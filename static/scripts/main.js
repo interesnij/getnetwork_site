@@ -153,6 +153,18 @@ on('#ajax', 'input', '.smile_supported', function() {
   }, 2000)
 });
 
+function send_alt_post_data(form, url) {
+  form_data = new FormData(form);
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', url, true );
+  link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    ajax_get_reload(url)
+  } else { console.log(link.responseText) }};
+  link.send(form_data);
+};
+
 function send_post_data(form, url) {
   try {
     text_val = form.querySelector(".smile_supported");
@@ -250,7 +262,7 @@ on('body', 'click', '#create_blog_btn', function() {
   send_post_data(this.parentElement, "/create_blog/");
 });
 on('body', 'click', '#edit_blog_btn', function() {
-  send_post_data(this.parentElement, "/edit_blog/" + this.getAttribute("data-pk") + "/");
+  send_alt_post_data(this.parentElement, "/edit_blog/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#create_blog_category_btn', function() {
   send_post_data(this.parentElement, "/create_blog_categories/");
