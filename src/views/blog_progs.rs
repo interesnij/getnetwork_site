@@ -305,7 +305,7 @@ pub async fn edit_blog(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     let form = split_payload(payload.borrow_mut()).await;
     let mut _new_image;
     if form.main_image == "".to_string() {
-        _new_image = _blog[0].image;
+        _new_image = Some(_blog[0].image);
     } else {
         _new_image = Some(form.main_image.clone());
     };
