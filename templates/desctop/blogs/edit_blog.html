@@ -24,7 +24,7 @@
                 <input value="{{ blog.description }}" class="input-md form-control" type="text" name="description" placeholder="Описание" />
             </div>
             <div class="mb-20 mb-md-10">
-                <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control smile_supported">{{ blog.content }}</div>
+                <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control smile_supported">{{ blog.content | safe }}</div>
             </div>
             <div class="mb-20 mb-md-10">
                 <input value="{{ blog.link }}" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
