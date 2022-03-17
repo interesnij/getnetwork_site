@@ -138,11 +138,15 @@ function format_text(text) {
   //text.innerHTML = text.innerHTML.replace(/<(?!img)(?!br)\/?[a-z][^>]*(>|$)/gi, "").replace(/\&nbsp;/g, ' ');
   brs = text.querySelectorAll("br");
   img = text.querySelectorAll("img");
+  p = text.querySelectorAll("p");
   for (var i = 0; i < brs.length; i++){
     brs[i].removeAttribute("style")
   };
   for (var i = 0; i < img.length; i++){
     img[i].removeAttribute("style")
+  }
+  for (var i = 0; i < p.length; i++){
+    p[i].removeAttribute("style")
   }
   return text
 };
