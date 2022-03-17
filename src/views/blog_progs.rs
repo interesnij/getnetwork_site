@@ -306,7 +306,7 @@ pub async fn edit_blog(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     if form.main_image == "".to_string() {
         let _new_image = _blog[0].image;
     } else {
-        let _new_image = Some(form.main_image.clone();
+        let _new_image = Some(form.main_image.clone());
     };
     let _new_blog = EditBlog {
         title: form.title.clone(),
