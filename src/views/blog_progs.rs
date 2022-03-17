@@ -314,7 +314,7 @@ pub async fn edit_blog(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
         description: Some(form.description.clone()),
         content: Some(form.content.clone()),
         link: Some(form.link.clone()),
-        image: _new_image.to_string(),
+        image: Some(_new_image),
         is_blog_active: form.is_active.clone()
     };
 
