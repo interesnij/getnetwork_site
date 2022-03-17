@@ -1,0 +1,27 @@
+{% extends "desctop/base.html" %}
+{% block title %}Изменение тега{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>Изменение тега</span>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+        <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
+            <div class="mb-20 mb-md-10">
+                <input value="{{ tag.name }}" class="input-md form-control" type="text" name="name" placeholder="Название" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input value="{{ tag.tag_position }}" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+            </div>
+            <button data-pk="{{ tag.id }}" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_tag_btn">Изменить</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

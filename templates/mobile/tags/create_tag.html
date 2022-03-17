@@ -1,0 +1,35 @@
+{% extends "mobile/base.html" %}
+{% block title %}Создание тега{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <span>Создание тега</span>
+                </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+<form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
+  <div class="mb-20 mb-md-10">
+    <input class="input-md form-control" type="text" name="name" placeholder="Название" />
+  </div>
+  <div class="mb-20 mb-md-10">
+    <input class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+  </div>
+  <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_tag_btn">Создать</button>
+</form>
+<div class="container">
+  {% for tag in all_tags %}
+    <p>{{ tag.name }}
+      | <a class="ajax" href="/edit_tag/{{ tag.id }}/">~</a>
+      | <a class="pointer remove_tag" data-pk="{{ tag.id }}">x</a>
+    </p>
+  {% endfor %}
+</div>
+</div>
+</section>
+{% endblock %}

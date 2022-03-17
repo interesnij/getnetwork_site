@@ -1,0 +1,32 @@
+{% extends "desctop/base.html" %}
+{% block title %}База знаний | {{ category.name }}{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <a class="ajax" href="/wiki_categories/">База знаний</a>
+                    &nbsp;/&nbsp;
+                    <span>{{ category.name }}</span>
+                </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+      <div class="row">
+          <div class="col-sm-8">
+            {% for object in wikis %}
+              {% include 'desctop/generic/wiki.html' %}
+            {% endfor %}
+          </div>
+          <div class="col-sm-4">
+            {% include 'desctop/wikis/sidebar.html' %}
+          </div>
+      </div>
+    </div>
+</section>
+
+{% endblock %}

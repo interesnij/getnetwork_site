@@ -1,0 +1,37 @@
+{% extends "mobile/base.html" %}
+{% block title %}Магазин | {{ category.name }}{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <a class="ajax" href="/store_categories/">Магазин</a>
+                    &nbsp;/&nbsp;
+                    <span>{{ category.name }}</span>
+                </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+            <div class="row multi-columns-row">
+              {% if object_list %}
+                {% for object in object_list %}
+                  {% include 'desctop/generic/store.html' %}
+                {% endfor %}
+              {% else %}
+                <p>Список пока пустой...</p>
+              {% endif %}
+            </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block sidebar %}
+<div class="sidebar">
+  {% include 'desctop/stores/sidebar.html' %}
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "desctop/base.html" %}
+{% block title %}Наш блог{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">
+                Главная
+            </a>
+            &nbsp;/&nbsp;
+            <span>Категории блога</span>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container align-center">
+        <h1 class="magazine-logo-text black font-alt">Наш блог</h1>
+    </div>
+    <div class="container relative">
+        <div class="row">
+            <div class="col-sm-8">
+                {% for category in blog_categories %}
+                {% if loop.index == 1 %}
+                {% set object_list = blogs1 %}
+                {% elif loop.index == 2 %}
+                {% set object_list = blogs2 %}
+                {% elif loop.index == 3 %}
+                {% set object_list = blogs3 %}
+                {% elif loop.index == 4 %}
+                {% set object_list = blogs4 %}
+                {% endif %}
+                <h3 class="blog-item-title font-alt mb-10">
+                    <a class="ajax" href="/blog/{{ category.id }}/">
+                        {{ category.name }}
+                    </a>
+                </h3>
+                <hr class="mt-0 mb-30">
+                <div class="row multi-columns-row">
+                    {% for object in object_list %}
+                    {% if loop.index < 3 %}
+                    {% include 'desctop/generic/blog.html' %}
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+
+                <div class="row mb-70 mt-20">
+                    {% for object in object_list %}
+                    {% if loop.index > 2 %}
+                    <div class="col-sm-6">
+                        <div class="blog-post-prev-small clearfix">
+                            <a class="ajax" href="/blog/{{ object.id }}/">
+                                <img src="{{ object.image | replace(from="./", to="/") }}" alt="img" class="widget-posts-img">
+                            </a>
+                            <div class="widget-posts-descr">
+                                <a class="ajax" href="/blog/{{ object.id }}/">{{ object.title }}</a>
+                                {{ object.blog_created | date(format="%Y-%m-%d %H:%M") }}
+                                <p>{{ object.description | truncate(length=100) }}</p>
+                                ;
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% endfor %}
+            </div>
+            <div class="col-sm-4">
+                {% include 'desctop/blogs/sidebar.html' %}
+            </div>
+        </div>
+
+</section>
+
+{% endblock %}

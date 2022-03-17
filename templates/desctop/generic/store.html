@@ -1,0 +1,25 @@
+<div class="col-md-6 mb-60 mb-xs-40">
+  <div class="post-prev-img">
+    <a class="ajax" href="/store/{{ category.id }}/{{ object.id }}/">
+      <img src="{{ object.image | replace(from="./", to="/") }}" alt="img">
+    </a>
+    <div class="intro-label">
+      <span class="label label-danger bg-red">Sale</span>
+    </div>
+  </div>
+  <div class="post-prev-title font-alt align-center">
+    <a class="ajax" href="/store/{{ category.id }}/{{ object.id }}/">
+      {{ object.title }}
+    </a>
+  </div>
+  <div class="post-prev-text align-center">
+    <del>Старая цена</del>
+    &nbsp;
+    <strong>Цена</strong>
+  </div>
+  <div class="post-prev-more align-center">
+    <a href="/store/{{ category.id }}/{{ object.id }}/" class="btn btn-mod ajax btn-round">
+      Детали
+    </a>
+  </div>
+</div>

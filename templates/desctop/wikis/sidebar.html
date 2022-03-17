@@ -1,0 +1,51 @@
+<div class="widget">
+    <form class="form-inline form" role="form">
+        <div class="search-wrap">
+            <input type="text" class="form-control search-field" placeholder="Поиск...">
+        </div>
+    </form>
+</div>
+<div class="widget">
+    <h5 class="widget-title font-alt">Категории</h5>
+    <div class="widget-body">
+        <ul class="clearlist widget-menu">
+          {% for category in wiki_categories %}
+            <li>
+                <a class="ajax" href="/wiki/{{ category.id }}/">{{ category.name }}</a>
+                <small>
+                    - {{ category.wiki_count }}
+                </small>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="widget">
+    <h5 class="widget-title font-alt">Теги ({{ tags_count }})</h5>
+    <div class="widget-body">
+        <div class="tags">
+          {% for tag in tags %}
+            <a class="ajax" href="/tag/{{ tag.id }}/">{{ tag.name }} ({{ tag.tag_count }})</a>
+          {% endfor %}
+        </div>
+    </div>
+</div>
+{% if is_admin %}
+<div class="widget">
+  <a href="/create_wiki_categories/" class="ajax">Создать категорию</a><br>
+  <a href="/create_wiki/" class="ajax">Создать статью</a>
+</div>
+{% endif %}
+<!--
+<div class="widget">
+    <h5 class="widget-title font-alt">Архив</h5>
+    <div class="widget-body">
+        <ul class="clearlist widget-menu">
+            <li>
+                <a href="#" title="">February 2022</a>
+            </li>
+        </ul>
+    </div>
+</div>
+-->

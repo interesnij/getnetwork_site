@@ -1,0 +1,54 @@
+{% extends "mobile/base.html" %}
+{% block title %}Наш блог{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+  <div class="relative container align-left">
+    <div class="hs-line-4 font-alt black">
+      <a class="ajax" href="/">
+        Главная
+      </a>
+      &nbsp;/&nbsp;
+      <span>Категории блога</span>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="container align-center">
+    <h1 class="magazine-logo-text black font-alt">Наш блог</h1>
+  </div>
+    <div class="container relative">
+      {% for category in blog_categories %}
+
+        {% if loop.index == 1 %}
+          {% set object_list = blogs1 %}
+          {% elif loop.index == 2 %}
+            {% set object_list = blogs2 %}
+          {% elif loop.index == 3 %}
+            {% set object_list = blogs3 %}
+          {% elif loop.index == 4 %}
+            {% set object_list = blogs4 %}
+        {% endif %}
+
+        <h3 class="blog-item-title font-alt mb-10">
+          <a class="ajax" href="/blog/{{ category.id }}/">
+           {{ category.name }}
+          </a>
+        </h3>
+
+        <hr class="mt-0 mb-30">
+        {% for object in object_list %}
+          {% include 'desctop/generic/blog.html' %}
+        {% endfor %}
+
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block sidebar %}
+<div class="sidebar">
+  {% include 'desctop/blogs/sidebar.html' %}
+</div>
+{% endblock %}

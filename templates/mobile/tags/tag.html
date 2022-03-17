@@ -1,0 +1,26 @@
+{% extends "mobile/base.html" %}
+{% block title %}Ключевое слово {{ object.name }}{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <a class="ajax" href="/tags/">Все ключевые слова</a>
+                </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+      Тег {{ object.name }}
+      <br><br><br>
+      {% for blog in blogs %}
+        <a class="ajax" href="/blog/{{ blog.id }}/">
+          {{ blog.title }}<br>
+        </a>
+      {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

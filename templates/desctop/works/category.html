@@ -1,0 +1,32 @@
+{% extends "desctop/base.html" %}
+{% block title %}Портфолио | {{ category.name }}{% endblock %}
+{% block content %}
+
+<section class="home-section need_darked_this" style='background-image: url("{{ category.image | replace(from="./", to="/") }}"); background-position: 50% -26px;'>
+    <div class="" style="height: 100vh">
+        <div class="home-content container">
+            <div class="home-text">
+                <h2 class="hs-line-8 no-transp font-alt mb-50 mb-xs-30">
+                    {% for tag in tags %}
+                      <a class="ajax dark_target" href="/tag/{{ tag.id }}/">{{ tag.name }} ({{ tag.tag_count }})</a>
+                    {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </h2>
+                <h1 class="dark_target hs-line-14 font-alt mb-50 mb-xs-30">
+                    {{ category.name }}
+                </h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+  <div class="container relative">
+    <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
+      {% for object in works %}
+        {% include 'desctop/generic/work.html' %}
+      {% endfor %}
+    <ul>
+  </div>
+</section>
+
+{% endblock %}

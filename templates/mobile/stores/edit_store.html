@@ -1,0 +1,82 @@
+{% extends "mobile/base.html" %}
+{% block title %}Изменение товара {{ store.title }}{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <a class="ajax" href="/store/{{ store.id }}/">{{ store.title }}</a>
+                    &nbsp;/&nbsp;
+                    <span>Изменение товара</span>
+                </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+        <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
+            <div class="mb-20 mb-md-10">
+                <input value="{{ store.title }}" class="input-md form-control" type="text" name="title" placeholder="Название" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input value="{{ store.description }}" class="input-md form-control" type="text" name="description" placeholder="Описание" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control smile_supported">{{ store.content }}</div>
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input value="{{ store.link }}" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <img style="height:50px" src="{{ store.image | replace(from="./", to="/") }}" />
+              <label>Обложка</label>
+              <input class="input-md form-control" type="file" name="main_image" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Категории</label>
+                <select class="form-control" name="category_list[]" multiple="">
+                  {% for category in store_categories %}
+                    <option {% if category in categories %}selected=""{% endif %} value="{{ category.id }}">{{ category.name }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Теги</label>
+                <select class="form-control" name="tags_list[]" multiple="">
+                  {% for tag in all_tags %}
+                    <option {% if tag in store_tags %}selected=""{% endif %} value="{{ tag.id }}">{{ tag.name }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+            <div class="mb-20 mb-md-10">
+              {% for img in images %}
+                <img style="height:50px" src="{{ img.src | replace(from="./", to="/") }}" />
+              {% endfor %}
+              <br>
+                <label>Изображения</label>
+                <input type="file" multiple name="images[]" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              {% for video in videos %}
+                <video width="400" height="300" controls="controls">
+                  <source src="{{ video.src | replace(from="./", to="/") }}" type='video/mp4;'>
+                </video>
+              {% endfor %}
+              <br>
+                <label>Видеозаписи</label>
+                <input type="file" multiple name="videos[]" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <label class="checkbox-inline">
+                <input type="checkbox" name="is_active" {% if store.is_store_active %}checked{% endif %}>
+                  Товар открыт
+              </label>
+            </div>
+            <button data-pk="{{ store.id }}" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_store_btn">Изменить</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

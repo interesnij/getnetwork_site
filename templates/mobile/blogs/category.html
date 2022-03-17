@@ -1,0 +1,29 @@
+{% extends "desctop/base.html" %}
+{% block title %}Блог | {{ category.name }}{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <a class="ajax" href="/blog_categories/">Блог</a>
+                    &nbsp;/&nbsp;
+                    <span>{{ category.name }}</span>
+                </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+              {% for object in blogs %}
+                {% include 'desctop/generic/blog.html' %}
+              {% endfor %}
+  </div>
+</section>
+{% endblock %}
+
+{% block sidebar %}
+<div class="sidebar">
+  {% include 'desctop/blogs/sidebar.html' %}
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+<span>
+<span class="first_span" style="display:none">
+  <button href="/service_categories/" class="mobile_icon border ajax">
+    <span class="icon-lightbulb"></span>
+    <p>Услуги</p>
+  </button>
+  <button href="/work_categories/" class="mobile_icon border ajax">
+    <span class="icon-briefcase"></span>
+    <p>Работы</p>
+  </button>
+  <button href="/store_categories/" class="mobile_icon border ajax">
+    <span class="icon-basket"></span>
+    <p>Продукты</p>
+  </button>
+  <button href="/blog_categories/" class="mobile_icon border ajax">
+    <span class="icon-newspaper"></span>
+    <p>Блог</p>
+  </button>
+  <button href="/wiki_categories/" class="mobile_icon border ajax">
+    <span class="icon-book-open"></span>
+    <p>Обучалка</p>
+  </button>
+</span>
+
+<span class="second_span" style="display:none">
+  <button href="/contacts/" class="mobile_icon border ajax">
+    <span class="icon-heart"></span>
+    <p>О нас</p>
+  </button>
+  <button href="/about/" class="mobile_icon border ajax">
+    <span class="icon-mobile"></span>
+    <p>О сайте</p>
+  </button>
+  <button href="/tags/" class="mobile_icon border ajax">
+    <span class="icon-ribbon"></span>
+    <p>Теги</p>
+  </button>
+  <button href="/search/" class="mobile_icon border ajax search_btn">
+    <span class="icon-search"></span>
+    <p>Поиск</p>
+  </button>
+  <button class="mobile_icon border anon_color_change" data-color="white">
+    <span class="icon-pencil"></span>
+    <p>Фон</p>
+  </button>
+</span>
+
+  <nav class="mobile_nav">
+    <button href="/" class="mobile_icon ajax border home_btn">
+      <span class="icon-flag"></span>
+      <p>Главная</p>
+    </button>
+    <button class="mobile_icon border apps_btn">
+      <span class="icon-layers"></span>
+      <p>Разделы</p>
+    </button>
+    <button href="" class="mobile_icon border pages_btn">
+      <span class="icon-documents"></span>
+      <p>Страницы</p>
+    </button>
+    {% if request.user.is_authenticated %}
+      <button href="/user/1/" class="mobile_icon border ajax user_btn">
+        <span class="icon-profile-male"></span>
+        <p>Профиль</p>
+      </button>
+    {% else %}
+      <button href="/login/" class="mobile_icon border ajax user_btn">
+        <span class="icon-profile-male"></span>
+        <p>Вход</p>
+      </button>
+    {% endif %}
+  </nav>
+</span>

@@ -1,0 +1,26 @@
+{% extends "desctop/base.html" %}
+{% block title %}Услуги | {{ object.title }}{% endblock %}
+{% block content %}
+
+<a style="margin-top:50px" class="ajax" href="/">Главная</a><br><br>
+  <br><br>
+  {% for category in categories %}
+    <a class="ajax" href="/work/{{ category.id }}/">
+      {{ category.name }}
+    </a>
+  {% endfor %}
+<br><br>
+{{ object.title }}<br>
+
+<br><br><br>
+{% for img in images %}
+  <img style="height:50px" src="/media/{{ img.src }}" />
+{% endfor %}
+<br><br><br>
+{% for video in videos %}
+  <video width="400" height="300" controls="controls">
+    <source src="/media/{{ video.src }}" type='video/mp4;'>
+  </video>
+{% endfor %}
+
+{% endblock %}
