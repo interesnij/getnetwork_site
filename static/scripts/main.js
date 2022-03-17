@@ -262,7 +262,7 @@ on('body', 'click', '#create_blog_btn', function() {
   send_post_data(this.parentElement, "/create_blog/");
 });
 on('body', 'click', '#edit_blog_btn', function() {
-  send_alt_post_data(this.parentElement, "/edit_blog/" + this.getAttribute("data-pk") + "/");
+  send_post_data(this.parentElement, "/edit_blog/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#create_blog_category_btn', function() {
   send_post_data(this.parentElement, "/create_blog_categories/");
