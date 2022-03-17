@@ -24,7 +24,7 @@
                 <input value="{{ blog.description }}" class="input-md form-control" type="text" name="description" placeholder="Описание" />
             </div>
             <div class="mb-20 mb-md-10">
-                <textarea value="{{ blog.content }}" class="input-md form-control" type="text" name="content" placeholder="Текст"></textarea>
+                <textarea class="input-md form-control" type="text" name="content" placeholder="Текст">{{ blog.content }}</textarea>
             </div>
             <div class="mb-20 mb-md-10">
                 <input value="{{ blog.link }}" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
