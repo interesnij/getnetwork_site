@@ -139,15 +139,19 @@ function format_text(text) {
   brs = text.querySelectorAll("br");
   img = text.querySelectorAll("img");
   p = text.querySelectorAll("p");
+  ol = text.querySelectorAll("ol");
   for (var i = 0; i < brs.length; i++){
     brs[i].removeAttribute("style")
   };
   for (var i = 0; i < img.length; i++){
     img[i].removeAttribute("style")
-  }
+  };
   for (var i = 0; i < p.length; i++){
     p[i].removeAttribute("style")
-  }
+  };
+  for (var i = 0; i < ol.length; i++){
+    ol[i].removeAttribute("style")
+  };
   return text
 };
 
