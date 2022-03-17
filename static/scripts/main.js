@@ -163,7 +163,7 @@ function send_post_data(form, url) {
     $input.setAttribute("name", "content");
     $input.setAttribute("type", "hidden");
     $input.classList.add("input_text");
-    $input.value = _text;
+    $input.value = text_val.innerHTML;
     form.append($input)
   } catch { null };
 
