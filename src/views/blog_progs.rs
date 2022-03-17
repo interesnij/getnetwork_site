@@ -303,12 +303,17 @@ pub async fn edit_blog(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     diesel::delete(blog_category.filter(schema::blog_category::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
 
     let form = split_payload(payload.borrow_mut()).await;
+    if form.main_image == "".to_string() {
+        let _new_image = _blog[0].image;
+    } else {
+        let _new_image = Some(form.main_image.clone();
+    };
     let _new_blog = EditBlog {
         title: form.title.clone(),
         description: Some(form.description.clone()),
         content: Some(form.content.clone()),
         link: Some(form.link.clone()),
-        image: Some(form.main_image.clone()),
+        image: _new_image.to_string(),
         is_blog_active: form.is_active.clone()
     };
 
