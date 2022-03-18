@@ -417,6 +417,41 @@ pub async fn edit_wiki_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     HttpResponse::Ok().body(_rendered)
 }
 
+use serde::Deserialize;
+#[derive(Debug, Deserialize)]
+pub struct WikiParams {
+    content: String,
+}
+pub async fn edit_content_wiki_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+    use schema::wikis::dsl::*;
+
+    let _wiki_id : i32 = *_id;
+    let _connection = establish_connection();
+    let _wiki = wikis.filter(schema::wikis::id.eq(&_wiki_id)).load::<Wiki>(&_connection).expect("E");
+
+    let params = web::Query::<WikiParams>::from_query(&req.query_string()).unwrap();
+    if params.content.clone() != "".to_string() {
+        diesel::update(&_wikie[0])
+            .set(schema::wikis::content.eq(&params.content.clone()))
+            .get_result::<Wiki>(&_connection)
+            .expect("E.");
+    }
+
+    let mut data = Context::new();
+    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    data.insert("service_categories", &_service_cats);
+    data.insert("store_categories", &_store_cats);
+    data.insert("blog_categories", &_blog_cats);
+    data.insert("wiki_categories", &_wiki_cats);
+    data.insert("work_categories", &_work_cats);
+    data.insert("is_admin", &_is_admin);
+    data.insert("wiki", &_wiki[0]);
+
+    let _template = _type + &"wikis/edit_content_wiki.html".to_string();
+    let _rendered = tera.render(&_template, &data).unwrap();
+    HttpResponse::Ok().body(_rendered)
+}
+
 pub async fn edit_wiki_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::wiki_categories::dsl::*;
 

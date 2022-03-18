@@ -24,6 +24,11 @@
                         <h1 class="mt-0 font-alt">{{ object.title }}</h1>
                         <div class="blog-item-data">
                           {{ object.wiki_created | date(format="%Y-%m-%d %H:%M") }}
+                          {% if is_admin %}
+                            | <a class="ajax" href="/edit_wiki/{{ object.id }}/">~</a>
+                            | <a class="ajax" href="/edit_content_wiki/{{ object.id }}/?content=">Aa</a>
+                            | <a class="pointer remove_wiki">x</a>
+                          {% endif %}
                           <span class="separator">&nbsp;</span>
                         </div>
                         {{ object.content | safe }}

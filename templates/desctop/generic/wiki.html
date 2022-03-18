@@ -8,6 +8,7 @@
     {{ object.description }}
     {% if is_admin %}
       | <a class="ajax" href="/edit_wiki/{{ object.id }}/">~</a>
+      | <a class="ajax" href="/edit_content_wiki/{{ object.id }}/?content=">Aa</a>
       | <a class="pointer remove_wiki">x</a>
     {% endif %}
   </p>

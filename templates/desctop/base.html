@@ -36,6 +36,9 @@
     <script defer type="text/javascript" src="/static/scripts/wow.min.js"></script>
     <script defer type="text/javascript" src="/static/scripts/desctop/main.js"></script>
     <script defer type="text/javascript" src="/static/scripts/main.js"></script>
+    {% if is_admin %}
+      <script defer type="text/javascript" src="/static/scripts/admin.js"></script>
+    {% endif %}
 </body>
 
 </html>

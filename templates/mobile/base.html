@@ -62,6 +62,9 @@
     <script defer type="text/javascript" src="/static/scripts/mobile/func.js"></script>
     <script defer type="text/javascript" src="/static/scripts/mobile/main.js"></script>
     <script defer type="text/javascript" src="/static/scripts/main.js"></script>
+    {% if is_admin %}
+      <script defer type="text/javascript" src="/static/scripts/admin.js"></script>
+    {% endif %}
 </body>
 
 </html>

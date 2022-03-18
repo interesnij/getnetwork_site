@@ -415,6 +415,41 @@ pub async fn edit_store_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     HttpResponse::Ok().body(_rendered)
 }
 
+use serde::Deserialize;
+#[derive(Debug, Deserialize)]
+pub struct StoreParams {
+    content: String,
+}
+pub async fn edit_content_store_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+    use schema::stores::dsl::*;
+
+    let _store_id : i32 = *_id;
+    let _connection = establish_connection();
+    let _store = stores.filter(schema::stores::id.eq(&_store_id)).load::<Store>(&_connection).expect("E");
+
+    let params = web::Query::<StoreParams>::from_query(&req.query_string()).unwrap();
+    if params.content.clone() != "".to_string() {
+        diesel::update(&_store[0])
+            .set(schema::stores::content.eq(&params.content.clone()))
+            .get_result::<Store>(&_connection)
+            .expect("E.");
+    }
+
+    let mut data = Context::new();
+    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    data.insert("service_categories", &_service_cats);
+    data.insert("store_categories", &_store_cats);
+    data.insert("blog_categories", &_blog_cats);
+    data.insert("wiki_categories", &_wiki_cats);
+    data.insert("work_categories", &_work_cats);
+    data.insert("is_admin", &_is_admin);
+    data.insert("store", &_store[0]);
+
+    let _template = _type + &"stores/edit_content_store.html".to_string();
+    let _rendered = tera.render(&_template, &data).unwrap();
+    HttpResponse::Ok().body(_rendered)
+}
+
 pub async fn edit_store_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::store_categories::dsl::*;
 

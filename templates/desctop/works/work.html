@@ -30,6 +30,7 @@
                                     {{ object.work_created | date(format="%Y-%m-%d %H:%M") }}
                                     {% if is_admin %}
                                     | <a class="ajax" href="/edit_work/{{ object.id }}/">~</a>
+                                    | <a class="ajax" href="/edit_content_work/{{ object.id }}/?content=">Aa</a>
                                     | <a class="pointer remove_work" data-pk="{{ object.id }}">x</a>
                                     {% endif %}
                                 </p>
