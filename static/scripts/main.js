@@ -205,8 +205,8 @@ on('#ajax', 'input', '.smile_supported', function() {
 });
 
 function send_content_data(url) {
-  text_val1 = document.body.querySelector(".content_2");
-  text_val2 = document.body.querySelector(".content_1");
+  text_val1 = document.body.querySelector(".content_1");
+  text_val2 = document.body.querySelector(".content_2");
   val1 = format_text(text_val1);
   _val2 = format_text(text_val2);
   _text1 = _val1.innerHTML;
