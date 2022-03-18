@@ -149,6 +149,7 @@ function format_text(text) {
   list += text.querySelectorAll("h4");
   list += text.querySelectorAll("h5");
   list += text.querySelectorAll("h6");
+  list += text.querySelectorAll("span");
   for (var i = 0; i < list.length; i++){
     list[i].removeAttribute("style");
     list[i].className = '';
