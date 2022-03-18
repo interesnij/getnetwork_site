@@ -135,22 +135,23 @@ function service_tab_action(is, tab_class){
 function on(elSelector, eventName, selector, fn) {var element = document.querySelector(elSelector);element.addEventListener(eventName, function(event) {var possibleTargets = element.querySelectorAll(selector);var target = event.target;for (var i = 0, l = possibleTargets.length; i < l; i++) {var el = target;var p = possibleTargets[i];while (el && el !== element) {if (el === p) {return fn.call(p, event);}el = el.parentNode;}}});};
 
 function format_text(text) {
-  //text.innerHTML = text.innerHTML.replace(/<(?!img)(?!br)\/?[a-z][^>]*(>|$)/gi, "").replace(/\&nbsp;/g, ' ');
-  brs = text.querySelectorAll("br");
-  img = text.querySelectorAll("img");
-  p = text.querySelectorAll("p");
-  ol = text.querySelectorAll("ol");
-  for (var i = 0; i < brs.length; i++){
-    brs[i].removeAttribute("style")
-  };
-  for (var i = 0; i < img.length; i++){
-    img[i].removeAttribute("style")
-  };
-  for (var i = 0; i < p.length; i++){
-    p[i].removeAttribute("style")
-  };
-  for (var i = 0; i < ol.length; i++){
-    ol[i].removeAttribute("style")
+  list = [];
+  list += text.querySelectorAll("br");
+  list += text.querySelectorAll("img");
+  list += text.querySelectorAll("p");
+  list += text.querySelectorAll("ol");
+  list += text.querySelectorAll("ul");
+  list += text.querySelectorAll("a");
+  list += text.querySelectorAll("img");
+  list += text.querySelectorAll("h1");
+  list += text.querySelectorAll("h2");
+  list += text.querySelectorAll("h3");
+  list += text.querySelectorAll("h4");
+  list += text.querySelectorAll("h5");
+  list += text.querySelectorAll("h6");
+  for (var i = 0; i < list.length; i++){
+    list[i].removeAttribute("style");
+    list[i].className = '';
   };
   return text
 };
