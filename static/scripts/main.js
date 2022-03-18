@@ -208,7 +208,8 @@ function send_content_data(url) {
   link.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload(url)
+    //ajax_get_reload(url)
+    alert("Done")
   } else { console.log(link.responseText) }};
   link.send();
 };
