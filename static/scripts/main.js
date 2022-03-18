@@ -214,6 +214,7 @@ function send_content_data(form, url) {
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', url, true );
   link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  link.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     ajax_get_reload(url)
