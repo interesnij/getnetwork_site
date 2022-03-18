@@ -168,8 +168,6 @@ pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id
         .get_result::<Blog>(&_connection)
         .expect("Error.");
     };
-    let blog_content = _blog[0].content;
-    let count = blog_content.chars().count();
 
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
@@ -180,7 +178,6 @@ pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
     data.insert("blog", &_blog[0]);
-    data.insert("count", &count);
 
     let _template = _type + &"blogs/edit_content_blog.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
