@@ -409,10 +409,9 @@ pub async fn edit_content_blog(form: web::Form<BlogContent>, _id: web::Path<i32>
 
     let _new_content : String = form.content.clone();
     diesel::update(&_blog[0])
-        .set(schema::blogs::content.eq(&_new_content)).
-        get_result::<Blog>(&_connection)
+        .set(schema::blogs::content.eq(&_new_content))
+        .get_result::<Blog>(&_connection)
         .expect("Error.");
-    }
 
     HttpResponse::Ok()
 }
