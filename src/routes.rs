@@ -74,7 +74,6 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
         .route(web::post().to(blog_progs::edit_blog))
     )
     .route("/edit_content_blog/{id}/", web::get().to(blog_progs::edit_content_blog_page))
-    )
     .route("/delete_blog/{id}/", web::get().to(blog_progs::delete_blog))
     .route("/delete_blog_category/{id}/", web::get().to(blog_progs::delete_blog_category))
     .service(web::resource("/blog/{cat_id}/{blog_id}/").route(web::get().to(blog_progs::get_blog_page)))
