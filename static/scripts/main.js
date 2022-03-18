@@ -205,17 +205,18 @@ on('#ajax', 'input', '.smile_supported', function() {
 });
 
 function send_content_data(url) {
-  text_val = document.body.querySelector(".smile_supported");
-  _val = format_text(text_val);
-  _text = _val.innerHTML;
+  text_val1 = document.body.querySelector(".content_2");
+  text_val2 = document.body.querySelector(".content_1");
+  val1 = format_text(text_val1);
+  _val2 = format_text(text_val2);
+  _text1 = _val1.innerHTML;
+  _text2 = _val2.innerHTML;
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'GET', url + "?content=" + _text, true );
-  //link.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  link.open( 'GET', url + "?content_1=" + _text1 + "&content_2=" + _text2, true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    //ajax_get_reload(url)
-    alert(_text)
+    alert(_text1, _text2)
   } else {
     //console.log(link.responseText)
   }};
