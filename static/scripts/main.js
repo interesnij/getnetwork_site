@@ -208,7 +208,7 @@ function send_content_data(url) {
   _text1 = _val1.innerHTML;
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'GET', url + "?content_1=" + _text1, true );
+  link.open( 'GET', url + "?content=" + _text1, true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     alert(_text1)
