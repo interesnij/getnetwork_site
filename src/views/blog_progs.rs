@@ -152,7 +152,7 @@ pub async fn edit_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct BlogParams {
-    content_1: String,
+    content: String,
 }
 pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::blogs::dsl::*;
@@ -163,7 +163,7 @@ pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id
     let params = web::Query::<BlogParams>::from_query(&req.query_string()).unwrap();
 
     diesel::update(&_blog[0])
-        .set(schema::blogs::content.eq(&params.content_1.clone()))
+        .set(schema::blogs::content.eq(&params.content.clone()))
         .get_result::<Blog>(&_connection)
         .expect("Error.");
 
