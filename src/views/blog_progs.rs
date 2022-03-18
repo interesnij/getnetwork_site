@@ -162,10 +162,12 @@ pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id
     let _blog = blogs.filter(schema::blogs::id.eq(&_blog_id)).load::<Blog>(&_connection).expect("E");
     let params = web::Query::<BlogParams>::from_query(&req.query_string()).unwrap();
 
-    diesel::update(&_blog[0])
-        .set(schema::blogs::content.eq(&params.content.clone()))
-        .get_result::<Blog>(&_connection)
-        .expect("Error.");
+    if let _cont = &params.content.clone() {
+        diesel::update(&_blog[0])
+            .set(schema::blogs::content.eq(_cont))
+            .get_result::<Blog>(&_connection)
+            .expect("Error.");
+    }
 
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
