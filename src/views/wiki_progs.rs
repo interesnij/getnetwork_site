@@ -431,7 +431,7 @@ pub async fn edit_content_wiki_page(req: HttpRequest, tera: web::Data<Tera>, _id
 
     let params = web::Query::<WikiParams>::from_query(&req.query_string()).unwrap();
     if params.content.clone() != "".to_string() {
-        diesel::update(&_wikie[0])
+        diesel::update(&_wiki[0])
             .set(schema::wikis::content.eq(&params.content.clone()))
             .get_result::<Wiki>(&_connection)
             .expect("E.");
