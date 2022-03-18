@@ -34,3 +34,4 @@ validator_derive = "*"
 bytes = { version = "1.1", features = ["serde"] }
 rand = "0.8.5"
 regex = "1.5.4"
+actix-rt = "2"
