@@ -199,7 +199,7 @@ on('#ajax', 'input', '.smile_supported', function() {
 });
 
 function send_content_data(url) {
-  text_val = form.querySelector(".smile_supported");
+  text_val = document.body.querySelector(".smile_supported");
   _val = format_text(text_val);
   _text = _val.innerHTML;
 
@@ -300,7 +300,7 @@ on('body', 'click', '#edit_blog_btn', function() {
   send_post_data(this.parentElement, "/edit_blog/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_text_blog_btn', function() {
-  send_content_data(this.parentElement, "/edit_content_blog/" + this.getAttribute("data-pk") + "/");
+  send_content_data("/edit_content_blog/" + this.getAttribute("data-pk") + "/");
 });
 
 on('body', 'click', '#create_blog_category_btn', function() {
