@@ -84,6 +84,16 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 }
             }
         }
+        else if name == "content" {
+            let mut _content = "".to_string()
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    _content += s.to_string();
+                    form.content = _content;
+                }
+            }
+        }
 
         else if name == "tags_list[]" {
             while let Some(chunk) = field.next().await {
@@ -174,8 +184,6 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                         form.title = data_string
                     } else if field.name() == "description" {
                         form.description = data_string
-                    } else if field.name() == "content" {
-                        form.content = data_string
                     } else if field.name() == "link" {
                         form.link = data_string
                     }
