@@ -90,9 +90,9 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
                     _content += &s.to_string();
-                    form.content = _content;
                 }
             }
+            form.content = _content;
         }
 
         else if name == "tags_list[]" {
