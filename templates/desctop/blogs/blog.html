@@ -14,6 +14,7 @@
   </div>
 </section>
 
+{{ content_count }}
 <section class="page-section">
     <div class="container relative">
         <div class="row">
@@ -28,7 +29,7 @@
                             | <a class="ajax" href="/edit_blog/{{ object.id }}/">~</a>
                             | <a class="pointer remove_blog">x</a>
                           {% endif %}
-                          
+
                           <span class="separator">&nbsp;</span>
                         </div>
                         {{ object.content | safe }}
