@@ -77,9 +77,10 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                     } else if field.name() == "link" {
                         form.link = data_string;
                     }
-                    form.content = _content;
+
                 }
             }
+            form.content = _content;
         }
 
         else if name == "category_list[]" {
