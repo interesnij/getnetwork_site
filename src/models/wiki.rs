@@ -40,7 +40,6 @@ pub struct Wiki {
     pub id: i32,
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_wiki_active: bool,
@@ -53,7 +52,6 @@ pub struct Wiki {
 pub struct EditWiki {
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_wiki_active: bool,
@@ -81,7 +79,6 @@ pub struct NewWikiCategory {
 pub struct NewWiki {
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_wiki_active: bool,
@@ -93,7 +90,6 @@ impl NewWiki {
     pub fn from_wiki_form(
         title: String,
         description: String,
-        content: String,
         link: String,
         image: String,
         is_wiki_active: bool,
@@ -102,7 +98,6 @@ impl NewWiki {
         NewWiki {
             title: title,
             description: Some(description),
-            content: Some(content),
             link: Some(link),
             image: Some(image),
             is_wiki_active: is_wiki_active,

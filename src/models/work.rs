@@ -40,7 +40,6 @@ pub struct Work {
     pub id: i32,
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_work_active: bool,
@@ -53,7 +52,6 @@ pub struct Work {
 pub struct EditWork {
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_work_active: bool,
@@ -81,7 +79,6 @@ pub struct NewWorkCategory {
 pub struct NewWork {
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_work_active: bool,
@@ -93,7 +90,6 @@ impl NewWork {
     pub fn from_work_form(
         title: String,
         description: String,
-        content: String,
         link: String,
         image: String,
         is_work_active: bool,
@@ -102,7 +98,6 @@ impl NewWork {
         NewWork {
             title: title,
             description: Some(description),
-            content: Some(content),
             link: Some(link),
             image: Some(image),
             is_work_active: is_work_active,

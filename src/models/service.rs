@@ -40,7 +40,6 @@ pub struct Service {
     pub id: i32,
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_service_active: bool,
@@ -53,7 +52,6 @@ pub struct Service {
 pub struct EditService {
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_service_active: bool,
@@ -82,7 +80,6 @@ pub struct NewServiceCategory {
 pub struct NewService {
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_service_active: bool,
@@ -94,7 +91,6 @@ impl NewService {
     pub fn from_service_form(
         title: String,
         description: String,
-        content: String,
         link: String,
         image: String,
         is_service_active: bool,
@@ -103,7 +99,6 @@ impl NewService {
         NewService {
             title: title,
             description: Some(description),
-            content: Some(content),
             link: Some(link),
             image: Some(image),
             is_service_active: is_service_active,

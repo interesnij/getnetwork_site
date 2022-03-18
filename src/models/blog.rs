@@ -54,7 +54,6 @@ pub struct Blog {
 pub struct NewBlog {
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_blog_active: bool,
@@ -66,7 +65,6 @@ impl NewBlog {
     pub fn from_blog_form(
         title: String,
         description: String,
-        content: String,
         link: String,
         image: String,
         is_blog_active: bool,
@@ -74,7 +72,6 @@ impl NewBlog {
         NewBlog {
             title: title,
             description: Some(description),
-            content: Some(content),
             link: Some(link),
             image: Some(image),
             is_blog_active: is_blog_active,

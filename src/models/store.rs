@@ -40,7 +40,6 @@ pub struct Store {
     pub id: i32,
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_store_active: bool,
@@ -53,7 +52,6 @@ pub struct Store {
 pub struct EditStore {
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_store_active: bool,
@@ -81,7 +79,6 @@ pub struct NewStoreCategory {
 pub struct NewStore {
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_store_active: bool,
@@ -93,7 +90,6 @@ impl NewStore {
     pub fn from_store_form(
         title: String,
         description: String,
-        content: String,
         link: String,
         image: String,
         is_store_active: bool,
@@ -102,7 +98,6 @@ impl NewStore {
         NewStore {
             title: title,
             description: Some(description),
-            content: Some(content),
             link: Some(link),
             image: Some(image),
             is_store_active: is_store_active,
