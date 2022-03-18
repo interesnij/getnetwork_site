@@ -153,46 +153,46 @@ function format_text(text) {
   span = text.querySelectorAll("span");
 
   for (var i = 0; i < br.length; i++){
-      br[i].removeAttribute("style"); br[i].className = ''
+      br[i].removeAttribute("style"); br[i].removeAttribute("class")
   };
   for (var i = 0; i < img.length; i++){
-      img[i].removeAttribute("style"); img[i].className = ''
+      img[i].removeAttribute("style"); img[i].removeAttribute("class")
   };
   for (var i = 0; i < p.length; i++){
-      p[i].removeAttribute("style"); p[i].className = ''
+      p[i].removeAttribute("style"); p[i].removeAttribute("class")
   };
   for (var i = 0; i < ul.length; i++){
-      ul[i].removeAttribute("style"); ul[i].className = ''
+      ul[i].removeAttribute("style"); ul[i].removeAttribute("class")
   };
   for (var i = 0; i < ol.length; i++){
-      ol[i].removeAttribute("style"); ol[i].className = ''
+      ol[i].removeAttribute("style"); ol[i].removeAttribute("class")
   };
   for (var i = 0; i < a.length; i++){
-      a[i].removeAttribute("style"); a[i].className = ''
+      a[i].removeAttribute("style"); a[i].removeAttribute("class")
   };
   for (var i = 0; i < span.length; i++){
-      span[i].removeAttribute("style"); span[i].className = ''
+      span[i].removeAttribute("style"); span[i].removeAttribute("class")
   };
   for (var i = 0; i < h1.length; i++){
-      h1[i].removeAttribute("style"); h1[i].className = ''
+      h1[i].removeAttribute("style"); h1[i].removeAttribute("class")
   };
   for (var i = 0; i < h2.length; i++){
-      h2[i].removeAttribute("style"); h2[i].className = ''
+      h2[i].removeAttribute("style"); h2[i].removeAttribute("class")
   };
   for (var i = 0; i < h3.length; i++){
-      h3[i].removeAttribute("style"); h3[i].className = ''
+      h3[i].removeAttribute("style"); h3[i].removeAttribute("class")
   };
   for (var i = 0; i < h4.length; i++){
-      h4[i].removeAttribute("style"); h4[i].className = ''
+      h4[i].removeAttribute("style"); h4[i].removeAttribute("class")
   };
   for (var i = 0; i < h5.length; i++){
-      h5[i].removeAttribute("style"); h5[i].className = ''
+      h5[i].removeAttribute("style"); h5[i].removeAttribute("class")
   };
   for (var i = 0; i < h6.length; i++){
-      h6[i].removeAttribute("style"); h6[i].className = ''
+      h6[i].removeAttribute("style"); h6[i].removeAttribute("class")
   };
   for (var i = 0; i < div.length; i++){
-      div[i].removeAttribute("style"); div[i].className = ''
+      div[i].removeAttribute("style"); div[i].removeAttribute("class")
   };
 
   return text
