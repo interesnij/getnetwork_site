@@ -209,9 +209,9 @@ function send_content_data(url) {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     //ajax_get_reload(url)
-    alert("Done")
+    alert(_text)
   } else {
-    //console.log(link.responseText) 
+    //console.log(link.responseText)
   }};
   link.send();
 };
