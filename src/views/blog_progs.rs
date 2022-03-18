@@ -152,7 +152,7 @@ pub async fn edit_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct Params {
-    content: String,
+    content: Text,
 }
 pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::blogs::dsl::*;
