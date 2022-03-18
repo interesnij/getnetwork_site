@@ -135,7 +135,7 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                     .unwrap()
                     .expect("Failed to open hello.txt");
             }
-            files.push(file.clone());
+            //files.push(file.clone());
             form.main_image = file.path.clone();
         }
 
