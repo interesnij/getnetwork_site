@@ -135,25 +135,59 @@ function service_tab_action(is, tab_class){
 function on(elSelector, eventName, selector, fn) {var element = document.querySelector(elSelector);element.addEventListener(eventName, function(event) {var possibleTargets = element.querySelectorAll(selector);var target = event.target;for (var i = 0, l = possibleTargets.length; i < l; i++) {var el = target;var p = possibleTargets[i];while (el && el !== element) {if (el === p) {return fn.call(p, event);}el = el.parentNode;}}});};
 
 function format_text(text) {
-  list = [];
-  list + text.querySelectorAll("br");
-  list + text.querySelectorAll("img");
-  list + text.querySelectorAll("p");
-  list + text.querySelectorAll("ol");
-  list + text.querySelectorAll("ul");
-  list + text.querySelectorAll("a");
-  list + text.querySelectorAll("img");
-  list + text.querySelectorAll("h1");
-  list + text.querySelectorAll("h2");
-  list + text.querySelectorAll("h3");
-  list + text.querySelectorAll("h4");
-  list + text.querySelectorAll("h5");
-  list + text.querySelectorAll("h6");
-  list + text.querySelectorAll("span");
-  for (var i = 0; i < list.length; i++){
-      list[i].removeAttribute("style");
-      list[i].className = ''
+  br = text.querySelectorAll("br");
+  img = text.querySelectorAll("img");
+  p = text.querySelectorAll("p");
+  ol = text.querySelectorAll("ol");
+  ul = text.querySelectorAll("ul");
+  a = text.querySelectorAll("a");
+  h1 = text.querySelectorAll("h1");
+  h2 = text.querySelectorAll("h2");
+  h3 = text.querySelectorAll("h3");
+  h4 = text.querySelectorAll("h4");
+  h5 = text.querySelectorAll("h5");
+  h6 = text.querySelectorAll("h6");
+  span = text.querySelectorAll("span");
+  for (var i = 0; i < br.length; i++){
+      br[i].removeAttribute("style"); span[i].className = ''
   };
+  for (var i = 0; i < img.length; i++){
+      img[i].removeAttribute("style"); img[i].className = ''
+  };
+  for (var i = 0; i < p.length; i++){
+      p[i].removeAttribute("style"); p[i].className = ''
+  };
+  for (var i = 0; i < ul.length; i++){
+      ul[i].removeAttribute("style"); ul[i].className = ''
+  };
+  for (var i = 0; i < ol.length; i++){
+      ol[i].removeAttribute("style"); ol[i].className = ''
+  };
+  for (var i = 0; i < a.length; i++){
+      a[i].removeAttribute("style"); a[i].className = ''
+  };
+  for (var i = 0; i < span.length; i++){
+      span[i].removeAttribute("style"); span[i].className = ''
+  };
+  for (var i = 0; i < h1.length; i++){
+      h1[i].removeAttribute("style"); h1[i].className = ''
+  };
+  for (var i = 0; i < h2.length; i++){
+      h2[i].removeAttribute("style"); h2[i].className = ''
+  };
+  for (var i = 0; i < h3.length; i++){
+      h3[i].removeAttribute("style"); h3[i].className = ''
+  };
+  for (var i = 0; i < h4.length; i++){
+      h4[i].removeAttribute("style"); h4[i].className = ''
+  };
+  for (var i = 0; i < h5.length; i++){
+      h5[i].removeAttribute("style"); h5[i].className = ''
+  };
+  for (var i = 0; i < h6.length; i++){
+      h3[i].removeAttribute("style"); h6[i].className = ''
+  };
+
   return text
 };
 
