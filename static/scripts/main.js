@@ -198,27 +198,19 @@ on('#ajax', 'input', '.smile_supported', function() {
 //  }, 2000)
 });
 
-function send_content_data(form, url) {
+function send_content_data(url) {
   text_val = form.querySelector(".smile_supported");
   _val = format_text(text_val);
   _text = _val.innerHTML;
 
-  $input = document.createElement("input");
-  $input.setAttribute("name", "content");
-  $input.setAttribute("type", "hidden");
-  $input.classList.add("input_text");
-  $input.value = text_val.innerHTML;
-  form.append($input)
-
-  form_data = new FormData(form);
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', url, true );
+  link.open( 'GET', url + "?content=" + _text, true );
   link.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     ajax_get_reload(url)
   } else { console.log(link.responseText) }};
-  link.send(form_data);
+  link.send();
 };
 
 function send_post_data(form, url) {
