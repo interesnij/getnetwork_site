@@ -63,7 +63,7 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
         let _list = ["title", "content", "description", "link"];
 
         if _list.contains(&name) {
-            let mut _content;
+            let mut _content : String;
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
