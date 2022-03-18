@@ -61,7 +61,29 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
         let mut field: Field = item.expect("split_payload err");
         let name = field.name();
 
-        if name == "category_list[]" {
+        if name == "title"
+            & name == "content"
+            & name == "description"
+            & name == "content"
+            & name == "link" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let data_string = s.to_string();
+                    if field.name() == "title" {
+                        form.title = data_string;
+                    } else if field.name() == "content" {
+                        form.content = data_string;
+                    } else if field.name() == "description" {
+                        form.description = data_string;
+                    } else if field.name() == "link" {
+                        form.link = data_string;
+                    }
+                }
+            }
+        }
+
+        else if name == "category_list[]" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
@@ -160,24 +182,6 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 files.push(file.clone());
                 form.videos.push(file.path.clone());
             };
-        }
-
-        else {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    if field.name() == "title" {
-                        form.title = data_string;
-                    } else if field.name() == "content" {
-                        form.content = data_string;
-                    } else if field.name() == "description" {
-                        form.description = data_string;
-                    } else if field.name() == "link" {
-                        form.link = data_string;
-                    }
-                }
-            }
         }
     }
     form
