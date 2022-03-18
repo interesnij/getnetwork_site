@@ -40,6 +40,7 @@ pub struct Service {
     pub id: i32,
     pub title: String,
     pub description: Option<String>,
+    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_service_active: bool,
