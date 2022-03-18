@@ -407,7 +407,7 @@ pub async fn edit_content_blog(form: web::Form<BlogContent>, _id: web::Path<i32>
     let _blog_id : i32 = *_id;
     let _blog = blogs.filter(schema::blogs::id.eq(_blog_id)).load::<Blog>(&_connection).expect("E");
 
-    let _new_content = std::str::from_utf8(Some(form.content.clone()));
+    let _new_content = std::str::from_utf8(form.content.clone());
     match _new_content {
             Err(_) => { println!("Failed to decode using {}", i); }
             Ok(_new_content) => {
