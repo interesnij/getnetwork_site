@@ -149,6 +149,7 @@ function format_text(text) {
   h4 = text.querySelectorAll("h4");
   h5 = text.querySelectorAll("h5");
   h6 = text.querySelectorAll("h6");
+  div = text.querySelectorAll("div");
   span = text.querySelectorAll("span");
 
   for (var i = 0; i < br.length; i++){
@@ -189,6 +190,9 @@ function format_text(text) {
   };
   for (var i = 0; i < h6.length; i++){
       h6[i].removeAttribute("style"); h6[i].className = ''
+  };
+  for (var i = 0; i < div.length; i++){
+      div[i].removeAttribute("style"); div[i].className = ''
   };
 
   return text
