@@ -166,7 +166,9 @@ on('#ajax', 'input', '.smile_supported', function() {
 function send_post_data(form, url) {
   if (form.querySelector(".smile_supported")) {
     text_val = form.querySelector(".smile_supported");
-    _val = format_text(text_val);
+    try {
+      _val = format_text(text_val)
+    } catch {_val = text_val};
     _text = _val.innerHTML;
 
     $input = document.createElement("input");
