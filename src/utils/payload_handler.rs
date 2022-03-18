@@ -69,7 +69,7 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 if let Ok(s) = str::from_utf8(&data) {
                     let data_string = s.to_string();
                     if field.name() == "title" {
-                        form.title = data_string;
+                        form.title = &data_string;
                     } else if field.name() == "content" {
                         _content += data_string;
                     } else if field.name() == "description" {
