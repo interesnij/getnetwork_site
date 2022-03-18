@@ -210,7 +210,9 @@ function send_content_data(url) {
   if ( link.readyState == 4 && link.status == 200 ) {
     //ajax_get_reload(url)
     alert("Done")
-  } else { console.log(link.responseText) }};
+  } else {
+    //console.log(link.responseText) 
+  }};
   link.send();
 };
 
