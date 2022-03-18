@@ -170,7 +170,7 @@ pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id
     let _blog = blogs.filter(schema::blogs::id.eq(&_blog_id)).load::<Blog>(&_connection).expect("E");
 
     let params = web::Query::<Params>::from_query(req.query_string()).unwrap();
-    let _new_content = params.content;
+    let _new_content = &params.content;
     if _new_content != "" {
     diesel::update(&_blog[0])
         .set(schema::blogs::content.eq(&_new_content))
