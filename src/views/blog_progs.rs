@@ -395,8 +395,8 @@ pub async fn edit_blog(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     HttpResponse::Ok()
 }
 
-use serde::Deserialize;
-#[derive(Deserialize)]
+use serde::Serialize;
+#[derive(Serialize)]
 pub struct BlogContent {
     pub content: String,
 }
