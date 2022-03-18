@@ -163,20 +163,8 @@ on('#ajax', 'input', '.smile_supported', function() {
 //  }, 2000)
 });
 
-function send_alt_post_data(form, url) {
-  form_data = new FormData(form);
-  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', url, true );
-  link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-  link.onreadystatechange = function () {
-  if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload(url)
-  } else { console.log(link.responseText) }};
-  link.send(form_data);
-};
-
 function send_post_data(form, url) {
-  try {
+  if (form.querySelector(".smile_supported")) {
     text_val = form.querySelector(".smile_supported");
     _val = format_text(text_val);
     _text = _val.innerHTML;
@@ -187,7 +175,7 @@ function send_post_data(form, url) {
     $input.classList.add("input_text");
     $input.value = text_val.innerHTML;
     form.append($input)
-  } catch { null };
+  };
 
   form_data = new FormData(form);
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
