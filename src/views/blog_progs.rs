@@ -7,6 +7,7 @@ use diesel::prelude::*;
 use crate::utils::{
     split_payload,
     category_split_payload,
+    content_split_payload,
     get_template_2,
     establish_connection
 };
@@ -198,7 +199,6 @@ pub async fn create_blog(mut payload: Multipart) -> impl Responder {
     let new_blog = NewBlog::from_blog_form(
         form.title.clone(),
         form.description.clone(),
-        form.content.clone(),
         form.link.clone(),
         form.main_image.clone(),
         form.is_active.clone(),
@@ -380,7 +380,7 @@ pub async fn edit_content_blog(mut payload: Multipart, _id: web::Path<i32>) -> i
     let _connection = establish_connection();
     let _blog_id : i32 = *_id;
     let form = content_split_payload(payload.borrow_mut()).await;
-    let updated_row = diesel::update(schema::blogs::id.eq(_blog_id))
+    let updated_row = diesel::update(schema::blogs::id.eq(_blog_id)[0])
     .set(content.eq(Some(form.content.clone()))
     .get_result(&_connection);
 

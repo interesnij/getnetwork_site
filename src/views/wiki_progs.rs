@@ -143,7 +143,6 @@ pub async fn create_wiki(mut payload: Multipart) -> impl Responder {
     let new_wiki = NewWiki::from_wiki_form(
         form.title.clone(),
         form.description.clone(),
-        form.content.clone(),
         form.link.clone(),
         form.main_image.clone(),
         form.is_active.clone(),
@@ -478,7 +477,6 @@ pub async fn edit_wiki(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     let _new_wiki = EditWiki {
         title: form.title.clone(),
         description: Some(form.description.clone()),
-        content: Some(form.content.clone()),
         link: Some(form.link.clone()),
         image: Some(form.main_image.clone()),
         is_wiki_active: form.is_active.clone()
