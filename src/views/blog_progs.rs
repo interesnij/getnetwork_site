@@ -149,6 +149,7 @@ pub async fn edit_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     HttpResponse::Ok().body(_rendered)
 }
 
+use diesel::types::Text;
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct Params {
