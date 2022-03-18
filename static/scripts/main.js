@@ -199,9 +199,7 @@ function format_text(text) {
 };
 
 on('#ajax', 'input', '.smile_supported', function() {
-//  setTimeout(function(){
-    //setEndOfContenteditable(this)
-//  }, 2000)
+    this.previousElementSibling.innerHTML = this.innerHTML.length
 });
 
 function send_content_data(url) {
