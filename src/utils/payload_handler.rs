@@ -81,6 +81,7 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 }
             }
             form.content = _content;
+            println!("content={:#?}", &form.content);
         }
 
         else if name == "category_list[]" {
