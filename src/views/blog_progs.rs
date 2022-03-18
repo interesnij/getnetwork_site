@@ -398,16 +398,19 @@ pub async fn edit_blog(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct BlogContent {
-    pub _content: String,
+    pub content: String,
 }
-pub async fn edit_content_blog(form: web::Form<BlogContent>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_content_blog(_id: web::Path<i32>) -> impl Responder {
     use crate::schema::blogs::dsl::blogs;
 
     let _connection = establish_connection();
     let _blog_id : i32 = *_id;
     let _blog = blogs.filter(schema::blogs::id.eq(_blog_id)).load::<Blog>(&_connection).expect("E");
 
-    let _new_content : String = form._content.clone();
+    let mut form: BlogContent = BlogContent {
+        content: "".to_string(),
+    };
+    let _new_content = form.content.clone();
     diesel::update(&_blog[0])
         .set(schema::blogs::content.eq(&_new_content))
         .get_result::<Blog>(&_connection)
