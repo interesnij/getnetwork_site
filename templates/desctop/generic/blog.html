@@ -11,7 +11,7 @@
         {{ object.blog_created | date(format="%Y-%m-%d %H:%M") }}
         {% if is_admin %}
           | <a class="ajax" href="/edit_blog/{{ object.id }}/">~</a>
-          | <a class="ajax" href="/edit_content_blog/{{ object.id }}/">Aa</a>
+          | <a class="ajax" href="/edit_content_blog/{{ object.id }}/?content=">Aa</a>
           | <a class="pointer remove_blog">x</a>
         {% endif %}
     </div>
