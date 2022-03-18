@@ -204,17 +204,14 @@ on('#ajax', 'input', '.smile_supported', function() {
 
 function send_content_data(url) {
   text_val1 = document.body.querySelector(".content_1");
-  text_val2 = document.body.querySelector(".content_2");
   _val1 = format_text(text_val1);
-  _val2 = format_text(text_val2);
   _text1 = _val1.innerHTML;
-  _text2 = _val2.innerHTML;
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'GET', url + "?content_1=" + _text1 + "&content_2=" + _text2, true );
+  link.open( 'GET', url + "?content_1=" + _text1, true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    alert(_text1, _text2)
+    alert(_text1)
   } else {
     //console.log(link.responseText)
   }};
