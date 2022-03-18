@@ -158,9 +158,9 @@ function format_text(text) {
 };
 
 on('#ajax', 'input', '.smile_supported', function() {
-  setTimeout(function(){
-    setEndOfContenteditable(this)
-  }, 2000)
+//  setTimeout(function(){
+    //setEndOfContenteditable(this)
+//  }, 2000)
 });
 
 function send_alt_post_data(form, url) {
