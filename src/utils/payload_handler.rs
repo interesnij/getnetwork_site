@@ -258,15 +258,12 @@ pub async fn content_split_payload(payload: &mut Multipart) -> ContentForm {
     while let Some(item) = payload.next().await {
         let mut field: Field = item.expect("split_payload err");
 
-        while let Some(chunk) = field.next().await {
-            let data = chunk.expect("split_payload err chunk");
-            if let Ok(s) = str::from_utf8(&data) {
-                let data_string = s.to_string();
-                if field.name() == "content" {
-                    form.content = data_string
-                }
+        //while let Some(chunk) = field.next().await {
+        //    let data = chunk.expect("split_payload err chunk");
+            if let Ok(s) = str::from_utf8(&field.1) {
+                form.content = s.to_string()
             }
-        }
+        //}
     }
     form
 }
