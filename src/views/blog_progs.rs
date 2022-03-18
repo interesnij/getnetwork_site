@@ -156,7 +156,7 @@ pub struct Params {
 }
 pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::blogs::dsl::*;
-
+    let params = web::Query::<Params>::from_query(&req.query_string()).unwrap();
     let _blog_id : i32 = *_id;
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
@@ -169,7 +169,7 @@ pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id
     let _connection = establish_connection();
     let _blog = blogs.filter(schema::blogs::id.eq(&_blog_id)).load::<Blog>(&_connection).expect("E");
 
-    let params = web::Query::<Params>::from_query(req.query_string()).unwrap();
+
     let _new_content = &params.content;
     if _new_content != "" {
     diesel::update(&_blog[0])
