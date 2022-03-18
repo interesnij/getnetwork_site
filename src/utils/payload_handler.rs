@@ -249,21 +249,3 @@ pub async fn category_split_payload(payload: &mut Multipart) -> CategoriesForm {
     }
     form
 }
-
-pub async fn content_split_payload(payload: &mut Multipart) -> ContentForm {
-    let mut form: ContentForm = ContentForm {
-        content: "".to_string(),
-    };
-
-    while let Some(item) = payload.next().await {
-        let mut field: Field = item.expect("split_payload err");
-
-        //while let Some(chunk) = field.next().await {
-        //    let data = chunk.expect("split_payload err chunk");
-            if let Ok(s) = str::from_utf8(&field.next()) {
-                form.content = s.to_string()
-            }
-        //}
-    }
-    form
-}

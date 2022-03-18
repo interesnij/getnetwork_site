@@ -7,7 +7,6 @@ use diesel::prelude::*;
 use crate::utils::{
     split_payload,
     category_split_payload,
-    content_split_payload,
     get_template_2,
     establish_connection
 };
@@ -396,6 +395,7 @@ pub async fn edit_blog(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     HttpResponse::Ok()
 }
 
+use serde::Deserialize;
 #[derive(Deserialize)]
 struct BlogContent {
     content: String,
