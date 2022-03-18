@@ -383,7 +383,7 @@ pub async fn edit_content_blog(mut payload: Multipart, _id: web::Path<i32>) -> i
 
     let form = content_split_payload(payload.borrow_mut()).await;
     let _new_content = Some(form.content.clone());
-    let updated_row = diesel::update(&_blog[0])
+    diesel::update(&_blog[0])
     .set(schema::blogs::content.eq(&_new_content))
     .get_result(&_connection);
 
