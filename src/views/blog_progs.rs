@@ -168,7 +168,7 @@ pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id
         .get_result::<Blog>(&_connection)
         .expect("Error.");
     };
-    let blog_content : String = _blog[0].content.to_string();
+    let blog_content = _blog[0].content;
     let count = blog_content.chars().count();
 
     let mut data = Context::new();
