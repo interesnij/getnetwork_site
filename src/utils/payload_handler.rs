@@ -89,7 +89,7 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
-                    _content += s.to_string();
+                    _content += &s.to_string();
                     form.content = _content;
                 }
             }
