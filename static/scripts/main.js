@@ -148,8 +148,9 @@ function format_text(text) {
   h5 = text.querySelectorAll("h5");
   h6 = text.querySelectorAll("h6");
   span = text.querySelectorAll("span");
+
   for (var i = 0; i < br.length; i++){
-      br[i].removeAttribute("style"); span[i].className = ''
+      br[i].removeAttribute("style"); br[i].className = ''
   };
   for (var i = 0; i < img.length; i++){
       img[i].removeAttribute("style"); img[i].className = ''
@@ -185,7 +186,7 @@ function format_text(text) {
       h5[i].removeAttribute("style"); h5[i].className = ''
   };
   for (var i = 0; i < h6.length; i++){
-      h3[i].removeAttribute("style"); h6[i].className = ''
+      h6[i].removeAttribute("style"); h6[i].className = ''
   };
 
   return text
