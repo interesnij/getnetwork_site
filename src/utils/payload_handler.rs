@@ -71,7 +71,7 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                     if field.name() == "title" {
                         form.title = data_string;
                     } else if field.name() == "content" {
-                        &_content += data_string;
+                        _content += data_string;
                     } else if field.name() == "description" {
                         form.description = data_string;
                     } else if field.name() == "link" {
