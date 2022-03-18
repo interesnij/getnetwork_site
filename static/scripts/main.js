@@ -151,8 +151,10 @@ function format_text(text) {
   list += text.querySelectorAll("h6");
   list += text.querySelectorAll("span");
   for (var i = 0; i < list.length; i++){
-    list[i].removeAttribute("style");
-    list[i].className = '';
+    try{
+      list[i].removeAttribute("style");
+      list[i].className = ''
+    } catch { null }
   };
   return text
 };
