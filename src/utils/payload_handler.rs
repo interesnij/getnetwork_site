@@ -257,7 +257,6 @@ pub async fn content_split_payload(payload: &mut Multipart) -> ContentForm {
 
     while let Some(item) = payload.next().await {
         let mut field: Field = item.expect("split_payload err");
-        let name = field.name();
 
         while let Some(chunk) = field.next().await {
             let data = chunk.expect("split_payload err chunk");
