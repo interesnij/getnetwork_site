@@ -311,6 +311,7 @@ pub async fn edit_blog(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
         image: Some(form.main_image.clone()),
         is_blog_active: form.is_active.clone()
     };
+    println!("content={:#?}", form.content.clone());
 
     diesel::update(&_blog[0])
         .set(_new_blog)
