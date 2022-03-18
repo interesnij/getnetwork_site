@@ -397,7 +397,7 @@ pub async fn edit_blog(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
 
 use serde::Deserialize;
 #[derive(Deserialize)]
-struct BlogContent {
+pub struct BlogContent {
     content: String,
 }
 pub async fn edit_content_blog(form: web::Form<BlogContent>, _id: web::Path<i32>) -> impl Responder {
