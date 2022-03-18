@@ -532,7 +532,7 @@ pub async fn get_blog_page(req: HttpRequest, tera: web::Data<Tera>, param: web::
     data.insert("tags", &_tags);
     data.insert("tags_count", &_tags.len());
     data.insert("is_admin", &_is_admin);
-    data.insert("content_count", Some(&_blog[0].content.chars().count()));
+    data.insert("content_count", &Some(&_blog[0].content.chars().count()));
     let _template = _type + &"blogs/blog.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
