@@ -135,7 +135,7 @@ function service_tab_action(is, tab_class){
 function on(elSelector, eventName, selector, fn) {var element = document.querySelector(elSelector);element.addEventListener(eventName, function(event) {var possibleTargets = element.querySelectorAll(selector);var target = event.target;for (var i = 0, l = possibleTargets.length; i < l; i++) {var el = target;var p = possibleTargets[i];while (el && el !== element) {if (el === p) {return fn.call(p, event);}el = el.parentNode;}}});};
 
 function format_text(text) {
-  text = text.replaceAll('&nbsp;', ' ');
+  text = text..replace(/&nbsp/g, ' ');
   br = text.querySelectorAll("br");
   text.querySelectorAll("br");
   img = text.querySelectorAll("img");
