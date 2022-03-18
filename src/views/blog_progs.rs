@@ -385,7 +385,7 @@ pub async fn edit_content_blog(mut payload: Multipart, _id: web::Path<i32>) -> i
     let _new_content = Some(form.content.clone());
     diesel::update(&_blog[0])
     .set(schema::blogs::content.eq(&_new_content))
-    .get_result(&_connection);
+    .get_result::<Blog>(&_connection);
 
     HttpResponse::Ok()
 }
