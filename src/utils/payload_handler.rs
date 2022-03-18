@@ -81,7 +81,6 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 }
             }
             form.content = _content;
-            println!("content={:#?}", &form.content);
         }
 
         else if name == "category_list[]" {
@@ -125,7 +124,7 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
             let zzz = yyy + ".jpg";
             let file = UploadedFiles::new(zzz);
             let file_path = file.path.clone();
-            let mut f = web::block(move || std::fs::File::create(&file_path).expect("Failed to open hello.txt"))
+            let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
                 .unwrap();
             while let Some(chunk) = field.next().await {
@@ -133,9 +132,8 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 f = web::block(move || f.write_all(&data).map(|_| f))
                     .await
                     .unwrap()
-                    .expect("Failed to open hello.txt");
+                    .expect("E");
             }
-            //files.push(file.clone());
             form.main_image = file.path.clone();
         }
 
@@ -153,9 +151,8 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 f = web::block(move || f.write_all(&data).map(|_| f))
                     .await
                     .unwrap()
-                    .expect("Failed to open hello.txt");
+                    .expect("E");
             };
-            println!("content_type={:#?}", field.content_type());
             if field.content_type().to_string() == "image/jpeg".to_string() {
                 files.push(file.clone());
                 form.images.push(file.path.clone());
@@ -176,9 +173,8 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 f = web::block(move || f.write_all(&data).map(|_| f))
                     .await
                     .unwrap()
-                    .expect("Failed to open hello.txt");
+                    .expect("E");
             };
-            println!("content_type={:#?}", field.content_type());
             if field.content_type().to_string() == "video/mp4".to_string() {
                 files.push(file.clone());
                 form.videos.push(file.path.clone());
