@@ -163,22 +163,30 @@ on('#ajax', 'input', '.smile_supported', function() {
 //  }, 2000)
 });
 
+function send_content_data(form, url) {
+  text_val = form.querySelector(".smile_supported");
+  _val = format_text(text_val);
+  _text = _val.innerHTML;
+
+  $input = document.createElement("input");
+  $input.setAttribute("name", "content");
+  $input.setAttribute("type", "hidden");
+  $input.classList.add("input_text");
+  $input.value = text_val.innerHTML;
+  form.append($input)
+
+  form_data = new FormData(form);
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', url, true );
+  link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    ajax_get_reload(url)
+  } else { console.log(link.responseText) }};
+  link.send(form_data);
+};
+
 function send_post_data(form, url) {
-  if (form.querySelector(".smile_supported")) {
-    text_val = form.querySelector(".smile_supported");
-    try {
-      _val = format_text(text_val)
-    } catch {_val = text_val};
-    _text = _val.innerHTML;
-
-    $input = document.createElement("input");
-    $input.setAttribute("name", "content");
-    $input.setAttribute("type", "hidden");
-    $input.classList.add("input_text");
-    $input.value = text_val.innerHTML;
-    form.append($input)
-  };
-
   form_data = new FormData(form);
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', url, true );
@@ -264,6 +272,10 @@ on('body', 'click', '#create_blog_btn', function() {
 on('body', 'click', '#edit_blog_btn', function() {
   send_post_data(this.parentElement, "/edit_blog/" + this.getAttribute("data-pk") + "/");
 });
+on('body', 'click', '#edit_text_blog_btn', function() {
+  send_content_data(this.parentElement, "/edit_content_blog/" + this.getAttribute("data-pk") + "/");
+});
+
 on('body', 'click', '#create_blog_category_btn', function() {
   send_post_data(this.parentElement, "/create_blog_categories/");
 });
