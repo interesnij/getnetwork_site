@@ -24,7 +24,6 @@ impl UploadedFiles {
 pub struct Forms {
     pub title: String,
     pub description: String,
-    pub content: String,
     pub link: String,
     pub main_image: String,
     pub is_active: bool,
@@ -41,13 +40,17 @@ pub struct CategoriesForm {
     pub image: String,
 }
 
+#[derive(Deserialize, Serialize, Debug)]
+pub struct ContentForm {
+    pub content: String,
+}
+
 pub async fn split_payload(payload: &mut Multipart) -> Forms {
     let mut files: Vec<UploadedFiles> = Vec::new();
 
     let mut form: Forms = Forms {
         title: "".to_string(),
         description: "".to_string(),
-        content: "".to_string(),
         link: "".to_string(),
         main_image: "".to_string(),
         is_active: true,
@@ -249,6 +252,28 @@ pub async fn category_split_payload(payload: &mut Multipart) -> CategoriesForm {
                     } else if field.name() == "position" {
                         form.position = 0
                     }
+                }
+            }
+        }
+    }
+    form
+}
+
+pub async fn content_split_payload(payload: &mut Multipart) -> ContentForm {
+    let mut form: ContentForm = ContentForm {
+        content: "".to_string(),
+    };
+
+    while let Some(item) = payload.next().await {
+        let mut field: Field = item.expect("split_payload err");
+        let name = field.name();
+
+        while let Some(chunk) = field.next().await {
+            let data = chunk.expect("split_payload err chunk");
+            if let Ok(s) = str::from_utf8(&data) {
+                let data_string = s.to_string();
+                if field.name() == "content" {
+                    form.content = data_string
                 }
             }
         }

@@ -89,7 +89,6 @@ impl NewBlog {
 pub struct EditBlog {
     pub title: String,
     pub description: Option<String>,
-    pub content: Option<String>,
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_blog_active: bool,
