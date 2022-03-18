@@ -190,15 +190,6 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 form.videos.push(file.path.clone());
             };
         }
-        else if name == "content" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    form.content = data_string;
-                }
-            }
-        }
     }
     form
 }
