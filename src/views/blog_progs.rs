@@ -160,7 +160,6 @@ pub async fn edit_content_blog_page(req: HttpRequest, tera: web::Data<Tera>, _id
     let _blog_id : i32 = *_id;
     let _connection = establish_connection();
     let _blog = blogs.filter(schema::blogs::id.eq(&_blog_id)).load::<Blog>(&_connection).expect("E");
-    //let params = web::Query::<BlogParams>::from_query(&req.query_string()).unwrap();
 
     let params = web::Query::<BlogParams>::from_query(&req.query_string()).unwrap();
     if params.content.clone() != "".to_string() {

@@ -453,5 +453,5 @@ on('body', 'click', '.anon_color_change', function() {
     this.setAttribute("data-color", "white");
     new_color = "white"
   };
-  window.history.replaceState(null, null, window.location.pathname + "?f=" + new_color);
+  window.history.replaceState(null, null, window.location.pathname + "?content=''&f=" + new_color);
 });
