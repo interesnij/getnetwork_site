@@ -60,7 +60,7 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
     while let Some(item) = payload.next().await {
         let mut field: Field = item.expect("split_payload err");
         let name = field.name();
-        let _list = ["title", "content", "description", "link"];
+        let _list = ["title", "description", "link"];
 
         if _list.contains(&name) {
             let mut _content = "".to_string();
@@ -70,8 +70,6 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                     let data_string = s.to_string();
                     if field.name() == "title" {
                         form.title = data_string;
-                    } else if field.name() == "content" {
-                        _content += &data_string;
                     } else if field.name() == "description" {
                         form.description = data_string;
                     } else if field.name() == "link" {
@@ -80,7 +78,16 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
 
                 }
             }
-            form.content = _content;
+        }
+        else if name == "category_list[]" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let data_string = s.to_string();
+                    let _int: i32 = data_string.parse().unwrap();
+                    form.category_list.push(_int);
+                }
+            }
         }
 
         else if name == "category_list[]" {
@@ -119,10 +126,10 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
         }
 
         else if name == "main_image" {
-            let xxx: i32 = rand::thread_rng().gen_range(0..100000);
-            let yyy: String = xxx.to_string();
-            let zzz = yyy + ".jpg";
-            let file = UploadedFiles::new(zzz);
+            let xxx1: i32 = rand::thread_rng().gen_range(0..100000);
+            let yyy1: String = xxx1.to_string();
+            let zzz1 = yyy1 + ".jpg";
+            let file = UploadedFiles::new(zzz1);
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -138,10 +145,10 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
         }
 
         else if name == "images[]" {
-            let xxx: i32 = rand::thread_rng().gen_range(0..100000);
-            let yyy: String = xxx.to_string();
-            let zzz = yyy + ".jpg";
-            let file = UploadedFiles::new(zzz);
+            let xxx2: i32 = rand::thread_rng().gen_range(0..100000);
+            let yyy2: String = xxx2.to_string();
+            let zzz2 = yyy2 + ".jpg";
+            let file = UploadedFiles::new(zzz2);
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -179,6 +186,15 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
                 files.push(file.clone());
                 form.videos.push(file.path.clone());
             };
+        }
+        else if name == "content" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let data_string = s.to_string();
+                    form.content = data_string;
+                }
+            }
         }
     }
     form
