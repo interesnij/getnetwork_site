@@ -46,7 +46,7 @@ pub async fn serve_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> i
         _count += 1;
         // для генерации переменной 1 2 3
         let mut _let_int : String = _count.to_string().parse().unwrap();
-        let _serves :Vec<Serve> = serve.filter(schema::serve::category.eq(&_cat.id)).load(&_connection).expect("E");
+        let _serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(&_cat.id)).load(&_connection).expect("E");
         let _let_data_serves: String = "serves".to_string() + &_let_int;
         data.insert(&_let_data_serves, &_serves);
     };
