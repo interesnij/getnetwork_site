@@ -353,7 +353,11 @@ pub async fn delete_serve(_id: web::Path<i32>) -> impl Responder {
     let _serve_id : i32 = *_id;
     let _serve = serve.filter(schema::serve::id.eq(_serve_id)).load::<Serve>(&_connection).expect("E");
 
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(&_serve[0].serve_categories).load::<ServeCategories>(&_connection).expect("E");
+    let _cat_id : i32 = &_serve[0].serve_categories;
+    let _category = serve_categories
+        .filter(schema::serve_categories::id.eq(_cat_id)
+        .load::<ServeCategories>(&_connection)
+        .expect("E");
     diesel::update(&_category[0])
             .set(schema::serve_categories::serve_count.eq(&_category[0].serve_count - 1))
             .get_result::<ServeCategories>(&_connection)
