@@ -19,6 +19,14 @@ use crate::models::{
     NewServe,
     EditServe,
 };
+use actix_multipart::{Field, Multipart};
+use actix_web::web;
+use futures::StreamExt;
+use serde::{Deserialize, Serialize};
+use std::io::Write;
+use std::str;
+use rand::Rng;
+
 
 pub async fn serve_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use diesel::dsl::any;
@@ -218,7 +226,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         if name == "category" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std:str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.category = _int;
                 }
@@ -227,7 +235,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         else if name == "price" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std:str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.price = _int;
                 }
@@ -236,7 +244,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         else if name == "price_acc" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std:str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.price_acc = _int;
                 }
@@ -245,7 +253,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         else if name == "social_price" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std:str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.social_price = _int;
                 }
@@ -255,7 +263,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         else {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std:str::from_utf8(&data) {
                     let data_string = s.to_string();
                     if field.name() == "name" {
                         form.name = data_string

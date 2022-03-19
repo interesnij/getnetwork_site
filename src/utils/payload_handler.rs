@@ -267,10 +267,10 @@ pub async fn category_split_payload(payload: &mut Multipart) -> CategoriesForm {
 }
 
 
-pub async fn store_split_payload(payload: &mut Multipart) -> Forms {
+pub async fn store_split_payload(payload: &mut Multipart) -> StoreForms {
     let mut files: Vec<UploadedFiles> = Vec::new();
 
-    let mut form: Forms = Forms {
+    let mut form: StoreForms = StoreForms {
         title: "".to_string(),
         description: "".to_string(),
         link: "".to_string(),
