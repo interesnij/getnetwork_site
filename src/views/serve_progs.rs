@@ -2,7 +2,6 @@ extern crate diesel;
 
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
 use tera::{Tera, Context};
-use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
@@ -20,7 +19,6 @@ use crate::models::{
     EditServe,
 };
 use actix_multipart::{Field, Multipart};
-use actix_web::web;
 use futures::StreamExt;
 use serde::{Deserialize, Serialize};
 use std::io::Write;
@@ -44,7 +42,7 @@ pub async fn serve_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> i
     data.insert("is_admin", &_is_admin);
 
     let mut _count: i32 = 0;
-    let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_conn).expect("E");
+    let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
     for _cat in _serve_cats.iter() {
         _count += 1;
         // для генерации переменной 1 2 3
@@ -151,7 +149,7 @@ pub async fn edit_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     let _connection = establish_connection();
     let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
     let _s_category = serve_categories.filter(schema::serve_categories::id.eq(&_serve.id)).load::<ServeCategories>(&_connection).expect("E");
-    let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_conn).expect("E");
+    let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
 
     data.insert("serve", &_serve[0]);
     data.insert("category", &_s_category[0]);
@@ -178,12 +176,12 @@ pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
         .expect("Error saving post.");
     return HttpResponse::Ok();
 }
-pub async fn edit_serve_categories(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use schema::serve_categories;
 
     let _connection = establish_connection();
     let _cat_id : i32 = *_id;
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
+    let _category = schema::serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
 
     let form = category_split_payload(payload.borrow_mut()).await;
     let new_cat = NewServeCategories {
@@ -226,7 +224,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         if name == "category" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = std:str::from_utf8(&data) {
+                if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.category = _int;
                 }
@@ -235,7 +233,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         else if name == "price" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = std:str::from_utf8(&data) {
+                if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.price = _int;
                 }
@@ -244,7 +242,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         else if name == "price_acc" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = std:str::from_utf8(&data) {
+                if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.price_acc = _int;
                 }
@@ -253,7 +251,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         else if name == "social_price" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = std:str::from_utf8(&data) {
+                if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.social_price = _int;
                 }
@@ -263,7 +261,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         else {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = std:str::from_utf8(&data) {
+                if let Ok(s) = str::from_utf8(&data) {
                     let data_string = s.to_string();
                     if field.name() == "name" {
                         form.name = data_string
@@ -317,7 +315,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     let _serve_id : i32 = *_id;
     let _connection = establish_connection();
 
-    let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
+    let _serve = schema::serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
 
     let form = serve_split_payload(payload.borrow_mut()).await;
     let _new_serve = NewServe {
