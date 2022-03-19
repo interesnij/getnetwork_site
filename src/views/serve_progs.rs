@@ -147,8 +147,8 @@ pub async fn edit_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     data.insert("is_admin", &_is_admin);
     let _connection = establish_connection();
     let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
-    let _cat_id : i32 = &_serve.serve_categories;
-    let _s_category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
+    let _cat_id : i32 = _serve[0].serve_categories;
+    let _s_category = schema::serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
     let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
 
     data.insert("serve", &_serve[0]);
@@ -354,7 +354,7 @@ pub async fn delete_serve(_id: web::Path<i32>) -> impl Responder {
     let _serve_id : i32 = *_id;
     let _serve = serve.filter(schema::serve::id.eq(_serve_id)).load::<Serve>(&_connection).expect("E");
 
-    let _cat_id : i32 = &_serve[0].serve_categories;
+    let _cat_id : i32 = _serve[0].serve_categories;
     let _category = serve_categories
         .filter(schema::serve_categories::id.eq(_cat_id))
         .load::<ServeCategories>(&_connection)
