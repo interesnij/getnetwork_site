@@ -176,7 +176,7 @@ pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
     return HttpResponse::Ok();
 }
 pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::tag::serve_categories::dsl::serve_categories;
+    use crate::models::serve_categories::dsl::serve_categories;
 
     let _connection = establish_connection();
     let _cat_id : i32 = *_id;
@@ -200,7 +200,7 @@ pub struct ServeForm {
     pub name: String,
     pub description: String,
     pub serve_position: i32,
-    pub category: i32,
+    pub serve_categories: i32,
     pub price: i32,
     pub price_acc: i32,
     pub social_price: i32,
@@ -211,7 +211,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         name: "".to_string(),
         description: "".to_string(),
         serve_position: 0,
-        category: 0,
+        serve_categories: 0,
         price: 0,
         price_acc: 0,
         social_price: 0,
@@ -230,12 +230,12 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                 }
             }
         }
-        else if name == "category" {
+        else if name == "serve_categories" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
-                    form.category = _int;
+                    form.serve_categories = _int;
                 }
             }
         }
@@ -296,7 +296,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
         name: form.name.clone(),
         description: form.description.clone(),
         serve_position: form.serve_position.clone(),
-        category: form.category.clone(),
+        serve_categories: form.serve_categories.clone(),
         price: form.price.clone(),
         price_acc: form.price_acc.clone(),
         social_price: form.social_price.clone()
@@ -330,7 +330,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
         name: form.name.clone(),
         description: form.description.clone(),
         serve_position: form.serve_position.clone(),
-        category: form.category.clone(),
+        serve_categories: form.serve_categories.clone(),
         price: form.price.clone(),
         price_acc: form.price_acc.clone(),
         social_price: form.social_price.clone()
