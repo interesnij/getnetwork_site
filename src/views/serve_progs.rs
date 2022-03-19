@@ -295,7 +295,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let _new_serve = NewServe {
         name: form.name.clone(),
         description: form.description.clone(),
-        serve_position: form.position.clone(),
+        serve_position: form.serve_position.clone(),
         category: form.category.clone(),
         price: form.price.clone(),
         price_acc: form.price_acc.clone(),
@@ -329,7 +329,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     let _new_serve = NewServe {
         name: form.name.clone(),
         description: form.description.clone(),
-        serve_position: form.position.clone(),
+        serve_position: form.serve_position.clone(),
         category: form.category.clone(),
         price: form.price.clone(),
         price_acc: form.price_acc.clone(),
