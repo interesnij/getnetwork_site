@@ -279,7 +279,7 @@ table! {
         name -> Varchar,
         description -> Varchar,
         serve_position -> Int4,
-        category -> Int4,
+        serve_categories -> Int4,
         price -> Int4,
         price_acc -> Nullable<Int4>,
         social_price -> Nullable<Int4>,

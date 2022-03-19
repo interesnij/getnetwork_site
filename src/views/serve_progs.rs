@@ -355,7 +355,7 @@ pub async fn delete_serve(_id: web::Path<i32>) -> impl Responder {
 
     let _category = serve_categories.filter(schema::serve_categories::id.eq(&_serve[0].serve_categories).load::<ServeCategories>(&_connection).expect("E");
     diesel::update(&_category[0])
-            .set(schema::serve_categories::serve_count.eq(_category[0].serve_count - 1))
+            .set(schema::serve_categories::serve_count.eq(&_category[0].serve_count - 1))
             .get_result::<ServeCategories>(&_connection)
             .expect("Error.");
 
