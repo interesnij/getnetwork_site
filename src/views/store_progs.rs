@@ -147,8 +147,8 @@ pub async fn create_store(mut payload: Multipart) -> impl Responder {
         form.main_image.clone(),
         form.is_active.clone(),
         form.price.clone(),
-        Some(form.price_acc.clone()),
-        Some(form.social_price.clone()),
+        form.price_acc.clone(),
+        form.social_price.clone(),
         1
     );
 
