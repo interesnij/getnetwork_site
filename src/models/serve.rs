@@ -43,7 +43,7 @@ pub struct Serve {
     pub price_acc: Option<i32>,
     pub social_price: Option<i32>,
 }
-#[derive(Insertable)]
+#[derive(Insertable,AsChangeset)]
 #[table_name="serve"]
 pub struct NewServe {
     pub name: String,
