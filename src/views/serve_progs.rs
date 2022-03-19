@@ -64,7 +64,7 @@ pub async fn get_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     let _serve_id : i32 = *_id;
 
     let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
-    let _s_category = serve_categories.filter(schema::serve_categories::id.eq(&_serve.id)).load::<ServeCategories>(&_connection).expect("E");
+    let _s_category = serve_categories.filter(schema::serve_categories::id.eq(&_serve[0].category)).load::<ServeCategories>(&_connection).expect("E");
 
     let mut data = Context::new();
 
@@ -199,7 +199,7 @@ pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) ->
 pub struct ServeForm {
     pub name: String,
     pub description: String,
-    pub position: i32,
+    pub serve_position: i32,
     pub category: i32,
     pub price: i32,
     pub price_acc: i32,
@@ -210,6 +210,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
     let mut form: ServeForm = ServeForm {
         name: "".to_string(),
         description: "".to_string(),
+        serve_position: 0,
         category: 0,
         price: 0,
         price_acc: 0,
@@ -220,7 +221,16 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         let mut field: Field = item.expect("split_payload err");
         let name = field.name();
 
-        if name == "category" {
+        if name == "serve_position" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.serve_position = _int;
+                }
+            }
+        }
+        else if name == "category" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
@@ -307,8 +317,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
 }
 
 pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::tag::serve::dsl::serve;
-    use crate::schema::tags::dsl::tags;
+    use crate::models::serve::serve::dsl::serve;
     use crate::schema::serve_categories::dsl::serve_categories;
 
     let _serve_id : i32 = *_id;
