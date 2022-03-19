@@ -15,18 +15,14 @@ use crate::models::{
     NewServeCategories,
     Serve,
     NewServe,
-    EditServe,
 };
 use actix_multipart::{Field, Multipart};
 use futures::StreamExt;
 use serde::{Deserialize, Serialize};
-use std::io::Write;
 use std::str;
-use rand::Rng;
 
 
 pub async fn serve_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
-    use diesel::dsl::any;
     use crate::schema::serve::dsl::serve;
     use crate::schema::serve_categories::dsl::serve_categories;
 
@@ -298,7 +294,6 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
 
 pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     use schema::serve;
-    use crate::schema::tags::dsl::tags;
     use crate::schema::serve_categories::dsl::serve_categories;
 
     let _connection = establish_connection();
@@ -330,7 +325,6 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
 
 pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::serve::dsl::serve;
-    use crate::schema::serve_categories::dsl::serve_categories;
 
     let _serve_id : i32 = *_id;
     let _connection = establish_connection();
