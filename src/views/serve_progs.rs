@@ -64,7 +64,7 @@ pub async fn get_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     let _serve_id : i32 = *_id;
 
     let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
-    let _s_category = serve_categories.filter(schema::serve_categories::id.eq(&_serve[0].category)).load::<ServeCategories>(&_connection).expect("E");
+    let _s_category = serve_categories.filter(schema::serve_categories::id.eq(&_serve[0].serve_categories)).load::<ServeCategories>(&_connection).expect("E");
 
     let mut data = Context::new();
 
@@ -176,7 +176,7 @@ pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
     return HttpResponse::Ok();
 }
 pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::serve_categories::dsl::serve_categories;
+    use crate::schema::serve_categories::dsl::serve_categories;
 
     let _connection = establish_connection();
     let _cat_id : i32 = *_id;
@@ -317,7 +317,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
 }
 
 pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::serve::serve::dsl::serve;
+    use crate::schema::serve::dsl::serve;
     use crate::schema::serve_categories::dsl::serve_categories;
 
     let _serve_id : i32 = *_id;
