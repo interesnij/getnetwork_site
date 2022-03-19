@@ -13,7 +13,6 @@ use crate::schema;
 use crate::models::{
     ServeCategories,
     NewServeCategories,
-    EditServeCategories,
     Serve,
     NewServe,
     EditServe,
@@ -148,7 +147,7 @@ pub async fn edit_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     data.insert("is_admin", &_is_admin);
     let _connection = establish_connection();
     let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
-    let _s_category = serve_categories.filter(schema::serve_categories::id.eq(&_serve.id)).load::<ServeCategories>(&_connection).expect("E");
+    let _s_category = serve_categories.filter(schema::serve_categories::id.eq(&_serve[0].id)).load::<ServeCategories>(&_connection).expect("E");
     let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
 
     data.insert("serve", &_serve[0]);
@@ -177,11 +176,11 @@ pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
     return HttpResponse::Ok();
 }
 pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use schema::serve_categories;
+    use crate::models::tag::serve_categories::dsl::serve_categories;
 
     let _connection = establish_connection();
     let _cat_id : i32 = *_id;
-    let _category = schema::serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
+    let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
 
     let form = category_split_payload(payload.borrow_mut()).await;
     let new_cat = NewServeCategories {
@@ -308,14 +307,14 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
 }
 
 pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use schema::serve;
+    use crate::models::tag::serve::dsl::serve;
     use crate::schema::tags::dsl::tags;
     use crate::schema::serve_categories::dsl::serve_categories;
 
     let _serve_id : i32 = *_id;
     let _connection = establish_connection();
 
-    let _serve = schema::serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
+    let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
 
     let form = serve_split_payload(payload.borrow_mut()).await;
     let _new_serve = NewServe {

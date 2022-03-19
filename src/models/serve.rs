@@ -14,16 +14,9 @@ pub struct ServeCategories {
     pub serve_position: i32,
     pub serve_count: i32,
 }
-#[derive(Insertable)]
+#[derive(Insertable,AsChangeset)]
 #[table_name="serve_categories"]
 pub struct NewServeCategories {
-    pub name: String,
-    pub serve_position: i32,
-    pub serve_count: i32,
-}
-#[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
-#[table_name="serve_categories"]
-pub struct EditServeCategories {
     pub name: String,
     pub serve_position: i32,
     pub serve_count: i32,
