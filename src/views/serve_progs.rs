@@ -298,8 +298,8 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
         serve_position: form.serve_position.clone(),
         serve_categories: form.serve_categories.clone(),
         price: form.price.clone(),
-        price_acc: form.price_acc.clone(),
-        social_price: form.social_price.clone()
+        price_acc: Some(form.price_acc.clone()),
+        social_price: Some(form.social_price.clone())
     };
 
     let _serve = diesel::insert_into(serve::table)
@@ -307,7 +307,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
         .get_result::<Serve>(&_connection)
         .expect("E.");
 
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve.category)).load::<ServeCategories>(&_connection).expect("E");
+    let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve.serve_categories)).load::<ServeCategories>(&_connection).expect("E");
     diesel::update(&_category[0])
         .set(schema::serve_categories::serve_count.eq(_category[0].serve_count + 1))
         .get_result::<ServeCategories>(&_connection)
