@@ -46,7 +46,7 @@ pub async fn serve_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> i
         _count += 1;
         // для генерации переменной 1 2 3
         let mut _let_int : String = _count.to_string().parse().unwrap();
-        let _serves :Vec<Serve> = serve.filter(schema::serve::category.eq(&_cat.id)).load(&_connection).expect("E");
+        let _serves :Vec<Serve> = schema::serve.filter(schema::serve::category.eq(&_cat.id)).load(&_connection).expect("E");
         let _let_data_serves: String = "serves".to_string() + &_let_int;
         data.insert(&_let_data_serves, &_serves);
     };
@@ -149,7 +149,7 @@ pub async fn edit_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
     let _cat_id : i32 = _serve[0].serve_categories;
     let _s_category = schema::serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
-    let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
+    let _serve_cats :Vec<ServeCategories> = schema::serve_categories.load(&_connection).expect("E");
 
     data.insert("serve", &_serve[0]);
     data.insert("category", &_s_category[0]);
