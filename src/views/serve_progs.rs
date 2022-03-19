@@ -84,19 +84,29 @@ pub async fn get_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
 }
 
 pub async fn create_serve_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+    use schema::serve_categories::dsl::serve_categories;
     let mut data = Context::new();
+
+    let _connection = establish_connection();
+    let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
     data.insert("blog_categories", &_blog_cats);
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
+    data.insert("categories", &_categories);
     data.insert("is_admin", &_is_admin);
     let _template = _type + &"serve/create_categories.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 pub async fn create_serve_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+    use schema::serve_categories::dsl::serve_categories;
+
+    let _connection = establish_connection();
+    let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
+
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
@@ -105,6 +115,7 @@ pub async fn create_serve_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
+    data.insert("categories", &_categories);
 
     let _template = _type + &"serve/create_serve.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
