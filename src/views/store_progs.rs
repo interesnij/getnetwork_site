@@ -7,7 +7,7 @@ use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
-    split_payload,
+    store_split_payload,
     category_split_payload,
     get_template_2,
     establish_connection
@@ -139,13 +139,16 @@ pub async fn create_store(mut payload: Multipart) -> impl Responder {
 
     let _connection = establish_connection();
 
-    let form = split_payload(payload.borrow_mut()).await;
+    let form = store_split_payload(payload.borrow_mut()).await;
     let new_store = NewStore::from_store_form(
         form.title.clone(),
         form.description.clone(),
         form.link.clone(),
         form.main_image.clone(),
         form.is_active.clone(),
+        form.price.clone(),
+        form.price_acc.clone(),
+        form.social_price.clone(),
         1
     );
 
@@ -506,13 +509,16 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     diesel::delete(tags_items.filter(schema::tags_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
     diesel::delete(store_category.filter(schema::store_category::store_id.eq(_store_id))).execute(&_connection).expect("E");
 
-    let form = split_payload(payload.borrow_mut()).await;
+    let form = store_split_payload(payload.borrow_mut()).await;
     let _new_store = EditStore {
         title: form.title.clone(),
         description: Some(form.description.clone()),
         link: Some(form.link.clone()),
         image: Some(form.main_image.clone()),
-        is_store_active: form.is_active.clone()
+        is_store_active: form.is_active.clone(),
+        price: form.price.clone(),
+        price_acc: Some(form.price_acc.clone()),
+        social_price: Some(form.social_price.clone()),
     };
 
     diesel::update(&_store[0])

@@ -44,6 +44,9 @@ pub struct Store {
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_store_active: bool,
+    pub price: i32,
+    pub price_acc: Option<i32>,
+    pub social_price: Option<i32>,
     pub creator: i32,
     pub store_created: chrono::NaiveDateTime,
 }
@@ -56,7 +59,53 @@ pub struct EditStore {
     pub link: Option<String>,
     pub image: Option<String>,
     pub is_store_active: bool,
+    pub price: i32,
+    pub price_acc: Option<i32>,
+    pub social_price: Option<i32>,
 }
+
+#[derive(Serialize, Insertable)]
+#[table_name="stores"]
+pub struct NewStore {
+    pub title: String,
+    pub description: Option<String>,
+    pub link: Option<String>,
+    pub image: Option<String>,
+    pub is_store_active: bool,
+    pub price: i32,
+    pub price_acc: Option<i32>,
+    pub social_price: Option<i32>,
+    pub creator: i32,
+    pub store_created: chrono::NaiveDateTime,
+}
+
+impl NewStore {
+    pub fn from_store_form(
+        title: String,
+        description: String,
+        link: String,
+        image: String,
+        is_store_active: bool,
+        price: i32,
+        price_acc: i32,
+        social_price: i32,
+        creator_id: i32
+    ) -> Self {
+        NewStore {
+            title: title,
+            description: Some(description),
+            link: Some(link),
+            image: Some(image),
+            is_store_active: is_store_active,
+            price: price,
+            price_acc: Some(price_acc),
+            social_price: Some(social_price),
+            creator: creator_id,
+            store_created: chrono::Local::now().naive_utc(),
+        }
+    }
+}
+
 
 #[derive(Identifiable, Queryable, Associations)]
 #[belongs_to(StoreCategories)]
@@ -73,39 +122,6 @@ pub struct StoreCategory {
 pub struct NewStoreCategory {
     pub store_categories_id: i32,
     pub store_id: i32,
-}
-
-#[derive(Serialize, Insertable)]
-#[table_name="stores"]
-pub struct NewStore {
-    pub title: String,
-    pub description: Option<String>,
-    pub link: Option<String>,
-    pub image: Option<String>,
-    pub is_store_active: bool,
-    pub creator: i32,
-    pub store_created: chrono::NaiveDateTime,
-}
-
-impl NewStore {
-    pub fn from_store_form(
-        title: String,
-        description: String,
-        link: String,
-        image: String,
-        is_store_active: bool,
-        creator_id: i32
-    ) -> Self {
-        NewStore {
-            title: title,
-            description: Some(description),
-            link: Some(link),
-            image: Some(image),
-            is_store_active: is_store_active,
-            creator: creator_id,
-            store_created: chrono::Local::now().naive_utc(),
-        }
-    }
 }
 
 #[derive(Debug, Serialize, Queryable, Identifiable, Associations)]

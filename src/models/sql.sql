@@ -230,6 +230,40 @@ CREATE TABLE service_videos (
 );
 CREATE INDEX service_videos_id_idx ON service_videos (service);
 
+
+-- serve -------
+---------------
+---------------
+CREATE TABLE serve_categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    serve_position INT,
+    serve_count INT
+);
+
+CREATE TABLE serve (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    description VARCHAR,
+    serve_position INT,
+    category INT,
+    price INT,
+    price_acc INT,
+    social_price INT,
+
+    CONSTRAINT fk_serve_category
+        FOREIGN KEY(category)
+            REFERENCES serve(id)
+);
+
+CREATE TABLE serve_items (
+    id SERIAL PRIMARY KEY,
+    serve_id INT,
+    service_id INT,
+    store_id INT,
+    work_id INT
+);
+
 -- stores -------
 ---------------
 ---------------
@@ -249,6 +283,9 @@ CREATE TABLE stores (
     link TEXT,
     image TEXT,
     is_store_active boolean NOT NULL,
+    price INT,
+    price_acc INT,
+    social_price INT,
     creator INT NOT NULL,
     store_created TIMESTAMP NOT NULL,
 

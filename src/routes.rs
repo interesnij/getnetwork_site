@@ -7,6 +7,7 @@ use crate::views::{
     store_progs,
     wiki_progs,
     tag_progs,
+    serve_progs,
 };
 use crate::views::{process_signup,signup,about,index};
 
@@ -18,6 +19,28 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     .route("/about/", web::get().to(about))
     .route("/signup", web::get().to(signup))
     .route("/signup", web::post().to(process_signup))
+
+    // serve urls
+    .route("/serve/{id}/", web::get().to(serve_progs::get_serve_page))
+    .route("/serve_categories/", web::get().to(serve_progs::serve_categories_page))
+    .service(web::resource("/create_serve_categories/")
+        .route(web::get().to(serve_progs::create_serve_categories_page))
+        .route(web::post().to(serve_progs::create_serve_categories))
+    )
+    .service(web::resource("/edit_serve_category/{id}/")
+        .route(web::get().to(serve_progs::edit_serve_category_page))
+        .route(web::post().to(serve_progs::edit_serve_category))
+    )
+    .service(web::resource("/create_serve/")
+        .route(web::get().to(serve_progs::create_serve_page))
+        .route(web::post().to(serve_progs::create_serve))
+    )
+    .service(web::resource("/edit_serve/{id}/")
+        .route(web::get().to(serve_progs::edit_serve_page))
+        .route(web::post().to(serve_progs::edit_serve))
+    )
+    .route("/delete_serve/{id}/", web::get().to(serve_progs::delete_serve))
+    .route("/delete_serve_category/{id}/", web::get().to(serve_progs::delete_serve_category))
 
     // tags urls
     .route("/tags/", web::get().to(tag_progs::tags_page))

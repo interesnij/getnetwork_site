@@ -71,6 +71,7 @@ table! {
 }
 
 //////////////////// work //////////////
+
 table! {
     work_categories (id) {
         id -> Int4,
@@ -80,6 +81,7 @@ table! {
         work_count -> Int4,
     }
 }
+
 table! {
     works (id) {
         id -> Int4,
@@ -93,6 +95,7 @@ table! {
         work_created -> Timestamp,
     }
 }
+
 
 table! {
     work_category (id) {
@@ -136,6 +139,9 @@ table! {
         link -> Nullable<Text>,
         image -> Nullable<Text>,
         is_store_active -> Bool,
+        price -> Int4,
+        price_acc -> Nullable<Int4>,
+        social_price -> Nullable<Int4>,
         creator -> Int4,
         store_created -> Timestamp,
     }
@@ -255,6 +261,41 @@ table! {
     }
 }
 
+
+//////////////////// serve //////////////
+
+table! {
+    serve_categories (id) {
+        id -> Int4,
+        name -> Varchar,
+        serve_position -> Int4,
+        serve_count -> Int4,
+    }
+}
+
+table! {
+    serve (id) {
+        id -> Int4,
+        name -> Varchar,
+        description -> Varchar,
+        serve_position -> Int4,
+        category -> Int4,
+        price -> Int4,
+        price_acc -> Nullable<Int4>,
+        social_price -> Nullable<Int4>,
+    }
+}
+
+table! {
+    serve_items (id) {
+        id -> Int4,
+        serve_id -> Int4,
+        service_id -> Int4,
+        store_id -> Int4,
+        work_id -> Int4,
+    }
+}
+
 //////////////////// tags //////////////
 table! {
     tags (id) {
@@ -318,6 +359,7 @@ joinable!(blog_comments -> users (user_id));
 
 allow_tables_to_appear_in_same_query!(
     users,
+
     blog_categories,
     blog_category,
     blogs,

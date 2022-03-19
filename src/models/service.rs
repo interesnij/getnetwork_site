@@ -58,7 +58,6 @@ pub struct EditService {
     pub is_service_active: bool,
 }
 
-
 #[derive(Identifiable, Queryable, Associations)]
 #[belongs_to(ServiceCategories)]
 #[belongs_to(Service)]

@@ -7,6 +7,7 @@ use serde::{
 
 use crate::models::User;
 
+/////// WorkCategories //////
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
 #[table_name="work_categories"]
 pub struct WorkCategories {
@@ -24,7 +25,6 @@ pub struct NewWorkCategories {
     pub image: Option<String>,
     pub work_count: i32,
 }
-
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="work_categories"]
 pub struct EditWorkCategories {
@@ -34,6 +34,7 @@ pub struct EditWorkCategories {
     pub work_count: i32,
 }
 
+/////// Work //////
 #[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(User, foreign_key="creator")]
 pub struct Work {
@@ -47,7 +48,6 @@ pub struct Work {
     pub creator: i32,
     pub work_created: chrono::NaiveDateTime,
 }
-
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="works"]
 pub struct EditWork {
@@ -57,24 +57,6 @@ pub struct EditWork {
     pub image: Option<String>,
     pub is_work_active: bool,
 }
-
-#[derive(Identifiable, Queryable, Associations)]
-#[belongs_to(WorkCategories)]
-#[belongs_to(Work)]
-#[table_name="work_category"]
-pub struct WorkCategory {
-    pub id: i32,
-    pub work_categories_id: i32,
-    pub work_id: i32,
-}
-
-#[derive(Insertable)]
-#[table_name="work_category"]
-pub struct NewWorkCategory {
-    pub work_categories_id: i32,
-    pub work_id: i32,
-}
-
 #[derive(Serialize, Insertable)]
 #[table_name="works"]
 pub struct NewWork {
@@ -108,6 +90,24 @@ impl NewWork {
     }
 }
 
+/////// WorkCategory //////
+#[derive(Identifiable, Queryable, Associations)]
+#[belongs_to(WorkCategories)]
+#[belongs_to(Work)]
+#[table_name="work_category"]
+pub struct WorkCategory {
+    pub id: i32,
+    pub work_categories_id: i32,
+    pub work_id: i32,
+}
+#[derive(Insertable)]
+#[table_name="work_category"]
+pub struct NewWorkCategory {
+    pub work_categories_id: i32,
+    pub work_id: i32,
+}
+
+/////// WorkImage //////
 #[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(Work, foreign_key="work")]
 pub struct WorkImage {
@@ -115,14 +115,12 @@ pub struct WorkImage {
     pub work: i32,
     pub src: String,
 }
-
 #[derive(Serialize, Insertable)]
 #[table_name="work_images"]
 pub struct NewWorkImage {
     pub work: i32,
     pub src: String,
 }
-
 impl NewWorkImage {
     pub fn from_work_images_form(
         work_id: i32, src: String) -> Self {
@@ -133,6 +131,7 @@ impl NewWorkImage {
     }
 }
 
+/////// WorkVideo //////
 #[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(Work, foreign_key="work")]
 pub struct WorkVideo {
@@ -140,14 +139,12 @@ pub struct WorkVideo {
     pub work: i32,
     pub src: String,
 }
-
 #[derive(Serialize, Insertable)]
 #[table_name="work_videos"]
 pub struct NewWorkVideo {
     pub work: i32,
     pub src: String,
 }
-
 impl NewWorkVideo {
     pub fn from_work_videos_form(
         work_id: i32, src: String) -> Self {
