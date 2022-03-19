@@ -517,8 +517,8 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
         image: Some(form.main_image.clone()),
         is_store_active: form.is_active.clone(),
         price: form.price.clone(),
-        price_acc: form.price_acc.clone(),
-        social_price: form.social_price.clone(),
+        price_acc: Some(form.price_acc.clone()),
+        social_price: Some(form.social_price.clone()),
     };
 
     diesel::update(&_store[0])

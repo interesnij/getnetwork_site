@@ -332,8 +332,8 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
         serve_position: form.serve_position.clone(),
         serve_categories: form.serve_categories.clone(),
         price: form.price.clone(),
-        price_acc: form.price_acc.clone(),
-        social_price: form.social_price.clone()
+        price_acc: Some(form.price_acc.clone()),
+        social_price: Some(form.social_price.clone())
     };
 
     diesel::update(&_serve[0])
@@ -353,7 +353,7 @@ pub async fn delete_serve(_id: web::Path<i32>) -> impl Responder {
     let _serve_id : i32 = *_id;
     let _serve = serve.filter(schema::serve::id.eq(_serve_id)).load::<Serve>(&_connection).expect("E");
 
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(&_serve[0].category)).load::<ServeCategories>(&_connection).expect("E");
+    let _category = serve_categories.filter(schema::serve_categories::id.eq(&_serve[0].serve_categories).load::<ServeCategories>(&_connection).expect("E");
     diesel::update(&_category[0])
             .set(schema::serve_categories::serve_count.eq(_category[0].serve_count - 1))
             .get_result::<ServeCategories>(&_connection)
