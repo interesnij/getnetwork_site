@@ -28,16 +28,18 @@ pub async fn serve_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> i
 
     let _connection = establish_connection();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
+
     let mut data = Context::new();
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
     data.insert("blog_categories", &_blog_cats);
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
+    data.insert("serve_categories", &_serve_cats);
     data.insert("is_admin", &_is_admin);
 
     let mut _count: i32 = 0;
-    let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
     for _cat in _serve_cats.iter() {
         _count += 1;
         // для генерации переменной 1 2 3
@@ -312,7 +314,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let _serve = diesel::insert_into(serve::table)
         .values(&_new_serve)
         .get_result::<Serve>(&_connection)
-        .expect("E."); 
+        .expect("E.");
 
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve.serve_categories)).load::<ServeCategories>(&_connection).expect("E");
     diesel::update(&_category[0])

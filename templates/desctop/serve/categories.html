@@ -1,21 +1,91 @@
 {% extends "desctop/base.html" %}
-{% block title %}Наши услуги{% endblock %}
+{% block title %}Калькулятор стоимости{% endblock %}
 {% block content %}
 
 <section class="bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
-            <a class="ajax" href="/">
-                Главная
-            </a>
+            <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <span>Наши услуги</span>
+            <span>Калькулятор стоимости</span>
         </div>
     </div>
 </section>
 
 <section class="page-section">
     <div class="container relative">
+        <div class="section-text">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <p class="lead align-center mt-0">
+                        Стоимость веб-ресурсов зависит от множества факторов, но самые
+                        внушительные из них: размер проекта, его сложность, необходимое время
+                        для его строительства, выьранные технологии разработки.
+                    </p>
+                    <p>
+                        Также мы принимаем в расчет общественную ценность заказываемого
+                        ресурса, поэтому делаем серьезные скидки на такие проекты.
+                    </p>
+                    <p>
+                        Мы знаем много стеков технологий для веб-разработки и можем предложить Вам
+                        несколько вариантов программного могущества приложений. Так, скриптовые языки
+                        потребуют меньших усилий, времени разработки и, соответственно, финансовых
+                        затрат. Компилируемые же языки программирования сложнее, объемнее и гораздо более
+                        требовательные в плане человеко-часов, зато работают в десятки раз быстрее, требуют
+                        сильно меньше серверных мощностей, способны обслуживать миллионы соединений в секунду.
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% for category in serve_categories %}
+        {% if loop.index == 1 %}
+        {% set object_list = serves1 %}
+        {% elif loop.index == 2 %}
+        {% set object_list = serves2 %}
+        {% elif loop.index == 3 %}
+        {% set object_list = serves3 %}
+        {% elif loop.index == 4 %}
+        {% set object_list = serves4 %}
+        {% endif %}
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  <a class="ajax" href="/serve/{{ category.id }}/">
+                    {{ category.name }}
+                  </a>
+                </th>
+                <th style="width:20%;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for object in object_list %}
+                <tr>
+                    <td>
+                        {{ object.name }}
+                        <div class="small">
+                            {{ object.description }}
+                        </div>
+                    </td>
+                    <td class="align-right">
+                      {% if object.social_price %}
+                        {{ object.social_price }}
+                        &nbsp;&nbsp;
+                      {% endif %}
+
+                      {% if object.price_acc %}
+                        <del>{{ object.price }}</del>
+                        &nbsp;
+                        {{ object.price_acc }}
+                      {% else %}
+                        {{ object.price }}
+                      {% endif %}
+                    </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
     </div>
 </section>
 
