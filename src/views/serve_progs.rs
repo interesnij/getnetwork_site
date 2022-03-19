@@ -312,7 +312,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let _serve = diesel::insert_into(serve::table)
         .values(&_new_serve)
         .get_result::<Serve>(&_connection)
-        .expect("E.");
+        .expect("E."); 
 
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve.serve_categories)).load::<ServeCategories>(&_connection).expect("E");
     diesel::update(&_category[0])

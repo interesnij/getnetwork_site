@@ -246,13 +246,13 @@ CREATE TABLE serve (
     name VARCHAR NOT NULL,
     description VARCHAR,
     serve_position INT,
-    category INT,
+    serve_categories INT,
     price INT,
     price_acc INT,
     social_price INT,
 
     CONSTRAINT fk_serve_category
-        FOREIGN KEY(category)
+        FOREIGN KEY(serve_categories)
             REFERENCES serve(id)
 );
 
