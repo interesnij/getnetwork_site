@@ -56,6 +56,13 @@ pub struct CategoriesForm {
     pub position: i32,
     pub image: String,
 }
+#[derive(Deserialize, Serialize, Debug)]
+pub struct ServeCategoriesForm {
+    pub name: String,
+    pub tech_categories: i32,
+    pub serve_position: i32,
+    pub serve_count: i32,
+}
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ContentForm {
@@ -434,6 +441,52 @@ pub async fn store_split_payload(payload: &mut Multipart) -> StoreForms {
                 files.push(file.clone());
                 form.videos.push(file.path.clone());
             };
+        }
+    }
+    form
+}
+
+pub async fn serve_category_split_payload(payload: &mut Multipart) -> ServeCategoriesForm {
+    let mut form: ServeCategoriesForm = ServeCategoriesForm {
+        name: "".to_string(),
+        tech_categories: 0,
+        serve_position: 0,
+    };
+
+    while let Some(item) = payload.next().await {
+        let mut field: Field = item.expect("split_payload err");
+        let name = field.name();
+
+        if name == "tech_categories" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.tech_categories = _int;
+                }
+            }
+        }
+        else if name == "serve_position" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    //let data_string = s.to_string();
+                    let _int: i32 = s.parse().unwrap();
+                    form.serve_position = _int;
+                }
+            }
+        }
+
+        else {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let data_string = s.to_string();
+                    if field.name() == "name" {
+                        form.name = data_string
+                    }
+                }
+            }
         }
     }
     form

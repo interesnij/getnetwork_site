@@ -1,5 +1,5 @@
 {% extends "desctop/base.html" %}
-{% block title %}Создание категории услуг{% endblock %}
+{% block title %}Создание тех. категории{% endblock %}
 {% block content %}
 
 <section class="bg-gray-lighter" style="padding-top: 90px;">
@@ -7,9 +7,9 @@
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <a class="ajax" href="/serve_categories/">Категории услуг</a>
+            <a class="ajax" href="/tech_categories/">Тех. категории</a>
             &nbsp;/&nbsp;
-            <span>Создание категории услуг</span>
+            <span>Создание тех. категории</span>
         </div>
     </div>
 </section>
@@ -22,13 +22,13 @@
             <div class="mb-20 mb-md-10">
                 <input class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
             </div>
-            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_serve_category_btn">Создать</button>
+            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_tech_category_btn">Создать</button>
         </form>
         <div class="container">
             {% for category in categories %}
             <p>{{ category.name }}
-                | <a class="ajax" href="/edit_serve_category/{{ category.id }}/">~</a>
-                | <a class="pointer remove_serve_category" data-pk="{{ category.id }}">x</a>
+                | <a class="ajax" href="/edit_tech_category/{{ category.id }}/">~</a>
+                | <a class="pointer remove_tech_category" data-pk="{{ category.id }}">x</a>
             </p>
             {% endfor %}
         </div>

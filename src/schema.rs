@@ -265,9 +265,19 @@ table! {
 //////////////////// serve //////////////
 
 table! {
+    tech_categories (id) {
+        id -> Int4,
+        name -> Varchar,
+        tech_position -> Int4,
+        tech_count -> Int4,
+    }
+}
+
+table! {
     serve_categories (id) {
         id -> Int4,
         name -> Varchar,
+        tech_categories -> Int4,
         serve_position -> Int4,
         serve_count -> Int4,
     }
@@ -277,12 +287,14 @@ table! {
     serve (id) {
         id -> Int4,
         name -> Varchar,
+        cat_name -> Varchar,
         description -> Varchar,
         serve_position -> Int4,
         serve_categories -> Int4,
         price -> Int4,
         price_acc -> Nullable<Int4>,
         social_price -> Nullable<Int4>,
+        man_hours -> Int4,
     }
 }
 

@@ -5,12 +5,30 @@ use serde::{
     Deserialize
 };
 
+/////// TechCategories //////
+#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
+#[table_name="tech_categories"]
+pub struct TechCategories {
+    pub id: i32,
+    pub name: String,
+    pub tech_position: i32,
+    pub tech_count: i32,
+}
+#[derive(Insertable,AsChangeset)]
+#[table_name="tech_categories"]
+pub struct NewTechCategories {
+    pub name: String,
+    pub tech_position: i32,
+    pub tech_count: i32,
+}
+
 /////// ServeCategories //////
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
 #[table_name="serve_categories"]
 pub struct ServeCategories {
     pub id: i32,
     pub name: String,
+    pub tech_categories: i32,
     pub serve_position: i32,
     pub serve_count: i32,
 }
@@ -18,6 +36,7 @@ pub struct ServeCategories {
 #[table_name="serve_categories"]
 pub struct NewServeCategories {
     pub name: String,
+    pub tech_categories: i32,
     pub serve_position: i32,
     pub serve_count: i32,
 }

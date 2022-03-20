@@ -1,5 +1,5 @@
 {% extends "desctop/base.html" %}
-{% block title %}Изменение категории услуг{% endblock %}
+{% block title %}Изменение категории опций{% endblock %}
 {% block content %}
 
 <section class="bg-gray-lighter" style="padding-top: 90px;">
@@ -7,9 +7,9 @@
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <a class="ajax" href="/serve_categories/">Категории услуг</a>
+            <a class="ajax" href="/serve_categories/">Категории опций</a>
             &nbsp;/&nbsp;
-            <span>Изменение категории услуг</span>
+            <span>Изменение категории опций</span>
         </div>
     </div>
 </section>
@@ -21,6 +21,14 @@
             </div>
             <div class="mb-20 mb-md-10">
                 <input value="{{ category.store_position }}" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <label>Категория</label>
+              <select class="input-md form-control" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
+                {% for cat in tech_categories %}
+                  <option {% if cat.id == category.id %}selected=""{% endif %} value="{{ cat.id }}">{{ cat.name }}</option>
+                {% endfor %}
+              </select>
             </div>
             <button data-pk="{{ category.id }}" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_serve_category_btn">Создать</button>
         </form>

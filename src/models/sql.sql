@@ -234,11 +234,23 @@ CREATE INDEX service_videos_id_idx ON service_videos (service);
 -- serve -------
 ---------------
 ---------------
+CREATE TABLE tech_categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    tech_position INT,
+    tech_count INT
+);
+
 CREATE TABLE serve_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
+    tech_categories INT,
     serve_position INT,
-    serve_count INT
+    serve_count INT,
+
+    CONSTRAINT fk_tech_category
+        FOREIGN KEY(tech_categories)
+            REFERENCES serve_categories(id)
 );
 
 CREATE TABLE serve (
