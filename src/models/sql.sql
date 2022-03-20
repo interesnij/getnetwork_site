@@ -236,7 +236,6 @@ CREATE INDEX service_videos_id_idx ON service_videos (service);
 CREATE TABLE tech_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
-    cat_name VARCHAR NOT NULL,
     tech_position INT,
     tech_count INT
 );
@@ -258,7 +257,7 @@ CREATE TABLE serve (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
     cat_name VARCHAR NOT NULL,
-    description TEXT, 
+    description TEXT,
     serve_position INT,
     serve_categories INT,
     price INT,
