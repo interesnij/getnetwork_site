@@ -26,10 +26,7 @@
             <div class="mb-20 mb-md-10">
                 <input class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
             </div>
-            <div class="mb-20 mb-md-10">
-                <label>Обложка</label>
-                <input class="input-md form-control" type="file" name="main_image" />
-            </div>
+
             <div class="mb-20 mb-md-10">
                 <label>Категории</label>
                 <select class="form-control" name="category_list[]" multiple="">
@@ -63,7 +60,7 @@
                 {% set loop_index = 4 %}
               {% endif %}
 
-            <h4>Опции: {{ tech_category.name }}</h4>
+            <h4>Тех-категория: {{ tech_category.name }}</h4>
 
               {% for category in category_list %}
                 {% if loop_index == 1 %}
@@ -112,11 +109,11 @@
                 {% endif %}
 
                 <div class="mb-20 mb-md-10">
-                  <label>{{ category.name }}</label>
+                  <label>Список опций {{ category.name }}</label>
                   <select class="form-control" name="serve_list[]" multiple="">
                     {% for object in object_list %}
                       <option value="{{ object.id }}">
-                        {{ category.name }} => {{ object.name }}
+                        {{ object.name }}
                       </option>
                     {% endfor %}
                   </select>
@@ -126,6 +123,10 @@
             {% endfor %}
 
             <hr class="mt-0 mb-0 " />
+            <div class="mb-20 mb-md-10">
+                <label>Обложка</label>
+                <input class="input-md form-control" type="file" name="main_image" />
+            </div>
             <div class="mb-20 mb-md-10">
                 <label>Изображения</label>
                 <input type="file" multiple name="images[]" />

@@ -39,7 +39,7 @@ fn get_cats_for_service(service: &Service) -> Vec<ServiceCategories> {
     schema::service_categories::table
         .filter(schema::service_categories::id.eq(any(ids)))
         .load::<ServiceCategories>(&_connection)
-        .expect("could not load tags")
+        .expect("E")
 }
 fn get_tags_for_service(service: &Service) -> Vec<Tag> {
     use crate::schema::tags_items::dsl::tags_items;
@@ -54,7 +54,7 @@ fn get_tags_for_service(service: &Service) -> Vec<Tag> {
     schema::tags::table
         .filter(schema::tags::id.eq(any(stack)))
         .load::<Tag>(&_connection)
-        .expect("could not load tags")
+        .expect("E")
 }
 fn get_6_service_for_category(category: &ServiceCategories) -> Vec<Service> {
     use diesel::pg::expression::dsl::any;
@@ -66,7 +66,7 @@ fn get_6_service_for_category(category: &ServiceCategories) -> Vec<Service> {
         .order(schema::services::service_created.desc())
         .limit(6)
         .load::<Service>(&_connection)
-        .expect("could not load tags")
+        .expect("E")
 }
 fn get_service_for_category(category: &ServiceCategories) -> Vec<Service> {
     use diesel::pg::expression::dsl::any;
@@ -77,7 +77,19 @@ fn get_service_for_category(category: &ServiceCategories) -> Vec<Service> {
         .filter(schema::services::id.eq(any(ids)))
         .order(schema::services::service_created.desc())
         .load::<Service>(&_connection)
-        .expect("could not load tags")
+        .expect("E")
+}
+fn get_serve_for_service(service: &Service) -> Vec<Serve> {
+    use diesel::pg::expression::dsl::any;
+    use schema::serve::dsl::serve;
+    use schema::serve_items::dsl::serve_items;
+    let _connection = establish_connection();
+
+    let ids = serve_items.filter(schema::serve_items::service_id.eq(service.id)).load(&_connection).expect("E.");
+    schema::serve::table
+        .filter(schema::serve::id.eq(any(ids)))
+        .load::<Serve>(&_connection)
+        .expect("E")
 }
 
 pub async fn create_service_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
@@ -116,10 +128,11 @@ pub async fn create_service_page(req: HttpRequest, tera: web::Data<Tera>) -> imp
         .expect("Error.");
 
     let all_tech_categories :Vec<TechCategories> = tech_categories.load(&_connection).expect("E.");
+
+    // генерация переменных шаблона, хранящих: категории опций и опции.
     let mut _count: i32 = 0;
     for _cat in all_tech_categories.iter() {
         _count += 1;
-        // получаем категории опций
         let mut _let_int : String = _count.to_string().parse().unwrap();
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
         let __serve_categories :Vec<ServeCategories> = serve_categories.filter(schema::serve_categories::tech_categories.eq(_cat.id)).load(&_connection).expect("E.");
@@ -129,9 +142,7 @@ pub async fn create_service_page(req: HttpRequest, tera: web::Data<Tera>) -> imp
         for __cat in __serve_categories.iter() {
             _serve_count += 1;
             let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
-            // "_1"
             let _serve_int_dooble = "_".to_string() + &_let_int;
-            // "_1serves1"
             let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
             let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
             data.insert(&_let_serves, &__serves);
@@ -139,8 +150,6 @@ pub async fn create_service_page(req: HttpRequest, tera: web::Data<Tera>) -> imp
     };
 
     data.insert("tags", &all_tags);
-    data.insert("tech_categories", &all_tech_categories);
-
     data.insert("tech_categories", &all_tech_categories);
 
     let _template = _type + &"services/create_service.html".to_string();
@@ -166,9 +175,10 @@ pub async fn create_service_categories(mut payload: Multipart) -> impl Responder
     return HttpResponse::Ok();
 }
 pub async fn create_service(mut payload: Multipart) -> impl Responder {
-    use schema::{services,service_images,service_videos,service_category,tags_items};
+    use schema::{services,service_images,service_videos,service_category,tags_items,serve_items};
     use crate::schema::tags::dsl::tags;
     use crate::schema::service_categories::dsl::service_categories;
+    use crate::schema::serve::dsl::serve;
 
     let _connection = establish_connection();
 
@@ -240,6 +250,19 @@ pub async fn create_service(mut payload: Multipart) -> impl Responder {
         diesel::update(&_tag[0])
             .set((schema::tags::tag_count.eq(_tag[0].tag_count + 1), schema::tags::service_count.eq(_tag[0].service_count + 1)))
             .get_result::<Tag>(&_connection)
+            .expect("Error.");
+    };
+
+    for serve_id in form.serve_list.iter().enumerate() {
+        let new_serve = NewServeItems{
+            serve_id: *serve_id.1,
+            service_id: _service.id,
+            store_id: 0,
+            work_id: 0,
+        };
+        diesel::insert_into(serve_items::table)
+            .values(&new_serve)
+            .get_result::<ServeItems>(&_connection)
             .expect("Error.");
     };
     HttpResponse::Ok()
@@ -413,6 +436,9 @@ pub async fn service_categories_page(req: HttpRequest, tera: web::Data<Tera>) ->
 pub async fn edit_service_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::services::dsl::*;
     use schema::tags::dsl::*;
+    use schema::serve::dsl::serve;
+    use schema::serve_categories::dsl::serve_categories;
+    use schema::tech_categories::dsl::tech_categories;
     use crate::schema::service_images::dsl::service_images;
     use crate::schema::service_videos::dsl::service_videos;
 
@@ -431,14 +457,39 @@ pub async fn edit_service_page(req: HttpRequest, tera: web::Data<Tera>, _id: web
     let _categories = get_cats_for_service(&_service[0]);
     let _all_tags :Vec<Tag> = tags.load(&_connection).expect("Error.");
     let _service_tags = get_tags_for_service(&_service[0]);
+    let _serve_list = get_serve_for_service(&_service[0]);
 
     let _images = service_images.filter(schema::service_images::service.eq(_service[0].id)).load::<ServiceImage>(&_connection).expect("E");
     let _videos = service_videos.filter(schema::service_videos::service.eq(_service[0].id)).load::<ServiceVideo>(&_connection).expect("E");
 
+    let all_tech_categories :Vec<TechCategories> = tech_categories.load(&_connection).expect("E.");
+
+    // генерация переменных шаблона, хранящих: категории опций и опции.
+    let mut _count: i32 = 0;
+    for _cat in all_tech_categories.iter() {
+        _count += 1;
+        let mut _let_int : String = _count.to_string().parse().unwrap();
+        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
+        let __serve_categories :Vec<ServeCategories> = serve_categories.filter(schema::serve_categories::tech_categories.eq(_cat.id)).load(&_connection).expect("E.");
+        data.insert(&_let_serve_categories, &__serve_categories);
+
+        let mut _serve_count: i32 = 0;
+        for __cat in __serve_categories.iter() {
+            _serve_count += 1;
+            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
+            let _serve_int_dooble = "_".to_string() + &_let_int;
+            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
+            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
+            data.insert(&_let_serves, &__serves);
+        }
+    };
+
+    data.insert("tech_categories", &all_tech_categories);
     data.insert("service", &_service[0]);
     data.insert("service_tags", &_service_tags);
     data.insert("all_tags", &_all_tags);
     data.insert("categories", &_categories);
+    data.insert("serve_list", &_serve_list);
     data.insert("images", &_images);
     data.insert("videos", &_videos);
 
@@ -536,6 +587,7 @@ pub async fn edit_service(mut payload: Multipart, _id: web::Path<i32>) -> impl R
     diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
     diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
     diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+    diesel::delete(serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
     diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
 
     let form = split_payload(payload.borrow_mut()).await;
@@ -607,6 +659,18 @@ pub async fn edit_service(mut payload: Multipart, _id: web::Path<i32>) -> impl R
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
+    for _serve_id in form.serve_list.iter().enumerate() {
+        let _new_serve = NewServeItems{
+            serve_id: *_serve_id.1,
+            service_id: _service_id,
+            store_id: 0,
+            work_id: 0,
+        };
+        diesel::insert_into(schema::serve_items::table)
+            .values(&_new_serve)
+            .get_result::<ServeItems>(&_connection)
+            .expect("Error.");
+    };
     HttpResponse::Ok()
 }
 
@@ -638,6 +702,7 @@ pub async fn delete_service(_id: web::Path<i32>) -> impl Responder {
     use crate::schema::services::dsl::services;
     use crate::schema::service_category::dsl::service_category;
     use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::serve_items::dsl::serve_items;
     use crate::schema::service_videos::dsl::service_videos;
     use crate::schema::service_images::dsl::service_images;
 
@@ -663,6 +728,7 @@ pub async fn delete_service(_id: web::Path<i32>) -> impl Responder {
     diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
     diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
     diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+    diesel::delete(serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
     diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
     diesel::delete(&_service[0]).execute(&_connection).expect("E");
     HttpResponse::Ok()
