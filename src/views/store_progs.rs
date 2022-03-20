@@ -464,7 +464,7 @@ pub async fn edit_store_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     let _all_tags :Vec<Tag> = tags.load(&_connection).expect("Error.");
     let _all_serves :Vec<Serve> = serve.load(&_connection).expect("Error.");
     let _store_tags = get_tags_for_store(&_store[0]);
-    let _serve_list = get_serve_for_store(&_store[0]);
+    let _serve_list = get_serves_for_store(&_store[0]);
 
     let _images = store_images.filter(schema::store_images::store.eq(_store[0].id)).load::<StoreImage>(&_connection).expect("E");
     let _videos = store_videos.filter(schema::store_videos::store.eq(_store[0].id)).load::<StoreVideo>(&_connection).expect("E");
