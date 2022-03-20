@@ -61,7 +61,8 @@
                   {% for serve in serves %}
                     <option value="{{ serve.id }}">
                       {{ serve.name }}<br> |
-                      {{ serve.serve_categories }}
+                      {{ serve.serve_categories }} |
+                      {{ serve.description }}
                     </option>
                   {% endfor %}
                 </select>
