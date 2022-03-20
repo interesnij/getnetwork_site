@@ -28,14 +28,16 @@ pub struct NewTechCategories {
 pub struct ServeCategories {
     pub id: i32,
     pub name: String,
+    pub cat_name: String,
     pub tech_categories: i32,
     pub serve_position: i32,
-    pub serve_count: i32,
+    pub serve_count: i32, 
 }
 #[derive(Insertable,AsChangeset)]
 #[table_name="serve_categories"]
 pub struct NewServeCategories {
     pub name: String,
+    pub cat_name: String,
     pub tech_categories: i32,
     pub serve_position: i32,
     pub serve_count: i32,
@@ -61,7 +63,7 @@ pub struct Serve {
 #[table_name="serve"]
 pub struct NewServe {
     pub name: String,
-    pub cat_name: String, 
+    pub cat_name: String,
     pub description: String,
     pub serve_position: i32,
     pub serve_categories: i32,

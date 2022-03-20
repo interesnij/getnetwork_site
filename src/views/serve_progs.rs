@@ -243,8 +243,11 @@ pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
 
     let _connection = establish_connection();
     let form = serve_category_split_payload(payload.borrow_mut()).await;
+    let _s_category = tech_categories.filter(schema::tech_categories::id.eq(form.tech_categories.clone())).load::<TechCategories>(&_connection).expect("E");
+
     let new_cat = NewServeCategories {
         name: form.name.clone(),
+        cat_name: _s_category.name.clone(),
         tech_categories: form.tech_categories.clone(),
         serve_position: form.serve_position.clone(),
         serve_count: 0
@@ -285,6 +288,7 @@ pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) ->
     let form = serve_category_split_payload(payload.borrow_mut()).await;
     let new_cat = NewServeCategories {
         name: form.name.clone(),
+        cat_name: _category.name.clone(),
         tech_categories: form.tech_categories.clone(),
         serve_position: form.serve_position.clone(),
         serve_count: 0
