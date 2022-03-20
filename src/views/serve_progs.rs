@@ -444,12 +444,14 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     let form = serve_split_payload(payload.borrow_mut()).await;
     let _new_serve = NewServe {
         name: form.name.clone(),
+        cat_name: form.cat_name.clone(),
         description: form.description.clone(),
         serve_position: form.serve_position.clone(),
         serve_categories: form.serve_categories.clone(),
         price: form.price.clone(),
         price_acc: Some(form.price_acc.clone()),
-        social_price: Some(form.social_price.clone())
+        social_price: Some(form.social_price.clone()),
+        man_hours: form.man_hours.clone(),
     };
 
     diesel::update(&_serve[0])
