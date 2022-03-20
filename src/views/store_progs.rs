@@ -57,7 +57,7 @@ fn get_tags_for_store(store: &Store) -> Vec<Tag> {
         .load::<Tag>(&_connection)
         .expect("could not load tags")
 }
-fn get_serves_for_store(store: &Store) -> Vec<Tag> {
+fn get_serves_for_store(store: &Store) -> Vec<Serve> {
     use crate::schema::serve_items::dsl::serve_items;
     use diesel::dsl::any;
     let _connection = establish_connection();
@@ -523,6 +523,7 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::store_videos::dsl::store_videos;
     use crate::schema::store_images::dsl::store_images;
+    use crate::schema::serve_items::dsl::serve_items;
     use crate::schema::store_categories::dsl::store_categories;
     use crate::schema::tags::dsl::tags;
     use crate::schema::serve::dsl::serve;
@@ -625,7 +626,7 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
             .expect("Error.");
     };
     for _serve_id in form.serve_list.iter().enumerate() {
-        let _new_tag = NewServeItems{
+        let _new_serve = NewServeItems{
             serve_id: *_serve_id.1,
             service_id: 0,
             store_id: _store_id,
