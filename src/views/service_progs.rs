@@ -6,7 +6,7 @@ use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
-    split_payload,
+    store_split_payload,
     category_split_payload,
     get_template_2,
     establish_connection
@@ -182,7 +182,7 @@ pub async fn create_service(mut payload: Multipart) -> impl Responder {
 
     let _connection = establish_connection();
 
-    let form = split_payload(payload.borrow_mut()).await;
+    let form = store_split_payload(payload.borrow_mut()).await;
     let new_service = NewService::from_service_form(
         form.title.clone(),
         form.description.clone(),
@@ -590,7 +590,7 @@ pub async fn edit_service(mut payload: Multipart, _id: web::Path<i32>) -> impl R
     diesel::delete(serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
     diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
 
-    let form = split_payload(payload.borrow_mut()).await;
+    let form = store_split_payload(payload.borrow_mut()).await;
     let _new_service = EditService {
         title: form.title.clone(),
         description: Some(form.description.clone()),
