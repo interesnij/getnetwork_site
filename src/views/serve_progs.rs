@@ -407,13 +407,14 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let _connection = establish_connection();
 
     let form = serve_split_payload(payload.borrow_mut()).await;
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve.serve_categories)).load::<ServeCategories>(&_connection).expect("E");
+    let _cat_id = form.serve_position.clone()
+    let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
     let _new_serve = NewServe {
         name: form.name.clone(),
-        cat_name: &_category[0].name,
+        cat_name: _category[0].name,
         description: form.description.clone(),
         serve_position: form.serve_position.clone(),
-        serve_categories: form.serve_categories.clone(),
+        serve_categories: _cat_id,
         price: form.price.clone(),
         price_acc: Some(form.price_acc.clone()),
         social_price: Some(form.social_price.clone()),
@@ -441,7 +442,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     let _connection = establish_connection();
 
     let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve.serve_categories)).load::<ServeCategories>(&_connection).expect("E");
+    let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve[0].serve_categories)).load::<ServeCategories>(&_connection).expect("E");
     let form = serve_split_payload(payload.borrow_mut()).await;
 
     let _new_serve = NewServe {
