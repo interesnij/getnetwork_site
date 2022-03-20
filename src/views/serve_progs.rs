@@ -487,7 +487,7 @@ pub async fn delete_serve_category(_id: web::Path<i32>) -> impl Responder {
         .load::<TechCategories>(&_connection)
         .expect("E");
     diesel::update(&_category[0])
-            .set(schema::tech_categories::serve_count.eq(&_category[0].tech_count - 1))
+            .set(schema::tech_categories::tech_count.eq(&_category[0].tech_count - 1))
             .get_result::<TechCategories>(&_connection)
             .expect("E");
     HttpResponse::Ok()

@@ -61,7 +61,7 @@ pub struct Serve {
 #[table_name="serve"]
 pub struct NewServe {
     pub name: String,
-    pub cat_name: String,
+    pub cat_name: String, 
     pub description: String,
     pub serve_position: i32,
     pub serve_categories: i32,
