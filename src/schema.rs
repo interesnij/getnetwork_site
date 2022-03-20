@@ -277,6 +277,7 @@ table! {
     serve_categories (id) {
         id -> Int4,
         name -> Varchar,
+        cat_name -> Varchar,
         tech_categories -> Int4,
         serve_position -> Int4,
         serve_count -> Int4,
@@ -288,7 +289,7 @@ table! {
         id -> Int4,
         name -> Varchar,
         cat_name -> Varchar,
-        description -> Varchar,
+        description -> Text,
         serve_position -> Int4,
         serve_categories -> Int4,
         price -> Int4,
