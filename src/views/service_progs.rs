@@ -28,7 +28,7 @@ use crate::models::{
     Tag,
     Serve,
     ServeCategories,
-    TechCategories 
+    TechCategories
 };
 
 fn get_cats_for_service(service: &Service) -> Vec<ServiceCategories> {
@@ -127,9 +127,9 @@ pub async fn create_service_page(req: HttpRequest, tera: web::Data<Tera>) -> imp
 
         let mut _serve_count: i32 = 0;
         for __cat in __serve_categories.iter() {
-            _serve_count += 1;
+            _serve_count += 1; 
             let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
-            let _let_serves: String = "serves".to_string() + &_serve_int;
+            let _let_serves: String = &_serve_int + "serves".to_string() + &_serve_int;
             let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
             data.insert(&_let_serves, &__serves);
         }
