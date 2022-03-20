@@ -30,6 +30,9 @@ use crate::models::{
     Serve,
     ServeItems,
     NewServeItems,
+    ServeCategories,
+    TechCategories,
+    NewServe,
 };
 
 fn get_cats_for_store(store: &Store) -> Vec<StoreCategories> {
