@@ -88,7 +88,10 @@ fn get_serve_for_service(service: &Service) -> Vec<Serve> {
     use schema::serve_items::dsl::serve_items;
     let _connection = establish_connection();
 
-    let ids = serve_items.filter(schema::serve_items::service_id.eq(service.id)).load(&_connection).expect("E.");
+    let ids = serve_items
+        .filter(schema::serve_items::service_id.eq(service.id))
+        .execute(&_connection)
+        .expect("E.");
     schema::serve::table
         .filter(schema::serve::id.eq(any(ids)))
         .load::<Serve>(&_connection)
