@@ -30,7 +30,7 @@
               <select class="input-md form-control" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
                 {% for category in categories %}
                   <option value="{{ category.id }}">
-                    {{ category.name }}
+                    {{ category.name }} - {{ category.tech_categories }}
                   </option>
                 {% endfor %}
               </select>
