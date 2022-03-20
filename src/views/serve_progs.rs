@@ -407,11 +407,11 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let _connection = establish_connection();
 
     let form = serve_split_payload(payload.borrow_mut()).await;
-    let _cat_id = form.serve_position.clone()
+    let _cat_id = form.serve_position.clone();
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
     let _new_serve = NewServe {
         name: form.name.clone(),
-        cat_name: _category[0].name,
+        cat_name: _category[0].name.clone(),
         description: form.description.clone(),
         serve_position: form.serve_position.clone(),
         serve_categories: _cat_id,
@@ -447,7 +447,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
 
     let _new_serve = NewServe {
         name: form.name.clone(),
-        cat_name: _category[0].name,
+        cat_name: _category[0].name.clone(),
         description: form.description.clone(),
         serve_position: form.serve_position.clone(),
         serve_categories: form.serve_categories.clone(),
