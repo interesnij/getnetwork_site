@@ -27,6 +27,15 @@
                 <input class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
             </div>
             <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="price" placeholder="Порядок следования" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="price_acc" placeholder="Порядок следования" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="social_price" placeholder="Порядок следования" />
+            </div>
+            <div class="mb-20 mb-md-10">
                 <label>Обложка</label>
                 <input class="input-md form-control" type="file" name="main_image" />
             </div>
@@ -44,6 +53,14 @@
                     {% for tag in tags %}
                     <option value="{{ tag.id }}">{{ tag.name }}</option>
                     {% endfor %}
+                </select>
+            </div> 
+            <div class="mb-20 mb-md-10">
+                <label>Опции</label>
+                <select class="form-control" name="serve_list[]" multiple="">
+                  {% for serve in serves %}
+                    <option value="{{ serve.id }}">{{ serve.name }}</option>
+                  {% endfor %}
                 </select>
             </div>
             <div class="mb-20 mb-md-10">

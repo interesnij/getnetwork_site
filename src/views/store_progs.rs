@@ -27,6 +27,9 @@ use crate::models::{
     TagItems,
     NewTagItems,
     Tag,
+    Serve,
+    ServeItems,
+    NewServeItems,
 };
 
 fn get_cats_for_store(store: &Store) -> Vec<StoreCategories> {
@@ -52,6 +55,21 @@ fn get_tags_for_store(store: &Store) -> Vec<Tag> {
     schema::tags::table
         .filter(schema::tags::id.eq(any(stack)))
         .load::<Tag>(&_connection)
+        .expect("could not load tags")
+}
+fn get_serves_for_store(store: &Store) -> Vec<Tag> {
+    use crate::schema::serve_items::dsl::serve_items;
+    use diesel::dsl::any;
+    let _connection = establish_connection();
+
+    let _serve_items = serve_items.filter(schema::serve_items::store_id.eq(&store.id)).load::<ServeItems>(&_connection).expect("E");
+    let mut stack = Vec::new();
+    for _serve_item in _serve_items.iter() {
+        stack.push(_serve_item.serve_id);
+    };
+    schema::serve::table
+        .filter(schema::serve::id.eq(any(stack)))
+        .load::<Serve>(&_connection)
         .expect("could not load tags")
 }
 fn get_6_store_for_category(category: &StoreCategories) -> Vec<Store> {
@@ -94,6 +112,7 @@ pub async fn create_store_categories_page(req: HttpRequest, tera: web::Data<Tera
 
 pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use schema::tags::dsl::tags;
+    use schema::serve::dsl::serve;
 
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
@@ -107,9 +126,13 @@ pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     let _connection = establish_connection();
     let all_tags :Vec<Tag> = tags
         .load(&_connection)
-        .expect("Error.");
+        .expect("E.");
+    let all_serve :Vec<Serve> = serve
+        .load(&_connection)
+        .expect("E.");
 
     data.insert("tags", &all_tags);
+    data.insert("serves", &all_serve);
     let _template = _type + &"stores/create_store.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
@@ -135,6 +158,7 @@ pub async fn create_store_categories(mut payload: Multipart) -> impl Responder {
 pub async fn create_store(mut payload: Multipart) -> impl Responder {
     use schema::{stores,store_images,store_videos,store_category,tags_items};
     use crate::schema::tags::dsl::tags;
+    use schema::serve::dsl::serve;
     use crate::schema::store_categories::dsl::store_categories;
 
     let _connection = establish_connection();
@@ -212,6 +236,17 @@ pub async fn create_store(mut payload: Multipart) -> impl Responder {
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
+    for serve_id in form.serve_list.iter().enumerate() {
+        let new_serve = NewServeItems{
+            serve_id: *serve_id.1,
+            service_id: 0,
+            store_id: _store.id,
+            work_id: 0
+        };
+        diesel::insert_into(serve_items::table)
+            .values(&new_serve)
+            .get_result::<ServeItems>(&_connection)
+            .expect("Error.");
     HttpResponse::Ok()
 }
 
@@ -384,6 +419,7 @@ pub async fn store_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> i
 pub async fn edit_store_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::stores::dsl::*;
     use schema::tags::dsl::*;
+    use schema::serve::dsl::*;
     use crate::schema::store_images::dsl::store_images;
     use crate::schema::store_videos::dsl::store_videos;
 
@@ -401,14 +437,18 @@ pub async fn edit_store_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
 
     let _categories = get_cats_for_store(&_store[0]);
     let _all_tags :Vec<Tag> = tags.load(&_connection).expect("Error.");
+    let _all_serves :Vec<Serve> = serve.load(&_connection).expect("Error.");
     let _store_tags = get_tags_for_store(&_store[0]);
+    let _store_serves = get_serves_for_store(&_store[0]);
 
     let _images = store_images.filter(schema::store_images::store.eq(_store[0].id)).load::<StoreImage>(&_connection).expect("E");
     let _videos = store_videos.filter(schema::store_videos::store.eq(_store[0].id)).load::<StoreVideo>(&_connection).expect("E");
 
     data.insert("store", &_store[0]);
-    data.insert("store_tags", &_store_tags);
     data.insert("all_tags", &_all_tags);
+    data.insert("store_tags", &_store_tags);
+    data.insert("all_serves", &_all_serves);
+    data.insert("store_serves", &_store_serves);
     data.insert("categories", &_categories);
     data.insert("images", &_images);
     data.insert("videos", &_videos);
@@ -484,6 +524,7 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     use crate::schema::store_images::dsl::store_images;
     use crate::schema::store_categories::dsl::store_categories;
     use crate::schema::tags::dsl::tags;
+    use crate::schema::serve::dsl::serve;
 
     let _connection = establish_connection();
     let _store_id : i32 = *_id;
@@ -507,6 +548,7 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     diesel::delete(store_images.filter(schema::store_images::store.eq(_store_id))).execute(&_connection).expect("E");
     diesel::delete(store_videos.filter(schema::store_videos::store.eq(_store_id))).execute(&_connection).expect("E");
     diesel::delete(tags_items.filter(schema::tags_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
+    diesel::delete(serve_items.filter(schema::serve_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
     diesel::delete(store_category.filter(schema::store_category::store_id.eq(_store_id))).execute(&_connection).expect("E");
 
     let form = store_split_payload(payload.borrow_mut()).await;
@@ -581,6 +623,17 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
+    for _serve_id in form.serve_list.iter().enumerate() {
+        let _new_tag = NewServeItems{
+            serve_id: *_serve_id.1,
+            service_id: 0,
+            store_id: _store_id,
+            work_id: 0
+        };
+        diesel::insert_into(schema::serve_items::table)
+            .values(&_new_serve)
+            .get_result::<ServeItems>(&_connection)
+            .expect("Error.");
     HttpResponse::Ok()
 }
 

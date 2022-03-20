@@ -47,6 +47,7 @@ pub struct StoreForms {
     pub videos: Vec<String>,
     pub category_list: Vec<i32>,
     pub tags_list: Vec<i32>,
+    pub serve_list: Vec<i32>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -283,6 +284,7 @@ pub async fn store_split_payload(payload: &mut Multipart) -> StoreForms {
         videos: Vec::new(),
         category_list: Vec::new(),
         tags_list: Vec::new(),
+        serve_list: Vec::new(),
     };
 
     while let Some(item) = payload.next().await {
@@ -336,13 +338,13 @@ pub async fn store_split_payload(payload: &mut Multipart) -> StoreForms {
             }
         }
 
-        else if name == "category_list[]" {
+        else if name == "serve_list[]" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
                     let data_string = s.to_string();
                     let _int: i32 = data_string.parse().unwrap();
-                    form.category_list.push(_int);
+                    form.serve_list.push(_int);
                 }
             }
         }

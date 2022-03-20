@@ -49,7 +49,7 @@ pub struct Store {
     pub social_price: Option<i32>,
     pub creator: i32,
     pub store_created: chrono::NaiveDateTime,
-}
+} 
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="stores"]
