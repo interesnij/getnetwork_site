@@ -26,6 +26,9 @@ use crate::models::{
     TagItems,
     NewTagItems,
     Tag,
+    Serve,
+    ServiceCategories,
+    TechCategories
 };
 
 fn get_cats_for_service(service: &Service) -> Vec<ServiceCategories> {
@@ -93,6 +96,10 @@ pub async fn create_service_categories_page(req: HttpRequest, tera: web::Data<Te
 
 pub async fn create_service_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use schema::tags::dsl::tags;
+    use schema::serve::dsl::serve;
+    use schema::serve_categories::dsl::serve_categories;
+    use schema::tech_categories::dsl::tech_categories;
+
 
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
@@ -107,7 +114,31 @@ pub async fn create_service_page(req: HttpRequest, tera: web::Data<Tera>) -> imp
     let all_tags :Vec<Tag> = tags
         .load(&_connection)
         .expect("Error.");
+
+    let all_tech_categories :Vec<TechCategories> = serve.load(&_connection).expect("E.");
+    let mut _count: i32 = 0;
+    for _cat in all_tech_categories.iter() {
+        _count += 1;
+        // получаем категории опций
+        let mut _let_int : String = _count.to_string().parse().unwrap();
+        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
+        let __serve_categories :Vec<ServeCategories> = serve_categories.filter(schema::serve_categories::tech_categories.eq(_cat.id)).load(&_connection).expect("E.");
+        data.insert(&_let_serve_categories, &__serve_categories);
+
+        let mut _serve_count: i32 = 0;
+        for __cat in __serve_categories.iter() {
+            _serve_count += 1;
+            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
+            let _let_serves: String = "serves".to_string() + &_serve_int;
+            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
+            data.insert(&_let_serves, &__serves);
+        }
+    };
+
     data.insert("tags", &all_tags);
+    data.insert("tech_categories", &all_tech_categories);
+
+    data.insert("tech_categories", &all_tech_categories);
 
     let _template = _type + &"services/create_service.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
