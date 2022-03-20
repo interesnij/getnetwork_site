@@ -16,6 +16,8 @@ use crate::models::{
     NewServeCategories,
     Serve,
     NewServe,
+    TechCategories,
+    NewTechCategories,
 };
 use actix_multipart::{Field, Multipart};
 use futures::StreamExt;
