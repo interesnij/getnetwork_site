@@ -208,23 +208,27 @@ pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) ->
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ServeForm {
     pub name: String,
+    pub cat_name: String,
     pub description: String,
     pub serve_position: i32,
     pub serve_categories: i32,
     pub price: i32,
     pub price_acc: i32,
     pub social_price: i32,
+    pub man_hours: i32,
 }
 
 pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
     let mut form: ServeForm = ServeForm {
         name: "".to_string(),
+        cat_name: "".to_string(),
         description: "".to_string(),
         serve_position: 0,
         serve_categories: 0,
         price: 0,
         price_acc: 0,
         social_price: 0,
+        man_hours: 0,
     };
 
     while let Some(item) = payload.next().await {
@@ -276,6 +280,15 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                 }
             }
         }
+        else if name == "man_hours" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.man_hours = _int;
+                }
+            }
+        }
 
         else {
             while let Some(chunk) = field.next().await {
@@ -283,6 +296,8 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                 if let Ok(s) = str::from_utf8(&data) {
                     let data_string = s.to_string();
                     if field.name() == "name" {
+                        form.name = data_string
+                    } else if field.name() == "cat_name" {
                         form.name = data_string
                     } else if field.name() == "description" {
                         form.description = data_string
@@ -303,12 +318,14 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let form = serve_split_payload(payload.borrow_mut()).await;
     let _new_serve = NewServe {
         name: form.name.clone(),
+        cat_name: form.cat_name.clone(),
         description: form.description.clone(),
         serve_position: form.serve_position.clone(),
         serve_categories: form.serve_categories.clone(),
         price: form.price.clone(),
         price_acc: Some(form.price_acc.clone()),
-        social_price: Some(form.social_price.clone())
+        social_price: Some(form.social_price.clone()),
+        man_hours: form.man_hours.clone(),
     };
 
     let _serve = diesel::insert_into(serve::table)

@@ -29,34 +29,40 @@ pub struct NewServeCategories {
 pub struct Serve {
     pub id: i32,
     pub name: String,
+    pub cat_name: String,
     pub description: String,
     pub serve_position: i32,
     pub serve_categories: i32,
     pub price: i32,
     pub price_acc: Option<i32>,
     pub social_price: Option<i32>,
+    pub man_hours: i32,
 }
 #[derive(Insertable,AsChangeset)]
 #[table_name="serve"]
 pub struct NewServe {
     pub name: String,
+    pub cat_name: String,
     pub description: String,
     pub serve_position: i32,
     pub serve_categories: i32,
     pub price: i32,
     pub price_acc: Option<i32>,
     pub social_price: Option<i32>,
+    pub man_hours: i32,
 }
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="serve"]
 pub struct EditServe {
     pub name: String,
+    pub cat_name: String,
     pub description: String,
     pub serve_position: i32,
     pub serve_categories: i32,
     pub price: i32,
     pub price_acc: Option<i32>,
     pub social_price: Option<i32>,
+    pub man_hours: i32,
 }
 
 /////// ServeItems //////

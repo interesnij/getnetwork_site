@@ -244,12 +244,14 @@ CREATE TABLE serve_categories (
 CREATE TABLE serve (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
+    cat_name VARCHAR NOT NULL,
     description VARCHAR,
     serve_position INT,
     serve_categories INT,
     price INT,
     price_acc INT,
     social_price INT,
+    man_hours INT,
 
     CONSTRAINT fk_serve_category
         FOREIGN KEY(serve_categories)
