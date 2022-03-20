@@ -410,7 +410,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve.serve_categories)).load::<ServeCategories>(&_connection).expect("E");
     let _new_serve = NewServe {
         name: form.name.clone(),
-        cat_name: &_category.name,
+        cat_name: &_category[0].name,
         description: form.description.clone(),
         serve_position: form.serve_position.clone(),
         serve_categories: form.serve_categories.clone(),
@@ -435,6 +435,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
 
 pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::serve::dsl::serve;
+    use crate::schema::serve_categories::dsl::serve_categories;
 
     let _serve_id : i32 = *_id;
     let _connection = establish_connection();
@@ -445,7 +446,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
 
     let _new_serve = NewServe {
         name: form.name.clone(),
-        cat_name: _category.name,
+        cat_name: _category[0].name,
         description: form.description.clone(),
         serve_position: form.serve_position.clone(),
         serve_categories: form.serve_categories.clone(),
