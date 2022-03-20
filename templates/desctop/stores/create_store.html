@@ -60,8 +60,8 @@
                 <select class="form-control" name="serve_list[]" multiple="">
                   {% for serve in serves %}
                     <option value="{{ serve.id }}">
-                      {{ serve.name }} |
-                      {{ serve.fk_serve_category }}
+                      {{ serve.name }}<br> |
+                      {{ serve.serve_categories }}
                     </option>
                   {% endfor %}
                 </select>
