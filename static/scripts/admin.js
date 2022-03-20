@@ -125,6 +125,9 @@ function delete_item(url) {
 on('body', 'click', '#create_serve_btn', function() {
   send_post_data(this.parentElement, "/create_serve/");
 });
+on('body', 'click', '#create_tech_category_btn', function() {
+  send_post_data(this.parentElement, "/create_tech_categories/");
+});
 on('body', 'click', '#create_serve_category_btn', function() {
   send_post_data(this.parentElement, "/create_serve_categories/");
 });
@@ -134,12 +137,19 @@ on('body', 'click', '#edit_serve_btn', function() {
 on('body', 'click', '#edit_serve_category_btn', function() {
   send_post_data(this.parentElement, "/edit_serve_categories/" + this.getAttribute("data-pk") + "/");
 });
+on('body', 'click', '#edit_tech_category_btn', function() {
+  send_post_data(this.parentElement, "/edit_tech_categories/" + this.getAttribute("data-pk") + "/");
+});
 on('body', 'click', '.remove_serve', function() {
   delete_item("/delete_serve/" + this.getAttribute("data-pk") + "/");
   this.parentElement.remove();
 });
 on('body', 'click', '.remove_serve_category', function() {
   delete_item("/delete_serve_category/" + this.getAttribute("data-pk") + "/");
+  this.parentElement.remove();
+});
+on('body', 'click', '.remove_tech_category', function() {
+  delete_item("/delete_tech_category/" + this.getAttribute("data-pk") + "/");
   this.parentElement.remove();
 });
 
