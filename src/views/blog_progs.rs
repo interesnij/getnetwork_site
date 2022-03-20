@@ -573,7 +573,7 @@ pub async fn blog_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: we
     let _tag_items = tags_items.filter(schema::tags_items::blog_id.ne(0)).load::<TagItems>(&_connection).expect("E");
     for _tag_item in _tag_items.iter() {
         if stack.iter().any(|&i| i==_tag_item.tag_id) {
-            println!("Exists!");
+            continue;
         } else {
             stack.push(_tag_item.tag_id);
         }
@@ -625,7 +625,7 @@ pub async fn blog_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> im
         let _tag_items = tags_items.filter(schema::tags_items::blog_id.eq(blog.id)).load::<TagItems>(&_connection).expect("E");
         for _tag_item in _tag_items.iter() {
             if stack.iter().any(|&i| i==_tag_item.tag_id) {
-                println!("Exists!");
+                continue;
             } else {
                 stack.push(_tag_item.tag_id);
             }

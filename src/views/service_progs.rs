@@ -119,7 +119,6 @@ pub async fn create_service_page(req: HttpRequest, tera: web::Data<Tera>) -> imp
     use schema::serve_categories::dsl::serve_categories;
     use schema::tech_categories::dsl::tech_categories;
 
-
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
@@ -371,7 +370,7 @@ pub async fn service_category_page(req: HttpRequest, tera: web::Data<Tera>, id: 
     let _tag_items = tags_items.filter(schema::tags_items::service_id.ne(0)).load::<TagItems>(&_connection).expect("E");
     for _tag_item in _tag_items.iter() {
         if stack.iter().any(|&i| i==_tag_item.tag_id) {
-            println!("Exists!");
+            continue;
         } else {
             stack.push(_tag_item.tag_id);
         }
@@ -422,7 +421,7 @@ pub async fn service_categories_page(req: HttpRequest, tera: web::Data<Tera>) ->
         let _tag_items = tags_items.filter(schema::tags_items::service_id.eq(service.id)).load::<TagItems>(&_connection).expect("E");
         for _tag_item in _tag_items.iter() {
             if stack.iter().any(|&i| i==_tag_item.tag_id) {
-                println!("Exists!");
+                continue;
             } else {
                 stack.push(_tag_item.tag_id);
             }

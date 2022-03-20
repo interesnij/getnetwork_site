@@ -113,6 +113,8 @@ pub async fn create_store_categories_page(req: HttpRequest, tera: web::Data<Tera
 pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use schema::tags::dsl::tags;
     use schema::serve::dsl::serve;
+    use schema::serve_categories::dsl::serve_categories;
+    use schema::tech_categories::dsl::tech_categories;
 
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
@@ -127,12 +129,29 @@ pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     let all_tags :Vec<Tag> = tags
         .load(&_connection)
         .expect("E.");
-    let all_serve :Vec<Serve> = serve
-        .load(&_connection)
-        .expect("E.");
+
+    let all_tech_categories :Vec<TechCategories> = tech_categories.load(&_connection).expect("E.");
+    let mut _count: i32 = 0;
+    for _cat in all_tech_categories.iter() {
+        _count += 1;
+        let mut _let_int : String = _count.to_string().parse().unwrap();
+        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
+        let __serve_categories :Vec<ServeCategories> = serve_categories.filter(schema::serve_categories::tech_categories.eq(_cat.id)).load(&_connection).expect("E.");
+        data.insert(&_let_serve_categories, &__serve_categories);
+
+        let mut _serve_count: i32 = 0;
+        for __cat in __serve_categories.iter() {
+            _serve_count += 1;
+            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
+            let _serve_int_dooble = "_".to_string() + &_let_int;
+            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
+            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
+            data.insert(&_let_serves, &__serves);
+        }
+    };
 
     data.insert("tags", &all_tags);
-    data.insert("serves", &all_serve);
+    data.insert("tech_categories", &all_tech_categories);
     let _template = _type + &"stores/create_store.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
@@ -350,7 +369,7 @@ pub async fn store_category_page(req: HttpRequest, tera: web::Data<Tera>, id: we
     let _tag_items = tags_items.filter(schema::tags_items::store_id.ne(0)).load::<TagItems>(&_connection).expect("E");
     for _tag_item in _tag_items.iter() {
         if stack.iter().any(|&i| i==_tag_item.tag_id) {
-            println!("Exists!");
+            continue;
         } else {
             stack.push(_tag_item.tag_id);
         }
@@ -398,7 +417,7 @@ pub async fn store_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> i
         let _tag_items = tags_items.filter(schema::tags_items::store_id.eq(store.id)).load::<TagItems>(&_connection).expect("E");
         for _tag_item in _tag_items.iter() {
             if stack.iter().any(|&i| i==_tag_item.tag_id) {
-                println!("Exists!");
+                continue;
             } else {
                 stack.push(_tag_item.tag_id);
             }
@@ -420,7 +439,9 @@ pub async fn store_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> i
 pub async fn edit_store_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::stores::dsl::*;
     use schema::tags::dsl::*;
-    use schema::serve::dsl::*;
+    use schema::serve::dsl::serve;
+    use schema::serve_categories::dsl::serve_categories;
+    use schema::tech_categories::dsl::tech_categories;
     use crate::schema::store_images::dsl::store_images;
     use crate::schema::store_videos::dsl::store_videos;
 
@@ -440,16 +461,40 @@ pub async fn edit_store_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     let _all_tags :Vec<Tag> = tags.load(&_connection).expect("Error.");
     let _all_serves :Vec<Serve> = serve.load(&_connection).expect("Error.");
     let _store_tags = get_tags_for_store(&_store[0]);
-    let _store_serves = get_serves_for_store(&_store[0]);
+    let _serve_list = get_serve_for_store(&_store[0]);
 
     let _images = store_images.filter(schema::store_images::store.eq(_store[0].id)).load::<StoreImage>(&_connection).expect("E");
     let _videos = store_videos.filter(schema::store_videos::store.eq(_store[0].id)).load::<StoreVideo>(&_connection).expect("E");
+
+    let all_tech_categories :Vec<TechCategories> = tech_categories.load(&_connection).expect("E.");
+
+    // генерация переменных шаблона, хранящих: категории опций и опции.
+    let mut _count: i32 = 0;
+    for _cat in all_tech_categories.iter() {
+        _count += 1;
+        let mut _let_int : String = _count.to_string().parse().unwrap();
+        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
+        let __serve_categories :Vec<ServeCategories> = serve_categories.filter(schema::serve_categories::tech_categories.eq(_cat.id)).load(&_connection).expect("E.");
+        data.insert(&_let_serve_categories, &__serve_categories);
+
+        let mut _serve_count: i32 = 0;
+        for __cat in __serve_categories.iter() {
+            _serve_count += 1;
+            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
+            let _serve_int_dooble = "_".to_string() + &_let_int;
+            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
+            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
+            data.insert(&_let_serves, &__serves);
+        }
+    };
+
+    data.insert("tech_categories", &all_tech_categories);
 
     data.insert("store", &_store[0]);
     data.insert("all_tags", &_all_tags);
     data.insert("store_tags", &_store_tags);
     data.insert("all_serves", &_all_serves);
-    data.insert("store_serves", &_store_serves);
+    data.insert("serve_list", &_serve_list);
     data.insert("categories", &_categories);
     data.insert("images", &_images);
     data.insert("videos", &_videos);
@@ -523,10 +568,10 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::store_videos::dsl::store_videos;
     use crate::schema::store_images::dsl::store_images;
-    use crate::schema::serve_items::dsl::serve_items;
     use crate::schema::store_categories::dsl::store_categories;
     use crate::schema::tags::dsl::tags;
-    use crate::schema::serve::dsl::serve;
+    use crate::schema::serve_items::dsl::serve_items;
+
 
     let _connection = establish_connection();
     let _store_id : i32 = *_id;
@@ -670,6 +715,7 @@ pub async fn delete_store(_id: web::Path<i32>) -> impl Responder {
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::store_videos::dsl::store_videos;
     use crate::schema::store_images::dsl::store_images;
+    use crate::schema::serve_items::dsl::serve_items;
 
     let _connection = establish_connection();
     let _store_id : i32 = *_id;
@@ -693,6 +739,7 @@ pub async fn delete_store(_id: web::Path<i32>) -> impl Responder {
     diesel::delete(store_images.filter(schema::store_images::store.eq(_store_id))).execute(&_connection).expect("E");
     diesel::delete(store_videos.filter(schema::store_videos::store.eq(_store_id))).execute(&_connection).expect("E");
     diesel::delete(tags_items.filter(schema::tags_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
+    diesel::delete(serve_items.filter(schema::serve_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
     diesel::delete(store_category.filter(schema::store_category::store_id.eq(_store_id))).execute(&_connection).expect("E");
     diesel::delete(&_store[0]).execute(&_connection).expect("E");
     HttpResponse::Ok()
