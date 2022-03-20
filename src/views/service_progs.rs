@@ -28,7 +28,10 @@ use crate::models::{
     Tag,
     Serve,
     ServeCategories,
-    TechCategories
+    TechCategories,
+    NewServeItems,
+    NewServe,
+    ServeItems,
 };
 
 fn get_cats_for_service(service: &Service) -> Vec<ServiceCategories> {
@@ -564,6 +567,7 @@ pub async fn edit_service(mut payload: Multipart, _id: web::Path<i32>) -> impl R
     use crate::schema::service_images::dsl::service_images;
     use crate::schema::service_categories::dsl::service_categories;
     use crate::schema::tags::dsl::tags;
+    use crate::schema::serve_items::dsl::serve_items;
 
     let _connection = establish_connection();
     let _service_id : i32 = *_id;
