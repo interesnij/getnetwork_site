@@ -156,7 +156,7 @@ pub async fn create_store_categories(mut payload: Multipart) -> impl Responder {
     return HttpResponse::Ok();
 }
 pub async fn create_store(mut payload: Multipart) -> impl Responder {
-    use schema::{stores,store_images,store_videos,store_category,tags_items};
+    use schema::{stores,store_images,store_videos,store_category,serve_items,tags_items};
     use crate::schema::tags::dsl::tags;
     use schema::serve::dsl::serve;
     use crate::schema::store_categories::dsl::store_categories;
@@ -247,6 +247,7 @@ pub async fn create_store(mut payload: Multipart) -> impl Responder {
             .values(&new_serve)
             .get_result::<ServeItems>(&_connection)
             .expect("Error.");
+    }
     HttpResponse::Ok()
 }
 
