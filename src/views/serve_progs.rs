@@ -255,6 +255,25 @@ pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
         .expect("Error saving post.");
     return HttpResponse::Ok();
 }
+pub async fn edit_tech_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+    use crate::schema::tech_categories::dsl::tech_categories;
+
+    let _connection = establish_connection();
+    let _cat_id : i32 = *_id;
+    let _category = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
+
+    let form = category_split_payload(payload.borrow_mut()).await;
+    let new_cat = NewTechCategories {
+        name: form.name.clone(),
+        tech_position: form.position.clone(),
+        tech_count: 0
+    };
+    diesel::update(&_category[0])
+        .set(new_cat)
+        .get_result::<TechCategories>(&_connection)
+        .expect("E");
+    return HttpResponse::Ok();
+}
 
 pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::serve_categories::dsl::serve_categories;
