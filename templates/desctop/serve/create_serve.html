@@ -29,7 +29,9 @@
               <label>Категория</label>
               <select class="input-md form-control" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
                 {% for category in categories %}
-                  <option value="{{ category.id }}">{{ category.name }}</option>
+                  <option value="{{ category.id }}">
+                    {{ category.name }}
+                  </option>
                 {% endfor %}
               </select>
             </div>

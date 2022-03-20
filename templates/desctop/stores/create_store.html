@@ -54,12 +54,15 @@
                     <option value="{{ tag.id }}">{{ tag.name }}</option>
                     {% endfor %}
                 </select>
-            </div> 
+            </div>
             <div class="mb-20 mb-md-10">
                 <label>Опции</label>
                 <select class="form-control" name="serve_list[]" multiple="">
                   {% for serve in serves %}
-                    <option value="{{ serve.id }}">{{ serve.name }}</option>
+                    <option value="{{ serve.id }}">
+                      {{ serve.name }} |
+                      {{ serve.serve_categories }}
+                    </option>
                   {% endfor %}
                 </select>
             </div>
