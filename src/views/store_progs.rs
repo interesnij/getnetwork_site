@@ -635,6 +635,7 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
             .values(&_new_serve)
             .get_result::<ServeItems>(&_connection)
             .expect("Error.");
+    }
     HttpResponse::Ok()
 }
 
