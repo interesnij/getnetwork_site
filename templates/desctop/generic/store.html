@@ -16,6 +16,12 @@
     <del>Старая цена</del>
     &nbsp;
     <strong>Цена</strong>
+    {% if is_admin %}
+    <br>
+      | <a class="ajax" href="/edit_store/{{ object.id }}/">~</a>
+      | <a class="ajax" href="/edit_content_store/{{ object.id }}/?content=">Aa</a>
+      | <a class="pointer remove_store">x</a>
+    {% endif %}
   </div>
   <div class="post-prev-more align-center">
     <a href="/store/{{ category.id }}/{{ object.id }}/" class="btn btn-mod ajax btn-round">
