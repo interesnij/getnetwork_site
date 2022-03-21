@@ -92,16 +92,6 @@
             </h4>
             <table class="table">
               <tbody>
-                <tr>
-                  <th>Название</th>
-                  <th>Цена</th>
-                  <th>Скидка</th>
-                  <th>Социалка</th>
-                  {% if is_admin %}
-                    <th>Изм.</th>
-                    <th>Удал.</th>
-                  {% endif %}
-                </tr>
                 {% for object in object_list %}
                 <tr>
                   <td class="hidden-xs">
@@ -109,9 +99,9 @@
                       {{ object.name }}
                     </a>
                   </td>
-                  <td>{{ object.price }}</td>
-                  <td>{{ object.price_acc }}</td>
-                  <td>{{ object.social_price }}</td>
+                  <td>Цена: {{ object.price }}</td>
+                  <td>Скидка: {{ object.price_acc }}</td>
+                  <td>Социалка: {{ object.social_price }}</td>
                   {% if is_admin %}
                     <td><a class="ajax" href="/edit_serve/{{ object.id }}/">~</a></td>
                     <td><a class="pointer remove_serve">x</a></td>
