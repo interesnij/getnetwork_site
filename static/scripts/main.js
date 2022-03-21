@@ -119,27 +119,27 @@ function service_tab_action(is, tab_class){
 function on(elSelector, eventName, selector, fn) {var element = document.querySelector(elSelector);element.addEventListener(eventName, function(event) {var possibleTargets = element.querySelectorAll(selector);var target = event.target;for (var i = 0, l = possibleTargets.length; i < l; i++) {var el = target;var p = possibleTargets[i];while (el && el !== element) {if (el === p) {return fn.call(p, event);}el = el.parentNode;}}});};
 
 function get_custom_design() {
+  color == "white";
   params = window.location.search.replace( '?', '').split('&');
     if (params[0] && params[0].split("=")[0] == "f") {
       color = params[0].split("=")[1] }
     else if (params[1] && params[1].split("=")[0] == "f") {
       color = params[1].split("=")[1];
-    }
-    else {color == "white"};
+    };
 
-      if (color == "white") {
+    if (color == "white") {
         addStyleSheets("/static/styles/color/white.css")
-      } else if (color == "dark") {
+    } else if (color == "dark") {
         addStyleSheets("/static/styles/color/dark.css")
-      } else if (color == "yellow") {
+    } else if (color == "yellow") {
         addStyleSheets("/static/styles/color/yellow.css")
-      } else if (color == "white_kletka") {
+    } else if (color == "white_kletka") {
         addStyleSheets("/static/styles/color/white_kletka.css")
-      } else if (color == "dark_wood") {
+    } else if (color == "dark_wood") {
         addStyleSheets("/static/styles/color/dark_wood.css")
-      };
-      btn = document.body.querySelector(".anon_color_change");
-      btn.setAttribute("data-color", color)
+    };
+    btn = document.body.querySelector(".anon_color_change");
+    btn.setAttribute("data-color", color)
 };
 get_custom_design();
 
