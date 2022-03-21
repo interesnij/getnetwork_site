@@ -131,11 +131,13 @@
                 <div class="mb-20 mb-md-10">
                   <label>{{ category.tech_categories }} => Список опций {{ category.name }}</label>
                   <select class="form-control" name="serve_list[]" multiple="">
-                    {% for object in object_list %}
-                      <option value="{{ object.id }}">
-                        {{ object.cat_name }} => {{ object.name }}
-                      </option>
-                    {% endfor %}
+                    {% if object_list %}
+                      {% for object in object_list %}
+                        <option value="{{ object.id }}">
+                          {{ object.cat_name }} => {{ object.name }}
+                        </option>
+                      {% endfor %}
+                    {% endif %}
                   </select>
                 </div>
               {% endfor %}
