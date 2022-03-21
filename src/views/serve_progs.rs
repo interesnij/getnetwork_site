@@ -127,9 +127,11 @@ pub async fn create_serve_categories_page(req: HttpRequest, tera: web::Data<Tera
 }
 pub async fn create_serve_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use schema::serve_categories::dsl::serve_categories;
+    use schema::serve::dsl::serve;
 
     let _connection = establish_connection();
     let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
+    let _serves = serve.load::<Serve>(&_connection).expect("E");
 
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
@@ -138,6 +140,7 @@ pub async fn create_serve_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     data.insert("blog_categories", &_blog_cats);
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
+    data.insert("serves", &_serves);
     data.insert("is_admin", &_is_admin);
     data.insert("categories", &_categories);
 
