@@ -75,6 +75,7 @@
         </ul>
 
         <div class="tab-content tpl-tabs-cont">
+          {% for category in service_categories %}
             <div class="tab_{{ category.id }} fade tab-pane in active wow fadeIn" data-wow-duration="0.3s">
                 <div class="section-text">
                     <div class="row">
@@ -87,6 +88,7 @@
                     </div>
                 </div>
             </div>
+          {% endfor %}
         </div>
     </div>
 </section>
