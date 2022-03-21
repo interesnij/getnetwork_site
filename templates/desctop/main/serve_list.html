@@ -100,8 +100,12 @@
                     </a>
                   </td>
                   <td>Цена: {{ object.price }}</td>
-                  <td>Скидка: {{ object.price_acc }}</td>
-                  <td>Социалка: {{ object.social_price }}</td>
+                  {% if object.price_ac %}
+                    <td>Скидка: {{ object.price_acc }}</td>
+                  {% endif %}
+                  {% if object.social_price %}
+                    <td>Социалка: {{ object.social_price }}</td>
+                  {% endif %}
                   {% if is_admin %}
                     <td><a class="ajax" href="/edit_serve/{{ object.id }}/">~</a></td>
                     <td><a class="pointer remove_serve">x</a></td>
