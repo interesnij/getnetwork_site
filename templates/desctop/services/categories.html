@@ -66,7 +66,7 @@
             <li class="yy s_{{ category.id }} active">
                 <a class="ajax" href="/service/{{ category.id }}/">
                     <div class="alt-tabs-icon">
-                      <span class="icon-gears"></span>
+                      <img class="image_fit_200" src="{{ category.image | replace(from="./", to="/") }}" alt="img" />
                     </div>
                     {{ category.name }}
                 </a>
