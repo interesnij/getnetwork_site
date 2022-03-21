@@ -32,8 +32,8 @@
           {% set loop_index = 4 %}
         {% endif %}
 
-      <h2>Тех-категория:
-        <a class="ajax" href="/tech_categories/{{ tech_category.id }}/">
+      <h2>
+        <a class="ajax border" href="/tech_categories/{{ tech_category.id }}/">
           {{ tech_category.name }}
         </a>
       </h2>
@@ -85,7 +85,7 @@
           {% endif %}
 
           <div class="mb-20 mb-md-10">
-            <h4>Список опций:
+            <h4>
               <a class="ajax" href="/serve_categories/{{ category.id }}/">
                 {{ category.name }}
               </a>
