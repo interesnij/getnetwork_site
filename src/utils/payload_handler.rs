@@ -453,7 +453,7 @@ pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm
     let mut form: ServeCategoriesForm = ServeCategoriesForm {
         name: "".to_string(),
         tech_categories: 0,
-        serve_position: 0,
+        position: 0,
     };
 
     while let Some(item) = payload.next().await {
