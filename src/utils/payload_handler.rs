@@ -173,7 +173,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
                     .unwrap()
                     .expect("E");
             }
-            form.main_image = file.path.clone();
+            form.main_image = file.path.clone().replace("./","/");
         }
 
         else if name == "images[]" {
@@ -194,7 +194,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
             };
             if field.content_type().to_string() == "image/jpeg".to_string() {
                 files.push(file.clone());
-                form.images.push(file.path.clone());
+                form.images.push(file.path.clone().replace("./","/"));
             };
         }
 
@@ -249,13 +249,12 @@ pub async fn category_form(payload: &mut Multipart) -> CategoriesForm {
                     .unwrap()
                     .expect("Failed to open hello.txt");
             }
-            form.image = file.path.clone()
+            form.image = file.path.clone().replace("./","/")
         }
         else if name == "position" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
-                    //let data_string = s.to_string();
                     let _int: i32 = s.parse().unwrap();
                     form.position = _int;
                 }
@@ -278,7 +277,6 @@ pub async fn category_form(payload: &mut Multipart) -> CategoriesForm {
     }
     form
 }
-
 
 pub async fn store_form(payload: &mut Multipart) -> StoreForms {
     let mut files: Vec<UploadedFiles> = Vec::new();
@@ -401,7 +399,7 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
                     .unwrap()
                     .expect("E");
             }
-            form.main_image = file.path.clone();
+            form.main_image = file.path.clone().replace("./","/");
         }
 
         else if name == "images[]" {
@@ -422,7 +420,7 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
             };
             if field.content_type().to_string() == "image/jpeg".to_string() {
                 files.push(file.clone());
-                form.images.push(file.path.clone());
+                form.images.push(file.path.clone().replace("./","/"));
             };
         }
 
@@ -444,7 +442,7 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
             };
             if field.content_type().to_string() == "video/mp4".to_string() {
                 files.push(file.clone());
-                form.videos.push(file.path.clone());
+                form.videos.push(file.path.clone().replace("./","/"));
             };
         }
     }
@@ -475,7 +473,6 @@ pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
-                    //let data_string = s.to_string();
                     let _int: i32 = s.parse().unwrap();
                     form.serve_position = _int;
                 }
