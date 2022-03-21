@@ -51,7 +51,7 @@
         </form>
         <div class="container">
             {% for serve in serves %}
-            <p>{{ serve.name }}
+            <p>{{ serve.cat_name }} => {{ serve.name }}
                 | <a class="ajax" href="/edit_serve/{{ serve.id }}/">~</a>
                 | <a class="pointer remove_serve" data-pk="{{ serve.id }}">x</a>
             </p>
