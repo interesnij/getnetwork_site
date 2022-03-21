@@ -105,8 +105,8 @@ pub async fn process_signup(data: web::Form<NewUser>) -> impl Responder {
     HttpResponse::Ok().body(format!("Successfully saved user: {}", data.username))
 }
 
-use actix_multipart::Multipart;
-pub async fn create_feedback(mut payload: Multipart) -> impl Responder {
+//use actix_multipart::Multipart;
+pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Responder {
     use crate::schema::feedbacks;
     use std::borrow::BorrowMut;
     use crate::models::{Feedback,NewFeedback};
