@@ -5,6 +5,7 @@ mod serve;
 mod wiki;
 mod store;
 mod user;
+mod feedback;
 mod tag;
 
 pub use self::{
@@ -14,6 +15,7 @@ pub use self::{
     service::*,
     serve::*,
     wiki::*,
+    feedback::*,
     store::*,
     tag::*,
     blog::{BlogCategories,BlogCategory},
