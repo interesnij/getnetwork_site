@@ -120,11 +120,11 @@
                 {% endif %}
 
                 <div class="mb-20 mb-md-10">
-                  <label>Список опций {{ category.name }}</label>
+                  <label>{{ category.tech_categories }} => Список опций {{ category.name }}</label>
                   <select class="form-control" name="serve_list[]" multiple="">
                     {% for object in object_list %}
                       <option value="{{ object.id }}">
-                        {{ object.tech_categories }} => {{ object.cat_name }} => {{ object.name }}
+                        {{ object.cat_name }} => {{ object.name }}
                       </option>
                     {% endfor %}
                   </select>
