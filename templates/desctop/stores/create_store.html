@@ -124,7 +124,7 @@
                   <select class="form-control" name="serve_list[]" multiple="">
                     {% for object in object_list %}
                       <option value="{{ object.id }}">
-                        {{ object.name }}
+                        {{ object.cat_name }} => {{ object.name }}
                       </option>
                     {% endfor %}
                   </select>
