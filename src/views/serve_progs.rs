@@ -5,8 +5,8 @@ use tera::{Tera, Context};
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
-    category_split_payload,
-    serve_category_split_payload,
+    category_form,
+    serve_category_form,
     get_template_2,
     establish_connection
 };
@@ -224,7 +224,7 @@ pub async fn create_tech_categories(mut payload: Multipart) -> impl Responder {
     use schema::tech_categories;
 
     let _connection = establish_connection();
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewTechCategories {
         name: form.name.clone(),
         tech_position: form.position.clone(),
@@ -242,7 +242,7 @@ pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
     use schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
-    let form = serve_category_split_payload(payload.borrow_mut()).await;
+    let form = serve_category_form(payload.borrow_mut()).await;
     let _s_category = tech_categories.filter(schema::tech_categories::id.eq(form.tech_categories.clone())).load::<TechCategories>(&_connection).expect("E");
 
     let new_cat = NewServeCategories {
@@ -265,7 +265,7 @@ pub async fn edit_tech_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     let _cat_id : i32 = *_id;
     let _category = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
 
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewTechCategories {
         name: form.name.clone(),
         tech_position: form.position.clone(),
@@ -285,7 +285,7 @@ pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) ->
     let _cat_id : i32 = *_id;
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
 
-    let form = serve_category_split_payload(payload.borrow_mut()).await;
+    let form = serve_category_form(payload.borrow_mut()).await;
     let new_cat = NewServeCategories {
         name: form.name.clone(),
         cat_name: _category[0].name.clone(),

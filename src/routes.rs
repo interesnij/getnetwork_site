@@ -8,17 +8,18 @@ use crate::views::{
     wiki_progs,
     tag_progs,
     serve_progs,
+    pages,
 };
 
 pub fn routes(cfg: &mut web::ServiceConfig) {
     cfg
     // pages urls
-    .route("/", web::get().to(views::index))
-    .route("/about/", web::get().to(views::about))
-    .route("/signup", web::get().to(views::signup))
-    .route("/signup", web::post().to(views::process_signup))
-    .route("/feedback/", web::post().to(views::create_feedback))
-    .route("/feedback_list/", web::get().to(views::feedback_page))
+    .route("/", web::get().to(pages::index))
+    .route("/about/", web::get().to(pages::about))
+    .route("/signup", web::get().to(pages::signup))
+    .route("/signup", web::post().to(pages::process_signup))
+    .route("/feedback/", web::post().to(pages::create_feedback))
+    .route("/feedback_list/", web::get().to(pages::feedback_page))
 
     // serve urls
     .route("/serve/{id}/", web::get().to(serve_progs::get_serve_page))

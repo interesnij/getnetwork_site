@@ -5,8 +5,8 @@ use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
-    split_payload,
-    category_split_payload,
+    item_form,
+    category_form,
     get_template_2,
     establish_connection
 };
@@ -209,7 +209,7 @@ pub async fn create_blog_categories(mut payload: Multipart) -> impl Responder {
     use schema::blog_categories;
 
     let _connection = establish_connection();
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewBlogCategories {
         name: form.name.clone(),
         blog_position: form.position.clone(),
@@ -229,7 +229,7 @@ pub async fn create_blog(mut payload: Multipart) -> impl Responder {
 
     let _connection = establish_connection();
 
-    let form = split_payload(payload.borrow_mut()).await;
+    let form = item_form(payload.borrow_mut()).await;
     let new_blog = NewBlog::from_blog_form(
         form.title.clone(),
         form.description.clone(),
@@ -336,7 +336,7 @@ pub async fn edit_blog(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     diesel::delete(tags_items.filter(schema::tags_items::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
     diesel::delete(blog_category.filter(schema::blog_category::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
 
-    let form = split_payload(payload.borrow_mut()).await;
+    let form = item_form(payload.borrow_mut()).await;
     let _new_blog = EditBlog {
         title: form.title.clone(),
         description: Some(form.description.clone()),
@@ -416,7 +416,7 @@ pub async fn edit_blog_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     let _cat_id : i32 = *_id;
     let _category = blog_categories.filter(schema::blog_categories::id.eq(_cat_id)).load::<BlogCategories>(&_connection).expect("E");
 
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditBlogCategories {
         name: form.name.clone(),
         blog_position: form.position.clone(),

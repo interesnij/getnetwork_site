@@ -7,7 +7,7 @@ use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
-    category_split_payload,
+    category_form,
     get_template_2,
     establish_connection
 };
@@ -42,7 +42,7 @@ pub async fn create_tag(mut payload: Multipart) -> impl Responder {
     use schema::tags;
 
     let _connection = establish_connection();
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let new_tag = NewTag {
         name: form.name.clone(),
         tag_position: form.position.clone(),
@@ -166,7 +166,7 @@ pub async fn edit_tag(mut payload: Multipart, _id: web::Path<i32>) -> impl Respo
     let _tag_id : i32 = *_id;
     let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
 
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let _new_tag = EditTag {
         name: form.name.clone(),
         tag_position: form.position.clone(),

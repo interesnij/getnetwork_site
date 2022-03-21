@@ -6,8 +6,8 @@ use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
-    store_split_payload,
-    category_split_payload,
+    store_form,
+    category_form,
     get_template_2,
     establish_connection
 };
@@ -167,7 +167,7 @@ pub async fn create_service_categories(mut payload: Multipart) -> impl Responder
     use schema::service_categories;
 
     let _connection = establish_connection();
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewServiceCategories {
         name: form.name.clone(),
         service_position: form.position.clone(),
@@ -188,7 +188,7 @@ pub async fn create_service(mut payload: Multipart) -> impl Responder {
 
     let _connection = establish_connection();
 
-    let form = store_split_payload(payload.borrow_mut()).await;
+    let form = store_form(payload.borrow_mut()).await;
     let new_service = NewService::from_service_form(
         form.title.clone(),
         form.description.clone(),
@@ -597,7 +597,7 @@ pub async fn edit_service(mut payload: Multipart, _id: web::Path<i32>) -> impl R
     diesel::delete(serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
     diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
 
-    let form = store_split_payload(payload.borrow_mut()).await;
+    let form = store_form(payload.borrow_mut()).await;
     let _new_service = EditService {
         title: form.title.clone(),
         description: Some(form.description.clone()),
@@ -689,7 +689,7 @@ pub async fn edit_service_category(mut payload: Multipart, _id: web::Path<i32>) 
     let _cat_id : i32 = *_id;
     let _category = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");
 
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditServiceCategories {
         name: form.name.clone(),
         service_position: form.position.clone(),

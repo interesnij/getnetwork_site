@@ -7,8 +7,8 @@ use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
-    split_payload,
-    category_split_payload,
+    item_form,
+    category_form,
     get_template_2,
     establish_connection
 };
@@ -118,7 +118,7 @@ pub async fn create_work_categories(mut payload: Multipart) -> impl Responder {
     use schema::work_categories;
 
     let _connection = establish_connection();
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewWorkCategories {
         name: form.name.clone(),
         work_position: form.position.clone(),
@@ -138,7 +138,7 @@ pub async fn create_work(mut payload: Multipart) -> impl Responder {
 
     let _connection = establish_connection();
 
-    let form = split_payload(payload.borrow_mut()).await;
+    let form = item_form(payload.borrow_mut()).await;
     let new_work = NewWork::from_work_form(
         form.title.clone(),
         form.description.clone(),
@@ -506,7 +506,7 @@ pub async fn edit_work(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     diesel::delete(tags_items.filter(schema::tags_items::work_id.eq(_work_id))).execute(&_connection).expect("E");
     diesel::delete(work_category.filter(schema::work_category::work_id.eq(_work_id))).execute(&_connection).expect("E");
 
-    let form = split_payload(payload.borrow_mut()).await;
+    let form = item_form(payload.borrow_mut()).await;
     let _new_work = EditWork {
         title: form.title.clone(),
         description: Some(form.description.clone()),
@@ -586,7 +586,7 @@ pub async fn edit_work_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     let _cat_id : i32 = *_id;
     let _category = work_categories.filter(schema::work_categories::id.eq(_cat_id)).load::<WorkCategories>(&_connection).expect("E");
 
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditWorkCategories {
         name: form.name.clone(),
         work_position: form.position.clone(),

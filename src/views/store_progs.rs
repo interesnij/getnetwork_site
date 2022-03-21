@@ -7,8 +7,8 @@ use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
-    store_split_payload,
-    category_split_payload,
+    store_form,
+    category_form,
     get_template_2,
     establish_connection
 };
@@ -164,7 +164,7 @@ pub async fn create_store_categories(mut payload: Multipart) -> impl Responder {
     use schema::store_categories;
 
     let _connection = establish_connection();
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewStoreCategories {
         name: form.name.clone(),
         store_position: form.position.clone(),
@@ -185,7 +185,7 @@ pub async fn create_store(mut payload: Multipart) -> impl Responder {
 
     let _connection = establish_connection();
 
-    let form = store_split_payload(payload.borrow_mut()).await;
+    let form = store_form(payload.borrow_mut()).await;
     let new_store = NewStore::from_store_form(
         form.title.clone(),
         form.description.clone(),
@@ -601,7 +601,7 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     diesel::delete(serve_items.filter(schema::serve_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
     diesel::delete(store_category.filter(schema::store_category::store_id.eq(_store_id))).execute(&_connection).expect("E");
 
-    let form = store_split_payload(payload.borrow_mut()).await;
+    let form = store_form(payload.borrow_mut()).await;
     let _new_store = EditStore {
         title: form.title.clone(),
         description: Some(form.description.clone()),
@@ -696,7 +696,7 @@ pub async fn edit_store_category(mut payload: Multipart, _id: web::Path<i32>) ->
     let _cat_id : i32 = *_id;
     let _category = store_categories.filter(schema::store_categories::id.eq(_cat_id)).load::<StoreCategories>(&_connection).expect("E");
 
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditStoreCategories {
         name: form.name.clone(),
         store_position: form.position.clone(),

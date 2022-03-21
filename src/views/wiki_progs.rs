@@ -7,8 +7,8 @@ use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
-    split_payload,
-    category_split_payload,
+    item_form,
+    category_form,
     get_template_2,
     establish_connection
 };
@@ -119,7 +119,7 @@ pub async fn create_wiki_categories(mut payload: Multipart) -> impl Responder {
     use schema::wiki_categories;
 
     let _connection = establish_connection();
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewWikiCategories {
         name: form.name.clone(),
         wiki_position: form.position.clone(),
@@ -139,7 +139,7 @@ pub async fn create_wiki(mut payload: Multipart) -> impl Responder {
 
     let _connection = establish_connection();
 
-    let form = split_payload(payload.borrow_mut()).await;
+    let form = item_form(payload.borrow_mut()).await;
     let new_wiki = NewWiki::from_wiki_form(
         form.title.clone(),
         form.description.clone(),
@@ -508,7 +508,7 @@ pub async fn edit_wiki(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     diesel::delete(tags_items.filter(schema::tags_items::wiki_id.eq(_wiki_id))).execute(&_connection).expect("E");
     diesel::delete(wiki_category.filter(schema::wiki_category::wiki_id.eq(_wiki_id))).execute(&_connection).expect("E");
 
-    let form = split_payload(payload.borrow_mut()).await;
+    let form = item_form(payload.borrow_mut()).await;
     let _new_wiki = EditWiki {
         title: form.title.clone(),
         description: Some(form.description.clone()),
@@ -588,7 +588,7 @@ pub async fn edit_wiki_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     let _cat_id : i32 = *_id;
     let _category = wiki_categories.filter(schema::wiki_categories::id.eq(_cat_id)).load::<WikiCategories>(&_connection).expect("E");
 
-    let form = category_split_payload(payload.borrow_mut()).await;
+    let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditWikiCategories {
         name: form.name.clone(),
         wiki_position: form.position.clone(),

@@ -74,7 +74,7 @@ pub struct ContentForm {
     pub content: String,
 }
 
-pub async fn split_payload(payload: &mut Multipart) -> Forms {
+pub async fn item_form(payload: &mut Multipart) -> Forms {
     let mut files: Vec<UploadedFiles> = Vec::new();
 
     let mut form: Forms = Forms {
@@ -222,7 +222,7 @@ pub async fn split_payload(payload: &mut Multipart) -> Forms {
     }
     form
 }
-pub async fn category_split_payload(payload: &mut Multipart) -> CategoriesForm {
+pub async fn category_form(payload: &mut Multipart) -> CategoriesForm {
     let mut form: CategoriesForm = CategoriesForm {
         name: "".to_string(),
         position: 0,
@@ -280,7 +280,7 @@ pub async fn category_split_payload(payload: &mut Multipart) -> CategoriesForm {
 }
 
 
-pub async fn store_split_payload(payload: &mut Multipart) -> StoreForms {
+pub async fn store_form(payload: &mut Multipart) -> StoreForms {
     let mut files: Vec<UploadedFiles> = Vec::new();
 
     let mut form: StoreForms = StoreForms {
@@ -451,7 +451,7 @@ pub async fn store_split_payload(payload: &mut Multipart) -> StoreForms {
     form
 }
 
-pub async fn serve_category_split_payload(payload: &mut Multipart) -> ServeCategoriesForm {
+pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm {
     let mut form: ServeCategoriesForm = ServeCategoriesForm {
         name: "".to_string(),
         tech_categories: 0,
