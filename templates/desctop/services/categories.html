@@ -64,7 +64,7 @@
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
           {% for category in service_categories %}
             <li class="yy s_{{ category.id }} active">
-                <a class="ajax" href="/service/{{ category.id }}/">
+                <a>
                     <div class="alt-tabs-icon">
                       <img class="image_fit_200" src="{{ category.image }}" alt="img" />
                     </div>
@@ -83,7 +83,7 @@
                           <blockquote style="margin-bottom: 10px">
                             <a href="/service/{{ category.id }}/" class="ajax" style="text-decoration: underline;">{{ category.name }}</a>
                           </blockquote>
-                          
+
                         </div>
                     </div>
                 </div>
