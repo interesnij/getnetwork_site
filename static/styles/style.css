@@ -3,7 +3,9 @@
 p {
   margin: 0px 0px 1em !important;
 }
-
+.underline {
+  text-decoration: underline;
+}
 .work-item:hover .work-title,
 .work-item:hover .work-descr{
     color: white !important;
