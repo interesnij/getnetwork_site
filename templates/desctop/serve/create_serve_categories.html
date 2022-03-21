@@ -37,9 +37,9 @@
 
         <div class="container">
             {% for category in categories %}
-            <p>{{ category.cat_name }} => {{ category.name }}
-                | <a class="ajax" href="/edit_tech_category/{{ category.id }}/">~</a>
-                | <a class="pointer remove_tech_category" data-pk="{{ category.id }}">x</a>
+            <p>{{ category.name }}
+                | <a class="ajax" href="/edit_serve_category/{{ category.id }}/">~</a>
+                | <a class="pointer remove_serve_category" data-pk="{{ category.id }}">x</a>
             </p>
             {% endfor %}
         </div>
