@@ -120,9 +120,9 @@ function on(elSelector, eventName, selector, fn) {var element = document.querySe
 
 function get_custom_design() {
   params = window.location.search.replace( '?', '').split('&');
-    if (params && params[0].split("=")[0] == "f") {
+    if (params[0] && params[0].split("=")[0] == "f") {
       color = params[0].split("=")[1] }
-    else if (params && params[1].split("=")[0] == "f") {
+    else if (params[1] && params[1].split("=")[0] == "f") {
       color = params[1].split("=")[1];
     }
     else {color == "white"};
