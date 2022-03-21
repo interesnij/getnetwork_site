@@ -186,7 +186,7 @@ pub async fn edit_serve_category_page(req: HttpRequest, tera: web::Data<Tera>, _
     let _t_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
 
     data.insert("category", &_category[0]);
-    data.insert("tech_categories", &_t_categories[0]);
+    data.insert("tech_categories", &_t_categories);
     let _template = _type + &"serve/edit_serve_category.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
