@@ -99,10 +99,10 @@
                       {{ object.name }}
                     </a>
                   </td>
-                  <td style="width:16%">{{ object.price }} ₽</td>
-                  <td style="width:16%"{% if object.price_ac %}{{ object.price_acc }} ↓₽{% endif %}</td>
-                  <td style="width:16%">{% if object.social_price %}{{ object.social_price }} ♡{% endif %}</td>
-                  <td style="width:16%">{{ object.man_hours }} ⌛</td>
+                  <td style="width:14%">{{ object.price }} ₽</td>
+                  <td style="width:12%"{% if object.price_ac %}{{ object.price_acc }} ↓₽{% endif %}</td>
+                  <td style="width:12%">{% if object.social_price %}{{ object.social_price }} ♡{% endif %}</td>
+                  <td style="width:12%">{{ object.man_hours }} ⌛</td>
                   {% if is_admin %}
                     <td style="width:5%"><a class="ajax" href="/edit_serve/{{ object.id }}/">~</a></td>
                     <td style="width:5%"><a class="pointer remove_serve">x</a></td>
