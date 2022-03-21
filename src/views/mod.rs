@@ -108,6 +108,7 @@ pub async fn process_signup(data: web::Form<NewUser>) -> impl Responder {
 use actix_multipart::Multipart;
 pub async fn create_feedback(mut payload: Multipart) -> impl Responder {
     use schema::feedback;
+    use std::borrow::BorrowMut;
 
     let _connection = establish_connection();
     let form = feedback_form(payload.borrow_mut()).await;
