@@ -55,7 +55,7 @@
                     {% endfor %}
                 </select>
             </div>
-            
+
             <hr class="mt-0 mb-0 " />
             {% for tech_category in tech_categories %}
               {% if loop.index == 1 %}
@@ -88,13 +88,21 @@
 
                 {% elif loop_index == 2 %}
                   {% if loop.index == 1 %}
-                    {% set object_list = _2serves1 %}
+                    {% if _2serves1 %}
+                      {% set object_list = _2serves1 %}
+                    {% endif %}
                   {% elif loop.index == 2 %}
-                    {% set object_list = _2serves2 %}
+                    {% if _2serves2 %}
+                      {% set object_list = _2serves2 %}
+                    {% endif %}
                   {% elif loop.index == 3 %}
-                    {% set object_list = _2serves3 %}
+                    {% if _2serves3 %}
+                      {% set object_list = _2serves3 %}
+                    {% endif %}
                   {% elif loop.index == 4 %}
-                    {% set object_list = _2serves4 %}
+                    {% if _2serves4 %}
+                      {% set object_list = _2serves4 %}
+                    {% endif %}
                   {% endif %}
 
                 {% elif loop_index == 3 %}
