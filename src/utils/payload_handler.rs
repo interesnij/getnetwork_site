@@ -216,7 +216,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
             };
             if field.content_type().to_string() == "video/mp4".to_string() {
                 files.push(file.clone());
-                form.videos.push(file.path.clone()[1..]);
+                form.videos.push(file.path.clone().to_string()[1..]);
             };
         }
     }
