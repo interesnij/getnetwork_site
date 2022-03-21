@@ -178,6 +178,7 @@ pub async fn serve_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Re
     data.insert("blog_categories", &_blog_cats);
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
+    data.insert("tech_categories", &all_tech_categories);
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"main/serve_list.html".to_string();
