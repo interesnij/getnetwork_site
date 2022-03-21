@@ -9,17 +9,16 @@ use crate::views::{
     tag_progs,
     serve_progs,
 };
-use crate::views::{process_signup,signup,about,index, create_feedback};
-
 
 pub fn routes(cfg: &mut web::ServiceConfig) {
     cfg
     // pages urls
-    .route("/", web::get().to(index))
-    .route("/about/", web::get().to(about))
-    .route("/signup", web::get().to(signup))
-    .route("/signup", web::post().to(process_signup))
-    .route("/feedback", web::post().to(create_feedback))
+    .route("/", web::get().to(views::index))
+    .route("/about/", web::get().to(views::about))
+    .route("/signup", web::get().to(views::signup))
+    .route("/signup", web::post().to(views::process_signup))
+    .route("/feedback/", web::post().to(views::create_feedback))
+    .route("/feedback_list/", web::get().to(views::feedback_page))
 
     // serve urls
     .route("/serve/{id}/", web::get().to(serve_progs::get_serve_page))

@@ -125,3 +125,25 @@ pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Re
         .expect("E.");
     return HttpResponse::Ok();
 }
+
+pub async fn feedback_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+    use crate::schema::feedbacks::dsl::feedbacks;
+    use crate::models::Feedback;
+
+    let _connection = establish_connection();
+    let _feedbacks = feedbacks.load::<Feedback>(&_connection).expect("E");
+
+    let mut data = Context::new();
+    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    data.insert("service_categories", &_service_cats);
+    data.insert("store_categories", &_store_cats);
+    data.insert("blog_categories", &_blog_cats);
+    data.insert("wiki_categories", &_wiki_cats);
+    data.insert("work_categories", &_work_cats);
+    data.insert("is_admin", &_is_admin);
+    data.insert("feedback_list", &_feedbacks);
+
+    let _template = _type + &"main/feedback_list.html".to_string();
+    let _rendered = tera.render(&_template, &data).unwrap();
+    HttpResponse::Ok().body(_rendered)
+}
