@@ -62,136 +62,27 @@
             Наши услуги
         </h2>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
-            <li class="yy s_1 active">
-                <a>
-                    <div class="alt-tabs-icon"><span class="icon-gears"></span></div>Веб-разработка
+          {% for category in service_categories %}
+            <li class="yy s_{{ category.id }} active">
+                <a class="ajax" href="/service/{{ category.id }}/">
+                    <div class="alt-tabs-icon">
+                      <span class="icon-gears"></span>
+                    </div>
+                    {{ category.name }}
                 </a>
             </li>
-            <li class="yy s_2 pointer">
-                <a>
-                    <div class="alt-tabs-icon"><span class="icon-piechart"></span></div>Партнёрство
-                </a>
-            </li>
-            <li class="yy s_3 pointer">
-                <a>
-                    <div class="alt-tabs-icon"><span class="icon-lifesaver"></span></div>Поддержка
-                </a>
-            </li>
-            <li class="yy s_4 pointer">
-                <a>
-                    <div class="alt-tabs-icon"><span class="icon-trophy"></span></div>Обучение
-                </a>
-            </li>
+          {% endfor %}
         </ul>
 
         <div class="tab-content tpl-tabs-cont">
-            <div class="tab_1 fade tab-pane in active wow fadeIn" data-wow-duration="0.3s">
+            <div class="tab_{{ category.id }} fade tab-pane in active wow fadeIn" data-wow-duration="0.3s">
                 <div class="section-text">
                     <div class="row">
                         <div class="mb-sm-50">
-                            <blockquote style="margin-bottom: 10px">
-                                <span class="icon-attachment"></span>
-                                <a href="" class="ajax" style="text-decoration: underline;">Разработка</a>
-                            </blockquote>
-                            <p>
-                                <strong>Мы</strong> любим и <strong>знаем свою работу</strong> по разработке любых сайтов.<br><br>
-                                Вот <strong>ключевые моменты</strong>:
-                            <ul class="my_ul">
-                                <li>Пользуемся только чистым кодом (python, rust, javascript, c++ и т.д.).</li>
-                                <li>Не используем сторонние плагины и "костыли". Только необходимый код, который нужен для обозначенных задач.
-                                    Никакого мусора.</li>
-                                <li>Даём взвешенный и авторитетный анализ предлагаемых проектов. Всё, что может прийти к Вам в голову,
-                                    мы скорее всего делали.</li>
-                                <li>Выполняем работу с опережением ожиданий заказчиков. Так как знаем самые лучшие практики программирования
-                                    и стремимся производить продукты только высочайшего класса.</li>
-                                <li>Опираемся на качества порядочных людей. Не делаем игровые, сутенерские, кредитные,
-                                    нарко-направленные, порнографические сайты. Наша репутация тверда и есть много отзывов.</li>
-                                <li>Выкатываем увесистые скидки на проекты социальной значимости.</li>
-                            </ul>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab_2 fade tab-pane in wow fadeIn" data-wow-duration="0.3s">
-                <div class="section-text">
-                    <div class="row">
-                        <div class="mb-sm-50">
-                            <blockquote style="margin-bottom: 10px">
-                                <span class="icon-attachment"></span>
-                                <a href="" class="ajax" style="text-decoration: underline;">Партнёрство</a>
-                            </blockquote>
-                            <p>
-                                Иногда у талантливых людей появляются крутые идеи, средства, хорошие связи и они мотивированы на
-                                создание большого проекта, но по каким-либо причинам не могут довести дело до конца. <br>
-                                <strong>Компания "getnetwork" с удовольствием обсудит предложения</strong> таких людей. Мы можем
-                                решить любой вопрос в обозначенной сфере. <br><br>
-                                Вот <strong>важные нюансы</strong>:
-                            <ul class="my_ul">
-                                <li>Ваш проект должен придерживаться принципов порядочности и прозрачности в нашем сотрудничестве.</li>
-                                <li>Мы рассматриваем несколько вариантов партнёрства: 30 / 70 (мы / Вы), 50/ 50, 70 / 30.</li>
-                                <li>Ваш проект должен находиться на нашей платформе при нашей поддержке. Так будет комфортнее и нам, и Вам.</li>
-                                <li>Мы готовы продемонстрировать отзывы и рекомендации уважаемых и почётных людей м компаний в подтверждение
-                                    наших честных намерений, и ждём от Вас того же.</li>
-                                <li>Наши договор и отношения должны иметь все атрибуты законности и здравого смысла.</li>
-                            </ul>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab_3 fade tab-pane in wow fadeIn" data-wow-duration="0.3s">
-                <div class="section-text">
-                    <div class="row">
-                        <div class="mb-sm-50">
-                            <blockquote style="margin-bottom: 10px">
-                                <span class="icon-attachment"></span>
-                                <a href="" class="ajax" style="text-decoration: underline;">Поддержка</a>
-                            </blockquote>
-                            <p>
-                                Мы готовы взять на себя все технические вопросы по организации надежного и развивающегося проекта.<br><br>
-                                <strong>Что</strong> же <strong>сюда входит</strong>:
-                            <ul class="my_ul">
-                                <li>Использование наших модулей и стандартов для гарантий безаварийного существования Вашего ресурса.</li>
-                                <li>Огромный выбор предложений и дополнений для усовершенствования процессов проекта.</li>
-                                <li>Устойчивая надежность нашей платформы. Гибкая и полная настройка статистики и отчетов по всем процессам.</li>
-                                <li>
-                                    Предоставление особого профиля со стандартизированной защитой его данных. Прямо на этом сайте.
-                                    Двухфакторная авторизация, использование аварийного слова/слов, ограниченные сессии, оповещение о смене ip,
-                                    история активности акаунта.
-                                </li>
-                            </ul>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab_4 fade tab-pane in wow fadeIn" data-wow-duration="0.3s">
-                <div class="section-text">
-                    <div class="row">
-                        <div class="mb-sm-50">
-                            <blockquote style="margin-bottom: 10px">
-                                <span class="icon-attachment"></span>
-                                <a href="" class="ajax" style="text-decoration: underline;">Обучение</a>
-                            </blockquote>
-                            <p>
-                                <strong>Нередко</strong> бывает так, что <strong>компания-заказчик</strong> имеет повышенную секретность
-                                своей деятельности, оперирует ценной коммерческой информацией и не <strong>может доверить воплощение своих
-                                    идей</strong> в корпоративной или приватной сети. Мы понимаем такие случаи и оказываем услуги по обучению сотрудников
-                                с любым уровнем технической подготовки. Таким образом Ваша фирма сможет построить высоконагруженный сайт и не
-                                опасаться потери конфеденциальных данных.
-                                <strong>Чему мы можем научить</strong>:<br><br>
-                            <ul class="my_ul">
-                                <li>Создавать веб-ресурсы повышенной сложности с нуля.</li>
-                                <li>Организовать полный стек нужных инструментов: базы данных с веб-сайтом(ами), мобильными приложениями.</li>
-                                <li>Уметь создавать нейронные сети на python и c++. Работать с ними.</li>
-                                <li>Знать основы администрирования в: linux, postgres, git, движках сайтов.</li>
-                                <li>Выполнять масштабирование и развитие любых проектов в любых направлениях.</li>
-                            </ul>
-                            </p>
+                          <blockquote style="margin-bottom: 10px">
+                            <a href="/service/{{ category.id }}/" class="ajax" style="text-decoration: underline;">{{ category.name }}</a>
+                          </blockquote>
+                          {{ category.description }}
                         </div>
                     </div>
                 </div>
