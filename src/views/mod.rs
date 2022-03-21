@@ -13,7 +13,7 @@ use actix_web::{
 };
 use tera::{Tera, Context};
 
-use crate::utils::{get_template_2, establish_connection};
+use crate::utils::{get_template_2, establish_connection, feedback_form};
 pub use self::{
     work_progs::*,
     blog_progs::*,
@@ -22,7 +22,7 @@ pub use self::{
     store_progs::*,
     wiki_progs::*
 };
-use crate::NewUser;
+use crate::{NewUser,Feedback,NewFeedback,};
 use crate::diesel::RunQueryDsl;
 
 
@@ -103,4 +103,21 @@ pub async fn process_signup(data: web::Form<NewUser>) -> impl Responder {
 
     println!("{:?}", data);
     HttpResponse::Ok().body(format!("Successfully saved user: {}", data.username))
+}
+
+pub async fn create_feedback(mut payload: Multipart) -> impl Responder {
+    use schema::feedback;
+
+    let _connection = establish_connection();
+    let form = feedback_form(payload.borrow_mut()).await;
+    let new_feedback = NewFeedback {
+        username: form.username.clone(),
+        email: form.email.clone(),
+        message: form.message.clone()
+    };
+    let _new_feedback = diesel::insert_into(feedback::table)
+        .values(&new_cat)
+        .get_result::<Feedback>(&_connection)
+        .expect("E.");
+    return HttpResponse::Ok();
 }

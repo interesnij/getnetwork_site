@@ -1,5 +1,5 @@
 
-// Таблица пользователей
+//////////////////// users //////////////
 table! {
     users (id) {
         id -> Int4,
@@ -8,6 +8,16 @@ table! {
         password -> Varchar,
         bio -> Nullable<Text>,
         image -> Nullable<Text>,
+    }
+}
+
+//////////////////// users //////////////
+table! {
+    feedback (id) {
+        id -> Int4,
+        username -> Varchar,
+        email -> Varchar,
+        message -> Text,
     }
 }
 

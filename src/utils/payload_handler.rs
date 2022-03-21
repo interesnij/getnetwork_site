@@ -51,6 +51,12 @@ pub struct StoreForms {
 }
 
 #[derive(Deserialize, Serialize, Debug)]
+pub struct FeedbackForm {
+    pub username: String,
+    pub email: String,
+    pub message: String,
+}
+#[derive(Deserialize, Serialize, Debug)]
 pub struct CategoriesForm {
     pub name: String,
     pub position: i32,
@@ -484,6 +490,34 @@ pub async fn serve_category_split_payload(payload: &mut Multipart) -> ServeCateg
                     if field.name() == "name" {
                         form.name = data_string
                     }
+                }
+            }
+        }
+    }
+    form
+}
+
+pub async fn feedback_form(payload: &mut Multipart) -> FeedbackForm {
+    let mut form: FeedbackForm = FeedbackForm {
+        username: "".to_string(),
+        email: "".to_string(),
+        message: "".to_string(),
+    };
+
+    while let Some(item) = payload.next().await {
+        let mut field: Field = item.expect("split_payload err");
+        let name = field.name();
+
+        while let Some(chunk) = field.next().await {
+            let data = chunk.expect("split_payload err chunk");
+            if let Ok(s) = str::from_utf8(&data) {
+                let data_string = s.to_string();
+                if field.name() == "username" {
+                    form.username = data_string
+                } else if field.name() == "email" {
+                    form.email = data_string
+                } else if field.name() == "message" {
+                    form.message = data_string
                 }
             }
         }
