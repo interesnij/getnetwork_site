@@ -416,7 +416,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let _connection = establish_connection();
 
     let form = serve_split_payload(payload.borrow_mut()).await;
-    let _cat_id = form.serve_position.clone();
+    let _cat_id = form.serve_categories.clone();
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
     let _new_serve = NewServe {
         name: form.name.clone(),
