@@ -132,18 +132,26 @@ pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
         .load(&_connection)
         .expect("E.");
 
-    let all_tech_categories :Vec<TechCategories> = tech_categories.load(&_connection).expect("E.");
+    let all_tech_categories :Vec<TechCategories> = tech_categories
+        .order(schema::all_tech_categories::tech_position.desc())
+        .load(&_connection)
+        .expect("E.");
     let mut _count: i32 = 0;
     for _cat in all_tech_categories.iter() {
         _count += 1;
         let mut _let_int : String = _count.to_string().parse().unwrap();
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
-        let __serve_categories :Vec<ServeCategories> = serve_categories.filter(schema::serve_categories::tech_categories.eq(_cat.id)).load(&_connection).expect("E.");
+        let __serve_categories :Vec<ServeCategories> = serve_categories
+            .filter(schema::serve_categories::tech_categories.eq(_cat.id))
+            .order(schema::serve_categories::serve_position.desc())
+            .load(&_connection)
+            .expect("E.");
         data.insert(&_let_serve_categories, &__serve_categories);
 
         let mut _serve_count: i32 = 0;
         for __cat in __serve_categories.iter() {
             _serve_count += 1;
+            // _1serves1 - 1ая техкатегория, 1 категория
             let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
             let _serve_int_dooble = "_".to_string() + &_let_int;
             let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
