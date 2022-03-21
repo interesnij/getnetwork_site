@@ -280,20 +280,22 @@ pub async fn edit_tech_category(mut payload: Multipart, _id: web::Path<i32>) -> 
 
 pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::serve_categories::dsl::serve_categories;
+    use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
     let _cat_id : i32 = *_id;
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
+    let t_category = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
+    let s_category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
 
     let form = serve_category_form(payload.borrow_mut()).await;
     let new_cat = NewServeCategories {
         name: form.name.clone(),
-        cat_name: _category[0].cat_name.clone(),
+        cat_name: t_category[0].name.clone(),
         tech_categories: form.tech_categories.clone(),
         serve_position: form.position.clone(),
-        serve_count: _category[0].serve_count.clone(),
+        serve_count: s_category[0].serve_count.clone(),
     };
-    diesel::update(&_category[0])
+    diesel::update(&s_category[0])
         .set(new_cat)
         .get_result::<ServeCategories>(&_connection)
         .expect("E");
