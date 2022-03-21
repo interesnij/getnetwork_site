@@ -107,7 +107,7 @@ pub async fn process_signup(data: web::Form<NewUser>) -> impl Responder {
 
 use actix_multipart::Multipart;
 pub async fn create_feedback(mut payload: Multipart) -> impl Responder {
-    use schema::feedback;
+    use crate::schema::feedback;
     use std::borrow::BorrowMut;
     use crate::models::{Feedback,NewFeedback};
     use crate::utils::feedback_form;
