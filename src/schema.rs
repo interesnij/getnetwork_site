@@ -13,7 +13,7 @@ table! {
 
 //////////////////// users //////////////
 table! {
-    feedback (id) {
+    feedbacks (id) {
         id -> Int4,
         username -> Varchar,
         email -> Varchar,
