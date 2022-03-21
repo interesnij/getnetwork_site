@@ -19,7 +19,8 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     .route("/signup", web::get().to(pages::signup))
     .route("/signup", web::post().to(pages::process_signup))
     .route("/feedback/", web::post().to(pages::create_feedback))
-    .route("/feedback_list/", web::get().to(pages::feedback_page))
+    .route("/feedback_list/", web::get().to(pages::feedback_list_page))
+    .route("/serve_list/", web::get().to(pages::serve_list_page))
 
     // serve urls
     .route("/serve/{id}/", web::get().to(serve_progs::get_serve_page))

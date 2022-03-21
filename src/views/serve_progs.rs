@@ -127,7 +127,7 @@ pub async fn create_serve_categories_page(req: HttpRequest, tera: web::Data<Tera
 }
 pub async fn create_serve_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use schema::serve_categories::dsl::serve_categories;
-    use schema::serve::dsl::serve;
+    use schema::serve::dsl::serve; 
 
     let _connection = establish_connection();
     let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");

@@ -111,7 +111,7 @@ pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Re
     return HttpResponse::Ok();
 }
 
-pub async fn feedback_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn feedback_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use crate::schema::feedbacks::dsl::feedbacks;
     use crate::models::Feedback;
 
@@ -129,6 +129,54 @@ pub async fn feedback_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     data.insert("feedback_list", &_feedbacks);
 
     let _template = _type + &"main/feedback_list.html".to_string();
+    let _rendered = tera.render(&_template, &data).unwrap();
+    HttpResponse::Ok().body(_rendered)
+}
+
+pub async fn serve_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+    use crate::serve::feedbacks::dsl::serve;
+    use schema::serve::dsl::serve;
+    use schema::serve_categories::dsl::serve_categories;
+    use schema::tech_categories::dsl::tech_categories;
+
+    let _connection = establish_connection();
+    let mut data = Context::new();
+
+    let all_tech_categories :Vec<TechCategories> = tech_categories
+        .order(schema::tech_categories::tech_position.asc())
+        .load(&_connection)
+        .expect("E.");
+    let mut _count: i32 = 0;
+    for _cat in all_tech_categories.iter() {
+        _count += 1;
+        let mut _let_int : String = _count.to_string().parse().unwrap();
+        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
+        let __serve_categories :Vec<ServeCategories> = serve_categories
+            .filter(schema::serve_categories::tech_categories.eq(_cat.id))
+            .order(schema::serve_categories::serve_position.asc())
+            .load(&_connection)
+            .expect("E.");
+        data.insert(&_let_serve_categories, &__serve_categories);
+
+        let mut _serve_count: i32 = 0;
+        for __cat in __serve_categories.iter() {
+            _serve_count += 1;
+            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
+            let _serve_int_dooble = "_".to_string() + &_let_int;
+            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
+            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
+            data.insert(&_let_serves, &__serves);
+        }
+    };
+    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    data.insert("service_categories", &_service_cats);
+    data.insert("store_categories", &_store_cats);
+    data.insert("blog_categories", &_blog_cats);
+    data.insert("wiki_categories", &_wiki_cats);
+    data.insert("work_categories", &_work_cats);
+    data.insert("is_admin", &_is_admin);
+
+    let _template = _type + &"main/serve_list.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }

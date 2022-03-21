@@ -147,21 +147,16 @@ pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
             .load(&_connection)
             .expect("E.");
         data.insert(&_let_serve_categories, &__serve_categories);
-        println!("{:?}", _let_serve_categories);
 
         let mut _serve_count: i32 = 0;
         for __cat in __serve_categories.iter() {
             _serve_count += 1;
-            // _1serves1 - 1ая техкатегория, 1 категория
             let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
             let _serve_int_dooble = "_".to_string() + &_let_int;
             let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
             let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
             data.insert(&_let_serves, &__serves);
-            println!("переменная {:?}", _let_serves);
-            println!("список{:?}", __serves);
         }
-        println!("====================");
     };
 
     data.insert("tags", &all_tags);
