@@ -120,10 +120,12 @@ function on(elSelector, eventName, selector, fn) {var element = document.querySe
 
 function get_custom_design() {
   params = window.location.search.replace( '?', '').split('&');
-  if (params) {
-    console.log(params);
     if (params[0].split("=")[0] == "f") {
-      color = params[0].split("=")[1];
+      color = params[0].split("=")[1] }
+    else if (params[1].split("=")[0] == "f") {
+      color = params[1].split("=")[1];
+    }
+    else {color == "white"};
 
       if (color == "white") {
         addStyleSheets("/static/styles/color/white.css")
@@ -138,8 +140,6 @@ function get_custom_design() {
       };
       btn = document.body.querySelector(".anon_color_change");
       btn.setAttribute("data-color", color)
-    };
-  };
 };
 get_custom_design();
 
