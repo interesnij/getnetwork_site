@@ -133,7 +133,7 @@ pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
         .expect("E.");
 
     let all_tech_categories :Vec<TechCategories> = tech_categories
-        .order(schema::all_tech_categories::tech_position.desc())
+        .order(schema::tech_categories::tech_position.desc())
         .load(&_connection)
         .expect("E.");
     let mut _count: i32 = 0;
