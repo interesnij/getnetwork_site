@@ -28,7 +28,7 @@
             <div class="mb-20 mb-md-10">
               <label>Категория</label>
               <select class="input-md form-control" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
-                {% for cat in categories %}
+                {% for cat in serve_categories %}
                   <option {% if cat.id == category.id %}selected=""{% endif %} value="{{ cat.id }}">{{ cat.name }}</option>
                 {% endfor %}
               </select>
@@ -48,7 +48,7 @@
             <button data-pk="{{ serve.id }}" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_serve_btn">Изменить</button>
         </form>
         <div class="container">
-            {% for category in categories %}
+            {% for category in serve_categories %}
             <p>{{ category.name }}
                 | <a class="ajax" href="/edit_serve_category/{{ category.id }}/">~</a>
                 | <a class="pointer remove_serve_category" data-pk="{{ category.id }}">x</a>
