@@ -474,7 +474,7 @@ pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
-                    form.serve_position = _int;
+                    form.position = _int;
                 }
             }
         }
