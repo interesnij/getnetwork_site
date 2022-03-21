@@ -11,7 +11,7 @@ pub struct Feedback {
 }
 
 #[derive(Debug, Deserialize, Insertable)]
-#[table_name="feedback"]
+#[table_name="feedbacks"]
 pub struct NewFeedback {
     pub username: String,
     pub email: String,
