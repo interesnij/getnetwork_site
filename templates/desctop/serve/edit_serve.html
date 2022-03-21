@@ -17,13 +17,13 @@
     <div class="container relative">
         <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
             <div class="mb-20 mb-md-10">
-                <input value="{{ category.name }}" class="input-md form-control" type="text" name="name" placeholder="Название" />
+                <input value="{{ serve.name }}" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
-                <input value="{{ category.description }}" class="input-md form-control" type="text" name="description" placeholder="Описание" />
+                <input value="{{ serve.description }}" class="input-md form-control" type="text" name="description" placeholder="Описание" />
             </div>
             <div class="mb-20 mb-md-10">
-                <input value="{{ category.serve_position }}" class="input-md form-control" type="number" name="serve_position" placeholder="Порядок следования" />
+                <input value="{{ serve.serve_position }}" class="input-md form-control" type="number" name="serve_position" placeholder="Порядок следования" />
             </div>
             <div class="mb-20 mb-md-10">
               <label>Категория</label>
@@ -34,18 +34,18 @@
               </select>
             </div>
             <div class="mb-20 mb-md-10">
-                <input value="{{ category.price }}" class="input-md form-control" type="number" name="price" placeholder="Цена" />
+                <input value="{{ serve.price }}" class="input-md form-control" type="number" name="price" placeholder="Цена" />
             </div>
             <div class="mb-20 mb-md-10">
-                <input value="{{ category.price_acc }}" class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
+                <input value="{{ serve.price_acc }}" class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
             </div>
             <div class="mb-20 mb-md-10">
-                <input value="{{ category.social_price }}" class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
+                <input value="{{ serve.social_price }}" class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
             </div>
             <div class="mb-20 mb-md-10">
-                <input value="{{ category.man_hours }}" class="input-md form-control" type="number" name="man_hours" placeholder="Человеко-часы" />
+                <input value="{{ serve.man_hours }}" class="input-md form-control" type="number" name="man_hours" placeholder="Человеко-часы" />
             </div>
-            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_serve_btn">Создать</button>
+            <button data-pk="{{ serve.id }}" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_serve_btn">Изменить</button>
         </form>
         <div class="container">
             {% for category in categories %}
