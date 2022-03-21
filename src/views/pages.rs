@@ -134,10 +134,10 @@ pub async fn feedback_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl
 }
 
 pub async fn serve_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+    use crate::models::{Serve, TechCategories, ServeCategories};
     use crate::serve::feedbacks::dsl::serve;
-    use schema::serve::dsl::serve;
-    use schema::serve_categories::dsl::serve_categories;
-    use schema::tech_categories::dsl::tech_categories;
+    use crate::schema::serve_categories::dsl::serve_categories;
+    use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
     let mut data = Context::new();
