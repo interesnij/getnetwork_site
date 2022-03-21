@@ -88,40 +88,24 @@
 
                 {% elif loop_index == 2 %}
                   {% if loop.index == 1 %}
-                    {% if _2serves1 %}
-                      {% set object_list = _2serves1 %}
-                    {% endif %}
+                    {% set object_list = _2serves1 %}
                   {% elif loop.index == 2 %}
-                    {% if _2serves2 %}
-                      {% set object_list = _2serves2 %}
-                    {% endif %}
+                    {% set object_list = _2serves2 %}
                   {% elif loop.index == 3 %}
-                    {% if _2serves3 %}
-                      {% set object_list = _2serves3 %}
-                    {% endif %}
+                    {% set object_list = _2serves3 %}{% endif %}
                   {% elif loop.index == 4 %}
-                    {% if _2serves4 %}
-                      {% set object_list = _2serves4 %}
-                    {% endif %}
+                    {% set object_list = _2serves4 %}{% endif %}
                   {% endif %}
 
                 {% elif loop_index == 3 %}
                   {% if loop.index == 1 %}
-                    {% if _3serves1 %}
-                      {% set object_list = _3serves1 %}
-                    {% endif %}
+                    {% set object_list = _3serves1 %}{% endif %}
                   {% elif loop.index == 2 %}
-                    {% if _3serves2 %}
-                      {% set object_list = _3serves2 %}
-                    {% endif %}
+                    {% set object_list = _3serves2 %}
                   {% elif loop.index == 3 %}
-                    {% if _3serves3 %}
-                      {% set object_list = _3serves3 %}
-                    {% endif %}
+                    {% set object_list = _3serves3 %}{% endif %}
                   {% elif loop.index == 4 %}
-                    {% if _3serves4 %}
-                      {% set object_list = _3serves4 %}
-                    {% endif %}
+                    {% set object_list = _3serves4 %}{% endif %}
                   {% endif %}
 
                 {% elif loop_index == 4 %}

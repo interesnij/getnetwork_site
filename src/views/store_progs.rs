@@ -158,7 +158,8 @@ pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
             let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
             let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
             data.insert(&_let_serves, &__serves);
-            println!("{:?}", _let_serves);
+            println!("переменная {:?}", _let_serves);
+            println!("список{:?}", __serves);
         }
         println!("====================");
     };
