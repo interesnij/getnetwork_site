@@ -469,7 +469,7 @@ pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm
                 }
             }
         }
-        else if name == "serve_position" {
+        else if name == "position" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
