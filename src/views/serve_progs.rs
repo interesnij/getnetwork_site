@@ -288,7 +288,7 @@ pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) ->
     let form = serve_category_form(payload.borrow_mut()).await;
     let new_cat = NewServeCategories {
         name: form.name.clone(),
-        cat_name: _category[0].name.clone(),
+        cat_name: _category[0].cat_name.clone(),
         tech_categories: form.tech_categories.clone(),
         serve_position: form.position.clone(),
         serve_count: _category[0].serve_count.clone(),
