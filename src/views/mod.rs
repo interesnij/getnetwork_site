@@ -107,7 +107,7 @@ pub async fn process_signup(data: web::Form<NewUser>) -> impl Responder {
 
 use actix_multipart::Multipart;
 pub async fn create_feedback(mut payload: Multipart) -> impl Responder {
-    use crate::schema::feedback;
+    use crate::schema::feedbacks;
     use std::borrow::BorrowMut;
     use crate::models::{Feedback,NewFeedback};
     use crate::utils::feedback_form;
@@ -119,7 +119,7 @@ pub async fn create_feedback(mut payload: Multipart) -> impl Responder {
         email: form.email.clone(),
         message: form.message.clone()
     };
-    let _new_feedback = diesel::insert_into(feedback::table)
+    let _new_feedback = diesel::insert_into(feedbacks::table)
         .values(&new_feedback)
         .get_result::<Feedback>(&_connection)
         .expect("E.");
