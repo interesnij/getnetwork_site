@@ -284,8 +284,8 @@ pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) ->
 
     let _connection = establish_connection();
     let _cat_id : i32 = *_id;
-    let t_category = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
     let s_category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
+    let t_category = tech_categories.filter(schema::tech_categories::id.eq(s_category[0].tech_categories)).load::<TechCategories>(&_connection).expect("E");
 
     let form = serve_category_form(payload.borrow_mut()).await;
     let new_cat = NewServeCategories {
