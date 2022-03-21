@@ -133,7 +133,7 @@ pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
         .expect("E.");
 
     let all_tech_categories :Vec<TechCategories> = tech_categories
-        .order(schema::tech_categories::tech_position.desc())
+        .order(schema::tech_categories::tech_position.asc())
         .load(&_connection)
         .expect("E.");
     let mut _count: i32 = 0;
@@ -143,7 +143,7 @@ pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
         let __serve_categories :Vec<ServeCategories> = serve_categories
             .filter(schema::serve_categories::tech_categories.eq(_cat.id))
-            .order(schema::serve_categories::serve_position.desc())
+            .order(schema::serve_categories::serve_position.asc())
             .load(&_connection)
             .expect("E.");
         data.insert(&_let_serve_categories, &__serve_categories);
