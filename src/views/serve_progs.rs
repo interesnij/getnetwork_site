@@ -227,8 +227,7 @@ pub async fn create_tech_categories(mut payload: Multipart) -> impl Responder {
     let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewTechCategories {
         name: form.name.clone(),
-        tech_position: form.position.clone(),
-        tech_count: 0
+        tech_position: form.position.clone()
     };
     let _new_tech = diesel::insert_into(tech_categories::table)
         .values(&new_cat)
@@ -249,7 +248,7 @@ pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
         name: form.name.clone(),
         cat_name: _s_category[0].name.clone(),
         tech_categories: form.tech_categories.clone(),
-        serve_position: form.serve_position.clone(),
+        serve_position: form.position.clone(),
         serve_count: 0
     };
     let _new_serve = diesel::insert_into(serve_categories::table)
@@ -269,7 +268,7 @@ pub async fn edit_tech_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     let new_cat = NewTechCategories {
         name: form.name.clone(),
         tech_position: form.position.clone(),
-        tech_count: 0
+        tech_count: _category[0].tech_count
     };
     diesel::update(&_category[0])
         .set(new_cat)
@@ -290,8 +289,8 @@ pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) ->
         name: form.name.clone(),
         cat_name: _category[0].name.clone(),
         tech_categories: form.tech_categories.clone(),
-        serve_position: form.serve_position.clone(),
-        serve_count: 0
+        serve_position: form.position.clone(),
+        serve_count: _category[0].serve_count.clone(),
     };
     diesel::update(&_category[0])
         .set(new_cat)
