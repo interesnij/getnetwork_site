@@ -66,7 +66,7 @@ pub struct CategoriesForm {
 pub struct ServeCategoriesForm {
     pub name: String,
     pub tech_categories: i32,
-    pub serve_position: i32,
+    pub position: i32,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
