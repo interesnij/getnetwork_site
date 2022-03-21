@@ -66,7 +66,7 @@
             <li class="yy s_{{ category.id }} active">
                 <a class="ajax" href="/service/{{ category.id }}/">
                     <div class="alt-tabs-icon">
-                      <img class="image_fit_200" src="{{ category.image | replace(from="./", to="/") }}" alt="img" />
+                      <img class="image_fit_200" src="{{ category.image }}" alt="img" />
                     </div>
                     {{ category.name }}
                 </a>
@@ -83,7 +83,7 @@
                           <blockquote style="margin-bottom: 10px">
                             <a href="/service/{{ category.id }}/" class="ajax" style="text-decoration: underline;">{{ category.name }}</a>
                           </blockquote>
-                          {{ category.description }}
+                          
                         </div>
                     </div>
                 </div>

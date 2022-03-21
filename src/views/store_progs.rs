@@ -32,7 +32,6 @@ use crate::models::{
     NewServeItems,
     ServeCategories,
     TechCategories,
-    NewServe,
 };
 
 fn get_cats_for_store(store: &Store) -> Vec<StoreCategories> {
@@ -180,7 +179,6 @@ pub async fn create_store_categories(mut payload: Multipart) -> impl Responder {
 pub async fn create_store(mut payload: Multipart) -> impl Responder {
     use schema::{stores,store_images,store_videos,store_category,serve_items,tags_items};
     use crate::schema::tags::dsl::tags;
-    use schema::serve::dsl::serve;
     use crate::schema::store_categories::dsl::store_categories;
 
     let _connection = establish_connection();

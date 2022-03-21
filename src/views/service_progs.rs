@@ -30,7 +30,6 @@ use crate::models::{
     ServeCategories,
     TechCategories,
     NewServeItems,
-    NewServe,
     ServeItems,
 };
 
@@ -84,7 +83,6 @@ fn get_service_for_category(category: &ServiceCategories) -> Vec<Service> {
 }
 fn get_serve_for_service(service: &Service) -> Vec<Serve> {
     use diesel::pg::expression::dsl::any;
-    use schema::serve::dsl::serve;
     use schema::serve_items::dsl::serve_items;
     let _connection = establish_connection();
 
@@ -184,7 +182,6 @@ pub async fn create_service(mut payload: Multipart) -> impl Responder {
     use schema::{services,service_images,service_videos,service_category,tags_items,serve_items};
     use crate::schema::tags::dsl::tags;
     use crate::schema::service_categories::dsl::service_categories;
-    use crate::schema::serve::dsl::serve;
 
     let _connection = establish_connection();
 
