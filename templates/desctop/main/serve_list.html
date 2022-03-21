@@ -99,12 +99,12 @@
                       {{ object.name }}
                     </a>
                   </td>
-                  <td>Цена: {{ object.price }}</td>
-                  <td>{% if object.price_ac %}Скидка: {{ object.price_acc }}{% endif %}</td>
-                  <td>{% if object.social_price %}Социалка: {{ object.social_price }}{% endif %}</td>
+                  <td style="width:16%">Цена: {{ object.price }}</td>
+                  <td style="width:16%"{% if object.price_ac %}Скидка: {{ object.price_acc }}{% endif %}</td>
+                  <td style="width:16%">{% if object.social_price %}Социалка: {{ object.social_price }}{% endif %}</td>
                   {% if is_admin %}
-                    <td><a class="ajax" href="/edit_serve/{{ object.id }}/">~</a></td>
-                    <td><a class="pointer remove_serve">x</a></td>
+                    <td style="width:5%"><a class="ajax" href="/edit_serve/{{ object.id }}/">~</a></td>
+                    <td style="width:5%"><a class="pointer remove_serve">x</a></td>
                   {% endif %}
                 </tr>
                 {% endfor %}
