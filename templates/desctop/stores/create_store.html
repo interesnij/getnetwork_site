@@ -58,10 +58,19 @@
 
             <hr class="mt-0 mb-0 " />
             {% for tech_category in tech_categories %}
-              {% if loop.index == 1 %}
-                {% set category_list = serve_categories1 %}
-                {% set loop_index = 1 %}
-              {% endif %}
+            {% if loop.index == 1 %}
+              {% set category_list = serve_categories1 %}
+              {% set loop_index = 1 %}
+            {% elif loop.index == 2 %}
+              {% set category_list = serve_categories2 %}
+              {% set loop_index = 2 %}
+            {% elif loop.index == 3 %}
+              {% set category_list = serve_categories3 %}
+              {% set loop_index = 3 %}
+            {% elif loop.index == 4 %}
+              {% set category_list = serve_categories4 %}
+              {% set loop_index = 4 %}
+            {% endif %}
 
             <h4>Тех-категория: {{ tech_category.name }}</h4>
 
