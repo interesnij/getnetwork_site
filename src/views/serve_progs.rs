@@ -227,7 +227,8 @@ pub async fn create_tech_categories(mut payload: Multipart) -> impl Responder {
     let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewTechCategories {
         name: form.name.clone(),
-        tech_position: form.position.clone()
+        tech_position: form.position.clone(),
+        tech_count: 0
     };
     let _new_tech = diesel::insert_into(tech_categories::table)
         .values(&new_cat)
