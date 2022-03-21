@@ -105,6 +105,7 @@ pub async fn process_signup(data: web::Form<NewUser>) -> impl Responder {
     HttpResponse::Ok().body(format!("Successfully saved user: {}", data.username))
 }
 
+use actix_multipart::Multipart;
 pub async fn create_feedback(mut payload: Multipart) -> impl Responder {
     use schema::feedback;
 
@@ -116,7 +117,7 @@ pub async fn create_feedback(mut payload: Multipart) -> impl Responder {
         message: form.message.clone()
     };
     let _new_feedback = diesel::insert_into(feedback::table)
-        .values(&new_cat)
+        .values(&new_feedback)
         .get_result::<Feedback>(&_connection)
         .expect("E.");
     return HttpResponse::Ok();
