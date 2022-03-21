@@ -90,22 +90,36 @@
                 {{ category.name }}
               </a>
             </h4>
-            {% for object in object_list %}
-              <p>
-                <a class="ajax underline" href="/serve/{{ object.id }}/">
-                  {{ object.name }}
-                 </a>
-                 - {{ object.description }} :
-                   цена {{ object.price }},
-                   скидка {{ object.price_acc }},
-                   социалка {{ object.social_price }}.
-                   {% if is_admin %}
-                     | <a class="ajax" href="/edit_serve/{{ object.id }}/">~</a>
-                     | <a class="pointer remove_serve">x</a>
-                   {% endif %}
-
-              </p>
-            {% endfor %}
+            <table class="table table-striped shopping-cart-table">
+              <tbody>
+                <tr>
+                  <th>Название</th>
+                  <th>Цена</th>
+                  <th>Скидка</th>
+                  <th>Социалка</th>
+                  {% if is_admin %}
+                    <th>Изм.</th>
+                    <th>Удал.</th>
+                  {% endif %}
+                </tr>
+                {% for object in object_list %}
+                <tr>
+                  <td class="hidden-xs">
+                    <a class="ajax underline" href="/serve/{{ object.id }}/">
+                      {{ object.name }}
+                    </a>
+                  </td>
+                  <td>{{ object.price }}</td>
+                  <td>{{ object.price_acc }}</td>
+                  <td>{{ object.social_price }}</td>
+                  {% if is_admin %}
+                    <td><a class="ajax" href="/edit_serve/{{ object.id }}/">~</a></td>
+                    <td><a class="pointer remove_serve">x</a></td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
         {% endfor %}
         {% if not loop.last %}
