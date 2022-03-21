@@ -145,7 +145,7 @@ pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
         for __cat in __serve_categories.iter() {
             _serve_count += 1;
             let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
-            let _serve_int_dooble = "_".to_string() + &_let_int;
+            let _serve_int_dooble = "_".to_string() + &_serve_int;
             let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
             let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
             data.insert(&_let_serves, &__serves);

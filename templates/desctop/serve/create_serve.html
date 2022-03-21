@@ -50,10 +50,10 @@
             <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_serve_btn">Создать</button>
         </form>
         <div class="container">
-            {% for category in categories %}
-            <p>{{ category.name }}
-                | <a class="ajax" href="/edit_serve_category/{{ category.id }}/">~</a>
-                | <a class="pointer remove_serve_category" data-pk="{{ category.id }}">x</a>
+            {% for serve in serves %}
+            <p>{{ serve.name }} {{ serve.cat_name }}
+                | <a class="ajax" href="/edit_serve/{{ category.id }}/">~</a>
+                | <a class="pointer remove_serve" data-pk="{{ serve.id }}">x</a>
             </p>
             {% endfor %}
         </div>
