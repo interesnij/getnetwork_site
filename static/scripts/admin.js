@@ -135,10 +135,10 @@ on('body', 'click', '#edit_serve_btn', function() {
   send_post_data(this.parentElement, "/edit_serve/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_serve_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_serve_categories/" + this.getAttribute("data-pk") + "/");
+  send_post_data(this.parentElement, "/edit_serve_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_tech_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_tech_categories/" + this.getAttribute("data-pk") + "/");
+  send_post_data(this.parentElement, "/edit_tech_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_serve', function() {
   delete_item("/delete_serve/" + this.getAttribute("data-pk") + "/");
