@@ -2,7 +2,7 @@
     <h5 class="widget-title font-alt">Категории</h5>
     <div class="widget-body">
         <ul class="clearlist widget-menu">
-          {% for category in services_categories %}
+          {% for category in service_categories %}
             <li>
                 <a class="ajax" href="/service/{{ category.id }}/">{{ category.name }}</a>
                 <small>
