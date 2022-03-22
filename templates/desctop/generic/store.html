@@ -13,9 +13,14 @@
     </a>
   </div>
   <div class="post-prev-text align-center">
-    <del>Старая цена</del>
-    &nbsp;
-    <strong>Цена</strong>
+    {% if object.price_ac %}
+      <del>{{ object.price }}</del>
+      &nbsp;
+      <strong>{{ object.price_ac }}</strong>
+    {% else %}
+      <strong>{{ object.price }}</strong>
+    {% endif %}
+    
     {% if is_admin %}
     <br>
       | <a class="ajax" href="/edit_store/{{ object.id }}/">~</a>
@@ -24,7 +29,7 @@
     {% endif %}
   </div>
   <div class="post-prev-more align-center">
-    <a href="/store/{{ category.id }}/{{ object.id }}/" class="btn btn-mod ajax btn-round">
+    <a href="/store/{{ category.id }}/{{ object.id }}/" class="btn border btn-mod ajax btn-round">
       Детали
     </a>
   </div>
