@@ -566,9 +566,7 @@ pub async fn blog_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: we
         .expect("could not load tags");
         if _blogs.len() > 0 {
             data.insert("blogs", &_blogs);
-            println!("blogs {:?}", _blogs);
             offset += page_size;
-            println!("============");
         }
         else {break;}
     };

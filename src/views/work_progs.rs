@@ -301,9 +301,11 @@ pub async fn work_category_page(req: HttpRequest, tera: web::Data<Tera>, id: web
         .order(schema::works::work_created.desc())
         .load::<Work>(&_connection)
         .expect("could not load tags");
-         if _works.len() <= 0 { break;}
-         offset += page_size;
-         data.insert("works", &_works);
+        if _works.len() > 0 {
+            data.insert("works", &_works);
+            offset += page_size;
+        }
+        else {break;}
     };
 
     let mut stack = Vec::new();
