@@ -342,11 +342,11 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         if tech_categories_ids.iter().any(|&i| i==_serve_cat.tech_categories) {
             continue;
         } else {
-            tech_categories_ids.push(_serve_cat.tech_categories);
+            tech_categories_ids.push(_serve_cat.tech_categories); 
         }
     };
     let __tech_categories = tech_categories
-        .filter(schema::tech_categories::id.any(&tech_categories_ids))
+        .filter(schema::tech_categories::id.eq(any(&tech_categories_ids)))
         .load::<TechCategory>(&_connection)
         .expect("E");
 
