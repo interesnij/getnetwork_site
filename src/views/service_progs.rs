@@ -272,6 +272,7 @@ pub async fn create_service(mut payload: Multipart) -> impl Responder {
 }
 
 pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: web::Path<(i32,i32)>) -> impl Responder {
+    use diesel::pg::expression::dsl::any;
     use schema::services::dsl::services;
     use schema::service_images::dsl::service_images;
     use schema::service_videos::dsl::service_videos;
