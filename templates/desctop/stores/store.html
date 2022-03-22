@@ -63,6 +63,34 @@
                                 {% endif %}
                             </div>
                         </div>
+
+                        {% if serves %}
+                        <div>
+                          <h4>
+                            <a class="ajax" href="/serve_categories/{{ category.id }}/">
+                              Опции товара ({{ serves_count }})
+                            </a>
+                          </h4>
+                          <table class="table">
+                            <tbody>
+                              {% for object in serves %}
+                              <tr>
+                                <td style="width:40%">
+                                  <a class="pointer load_serve_description underline">
+                                    {{ object.name }}
+                                  </a>
+                                </td>
+                                <td style="width:15%">{{ object.price }} ₽</td>
+                                <td style="width:15%"{% if object.price_ac %}{{ object.price_acc }} ↓₽{% endif %}</td>
+                                <td style="width:15%">{% if object.social_price %}{{ object.social_price }} ♡{% endif %}</td>
+                                <td style="width:15%">{{ object.man_hours }} ⌛</td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                        {% endif %}
+
                         {{ object.content | safe }}
                     </div>
                 </div>

@@ -316,6 +316,7 @@ pub async fn get_store_page(req: HttpRequest, tera: web::Data<Tera>, param: web:
     let _videos :Vec<StoreVideo> = store_videos.filter(schema::store_videos::store.eq(&_store_id)).load(&_connection).expect("E");
     let _categories = get_cats_for_store(&_store[0]);
     let _tags = get_tags_for_store(&_store[0]);
+    let _serves = get_serves_for_store(&_store[0]);
 
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
@@ -329,7 +330,9 @@ pub async fn get_store_page(req: HttpRequest, tera: web::Data<Tera>, param: web:
     data.insert("categories", &_categories);
     data.insert("category", &_s_category[0]);
     data.insert("tags", &_tags);
+    data.insert("serves", &_serves);
     data.insert("tags_count", &_tags.len());
+    data.insert("serves_count", &_serves.len());
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"stores/store.html".to_string();
