@@ -276,6 +276,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     use schema::service_images::dsl::service_images;
     use schema::service_videos::dsl::service_videos;
     use schema::service_categories::dsl::service_categories;
+    use schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
     let _service_id : i32 = param.1;
@@ -286,6 +287,10 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         .filter(schema::service_categories::id.eq(&_cat_id))
         .load::<ServiceCategories>(&_connection)
         .expect("E");
+    let all_tech_categories :Vec<TechCategories> = tech_categories
+        .order(schema::tech_categories::tech_position.asc())
+        .load(&_connection)
+        .expect("E.");
 
     let mut data = Context::new();
 
@@ -316,6 +321,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     data.insert("blog_categories", &_blog_cats);
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
+    data.insert("tech_categories", &all_tech_categories);
     data.insert("object", &_service[0]);
     data.insert("images", &_images);
     data.insert("videos", &_videos);
