@@ -14,13 +14,13 @@
   </div>
   <div class="post-prev-text align-center">
     {% if object.price_ac %}
-      <del>{{ object.price }}</del>
+      <del>{{ object.price }} ₽</del>
       &nbsp;
-      <strong>{{ object.price_ac }}</strong>
+      <strong>{{ object.price_ac }} ₽</strong>
     {% else %}
-      <strong>{{ object.price }}</strong>
+      <strong>{{ object.price }} ₽</strong>
     {% endif %}
-    
+
     {% if is_admin %}
     <br>
       | <a class="ajax" href="/edit_store/{{ object.id }}/">~</a>
