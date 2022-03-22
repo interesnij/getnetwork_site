@@ -109,13 +109,13 @@
                                           {% endif %}
                                         {% endif %}
                                         <table class="table">
-                                            <thead>{{ category.name }}</thead>
+                                            <h5>{{ category.name }}</h5>
                                             <tbody>
                                               {% for object in object_list %}
                                               <tr>
                                                 <td style="width:5%">
                                                   <label flow="up" tooltip="Выбрать опцию" class="checkbox-inline">
-                                                    <input type="checkbox" name="option_serve" value="{{ object.id }}">
+                                                    <input type="checkbox" name="option_serve" value="{{ object.id }}" style="position:relative">
                                                   </label>
                                                 </td>
                                                 <td style="width:40%">
