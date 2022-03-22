@@ -332,7 +332,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         }
     };
     let __serve_categories = serve_categories
-        .filter(schema::serve_categories::id.any(&serve_categories_ids))
+        .filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
         .load::<ServiceCategories>(&_connection)
         .expect("E");
 
