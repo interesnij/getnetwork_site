@@ -135,6 +135,7 @@ pub async fn feedback_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl
 
 pub async fn serve_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use diesel::prelude::*;
+    use diesel::dsl::any;
     use crate::models::{Serve, TechCategories, ServeCategories};
     use crate::schema;
     use crate::schema::{

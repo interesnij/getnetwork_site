@@ -276,7 +276,11 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     use schema::service_images::dsl::service_images;
     use schema::service_videos::dsl::service_videos;
     use schema::service_categories::dsl::service_categories;
-    use schema::tech_categories::dsl::tech_categories;
+    use crate::schema::{
+        serve::dsl::serve,
+        serve_categories::dsl::serve_categories,
+        tech_categories::dsl::tech_categories,
+    };
 
     let _connection = establish_connection();
     let _service_id : i32 = param.1;
@@ -287,10 +291,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         .filter(schema::service_categories::id.eq(&_cat_id))
         .load::<ServiceCategories>(&_connection)
         .expect("E");
-    let all_tech_categories :Vec<TechCategories> = tech_categories
-        .order(schema::tech_categories::tech_position.asc())
-        .load(&_connection)
-        .expect("E.");
+
 
     let mut data = Context::new();
 
@@ -315,13 +316,71 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     let _categories = get_cats_for_service(&_service[0]);
     let _tags = get_tags_for_service(&_service[0]);
 
+    // нам надо показать выбор опций только в нужном диапазоне.
+    // поэтому мы по выбранным для объекта сервиса опциям получаем
+    // категории опций, а уже по тем - тех. категории.
+    // ИТАК: 1. получаем опции
+    let __serves = get_serves_for_service(&_service[0]);
+    // 2. получаем категории опций, исключая дубли
+    let mut serve_categories_ids = Vec::new();
+    for _serve in __serves.iter() {
+        if serve_categories_ids.iter().any(|&i| i==_serve.serve_categories) {
+            continue;
+        } else {
+            serve_categories_ids.push(_serve.serve_categories);
+        }
+    };
+    let __serve_categories = serve_categories
+        .filter(schema::serve_categories::id.any(&serve_categories_ids))
+        .load::<ServiceCategory>(&_connection)
+        .expect("E");
+
+    // 3. получаем технические категории, исключая дубли
+    let mut tech_categories_ids = Vec::new();
+    for _serve_cat in __serve_categories.iter() {
+        if tech_categories_ids.iter().any(|&i| i==_serve_cat.tech_categories) {
+            continue;
+        } else {
+            tech_categories_ids.push(_serve_cat.tech_categories);
+        }
+    };
+    let __tech_categories = tech_categories
+        .filter(schema::tech_categories::id.any(&tech_categories_ids))
+        .load::<TechCategory>(&_connection)
+        .expect("E");
+
+    // 3. генерируем переменные для шаблона, которые будут хранить наши объекты опций
+    let mut _count: i32 = 0;
+    for _cat in __tech_categories.iter() {
+        _count += 1;
+        let mut _let_int : String = _count.to_string().parse().unwrap();
+        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
+        let __serve_categories :Vec<ServeCategories> = serve_categories
+            .filter(schema::serve_categories::tech_categories.eq(_cat.id))
+            .filter(schema::serve_categories::id.eq(any(serve_categories_ids))
+            .order(schema::serve_categories::serve_position.asc())
+            .load(&_connection)
+            .expect("E.");
+        data.insert(&_let_serve_categories, &__serve_categories);
+
+        let mut _serve_count: i32 = 0;
+        for __cat in __serve_categories.iter() {
+            _serve_count += 1;
+            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
+            let _serve_int_dooble = "_".to_string() + &_let_int;
+            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
+            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
+            data.insert(&_let_serves, &__serves);
+        }
+    };
+
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
     data.insert("blog_categories", &_blog_cats);
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
-    data.insert("tech_categories", &all_tech_categories);
+    data.insert("tech_categories", &__tech_categories);
     data.insert("object", &_service[0]);
     data.insert("images", &_images);
     data.insert("videos", &_videos);
