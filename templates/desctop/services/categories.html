@@ -58,18 +58,18 @@
 
 <section class="page-section">
     <div class="container relative">
-        <h2 class="section-title font-alt mb-70 mb-sm-40">
+        <h2 class="section-title font-alt mb-40">
             Наши услуги
         </h2>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
           {% for category in service_categories %}
             <li>
-                <a>
-                    <div class="alt-tabs-icon">
-                      <img class="image_fit_200" src="{{ category.image }}" alt="img" />
-                    </div>
-                    {{ category.name }}
-                </a>
+              <a>
+                <div class="alt-tabs-icon">
+                  <img class="image_fit_200" src="{{ category.image }}" alt="img" />
+                </div>
+                {{ category.name }}
+              </a>
             </li>
           {% endfor %}
         </ul>
