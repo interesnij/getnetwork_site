@@ -38,7 +38,7 @@
                                 <div class="align-center mb-40 mb-xs-30">
                                     <ul class="nav nav-tabs tpl-minimal-tabs animate">
                                       {% for category in tech_categories %}
-                                        <li class="yy s_{{ loop.index }} {% if loop.first %}active{% endif %}">
+                                        <li class="yy s_{{ loop.index }} {% if loop.first %}active{% else %}pointer{% endif %}">
                                             <a>{{ category.name }}</a>
                                         </li>
                                       {% endfor %}
