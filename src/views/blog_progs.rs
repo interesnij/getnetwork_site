@@ -564,10 +564,13 @@ pub async fn blog_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: we
         .order(schema::blogs::blog_created.desc())
         .load::<Blog>(&_connection)
         .expect("could not load tags");
-        data.insert("blogs", &_blogs);
-        println!("blogs {:?}", _blogs);
-        offset += page_size;
-        if _blogs.len() <= 0 { break;}
+        if _blogs.len() > 0 {
+            data.insert("blogs", &_blogs);
+            println!("blogs {:?}", _blogs);
+            offset += page_size;
+            println!("============");
+        }
+        else {break;}
     };
 
     let mut stack = Vec::new();
