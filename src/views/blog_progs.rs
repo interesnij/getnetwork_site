@@ -555,20 +555,19 @@ pub async fn blog_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: we
     let _connection = establish_connection();
 
     let _category = blog_categories.filter(schema::blog_categories::id.eq(_cat_id)).load::<BlogCategories>(&_connection).expect("E");
-    let mut _blogs: Vec<Blog>;
     loop {
         let ids = BlogCategory::belonging_to(&_category).select(schema::blog_category::blog_id);
-        _blogs = schema::blogs::table
+        let _blogs = schema::blogs::table
         .filter(schema::blogs::id.eq(any(ids)))
         .limit(page_size)
         .offset(offset)
         .order(schema::blogs::blog_created.desc())
         .load::<Blog>(&_connection)
         .expect("could not load tags");
-         offset += page_size;
-         if _blogs.len() <= 0 { break;}
+        data.insert("blogs", &_blogs);
+        offset += page_size;
+        if _blogs.len() <= 0 { break;}
     };
-    data.insert("blogs", &_blogs);
 
     let mut stack = Vec::new();
     let _tag_items = tags_items.filter(schema::tags_items::blog_id.ne(0)).load::<TagItems>(&_connection).expect("E");
