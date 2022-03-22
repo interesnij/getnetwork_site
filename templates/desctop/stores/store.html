@@ -66,11 +66,9 @@
 
                         {% if serves %}
                         <div>
-                          <h4>
-                            <a class="ajax" href="/serve_categories/{{ category.id }}/">
-                              Опции товара ({{ serves_count }})
-                            </a>
-                          </h4>
+                          <h5 class="font-alt mb-20">
+                            Опции товара ({{ serves_count }})
+                          </h5>
                           <table class="table">
                             <tbody>
                               {% for object in serves %}
