@@ -36,9 +36,9 @@
                                       <strong>{{ object.price }} ₽</strong>
                                     {% endif %}
                                     {% if is_admin %}
-                                    | <a class="ajax" href="/edit_work/{{ object.id }}/">~</a>
-                                    | <a class="ajax" href="/edit_content_work/{{ object.id }}/?content=">Aa</a>
-                                    | <a class="pointer remove_work" data-pk="{{ object.id }}">x</a>
+                                    | <a class="ajax" href="/edit_store/{{ object.id }}/">~</a>
+                                    | <a class="ajax" href="/edit_content_store/{{ object.id }}/?content=">Aa</a>
+                                    | <a class="pointer remove_store" data-pk="{{ object.id }}">x</a>
                                     {% endif %}
                                 </p>
                                 <p>
