@@ -63,7 +63,7 @@
         </h2>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
           {% for category in service_categories %}
-            <li class="yy s_{{ category.id }} active">
+            <li>
                 <a>
                     <div class="alt-tabs-icon">
                       <img class="image_fit_200" src="{{ category.image }}" alt="img" />
@@ -73,23 +73,6 @@
             </li>
           {% endfor %}
         </ul>
-
-        <div class="tab-content tpl-tabs-cont">
-          {% for category in service_categories %}
-            <div class="tab_{{ category.id }} fade tab-pane in active wow fadeIn" data-wow-duration="0.3s">
-                <div class="section-text">
-                    <div class="row">
-                        <div class="mb-sm-50">
-                          <blockquote style="margin-bottom: 10px">
-                            <a href="/service/{{ category.id }}/" class="ajax" style="text-decoration: underline;">{{ category.name }}</a>
-                          </blockquote>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-          {% endfor %}
-        </div>
     </div>
 </section>
 
