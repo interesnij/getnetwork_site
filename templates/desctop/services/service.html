@@ -109,11 +109,7 @@
                                           {% endif %}
                                         {% endif %}
                                         <table class="table">
-                                            <thead>
-                                              <tr>
-                                                  <th>{{ category.name }}</th>
-                                              </tr>
-                                            </thead>
+                                            <thead>{{ category.name }}</thead>
                                             <tbody>
                                               {% for object in object_list %}
                                               <tr>
