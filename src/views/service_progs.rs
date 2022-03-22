@@ -81,7 +81,7 @@ fn get_service_for_category(category: &ServiceCategories) -> Vec<Service> {
         .load::<Service>(&_connection)
         .expect("E")
 }
-fn get_serve_for_service(service: &Service) -> Vec<Serve> {
+fn get_serves_for_service(service: &Service) -> Vec<Serve> {
     use diesel::pg::expression::dsl::any;
     use schema::serve_items::dsl::serve_items;
     let _connection = establish_connection();
@@ -333,7 +333,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     };
     let __serve_categories = serve_categories
         .filter(schema::serve_categories::id.any(&serve_categories_ids))
-        .load::<ServiceCategory>(&_connection)
+        .load::<ServiceCategories>(&_connection)
         .expect("E");
 
     // 3. получаем технические категории, исключая дубли
@@ -342,12 +342,12 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         if tech_categories_ids.iter().any(|&i| i==_serve_cat.tech_categories) {
             continue;
         } else {
-            tech_categories_ids.push(_serve_cat.tech_categories); 
+            tech_categories_ids.push(_serve_cat.tech_categories);
         }
     };
     let __tech_categories = tech_categories
         .filter(schema::tech_categories::id.eq(any(&tech_categories_ids)))
-        .load::<TechCategory>(&_connection)
+        .load::<TechCategories>(&_connection)
         .expect("E");
 
     // 3. генерируем переменные для шаблона, которые будут хранить наши объекты опций
