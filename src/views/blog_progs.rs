@@ -555,6 +555,7 @@ pub async fn blog_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: we
     let _connection = establish_connection();
 
     let _category = blog_categories.filter(schema::blog_categories::id.eq(_cat_id)).load::<BlogCategories>(&_connection).expect("E");
+    let mut _blogs;
     loop {
         let ids = BlogCategory::belonging_to(&_category).select(schema::blog_category::blog_id);
         let _blogs = schema::blogs::table
