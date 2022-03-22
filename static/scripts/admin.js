@@ -134,6 +134,9 @@ on('body', 'click', '#create_serve_category_btn', function() {
 on('body', 'click', '#edit_serve_btn', function() {
   send_post_data(this.parentElement, "/edit_serve/" + this.getAttribute("data-pk") + "/");
 });
+on('body', 'click', '#edit_text_work_btn', function() {
+  send_content_data("/edit_content_serve/" + this.getAttribute("data-pk") + "/");
+});
 on('body', 'click', '#edit_serve_category_btn', function() {
   send_post_data(this.parentElement, "/edit_serve_category/" + this.getAttribute("data-pk") + "/");
 });
@@ -162,6 +165,9 @@ on('body', 'click', '#create_work_category_btn', function() {
 });
 on('body', 'click', '#edit_work_btn', function() {
   send_post_data(this.parentElement, "/edit_work/" + this.getAttribute("data-pk") + "/");
+});
+on('body', 'click', '#edit_text_work_btn', function() {
+  send_content_data("/edit_content_work/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_work_category_btn', function() {
   send_post_data(this.parentElement, "/edit_work_category/" + this.getAttribute("data-pk") + "/");
@@ -213,6 +219,9 @@ on('body', 'click', '#create_wiki_category_btn', function() {
 on('body', 'click', '#edit_wiki_btn', function() {
   send_post_data(this.parentElement, "/edit_wiki/" + this.getAttribute("data-pk") + "/");
 });
+on('body', 'click', '#edit_text_wiki_btn', function() {
+  send_content_data("/edit_content_wiki/" + this.getAttribute("data-pk") + "/");
+});
 on('body', 'click', '#edit_wiki_category_btn', function() {
   send_post_data(this.parentElement, "/edit_wiki_category/" + this.getAttribute("data-pk") + "/");
 });
@@ -236,6 +245,9 @@ on('body', 'click', '#create_store_category_btn', function() {
 on('body', 'click', '#edit_store_btn', function() {
   send_post_data(this.parentElement, "/edit_store/" + this.getAttribute("data-pk") + "/");
 });
+on('body', 'click', '#edit_text_store_btn', function() {
+  send_content_data("/edit_content_store/" + this.getAttribute("data-pk") + "/");
+});
 on('body', 'click', '#edit_store_category_btn', function() {
   send_post_data(this.parentElement, "/edit_store_category/" + this.getAttribute("data-pk") + "/");
 });
@@ -258,6 +270,9 @@ on('body', 'click', '#create_service_category_btn', function() {
 });
 on('body', 'click', '#edit_service_btn', function() {
   send_post_data(this.parentElement, "/edit_service/" + this.getAttribute("data-pk") + "/");
+});
+on('body', 'click', '#edit_text_service_btn', function() {
+  send_content_data("/edit_content_service/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_service_category_btn', function() {
   send_post_data(this.parentElement, "/edit_service_category/" + this.getAttribute("data-pk") + "/");
