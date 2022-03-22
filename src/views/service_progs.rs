@@ -528,7 +528,7 @@ pub async fn edit_service_page(req: HttpRequest, tera: web::Data<Tera>, _id: web
     let _categories = get_cats_for_service(&_service[0]);
     let _all_tags :Vec<Tag> = tags.load(&_connection).expect("Error.");
     let _service_tags = get_tags_for_service(&_service[0]);
-    let _serve_list = get_serve_for_service(&_service[0]);
+    let _serve_list = get_serves_for_service(&_service[0]);
 
     let _images = service_images.filter(schema::service_images::service.eq(_service[0].id)).load::<ServiceImage>(&_connection).expect("E");
     let _videos = service_videos.filter(schema::service_videos::service.eq(_service[0].id)).load::<ServiceVideo>(&_connection).expect("E");
