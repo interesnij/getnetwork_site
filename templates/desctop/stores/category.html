@@ -19,12 +19,12 @@
         <div class="row">
             <div class="col-sm-8">
                 <div class="row multi-columns-row">
-                    {% if object_list %}
-                    {% for object in object_list %}
-                    {% include 'desctop/generic/store.html' %}
-                    {% endfor %}
+                    {% if stores %}
+                      {% for object in stores %}
+                        {% include 'desctop/generic/store.html' %}
+                      {% endfor %}
                     {% else %}
-                    <p>Список пока пустой...</p>
+                      <p>Список пока пустой...</p>
                     {% endif %}
                 </div>
             </div>

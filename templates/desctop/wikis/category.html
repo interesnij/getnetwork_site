@@ -18,9 +18,13 @@
     <div class="container relative">
       <div class="row">
           <div class="col-sm-8">
-            {% for object in wikis %}
-              {% include 'desctop/generic/wiki.html' %}
-            {% endfor %}
+            {% if wikis %}
+              {% for object in wikis %}
+                {% include 'desctop/generic/wiki.html' %}
+              {% endfor %}
+            {% else %}
+              <p>Список пока пустой...</p>
+            {% endif %}
           </div>
           <div class="col-sm-4">
             {% include 'desctop/wikis/sidebar.html' %}

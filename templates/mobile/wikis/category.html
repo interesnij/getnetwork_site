@@ -16,9 +16,13 @@
 
 <section class="page-section">
     <div class="container relative">
-            {% for object in wikis %}
-              {% include 'desctop/generic/wiki.html' %}
-            {% endfor %}
+      {% if wikis %}
+        {% for object in wikis %}
+          {% include 'desctop/generic/wiki.html' %}
+        {% endfor %}
+      {% else %}
+        <p>Список пока пустой...</p>
+      {% endif %}
     </div>
 </section>
 

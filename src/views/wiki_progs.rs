@@ -303,9 +303,11 @@ pub async fn wiki_category_page(req: HttpRequest, tera: web::Data<Tera>, id: web
         .order(schema::wikis::wiki_created.desc())
         .load::<Wiki>(&_connection)
         .expect("could not load tags");
-         if _wikis.len() <= 0 { break;}
-         offset += page_size;
-         data.insert("wikis", &_wikis);
+        if _wikis.len() > 0 {
+            data.insert("wikis", &_wikis);
+            offset += page_size;
+        }
+        else {break;}
     };
 
     let mut stack = Vec::new();

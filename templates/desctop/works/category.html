@@ -22,9 +22,13 @@
 <section class="page-section">
   <div class="container relative">
     <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
-      {% for object in works %}
-        {% include 'desctop/generic/work.html' %}
-      {% endfor %}
+      {% if works %}
+        {% for object in works %}
+          {% include 'desctop/generic/work.html' %}
+        {% endfor %}
+      {% else %}
+        <p>Список пока пустой...</p>
+      {% endif %}
     <ul>
   </div>
 </section>

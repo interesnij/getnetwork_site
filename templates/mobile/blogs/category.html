@@ -15,9 +15,13 @@
 </section>
 <section class="page-section">
     <div class="container relative">
-              {% for object in blogs %}
-                {% include 'desctop/generic/blog.html' %}
-              {% endfor %}
+      {% if blogs %}
+        {% for object in blogs %}
+          {% include 'desctop/generic/blog.html' %}
+        {% endfor %}
+      {% else %}
+        <p>Список пока пустой...</p>
+      {% endif %}
   </div>
 </section>
 {% endblock %}

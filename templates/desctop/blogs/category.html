@@ -18,9 +18,13 @@
         <div class="row">
             <div class="col-sm-8">
                 <div class="row multi-columns-row">
+                  {% if blogs %}
                     {% for object in blogs %}
-                    {% include 'desctop/generic/blog.html' %}
+                      {% include 'desctop/generic/blog.html' %}
                     {% endfor %}
+                  {% else %}
+                    <p>Список пока пустой...</p>
+                  {% endif %}
                 </div>
             </div>
             <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">

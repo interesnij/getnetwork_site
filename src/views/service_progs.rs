@@ -358,9 +358,11 @@ pub async fn service_category_page(req: HttpRequest, tera: web::Data<Tera>, id: 
         .order(schema::services::service_created.desc())
         .load::<Service>(&_connection)
         .expect("could not load tags");
-         if _services.len() <= 0 { break;}
-         offset += page_size;
-         data.insert("services", &_services);
+        if _services.len() > 0 {
+            data.insert("services", &_services);
+            offset += page_size;
+        }
+        else {break;}
     };
 
     let mut stack = Vec::new();

@@ -17,8 +17,8 @@
 <section class="page-section">
     <div class="container relative">
             <div class="row multi-columns-row">
-              {% if object_list %}
-                {% for object in object_list %}
+              {% if stores %}
+                {% for object in stores %}
                   {% include 'desctop/generic/store.html' %}
                 {% endfor %}
               {% else %}

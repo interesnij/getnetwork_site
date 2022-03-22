@@ -368,9 +368,11 @@ pub async fn store_category_page(req: HttpRequest, tera: web::Data<Tera>, id: we
         .order(schema::stores::store_created.desc())
         .load::<Store>(&_connection)
         .expect("could not load tags");
-        data.insert("stores", &_stores);
-         if _stores.len() <= 0 { break;}
-         offset += page_size;
+        if _stores.len() > 0 {
+            data.insert("stores", &_stores);
+            offset += page_size;
+        }
+        else {break;}
     };
 
     let mut stack = Vec::new();

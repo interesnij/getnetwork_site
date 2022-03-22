@@ -37,11 +37,11 @@
                 </h3>
                 <div class="row multi-columns-row">
                     {% if object_list %}
-                    {% for object in object_list %}
-                    {% include 'desctop/generic/store.html' %}
-                    {% endfor %}
+                      {% for object in object_list %}
+                        {% include 'desctop/generic/store.html' %}
+                      {% endfor %}
                     {% else %}
-                    <p>Список пока пустой...</p>
+                      <p>Список пока пустой...</p>
                     {% endif %}
                 </div>
                 {% endfor %}
