@@ -558,15 +558,15 @@ pub async fn blog_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: we
     let mut _blogs: Vec<Blog>;
     loop {
         let ids = BlogCategory::belonging_to(&_category).select(schema::blog_category::blog_id);
-        let _blogs = schema::blogs::table
+        _blogs = schema::blogs::table
         .filter(schema::blogs::id.eq(any(ids)))
         .limit(page_size)
         .offset(offset)
         .order(schema::blogs::blog_created.desc())
         .load::<Blog>(&_connection)
         .expect("could not load tags");
-         if _blogs.len() <= 0 { break;}
          offset += page_size;
+         if _blogs.len() <= 0 { break;}
     };
     data.insert("blogs", &_blogs);
 
