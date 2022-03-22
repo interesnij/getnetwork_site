@@ -323,7 +323,7 @@ pub async fn get_store_page(req: HttpRequest, tera: web::Data<Tera>, param: web:
     data.insert("blog_categories", &_blog_cats);
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
-    data.insert("object", &_store);
+    data.insert("object", &_store[0]);
     data.insert("images", &_images);
     data.insert("videos", &_videos);
     data.insert("categories", &_categories);
