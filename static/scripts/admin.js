@@ -164,7 +164,7 @@ on('body', 'click', '#edit_work_btn', function() {
   send_post_data(this.parentElement, "/edit_work/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_work_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_work_categories/" + this.getAttribute("data-pk") + "/");
+  send_post_data(this.parentElement, "/edit_work_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_work', function() {
   delete_item("/delete_work/" + this.getAttribute("data-pk") + "/");
@@ -214,7 +214,7 @@ on('body', 'click', '#edit_wiki_btn', function() {
   send_post_data(this.parentElement, "/edit_wiki/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_wiki_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_wiki_categories/" + this.getAttribute("data-pk") + "/");
+  send_post_data(this.parentElement, "/edit_wiki_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_wiki', function() {
   delete_item("/delete_wiki/" + this.getAttribute("data-pk") + "/");
@@ -237,7 +237,7 @@ on('body', 'click', '#edit_store_btn', function() {
   send_post_data(this.parentElement, "/edit_store/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_store_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_store_categories/" + this.getAttribute("data-pk") + "/");
+  send_post_data(this.parentElement, "/edit_store_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_store', function() {
   delete_item("/delete_store/" + this.getAttribute("data-pk") + "/");
@@ -260,7 +260,7 @@ on('body', 'click', '#edit_service_btn', function() {
   send_post_data(this.parentElement, "/edit_service/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_service_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_service_categories/" + this.getAttribute("data-pk") + "/");
+  send_post_data(this.parentElement, "/edit_service_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_service', function() {
   delete_item("/delete_service/" + this.getAttribute("data-pk") + "/");
