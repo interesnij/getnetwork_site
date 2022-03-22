@@ -40,17 +40,20 @@
                                     <a href="/work/{{ category.id }}/" class="ajax">{{ category.name }} - {{ category.work_count }}</a>{% if not loop.last %}, {% endif %}
                                     {% endfor %}
                                 </p>
+                                {% if tags %}
                                 <p>
                                     <strong>Теги:</strong>
                                     {% for tag in tags %}
-                                    <a class="ajax" href="/tag/{{ tag.id }}/">{{ tag.name }} ({{ tag.tag_count }})</a>{% if not loop.last %}, {% endif %}
-
+                                      <a class="ajax" href="/tag/{{ tag.id }}/">{{ tag.name }} ({{ tag.tag_count }})</a>{% if not loop.last %}, {% endif %}
                                     {% endfor %}
                                 </p>
+                                {% endif %}
+                                {% if object.link %}
                                 <p>
-                                    <strong>Ссылка:</strong>
-                                    <a href="{{ object.link }}" target="_blank">{{ object.link | truncate(length=70) }}</a>
+                                  <strong>Ссылка:</strong>
+                                  <a href="{{ object.link }}" target="_blank">{{ object.link | truncate(length=70) }}</a>
                                 </p>
+                                {% endif %}
                             </div>
                         </div>
                         {{ object.content | safe }}
