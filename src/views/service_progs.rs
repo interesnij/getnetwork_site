@@ -294,7 +294,6 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         .load::<ServiceCategories>(&_connection)
         .expect("E");
 
-
     let mut data = Context::new();
 
     let _category_services = get_service_for_category(&_s_category[0]);
@@ -327,7 +326,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     let mut serve_categories_ids = Vec::new();
     let mut total_price: i32 = 0;
     for _serve in __serves.iter() {
-        if _serve.is_default == true {
+        if _serve.is_default == "true" {
             total_price += _serve.price;
         }
         if serve_categories_ids.iter().any(|&i| i==_serve.serve_categories) {
