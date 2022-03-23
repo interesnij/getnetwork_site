@@ -292,6 +292,7 @@ table! {
     serve_categories (id) {
         id -> Int4,
         name -> Varchar,
+        description -> Nullable<Text>,
         cat_name -> Varchar,
         tech_categories -> Int4,
         serve_position -> Int4,
