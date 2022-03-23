@@ -5,11 +5,10 @@ p {
 }
 
 .item_attach_circle{
-  position: absolute;
+  position: absolute !important;
   right: 15px;
   border-radius: 50%;
   cursor: pointer;
-  top: 12px;
   height: 25px;
   width: 25px;
 }
