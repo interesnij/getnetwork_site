@@ -111,11 +111,6 @@
                                             <tbody>
                                               {% for object in object_list %}
                                               <tr>
-                                                <td style="width:5%">
-                                                  <label flow="up" tooltip="Выбрать опцию" class="checkbox-inline">
-                                                    <input type="checkbox" name="option_serve" value="{{ object.id }}" style="position:relative">
-                                                  </label>
-                                                </td>
                                                 <td style="width:40%">
                                                   <a class="ajax underline" href="/serve/{{ object.id }}/">
                                                     {{ object.name }}
@@ -125,6 +120,13 @@
                                                 <td style="width:11%"{% if object.price_ac %}{{ object.price_acc }} ↓₽{% endif %}</td>
                                                 <td style="width:11%">{% if object.social_price %}{{ object.social_price }} ♡{% endif %}</td>
                                                 <td style="width:11%">{{ object.man_hours }} ⌛</td>
+                                                <td style="width:5%">
+                                                  <span class="custom_color border item_attach_circle select_serve" tooltip="Выбрать опцию" flow="up">
+                                                    <svg class="svg_default" fill="currentColor" viewBox="2 2 20 20">
+                                                      <path d="M0 0h24v24H0V0z" fill="none"></path><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"></path>
+                                                    </svg>
+          <                                       </span>
+                                                </td>
                                               </tr>
                                               {% endfor %}
 
@@ -136,13 +138,11 @@
                                 </div>
 
                                 <div class="mt-40 align-right">
-                                    <a href="#" class="btn btn-mod btn-gray btn-small btn-circle"><i class="fa fa-cloud-download"></i> Download Menu</a>
+                                    <a class="btn pointer btn-mod border btn-small btn-circle">
+                                      Перейти к заказу
+                                    </a>
                                 </div>
-                                <!-- End Button -->
-
                             </div>
-                            <!-- End Col -->
-
                         </div>
                     </div>
                 </section>
