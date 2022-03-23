@@ -121,7 +121,7 @@
                                             <h4>{{ category.name }}</h4>
                                             <tbody>
                                               {% for object in object_list %}
-                                              <tr class="{% if not object.is_default %}select_serve pointer{% endif %}">
+                                              <tr class="{% if object.is_default %}is_default{% else %}select_serve pointer{% endif %}">
                                                 <td style="width:40%">
                                                   <a class="pointer underline get_serve_info">
                                                     {{ object.name }}
