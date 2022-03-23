@@ -62,6 +62,7 @@ pub struct Serve {
     pub price_acc: Option<i32>,
     pub social_price: Option<i32>,
     pub man_hours: i32,
+    pub is_default: bool,
 }
 #[derive(Insertable,AsChangeset)]
 #[table_name="serve"]
@@ -75,6 +76,7 @@ pub struct NewServe {
     pub price_acc: Option<i32>,
     pub social_price: Option<i32>,
     pub man_hours: i32,
+    pub is_default: bool,
 }
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="serve"]
@@ -88,6 +90,7 @@ pub struct EditServe {
     pub price_acc: Option<i32>,
     pub social_price: Option<i32>,
     pub man_hours: i32,
+    pub is_default: bool,
 }
 
 /////// ServeItems //////

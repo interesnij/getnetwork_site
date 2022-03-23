@@ -279,6 +279,7 @@ CREATE TABLE serve (
     price_acc INT,
     social_price INT,
     man_hours INT,
+    is_default boolean not null default 0,
 
     CONSTRAINT fk_serve_category
         FOREIGN KEY(serve_categories)

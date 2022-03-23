@@ -320,6 +320,7 @@ pub struct ServeForm {
     pub price_acc: i32,
     pub social_price: i32,
     pub man_hours: i32,
+    pub is_default: bool,
 }
 
 pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
@@ -333,6 +334,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         price_acc: 0,
         social_price: 0,
         man_hours: 0,
+        is_default: true,
     };
 
     while let Some(item) = payload.next().await {
@@ -393,7 +395,18 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                 }
             }
         }
-
+        else if name == "is_default" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    if s.to_string() == "on" {
+                        form.is_default = true;
+                    } else {
+                        form.is_default = false;
+                    }
+                }
+            }
+        }
         else {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
@@ -432,6 +445,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
         price_acc: Some(form.price_acc.clone()),
         social_price: Some(form.social_price.clone()),
         man_hours: form.man_hours.clone(),
+        is_default: form.is_default.clone(),
     };
 
     let _serve = diesel::insert_into(serve::table)
@@ -468,6 +482,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
         price_acc: Some(form.price_acc.clone()),
         social_price: Some(form.social_price.clone()),
         man_hours: form.man_hours.clone(),
+        is_default: form.is_default.clone(),
     };
 
     diesel::update(&_serve[0])

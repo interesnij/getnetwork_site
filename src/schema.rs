@@ -312,6 +312,7 @@ table! {
         price_acc -> Nullable<Int4>,
         social_price -> Nullable<Int4>,
         man_hours -> Int4,
+        is_default -> Bool,
     }
 }
 
