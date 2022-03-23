@@ -3,6 +3,9 @@
 p {
   margin: 0px 0px 1em !important;
 }
+tr:hover, tr.hover {
+  opacity: 0.9;
+}
 
 .item_attach_circle{
   position: absolute !important;
