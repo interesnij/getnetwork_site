@@ -36,7 +36,17 @@
                                 <div class="align-center mb-40 mb-xs-30">
                                     <ul class="nav nav-tabs tpl-minimal-tabs animate">
                                       {% for category in tech_categories %}
-                                        <li class="yy s_{{ loop.index }} {% if loop.first %}active get_object_info{% else %}pointer{% endif %}" data-pk="{{ category.id }}" data-type="tech_categories" tooltip="Нажмите для справки" flow="up">
+                                        <li
+                                          {% if loop.first %}
+                                            class="yy pointer s_{{ loop.index }} active get_object_info"
+                                            tooltip="Нажмите для справки"
+                                            flow="up"
+                                          {% else %}
+                                            class="yy pointer s_{{ loop.index }}"
+                                          {% endif %}
+                                          data-pk="{{ category.id }}"
+                                          data-type="tech_categories"
+                                          >
                                             <a>{{ category.name }}
                                             </a>
                                         </li>
