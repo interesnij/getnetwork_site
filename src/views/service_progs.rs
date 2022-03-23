@@ -326,7 +326,8 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     let mut serve_categories_ids = Vec::new();
     let mut total_price: i32 = 0;
     for _serve in __serves.iter() {
-        if _serve.is_default == true { 
+        println!("{:?}", _serve.is_default);
+        if _serve.is_default {
             total_price += _serve.price;
         }
         if serve_categories_ids.iter().any(|&i| i==_serve.serve_categories) {
