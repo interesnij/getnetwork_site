@@ -20,6 +20,9 @@
                 <input value="{{ category.name }}" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" value="{{ category.description }}" type="text" name="description" placeholder="Описание" />
+            </div>
+            <div class="mb-20 mb-md-10">
                 <input value="{{ category.tech_position }}" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
             </div>
             <button data-pk="{{ category.id }}" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_tech_category_btn">Изменить</button>
