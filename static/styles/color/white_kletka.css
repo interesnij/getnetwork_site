@@ -8,7 +8,7 @@
 	background-position: center center;
 }
 tr:hover, tr.hover {
-  color: #fff !important;
+  background-color: #fff !important;
 }
 .small-section, .mob_menu, .banner_block {
   background-color: white !important;

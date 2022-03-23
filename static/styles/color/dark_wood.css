@@ -6,7 +6,7 @@
   background: inherit !important;
 }
 tr:hover, tr.hover {
-  color: #000000 !important;
+  background-color: #000000 !important;
 }
 
 .banner_block {

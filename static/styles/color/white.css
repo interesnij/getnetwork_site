@@ -12,7 +12,7 @@
   background-color: white !important;
 }
 tr:hover, tr.hover {
-  color: #e6e3df !important;
+  background-color: #e6e3df !important;
 }
 .banner_block {
   display: inline-block;
