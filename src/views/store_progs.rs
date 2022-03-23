@@ -173,6 +173,7 @@ pub async fn create_store_categories(mut payload: Multipart) -> impl Responder {
     let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewStoreCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         store_position: form.position.clone(),
         image: Some(form.image.clone()),
         store_count: 0
@@ -709,6 +710,7 @@ pub async fn edit_store_category(mut payload: Multipart, _id: web::Path<i32>) ->
     let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditStoreCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         store_position: form.position.clone(),
         image: Some(form.image.clone()),
         store_count: _category[0].store_count,

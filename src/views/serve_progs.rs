@@ -127,7 +127,7 @@ pub async fn create_serve_categories_page(req: HttpRequest, tera: web::Data<Tera
 }
 pub async fn create_serve_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use schema::serve_categories::dsl::serve_categories;
-    use schema::serve::dsl::serve; 
+    use schema::serve::dsl::serve;
 
     let _connection = establish_connection();
     let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
@@ -230,6 +230,7 @@ pub async fn create_tech_categories(mut payload: Multipart) -> impl Responder {
     let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewTechCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         tech_position: form.position.clone(),
         tech_count: 0
     };
@@ -250,6 +251,7 @@ pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
 
     let new_cat = NewServeCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         cat_name: _s_category[0].name.clone(),
         tech_categories: form.tech_categories.clone(),
         serve_position: form.position.clone(),
@@ -271,6 +273,7 @@ pub async fn edit_tech_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewTechCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         tech_position: form.position.clone(),
         tech_count: _category[0].tech_count
     };

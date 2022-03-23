@@ -122,6 +122,7 @@ pub async fn create_wiki_categories(mut payload: Multipart) -> impl Responder {
     let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewWikiCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         wiki_position: form.position.clone(),
         image: Some(form.image.clone()),
         wiki_count: 0
@@ -593,6 +594,7 @@ pub async fn edit_wiki_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditWikiCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         wiki_position: form.position.clone(),
         image: Some(form.image.clone()),
         wiki_count: _category[0].wiki_count,

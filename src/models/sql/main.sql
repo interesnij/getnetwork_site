@@ -29,6 +29,7 @@ CREATE TABLE users (
 CREATE TABLE work_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
+    description TEXT,
     work_position INT,
     image TEXT,
     work_count INT
@@ -94,6 +95,7 @@ CREATE INDEX work_videos_id_idx ON work_videos (work);
 CREATE TABLE blog_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
+    description TEXT,
     blog_position INT,
     image TEXT,
     blog_count INT
@@ -182,6 +184,7 @@ CREATE INDEX blog_videos_id_idx ON blog_videos (blog);
 CREATE TABLE service_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
+    description TEXT,
     service_position INT,
     image TEXT,
     service_count INT
@@ -246,6 +249,7 @@ CREATE INDEX service_videos_id_idx ON service_videos (service);
 CREATE TABLE tech_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
+    description TEXT,
     tech_position INT,
     tech_count INT
 );
@@ -294,6 +298,7 @@ CREATE TABLE serve_items (
 CREATE TABLE store_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
+    description TEXT,
     store_position INT,
     image TEXT,
     store_count INT
@@ -361,6 +366,7 @@ CREATE INDEX store_videos_id_idx ON store_videos (store);
 CREATE TABLE wiki_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
+    description TEXT,
     wiki_position INT,
     image TEXT,
     wiki_count INT

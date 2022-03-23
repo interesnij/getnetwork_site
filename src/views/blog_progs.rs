@@ -212,6 +212,7 @@ pub async fn create_blog_categories(mut payload: Multipart) -> impl Responder {
     let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewBlogCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         blog_position: form.position.clone(),
         image: Some(form.image.clone()),
         blog_count: 0
@@ -419,6 +420,7 @@ pub async fn edit_blog_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditBlogCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         blog_position: form.position.clone(),
         image: Some(form.image.clone()),
         blog_count: _category[0].blog_count,

@@ -168,6 +168,7 @@ pub async fn create_service_categories(mut payload: Multipart) -> impl Responder
     let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewServiceCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         service_position: form.position.clone(),
         image: Some(form.image.clone()),
         service_count: 0
@@ -757,6 +758,7 @@ pub async fn edit_service_category(mut payload: Multipart, _id: web::Path<i32>) 
     let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditServiceCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         service_position: form.position.clone(),
         image: Some(form.image.clone()),
         service_count: _category[0].service_count,

@@ -121,6 +121,7 @@ pub async fn create_work_categories(mut payload: Multipart) -> impl Responder {
     let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewWorkCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         work_position: form.position.clone(),
         image: Some(form.image.clone()),
         work_count: 0
@@ -591,6 +592,7 @@ pub async fn edit_work_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditWorkCategories {
         name: form.name.clone(),
+        description: Some(form.description.clone()),
         work_position: form.position.clone(),
         image: Some(form.image.clone()),
         work_count: _category[0].work_count,

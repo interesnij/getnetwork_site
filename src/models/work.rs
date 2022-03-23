@@ -13,6 +13,7 @@ use crate::models::User;
 pub struct WorkCategories {
     pub id: i32,
     pub name: String,
+    pub description: String,
     pub work_position: i32,
     pub image: Option<String>,
     pub work_count: i32,
@@ -21,6 +22,7 @@ pub struct WorkCategories {
 #[table_name="work_categories"]
 pub struct NewWorkCategories {
     pub name: String,
+    pub description: String,
     pub work_position: i32,
     pub image: Option<String>,
     pub work_count: i32,
@@ -29,6 +31,7 @@ pub struct NewWorkCategories {
 #[table_name="work_categories"]
 pub struct EditWorkCategories {
     pub name: String,
+    pub description: String,
     pub work_position: i32,
     pub image: Option<String>,
     pub work_count: i32,

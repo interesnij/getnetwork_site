@@ -12,6 +12,7 @@ use crate::models::User;
 pub struct StoreCategories {
     pub id: i32,
     pub name: String,
+    pub description: String,
     pub store_position: i32,
     pub image: Option<String>,
     pub store_count: i32,
@@ -20,6 +21,7 @@ pub struct StoreCategories {
 #[table_name="store_categories"]
 pub struct NewStoreCategories {
     pub name: String,
+    pub description: String,
     pub store_position: i32,
     pub image: Option<String>,
     pub store_count: i32,
@@ -29,6 +31,7 @@ pub struct NewStoreCategories {
 #[table_name="store_categories"]
 pub struct EditStoreCategories {
     pub name: String,
+    pub description: String,
     pub store_position: i32,
     pub image: Option<String>,
     pub store_count: i32,

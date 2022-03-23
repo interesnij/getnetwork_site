@@ -28,6 +28,7 @@ table! {
     blog_categories (id) {
         id -> Int4,
         name -> Varchar,
+        description -> Nullable<Text>,
         blog_position -> Int4,
         image -> Nullable<Text>,
         blog_count -> Int4,
@@ -86,6 +87,7 @@ table! {
     work_categories (id) {
         id -> Int4,
         name -> Varchar,
+        description -> Nullable<Text>,
         work_position -> Int4,
         image -> Nullable<Text>,
         work_count -> Int4,
@@ -135,6 +137,7 @@ table! {
     store_categories (id) {
         id -> Int4,
         name -> Varchar,
+        description -> Nullable<Text>,
         store_position -> Int4,
         image -> Nullable<Text>,
         store_count -> Int4,
@@ -184,6 +187,7 @@ table! {
     wiki_categories (id) {
         id -> Int4,
         name -> Varchar,
+        description -> Nullable<Text>,
         wiki_position -> Int4,
         image -> Nullable<Text>,
         wiki_count -> Int4,
@@ -230,6 +234,7 @@ table! {
     service_categories (id) {
         id -> Int4,
         name -> Varchar,
+        description -> Nullable<Text>,
         service_position -> Int4,
         image -> Nullable<Text>,
         service_count -> Int4,
@@ -278,6 +283,7 @@ table! {
     tech_categories (id) {
         id -> Int4,
         name -> Varchar,
+        description -> Nullable<Text>,
         tech_position -> Int4,
         tech_count -> Int4,
     }

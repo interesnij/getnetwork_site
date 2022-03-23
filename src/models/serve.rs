@@ -11,6 +11,7 @@ use serde::{
 pub struct TechCategories {
     pub id: i32,
     pub name: String,
+    pub description: String,
     pub tech_position: i32,
     pub tech_count: i32,
 }
@@ -18,6 +19,7 @@ pub struct TechCategories {
 #[table_name="tech_categories"]
 pub struct NewTechCategories {
     pub name: String,
+    pub description: String,
     pub tech_position: i32,
     pub tech_count: i32,
 }
@@ -28,6 +30,7 @@ pub struct NewTechCategories {
 pub struct ServeCategories {
     pub id: i32,
     pub name: String,
+    pub description: String,
     pub cat_name: String,
     pub tech_categories: i32,
     pub serve_position: i32,
@@ -37,6 +40,7 @@ pub struct ServeCategories {
 #[table_name="serve_categories"]
 pub struct NewServeCategories {
     pub name: String,
+    pub description: String,
     pub cat_name: String,
     pub tech_categories: i32,
     pub serve_position: i32,

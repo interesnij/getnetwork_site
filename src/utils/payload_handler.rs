@@ -59,12 +59,14 @@ pub struct FeedbackForm {
 #[derive(Deserialize, Serialize, Debug)]
 pub struct CategoriesForm {
     pub name: String,
+    pub description: String,
     pub position: i32,
     pub image: String,
 }
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ServeCategoriesForm {
     pub name: String,
+    pub description: String,
     pub tech_categories: i32,
     pub position: i32,
 }
@@ -225,6 +227,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
 pub async fn category_form(payload: &mut Multipart) -> CategoriesForm {
     let mut form: CategoriesForm = CategoriesForm {
         name: "".to_string(),
+        description: "".to_string(),
         position: 0,
         image: "".to_string(),
     };
@@ -268,8 +271,8 @@ pub async fn category_form(payload: &mut Multipart) -> CategoriesForm {
                     let data_string = s.to_string();
                     if field.name() == "name" {
                         form.name = data_string
-                    } else if field.name() == "position" {
-                        form.position = 0
+                    } else if field.name() == "description" {
+                        form.description = data_string
                     }
                 }
             }
@@ -452,6 +455,7 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
 pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm {
     let mut form: ServeCategoriesForm = ServeCategoriesForm {
         name: "".to_string(),
+        description: "".to_string(),
         tech_categories: 0,
         position: 0,
     };
@@ -486,6 +490,8 @@ pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm
                     let data_string = s.to_string();
                     if field.name() == "name" {
                         form.name = data_string
+                    } else if field.name() == "description" {
+                        form.description = data_string
                     }
                 }
             }
