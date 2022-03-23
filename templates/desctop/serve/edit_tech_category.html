@@ -21,9 +21,8 @@
             </div>
 
             <div class="mb-20 mb-md-10">
-              <textarea class="input-md form-control" rows="10" type="text" name="description" placeholder="Описание">
-                {{ category.description }}
-              </textarea>
+              <p>0</p>
+                <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">{{ category.description | safe }}</div>
             </div>
 
             <div class="mb-20 mb-md-10">

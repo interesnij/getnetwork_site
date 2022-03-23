@@ -84,6 +84,28 @@ on('#ajax', 'input', '.smile_supported', function() {
     this.previousElementSibling.innerHTML = this.innerHTML.length
 });
 
+function send_category_data(form, url) {
+  text_val1 = document.body.querySelector(".content_1");
+  _val1 = format_text(text_val1);
+  _text1 = _val1.innerHTML;
+
+  $input = document.createElement("input");
+  $input.setAttribute("name", "text");
+  $input.setAttribute("type", "hidden");
+  $input.classList.add("input_text");
+  $input.value = _text;
+  form.append($input);
+  form_data = new FormData(form);
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', url, true );
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    ajax_get_reload(url)
+  }};
+  link.send(form_data);
+};
+
 function send_content_data(url) {
   text_val1 = document.body.querySelector(".content_1");
   _val1 = format_text(text_val1);
@@ -126,10 +148,10 @@ on('body', 'click', '#create_serve_btn', function() {
   send_post_data(this.parentElement, "/create_serve/");
 });
 on('body', 'click', '#create_tech_category_btn', function() {
-  send_post_data(this.parentElement, "/create_tech_categories/");
+  send_category_data(this.parentElement, "/create_tech_categories/");
 });
 on('body', 'click', '#create_serve_category_btn', function() {
-  send_post_data(this.parentElement, "/create_serve_categories/");
+  send_category_data(this.parentElement, "/create_serve_categories/");
 });
 on('body', 'click', '#edit_serve_btn', function() {
   send_post_data(this.parentElement, "/edit_serve/" + this.getAttribute("data-pk") + "/");
@@ -138,10 +160,10 @@ on('body', 'click', '#edit_text_work_btn', function() {
   send_content_data("/edit_content_serve/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_serve_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_serve_category/" + this.getAttribute("data-pk") + "/");
+  send_category_data(this.parentElement, "/edit_serve_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_tech_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_tech_category/" + this.getAttribute("data-pk") + "/");
+  send_category_data(this.parentElement, "/edit_tech_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_serve', function() {
   delete_item("/delete_serve/" + this.getAttribute("data-pk") + "/");
@@ -161,7 +183,7 @@ on('body', 'click', '#create_work_btn', function() {
   send_post_data(this.parentElement, "/create_work/");
 });
 on('body', 'click', '#create_work_category_btn', function() {
-  send_post_data(this.parentElement, "/create_work_categories/");
+  send_category_data(this.parentElement, "/create_work_categories/");
 });
 on('body', 'click', '#edit_work_btn', function() {
   send_post_data(this.parentElement, "/edit_work/" + this.getAttribute("data-pk") + "/");
@@ -170,7 +192,7 @@ on('body', 'click', '#edit_text_work_btn', function() {
   send_content_data("/edit_content_work/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_work_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_work_category/" + this.getAttribute("data-pk") + "/");
+  send_category_data(this.parentElement, "/edit_work_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_work', function() {
   delete_item("/delete_work/" + this.getAttribute("data-pk") + "/");
@@ -194,10 +216,10 @@ on('body', 'click', '#edit_text_blog_btn', function() {
 });
 
 on('body', 'click', '#create_blog_category_btn', function() {
-  send_post_data(this.parentElement, "/create_blog_categories/");
+  send_category_data(this.parentElement, "/create_blog_categories/");
 });
 on('body', 'click', '#edit_blog_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_blog_category/" + this.getAttribute("data-pk") + "/");
+  send_category_data(this.parentElement, "/edit_blog_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_blog', function() {
   delete_item("/delete_blog/" + this.getAttribute("data-pk") + "/");
@@ -214,7 +236,7 @@ on('body', 'click', '#create_wiki_btn', function() {
   send_post_data(this.parentElement, "/create_wiki/");
 });
 on('body', 'click', '#create_wiki_category_btn', function() {
-  send_post_data(this.parentElement, "/create_wiki_categories/");
+  send_category_data(this.parentElement, "/create_wiki_categories/");
 });
 on('body', 'click', '#edit_wiki_btn', function() {
   send_post_data(this.parentElement, "/edit_wiki/" + this.getAttribute("data-pk") + "/");
@@ -223,7 +245,7 @@ on('body', 'click', '#edit_text_wiki_btn', function() {
   send_content_data("/edit_content_wiki/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_wiki_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_wiki_category/" + this.getAttribute("data-pk") + "/");
+  send_category_data(this.parentElement, "/edit_wiki_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_wiki', function() {
   delete_item("/delete_wiki/" + this.getAttribute("data-pk") + "/");
@@ -240,7 +262,7 @@ on('body', 'click', '#create_store_btn', function() {
   send_post_data(this.parentElement, "/create_store/");
 });
 on('body', 'click', '#create_store_category_btn', function() {
-  send_post_data(this.parentElement, "/create_store_categories/");
+  send_category_data(this.parentElement, "/create_store_categories/");
 });
 on('body', 'click', '#edit_store_btn', function() {
   send_post_data(this.parentElement, "/edit_store/" + this.getAttribute("data-pk") + "/");
@@ -249,7 +271,7 @@ on('body', 'click', '#edit_text_store_btn', function() {
   send_content_data("/edit_content_store/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_store_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_store_category/" + this.getAttribute("data-pk") + "/");
+  send_category_data(this.parentElement, "/edit_store_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_store', function() {
   delete_item("/delete_store/" + this.getAttribute("data-pk") + "/");
@@ -266,7 +288,7 @@ on('body', 'click', '#create_service_btn', function() {
   send_post_data(this.parentElement, "/create_service/");
 });
 on('body', 'click', '#create_service_category_btn', function() {
-  send_post_data(this.parentElement, "/create_service_categories/");
+  send_category_data(this.parentElement, "/create_service_categories/");
 });
 on('body', 'click', '#edit_service_btn', function() {
   send_post_data(this.parentElement, "/edit_service/" + this.getAttribute("data-pk") + "/");
@@ -275,7 +297,7 @@ on('body', 'click', '#edit_text_service_btn', function() {
   send_content_data("/edit_content_service/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_service_category_btn', function() {
-  send_post_data(this.parentElement, "/edit_service_category/" + this.getAttribute("data-pk") + "/");
+  send_category_data(this.parentElement, "/edit_service_category/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '.remove_service', function() {
   delete_item("/delete_service/" + this.getAttribute("data-pk") + "/");

@@ -20,7 +20,8 @@
                 <input value="{{ category.name }}" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
-                <input class="input-md form-control" value="{{ category.description }}" type="text" name="description" placeholder="Описание" />
+              <p>0</p>
+                <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">{{ category.description | safe }}</div>
             </div>
             <div class="mb-20 mb-md-10">
                 <input value="{{ category.service_position }}" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
