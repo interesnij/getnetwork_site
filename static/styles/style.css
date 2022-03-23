@@ -5,7 +5,6 @@ p {
 }
 .item_attach_circle{
   position: absolute !important;
-  right: 15px;
   border-radius: 50%;
   cursor: pointer;
   height: 25px;
