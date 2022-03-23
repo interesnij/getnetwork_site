@@ -362,7 +362,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         let mut _let_int : String = _count.to_string().parse().unwrap();
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
         let __serve_categories :Vec<ServeCategories> = serve_categories
-            .filter(schema::serve_categories::id.eq((_cat.id)))
+            .filter(schema::serve_categories::id.eq(_cat.id))
             .filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
             .order(schema::serve_categories::serve_position.asc())
             .load(&_connection)
