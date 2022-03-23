@@ -323,9 +323,17 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     // категории опций, а уже по тем - тех. категории.
     // ИТАК: 1. получаем опции
     let __serves = get_serves_for_service(&_service[0]);
-    // 2. получаем категории опций, исключая дубли
+    // 2. получаем категории опций, исключая дубли, и дефолтную цену.
     let mut serve_categories_ids = Vec::new();
+    let mut total_price: i32 = 0;
     for _serve in __serves.iter() {
+        if _serve.is_default == true {
+            if _serve.price_acc > 0 {
+                total_price += _serve.price_acc;
+            } else {
+                total_price += _serve.price;
+            }
+        }
         if serve_categories_ids.iter().any(|&i| i==_serve.serve_categories) {
             continue;
         } else {
@@ -391,6 +399,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     data.insert("tags", &_tags);
     data.insert("tags_count", &_tags.len());
     data.insert("is_admin", &_is_admin);
+    data.insert("total_price", &total_price);
 
     let _template = _type + &"services/service.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
