@@ -93,7 +93,7 @@ function send_category_data(form, url) {
   $input.setAttribute("name", "text");
   $input.setAttribute("type", "hidden");
   $input.classList.add("input_text");
-  $input.value = _text;
+  $input.value = _text1;
   form.append($input);
   form_data = new FormData(form);
 
