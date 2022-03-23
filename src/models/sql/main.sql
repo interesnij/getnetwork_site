@@ -257,6 +257,7 @@ CREATE TABLE tech_categories (
 CREATE TABLE serve_categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
+    description TEXT,
     cat_name VARCHAR NOT NULL,
     tech_categories INT,
     serve_position INT,
