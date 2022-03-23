@@ -12,7 +12,7 @@ use crate::models::User;
 pub struct BlogCategories {
     pub id: i32,
     pub name: String,
-    pub description: String,
+    pub description: Option<String>,
     pub blog_position: i32,
     pub image: Option<String>,
     pub blog_count: i32,
@@ -22,7 +22,7 @@ pub struct BlogCategories {
 #[table_name="blog_categories"]
 pub struct NewBlogCategories {
     pub name: String,
-    pub description: String,
+    pub description: Option<String>,
     pub blog_position: i32,
     pub image: Option<String>,
     pub blog_count: i32,
@@ -32,7 +32,7 @@ pub struct NewBlogCategories {
 #[table_name="blog_categories"]
 pub struct EditBlogCategories {
     pub name: String,
-    pub description: String,
+    pub description: Option<String>,
     pub blog_position: i32,
     pub image: Option<String>,
     pub blog_count: i32,

@@ -12,7 +12,7 @@ use crate::models::User;
 pub struct WikiCategories {
     pub id: i32,
     pub name: String,
-    pub description: String,
+    pub description: Option<String>,
     pub wiki_position: i32,
     pub image: Option<String>,
     pub wiki_count: i32,
@@ -21,7 +21,7 @@ pub struct WikiCategories {
 #[table_name="wiki_categories"]
 pub struct NewWikiCategories {
     pub name: String,
-    pub description: String,
+    pub description: Option<String>,
     pub wiki_position: i32,
     pub image: Option<String>,
     pub wiki_count: i32,
@@ -31,7 +31,7 @@ pub struct NewWikiCategories {
 #[table_name="wiki_categories"]
 pub struct EditWikiCategories {
     pub name: String,
-    pub description: String,
+    pub description: Option<String>,
     pub wiki_position: i32,
     pub image: Option<String>,
     pub wiki_count: i32,
