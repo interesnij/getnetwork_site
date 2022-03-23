@@ -127,19 +127,19 @@
                                                     {{ object.name }}
                                                   </a>
                                                 </td>
-                                                <td tooltip="Сумма" flow="up" style="width:14%">{{ object.price }} ₽</td>
+                                                <td tooltip="Сумма" flow="up" style="width:12%">{{ object.price }} ₽</td>
                                                 {% if object.price_acc %}
-                                                  <td tooltip="Со скидкой" flow="up" style="width:14%">↓ {{ object.price_acc }} ₽</td>
+                                                  <td tooltip="Со скидкой" flow="up" style="width:12%">↓ {{ object.price_acc }} ₽</td>
                                                 {% else %}
                                                   <td style="width:11%"></td>
                                                 {% endif %}
                                                 {% if object.social_price %}
-                                                  <td tooltip="Социальная цена" flow="up" style="width:14%">{{ object.social_price }} ♡</td>
+                                                  <td tooltip="Социальная цена" flow="up" style="width:12%">{{ object.social_price }} ♡</td>
                                                 {% else %}
                                                   <td style="width:11%"></td>
                                                 {% endif %}
-                                                <td tooltip="Человеко-часы" flow="up" style="width:14%">{{ object.man_hours }} ⌛</td>
-                                                <td style="width:4%">
+                                                <td tooltip="Человеко-часы" flow="up" style="width:12%">{{ object.man_hours }} ⌛</td>
+                                                <td style="width:12%">
                                                   {% if not object.is_default %}
                                                   <span class="item_attach_circle border" tooltip="Выбрать опцию" flow="up">
                                                     <svg class="svg_default" fill="currentColor" viewBox="2 2 20 20">
