@@ -37,10 +37,7 @@
                                     <ul class="nav nav-tabs tpl-minimal-tabs animate">
                                       {% for category in tech_categories %}
                                         <li class="yy s_{{ loop.index }} {% if loop.first %}active{% else %}pointer{% endif %}">
-                                            <a>{{ category.name }}
-                                              <span tooltip="Информация" flow="up" class="pointer get_object_info" data-pk="{{ category.id }}" data-type="tech_categories">
-                                                ?
-                                              </span>
+                                            <a class="pointer get_object_info" data-pk="{{ category.id }}" data-type="tech_categories" tooltip="Нажмите для справки" flow="up">{{ category.name }}
                                             </a>
                                         </li>
                                       {% endfor %}
