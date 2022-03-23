@@ -128,8 +128,16 @@
                                                   </a>
                                                 </td>
                                                 <td tooltip="Сумма" flow="up" style="width:22%">{{ object.price }} ₽</td>
-                                                <td tooltip="Со скидкой" flow="up" style="width:11%">{% if object.price_ac %}{{ object.price_acc }} ↓₽{% endif %}</td>
-                                                <td tooltip="Социальная цена" flow="up" style="width:11%">{% if object.social_price %}{{ object.social_price }} ♡{% endif %}</td>
+                                                {% if object.price_ac %}
+                                                  <td tooltip="Со скидкой" flow="up" style="width:11%">{{ object.price_acc }} ↓₽</td>
+                                                {% else %}
+                                                  <td style="width:11%"></td>
+                                                {% endif %}
+                                                {% if object.social_price %}
+                                                  <td tooltip="Социальная цена" flow="up" style="width:11%">{{ object.social_price }} ♡</td>
+                                                {% else %}
+                                                  <td style="width:11%"></td>
+                                                {% endif %}
                                                 <td tooltip="Человеко-часы" flow="up" style="width:11%">{{ object.man_hours }} ⌛</td>
                                                 <td style="width:5%">
                                                   {% if not object.is_default %}
