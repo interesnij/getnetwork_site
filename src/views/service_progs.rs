@@ -324,8 +324,10 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     let __serves = get_serves_for_service(&_service[0]);
     // 2. получаем категории опций, исключая дубли, и дефолтную цену.
     let mut serve_categories_ids = Vec::new();
+    let mut serve_ids = Vec::new();
     let mut total_price: i32 = 0;
     for _serve in __serves.iter() {
+        serve_ids.push(_serve.id);
         if _serve.is_default {
             total_price += _serve.price;
         }
@@ -374,7 +376,12 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
             let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
             let _serve_int_dooble = "_".to_string() + &_let_int;
             let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
-            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
+            let __serves :Vec<Serve> = serve
+                .filter(schema::serve::serve_categories.eq(__cat.id))
+                .filter(schema::serve::id.eq(any(&serve_ids)))
+                .order(schema::serve::serve_position.asc())
+                .load(&_connection)
+                .expect("E.");
             data.insert(&_let_serves, &__serves);
         }
     };

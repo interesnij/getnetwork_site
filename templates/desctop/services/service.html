@@ -127,14 +127,14 @@
                                                     {{ object.name }}
                                                   </a>
                                                 </td>
-                                                <td tooltip="Сумма" flow="up" style="width:12%">{{ object.price }} ₽</td>
+                                                <td class="price_td" tooltip="Сумма" flow="up" style="width:12%"><span class="price">{{ object.price }}</span> ₽</td>
                                                 {% if object.price_acc %}
-                                                  <td tooltip="Со скидкой" flow="up" style="width:12%">↓ {{ object.price_acc }} ₽</td>
+                                                  <td class="price_acc_td" tooltip="Со скидкой" flow="up" style="width:12%">↓ <span class="price_acc">{{ object.price_acc }}</span> ₽</td>
                                                 {% else %}
                                                   <td style="width:11%"></td>
                                                 {% endif %}
                                                 {% if object.social_price %}
-                                                  <td tooltip="Социальная цена" flow="up" style="width:12%">{{ object.social_price }} ♡</td>
+                                                  <td class="social_price_td" tooltip="Социальная цена" flow="up" style="width:12%"><span class="social_price">{{ object.social_price }}</span> ♡</td>
                                                 {% else %}
                                                   <td style="width:11%"></td>
                                                 {% endif %}
