@@ -37,7 +37,11 @@
                                     <ul class="nav nav-tabs tpl-minimal-tabs animate">
                                       {% for category in tech_categories %}
                                         <li class="yy s_{{ loop.index }} {% if loop.first %}active{% else %}pointer{% endif %}">
-                                            <a>{{ category.name }}</a>
+                                            <a>{{ category.name }}
+                                              <span tooltip="Информация" flow="up" class="pointer get_object_info" data-pk="{{ category.id }}" data-type="tech_categories">
+                                                ?
+                                              </span>
+                                            </a>
                                         </li>
                                       {% endfor %}
                                     </ul>
@@ -142,11 +146,11 @@
                                         </table>
                                         {% endfor %}
                                         <div class="mt-40 align-right">
-                                            <a class="btn pointer btn-mod border btn-small btn-circle">
+                                            <a data-pk="{{ category.id }}" class="btn pointer create_order_form_of_service btn-mod border btn-small btn-circle">
                                               Сумма
                                               <span class="total_price_counter">
                                                 {{ total_price }}
-                                              </span>. Перейти к заказу/
+                                              </span>. Перейти к заказу
                                             </a>
                                         </div>
                                     </div>
