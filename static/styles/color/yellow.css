@@ -11,6 +11,9 @@
 .mob_menu, .banner_block {
   background-color: #fee6a1 !important;;
 }
+tr:hover, tr.hover {
+  color: #fee6a1 !important;
+}
 .banner_block {
   display: inline-block;
   padding: 17px;
