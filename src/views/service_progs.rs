@@ -328,11 +328,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     let mut total_price: i32 = 0;
     for _serve in __serves.iter() {
         if _serve.is_default == true {
-            if Some(_serve.price_acc) > 0 {
-                total_price += Some(_serve.price_acc);
-            } else {
-                total_price += _serve.price;
-            }
+            total_price += _serve.price;
         }
         if serve_categories_ids.iter().any(|&i| i==_serve.serve_categories) {
             continue;
