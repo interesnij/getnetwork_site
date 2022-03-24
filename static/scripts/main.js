@@ -400,3 +400,7 @@ on('body', 'click', '.this_fullscreen_hide', function() {
 on('body', 'click', '.body_overlay', function() {
   close_fullscreen()
 });
+
+on('#ajax', 'click', '.get_object_info', function() {
+  create_fullscreen("/load_item/?_type" + this.getAttribute("data-type") + "&_pk" + this.getAttribute("data-pk"), "worker_fullscreen");
+});
