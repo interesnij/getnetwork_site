@@ -222,7 +222,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     //        .load::<Serve>(&_connection)
     //        .expect("E");
     //    data.insert("object", &_serve[0]);
-        _template = _type + &"load/serve.html".to_string();
+    //    _template = _type + &"load/serve.html".to_string();
     }
     _template = _type + &"load/serve.html".to_string();
     data.insert("is_admin", &_is_admin);
