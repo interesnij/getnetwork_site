@@ -222,6 +222,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         // получаем объект и записываем в контекст, получаем строку шаблона
         use crate::models::Serve;
         use crate::schema::serve::dsl::serve;
+        use crate::schema::services::dsl::services;
         use diesel::pg::expression::dsl::any;
         use schema::serve_items::dsl::serve_items;
 
@@ -236,7 +237,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
             use crate::models::{Service, ServeItems};
             use crate::schema::services::dsl::services;
             let _service_id : i32 = params._owner_pk.clone();
-            let _service = serve
+            let _service = services
                 .filter(schema::services::id.eq(&_object_id))
                 .load::<Service>(&_connection)
                 .expect("E");
