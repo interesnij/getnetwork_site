@@ -238,7 +238,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
             use crate::schema::services::dsl::services;
             let _service_id : i32 = params._owner_pk.clone();
             let _service = services
-                .filter(schema::services::id.eq(&_object_id))
+                .filter(schema::services::id.eq(&_service_id))
                 .load::<Service>(&_connection)
                 .expect("E");
             data.insert("service", &_service[0]);
