@@ -431,6 +431,7 @@ pub async fn edit_content_work_page(req: HttpRequest, tera: web::Data<Tera>, _id
     let _work = works.filter(schema::works::id.eq(&_work_id)).load::<Work>(&_connection).expect("E");
 
     let params = web::Query::<WorkParams>::from_query(&req.query_string()).unwrap();
+    println!("params {:?}", params);
     if params.content.clone() != "".to_string() {
         diesel::update(&_work[0])
             .set(schema::works::content.eq(&params.content.clone()))
