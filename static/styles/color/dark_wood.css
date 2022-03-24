@@ -69,7 +69,8 @@ body{
     background-image: url('/static/images/dark_wood.jpg') !important;
     background-size: unset !important;
 }
-.window_fullscreen {
+
+.window_fullscreen, .card_fullscreen {
   color: rgba(255,255,255, 0.8) !important;
   background: inherit !important;
 }

@@ -70,7 +70,7 @@ body{
     background-color: #fee6a1 !important;
 
 }
-.window_fullscreen {
+.window_fullscreen, .card_fullscreen {
   color: rgba(0,0,0, 0.9) !important;
   background-color: #F4E0E3 !important;
 }

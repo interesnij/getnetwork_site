@@ -81,7 +81,7 @@ body{
 	background-position: center center;
 }
 
-.window_fullscreen {
+.window_fullscreen, .card_fullscreen {
   color: rgba(0,0,0, 0.9) !important;
   background-color: #e6e3df !important;
 }
