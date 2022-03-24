@@ -233,7 +233,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         if params._owner_type.clone() == "service".to_string() {
             // тип объекта-владельца - услуга.
             // получаем объект и записываем в контекст, получаем строку шаблона
-            use crate::models::Service;
+            use crate::models::{Service, ServeItems};
             use crate::schema::services::dsl::services;
             let _service_id : i32 = params._owner_pk.clone();
             let _service = serve
