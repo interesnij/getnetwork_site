@@ -28,8 +28,6 @@ function close_fullscreen() {
   } else {
     prev_window = container.querySelector(".card_fullscreen");
     prev_window.querySelector(".this_fullscreen_hide").style.display = "unset";
-    try {prev_window.querySelector(".prev_item").style.display = "unset"} catch {null};
-    try {prev_window.querySelector(".next_item").style.display = "unset"} catch {null}
   };
 };
 
@@ -39,8 +37,6 @@ function create_fullscreen(url, type_class) {
   if (container.innerHTML) {
     prev_window = container.querySelector(".card_fullscreen");
     prev_window.querySelector(".this_fullscreen_hide").style.display = "none";
-    try {prev_window.querySelector(".prev_item").style.display = "none"} catch {null};
-    try {prev_window.querySelector(".next_item").style.display = "none"} catch {null}
   };
 
   try {
@@ -82,8 +78,6 @@ function create_fullscreen(url, type_class) {
             _height = (window.innerHeight - height - 50) / 2;
             $parent_div.style.top = _height + "px";
             prev_next_height = _height*1 + 50 + "px";
-            try {$loader.querySelector(".prev_item").style.top = "-" + prev_next_height}catch {null};
-            try {$loader.querySelector(".next_item").style.top = "-" + prev_next_height}catch {null}
           } else {
             $parent_div.style.height = "100%";
             $parent_div.style.top = "15px";
