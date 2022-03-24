@@ -201,22 +201,22 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     let mut data = Context::new();
     let mut _template : String;
 
-    if params.type == "tech_category".to_string() {
+    if params.0 == "tech_category".to_string() {
         use crate::models::TechCategories;
         use crate::schema::tech_categories::dsl::tech_categories;
 
-        let tech_cat_id : i32 = param.pk.clone();
+        let tech_cat_id : i32 = param.2;
         let _tech_category = tech_categories
             .filter(schema::tech_categories::id.eq(&tech_cat_id))
             .load::<TechCategories>(&_connection)
             .expect("E");
         data.insert("object", &_tech_category[0]);
         _template = _type + &"load/tech_category.html".to_string();
-    } else if params.type == "serve".to_string() {
+    } else if params.0 == "serve".to_string() {
         use crate::models::Serve;
         use crate::schema::serve::dsl::serve;
 
-        let serve_id : i32 = param.pk.clone();
+        let serve_id : i32 = param.1;
         let _serve = serve
             .filter(schema::serve::id.eq(&serve_id))
             .load::<Serve>(&_connection)
