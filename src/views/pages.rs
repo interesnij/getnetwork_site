@@ -200,14 +200,14 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     let mut data = Context::new();
     let mut _template : String;
-    let object_id : i32 = params._pk.clone();
+    let object_id : i32 = params.1;
 
     if params._type.clone() == "tech_category".to_string() {
         use crate::models::TechCategories;
         use crate::schema::tech_categories::dsl::tech_categories;
 
         let _tech_category = tech_categories
-            .filter(schema::tech_categories::id.eq(params._pk.clone()))
+            .filter(schema::tech_categories::id.eq(object_id))
             .load::<TechCategories>(&_connection)
             .expect("E");
         data.insert("object", &_tech_category[0]);
@@ -217,7 +217,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         use crate::schema::serve::dsl::serve;
 
         let _serve = serve
-            .filter(schema::serve::id.eq(params._pk.clone()))
+            .filter(schema::serve::id.eq(object_id))
             .load::<Serve>(&_connection)
             .expect("E");
         data.insert("object", &_serve[0]);
