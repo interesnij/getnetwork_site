@@ -189,7 +189,7 @@ pub async fn serve_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Re
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct LoadParams {
-    type: String,
+    r#type: String,
     pk: i32,
 }
 pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
