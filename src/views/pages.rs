@@ -201,11 +201,12 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     let mut data = Context::new();
     let mut _template : String;
     let _object_id : i32 = params._pk;
-
+    println!("params {:?}", params);
 
     if params._type.clone() == "tech_category".to_string() {
         use crate::models::TechCategories;
         use crate::schema::tech_categories::dsl::*;
+        println!("tech_category");
 
     //    let _tech_category = tech_categories
     //        .filter(schema::tech_categories::id.eq(&_object_id))
@@ -216,7 +217,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     } else if params._type.clone() == "serve".to_string() {
         use crate::models::Serve;
         use crate::schema::serve::dsl::*;
-
+        println!("serve");
     //    let _serve = serve
     //        .filter(schema::serve::id.eq(&_object_id))
     //        .load::<Serve>(&_connection)
