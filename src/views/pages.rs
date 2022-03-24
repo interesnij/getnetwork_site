@@ -200,7 +200,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     let params = web::Query::<LoadParams>::from_query(&req.query_string()).unwrap();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     let mut data = Context::new();
-    let mut _template : String;
+    let mut _template = "".to_string();
     let _object_id : i32 = params._pk.clone();
 
     if params._type.clone() == "tech_category".to_string() {
@@ -226,6 +226,6 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         _template = _type + &"load/serve.html".to_string();
     }
     data.insert("is_admin", &_is_admin);
-    let _rendered = tera.render(_template, &data).unwrap();
+    let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
