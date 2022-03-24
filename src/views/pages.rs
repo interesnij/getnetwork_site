@@ -241,6 +241,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
                 .filter(schema::services::id.eq(&_object_id))
                 .load::<Service>(&_connection)
                 .expect("E");
+            data.insert("service", &_service[0]);
 
             // получаем предыдущую и следующую опцию. Как вариант.
             // Ведь можем передать и весь список опций
