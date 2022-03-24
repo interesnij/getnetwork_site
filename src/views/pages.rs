@@ -216,6 +216,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
             .load::<TechCategories>(&_connection)
             .expect("E");
         data.insert("object", &_tech_category[0]);
+        data.insert("object_type", "tech_category".to_string());
         _template = _type + &"load/tech_category.html".to_string();
     } else if params._object_type.clone() == "serve".to_string() {
         // тип запрашиваемого объекта - опция.
@@ -231,6 +232,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
             .load::<Serve>(&_connection)
             .expect("E");
         data.insert("object", &_serve[0]);
+        data.insert("object_type", "serve".to_string());
         if params._owner_type.clone() == "service".to_string() {
             // тип объекта-владельца - услуга.
             // получаем объект и записываем в контекст, получаем строку шаблона
@@ -242,6 +244,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
                 .load::<Service>(&_connection)
                 .expect("E");
             data.insert("service", &_service[0]);
+            data.insert("owner_type", "service".to_string());
 
             // получаем предыдущую и следующую опцию. Как вариант.
             // Ведь можем передать и весь список опций
