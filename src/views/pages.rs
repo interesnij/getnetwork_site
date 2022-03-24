@@ -201,32 +201,29 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     let mut data = Context::new();
     let mut _template : String;
     let _object_id : i32 = params._pk;
-    println!("params {:?}", params);
-    println!("_object_id {:?}", _object_id);
 
     if params._type.clone() == "tech_category".to_string() {
         use crate::models::TechCategories;
         use crate::schema::tech_categories::dsl::*;
         println!("tech_category");
 
-    //    let _tech_category = tech_categories
-    //        .filter(schema::tech_categories::id.eq(&_object_id))
-    //        .load::<TechCategories>(&_connection)
-    //        .expect("E");
-    //    data.insert("object", &_tech_category[0]);
-    //    _template = _type + &"load/tech_category.html".to_string();
+        let _tech_category = tech_categories
+            .filter(schema::tech_categories::id.eq(&_object_id))
+            .load::<TechCategories>(&_connection)
+            .expect("E");
+        data.insert("object", &_tech_category[0]);
+        _template = _type + &"load/tech_category.html".to_string();
     } else if params._type.clone() == "serve".to_string() {
         use crate::models::Serve;
         use crate::schema::serve::dsl::*;
         println!("serve");
-    //    let _serve = serve
-    //        .filter(schema::serve::id.eq(&_object_id))
-    //        .load::<Serve>(&_connection)
-    //        .expect("E");
-    //    data.insert("object", &_serve[0]);
-    //    _template = _type + &"load/serve.html".to_string();
+        let _serve = serve
+            .filter(schema::serve::id.eq(&_object_id))
+            .load::<Serve>(&_connection)
+            .expect("E");
+        data.insert("object", &_serve[0]);
+        _template = _type + &"load/serve.html".to_string();
     }
-    _template = _type + &"load/serve.html".to_string();
     data.insert("is_admin", &_is_admin);
     let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
