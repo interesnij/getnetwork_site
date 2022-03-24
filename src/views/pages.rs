@@ -252,6 +252,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
             };
             let serve_of_service = schema::serve::table
                 .filter(schema::serve::id.eq(any(serve_stack_of_service)))
+                .order(schema::serve::serve_position.asc())
                 .load::<Serve>(&_connection)
                 .expect("E");
 
