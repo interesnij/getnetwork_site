@@ -1,6 +1,6 @@
 function get_document_opacity_0() {
   document.body.style.overflow = "hidden";
-  document.body.style.marginRight = "4px";
+  document.body.style.marginRight = "10px";
   overlay = document.body.querySelector(".body_overlay");
   overlay.style.visibility = "unset";
   overlay.style.opacity = "1";
