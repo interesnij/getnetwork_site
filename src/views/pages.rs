@@ -224,8 +224,8 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     //    data.insert("object", &_serve[0]);
         _template = _type + &"load/serve.html".to_string();
     }
-
+    _template = _type + &"load/serve.html".to_string();
     data.insert("is_admin", &_is_admin);
-    let _rendered = tera.render(_type + &"load/serve.html".to_string(), &data).unwrap();
+    let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
