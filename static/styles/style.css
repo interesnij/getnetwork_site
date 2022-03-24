@@ -41,26 +41,9 @@
   cursor: pointer;
   z-index: 400
 }
-.next_item {
-  position: absolute;
-  left: -60px;
-  cursor: pointer;
-  z-index: 400
-}
 
-.desctop_version .prev_item svg,
-.desctop_version .next_item svg {
-  position: fixed;
-  color: rgba(255, 255, 255, 0.8) !important;
-  width:50px;
-  height:100%;
-}
 .this_fullscreen_hide svg {
   color: rgba(255, 255, 255, 0.8) !important;
-}
-.desctop_version .prev_item svg :hover,
-.desctop_version .next_item svg :hover{
-  color: rgba(255, 255, 255, 1) !important;
 }
 .this_fullscreen_hide svg :hover {
   color: rgba(255, 255, 255, 1) !important;
