@@ -193,21 +193,15 @@ pub struct LoadParams {
     pk: i32,
 }
 pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
-    use crate::models::{Serve, ServeCategories};
     use crate::schema;
-    use crate::schema::{
-        serve::dsl::serve,
-        serve_categories::dsl::serve_categories,
-    };
 
     let _connection = establish_connection();
-    let _work = works.filter(schema::works::id.eq(&_work_id)).load::<Work>(&_connection).expect("E");
     let params = web::Query::<LoadParams>::from_query(&req.query_string()).unwrap();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     let mut data = Context::new();
     let mut _template : String;
 
-    if params.type.clone() == "tech_category".to_string() {
+    if params.type == "tech_category".to_string() {
         use crate::models::TechCategories;
         use crate::schema::tech_categories::dsl::tech_categories;
 
@@ -218,7 +212,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
             .expect("E");
         data.insert("object", &_tech_category[0]);
         _template = _type + &"load/tech_category.html".to_string();
-    } else if params.type.clone() == "serve".to_string() {
+    } else if params.type == "serve".to_string() {
         use crate::models::Serve;
         use crate::schema::serve::dsl::serve;
 
