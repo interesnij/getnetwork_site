@@ -185,3 +185,53 @@ pub async fn serve_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Re
     let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
+
+use serde::Deserialize;
+#[derive(Debug, Deserialize)]
+pub struct LoadParams {
+    type: String,
+    pk: i32,
+}
+pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+    use crate::models::{Serve, ServeCategories};
+    use crate::schema;
+    use crate::schema::{
+        serve::dsl::serve,
+        serve_categories::dsl::serve_categories,
+    };
+
+    let _connection = establish_connection();
+    let _work = works.filter(schema::works::id.eq(&_work_id)).load::<Work>(&_connection).expect("E");
+    let params = web::Query::<LoadParams>::from_query(&req.query_string()).unwrap();
+    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    let mut data = Context::new();
+    let mut _template : String;
+
+    if params.type.clone() == "tech_category".to_string() {
+        use crate::models::TechCategories;
+        use crate::schema::tech_categories::dsl::tech_categories;
+
+        let tech_cat_id : i32 = param.pk.clone();
+        let _tech_category = tech_categories
+            .filter(schema::tech_categories::id.eq(&tech_cat_id))
+            .load::<TechCategories>(&_connection)
+            .expect("E");
+        data.insert("object", &_tech_category[0]);
+        _template = _type + &"load/tech_category.html".to_string();
+    } else if params.type.clone() == "serve".to_string() {
+        use crate::models::Serve;
+        use crate::schema::serve::dsl::serve;
+
+        let serve_id : i32 = param.pk.clone();
+        let _serve = serve
+            .filter(schema::serve::id.eq(&serve_id))
+            .load::<Serve>(&_connection)
+            .expect("E");
+        data.insert("object", &_serve[0]);
+        _template = _type + &"load/serve.html".to_string();
+    }
+
+    data.insert("is_admin", &_is_admin);
+    let _rendered = tera.render(&_template, &data).unwrap();
+    HttpResponse::Ok().body(_rendered)
+}
