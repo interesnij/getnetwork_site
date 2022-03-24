@@ -212,7 +212,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     //        .load::<TechCategories>(&_connection)
     //        .expect("E");
     //    data.insert("object", &_tech_category[0]);
-        _template = _type + &"load/tech_category.html".to_string();
+    //    _template = _type + &"load/tech_category.html".to_string();
     } else if params._type.clone() == "serve".to_string() {
         use crate::models::Serve;
         use crate::schema::serve::dsl::*;
