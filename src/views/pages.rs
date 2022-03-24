@@ -243,7 +243,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
 
             // получаем предыдущую и следующую опцию. Как вариант.
             // Ведь можем передать и весь список опций
-            let _serve_items = serve_items.filter(schema::serve_items::service_id.eq(&service.id)).load::<ServeItems>(&_connection).expect("E");
+            let _serve_items = serve_items.filter(schema::serve_items::service_id.eq(_object_id)).load::<ServeItems>(&_connection).expect("E");
             let mut serve_stack_of_service = Vec::new();
             for _serve_item in _serve_items.iter() {
                 serve_stack_of_service.push(_serve_item.serve_id);
