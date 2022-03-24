@@ -202,6 +202,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     let mut _template : String;
     let _object_id : i32 = params._pk;
 
+
     if params._type.clone() == "tech_category".to_string() {
         use crate::models::TechCategories;
         use crate::schema::tech_categories::dsl::*;
@@ -222,7 +223,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     //        .expect("E");
     //    data.insert("object", &_serve[0]);
         _template = _type + &"load/serve.html".to_string();
-    //}
+    }
 
     data.insert("is_admin", &_is_admin);
     let _rendered = tera.render(&_template, &data).unwrap();
