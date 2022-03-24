@@ -1,2 +1,12 @@
+{% if prev %}
+  <a class="prev_item" href="/load_item/?_object_type={{ prev.id }}&_owner_type=service&_object_pk={{ object.id }}&_owner_pk={{ service.id }}">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>
+  </a>
+{% endif %}
+{% if next %}
+  <a class="next_item" href="/load_item/?_object_type={{ next.id }}&_owner_type=service&_object_pk={{ object.id }}&_owner_pk={{ service.id }}">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>
+  </a>
+{% endif %}
 
 {{ object.description |safe }}

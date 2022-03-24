@@ -46,6 +46,8 @@
                                           {% endif %}
                                           data-pk="{{ category.id }}"
                                           data-type="tech_category"
+                                          owner-pk="{{ object.id }}"
+                                          owner-type="service"
                                           >
                                             <a>{{ category.name }}
                                             </a>
@@ -125,7 +127,10 @@
                                                 <td style="width:40%">
                                                   <a class="pointer underline get_object_info"
                                                      data-pk="{{ object.id }}"
-                                                     data-type="serve">
+                                                     data-type="serve"
+                                                     owner-pk="{{ object.id }}"
+                                                     owner-type="service"
+                                                   > 
                                                     {{ object.name }}
                                                   </a>
                                                 </td>

@@ -402,5 +402,16 @@ on('body', 'click', '.body_overlay', function() {
 });
 
 on('#ajax', 'click', '.get_object_info', function() {
-  create_fullscreen("/load_item/?_type=" + this.getAttribute("data-type") + "&_pk=" + this.getAttribute("data-pk"), "worker_fullscreen");
+  create_fullscreen("/load_item/?_object_type=" + this.getAttribute("data-type") + "&_owner_type=" + this.getAttribute("owner-type") + "&_object_pk=" + this.getAttribute("data-pk") + "&_owner_pk=" + this.getAttribute("owner-pk"), "worker_fullscreen");
+});
+
+on('body', 'click', '.next_item', function(event) {
+  event.preventDefault();
+  this.style.display = "none";
+  change_this_fullscreen(this, document.getElementById('item_loader'));
+});
+on('body', 'click', '.prev_item', function(event) {
+  event.preventDefault();
+  this.style.display = "none";
+  change_this_fullscreen(this, document.getElementById('item_loader'));
 });

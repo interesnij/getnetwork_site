@@ -189,8 +189,10 @@ pub async fn serve_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Re
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct LoadParams {
-    pub _type: String,
-    pub _pk: i32,
+    pub _object_type: String,
+    pub _owner_type: String,
+    pub _object_pk: i32,
+    pub _owner_pk: i32,
 }
 pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use crate::schema;
@@ -201,12 +203,13 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     let mut data = Context::new();
     let mut _template = "".to_string();
-    let _object_id : i32 = params._pk.clone();
+    let _object_id : i32 = params._object_pk.clone();
 
-    if params._type.clone() == "tech_category".to_string() {
+    if params._object_type.clone() == "tech_category".to_string() {
+        // тип запрашиваемого объекта "tech_category".
+        // получаем объект и записываем в контекст, получаем строку шаблона
         use crate::models::TechCategories;
         use crate::schema::tech_categories::dsl::*;
-        println!("tech_category");
 
         let _tech_category = tech_categories
             .filter(schema::tech_categories::id.eq(&_object_id))
@@ -214,15 +217,57 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
             .expect("E");
         data.insert("object", &_tech_category[0]);
         _template = _type + &"load/tech_category.html".to_string();
-    } else if params._type.clone() == "serve".to_string() {
+    } else if params._object_type.clone() == "serve".to_string() {
+        // тип запрашиваемого объекта - опция.
+        // получаем объект и записываем в контекст, получаем строку шаблона
         use crate::models::Serve;
-        use crate::schema::serve::dsl::*;
-        println!("serve");
+        use crate::schema::serve::dsl::serve;
+        use diesel::pg::expression::dsl::any;
+        use schema::serve_items::dsl::serve_items;
+
         let _serve = serve
             .filter(schema::serve::id.eq(&_object_id))
             .load::<Serve>(&_connection)
             .expect("E");
         data.insert("object", &_serve[0]);
+        if params._owner_type.clone() == "service".to_string() {
+            // тип объекта-владельца - услуга.
+            // получаем объект и записываем в контекст, получаем строку шаблона
+            use crate::models::Service;
+            use crate::schema::service::dsl::*;
+            let _service_id : i32 = params._owner_pk.clone();
+            let _service = serve
+                .filter(schema::service::id.eq(&_object_id))
+                .load::<Service>(&_connection)
+                .expect("E");
+
+            // получаем предыдущую и следующую опцию. Как вариант.
+            // Ведь можем передать и весь список опций
+            let _serve_items = serve_items.filter(schema::serve_items::service_id.eq(&service.id)).load::<ServeItems>(&_connection).expect("E");
+            let mut serve_stack_of_service = Vec::new();
+            for _serve_item in _serve_items.iter() {
+                serve_stack_of_service.push(_serve_item.serve_id);
+            };
+            let serve_of_service = schema::serve::table
+                .filter(schema::serve::id.eq(any(stack)))
+                .load::<Serve>(&_connection)
+                .expect("E");
+
+            for (i, item) in _category_services.iter().enumerate().rev() {
+                if item.id == _service_id {
+                    if (i + 1) != _category_services_len {
+                        let _prev = Some(&_category_services[i + 1]);
+                        data.insert("prev", &_prev);
+                    };
+                    if i != 0 {
+                        let _next = Some(&_category_services[i - 1]);
+                        data.insert("next", &_next);
+                    };
+                    break;
+                }
+            };
+
+        }
         _template = _type + &"load/serve.html".to_string();
     }
     data.insert("is_admin", &_is_admin);
