@@ -42,7 +42,7 @@
                                             tooltip="Нажмите для справки"
                                             flow="up"
                                           {% else %}
-                                            class="yy pointer s_{{ loop.index }}"
+                                            class="yy pointer s_{{ loop.index }} get_object_info"
                                           {% endif %}
                                           data-pk="{{ category.id }}"
                                           data-type="tech_categories"
@@ -123,7 +123,9 @@
                                               {% for object in object_list %}
                                               <tr class="{% if object.is_default %}is_default hover{% else %}select_serve pointer{% endif %}">
                                                 <td style="width:40%">
-                                                  <a class="pointer underline get_serve_info">
+                                                  <a class="pointer underline get_object_info"
+                                                     data-pk="{{ object.id }}"
+                                                     data-type="serve">
                                                     {{ object.name }}
                                                   </a>
                                                 </td>
