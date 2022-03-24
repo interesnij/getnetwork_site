@@ -207,7 +207,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         use crate::schema::tech_categories::dsl::tech_categories;
 
         let _tech_category = tech_categories
-            .filter(schema::tech_categories::id.eq(object_id))
+            .filter(schema::tech_categories::id.eq(params._pk.clone()))
             .load::<TechCategories>(&_connection)
             .expect("E");
         data.insert("object", &_tech_category[0]);
@@ -217,7 +217,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         use crate::schema::serve::dsl::serve;
 
         let _serve = serve
-            .filter(schema::serve::id.eq(object_id))
+            .filter(schema::serve::id.eq(params._pk.clone()))
             .load::<Serve>(&_connection)
             .expect("E");
         data.insert("object", &_serve[0]);
