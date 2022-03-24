@@ -200,7 +200,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     let mut data = Context::new();
     let mut _template : String;
-    let _object_id : i32 = params._pk.clone();
+    let _object_id : i32 = *params._pk.clone();
 
     if params._type.clone() == "tech_category".to_string() {
         use crate::models::TechCategories;
