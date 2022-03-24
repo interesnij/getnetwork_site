@@ -1,5 +1,78 @@
 @charset "utf-8";
 
+.item_fullscreen,
+.worker_fullscreen {
+  position: fixed;
+  width: 100%;
+  overflow: auto;
+}
+@media screen and (min-width: 621px) {
+    .item_fullscreen {left: 15%;width: 60%;padding-left: 5%;padding-right: 5%;}
+}
+@media screen and (min-width: 621px) {
+    .worker_fullscreen{left: 30%;width: 40%;padding-left: 5%;padding-right: 5%;}
+}
+
+.this_fullscreen_hide {
+  cursor: pointer;
+  position: absolute;
+  right: -17px;
+  margin: 10px;
+  top: 0;
+  z-index: 500;
+}
+.prev_item {
+  position: absolute;
+  right: -10px;
+  cursor: pointer;
+  z-index: 400
+}
+.next_item {
+  position: absolute;
+  left: -60px;
+  cursor: pointer;
+  z-index: 400
+}
+
+.desctop_version .prev_item svg,
+.desctop_version .next_item svg {
+  position: fixed;
+  color: rgba(255, 255, 255, 0.8) !important;
+  width:50px;
+  height:100%;
+}
+.this_fullscreen_hide svg {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+.desctop_version .prev_item svg :hover,
+.desctop_version .next_item svg :hover{
+  color: rgba(255, 255, 255, 1) !important;
+}
+.this_fullscreen_hide svg :hover {
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+#fullscreen_loader {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 0px;
+  top: 10px;
+  padding: 0 7px;
+  margin-bottom: 50px;
+}
+
+#item_loader {
+  margin-top:30px;
+  position: relative;
+  overflow-y: auto;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  top: 5px;
+  position: absolute;
+}
+
 p {
   margin: 0px 0px 1em !important;
 }

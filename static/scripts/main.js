@@ -1,3 +1,195 @@
+function get_document_opacity_0() {
+  document.body.style.overflow = "hidden";
+  document.body.style.marginRight = "4px";
+  overlay = document.body.querySelector(".body_overlay");
+  overlay.style.visibility = "unset";
+  overlay.style.opacity = "1";
+};
+function get_document_opacity_1() {
+  document.body.style.overflow = "scroll";
+  document.body.style.marginRight = "0";
+  overlay = document.body.querySelector(".body_overlay");
+  overlay.style.visibility = "hidden";
+  overlay.style.opacity = "0";
+};
+
+function close_fullscreen() {
+  container = document.body.querySelector("#fullscreens_container");
+  if (!container.innerHTML) {
+    get_document_opacity_1();
+    return
+  };
+  container = document.body.querySelector("#fullscreens_container");
+  _window = container.querySelector(".card_fullscreen");
+  _window.remove();
+
+  if (!container.innerHTML) {
+    get_document_opacity_1();
+  } else {
+    prev_window = container.querySelector(".card_fullscreen");
+    prev_window.querySelector(".this_fullscreen_hide").style.display = "unset";
+    try {prev_window.querySelector(".prev_item").style.display = "unset"} catch {null};
+    try {prev_window.querySelector(".next_item").style.display = "unset"} catch {null}
+  };
+};
+
+function create_fullscreen(url, type_class) {
+  container = document.body.querySelector("#fullscreens_container");
+
+  if (container.innerHTML) {
+    prev_window = container.querySelector(".card_fullscreen");
+    prev_window.querySelector(".this_fullscreen_hide").style.display = "none";
+    try {prev_window.querySelector(".prev_item").style.display = "none"} catch {null};
+    try {prev_window.querySelector(".next_item").style.display = "none"} catch {null}
+  };
+
+  try {
+    count_items = container.querySelectorAll(".card_fullscreen").length + 1
+  } catch {count_items = 0};
+
+  $parent_div = document.createElement("div");
+  $parent_div.classList.add("card_fullscreen", "mb-30", "border", type_class);
+  $parent_div.style.zIndex = 100 + count_items;
+  $parent_div.style.opacity = "0";
+
+  if (document.body.querySelector(".desctop_nav")) {
+    hide_svg = '<svg class="svg_default" style="position:fixed;" width="30" height="30" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
+  } else { hide_svg = "" };
+  $hide_span = document.createElement("span");
+  $hide_span.classList.add("this_fullscreen_hide");
+  $loader = document.createElement("div");
+
+  $loader.setAttribute("id", "fullscreen_loader");
+  $hide_span.innerHTML = hide_svg;
+  $parent_div.append($hide_span);
+  $parent_div.append($loader);
+  container.prepend($parent_div);
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+  link.open('GET', url, true);
+  link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+  link.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          elem = link.responseText;
+
+          $loader.innerHTML = elem;
+          height = $loader.scrollHeight*1 + 30;
+          if (height < 500 && !$loader.querySelector(".data_display")) {
+            $parent_div.style.height = height + "px";
+            $loader.style.overflowY = "unset";
+
+            _height = (window.innerHeight - height - 50) / 2;
+            $parent_div.style.top = _height + "px";
+            prev_next_height = _height*1 + 50 + "px";
+            try {$loader.querySelector(".prev_item").style.top = "-" + prev_next_height}catch {null};
+            try {$loader.querySelector(".next_item").style.top = "-" + prev_next_height}catch {null}
+          } else {
+            $parent_div.style.height = "100%";
+            $parent_div.style.top = "15px";
+            $loader.style.overflowY = "auto";
+          };
+          $parent_div.style.opacity = "1";
+          if ($loader.querySelector(".data_display")) {
+            $loader.style.overflowY = "unset";
+          }
+
+          get_document_opacity_0();
+
+          $loader.onscroll = function() {
+            if ($loader.querySelector(".next_page_list")) {
+              box = $loader.querySelector('.next_page_list');
+              if (box && box.classList.contains("next_page_list")) {
+                  inViewport = elementInViewport(box);
+                  if (inViewport) {
+                      box.remove();
+                      var link_3 = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+                      link_3.open('GET', location.protocol + "//" + location.host + box.getAttribute("data-link"), true);
+                      link_3.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+                      link_3.onreadystatechange = function() {
+                          if (this.readyState == 4 && this.status == 200) {
+                              var elem = document.createElement('span');
+                              elem.innerHTML = link_3.responseText;
+                              $loader.querySelector(".is_block_paginate").insertAdjacentHTML('beforeend', elem.querySelector(".is_block_paginate").innerHTML);
+                            }
+                      }
+                      link_3.send();
+                  }
+              };
+            };
+          };
+      }
+  };
+  link.send();
+};
+
+function change_this_fullscreen(_this, type_class) {
+  _this.parentElement.classList.contains("col") ? $loader = _this.parentElement.parentElement.parentElement.parentElement : $loader = _this.parentElement.parentElement;
+  $loader.innerHTML = "";
+  $parent_div.style.opacity = "0";
+  $parent_div.style.height = "35px";
+  url = _this.getAttribute("href");
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+  link.open('GET', url, true);
+  link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+  link.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          elem = link.responseText;
+          $loader.innerHTML = elem;
+          height = $loader.scrollHeight*1 + 30;
+          $parent_div = $loader.parentElement
+          if (height < 500 && !$loader.querySelector(".data_display")){
+            $parent_div.style.height = height + "px";
+            _height = (window.innerHeight - height - 50) / 2;
+            $parent_div.style.top = _height + "px";
+            prev_next_height = _height*1 + 50 + "px";
+            $loader.style.overflowY = "unset";
+            try {$loader.querySelector(".prev_item").style.top = "-" + prev_next_height}catch {null};
+            try {$loader.querySelector(".next_item").style.top = "-" + prev_next_height}catch {null}
+          } else {
+            $parent_div.style.height = "100%";
+            $parent_div.style.top = "15px";
+            $loader.style.overflowY = "auto";
+          };
+          $parent_div.style.opacity = "1";
+          $parent_div.style.opacity = "1";
+          if ($loader.querySelector(".data_display")) {
+            $loader.style.overflowY = "unset";
+          };
+
+          get_document_opacity_0();
+
+          $loader.onscroll = function() {
+            if ($loader.querySelector(".next_page_list")) {
+              box = $loader.querySelector('.next_page_list');
+              if (box && box.classList.contains("next_page_list")) {
+                  inViewport = elementInViewport(box);
+                  if (inViewport) {
+                      box.remove();
+                      var link_3 = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+                      link_3.open('GET', location.protocol + "//" + location.host + box.getAttribute("data-link"), true);
+                      link_3.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+                      link_3.onreadystatechange = function() {
+                          if (this.readyState == 4 && this.status == 200) {
+                              var elem = document.createElement('span');
+                              elem.innerHTML = link_3.responseText;
+                              $loader.querySelector(".is_block_paginate").insertAdjacentHTML('beforeend', elem.querySelector(".is_block_paginate").innerHTML);
+                            }
+                      }
+                      link_3.send();
+                  }
+              };
+            };
+          }
+      }
+  };
+  link.send();
+};
+
 function addStyleSheets(href) {
     $head = document.head, $link = document.createElement('link');
     $link.rel = 'stylesheet';
@@ -201,4 +393,10 @@ on('body', 'click', '.anon_color_change', function() {
     new_color = "white"
   };
   window.history.replaceState(null, null, window.location.pathname + "?content=''&f=" + new_color);
+});
+on('body', 'click', '.this_fullscreen_hide', function() {
+  close_fullscreen()
+});
+on('body', 'click', '.body_overlay', function() {
+  close_fullscreen()
 });
