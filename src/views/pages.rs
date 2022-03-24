@@ -234,10 +234,10 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
             // тип объекта-владельца - услуга.
             // получаем объект и записываем в контекст, получаем строку шаблона
             use crate::models::Service;
-            use crate::schema::service::dsl::*;
+            use crate::schema::services::dsl::services;
             let _service_id : i32 = params._owner_pk.clone();
             let _service = serve
-                .filter(schema::service::id.eq(&_object_id))
+                .filter(schema::services::id.eq(&_object_id))
                 .load::<Service>(&_connection)
                 .expect("E");
 
