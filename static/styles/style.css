@@ -1123,7 +1123,7 @@ a.logo:hover{
     top: 0;
     left: 0;
     text-align: left;
-    z-index: 1030;
+    z-index: 10;
     -webkit-transition: height 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
     -moz-transition: height 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
     -o-transition: height 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
@@ -1488,7 +1488,7 @@ a.logo:hover{
     top: 30px;
     left: 30px;
     height: 54px;
-    z-index: 1030;
+    z-index: 10;
 }
 .fm-logo-wrap .logo{
     display: block;
@@ -1518,7 +1518,7 @@ a.logo:hover{
     height: 54px;
     opacity: .85;
     text-indent: -12345px;
-    z-index: 1030;
+    z-index: 10;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
@@ -3649,7 +3649,7 @@ table.shopping-cart-table tr td{
     top: 0;
     left: 0;
     cursor:crosshair;
-    z-index: 1030;
+    z-index: 10;
 }
 
 .sp-logo-wrap .logo{

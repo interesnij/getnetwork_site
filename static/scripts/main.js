@@ -1,13 +1,13 @@
 function get_document_opacity_0() {
-  document.body.style.overflow = "hidden";
-  document.body.style.marginRight = "4px";
+  document.style.overflow = "hidden";
+  document.style.marginRight = "4px";
   overlay = document.body.querySelector(".body_overlay");
   overlay.style.visibility = "unset";
   overlay.style.opacity = "1";
 };
 function get_document_opacity_1() {
-  document.body.style.overflow = "scroll";
-  document.body.style.marginRight = "0";
+  document.style.overflow = "scroll";
+  document.style.marginRight = "0";
   overlay = document.body.querySelector(".body_overlay");
   overlay.style.visibility = "hidden";
   overlay.style.opacity = "0";
