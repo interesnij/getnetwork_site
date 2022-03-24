@@ -402,5 +402,5 @@ on('body', 'click', '.body_overlay', function() {
 });
 
 on('#ajax', 'click', '.get_object_info', function() {
-  create_fullscreen("/load_item/?_type" + this.getAttribute("data-type") + "&_pk" + this.getAttribute("data-pk"), "worker_fullscreen");
+  create_fullscreen("/load_item/?_type=" + this.getAttribute("data-type") + "&_pk=" + this.getAttribute("data-pk"), "worker_fullscreen");
 });
