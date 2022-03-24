@@ -253,14 +253,14 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
                 .load::<Serve>(&_connection)
                 .expect("E");
 
-            for (i, item) in _category_services.iter().enumerate().rev() {
-                if item.id == _service_id {
-                    if (i + 1) != _category_services_len {
-                        let _prev = Some(&_category_services[i + 1]);
+            for (i, item) in serve_of_service.iter().enumerate().rev() {
+                if item.id == _object_id {
+                    if (i + 1) != serve_of_service.len() {
+                        let _prev = Some(&serve_of_service[i + 1]);
                         data.insert("prev", &_prev);
                     };
                     if i != 0 {
-                        let _next = Some(&_category_services[i - 1]);
+                        let _next = Some(&serve_of_service[i - 1]);
                         data.insert("next", &_next);
                     };
                     break;
