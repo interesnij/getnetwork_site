@@ -194,6 +194,7 @@ pub struct LoadParams {
 }
 pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use crate::schema;
+    use diesel::prelude::*;
 
     let _connection = establish_connection();
     let params = web::Query::<LoadParams>::from_query(&req.query_string()).unwrap();
