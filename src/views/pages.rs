@@ -294,7 +294,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     let _q = Some(params.q.clone());
     match _q {
         Some(v) => v,
-        None => {"1010101010".to_string()},
+        None => "1010101010".to_string(),
     }
 
     let _blogs = schema::blogs::table
