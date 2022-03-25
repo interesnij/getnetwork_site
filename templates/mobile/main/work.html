@@ -10,21 +10,7 @@
         </h2>
         <ul class="works-grid work-grid-2 work-grid-gut clearfix font-alt">
           {% for object in last_works %}
-          <li class="work-item">
-            <a href="/work/1/{{ object.id }}/" class="ajax mfp-image">
-              <div class="work-img">
-                <img class="image_fit_300" src="{{ object.image }}" alt="Work">
-              </div>
-              <div class="work-intro">
-                <h3 class="work-title">
-                  {{ object.title }}
-                </h3>
-                <div class="work-descr">
-                  {{ object.description }}
-                </div>
-              </div>
-            </a>
-          </li>
+            {% include 'desctop/generic/default_work.html' %}
           {% endfor %}
         </ul>
     </div>

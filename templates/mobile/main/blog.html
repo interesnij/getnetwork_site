@@ -6,26 +6,8 @@
             Последние статьи
         </h2>
           {% for object in last_blogs %}
-            <div class="mb-md-50">
-                <div class="post-prev-img">
-                    <a href="/blog/1/{{ object.id }}/" class="ajax">
-                      <img class="image_fit_300" src="{{ object.image }}" alt="img" />
-                    </a>
-                </div>
-                <div class="post-prev-title font-alt">
-                    <a class="ajax" href="/blog/1/{{ object.id }}/">{{ object.title }}</a>
-                </div>
-                <div class="post-prev-info font-alt">
-                    {{ object.blog_created }}
-                </div>
-                <div class="post-prev-text">
-                    {{ object.description }}
-                </div>
-                <div class="post-prev-more">
-                    <a href="/blog/1/{{ object.id }}/" class="btn btn-mod border btn-round ajax">Читать</a>
-                </div>
-            </div>
-            {% endfor %}
+            {% include 'desctop/generic/default_blog.html' %}
+          {% endfor %}
     </div>
 </section>
 {% endif %}
