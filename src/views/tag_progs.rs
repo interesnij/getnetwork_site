@@ -157,6 +157,7 @@ pub async fn tag_blogs_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     let _tag_id : i32 = *_id;
     let page_size = 20;
     let mut offset = 0;
+    let mut data = Context::new();
     let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
 
     let _tag_items = tags_items.filter(schema::tags_items::tag_id.eq(&_tag_id)).load::<TagItems>(&_connection).expect("E");
@@ -182,7 +183,6 @@ pub async fn tag_blogs_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
         else {break;}
     }
 
-    let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
@@ -208,6 +208,7 @@ pub async fn tag_services_page(req: HttpRequest, tera: web::Data<Tera>, _id: web
     let _tag_id : i32 = *_id;
     let page_size = 20;
     let mut offset = 0;
+    let mut data = Context::new();
     let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
 
     let _tag_items = tags_items.filter(schema::tags_items::tag_id.eq(&_tag_id)).load::<TagItems>(&_connection).expect("E");
@@ -233,7 +234,6 @@ pub async fn tag_services_page(req: HttpRequest, tera: web::Data<Tera>, _id: web
         else {break;}
     }
 
-    let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
@@ -259,6 +259,7 @@ pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     let _tag_id : i32 = *_id;
     let page_size = 20;
     let mut offset = 0;
+    let mut data = Context::new();
     let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
 
     let _tag_items = tags_items.filter(schema::tags_items::tag_id.eq(&_tag_id)).load::<TagItems>(&_connection).expect("E");
@@ -276,15 +277,14 @@ pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
             .order(schema::stores::store_created.desc())
             .load::<Store>(&_connection)
             .expect("e");
-        if _wikis.len() > 0 {
+        if _stores.len() > 0 {
             data.insert("stores", &_stores);
-            data.insert("stores_count", wikis.filter(schema::stores::id.eq(any(store_stack))).len());
+            data.insert("stores_count", stores.filter(schema::stores::id.eq(any(store_stack))).len());
             offset += page_size;
         }
         else {break;}
     }
 
-    let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
@@ -310,6 +310,7 @@ pub async fn tag_wikis_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     let _tag_id : i32 = *_id;
     let page_size = 20;
     let mut offset = 0;
+    let mut data = Context::new();
     let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
 
     let _tag_items = tags_items.filter(schema::tags_items::tag_id.eq(&_tag_id)).load::<TagItems>(&_connection).expect("E");
@@ -335,7 +336,6 @@ pub async fn tag_wikis_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
         else {break;}
     }
 
-    let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
@@ -361,6 +361,7 @@ pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     let _tag_id : i32 = *_id;
     let page_size = 20;
     let mut offset = 0;
+    let mut data = Context::new();
     let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
 
     let _tag_items = tags_items.filter(schema::tags_items::tag_id.eq(&_tag_id)).load::<TagItems>(&_connection).expect("E");
@@ -385,7 +386,7 @@ pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
         }
         else {break;}
     }
-    let mut data = Context::new();
+
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
