@@ -167,7 +167,7 @@ pub async fn tag_blogs_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
 
     let _blogs = blogs
         .filter(schema::blogs::id.eq(any(blog_stack)))
-        .order(blog_created.desc())
+        .order(blogs::blog_created.desc())
         .load::<Blog>(&_connection)
         .expect("e");
 
@@ -209,7 +209,7 @@ pub async fn tag_services_page(req: HttpRequest, tera: web::Data<Tera>, _id: web
 
     let _services = services
         .filter(schema::services::id.eq(any(service_stack)))
-        .order(service_created.desc())
+        .order(services::service_created.desc())
         .load::<Service>(&_connection)
         .expect("e");
 
@@ -251,7 +251,7 @@ pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
 
     let _stores = stores
         .filter(schema::stores::id.eq(any(store_stack)))
-        .order(store_created.desc())
+        .order(stores::store_created.desc())
         .load::<Store>(&_connection)
         .expect("e");
 
@@ -293,7 +293,7 @@ pub async fn tag_wikis_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
 
     let _wikis = wikis
         .filter(schema::wikis::id.eq(any(wiki_stack)))
-        .order(wiki_created.desc())
+        .order(wikis::wiki_created.desc())
         .load::<Wiki>(&_connection)
         .expect("e");
 
@@ -335,7 +335,7 @@ pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
 
     let _works = works
         .filter(schema::works::id.eq(any(work_stack)))
-        .order(work_created.desc())
+        .order(works::work_created.desc())
         .load::<Work>(&_connection)
         .expect("e");
 
