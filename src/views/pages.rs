@@ -281,7 +281,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
 
 #[derive(Debug, Deserialize)]
 pub struct SearchParams {
-    pub q: String,
+    pub q: Option<String>,
 }
 
 pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
@@ -291,7 +291,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
 
     let _connection = establish_connection();
     let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
-    let _q : String = params.q.clone();
+    let _q : String = Some(params.q.clone());
 
     let _blogs = schema::blogs::table
         .filter(schema::blogs::title.eq(&_q))
