@@ -294,41 +294,41 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     let _q = Some(params.q.clone());
 
     let _blogs = schema::blogs::table
-        .filter(schema::blogs::title.eq(&_q))
-        .or_filter(schema::blogs::description.eq(&_q))
-        .or_filter(schema::blogs::content.eq(&_q))
+        .filter(schema::blogs::title.eq(&Some(_q)))
+        .or_filter(schema::blogs::description.eq(&Some(_q)))
+        .or_filter(schema::blogs::content.eq(&Some(_q)))
         .order(schema::blogs::blog_created.desc())
         .limit(3)
         .load::<Blog>(&_connection)
         .expect("e");
     let _services = schema::services::table
-        .filter(schema::services::title.eq(&_q))
-        .or_filter(schema::services::description.eq(&_q))
-        .or_filter(schema::services::content.eq(&_q))
+        .filter(schema::services::title.eq(&Some(_q)))
+        .or_filter(schema::services::description.eq(&Some(_q)))
+        .or_filter(schema::services::content.eq(&Some(_q)))
         .order(schema::services::service_created.desc())
         .limit(3)
         .load::<Service>(&_connection)
         .expect("e");
     let _stores = schema::stores::table
-        .filter(schema::stores::title.eq(&_q))
-        .or_filter(schema::stores::description.eq(&_q))
-        .or_filter(schema::stores::content.eq(&_q))
+        .filter(schema::stores::title.eq(&Some(_q)))
+        .or_filter(schema::stores::description.eq(&Some(_q)))
+        .or_filter(schema::stores::content.eq(&Some(_q)))
         .order(schema::stores::store_created.desc())
         .limit(3)
         .load::<Store>(&_connection)
         .expect("e");
     let _wikis = schema::wikis::table
-        .filter(schema::wikis::title.eq(&_q))
-        .or_filter(schema::wikis::description.eq(&_q))
-        .or_filter(schema::wikis::content.eq(&_q))
+        .filter(schema::wikis::title.eq(&Some(_q)))
+        .or_filter(schema::wikis::description.eq(&Some(_q)))
+        .or_filter(schema::wikis::content.eq(&Some(_q)))
         .order(schema::wikis::wiki_created.desc())
         .limit(3)
         .load::<Wiki>(&_connection)
         .expect("e");
     let _works = schema::works::table
-        .filter(schema::works::title.eq(&_q))
-        .or_filter(schema::works::description.eq(&_q))
-        .or_filter(schema::works::content.eq(&_q))
+        .filter(schema::works::title.eq(&Some(_q)))
+        .or_filter(schema::works::description.eq(&Some(_q)))
+        .or_filter(schema::works::content.eq(&Some(_q)))
         .order(schema::works::work_created.desc())
         .limit(3)
         .load::<Work>(&_connection)
