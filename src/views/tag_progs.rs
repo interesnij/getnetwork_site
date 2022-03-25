@@ -381,7 +381,11 @@ pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
             .expect("e");
         if _works.len() > 0 {
             data.insert("works", &_works);
-            data.insert("works_count", works.filter(schema::works::id.eq(any(work_stack))).len());
+            data.insert("works_count", works
+                .filter(schema::works::id.eq(any(work_stack)))
+                .load::<Work>(&_connection)
+                .expect("could not load tags")
+                .len());
             offset += page_size;
         }
         else {break;}
@@ -394,7 +398,6 @@ pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
     data.insert("tag", &_tag[0]);
-    data.insert("works_count", &_works.len());
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"tags/tag_works.html".to_string();
