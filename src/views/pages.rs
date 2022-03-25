@@ -294,7 +294,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     let __q = Some(params.q.clone());
     let mut _q = "".to_string();
     match __q {
-        Some(x) => _q = x,
+        Some(x) => _q = Some(x).unwrap(),
         None => _q = "".to_string(),
     }
 
