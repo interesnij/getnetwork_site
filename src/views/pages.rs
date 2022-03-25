@@ -291,11 +291,10 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
 
     let _connection = establish_connection();
     let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
-    let __q = Some(params.q.clone());
-    let mut _q = "".to_string();
-    match __q {
-        Some(x) => _q = Some(x).unwrap(),
-        None => _q = "".to_string(),
+    let _q = Some(params.q.clone());
+    match _q {
+        Some(x) => Some(x).unwrap(),
+        None => "".to_string(),
     }
 
     let _blogs = schema::blogs::table
