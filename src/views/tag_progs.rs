@@ -149,6 +149,7 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
 pub async fn tag_blogs_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::blogs::dsl::blogs;
     use diesel::pg::expression::dsl::any;
     use crate::models::Blog;
 
@@ -164,7 +165,7 @@ pub async fn tag_blogs_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
         }
     };
 
-    let _blogs = schema::blogs::table
+    let _blogs = blogs
         .filter(schema::blogs::id.eq(any(blog_stack)))
         .order(blog_created.desc())
         .load::<Blog>(&_connection)
@@ -190,6 +191,7 @@ pub async fn tag_blogs_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
 pub async fn tag_services_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::services::dsl::services;
     use diesel::pg::expression::dsl::any;
     use crate::models::Service;
 
@@ -205,7 +207,7 @@ pub async fn tag_services_page(req: HttpRequest, tera: web::Data<Tera>, _id: web
         }
     };
 
-    let _services = schema::services::table
+    let _services = services
         .filter(schema::services::id.eq(any(service_stack)))
         .order(service_created.desc())
         .load::<Service>(&_connection)
@@ -231,6 +233,7 @@ pub async fn tag_services_page(req: HttpRequest, tera: web::Data<Tera>, _id: web
 pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::stores::dsl::stores;
     use diesel::pg::expression::dsl::any;
     use crate::models::Store;
 
@@ -246,7 +249,7 @@ pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
         }
     };
 
-    let _stores = schema::stores::table
+    let _stores = stores
         .filter(schema::stores::id.eq(any(store_stack)))
         .order(store_created.desc())
         .load::<Store>(&_connection)
@@ -272,6 +275,7 @@ pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
 pub async fn tag_wikis_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::wikis::dsl::wikis;
     use diesel::pg::expression::dsl::any;
     use crate::models::Wiki;
 
@@ -287,7 +291,7 @@ pub async fn tag_wikis_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
         }
     };
 
-    let _wikis = schema::wikis::table
+    let _wikis = wikis
         .filter(schema::wikis::id.eq(any(wiki_stack)))
         .order(wiki_created.desc())
         .load::<Wiki>(&_connection)
@@ -313,6 +317,7 @@ pub async fn tag_wikis_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
 pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::works::dsl::works;
     use diesel::pg::expression::dsl::any;
     use crate::models::Work;
 
@@ -328,7 +333,7 @@ pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
         }
     };
 
-    let _works = schema::works::table
+    let _works = works
         .filter(schema::works::id.eq(any(work_stack)))
         .order(work_created.desc())
         .load::<Work>(&_connection)
