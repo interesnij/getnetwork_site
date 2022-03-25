@@ -285,6 +285,8 @@ pub struct SearchParams {
 }
 
 pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+    use crate::schema;
+    use diesel::prelude::*;
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
@@ -339,7 +341,6 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     data.insert("blog_categories", &_blog_cats);
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
-    data.insert("tag", &_tag[0]);
     data.insert("blogs", &_blogs);
     data.insert("services", &_services);
     data.insert("stores", &_stores);
