@@ -90,11 +90,36 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
         }
     };
 
-    let _blogs = schema::blogs::table.filter(schema::blogs::id.eq(any(blog_stack))).load::<Blog>(&_connection).expect("e");
-    let _services = schema::services::table.filter(schema::services::id.eq(any(service_stack))).load::<Service>(&_connection).expect("e");
-    let _stores = schema::stores::table.filter(schema::stores::id.eq(any(store_stack))).load::<Store>(&_connection).expect("e");
-    let _wikis = schema::wikis::table.filter(schema::wikis::id.eq(any(wiki_stack))).load::<Wiki>(&_connection).expect("e");
-    let _works = schema::works::table.filter(schema::works::id.eq(any(work_stack))).load::<Work>(&_connection).expect("e");
+    let _blogs = schema::blogs::table
+        .filter(schema::blogs::id.eq(any(blog_stack)))
+        .order(blog_created.desc())
+        .limit(3)
+        .load::<Blog>(&_connection)
+        .expect("e");
+    let _services = schema::services::table
+        .filter(schema::services::id.eq(any(service_stack)))
+        .order(service_created.desc())
+        .limit(3)
+        .load::<Service>(&_connection)
+        .expect("e");
+    let _stores = schema::stores::table
+        .filter(schema::stores::id.eq(any(store_stack)))
+        .order(store_created.desc())
+        .limit(3)
+        .load::<Store>(&_connection)
+        .expect("e");
+    let _wikis = schema::wikis::table
+        .filter(schema::wikis::id.eq(any(wiki_stack)))
+        .order(wiki_created.desc())
+        .limit(3)
+        .load::<Wiki>(&_connection)
+        .expect("e");
+    let _works = schema::works::table
+        .filter(schema::works::id.eq(any(work_stack)))
+        .order(work_created.desc())
+        .limit(3)
+        .load::<Work>(&_connection)
+        .expect("e");
 
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
@@ -103,15 +128,225 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
     data.insert("blog_categories", &_blog_cats);
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
-    data.insert("object", &_tag[0]);
+    data.insert("tag", &_tag[0]);
     data.insert("blogs", &_blogs);
     data.insert("services", &_services);
     data.insert("stores", &_stores);
     data.insert("wikis", &_wikis);
     data.insert("works", &_works);
+    data.insert("blogs_count", &_blogs.len());
+    data.insert("services_count", &_services.len());
+    data.insert("stores_count", &_stores.len());
+    data.insert("wikis_count", &_wikis.len());
+    data.insert("works_count", &_works.len());
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"tags/tag.html".to_string();
+    let _rendered = tera.render(&_template, &data).unwrap();
+    HttpResponse::Ok().body(_rendered)
+}
+
+pub async fn tag_blogs_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+    use schema::tags::dsl::tags;
+    use crate::schema::tags_items::dsl::tags_items;
+    use diesel::pg::expression::dsl::any;
+    use crate::models::Blog;
+
+    let _connection = establish_connection();
+    let _tag_id : i32 = *_id;
+    let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
+
+    let _tag_items = tags_items.filter(schema::tags_items::tag_id.eq(&_tag_id)).load::<TagItems>(&_connection).expect("E");
+    let mut blog_stack = Vec::new();
+    for _tag_item in _tag_items.iter() {
+        if _tag_item.blog_id > 0 {
+            blog_stack.push(_tag_item.blog_id);
+        }
+    };
+
+    let _blogs = schema::blogs::table
+        .filter(schema::blogs::id.eq(any(blog_stack)))
+        .order(blog_created.desc())
+        .load::<Blog>(&_connection)
+        .expect("e");
+
+    let mut data = Context::new();
+    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    data.insert("service_categories", &_service_cats);
+    data.insert("store_categories", &_store_cats);
+    data.insert("blog_categories", &_blog_cats);
+    data.insert("wiki_categories", &_wiki_cats);
+    data.insert("work_categories", &_work_cats);
+    data.insert("tag", &_tag[0]);
+    data.insert("blogs", &_blogs);
+    data.insert("blogs_count", &_blogs.len());
+    data.insert("is_admin", &_is_admin);
+
+    let _template = _type + &"tags/tag_blogs.html".to_string();
+    let _rendered = tera.render(&_template, &data).unwrap();
+    HttpResponse::Ok().body(_rendered)
+}
+
+pub async fn tag_services_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+    use schema::tags::dsl::tags;
+    use crate::schema::tags_items::dsl::tags_items;
+    use diesel::pg::expression::dsl::any;
+    use crate::models::Service;
+
+    let _connection = establish_connection();
+    let _tag_id : i32 = *_id;
+    let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
+
+    let _tag_items = tags_items.filter(schema::tags_items::tag_id.eq(&_tag_id)).load::<TagItems>(&_connection).expect("E");
+    let mut service_stack = Vec::new();
+    for _tag_item in _tag_items.iter() {
+        if _tag_item.service_id > 0 {
+            service_stack.push(_tag_item.service_id);
+        }
+    };
+
+    let _services = schema::services::table
+        .filter(schema::services::id.eq(any(service_stack)))
+        .order(service_created.desc())
+        .load::<Service>(&_connection)
+        .expect("e");
+
+    let mut data = Context::new();
+    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    data.insert("service_categories", &_service_cats);
+    data.insert("store_categories", &_store_cats);
+    data.insert("blog_categories", &_blog_cats);
+    data.insert("wiki_categories", &_wiki_cats);
+    data.insert("work_categories", &_work_cats);
+    data.insert("tag", &_tag[0]);
+    data.insert("services", &_services);
+    data.insert("services_count", &_services.len());
+    data.insert("is_admin", &_is_admin);
+
+    let _template = _type + &"tags/tag_services.html".to_string();
+    let _rendered = tera.render(&_template, &data).unwrap();
+    HttpResponse::Ok().body(_rendered)
+}
+
+pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+    use schema::tags::dsl::tags;
+    use crate::schema::tags_items::dsl::tags_items;
+    use diesel::pg::expression::dsl::any;
+    use crate::models::Store;
+
+    let _connection = establish_connection();
+    let _tag_id : i32 = *_id;
+    let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
+
+    let _tag_items = tags_items.filter(schema::tags_items::tag_id.eq(&_tag_id)).load::<TagItems>(&_connection).expect("E");
+    let mut store_stack = Vec::new();
+    for _tag_item in _tag_items.iter() {
+        if _tag_item.store_id > 0 {
+            store_stack.push(_tag_item.store_id);
+        }
+    };
+
+    let _stores = schema::stores::table
+        .filter(schema::stores::id.eq(any(store_stack)))
+        .order(store_created.desc())
+        .load::<Store>(&_connection)
+        .expect("e");
+
+    let mut data = Context::new();
+    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    data.insert("service_categories", &_service_cats);
+    data.insert("store_categories", &_store_cats);
+    data.insert("blog_categories", &_blog_cats);
+    data.insert("wiki_categories", &_wiki_cats);
+    data.insert("work_categories", &_work_cats);
+    data.insert("tag", &_tag[0]);
+    data.insert("stores", &_stores);
+    data.insert("stores_count", &_stores.len());
+    data.insert("is_admin", &_is_admin);
+
+    let _template = _type + &"tags/tag_stores.html".to_string();
+    let _rendered = tera.render(&_template, &data).unwrap();
+    HttpResponse::Ok().body(_rendered)
+}
+
+pub async fn tag_wikis_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+    use schema::tags::dsl::tags;
+    use crate::schema::tags_items::dsl::tags_items;
+    use diesel::pg::expression::dsl::any;
+    use crate::models::Wiki;
+
+    let _connection = establish_connection();
+    let _tag_id : i32 = *_id;
+    let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
+
+    let _tag_items = tags_items.filter(schema::tags_items::tag_id.eq(&_tag_id)).load::<TagItems>(&_connection).expect("E");
+    let mut wiki_stack = Vec::new();
+    for _tag_item in _tag_items.iter() {
+        if _tag_item.wiki_id > 0 {
+            wiki_stack.push(_tag_item.wiki_id);
+        }
+    };
+
+    let _wikis = schema::wikis::table
+        .filter(schema::wikis::id.eq(any(wiki_stack)))
+        .order(wiki_created.desc())
+        .load::<Wiki>(&_connection)
+        .expect("e");
+
+    let mut data = Context::new();
+    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    data.insert("service_categories", &_service_cats);
+    data.insert("store_categories", &_store_cats);
+    data.insert("blog_categories", &_blog_cats);
+    data.insert("wiki_categories", &_wiki_cats);
+    data.insert("work_categories", &_work_cats);
+    data.insert("tag", &_tag[0]);
+    data.insert("wikis", &_wikis);
+    data.insert("wikis_count", &_wikis.len());
+    data.insert("is_admin", &_is_admin);
+
+    let _template = _type + &"tags/tag_wikis.html".to_string();
+    let _rendered = tera.render(&_template, &data).unwrap();
+    HttpResponse::Ok().body(_rendered)
+}
+
+pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+    use schema::tags::dsl::tags;
+    use crate::schema::tags_items::dsl::tags_items;
+    use diesel::pg::expression::dsl::any;
+    use crate::models::Work;
+
+    let _connection = establish_connection();
+    let _tag_id : i32 = *_id;
+    let _tag = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
+
+    let _tag_items = tags_items.filter(schema::tags_items::tag_id.eq(&_tag_id)).load::<TagItems>(&_connection).expect("E");
+    let mut work_stack = Vec::new();
+    for _tag_item in _tag_items.iter() {
+        if _tag_item.work_id > 0 {
+            work_stack.push(_tag_item.work_id);
+        }
+    };
+
+    let _works = schema::works::table
+        .filter(schema::works::id.eq(any(work_stack)))
+        .order(work_created.desc())
+        .load::<Work>(&_connection)
+        .expect("e");
+
+    let mut data = Context::new();
+    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+    data.insert("service_categories", &_service_cats);
+    data.insert("store_categories", &_store_cats);
+    data.insert("blog_categories", &_blog_cats);
+    data.insert("wiki_categories", &_wiki_cats);
+    data.insert("work_categories", &_work_cats);
+    data.insert("tag", &_tag[0]);
+    data.insert("works", &_works);
+    data.insert("works_count", &_works.len());
+    data.insert("is_admin", &_is_admin);
+
+    let _template = _type + &"tags/tag_works.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }

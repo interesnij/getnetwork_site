@@ -59,6 +59,11 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     // tags urls
     .route("/tags/", web::get().to(tag_progs::tags_page))
     .route("/tag/{id}/", web::get().to(tag_progs::tag_page))
+    .route("/tag_blogs/{id}/", web::get().to(tag_progs::tag_blogs_page))
+    .route("/tag_services/{id}/", web::get().to(tag_progs::tag_services_page))
+    .route("/tag_stores/{id}/", web::get().to(tag_progs::tag_stores_page))
+    .route("/tag_wikis/{id}/", web::get().to(tag_progs::tag_wikis_page))
+    .route("/tag_works/{id}/", web::get().to(tag_progs::tag_works_page))
     .service(web::resource("/create_tag/")
         .route(web::get().to(tag_progs::create_tag_page))
         .route(web::post().to(tag_progs::create_tag))
