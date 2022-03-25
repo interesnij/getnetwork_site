@@ -287,7 +287,7 @@ pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
             .expect("e");
         if _stores.len() > 0 {
             data.insert("stores", &_stores);
-            data.insert("stores_count", stores
+            data.insert("stores_count", &stores
                 .filter(schema::stores::id.eq(any(&store_stack)))
                 .load::<Store>(&_connection)
                 .expect("could not load tags")
