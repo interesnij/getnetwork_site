@@ -251,7 +251,7 @@ pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
 
     let _stores = stores
         .filter(schema::stores::id.eq(any(store_stack)))
-        .order(schema::schema::stores::store_created.desc())
+        .order(schema::stores::store_created.desc())
         .load::<Store>(&_connection)
         .expect("e");
 
