@@ -177,7 +177,11 @@ pub async fn tag_blogs_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
             .expect("e");
         if _blogs.len() > 0 {
             data.insert("blogs", &_blogs);
-            data.insert("blogs_count", blogs.filter(schema::blogs::id.eq(any(blog_stack))).len());
+            data.insert("blogs_count", &blogs
+                .filter(schema::blogs::id.eq(any(blog_stack)))
+                .load::<Blog>(&_connection)
+                .expect("could not load tags")
+                .len());
             offset += page_size;
         }
         else {break;}
@@ -228,7 +232,11 @@ pub async fn tag_services_page(req: HttpRequest, tera: web::Data<Tera>, _id: web
             .expect("e");
         if _services.len() > 0 {
             data.insert("services", &_services);
-            data.insert("services_count", services.filter(schema::services::id.eq(any(service_stack))).len());
+            data.insert("services_count", &services
+                .filter(schema::services::id.eq(any(service_stack)))
+                .load::<Service>(&_connection)
+                .expect("could not load tags")
+                .len());
             offset += page_size;
         }
         else {break;}
@@ -279,7 +287,11 @@ pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
             .expect("e");
         if _stores.len() > 0 {
             data.insert("stores", &_stores);
-            data.insert("stores_count", stores.filter(schema::stores::id.eq(any(store_stack))).len());
+            data.insert("stores_count", stores
+                .filter(schema::stores::id.eq(any(store_stack)))
+                .load::<Store>(&_connection)
+                .expect("could not load tags")
+                .len());
             offset += page_size;
         }
         else {break;}
@@ -330,7 +342,11 @@ pub async fn tag_wikis_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
             .expect("e");
         if _wikis.len() > 0 {
             data.insert("wikis", &_wikis);
-            data.insert("wikis_count", wikis.filter(schema::wikis::id.eq(any(wiki_stack))).len());
+            data.insert("wikis_count", &wikis
+                .filter(schema::wikis::id.eq(any(wiki_stack)))
+                .load::<Wiki>(&_connection)
+                .expect("could not load tags")
+                .len());
             offset += page_size;
         }
         else {break;}
@@ -381,7 +397,7 @@ pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
             .expect("e");
         if _works.len() > 0 {
             data.insert("works", &_works);
-            data.insert("works_count", works
+            data.insert("works_count", &works
                 .filter(schema::works::id.eq(any(work_stack)))
                 .load::<Work>(&_connection)
                 .expect("could not load tags")
