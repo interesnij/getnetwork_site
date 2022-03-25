@@ -295,7 +295,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     match _q {
         Some(x) => Some(x).unwrap(),
         None => "".to_string(),
-    }
+    };
 
     let _blogs = schema::blogs::table
         .filter(schema::blogs::title.eq(&_q))
