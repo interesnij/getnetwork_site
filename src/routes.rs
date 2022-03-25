@@ -23,6 +23,14 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     .route("/serve_list/", web::get().to(pages::serve_list_page))
     .route("/load_item/", web::get().to(pages::get_load_page))
 
+    // search urls
+    .route("/search/", web::get().to(pages::search_page))
+    //.route("/search_blogs/", web::get().to(pages::search_blogs_page))
+    //.route("/search_services/", web::get().to(pages::search_services_page))
+    //.route("/search_stores/", web::get().to(pages::search_stores_page))
+    //.route("/search_wikis/", web::get().to(pages::search_wikis_page))
+    //.route("/search_works/", web::get().to(pages::search_works_page))
+
     // serve urls
     .route("/serve/{id}/", web::get().to(serve_progs::get_serve_page))
     .route("/serve_categories/", web::get().to(serve_progs::serve_categories_page))
