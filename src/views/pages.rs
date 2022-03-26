@@ -302,9 +302,9 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
         .load::<Blog>(&_connection)
         .expect("e");
     let _services = schema::services::table
-        .filter(schema::services::title.like(&_q))
-        .or_filter(schema::services::description.eq(&_q))
-        .or_filter(schema::services::content.eq(&_q))
+        .filter(schema::services::title.ilike(&_q))
+        .or_filter(schema::services::description.ilike(&_q))
+        .or_filter(schema::services::content.ilike(&_q))
         .order(schema::services::service_created.desc())
         .limit(3)
         .load::<Service>(&_connection)
