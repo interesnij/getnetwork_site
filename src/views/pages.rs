@@ -353,6 +353,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     data.insert("wikis_count", &_wikis.len());
     data.insert("works_count", &_works.len());
     data.insert("is_admin", &_is_admin);
+    data.insert("q", &_q);
 
     let _template = _type + &"search/all.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
