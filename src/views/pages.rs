@@ -302,7 +302,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
         .load::<Blog>(&_connection)
         .expect("e");
     let _services = schema::services::table
-        .filter(schema::services::title.ilike(&_q))
+        .filter(schema::services::title.ilike(&("%" + _q + "%")))
         .or_filter(schema::services::description.ilike(&_q))
         .or_filter(schema::services::content.ilike(&_q))
         .order(schema::services::service_created.desc())
@@ -354,7 +354,6 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     data.insert("is_admin", &_is_admin);
     data.insert("q", &_q);
     println!("{}", _q);
-    println!("{}", _services);
 
     let _template = _type + &"search/all.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
