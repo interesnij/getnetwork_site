@@ -6,6 +6,7 @@ pub mod store_progs;
 pub mod wiki_progs;
 pub mod pages;
 pub mod tag_progs;
+pub mod search_progs;
 
 pub use self::{
     work_progs::*,
@@ -15,4 +16,5 @@ pub use self::{
     store_progs::*,
     wiki_progs::*,
     pages::*,
+    search_progs::*,
 };
