@@ -63,11 +63,11 @@ pub async fn create_tag(mut payload: Multipart) -> impl Responder {
 pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::tag::blogs::dsl::blogs;
-    use crate::schema::tag::services::dsl::services;
-    use crate::schema::tag::stores::dsl::stores;
-    use crate::schema::tag::wikis::dsl::wikis;
-    use crate::schema::tag::works::dsl::works;
+    use crate::schema::blogs::dsl::blogs;
+    use crate::schema::services::dsl::services;
+    use crate::schema::stores::dsl::stores;
+    use crate::schema::wikis::dsl::wikis;
+    use crate::schema::works::dsl::works;
 
     use diesel::pg::expression::dsl::any;
     use crate::models::{Work, Blog, Service, Store, Wiki};
@@ -137,7 +137,7 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
         data.insert("stores", &_stores);
         data.insert("stores_count", &stores
             .filter(schema::stores::id.eq(any(store_stack)))
-            .load::<Stores>(&_connection)
+            .load::<Store>(&_connection)
             .expect("E")
             .len());
     }
