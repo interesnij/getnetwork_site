@@ -63,6 +63,12 @@ pub async fn create_tag(mut payload: Multipart) -> impl Responder {
 pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::tag::blogs::dsl::blogs;
+    use crate::schema::tag::services::dsl::services;
+    use crate::schema::tag::stores::dsl::stores;
+    use crate::schema::tag::wikis::dsl::wikis;
+    use crate::schema::tag::works::dsl::works;
+
     use diesel::pg::expression::dsl::any;
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
@@ -105,6 +111,7 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
             .load::<Blog>(&_connection)
             .expect("E")
             .len());
+    }
 
     let _services = schema::services::table
         .filter(schema::services::id.eq(any(service_stack)))
@@ -133,6 +140,7 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
             .load::<Stores>(&_connection)
             .expect("E")
             .len());
+    }
 
     let _wikis = schema::wikis::table
         .filter(schema::wikis::id.eq(any(wiki_stack)))
@@ -147,6 +155,7 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
             .load::<Wiki>(&_connection)
             .expect("E")
             .len());
+    }
 
     let _works = schema::works::table
         .filter(schema::works::id.eq(any(work_stack)))
@@ -161,6 +170,7 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
             .load::<Work>(&_connection)
             .expect("E")
             .len());
+    }
 
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
