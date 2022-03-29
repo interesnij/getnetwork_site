@@ -17,8 +17,6 @@ pub struct SearchParams {
 }
 
 pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
-    use crate::schema;
-    use diesel::prelude::*;
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
