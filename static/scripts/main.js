@@ -421,6 +421,7 @@ on('body', 'input', '.general_search', function() {
           elem_ = document.createElement('span');
           elem_.innerHTML = ajax_link.responseText;
           search = elem_.querySelector(".search_section");
+          div = document.body.querySelector(".search_section");
           div.innerHTML = '';
           div.innerHTML = search.innerHTML;
         }
