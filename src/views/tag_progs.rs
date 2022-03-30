@@ -126,6 +126,7 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
             .load::<Service>(&_connection)
             .expect("E")
             .len());
+    }
 
     let _stores = schema::stores::table
         .filter(schema::stores::id.eq(any(store_stack)))
@@ -166,7 +167,7 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
     if _works.len() > 0 {
         data.insert("works", &_works);
         data.insert("works_count", &works
-            .filter(schema::works::id.eq(any(work)))
+            .filter(schema::works::id.eq(any(work_stack)))
             .load::<Work>(&_connection)
             .expect("E")
             .len());
