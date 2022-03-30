@@ -420,8 +420,7 @@ on('body', 'input', '.general_search', function() {
         if ( this.readyState == 4 && this.status == 200 ) {
           elem_ = document.createElement('span');
           elem_.innerHTML = ajax_link.responseText;
-          search = elem_.querySelector("#reload_block");
-          div = document.body.querySelector(".search_section");
+          search = elem_.querySelector(".search_section");
           div.innerHTML = '';
           div.innerHTML = search.innerHTML;
         }
