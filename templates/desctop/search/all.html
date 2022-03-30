@@ -108,6 +108,23 @@
       </section>
       <hr class="mt-0 mb-0 " />
       {% endif %}
+
+      {% if not blogs
+            and not stores
+            and not services
+            and not stores
+            and not services
+            and not works
+            and not wikis
+        %}
+          <section class="border small-section bg-dark">
+            <div class="container relative">
+                <div class="align-center">
+                    <h3 class="banner-heading font-alt">Ничего не найдено</h3>
+                </div>
+            </div>
+          </section>
+        {% endif %}
     </div>
   </div>
 </section>
