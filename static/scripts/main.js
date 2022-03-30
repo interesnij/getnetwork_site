@@ -409,6 +409,7 @@ on('body', 'click', '.prev_item', function(event) {
 });
 
 on('body', 'input', '.general_search', function() {
+    this = this;
     if (this.classList.contains("search-field") && !document.body.querySelector(".search_section")) {
       ajax_get_reload("/search/?q=" + this.value)
     }
@@ -418,6 +419,7 @@ on('body', 'input', '.general_search', function() {
       ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
+          document.body.querySelector(".search_page").value = this.value;
           elem_ = document.createElement('span');
           elem_.innerHTML = ajax_link.responseText;
           search = elem_.querySelector(".search_section");
