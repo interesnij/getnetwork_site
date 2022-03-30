@@ -418,9 +418,9 @@ on('body', 'input', '.general_search', function() {
         folder = _this.getAttribute("data-folder")
       } else {
         folder = ""
-      };
+      }; 
     var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-      ajax_link.open( 'GET', "/search/" + folder + "?q=" + _this.value, true );
+      ajax_link.open( 'GET', "/search" + folder + "/?q=" + _this.value, true );
       ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {

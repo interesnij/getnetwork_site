@@ -25,7 +25,7 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     .route("/load_item/", web::get().to(pages::get_load_page))
 
     // search urls
-    .route("/search/", web::get().to(search_progs::search_page))
+    .route("/search/", web::get().to(search_progs::search_page)) 
     .route("/search_blogs/", web::get().to(search_progs::search_blogs_page))
     .route("/search_services/", web::get().to(search_progs::search_services_page))
     .route("/search_stores/", web::get().to(search_progs::search_stores_page))

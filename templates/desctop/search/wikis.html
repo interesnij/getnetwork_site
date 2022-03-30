@@ -1,0 +1,42 @@
+{% extends "desctop/base.html" %}
+{% block title %}Поиск обучающих статей: "{{ q }}"{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>Поиск</span>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+      <form class="form mb-20" role="form">
+          <input data-folder="_wikis" value="{{ q }}" type="text" class="form-control general_search search_page" placeholder="Поиск...">
+      </form>
+    <div class="search_section">
+      {% if wikis %}
+      <section class="page-section">
+          <div class="container relative">
+              <div class="row multi-columns-row">
+                {% for object in wikis %}
+                  {% include 'desctop/generic/default_wiki.html' %}
+                {% endfor %}
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      {% else %}
+          <div class="text-center">
+            <span class="widget-title font-alt">
+              По запросу "{{ q }}" обучающих статей не найдено...
+            </span>
+          </div>
+        {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
