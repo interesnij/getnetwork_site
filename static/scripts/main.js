@@ -408,7 +408,7 @@ on('body', 'click', '.prev_item', function(event) {
   change_this_fullscreen(this, document.getElementById('item_loader'));
 });
 
-on('#ajax', 'input', '.general_search', function() {
+on('body', 'input', '.general_search', function() {
     if (this.classList.contains("search-field") && !document.body.querySelector(".search_section")) {
       ajax_get_reload("/search/?q=" + this.value)
     }
