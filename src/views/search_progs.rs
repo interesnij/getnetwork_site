@@ -134,6 +134,7 @@ pub async fn search_blogs_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
+    data.insert("q", &_q);
 
     let _template = _type + &"search/blogs.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
@@ -184,6 +185,7 @@ pub async fn search_services_page(req: HttpRequest, tera: web::Data<Tera>) -> im
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
+    data.insert("q", &_q);
 
     let _template = _type + &"search/services.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
@@ -234,6 +236,7 @@ pub async fn search_stores_page(req: HttpRequest, tera: web::Data<Tera>) -> impl
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
+    data.insert("q", &_q);
 
     let _template = _type + &"search/stores.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
@@ -284,6 +287,7 @@ pub async fn search_wikis_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
+    data.insert("q", &_q);
 
     let _template = _type + &"search/wikis.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
@@ -334,6 +338,7 @@ pub async fn search_works_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
+    data.insert("q", &_q);
 
     let _template = _type + &"search/works.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
