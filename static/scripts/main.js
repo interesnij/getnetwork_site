@@ -407,3 +407,25 @@ on('body', 'click', '.prev_item', function(event) {
   this.style.display = "none";
   change_this_fullscreen(this, document.getElementById('item_loader'));
 });
+
+on('#ajax', 'input', '.general_search', function() {
+    if (this.classList.contains("search-field") && !document.body.querySelector(".search_section")) {
+      ajax_get_reload("/search/?q=" + this.value)
+    }
+    else if (document.body.querySelector(".search_section")) {
+    var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+      ajax_link.open( 'GET', "/search/" + this.getAttribute("data-folder") + "?q=" + this.value, true );
+      ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      ajax_link.onreadystatechange = function () {
+        if ( this.readyState == 4 && this.status == 200 ) {
+          elem_ = document.createElement('span');
+          elem_.innerHTML = ajax_link.responseText;
+          search = elem_.querySelector("#reload_block");
+          div = document.body.querySelector(".search_section");
+          div.innerHTML = '';
+          div.innerHTML = search.innerHTML;
+        }
+      }
+      ajax_link.send();
+  }
+});
