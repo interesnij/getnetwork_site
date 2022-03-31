@@ -134,7 +134,8 @@ pub async fn create_serve_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
 
     let _connection = establish_connection();
     let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
-
+    let mut data = Context::new();
+    
     let all_tech_categories :Vec<TechCategories> = tech_categories
         .order(schema::tech_categories::tech_position.asc())
         .load(&_connection)
@@ -162,7 +163,6 @@ pub async fn create_serve_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
         }
     };
 
-    let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
