@@ -500,11 +500,10 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let _cat_id = form.serve_categories.clone();
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
 
+    let mut is_default = false;
     if form.is_default.clone() {
-        let is_default = true;
-    } else {
-        let is_default = false;
-    }
+        is_default = true;
+    };
     let _new_serve = NewServe {
         name: form.name.clone(),
         cat_name: _category[0].name.clone(),
@@ -542,11 +541,10 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve[0].serve_categories)).load::<ServeCategories>(&_connection).expect("E");
     let form = serve_split_payload(payload.borrow_mut()).await;
 
+    let mut is_default = false;
     if form.is_default.clone() {
-        let is_default = true;
-    } else {
-        let is_default = false;
-    }
+        is_default = true;
+    };
     let _new_serve = NewServe {
         name: form.name.clone(),
         cat_name: _category[0].name.clone(),
