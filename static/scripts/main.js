@@ -419,7 +419,7 @@ on('body', 'click', '.anon_color_change', function() {
   } else if (params[2] && params[2].split("=")[0] == "f") {
     params[2].split("=")[1] = new_color
   } else {
-    if (params) {
+    if (params[0]) {
       _url = window.location.href + "&f=" + new_color;
     } else {
       _url = window.location.href + "?f=" + new_color;
