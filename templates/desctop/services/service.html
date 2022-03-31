@@ -41,7 +41,7 @@
                                     <ul class="nav nav-tabs tpl-minimal-tabs animate">
                                       {% for category in tech_categories %}
                                         <li class="yy s_{{ loop.index }} {% if loop.first %}active{% endif %}">
-                                            <a class="pointer">{{ category.name }}</a>
+                                            <a class="pointer {% if loop.first %}border{% endif %}">{{ category.name }}</a>
                                         </li>
                                       {% endfor %}
                                     </ul>
