@@ -410,17 +410,15 @@ on('body', 'click', '.anon_color_change', function() {
     this.setAttribute("data-color", "white");
     new_color = "white"
   };
-  params = window.location.search.replace( '?', '').split('&');
-  console.log(window.location.search);
-  if (params[0] && params[0].split("=")[0] == "f") {
-    params[0].split("=")[1] = new_color;
+  _href = window.location.href;
+  _search = window.location.search;
+  _params = _search.replace( '?', '').split('&');
+  console.log(_search);
+  if (_search.indexOf('f=') !== -1){
+    _search.delete('f')
   }
-  else if (params[1] && params[1].split("=")[0] == "f") {
-    params[1].split("=")[1] = new_color
-  } else if (params[2] && params[2].split("=")[0] == "f") {
-    params[2].split("=")[1] = new_color
-  } else {
-    if (params[0]) {
+  else {
+    if (_params[0]) {
       _url = window.location.href + "&f=" + new_color;
     } else {
       _url = window.location.href + "?f=" + new_color;
