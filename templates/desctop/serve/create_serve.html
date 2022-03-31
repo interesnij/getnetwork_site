@@ -80,7 +80,7 @@
                 <a style="padding:5px" class="ajax border" href="/tech_categories/{{ tech_category.id }}/">
                   {{ tech_category.name }}
                 </a>
-              </h2> 
+              </h2>
 
                 {% for category in category_list %}
                   {% if loop_index == 1 %}
@@ -167,25 +167,6 @@
                 {% endif %}
               {% endfor %}
             </div>
-        </section>
-
-        <section class="border small-section bg-dark">
-          {% for serve in serves %}
-            <p>
-              {{ serve.cat_name }}
-              =>
-              <a class="pointer underline get_object_info"
-                 data-pk="{{ serve.id }}"
-                 data-type="serve"
-                 owner-pk="0"
-                 owner-type="settings"
-               >
-              {{ serve.name }}
-              </a>
-              | <a class="ajax" href="/edit_serve/{{ serve.id }}/">~</a>
-              | <a class="pointer remove_serve" data-pk="{{ serve.id }}">x</a>
-            </p>
-          {% endfor %}
         </section>
     </div>
 </section>
