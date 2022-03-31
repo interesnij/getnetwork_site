@@ -529,7 +529,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     if is_default == true {
         let _tech_category = tech_categories.filter(schema::tech_categories::id.eq(_category[0].tech_categories)).load::<TechCategories>(&_connection).expect("E");
         let mut new_default_price = 0;
-        if _serve.price_acc > 0 {
+        if _serve.price_acc > Some(0) {
             new_default_price = _serve.price_acc;
         } else {
             new_default_price = _serve.price;
