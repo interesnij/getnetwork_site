@@ -499,6 +499,12 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let form = serve_split_payload(payload.borrow_mut()).await;
     let _cat_id = form.serve_categories.clone();
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
+
+    if form.is_default.clone() {
+        let is_default = true;
+    } else {
+        let is_default = false;
+    }
     let _new_serve = NewServe {
         name: form.name.clone(),
         cat_name: _category[0].name.clone(),
@@ -509,7 +515,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
         price_acc: Some(form.price_acc.clone()),
         social_price: Some(form.social_price.clone()),
         man_hours: form.man_hours.clone(),
-        is_default: form.is_default.clone(),
+        is_default: is_default,
     };
 
     let _serve = diesel::insert_into(serve::table)
@@ -536,6 +542,11 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve[0].serve_categories)).load::<ServeCategories>(&_connection).expect("E");
     let form = serve_split_payload(payload.borrow_mut()).await;
 
+    if form.is_default.clone() {
+        let is_default = true;
+    } else {
+        let is_default = false;
+    }
     let _new_serve = NewServe {
         name: form.name.clone(),
         cat_name: _category[0].name.clone(),
@@ -546,7 +557,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
         price_acc: Some(form.price_acc.clone()),
         social_price: Some(form.social_price.clone()),
         man_hours: form.man_hours.clone(),
-        is_default: form.is_default.clone(),
+        is_default: is_default,
     };
 
     diesel::update(&_serve[0])

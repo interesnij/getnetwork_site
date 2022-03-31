@@ -325,7 +325,6 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     // 2. получаем категории опций, исключая дубли, и дефолтную цену.
     let mut serve_categories_ids = Vec::new();
     let mut serve_ids = Vec::new();
-    let mut total_price: i32 = 0;
     for _serve in __serves.iter() {
         serve_ids.push(_serve.id);
         if serve_categories_ids.iter().any(|&i| i==_serve.serve_categories) {
