@@ -134,31 +134,18 @@
                                                     {{ serve.name }}
                                                   </a>
                                                 </td>
-                                                <td class="price_td" tooltip="Сумма" flow="up" style="width:12%"><span class="price">{{ serve.price }}</span> ₽</td>
+                                                <td class="price_td" tooltip="Сумма" flow="up" style="width:15%"><span class="price">{{ serve.price }}</span> ₽</td>
                                                 {% if serve.price_acc %}
-                                                  <td class="price_acc_td" tooltip="Со скидкой" flow="up" style="width:12%">↓ <span class="price_acc">{{ serve.price_acc }}</span> ₽</td>
+                                                  <td class="price_acc_td" tooltip="Со скидкой" flow="up" style="width:15%">↓ <span class="price_acc">{{ serve.price_acc }}</span> ₽</td>
                                                 {% else %}
-                                                  <td style="width:11%"></td>
+                                                  <td style="width:15%"></td>
                                                 {% endif %}
-                                                {% if serve.social_price %}
-                                                  <td class="social_price_td" tooltip="Социальная цена" flow="up" style="width:12%"><span class="social_price">{{ serve.social_price }}</span> ♡</td>
-                                                {% else %}
-                                                  <td style="width:11%"></td>
-                                                {% endif %}
-                                                <td tooltip="Человеко-часы" flow="up" style="width:12%">{{ serve.man_hours }} ⌛</td>
-                                                <td style="width:12%">
+                                                <td tooltip="Человеко-часы" flow="up" style="width:15%">{{ serve.man_hours }} ⌛</td>
+                                                <td style="width:15%">
                                                   {% if not serve.is_default %}
-                                                  <span class="item_attach_circle border" tooltip="Выбрать опцию" flow="up">
-                                                    <svg class="svg_default" fill="currentColor" viewBox="2 2 20 20">
-                                                      <path d="M0 0h24v24H0V0z" fill="none"></path><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"></path>
-                                                    </svg>
-                                                  </span>
+                                                    Выбрать
                                                   {% else %}
-                                                    <span class="border item_attach_circle active_svg" tooltip="Опция по умолчанию" flow="up">
-                                                      <svg class="svg_default" fill="currentColor" viewBox="2 2 20 20">
-                                                        <path d="M0 0h24v24H0V0z" fill="none"></path><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"></path>
-                                                      </svg>
-                                                    </span>
+                                                    Выбрано
                                                   {% endif %}
                                                 </td>
                                               </tr>
