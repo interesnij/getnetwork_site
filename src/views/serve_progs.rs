@@ -492,8 +492,11 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
 }
 
 pub async fn create_serve(mut payload: Multipart) -> impl Responder {
-    use schema::serve;
-    use crate::schema::serve_categories::dsl::serve_categories;
+    use crate::schema::{
+        serve::dsl::serve,
+        serve_categories::dsl::serve_categories,
+        tech_categories::dsl::tech_categories,
+    };
 
     let _connection = establish_connection();
 
@@ -523,6 +526,20 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
         .get_result::<Serve>(&_connection)
         .expect("E.");
 
+    if is_default == true {
+        let _tech_category = tech_categories.filter(schema::tech_categories::id.eq(_category[0].tech_categories)).load::<TechCategories>(&_connection).expect("E");
+        let mut new_default_price = 0;
+        if _serve.price_acc {
+            new_default_price = _serve.price_acc;
+        } else {
+            new_default_price = _serve.price;
+        }
+        diesel::update(&_tech_category[0])
+            .set(schema::tech_category::default_price.eq(new_default_price))
+            .get_result::<TechCategories>(&_connection)
+            .expect("E.");
+        }
+    }
     diesel::update(&_category[0])
         .set(schema::serve_categories::serve_count.eq(_category[0].serve_count + 1))
         .get_result::<ServeCategories>(&_connection)
