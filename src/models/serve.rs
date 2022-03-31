@@ -23,7 +23,6 @@ pub struct NewTechCategories {
     pub description: Option<String>,
     pub tech_position: i32,
     pub tech_count: i32,
-    pub default_price: i32,
 }
 
 /////// ServeCategories //////
