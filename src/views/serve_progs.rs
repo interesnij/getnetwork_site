@@ -230,11 +230,11 @@ pub async fn edit_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
         serve_categories::dsl::serve_categories,
         tech_categories::dsl::tech_categories,
     };
-    use schema::serve_categories::dsl::serve_categories;
 
     let _connection = establish_connection();
     let mut _count: i32 = 0;
-    
+    let mut data = Context::new();
+
     let all_tech_categories :Vec<TechCategories> = tech_categories
         .order(schema::tech_categories::tech_position.asc())
         .load(&_connection)
@@ -263,7 +263,7 @@ pub async fn edit_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     };
 
     let _serve_id : i32 = *_id;
-    let mut data = Context::new();
+
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
