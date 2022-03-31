@@ -358,6 +358,7 @@ on('body', 'click', '.ajax', function(event) {
   event.preventDefault();
   if (this.getAttribute("href") == window.location.href){
     toast_info("Вы уже на этой странице");
+    return 
   };
 
   url = "http://" + location.host + this.getAttribute("href");
@@ -377,6 +378,7 @@ on('body', 'click', '.ajax', function(event) {
       _url = __url + "?q=" + this.getAttribute("data-q");
     };
   } else { _url = url + _search};
+  ajax_get_reload(_url)
 });
 
 init_wow();
