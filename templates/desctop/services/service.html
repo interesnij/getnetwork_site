@@ -111,19 +111,16 @@
                                           {% endif %}
                                         {% endif %}
                                         <table class="table">
-                                            <h4>
-                                              {{ tech_category.name }}
-
-                                              <a data-pk="{{ tech_category.id }}"
-                                                 data-type="tech_category"
-                                                 owner-pk="{{ object.id }}"
-                                                 owner-type="service"
-                                                 class="pointer get_object_info"
-                                                 tooltip="Нажмите для справки"
-                                                 flow="up"
-                                                 >
-                                                 ( ? ):
-                                              </a>
+                                           <h4>
+                                               <span data-pk="{{ tech_category.id }}"
+                                                     data-type="tech_category"
+                                                     owner-pk="{{ object.id }}"
+                                                     owner-type="service"
+                                                     class="pointer get_object_info"
+                                                     tooltip="Нажмите для справки"
+                                                     flow="up">
+                                                 {{ tech_category.name }}
+:                                              </span>
                                               {{ category.name }}
                                             </h4>
                                             <tbody>
