@@ -57,7 +57,17 @@
         </form>
         <section class="border small-section bg-dark">
           {% for serve in serves %}
-            <p>{{ serve.cat_name }} => {{ serve.name }}
+            <p>
+              {{ serve.cat_name }}
+              =>
+              <a class="pointer underline get_object_info"
+                 data-pk="{{ serve.id }}"
+                 data-type="serve"
+                 owner-pk="0"
+                 owner-type="settings"
+               >
+              {{ serve.name }}
+              </a>
               | <a class="ajax" href="/edit_serve/{{ serve.id }}/">~</a>
               | <a class="pointer remove_serve" data-pk="{{ serve.id }}">x</a>
             </p>
