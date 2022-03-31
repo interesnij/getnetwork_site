@@ -413,19 +413,16 @@ on('body', 'click', '.anon_color_change', function() {
   _href = window.location.href;
   _search = window.location.search;
   _params = _search.replace( '?', '').split('&');
-  console.log(_search);
   if (_search.indexOf('f=') !== -1){
     r = new URL(_href);
     r.searchParams.delete('f');
-  }
-  else {
-    if (_params[0]) {
-      _url = window.location.href + "&f=" + new_color;
-    } else {
-      _url = window.location.href + "?f=" + new_color;
-    };
-    window.history.replaceState(null, null, _url);
   };
+  if (_params[0]) {
+    _url = _href + "&f=" + new_color;
+  } else {
+    _url = _href + "?f=" + new_color;
+  };
+  window.history.replaceState(null, null, _url);
 });
 on('body', 'click', '.this_fullscreen_hide', function() {
   close_fullscreen()
