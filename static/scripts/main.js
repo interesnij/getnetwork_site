@@ -416,6 +416,7 @@ on('body', 'click', '.anon_color_change', function() {
   if (_search.indexOf('f=') !== -1){
     r = new URL(_href);
     r.searchParams.delete('f');
+    window.history.replaceState(null, null, r);
   };
   if (_params[0]) {
     _url = _href + "&f=" + new_color;
