@@ -55,14 +55,14 @@
             </div>
             <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_serve_btn">Создать</button>
         </form>
-        <div class="container">
-            {% for serve in serves %}
+        <section class="border small-section bg-dark">
+          {% for serve in serves %}
             <p>{{ serve.cat_name }} => {{ serve.name }}
-                | <a class="ajax" href="/edit_serve/{{ serve.id }}/">~</a>
-                | <a class="pointer remove_serve" data-pk="{{ serve.id }}">x</a>
+              | <a class="ajax" href="/edit_serve/{{ serve.id }}/">~</a>
+              | <a class="pointer remove_serve" data-pk="{{ serve.id }}">x</a>
             </p>
-            {% endfor %}
-        </div>
+          {% endfor %}
+        </section>
     </div>
 </section>
 {% endblock %}
