@@ -149,8 +149,9 @@
                                owner-pk="{{ category.id }}"
                                owner-type="settings"
                              >
+                            {% if object.is_default %}(*) {% endif %}
                             {{ object.name }}
-                            {% if object.is_default %} (*){% endif %}
+
                             </a>
                           </td>
                           <td style="width:14%">{{ object.price }} ₽</td>
