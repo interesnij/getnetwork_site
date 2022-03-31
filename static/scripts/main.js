@@ -421,7 +421,7 @@ on('body', 'click', '.anon_color_change', function() {
     params[2].split("=")[1] = new_color
   } else {
     new_params = new URLSearchParams(search);
-    new_params.append("f", new_color);
+    search.append("f", new_color);
   };
 });
 on('body', 'click', '.this_fullscreen_hide', function() {
