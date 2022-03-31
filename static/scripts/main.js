@@ -362,9 +362,8 @@ on('body', 'click', '.ajax', function(event) {
   _params = _search.replace( '?', '').split('&');
   console.log(_search);
   if (this.getAttribute("data-q")) {
-
     if (_search.indexOf('q=') !== -1){
-      r = new URL(url);
+      r = new URL(url + _search);
       r.searchParams.delete('q');
       __url = r;
     } else { __url = url };
@@ -373,7 +372,7 @@ on('body', 'click', '.ajax', function(event) {
     } else {
       _url = __url + "?q=" + this.getAttribute("data-q");
     };
-  } else { _url = url};
+  } else { _url = url + _search};
   if (url != window.location.pathname){
     ajax_get_reload(_url);
   } else {toast_info("Вы уже на этой странице")}
