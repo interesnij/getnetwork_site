@@ -420,8 +420,9 @@ on('body', 'click', '.anon_color_change', function() {
   } else if (params[2] && params[2].split("=")[0] == "f") {
     params[2].split("=")[1] = new_color
   } else {
-    new_params = new URLSearchParams(search);
-    search.append("f", new_color);
+    url = new URL(window.location.href);
+    _params = new URLSearchParams(url.search);
+    _params.append("f", new_color);
   };
 });
 on('body', 'click', '.this_fullscreen_hide', function() {
