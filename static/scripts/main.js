@@ -356,7 +356,7 @@ get_custom_design();
 
 on('body', 'click', '.ajax', function(event) {
   event.preventDefault();
-  url = location.host + this.getAttribute("href");
+  url = "http://" + location.host + this.getAttribute("href");
   _href = window.location.href;
   _search = window.location.search;
   _params = _search.replace( '?', '').split('&');
