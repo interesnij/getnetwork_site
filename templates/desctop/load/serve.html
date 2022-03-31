@@ -6,6 +6,6 @@
     <a href="/load_item/?_object_type={{ object_type }}&_owner_type={{ owner_type }}&_object_pk={{ next.id }}&_owner_pk={{ service.id }}" class="next_item pointer blog-item-more left">⇠&nbsp;&nbsp;{{ next.name }}</a>
   {% endif %}
   {% if prev %}
-    <a href="/load_item/?_object_type={{ object_type }}&_owner_type={{ owner_type }}&_object_pk={{ prev.id }}&_owner_pk={{ service.id }}" class="prev_item pointer blog-item-more right">{{ prev.name }}&nbsp;&nbsp;⇢</a>
+    <a href="/load_item/?_object_type={{ object_type }}&_owner_type={{ owner_type }}&_object_pk={{ prev.id }}&_owner_pk={{ service.id }}" class="prev_item pointer blog-item-more right" style="margin-right: 3%;">{{ prev.name }}&nbsp;&nbsp;⇢</a>
   {% endif %}
 </div>
