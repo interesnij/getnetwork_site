@@ -53,14 +53,12 @@
             </div>
             <button data-pk="{{ serve.id }}" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_serve_btn">Изменить</button>
         </form>
-        <div class="container">
-            {% for category in serve_categories %}
-            <p>{{ category.name }}
-                | <a class="ajax" href="/edit_serve_category/{{ category.id }}/">~</a>
-                | <a class="pointer remove_serve_category" data-pk="{{ category.id }}">x</a>
-            </p>
-            {% endfor %}
-        </div>
+        {% for serve in serves %}
+        <p>{{ serve.cat_name }} => {{ serve.name }}
+            | <a class="ajax" href="/edit_serve/{{ serve.id }}/">~</a>
+            | <a class="pointer remove_serve" data-pk="{{ serve.id }}">x</a>
+        </p>
+        {% endfor %}
     </div>
 </section>
 {% endblock %}
