@@ -360,9 +360,9 @@ on('body', 'click', '.ajax', function(event) {
   _href = window.location.href;
   _search = window.location.search;
   _params = _search.replace( '?', '').split('&');
-  console.log(_search);
   if (this.getAttribute("data-q")) {
     if (_search.indexOf('q=') !== -1){
+      console.log(url);
       r = new URL(url + _search);
       r.searchParams.delete('q');
       __url = r;
