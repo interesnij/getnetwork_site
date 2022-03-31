@@ -55,6 +55,120 @@
             </div>
             <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_serve_btn">Создать</button>
         </form>
+
+        <section class="border small-section bg-dark">
+            <div class="container align-center">
+                <h1 class="magazine-logo-text black font-alt">Список опций</h1>
+            </div>
+            <div class="container relative">
+              {% for tech_category in tech_categories %}
+                {% if loop.index == 1 %}
+                  {% set category_list = serve_categories1 %}
+                  {% set loop_index = 1 %}
+                {% elif loop.index == 2 %}
+                  {% set category_list = serve_categories2 %}
+                  {% set loop_index = 2 %}
+                {% elif loop.index == 3 %}
+                  {% set category_list = serve_categories3 %}
+                  {% set loop_index = 3 %}
+                {% elif loop.index == 4 %}
+                  {% set category_list = serve_categories4 %}
+                  {% set loop_index = 4 %}
+                {% endif %}
+
+              <h2>
+                <a style="padding:5px" class="ajax border" href="/tech_categories/{{ tech_category.id }}/">
+                  {{ tech_category.name }}
+                </a>
+              </h2>
+
+                {% for category in category_list %}
+                  {% if loop_index == 1 %}
+                    {% if loop.index == 1 %}
+                      {% set object_list = _1serves1 %}
+                    {% elif loop.index == 2 %}
+                      {% set object_list = _1serves2 %}
+                    {% elif loop.index == 3 %}
+                      {% set object_list = _1serves3 %}
+                    {% elif loop.index == 4 %}
+                      {% set object_list = _1serves4 %}
+                    {% endif %}
+
+                  {% elif loop_index == 2 %}
+                    {% if loop.index == 1 %}
+                      {% set object_list = _2serves1 %}
+                    {% elif loop.index == 2 %}
+                      {% set object_list = _2serves2 %}
+                    {% elif loop.index == 3 %}
+                      {% set object_list = _2serves3 %}
+                    {% elif loop.index == 4 %}
+                      {% set object_list = _2serves4 %}
+                    {% endif %}
+
+                  {% elif loop_index == 3 %}
+                    {% if loop.index == 1 %}
+                      {% set object_list = _3serves1 %}
+                    {% elif loop.index == 2 %}
+                      {% set object_list = _3serves2 %}
+                    {% elif loop.index == 3 %}
+                      {% set object_list = _3serves3 %}
+                    {% elif loop.index == 4 %}
+                      {% set object_list = _3serves4 %}
+                    {% endif %}
+
+                  {% elif loop_index == 4 %}
+                    {% if loop.index == 1 %}
+                      {% set object_list = _4serves1 %}
+                    {% elif loop.index == 2 %}
+                      {% set object_list = _4serves2 %}
+                    {% elif loop.index == 3 %}
+                      {% set object_list = _4serves3 %}
+                    {% elif loop.index == 4 %}
+                      {% set object_list = _4serves4 %}
+                    {% endif %}
+                  {% endif %}
+
+                  <div>
+                    <h4>
+                      <a class="ajax" href="/serve_categories/{{ category.id }}/">
+                        {{ category.name }}
+                      </a>
+                    </h4>
+                    <table class="table">
+                      <tbody>
+                        {% for object in object_list %}
+                        <tr>
+                          <td style="width:40%">
+                            <a class="pointer underline get_object_info"
+                               data-pk="{{ object.id }}"
+                               data-type="serve"
+                               owner-pk="0"
+                               owner-type="settings"
+                             >
+                            {{ object.name }}
+                            </a>
+                          </td>
+                          <td style="width:14%">{{ object.price }} ₽</td>
+                          <td style="width:12%"{% if object.price_ac %}{{ object.price_acc }} ↓₽{% endif %}</td>
+                          <td style="width:12%">{% if object.social_price %}{{ object.social_price }} ♡{% endif %}</td>
+                          <td style="width:12%">{{ object.man_hours }} ⌛</td>
+                          {% if is_admin %}
+                            <td style="width:5%"><a class="ajax" href="/edit_serve/{{ object.id }}/">~</a></td>
+                            <td style="width:5%"><a class="pointer remove_serve">x</a></td>
+                          {% endif %}
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                {% endfor %}
+                {% if not loop.last %}
+                  <hr class="mt-0 mb-0 " />
+                {% endif %}
+              {% endfor %}
+            </div>
+        </section>
+
         <section class="border small-section bg-dark">
           {% for serve in serves %}
             <p>
