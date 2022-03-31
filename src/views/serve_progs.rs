@@ -225,8 +225,39 @@ pub async fn edit_serve_category_page(req: HttpRequest, tera: web::Data<Tera>, _
 }
 
 pub async fn edit_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
-    use schema::serve::dsl::*;
+    use crate::schema::{
+        serve::dsl::serve,
+        serve_categories::dsl::serve_categories,
+        tech_categories::dsl::tech_categories,
+    };
     use schema::serve_categories::dsl::serve_categories;
+
+    let all_tech_categories :Vec<TechCategories> = tech_categories
+        .order(schema::tech_categories::tech_position.asc())
+        .load(&_connection)
+        .expect("E.");
+    let mut _count: i32 = 0;
+    for _cat in all_tech_categories.iter() {
+        _count += 1;
+        let mut _let_int : String = _count.to_string().parse().unwrap();
+        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
+        let __serve_categories :Vec<ServeCategories> = serve_categories
+            .filter(schema::serve_categories::tech_categories.eq(_cat.id))
+            .order(schema::serve_categories::serve_position.asc())
+            .load(&_connection)
+            .expect("E.");
+        data.insert(&_let_serve_categories, &__serve_categories);
+
+        let mut _serve_count: i32 = 0;
+        for __cat in __serve_categories.iter() {
+            _serve_count += 1;
+            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
+            let _serve_int_dooble = "_".to_string() + &_let_int;
+            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
+            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
+            data.insert(&_let_serves, &__serves);
+        }
+    };
 
     let _serve_id : i32 = *_id;
     let mut data = Context::new();
@@ -237,6 +268,8 @@ pub async fn edit_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     data.insert("wiki_categories", &_wiki_cats);
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
+    data.insert("tech_categories", &all_tech_categories);
+
     let _connection = establish_connection();
     let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
     let _cat_id : i32 = _serve[0].serve_categories;
