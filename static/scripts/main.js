@@ -356,7 +356,7 @@ get_custom_design();
 
 on('body', 'click', '.ajax', function(event) {
   event.preventDefault();
-  if (this.getAttribute("href") == window.location.pathname){
+  if (this.getAttribute("href") == window.location.href){
     toast_info("Вы уже на этой странице");
   };
 
