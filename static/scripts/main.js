@@ -410,8 +410,8 @@ on('body', 'click', '.anon_color_change', function() {
     this.setAttribute("data-color", "white");
     new_color = "white"
   };
-
-  params = window.location.search.replace( '?', '').split('&');
+  search = window.location.search;
+  params = search.replace( '?', '').split('&');
   if (params[0] && params[0].split("=")[0] == "f") {
     params[0].split("=")[1] = new_color
   }
@@ -420,8 +420,8 @@ on('body', 'click', '.anon_color_change', function() {
   } else if (params[2] && params[2].split("=")[0] == "f") {
     params[2].split("=")[1] = new_color
   } else {
-
-    window.location.append("f", new_color);
+    new_params = new URLSearchParams(search);
+    new_params.append("f", new_color);
   };
 });
 on('body', 'click', '.this_fullscreen_hide', function() {
