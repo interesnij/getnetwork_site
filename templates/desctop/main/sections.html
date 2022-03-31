@@ -22,11 +22,6 @@
             <li class="yy s_6 pointer">
                 <a><div class="alt-tabs-icon"><span class="icon-profile-male"></span></div>Профиль</a>
             </li>
-            {% if is_admin %}
-            <li class="yy s_7 pointer">
-                <a><div class="alt-tabs-icon"><span class="icon-gears"></span></div>Управление</a>
-            </li>
-            {% endif %}
         </ul>
 
         <div class="tab-content tpl-tabs-cont">
@@ -205,48 +200,6 @@
                     </div>
                 </div>
             </div>
-            {% if is_admin %}
-            <div class="tab_7 fade tab-pane in wow fadeIn" data-wow-duration="0.3s">
-                <div class="section-text">
-                    <div class="row">
-                      <div class="mb-sm-50">
-                        <p>
-                          <a href="/feedback_list/" class="ajax">Письма</a> /
-                          <a href="/serve_list/" class="ajax">Опции</a>
-                        </p>
-                        <p>
-                          <a href="/create_work_categories/" class="ajax">+ категория портфолио</a> /
-                          <a href="/create_work/" class="ajax">+ кейс</a>
-                        </p>
-                        <p>
-                          <a href="/create_blog_categories/" class="ajax">+ категория блога</a> /
-                          <a href="/create_blog/" class="ajax">+ статья</a>
-                        </p>
-                        <p>
-                          <a href="/create_service_categories/" class="ajax">+ категория услуг</a> /
-                          <a href="/create_service/" class="ajax">+ услуга</a>
-                        </p>
-                        <p>
-                          <a href="/create_store_categories/" class="ajax">+ категория магазина</a> /
-                          <a href="/create_store/" class="ajax">+ товар</a>
-                        </p>
-                        <p>
-                          <a href="/create_wiki_categories/" class="ajax">+ категория обучалки</a> /
-                          <a href="/create_wiki/" class="ajax">+ обучалка</a>
-                        </p>
-                        <p>
-                          <a href="/create_tag/" class="ajax">+ тег</a>
-                        </p>
-                        <p>
-                          <a href="/create_tech_categories/" class="ajax">+ технология опций</a> /
-                          <a href="/create_serve_categories/" class="ajax">+ категория опций</a> /
-                          <a href="/create_serve/" class="ajax">+ опция</a>
-                        </p>
-                      </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
         </div>
     </div>
 </section>
