@@ -18,6 +18,16 @@
     <div class="">
         <div class="row">
             <div class="col-sm-8">
+              <div class="blog-item-body">
+                        <h1 class="mt-0 font-alt">{{ object.title }}</h1>
+                        <div class="blog-item-data">
+                            | <a class="ajax" href="/edit_service/{{ object.id }}/">~</a>
+                            | <a class="ajax" href="/edit_content_service/{{ object.id }}/?content=">Aa</a>
+                            | <a class="pointer remove_service" data-pk="{{ object.id }}">x</a>
+                          <span class="separator">&nbsp;</span>
+                        </div>
+
+                    </div>
                 <section class="page-section" id="menu">
                     <div class="container relative">
                         <h2 class="section-title font-alt">

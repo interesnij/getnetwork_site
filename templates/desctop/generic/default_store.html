@@ -25,7 +25,7 @@
     <br>
       | <a class="ajax" href="/edit_store/{{ object.id }}/">~</a>
       | <a class="ajax" href="/edit_content_store/{{ object.id }}/?content=">Aa</a>
-      | <a class="pointer remove_store">x</a>
+      | <a class="pointer remove_store" data-pk="{{ object.id }}">x</a>
     {% endif %}
   </div>
   <div class="post-prev-more align-center">
