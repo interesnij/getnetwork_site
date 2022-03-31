@@ -556,13 +556,13 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     let _tech_category = tech_categories.filter(schema::tech_categories::id.eq(_category[0].tech_categories)).load::<TechCategories>(&_connection).expect("E");
     let form = serve_split_payload(payload.borrow_mut()).await;
 
-    if _serve.is_default {
+    if _serve[0].is_default {
         diesel::update(&_serve[0])
             .set(schema::serve::is_default.eq(false))
             .get_result::<Serve>(&_connection)
             .expect("E.");
         diesel::update(&_tech_category[0])
-            .set(schema::tech_categories::default_price.eq(_tech_category[0].default_price - _serve.price))
+            .set(schema::tech_categories::default_price.eq(_tech_category[0].default_price - _serve[0].price))
             .get_result::<TechCategories>(&_connection)
             .expect("E.");
     }
@@ -591,7 +591,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
 
     if is_default {
         diesel::update(&_tech_category[0])
-            .set(schema::tech_categories::default_price.eq(_tech_category[0].default_price + _serve.price))
+            .set(schema::tech_categories::default_price.eq(_tech_category[0].default_price + _serve[0].price))
             .get_result::<TechCategories>(&_connection)
             .expect("E.");
     }
