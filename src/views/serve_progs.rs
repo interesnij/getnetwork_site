@@ -521,7 +521,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
         is_default: is_default,
     };
 
-    let _serve = diesel::insert_into(serve::table)
+    let _serve = diesel::insert_into(schema::serve::table)
         .values(&_new_serve)
         .get_result::<Serve>(&_connection)
         .expect("E.");
@@ -529,13 +529,13 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     if is_default == true {
         let _tech_category = tech_categories.filter(schema::tech_categories::id.eq(_category[0].tech_categories)).load::<TechCategories>(&_connection).expect("E");
         let mut new_default_price = 0;
-        if _serve.price_acc {
-            new_default_price = _serve.price_acc;
+        if Some(_serve.price_acc) > 0 {
+            new_default_price = Some(_serve.price_acc);
         } else {
             new_default_price = _serve.price;
         }
         diesel::update(&_tech_category[0])
-            .set(schema::tech_category::default_price.eq(new_default_price))
+            .set(schema::tech_categories::default_price.eq(new_default_price))
             .get_result::<TechCategories>(&_connection)
             .expect("E.");
     }
