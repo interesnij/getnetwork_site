@@ -1,3 +1,37 @@
+function update_query_string(key, value, url) {
+    if (!url) url = window.location.href;
+    var re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
+        hash;
+
+    if (re.test(url)) {
+        if (typeof value !== 'undefined' && value !== null) {
+            return url.replace(re, '$1' + key + "=" + value + '$2$3');
+        }
+        else {
+            hash = url.split('#');
+            url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
+            if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
+                url += '#' + hash[1];
+            }
+            return url;
+        }
+    }
+    else {
+        if (typeof value !== 'undefined' && value !== null) {
+            var separator = url.indexOf('?') !== -1 ? '&' : '?';
+            hash = url.split('#');
+            url = hash[0] + separator + key + '=' + value;
+            if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
+                url += '#' + hash[1];
+            }
+            return url;
+        }
+        else {
+            return url;
+        }
+    }
+};
+
 function get_document_opacity_0() {
   document.body.style.overflowY = "hidden";
   document.body.style.marginRight = "20px";
@@ -306,22 +340,14 @@ function get_custom_design() {
   color = "white";
   params = window.location.search.replace( '?', '').split('&');
     if (params[0] && params[0].split("=")[0] == "f") {
-      color = params[0].split("=")[1] }
+      color = params[0].split("=")[1]}
     else if (params[1] && params[1].split("=")[0] == "f") {
-      color = params[1].split("=")[1];
+      color = params[1].split("=")[1]
+    } else if (params[2] && params[2].split("=")[0] == "f") {
+      color = params[2].split("=")[1]
     };
 
-    if (color == "white") {
-        addStyleSheets("/static/styles/color/white.css")
-    } else if (color == "dark") {
-        addStyleSheets("/static/styles/color/dark.css")
-    } else if (color == "yellow") {
-        addStyleSheets("/static/styles/color/yellow.css")
-    } else if (color == "white_kletka") {
-        addStyleSheets("/static/styles/color/white_kletka.css")
-    } else if (color == "dark_wood") {
-        addStyleSheets("/static/styles/color/dark_wood.css")
-    };
+    addStyleSheets("/static/styles/color/" + color + ".css")
     btn = document.body.querySelector(".anon_color_change");
     btn.setAttribute("data-color", color)
 };
@@ -361,7 +387,6 @@ on('#ajax', 'click', '.s_7', function() {
 });
 
 on('body', 'click', '.anon_color_change', function() {
-  window.history.replaceState(null, null, window.location.pathname);
   color = this.getAttribute("data-color");
   if (color == "white") {
     addStyleSheets("/static/styles/color/dark.css");
@@ -384,7 +409,7 @@ on('body', 'click', '.anon_color_change', function() {
     this.setAttribute("data-color", "white");
     new_color = "white"
   };
-  window.history.replaceState(null, null, window.location.pathname + "?content=''&f=" + new_color);
+  update_query_string("f", new_color);
 });
 on('body', 'click', '.this_fullscreen_hide', function() {
   close_fullscreen()
@@ -410,17 +435,18 @@ on('body', 'click', '.prev_item', function(event) {
 
 on('body', 'input', '.general_search', function() {
     _this = this;
+    color = document.body.querySelector(".anon_color_change").getAttribute("data-color");
     if (_this.classList.contains("search-field") && !document.body.querySelector(".search_section")) {
-      ajax_get_reload("/search/?q=" + _this.value)
+      ajax_get_reload("/search/?f=" + color + "&q=" + _this.value)
     }
     else if (document.body.querySelector(".search_section")) {
       if (_this.getAttribute("data-folder")) {
         folder = _this.getAttribute("data-folder")
       } else {
         folder = ""
-      }; 
+      };
     var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-      ajax_link.open( 'GET', "/search" + folder + "/?q=" + _this.value, true );
+      ajax_link.open( 'GET', "/search" + folder + "/?f=" + color + "&q=" + _this.value, true );
       ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {

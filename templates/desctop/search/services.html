@@ -17,24 +17,24 @@
           <input data-folder="_services" value="{{ q }}" type="text" class="form-control general_search search_page" placeholder="Поиск...">
       </form>
     <div class="search_section">
-      {% if services %}
+
       <section class="page-section">
           <div class="container relative">
+            {% if services %}
               <div class="row multi-columns-row">
                 {% for object in services %}
                   {% include 'desctop/generic/default_service.html' %}
                 {% endfor %}
               </div>
+            {% else %}
+              <div class="text-center">
+                <span class="widget-title font-alt">
+                  По запросу "{{ q }}" услуг не найдено...
+                </span>
+              </div>
+            {% endif %}
           </div>
       </section>
-      <hr class="mt-0 mb-0 " />
-      {% else %}
-          <div class="text-center">
-            <span class="widget-title font-alt">
-              По запросу "{{ q }}" услуг не найдено...
-            </span>
-          </div>
-        {% endif %}
     </div>
   </div>
 </section>
