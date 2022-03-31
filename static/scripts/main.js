@@ -356,9 +356,9 @@ get_custom_design();
 
 on('body', 'click', '.ajax', function(event) {
   event.preventDefault();
-  if (this.getAttribute("href") == window.location.href){
+  if (this.getAttribute("href") == window.location.pathname){
     toast_info("Вы уже на этой странице");
-    return 
+    return  
   };
 
   url = "http://" + location.host + this.getAttribute("href");
