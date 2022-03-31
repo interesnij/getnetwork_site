@@ -401,6 +401,8 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         is_default: true,
     };
 
+    let mut is_default = false;
+
     while let Some(item) = payload.next().await {
         let mut field: Field = item.expect("split_payload err");
         let name = field.name();
@@ -464,9 +466,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
                     if s.to_string() == "on" {
-                        form.is_default = true;
-                    } else {
-                        form.is_default = false;
+                        is_default = true;
                     }
                 }
             }
@@ -487,6 +487,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
             }
         }
     }
+    form.is_default = is_default;
     form
 }
 
