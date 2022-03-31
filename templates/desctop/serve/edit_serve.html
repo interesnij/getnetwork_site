@@ -150,6 +150,7 @@
                                owner-type="settings"
                              >
                             {{ object.name }}
+                             {% if object.is_default %} (D){% endif %}
                             </a>
                           </td>
                           <td style="width:14%">{{ object.price }} ₽</td>
