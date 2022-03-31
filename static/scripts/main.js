@@ -411,7 +411,7 @@ on('body', 'click', '.anon_color_change', function() {
     new_color = "white"
   };
   params = window.location.search.replace( '?', '').split('&');
-  console.log(params);
+  console.log(window.location.search);
   if (params[0] && params[0].split("=")[0] == "f") {
     params[0].split("=")[1] = new_color;
   }
