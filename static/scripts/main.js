@@ -499,6 +499,8 @@ on('body', 'input', '.general_search', function() {
           div = document.body.querySelector(".search_section");
           div.innerHTML = '';
           div.innerHTML = search.innerHTML;
+          document.title = elem_.querySelector("title").innerHTML;
+          window.history.replaceState(null, null, r);
         }
       }
       ajax_link.send();
