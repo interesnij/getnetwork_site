@@ -135,7 +135,7 @@ pub async fn create_serve_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     let _connection = establish_connection();
     let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
     let mut data = Context::new();
-    
+
     let all_tech_categories :Vec<TechCategories> = tech_categories
         .order(schema::tech_categories::tech_position.asc())
         .load(&_connection)
@@ -261,7 +261,7 @@ pub async fn create_tech_categories(mut payload: Multipart) -> impl Responder {
         name: form.name.clone(),
         description: Some(form.description.clone()),
         tech_position: form.position.clone(),
-        tech_count: 0
+        tech_count: 0,
     };
     let _new_tech = diesel::insert_into(tech_categories::table)
         .values(&new_cat)
@@ -304,7 +304,7 @@ pub async fn edit_tech_category(mut payload: Multipart, _id: web::Path<i32>) -> 
         name: form.name.clone(),
         description: Some(form.description.clone()),
         tech_position: form.position.clone(),
-        tech_count: _category[0].tech_count
+        tech_count: _category[0].tech_count,
     };
     diesel::update(&_category[0])
         .set(new_cat)

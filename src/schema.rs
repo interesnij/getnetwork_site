@@ -285,6 +285,7 @@ table! {
         description -> Nullable<Text>,
         tech_position -> Int4,
         tech_count -> Int4,
+        default_price -> Int4,
     }
 }
 
