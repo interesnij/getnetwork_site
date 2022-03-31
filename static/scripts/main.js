@@ -339,6 +339,7 @@ function on(elSelector, eventName, selector, fn) {var element = document.querySe
 function get_custom_design() {
   color = "white";
   params = window.location.search.replace( '?', '').split('&');
+
     if (params[0] && params[0].split("=")[0] == "f") {
       color = params[0].split("=")[1]}
     else if (params[1] && params[1].split("=")[0] == "f") {
@@ -409,7 +410,16 @@ on('body', 'click', '.anon_color_change', function() {
     this.setAttribute("data-color", "white");
     new_color = "white"
   };
-  update_query_string("f", new_color);
+
+  params = window.location.search.replace( '?', '').split('&');
+  if (params[0] && params[0].split("=")[0] == "f") {
+    params[0].split("=")[1] = new_color
+  }
+  else if (params[1] && params[1].split("=")[0] == "f") {
+    params[1].split("=")[1] = new_color
+  } else if (params[2] && params[2].split("=")[0] == "f") {
+    params[2].split("=")[1] = new_color
+  }; 
 });
 on('body', 'click', '.this_fullscreen_hide', function() {
   close_fullscreen()
