@@ -410,8 +410,7 @@ on('body', 'click', '.anon_color_change', function() {
     this.setAttribute("data-color", "white");
     new_color = "white"
   };
-  search = window.location.search;
-  params = search.replace( '?', '').split('&');
+  params = window.location.search.replace( '?', '').split('&');
   if (params[0] && params[0].split("=")[0] == "f") {
     params[0].split("=")[1] = new_color
   }
