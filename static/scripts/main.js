@@ -418,7 +418,7 @@ on('body', 'click', '.anon_color_change', function() {
     r.searchParams.delete('f');
     __url = r;
   } else { __url = _href };
-  if (_params[0]) {
+  if (_params[1]) {
     _url = __url + "&f=" + new_color;
   } else {
     _url = __url + "?f=" + new_color;
