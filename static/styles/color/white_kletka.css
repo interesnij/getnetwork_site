@@ -46,7 +46,7 @@ tr:hover, tr.hover {
 .svg_default {
     color: rgba(0, 0, 0, 0.5) !important;
 }
-.border {
+.border, .yy_tab :hover {
     border: 1px solid rgba(127,127,127, 0.7) !important;
 }
 
