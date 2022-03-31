@@ -40,17 +40,8 @@
                                 <div class="align-center mb-40 mb-xs-30">
                                     <ul class="nav nav-tabs tpl-minimal-tabs animate">
                                       {% for category in tech_categories %}
-                                        <li
-                                          {% if loop.first %}
-                                            class="yy pointer s_{{ loop.index }} active get_object_info"
-                                            tooltip="Нажмите для справки"
-                                            flow="up"
-                                          {% else %}
-                                            class="yy s_{{ loop.index }}"
-                                          {% endif %}
-                                          >
-                                            <a class="pointer">{{ category.name }}
-                                            </a>
+                                        <li class="yy s_{{ loop.index }} {% if loop.first %}active{% endif %}">
+                                            <a class="pointer">{{ category.name }}</a>
                                         </li>
                                       {% endfor %}
                                     </ul>
@@ -128,8 +119,10 @@
                                                  owner-pk="{{ object.id }}"
                                                  owner-type="service"
                                                  class="pointer get_object_info"
+                                                 tooltip="Нажмите для справки"
+                                                 flow="up"
                                                  >
-                                                 ( ? ): 
+                                                 ( ? ):
                                               </a>
                                               {{ category.name }}
                                             </h4>
