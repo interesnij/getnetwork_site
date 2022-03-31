@@ -463,11 +463,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
-                    if s.to_string() == "on" {
-                        form.is_default = true;
-                    } else {
-                        form.is_default = false;
-                    }
+                    form.is_default = s.to_string();
                 }
             }
         }
@@ -501,7 +497,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
 
     let mut is_default = false;
-    if form.is_default.clone() {
+    if form.is_default.clone() == "on".to_string() {
         is_default = true;
     };
     let _new_serve = NewServe {
@@ -542,7 +538,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     let form = serve_split_payload(payload.borrow_mut()).await;
 
     let mut is_default = false;
-    if form.is_default.clone() {
+    if form.is_default.clone() == "on".to_string() {
         is_default = true;
     };
     let _new_serve = NewServe {
