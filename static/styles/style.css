@@ -301,7 +301,7 @@ html, body{
     z-index: 100000;
 }
 .pointer {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .mask-delay{
