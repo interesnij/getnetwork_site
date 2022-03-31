@@ -355,11 +355,23 @@ function get_custom_design() {
 get_custom_design();
 
 on('body', 'click', '.ajax', function(event) {
-  //this.classList.remove("ajax");
   event.preventDefault();
-  var url = this.getAttribute('href');
+
+  _href = window.location.href;
+  _search = window.location.search;
+  _params = _search.replace( '?', '').split('&');
+  if (_search.indexOf('f=') !== -1){
+    r = new URL(this.getAttribute('href'));
+    r.searchParams.delete('f');
+    __url = r;
+  } else { __url = this.getAttribute('href') };
+  if (_params[1]) {
+    _url = __url + "&f=" + new_color;
+  } else {
+    _url = __url + "?f=" + new_color;
+  };
   if (url != window.location.pathname){
-    ajax_get_reload(url);
+    ajax_get_reload(_url);
   } else {toast_info("Вы уже на этой странице")}
 });
 

@@ -21,7 +21,7 @@
       <section class="page-section">
           <div class="container relative">
               <h2 class="section-title font-alt align-left">
-                <a href="/search_services/?q={{ q }}" class="ajax">
+                <a data-q="{{ q }}" href="/search_services/" class="ajax">
                   Услуги ({{ services_count }})
                 </a>
               </h2>
@@ -39,7 +39,7 @@
       <section class="page-section">
           <div class="container relative">
               <h2 class="section-title font-alt align-left">
-                <a href="/search_stores/?q={{ q }}" class="ajax">
+                <a data-q="{{ q }}" href="/search_stores/" class="ajax">
                   Товары ({{ stores_count }})
                 </a>
               </h2>
@@ -57,7 +57,7 @@
       <section class="page-section">
           <div class="container relative">
               <h2 class="section-title font-alt align-left">
-                <a href="/search_works/?q={{ q }}" class="ajax">
+                <a data-q="{{ q }}" href="/search_works/" class="ajax">
                   Работы ({{ works_count }})
                 </a>
               </h2>
@@ -75,7 +75,7 @@
       <section class="page-section">
           <div class="container relative">
               <h2 class="section-title font-alt align-left">
-                <a href="/search_blogs/?q={{ q }}" class="section-more right ajax blog">
+                <a data-q="{{ q }}" href="/search_blogs/" class="section-more right ajax blog">
                   Статьи блога ({{ blogs_count }})
                 </a>
               </h2>
@@ -93,7 +93,7 @@
       <section class="page-section">
           <div class="container relative">
               <h2 class="section-title font-alt align-left">
-                <a href="/search_wikis/?q={{ q }}" class="ajax">
+                <a data-q="{{ q }}" href="/search_wikis/" class="ajax">
                   Товары ({{ wikis_count }})
                 </a>
               </h2>
