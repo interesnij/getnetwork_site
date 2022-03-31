@@ -105,9 +105,9 @@ pub async fn search_blogs_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
 
     loop {
         let _blogs = blogs
-            .filter(schema::blogs::title.eq(&_q_standalone))
-            .or_filter(schema::blogs::description.eq(&_q_standalone))
-            .or_filter(schema::blogs::content.eq(&_q_standalone))
+            .filter(schema::blogs::title.ilike(&_q_standalone))
+            .or_filter(schema::blogs::description.ilike(&_q_standalone))
+            .or_filter(schema::blogs::content.ilike(&_q_standalone))
             .limit(page_size)
             .offset(offset)
             .order(schema::blogs::blog_created.desc())
@@ -116,9 +116,9 @@ pub async fn search_blogs_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
         if _blogs.len() > 0 {
             data.insert("blogs", &_blogs);
             data.insert("blogs_count", &blogs
-                .filter(schema::blogs::title.eq(&_q_standalone))
-                .or_filter(schema::blogs::description.eq(&_q_standalone))
-                .or_filter(schema::blogs::content.eq(&_q_standalone))
+                .filter(schema::blogs::title.ilike(&_q_standalone))
+                .or_filter(schema::blogs::description.ilike(&_q_standalone))
+                .or_filter(schema::blogs::content.ilike(&_q_standalone))
                 .load::<Blog>(&_connection)
                 .expect("E")
                 .len());
@@ -156,9 +156,9 @@ pub async fn search_services_page(req: HttpRequest, tera: web::Data<Tera>) -> im
 
     loop {
         let _services = services
-            .filter(schema::services::title.eq(&_q_standalone))
-            .or_filter(schema::services::description.eq(&_q_standalone))
-            .or_filter(schema::services::content.eq(&_q_standalone))
+            .filter(schema::services::title.ilike(&_q_standalone))
+            .or_filter(schema::services::description.ilike(&_q_standalone))
+            .or_filter(schema::services::content.ilike(&_q_standalone))
             .limit(page_size)
             .offset(offset)
             .order(schema::services::service_created.desc())
@@ -167,9 +167,9 @@ pub async fn search_services_page(req: HttpRequest, tera: web::Data<Tera>) -> im
         if _services.len() > 0 {
             data.insert("services", &_services);
             data.insert("services_count", &services
-                .filter(schema::services::title.eq(&_q_standalone))
-                .or_filter(schema::services::description.eq(&_q_standalone))
-                .or_filter(schema::services::content.eq(&_q_standalone))
+                .filter(schema::services::title.ilike(&_q_standalone))
+                .or_filter(schema::services::description.ilike(&_q_standalone))
+                .or_filter(schema::services::content.ilike(&_q_standalone))
                 .load::<Service>(&_connection)
                 .expect("E")
                 .len());
@@ -207,9 +207,9 @@ pub async fn search_stores_page(req: HttpRequest, tera: web::Data<Tera>) -> impl
 
     loop {
         let _stores = stores
-            .filter(schema::stores::title.eq(&_q_standalone))
-            .or_filter(schema::stores::description.eq(&_q_standalone))
-            .or_filter(schema::stores::content.eq(&_q_standalone))
+            .filter(schema::stores::title.ilike(&_q_standalone))
+            .or_filter(schema::stores::description.ilike(&_q_standalone))
+            .or_filter(schema::stores::content.ilike(&_q_standalone))
             .limit(page_size)
             .offset(offset)
             .order(schema::stores::store_created.desc())
@@ -218,9 +218,9 @@ pub async fn search_stores_page(req: HttpRequest, tera: web::Data<Tera>) -> impl
         if _stores.len() > 0 {
             data.insert("stores", &_stores);
             data.insert("stores_count", &stores
-                .filter(schema::stores::title.eq(&_q_standalone))
-                .or_filter(schema::stores::description.eq(&_q_standalone))
-                .or_filter(schema::stores::content.eq(&_q_standalone))
+                .filter(schema::stores::title.ilike(&_q_standalone))
+                .or_filter(schema::stores::description.ilike(&_q_standalone))
+                .or_filter(schema::stores::content.ilike(&_q_standalone))
                 .load::<Store>(&_connection)
                 .expect("E")
                 .len());
@@ -258,9 +258,9 @@ pub async fn search_wikis_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
 
     loop {
         let _wikis = wikis
-            .filter(schema::wikis::title.eq(&_q_standalone))
-            .or_filter(schema::wikis::description.eq(&_q_standalone))
-            .or_filter(schema::wikis::content.eq(&_q_standalone))
+            .filter(schema::wikis::title.ilike(&_q_standalone))
+            .or_filter(schema::wikis::description.ilike(&_q_standalone))
+            .or_filter(schema::wikis::content.ilike(&_q_standalone))
             .limit(page_size)
             .offset(offset)
             .order(schema::wikis::wiki_created.desc())
@@ -269,9 +269,9 @@ pub async fn search_wikis_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
         if _wikis.len() > 0 {
             data.insert("wikis", &_wikis);
             data.insert("wikis_count", &wikis
-                .filter(schema::wikis::title.eq(&_q_standalone))
-                .or_filter(schema::wikis::description.eq(&_q_standalone))
-                .or_filter(schema::wikis::content.eq(&_q_standalone))
+                .filter(schema::wikis::title.ilike(&_q_standalone))
+                .or_filter(schema::wikis::description.ilike(&_q_standalone))
+                .or_filter(schema::wikis::content.ilike(&_q_standalone))
                 .load::<Wiki>(&_connection)
                 .expect("E")
                 .len());
@@ -309,9 +309,9 @@ pub async fn search_works_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
 
     loop {
         let _works = works
-            .filter(schema::works::title.eq(&_q_standalone))
-            .or_filter(schema::works::description.eq(&_q_standalone))
-            .or_filter(schema::works::content.eq(&_q_standalone))
+            .filter(schema::works::title.ilike(&_q_standalone))
+            .or_filter(schema::works::description.ilike(&_q_standalone))
+            .or_filter(schema::works::content.ilike(&_q_standalone))
             .limit(page_size)
             .offset(offset)
             .order(schema::works::work_created.desc())
@@ -320,9 +320,9 @@ pub async fn search_works_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
         if _works.len() > 0 {
             data.insert("works", &_works);
             data.insert("works_count", &works
-                .filter(schema::works::title.eq(&_q_standalone))
-                .or_filter(schema::works::description.eq(&_q_standalone))
-                .or_filter(schema::works::content.eq(&_q_standalone))
+                .filter(schema::works::title.ilike(&_q_standalone))
+                .or_filter(schema::works::description.ilike(&_q_standalone))
+                .or_filter(schema::works::content.ilike(&_q_standalone))
                 .load::<Work>(&_connection)
                 .expect("E")
                 .len());
