@@ -416,12 +416,12 @@ on('body', 'click', '.anon_color_change', function() {
   if (_search.indexOf('f=') !== -1){
     r = new URL(_href);
     r.searchParams.delete('f');
-    window.history.replaceState(null, null, r);
-  };
+    __url = r;
+  } else { __url = _href };
   if (_params[0]) {
-    _url = _href + "&f=" + new_color;
+    _url = __url + "&f=" + new_color;
   } else {
-    _url = _href + "?f=" + new_color;
+    _url = __url + "?f=" + new_color;
   };
   window.history.replaceState(null, null, _url);
 });
