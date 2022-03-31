@@ -3279,7 +3279,7 @@ table.shopping-cart-table tr td{
     border: none;
 }
 .tpl-minimal-tabs > li{
-    padding: 0 30px;
+    padding: 0 5px;
     background: none !important;
 }
 .tpl-minimal-tabs > li > a{
