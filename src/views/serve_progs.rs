@@ -538,7 +538,6 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
             .set(schema::tech_category::default_price.eq(new_default_price))
             .get_result::<TechCategories>(&_connection)
             .expect("E.");
-        }
     }
     diesel::update(&_category[0])
         .set(schema::serve_categories::serve_count.eq(_category[0].serve_count + 1))
