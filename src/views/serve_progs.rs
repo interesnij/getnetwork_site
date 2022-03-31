@@ -232,11 +232,14 @@ pub async fn edit_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     };
     use schema::serve_categories::dsl::serve_categories;
 
+    let _connection = establish_connection();
+    let mut _count: i32 = 0;
+    
     let all_tech_categories :Vec<TechCategories> = tech_categories
         .order(schema::tech_categories::tech_position.asc())
         .load(&_connection)
         .expect("E.");
-    let mut _count: i32 = 0;
+
     for _cat in all_tech_categories.iter() {
         _count += 1;
         let mut _let_int : String = _count.to_string().parse().unwrap();
@@ -270,7 +273,6 @@ pub async fn edit_serve_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     data.insert("is_admin", &_is_admin);
     data.insert("tech_categories", &all_tech_categories);
 
-    let _connection = establish_connection();
     let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
     let _cat_id : i32 = _serve[0].serve_categories;
     let _s_category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
