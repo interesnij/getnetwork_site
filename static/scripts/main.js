@@ -356,6 +356,10 @@ get_custom_design();
 
 on('body', 'click', '.ajax', function(event) {
   event.preventDefault();
+  if (this.getAttribute("href") == window.location.pathname){
+    toast_info("Вы уже на этой странице");
+  };
+
   url = "http://" + location.host + this.getAttribute("href");
   _href = window.location.href;
   _search = window.location.search;
@@ -373,9 +377,6 @@ on('body', 'click', '.ajax', function(event) {
       _url = __url + "?q=" + this.getAttribute("data-q");
     };
   } else { _url = url + _search};
-  if (url != window.location.pathname){
-    ajax_get_reload(_url);
-  } else {toast_info("Вы уже на этой странице")}
 });
 
 init_wow();
@@ -433,7 +434,7 @@ on('body', 'click', '.anon_color_change', function() {
     r.searchParams.delete('f');
     __url = r;
   } else { __url = _href };
-  if (_params[0]) { 
+  if (_params[0]) {
     _url = __url + "&f=" + new_color;
   } else {
     _url = __url + "?f=" + new_color;
