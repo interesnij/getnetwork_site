@@ -415,7 +415,7 @@ on('body', 'click', '.anon_color_change', function() {
   _params = _search.replace( '?', '').split('&');
   console.log(_search);
   if (_search.indexOf('f=') !== -1){
-    _search.delete('f')
+    _href.searchParams.delete('f');
   }
   else {
     if (_params[0]) {
