@@ -362,7 +362,7 @@ on('body', 'click', '.ajax', function(event) {
   _params = _search.replace( '?', '').split('&');
   if (this.getAttribute("data-q")) {
     if (_search.indexOf('q=') !== -1){
-      console.log(url);
+      console.log(url + _search);
       r = new URL(url + _search);
       r.searchParams.delete('q');
       __url = r;
