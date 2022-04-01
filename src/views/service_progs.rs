@@ -44,7 +44,7 @@ fn get_cats_for_service(service: &Service) -> (Vec<ServiceCategories>, Vec<Strin
         .expect("E");
     let mut categories_names = Vec::new();
     for _cat in categories.iter() {
-        categories_names.push(_cat.name);
+        categories_names.push(_cat.name.clone());
     }
     (categories, categories_names)
 }
