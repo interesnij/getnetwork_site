@@ -345,6 +345,14 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
 
     // 3. получаем технические категории, исключая дубли
     let mut tech_categories_ids = Vec::new();
+
+    // сначала добавим категорию технологий по умолчанию
+    for _serve_cat in __serve_categories.iter() {
+        if _serve_cat.cat_name in _categories_names) {
+            tech_categories_ids.push(_serve_cat.tech_categories);
+        }
+    };
+    // теперь добавим остальные категории технологий 
     for _serve_cat in __serve_categories.iter() {
         if tech_categories_ids.iter().any(|&i| i==_serve_cat.tech_categories) {
             continue;
