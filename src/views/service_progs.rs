@@ -33,7 +33,7 @@ use crate::models::{
     ServeItems,
 };
 
-fn get_cats_for_service(service: &Service) -> Vec<ServiceCategories>, Vec<String> {
+fn get_cats_for_service(service: &Service) -> (Vec<ServiceCategories>, Vec<String>) {
     use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();
 
