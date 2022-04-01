@@ -279,17 +279,18 @@ table! {
 //////////////////// serve //////////////
 
 table! {
+    /// например "моб. приложения" ///
     tech_categories (id) {
         id -> Int4,
         name -> Varchar,
         description -> Nullable<Text>,
         tech_position -> Int4,
         tech_count -> Int4,
-        default_price -> Int4,
     }
 }
 
 table! {
+    /// например "моб. приложения на rust" ///
     serve_categories (id) {
         id -> Int4,
         name -> Varchar,
@@ -298,11 +299,13 @@ table! {
         tech_categories -> Int4,
         serve_position -> Int4,
         serve_count -> Int4,
+        default_price -> Int4,
     }
 }
 
 table! {
     serve (id) {
+        /// например "моб. приложения на rust - моб. админка" ///
         id -> Int4,
         name -> Varchar,
         cat_name -> Varchar,

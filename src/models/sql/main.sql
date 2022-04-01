@@ -262,6 +262,7 @@ CREATE TABLE serve_categories (
     tech_categories INT,
     serve_position INT,
     serve_count INT,
+    default_price INT default 0,
 
     CONSTRAINT fk_tech_category
         FOREIGN KEY(tech_categories)
