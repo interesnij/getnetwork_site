@@ -46,6 +46,7 @@ pub struct NewServeCategories {
     pub tech_categories: i32,
     pub serve_position: i32,
     pub serve_count: i32,
+    pub default_price: i32,
 }
 
 /////// Serve //////

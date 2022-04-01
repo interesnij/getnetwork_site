@@ -319,7 +319,8 @@ pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
         cat_name: _s_category[0].name.clone(),
         tech_categories: form.tech_categories.clone(),
         serve_position: form.position.clone(),
-        serve_count: 0
+        serve_count: 0,
+        default_price: 0
     };
     let _new_serve = diesel::insert_into(serve_categories::table)
         .values(&new_cat)
@@ -340,6 +341,7 @@ pub async fn edit_tech_category(mut payload: Multipart, _id: web::Path<i32>) -> 
         description: Some(form.description.clone()),
         tech_position: form.position.clone(),
         tech_count: _category[0].tech_count,
+        default_price: _category[0].default_price,
     };
     diesel::update(&_category[0])
         .set(new_cat)
