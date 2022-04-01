@@ -45,11 +45,18 @@
                     {% set loop_index = 4 %}
                   {% endif %}
 
-                <section class="page-section" id="menu">
-                    <div class="">
-                        <h2 class="section-title font-alt">
-                            {{ category.name }}
-                        </h2>
+                  {% set is_main_cat = category.name in service_categories_names %}
+                <section class="page-section">
+                  {% if is_main_cat %}
+                    <h2 class="section-title font-alt">
+                        {{ category.name }}
+                    </h2>
+                  {% else %}
+                    <h2 class="pointer section-title font-alt">
+                        {{ category.description }}
+                    </h2>
+                  {% endif %}
+                    <div class="{% if is_main_cat %}hidden{% endif %}">
                         <div class="align-center mb-40 mb-xs-30">
                             <ul class="nav nav-tabs tpl-minimal-tabs animate">
                               {% for category in category_list %}
@@ -145,7 +152,7 @@
                                     <a data-sum="" data-pk="{{ category.id }}" class="btn pointer create_order_form_of_service btn-mod border btn-small btn-circle">
                                         Сумма
                                         <span class="total_price_counter">
-                                            
+
                                         </span>. Перейти к заказу
                                     </a>
                                 </div>

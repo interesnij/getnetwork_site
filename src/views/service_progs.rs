@@ -33,15 +33,20 @@ use crate::models::{
     ServeItems,
 };
 
-fn get_cats_for_service(service: &Service) -> Vec<ServiceCategories> {
+fn get_cats_for_service(service: &Service) -> Vec<ServiceCategories>, Vec<String> {
     use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();
 
     let ids = ServiceCategory::belonging_to(service).select(schema::service_category::service_categories_id);
-    schema::service_categories::table
+    categories = schema::service_categories::table
         .filter(schema::service_categories::id.eq(any(ids)))
         .load::<ServiceCategories>(&_connection)
-        .expect("E")
+        .expect("E");
+    let mut categories_names = Vec::new();
+    for _cat in categories.iter() {
+        categories_names.push(_cat.name);
+    }
+    (categories, categories_names)
 }
 fn get_tags_for_service(service: &Service) -> Vec<Tag> {
     use crate::schema::tags_items::dsl::tags_items;
@@ -314,7 +319,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
 
     let _images :Vec<ServiceImage> = service_images.filter(schema::service_images::service.eq(&_service_id)).load(&_connection).expect("E");
     let _videos :Vec<ServiceVideo> = service_videos.filter(schema::service_videos::service.eq(&_service_id)).load(&_connection).expect("E");
-    let _categories = get_cats_for_service(&_service[0]);
+    let (_categories, _categories_names) = get_cats_for_service(&_service[0]);
     let _tags = get_tags_for_service(&_service[0]);
 
     // нам надо показать выбор опций только в нужном диапазоне.
@@ -393,6 +398,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     data.insert("images", &_images);
     data.insert("videos", &_videos);
     data.insert("categories", &_categories);
+    data.insert("service_categories_names", &_categories_names);
     data.insert("category", &_s_category[0]);
     data.insert("tags", &_tags);
     data.insert("tags_count", &_tags.len());
