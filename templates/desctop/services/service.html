@@ -30,7 +30,7 @@
                 </div>
 
 
-                {% for category in tech_categories reverse %}
+                {% for category in tech_categories | reverse %}
                 {% set is_main_cat = category.name in service_categories_names %}
 
                   {% if loop.index == 1 %}
