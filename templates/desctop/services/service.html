@@ -29,7 +29,9 @@
 
                 </div>
 
-                {% for category in tech_categories %}
+
+                {% for category in tech_categories reverse %}
+                {% set is_main_cat = category.name in service_categories_names %}
 
                   {% if loop.index == 1 %}
                     {% set category_list = serve_categories1 %}
@@ -45,7 +47,6 @@
                     {% set loop_index = 4 %}
                   {% endif %}
 
-                  {% set is_main_cat = category.name in service_categories_names %}
                 <section class="page-section">
                   {% if is_main_cat %}
                     <h2 class="section-title font-alt">
