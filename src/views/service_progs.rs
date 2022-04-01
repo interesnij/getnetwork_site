@@ -796,7 +796,7 @@ pub async fn delete_service(_id: web::Path<i32>) -> impl Responder {
     let _service_id : i32 = *_id;
     let _service = services.filter(schema::services::id.eq(_service_id)).load::<Service>(&_connection).expect("E");
 
-    let _categories = get_cats_for_service(&_service[0]);
+    let _categories = get_cats_for_service(&_service[0]).0;
     let _tags = get_tags_for_service(&_service[0]);
     for _category in _categories.iter() {
         diesel::update(_category)
