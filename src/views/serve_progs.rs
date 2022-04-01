@@ -341,7 +341,6 @@ pub async fn edit_tech_category(mut payload: Multipart, _id: web::Path<i32>) -> 
         description: Some(form.description.clone()),
         tech_position: form.position.clone(),
         tech_count: _category[0].tech_count,
-        default_price: _category[0].default_price,
     };
     diesel::update(&_category[0])
         .set(new_cat)
@@ -367,6 +366,7 @@ pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) ->
         tech_categories: form.tech_categories.clone(),
         serve_position: form.position.clone(),
         serve_count: s_category[0].serve_count.clone(),
+        default_price: s_category[0].default_price,
     };
     diesel::update(&s_category[0])
         .set(new_cat)
