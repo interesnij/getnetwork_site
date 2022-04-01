@@ -348,13 +348,13 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
 
     // сначала добавим категорию технологий по умолчанию
     for _serve_cat in __serve_categories.iter() {
-        if _categories_names.iter().any(|&i| i==_serve_cat.cat_name.clone()) {
+        if _categories_names.iter().any(|&i| i==_serve_cat.cat_name) {
             tech_categories_ids.push(_serve_cat.tech_categories);
         }
     };
     // теперь добавим остальные категории технологий
     for _serve_cat in __serve_categories.iter() {
-        if tech_categories_ids.iter().any(|&i| i==_serve_cat.tech_categories) {
+        if tech_categories_ids.iter().any(|&i2| i2==_serve_cat.tech_categories) {
             continue;
         } else {
             tech_categories_ids.push(_serve_cat.tech_categories);
