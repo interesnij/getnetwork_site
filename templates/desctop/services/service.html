@@ -56,7 +56,7 @@
                         {{ category.description }}
                     </h2>
                   {% endif %}
-                    <div class="{% if is_main_cat %}hidden{% endif %}">
+                    <div class="{% if not is_main_cat %}hidden{% endif %}">
                         <div class="align-center mb-40 mb-xs-30">
                             <ul class="nav nav-tabs tpl-minimal-tabs animate">
                               {% for category in category_list %}
