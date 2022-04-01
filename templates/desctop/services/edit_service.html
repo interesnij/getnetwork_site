@@ -32,6 +32,7 @@
               <input class="input-md form-control" type="file" name="main_image" />
             </div>
             <div class="mb-20 mb-md-10">
+              {{ categories }}
                 <label>Категории</label>
                 <select class="form-control" name="category_list[]" multiple="">
                   {% for category in service_categories %}
