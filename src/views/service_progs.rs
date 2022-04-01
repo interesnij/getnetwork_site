@@ -38,7 +38,7 @@ fn get_cats_for_service(service: &Service) -> (Vec<ServiceCategories>, Vec<Strin
     let _connection = establish_connection();
 
     let ids = ServiceCategory::belonging_to(service).select(schema::service_category::service_categories_id);
-    categories = schema::service_categories::table
+    let categories = schema::service_categories::table
         .filter(schema::service_categories::id.eq(any(ids)))
         .load::<ServiceCategories>(&_connection)
         .expect("E");
