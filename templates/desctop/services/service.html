@@ -45,7 +45,7 @@
                     {% set category_list = serve_categories4 %}
                     {% set loop_index = 4 %}
                   {% endif %}
-                <section class="page-section">
+                <section>
                   {% if is_main_cat %}
                     <h2 class="section-title font-alt">
                         {{ t_category.name }}
@@ -60,7 +60,7 @@
                       </span>
                     </h2>
                   {% endif %}
-                    <div  class="{% if not is_main_cat %}hidden is_not_main_cat{% endif %}">
+                    <div class="{% if not is_main_cat %}hidden is_not_main_cat{% endif %}">
                         <div class="align-center mb-40 mb-xs-30">
                             <ul class="nav nav-tabs tpl-minimal-tabs animate">
                               {% for category in category_list %}
