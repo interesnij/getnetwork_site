@@ -368,7 +368,7 @@ pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) ->
         tech_categories: form.tech_categories.clone(),
         serve_position: form.position.clone(),
         serve_count: s_category[0].serve_count.clone(),
-        default_price: s_category[0].default_price,
+        default_price: form.default_price.clone(),
     };
     diesel::update(&s_category[0])
         .set(new_cat)

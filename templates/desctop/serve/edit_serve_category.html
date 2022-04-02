@@ -27,6 +27,9 @@
                 <input value="{{ category.serve_position }}" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
             </div>
             <div class="mb-20 mb-md-10">
+                <input value="{{ category.default_price }}" class="input-md form-control" type="number" name="default_price" placeholder="Начальная цена" />
+            </div>
+            <div class="mb-20 mb-md-10">
               <label>Категория</label>
               <select class="input-md form-control" name="tech_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
                 {% for cat in tech_categories %}

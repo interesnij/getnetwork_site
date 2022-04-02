@@ -69,6 +69,7 @@ pub struct ServeCategoriesForm {
     pub description: String,
     pub tech_categories: i32,
     pub position: i32,
+    pub default_price: i32,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -458,6 +459,7 @@ pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm
         description: "".to_string(),
         tech_categories: 0,
         position: 0,
+        default_price: 0,
     };
 
     while let Some(item) = payload.next().await {
@@ -479,6 +481,15 @@ pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm
                 if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.position = _int;
+                }
+            }
+        }
+        else if name == "default_price" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.default_price = _int;
                 }
             }
         }
