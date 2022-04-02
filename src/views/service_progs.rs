@@ -370,8 +370,9 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
 
     // 3. генерируем переменные для шаблона, которые будут хранить наши объекты опций
     let mut _count: i32 = 0;
-    let mut _serve_count: i32 = 0;
+
     for _cat in __tech_categories.iter() {
+        let mut _serve_count: i32 = 0;
         _count += 1;
         let mut _let_int : String = _count.to_string().parse().unwrap();
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
