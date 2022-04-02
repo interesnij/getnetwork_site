@@ -374,7 +374,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         data.insert(&_let_serve_categories, &serve_categories
             .filter(schema::serve_categories::id.eq(_cat.id))
             .filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
-            .load(&_connection)
+            .load::<ServeCategories>(&_connection)
             .expect("E."));
 
         let mut _serve_count: i32 = 0;
