@@ -122,9 +122,7 @@
                             <div data-sum="{{ category.default_price }}" class="tab_{{ loop.index }} fade tab-pane {% if loop.first %}in active{% endif %}">
                               loop_index {{ loop_index }} |
                               loop.index{{ loop.index }}
-                              {% for serve in _1serves1 %}
-                                _1serves1: {{ serve.cat_name }} => {{ serve.name }} ({{ serve.id }})
-                              {% endfor %}
+                              <br>
                                 <table class="table">
                                     <h4>
                                       <span data-pk="{{ category.id }}" data-type="serve_category" owner-pk="{{ object.id }}" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up">
