@@ -119,9 +119,10 @@
                               {% endif %}
                             {% endif %}
 
+                            {% if _4serves4 %}
+                              _4serves4
+                            {% endif %}
                             <div data-sum="{{ category.default_price }}" class="tab_{{ loop.index }} fade tab-pane {% if loop.first %}in active{% endif %}">
-                              loop_index {{ loop_index }} |
-                              loop.index{{ loop.index }}
                               <br>
                                 <table class="table">
                                     <h4>
