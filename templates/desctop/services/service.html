@@ -70,10 +70,10 @@
                               {% endfor %}
                             </ul>
                         </div>
-                        {{ _1serves1 }}
-                        {{ _1serves2 }}
-                        {{ _1serves3 }}
-                        {{ _2serves1 }}
+                        {% for i in _1serves1 %} _1serves1 {{ i.pk }}{% endfor %}
+                        {% for i in _1serves2 %} _1serves2 {{ i.pk }}{% endfor %}
+                        {% for i in _1serves3 %} _1serves3 {{ i.pk }}{% endfor %}
+                        {% for i in _2serves1 %} _2serves1 {{ i.pk }}{% endfor %}
                         <div class="tab-content tpl-minimal-tabs-cont section-text">
                           {% for category in category_list %}
 
