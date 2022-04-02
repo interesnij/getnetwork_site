@@ -386,9 +386,8 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         let mut _serve_count: i32 = 0;
         for __cat in __serve_categories.iter() {
             _serve_count += 1;
-            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
             let _serve_int_dooble = "_".to_string() + &_let_int;
-            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
+            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_count;
             let ___serve = serve
                 .filter(schema::serve::serve_categories.eq(__cat.id))
                 .filter(schema::serve::id.eq(any(&serve_ids)))
