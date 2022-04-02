@@ -131,7 +131,7 @@
                                         <tr class="{% if serve.is_default %}is_default hover{% else %}select_serve pointer{% endif %}">
                                             <td style="width:52%">
                                                 <a class="pointer underline get_object_info" data-pk="{{ serve.id }}" data-type="serve" owner-pk="{{ object.id }}" owner-type="service">
-                                                    {{ serve.name }}
+                                                    {{ serve.cat_name }} => {{ serve.name }} ({{ serve.id }})
                                                 </a>
                                             </td>
                                             <td class="price_td" tooltip="Сумма" flow="up" style="width:12%"><span class="price">{{ serve.price }}</span> ₽</td>

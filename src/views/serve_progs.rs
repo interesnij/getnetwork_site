@@ -497,9 +497,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
 
 pub async fn create_serve(mut payload: Multipart) -> impl Responder {
     use crate::schema::{
-        serve::dsl::serve,
         serve_categories::dsl::serve_categories,
-        tech_categories::dsl::tech_categories,
     };
 
     let _connection = establish_connection();
@@ -547,7 +545,6 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     use crate::schema::{
         serve::dsl::serve,
         serve_categories::dsl::serve_categories,
-        tech_categories::dsl::tech_categories,
     };
 
     let _serve_id : i32 = *_id;
