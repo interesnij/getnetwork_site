@@ -119,9 +119,9 @@
                               {% endif %}
                             {% endif %}
 
-                            {% if _4serves4 %}
-                              {{ _4serves4 }}
-                            {% endif %}
+                            {% for serve in _4serves4 %}
+                              {{ serve.cat_name }} => {{ serve.name }} ({{ serve.id }})
+                            {% endfor %}
                             <div data-sum="{{ category.default_price }}" class="tab_{{ loop.index }} fade tab-pane {% if loop.first %}in active{% endif %}">
                               <br>
                                 <table class="table">
