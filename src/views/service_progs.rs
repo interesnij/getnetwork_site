@@ -327,7 +327,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     // категории опций, а уже по тем - тех. категории.
     // ИТАК: 1. получаем опции
     let __serves = get_serves_for_service(&_service[0]);
-    // 2. получаем категории опций, исключая дубли, и дефолтную цену.
+    // 2. получаем категории опций, исключая дубли.
     let mut serve_categories_ids = Vec::new();
     let mut serve_ids = Vec::new();
     for _serve in __serves.iter() {
@@ -371,12 +371,11 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         _count += 1;
         let mut _let_int : String = _count.to_string().parse().unwrap();
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
-        let __serve_categories :Vec<ServeCategories> = serve_categories
+        data.insert(&_let_serve_categories, &serve_categories
             .filter(schema::serve_categories::id.eq(_cat.id))
             .filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
             .load(&_connection)
-            .expect("E.");
-        data.insert(&_let_serve_categories, &__serve_categories);
+            .expect("E."));
 
         let mut _serve_count: i32 = 0;
         for __cat in __serve_categories.iter() {
