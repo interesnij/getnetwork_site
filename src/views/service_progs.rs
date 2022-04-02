@@ -388,13 +388,21 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
             _serve_count += 1;
             let _serve_int_dooble = "_".to_string() + &_let_int;
             let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_count.to_string();
-            let ___serve = serve
+            let _serve_list = serve
                 .filter(schema::serve::serve_categories.eq(__cat.id))
                 .filter(schema::serve::id.eq(any(&serve_ids)))
                 .order(schema::serve::serve_position.asc())
                 .load::<Serve>(&_connection)
-                .expect("E.");
-            data.insert(&_let_serves, &___serve);
+                .expect("E.")
+            data.insert(&_let_serves, &_serve_list);
+            println!("===================");
+            println!("_let_serves {:?}", _let_serves);
+            println!("-------------------");
+            for i in _serve_list.iter() {
+                println!("название опции {:?}", i.name);
+                println!("категория {:?}", i.cat_name);
+                println!("id {:?}", i.id);
+            }
         }
     };
 
