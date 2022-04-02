@@ -351,7 +351,6 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     for _serve_cat in __serve_categories.iter() {
         if _categories_names.iter().any(|i| i.to_string()==_serve_cat.cat_name) {
             tech_categories_ids.push(_serve_cat.tech_categories);
-            default_price = _serve_cat.default_price
         }
     };
     // теперь добавим остальные категории технологий
@@ -373,11 +372,15 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         _count += 1;
         let mut _let_int : String = _count.to_string().parse().unwrap();
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
-        data.insert(&_let_serve_categories, &serve_categories
+        __serve_categories = serve_categories
             .filter(schema::serve_categories::tech_categories.eq(tech_cat_id))
             .filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
             .load::<ServeCategories>(&_connection)
-            .expect("E."));
+            .expect("E.");
+        data.insert(&_let_serve_categories, &__serve_categories);
+        if _count == 1 {
+            default_price = __serve_categories[0].default_price;
+        }
 
         let mut _serve_count: i32 = 0;
         for __cat in __serve_categories.iter() {
