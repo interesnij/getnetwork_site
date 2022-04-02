@@ -517,7 +517,14 @@ on('body', 'input', '.general_search', function() {
 });
 
 on('#ajax', 'click', '.show_tech_category', function() {
+  next_div = this.nextElementSibling;
+  counter = document.body.querySelector(".total_price_counter")
+  if (next_div.classList.contains("hidden")) {
+    counter.innerHTML = counter.innerHTML*1 + next_div.querySelector(".tab_1").getAttribute("data-sum")*1;
+  } else {
+    counter.innerHTML = counter.innerHTML*1 - next_div.querySelector(".tab_1").getAttribute("data-sum")*1;
+  }
   this.querySelector(".cat_description").classList.toggle("hidden");
   this.querySelector(".cat_name").classList.toggle("hidden")
-  this.nextElementSibling.classList.toggle("hidden")
+  next_div.classList.toggle("hidden")
 });
