@@ -22,7 +22,7 @@
       {{ tech_category.name }}
     </a>
     {% if is_admin %}
-     - <a class="ajax" href="/edit_tech_category/{{ tech_category.id }}/">~</a>
+     <a class="ajax" href="/edit_tech_category/{{ tech_category.id }}/">~</a>
      <a class="pointer remove_tech_category" data-pk="{{ tech_category.id }}">x</a>
     {% endif %}
   </h2>
@@ -81,7 +81,7 @@
           <span style="font-size:70%">
             (начальная цена {{ category.default_price }})
             {% if is_admin %}
-             - <a class="ajax" href="/edit_serve_category/{{ category.id }}/">~</a>
+             <a class="ajax" href="/edit_serve_category/{{ category.id }}/">~</a>
              <a class="pointer remove_serve_category" data-pk="{{ category.id }}">x</a>
             {% endif %}
           <span>
