@@ -370,6 +370,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
 
     // 3. генерируем переменные для шаблона, которые будут хранить наши объекты опций
     let mut _count: i32 = 0;
+    let mut _serve_count: i32 = 0;
     for _cat in __tech_categories.iter() {
         _count += 1;
         let mut _let_int : String = _count.to_string().parse().unwrap();
@@ -385,18 +386,20 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
             default_price = _serve_categories[0].default_price;
         }
 
-        let mut _serve_count: i32 = 0;
         for __cat in __serve_categories.iter() {
-            _serve_count += 1;
-            let _serve_int_dooble = "_".to_string() + &_let_int;
-            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_count.to_string();
-            let _serve_list = serve
-                .filter(schema::serve::serve_categories.eq(__cat.id))
-                .filter(schema::serve::id.eq(any(&serve_ids)))
-                .order(schema::serve::serve_position.asc())
-                .load::<Serve>(&_connection)
-                .expect("E.");
-            data.insert(&_let_serves, &_serve_list);
+            if __cat.tech_categories == _cat.id {
+                _serve_count += 1;
+                let _serve_int_dooble = "_".to_string() + &_let_int;
+                let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_count.to_string();
+                let _serve_list = serve
+                    .filter(schema::serve::serve_categories.eq(__cat.id))
+                    .filter(schema::serve::id.eq(any(&serve_ids)))
+                    .order(schema::serve::serve_position.asc())
+                    .load::<Serve>(&_connection)
+                    .expect("E.");
+                data.insert(&_let_serves, &_serve_list);
+            }
+
             println!("===================");
             println!("_let_serves {:?}", _let_serves);
             println!("-------------------");
