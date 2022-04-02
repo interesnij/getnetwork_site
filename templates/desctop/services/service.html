@@ -45,7 +45,7 @@
                     {% set category_list = serve_categories4 %}
                     {% set loop_index = 4 %}
                   {% endif %}
-                <section class="mb-20 mt-20 border">
+                <section class="mb-20 mt-20 border wow fadeIn" data-wow-duration="0.3s">
                   {% if is_main_cat %}
                     <h2 class="section-title font-alt">
                         {{ t_category.name }}
@@ -71,7 +71,7 @@
                             </ul>
                         </div>
 
-                        <div class="tab-content tpl-minimal-tabs-cont section-text wow fadeIn" data-wow-duration="0.3s">
+                        <div class="tab-content tpl-minimal-tabs-cont section-text">
                           {% for category in category_list %}
 
                             {% if loop_index == 1 %}
