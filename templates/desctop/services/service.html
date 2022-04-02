@@ -63,9 +63,9 @@
                     <div class="{% if not is_main_cat %}hidden is_not_main_cat{% endif %}">
                         <div class="align-center mb-40 mb-xs-30">
                             <ul class="nav nav-tabs tpl-minimal-tabs animate">
-                              {% for category in category_list %}
+                              {% for cat in category_list %}
                                 <li class="yy s_{{ loop.index }} {% if loop.first %}active{% endif %}">
-                                    <a class="pointer">{{ category.name }}</a>
+                                    <a class="pointer">{{ cat.name }}</a>
                                 </li>
                               {% endfor %}
                             </ul>
