@@ -398,15 +398,15 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
                     .load::<Serve>(&_connection)
                     .expect("E.");
                 data.insert(&_let_serves, &_serve_list);
-            }
 
-            println!("===================");
-            println!("_let_serves {:?}", _let_serves);
-            println!("-------------------");
-            for i in _serve_list.iter() {
-                println!("название опции {:?}", i.name);
-                println!("категория {:?}", i.cat_name);
-                println!("id {:?}", i.id);
+                println!("===================");
+                println!("_let_serves {:?}", _let_serves);
+                println!("-------------------");
+                for i in _serve_list.iter() {
+                    println!("название опции {:?}", i.name);
+                    println!("категория {:?}", i.cat_name);
+                    println!("id {:?}", i.id);
+                }
             }
         }
     };
