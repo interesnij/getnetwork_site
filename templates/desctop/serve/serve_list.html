@@ -79,7 +79,6 @@
             {{ category.name }}
           </a>
           <span style="font-size:70%">
-            (начальная цена {{ category.default_price }})
             {% if is_admin %}
              <a class="ajax" href="/edit_serve_category/{{ category.id }}/">~</a>
              <a class="pointer remove_serve_category" data-pk="{{ category.id }}">x</a>
