@@ -557,7 +557,9 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve[0].serve_categories)).load::<ServeCategories>(&_connection).expect("E");
     let form = serve_split_payload(payload.borrow_mut()).await;
 
-    if _serve[0].is_default {
+    println!("{:?}", _serve[0].is_default);
+    if _serve[0].is_default == true {
+        println!("is_default true!");
         diesel::update(&_serve[0])
             .set(schema::serve::is_default.eq(false))
             .get_result::<Serve>(&_connection)
