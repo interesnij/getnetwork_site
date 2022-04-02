@@ -122,13 +122,12 @@
                             <div total-price="{{ category.default_price }}" class="tab_{{ loop.index }} fade tab-pane {% if loop.first %}in active{% endif %}">
                                 <table class="table">
                                     <h4>
-                                      serve_category.id {{ category.id }}
                                       <span data-pk="{{ category.id }}" data-type="serve_category" owner-pk="{{ object.id }}" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up" style="margin-left:7px">
                                         {{ t_category.name }} на {{ category.name }}
                                       </span>
                                     </h4>
                                     <tbody>
-                                      
+
                                         {% for serve in object_list %}
                                         <tr class="{% if serve.is_default %}is_default hover{% else %}select_serve pointer{% endif %}">
                                             <td style="width:52%">
