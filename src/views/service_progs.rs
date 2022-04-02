@@ -338,6 +338,8 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         } else {
             serve_categories_ids.push(_serve.serve_categories);
         }
+        println!("список категорий {:?}", serve_categories_ids);
+        println!("номер категории {:?}", _serve.serve_categories);
     };
     let __serve_categories = serve_categories
         .filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
