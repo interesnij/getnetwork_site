@@ -368,13 +368,13 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
 
     // 3. генерируем переменные для шаблона, которые будут хранить наши объекты опций
     let mut _count: i32 = 0;
-    for tech_cat_id in tech_categories_ids.iter() {
+    for _cat in __tech_categories.iter() {
         _count += 1;
         let mut _let_int : String = _count.to_string().parse().unwrap();
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
         let _serve_categories = serve_categories
-            .filter(schema::serve_categories::tech_categories.eq(tech_cat_id))
-            //.filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
+            .filter(schema::serve_categories::tech_categories.eq(_cat.id))
+            .filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
             .load::<ServeCategories>(&_connection)
             .expect("E.");
         data.insert(&_let_serve_categories, &_serve_categories);
