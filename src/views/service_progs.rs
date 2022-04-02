@@ -393,7 +393,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
                 .filter(schema::serve::id.eq(any(&serve_ids)))
                 .order(schema::serve::serve_position.asc())
                 .load::<Serve>(&_connection)
-                .expect("E.")
+                .expect("E.");
             data.insert(&_let_serves, &_serve_list);
             println!("===================");
             println!("_let_serves {:?}", _let_serves);
