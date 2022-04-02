@@ -60,7 +60,7 @@
                       </span>
                     </h2>
                   {% endif %}
-                    <div class="{% if not is_main_cat %}hidden is_not_main_cat{% endif %}" style="transition: 0.5s;">
+                    <div class="{% if not is_main_cat %}hidden is_not_main_cat{% endif %}">
                         <div class="align-center mb-40 mb-xs-30">
                             <ul class="nav nav-tabs tpl-minimal-tabs animate">
                               {% for category in category_list %}
@@ -119,15 +119,14 @@
                               {% endif %}
                             {% endif %}
 
-                            <div total-price="{{ category.default_price }}" class="tab_{{ loop.index }} fade tab-pane {% if loop.first %}in active{% endif %}">
+                            <div data-sum="{{ category.default_price }}" class="tab_{{ loop.index }} fade tab-pane {% if loop.first %}in active{% endif %}">
                                 <table class="table">
                                     <h4>
-                                      <span data-pk="{{ category.id }}" data-type="serve_category" owner-pk="{{ object.id }}" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up" style="margin-left:7px">
+                                      <span data-pk="{{ category.id }}" data-type="serve_category" owner-pk="{{ object.id }}" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up">
                                         {{ t_category.name }} на {{ category.name }}
                                       </span>
                                     </h4>
                                     <tbody>
-
                                         {% for serve in object_list %}
                                         <tr class="{% if serve.is_default %}is_default hover{% else %}select_serve pointer{% endif %}">
                                             <td style="width:52%">
@@ -160,10 +159,13 @@
                 </section>
                 {% endfor %}
                 <div class="mt-40 align-right">
-                    <a data-sum="{{ default_price }}" data-pk="{{ object.id }}" class="btn pointer create_order_form_of_service btn-mod border btn-small btn-circle">
-                        Сумма
-                        <span class="total_price_counter">{{ default_price }}</span>.
-                        Перейти к заказу
+                    <a data-sum="{{ default_price }}"
+                       data-pk="{{ object.id }}"
+                       class="btn btn-mod border btn-round create_order_form_of_service"
+                     >
+                      Сумма
+                      <span class="total_price_counter">{{ default_price }}</span>.
+                      Перейти к заказу
                     </a>
                 </div>
             </div>
