@@ -517,5 +517,5 @@ on('body', 'input', '.general_search', function() {
 });
 
 on('#ajax', 'click', '.show_tech_category', function() {
-  this.nextElementSibling.classList.replace("hidden")
+  this.nextElementSibling.classList.toggle("hidden")
 });
