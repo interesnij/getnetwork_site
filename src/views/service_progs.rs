@@ -390,12 +390,12 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         for __cat in __serve_categories.iter() {
             if __cat.tech_categories == _cat.id {
                 _serve_count += 1;
-                let _serve_int_dooble = "_".to_string() + &_let_int;
+                let _serve_int_dooble = "_".to_string() + &_cat.tech_position.to_string();
                 let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_count.to_string();
                 let _serve_list = serve
                     .filter(schema::serve::serve_categories.eq(__cat.id))
                     .filter(schema::serve::id.eq(any(&serve_ids)))
-                    //.order(schema::serve::serve_position.asc())
+                    .order(schema::serve::serve_position.asc())
                     .load::<Serve>(&_connection)
                     .expect("E.");
                 data.insert(&_let_serves, &_serve_list);
