@@ -39,14 +39,14 @@
             <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_serve_category_btn">Создать</button>
         </form>
 
-        <div class="container">
+        <section class="border small-section bg-dark">
             {% for category in categories %}
             <p>{{ category.cat_name }} => {{ category.name }}
                 | <a class="ajax" href="/edit_serve_category/{{ category.id }}/">~</a>
                 | <a class="pointer remove_serve_category" data-pk="{{ category.id }}">x</a>
             </p>
             {% endfor %}
-        </div>
+        </section>
     </div>
 </section>
 {% endblock %}

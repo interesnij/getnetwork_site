@@ -28,14 +28,14 @@
             </div>
             <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_tech_category_btn">Создать</button>
         </form>
-        <div class="container">
+        <section class="border small-section bg-dark">
             {% for category in categories %}
             <p>{{ category.name }}
                 | <a class="ajax" href="/edit_tech_category/{{ category.id }}/">~</a>
                 | <a class="pointer remove_tech_category" data-pk="{{ category.id }}">x</a>
             </p>
             {% endfor %}
-        </div>
+        </section>
     </div>
 </section>
 {% endblock %}
