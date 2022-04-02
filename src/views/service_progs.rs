@@ -372,14 +372,14 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         _count += 1;
         let mut _let_int : String = _count.to_string().parse().unwrap();
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
-        __serve_categories = serve_categories
+        _serve_categories = serve_categories
             .filter(schema::serve_categories::tech_categories.eq(tech_cat_id))
             .filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
             .load::<ServeCategories>(&_connection)
             .expect("E.");
-        data.insert(&_let_serve_categories, &__serve_categories);
+        data.insert(&_let_serve_categories, &_serve_categories);
         if _count == 1 {
-            default_price = __serve_categories[0].default_price;
+            default_price = _serve_categories[0].default_price;
         }
 
         let mut _serve_count: i32 = 0;
