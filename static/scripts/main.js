@@ -515,3 +515,7 @@ on('body', 'input', '.general_search', function() {
       ajax_link.send();
   }
 });
+
+on('#ajax', 'click', '.show_tech_category', function() {
+  this.nextElementSibling.classList.replace("hidden")
+});
