@@ -67,7 +67,7 @@
                     </h2>
                   {% endif %}
                     <div class="{% if not is_main_cat %}hidden is_not_main_cat{% endif %}">
-                        <div class="align-center mb-40 mb-xs-30">
+                        <div class="align-center">
                             <ul class="nav nav-tabs tpl-minimal-tabs animate">
                               {% for cat in category_list %}
                                 <li data-sum="{{ cat.default_price }}" class="yy pointer s_{{ loop.index }} {% if loop.first %}active{% endif %}">
