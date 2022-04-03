@@ -167,12 +167,11 @@
                 {% endfor %}
                 <div class="mt-40 align-right">
                     <a data-sum="{{ default_price }}"
-                       data-oldsum="{{ default_price }}"
                        data-pk="{{ object.id }}"
                        class="btn btn-medium btn-mod border btn-round create_order_form_of_service"
                      >
                       Сумма
-                      <span class="total_price_counter">{{ default_price }}</span>.
+                      <span data-oldsum="{{ default_price }}" class="total_price_counter">{{ default_price }}</span>.
                       Перейти к заказу
                     </a>
                 </div>
