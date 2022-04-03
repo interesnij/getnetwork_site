@@ -334,15 +334,15 @@ on('#ajax', 'click', '.select_serve', function() {
     // работаем только с теми таб панелями, которые не видны.
     if (!tab_panes[i].classList.contains("active")){
       serve_list = tab_panes[i].querySelectorAll(".select_serve");
-      for (var i2 = 0; i2 < serve_list.length; i++){
+      for (var i2 = 0; i2 < serve_list.length; i2++){
         // также нужно уменьшить счетчик цены на сумму всех выбранных опций в других
         // вкладках. А также уменьшить "data-serve" счетчика
-          if (!serve_list[i].classList.contains("is_default")){
-            serve_list[i].classList.remove("hover");
-            if (serve_list[i].querySelector(".price_acc_td")) {
-              _serve_price = serve_list[i].querySelector(".price_acc").innerHTML*1
+          if (!serve_list[i2].classList.contains("is_default")){
+            serve_list[i2].classList.remove("hover");
+            if (serve_list[i2].querySelector(".price_acc_td")) {
+              _serve_price = serve_list[i2].querySelector(".price_acc").innerHTML*1
             } else {
-              _serve_price = serve_list[i].querySelector(".price").innerHTML*1
+              _serve_price = serve_list[i2].querySelector(".price").innerHTML*1
             };
             counter.innerHTML = counter.innerHTML*1 - _serve_price;
             counter.setAttribute("data-serve", counter_serve_price - _serve_price);
