@@ -30,6 +30,7 @@
                 </div>
 
                 {{ object.content | safe }}
+
                 {% for t_category in tech_categories %}
                 {% set is_main_cat = t_category.name in service_categories_names %}
 
