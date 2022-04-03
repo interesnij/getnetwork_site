@@ -97,7 +97,7 @@
                    owner-type="settings"
                  >
                 {% if object.is_default %}(*) {% endif %}
-                {{ object.name }}
+                {{ serve.cat_name }} => {{ object.name }} ({{ serve.id }})
                 </a>
               </td>
               <td style="width:14%">{{ object.price }} ₽</td>

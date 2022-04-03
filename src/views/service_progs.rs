@@ -338,8 +338,6 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         } else {
             serve_categories_ids.push(_serve.serve_categories);
         }
-        println!("список категорий {:?}", serve_categories_ids);
-        println!("номер категории {:?}", _serve.serve_categories);
     };
     let __serve_categories = serve_categories
         .filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
@@ -379,7 +377,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         let _serve_categories = serve_categories
             .filter(schema::serve_categories::tech_categories.eq(_cat.id))
             .filter(schema::serve_categories::id.eq(any(&serve_categories_ids)))
-            .order(schema::serve_categories::id.asc())
+            //.order(schema::serve_categories::id.asc())
             .load::<ServeCategories>(&_connection)
             .expect("E.");
         data.insert(&_let_serve_categories, &_serve_categories);
@@ -395,7 +393,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
                 let _serve_list = serve
                     .filter(schema::serve::serve_categories.eq(__cat.id))
                     .filter(schema::serve::id.eq(any(&serve_ids)))
-                    .order(schema::serve::serve_categories.asc())
+                    //.order(schema::serve::serve_categories.asc())
                     .load::<Serve>(&_connection)
                     .expect("E.");
                 data.insert(&_let_serves, &_serve_list);
