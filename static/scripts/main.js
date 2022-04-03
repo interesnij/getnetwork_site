@@ -337,7 +337,7 @@ on('#ajax', 'click', '.select_serve', function() {
       for (var i2 = 0; i2 < serve_list.length; i2++){
         // также нужно уменьшить счетчик цены на сумму всех выбранных опций в других
         // вкладках. А также уменьшить "data-serve" счетчика
-          if (!serve_list[i2].classList.contains("is_default")){
+          if (!serve_list[i2].classList.contains("is_default") && serve_list[i2].classList.contains("hover")){
             serve_list[i2].classList.remove("hover");
             if (serve_list[i2].querySelector(".price_acc_td")) {
               _serve_price = serve_list[i2].querySelector(".price_acc").innerHTML*1
