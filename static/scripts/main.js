@@ -323,7 +323,7 @@ function toast_warning(text) {
 
 function service_tab_action(_this, tab_class){
   if (!_this.classList.contains("active")){
-    if (!_this.getAttribute("data-sum")){
+    if (_this.getAttribute("data-sum")){
       old_sum = _this.parentElement.classList.querySelector("active").getAttribute("data-sum");
       counter = document.body.querySelector(".total_price_counter");
       counter.innerHTML = counter.innerHTML*1 - old_sum*1 + _this.getAttribute("data-sum")*1;
