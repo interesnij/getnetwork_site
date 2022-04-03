@@ -321,6 +321,60 @@ function toast_warning(text) {
     toasts.showWarning(text)
 }
 
+on('#ajax', 'click', '.select_serve', function() {
+  _this = this;
+  counter = document.body.querySelector(".total_price_counter");
+  counter_serve_price = counter.getAttribute("data-serve")*1;
+
+  // для начала мы уберем выбранные опции во вкладках
+  // выбранной категории (напр категории "моб. разработка")
+  // а те, которые там по умолчанию выбраны, оставим.
+  tab_panes = _this.parentElement.parentElement.parentElement.parentElement.querySelectorAll(".tab-pane");
+  for (var i = 0; i < tab_panes.length; i++){
+    // работаем только с теми таб панелями, которые не видны.
+    if (!tab_panes[i].classList.contains("active")){
+      serve_list = tab_panes[i].querySelectorAll(".select_serve");
+      for (var i2 = 0; i2 < serve_list.length; i++){
+        // также нужно уменьшить счетчик цены на сумму всех выбранных опций в других
+        // вкладках. А также уменьшить "data-serve" счетчика
+          if (!serve_list[i].classList.contains("is_default")){
+            serve_list[i].classList.remove("hover");
+            if (serve_list[i].querySelector(".price_acc_td")) {
+              _serve_price = serve_list[i].querySelector(".price_acc").innerHTML*1
+            } else {
+              _serve_price = serve_list[i].querySelector(".price").innerHTML*1
+            };
+            counter.innerHTML = counter.innerHTML*1 - serve_price;
+            counter.setAttribute("data-serve", counter_serve_price - _serve_price);
+          }
+      };
+    };
+  };
+
+  // найдем цену опции и сделаем цену числом
+  if (_this.querySelector(".price_acc_td")) {
+    serve_price = _this.querySelector(".price_acc").innerHTML*1
+  } else {
+    serve_price = _this.querySelector(".price").innerHTML*1
+  };
+
+  if (!_this.classList.contains("hover")){
+    // если до нажатия опция не выбрана...
+    counter.innerHTML = counter.innerHTML*1 + serve_price;
+    counter.setAttribute("data-serve", counter_serve_price + serve_price);
+    _this.classList.add("hover");
+    _this.classList.remove("select_serve", "pointer");
+  }
+  else {
+    // если опция выбрана, надо снять выделение и счетчик уменьшить на сумму опции.
+    // а также уменьшить "data-serve" счетчика
+    counter.innerHTML = counter.innerHTML*1 - serve_price;
+    counter.setAttribute("data-serve", counter_serve_price - serve_price);
+    _this.classList.add("select_serve", "pointer");
+    _this.classList.remove("hover");
+  }
+});
+
 function service_tab_action(_this, tab_class){
   if (!_this.classList.contains("active")){
     if (_this.getAttribute("data-sum")){
