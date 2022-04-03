@@ -363,14 +363,12 @@ on('#ajax', 'click', '.select_serve', function() {
     counter.innerHTML = counter.innerHTML*1 + serve_price;
     counter.setAttribute("data-serve", counter_serve_price + serve_price);
     _this.classList.add("hover");
-    _this.classList.remove("select_serve", "pointer");
   }
   else {
     // если опция выбрана, надо снять выделение и счетчик уменьшить на сумму опции.
     // а также уменьшить "data-serve" счетчика
     counter.innerHTML = counter.innerHTML*1 - serve_price;
     counter.setAttribute("data-serve", counter_serve_price - serve_price);
-    _this.classList.add("select_serve", "pointer");
     _this.classList.remove("hover");
   }
 });
