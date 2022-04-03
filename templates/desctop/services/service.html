@@ -124,7 +124,7 @@
                               {% endif %}
                             {% endif %}
 
-                            <div data-sum="{{ category.default_price }}" class="tab_{{ loop.index }} fade tab-pane {% if loop.first %}in active{% endif %}">
+                            <div data-sum="{{ category.default_price }}" class="tab_{{ loop.index }} fade tab-pane {% if loop.first %}in active{% else %}slideUp{% endif %}">
                               <br>
                                 <table class="table">
                                     <h4>
