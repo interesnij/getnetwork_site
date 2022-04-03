@@ -344,7 +344,7 @@ on('#ajax', 'click', '.select_serve', function() {
             } else {
               _serve_price = serve_list[i].querySelector(".price").innerHTML*1
             };
-            counter.innerHTML = counter.innerHTML*1 - serve_price;
+            counter.innerHTML = counter.innerHTML*1 - _serve_price;
             counter.setAttribute("data-serve", counter_serve_price - _serve_price);
           }
       };
