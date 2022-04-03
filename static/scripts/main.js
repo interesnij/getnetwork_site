@@ -324,9 +324,9 @@ function toast_warning(text) {
 function service_tab_action(_this, tab_class){
   if (!_this.classList.contains("active")){
     if (_this.getAttribute("data-sum")){
-      old_sum = _this.parentElement.querySelector(".active").getAttribute("data-sum");
       counter = document.body.querySelector(".total_price_counter");
-      counter.innerHTML = counter.innerHTML*1 - old_sum*1 + _this.getAttribute("data-sum")*1;
+      counter.innerHTML = counter.innerHTML*1 - counter.getAttribute("data-old-sum")*1 + _this.getAttribute("data-sum")*1;
+      counter.setAttribute("data-old-sum", _this.getAttribute("data-sum"))
     };
     nav = _this.parentElement.parentElement.parentElement;
     nav_items = nav.querySelectorAll(".yy");
