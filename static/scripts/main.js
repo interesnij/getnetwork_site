@@ -325,8 +325,12 @@ function service_tab_action(_this, tab_class){
   if (!_this.classList.contains("active")){
     if (_this.getAttribute("data-sum")){
       counter = document.body.querySelector(".total_price_counter");
+      console.log("цена counter", counter.innerHTML);
+      console.log("старая цена counter", counter.getAttribute("data-old-sum"));
+      console.log("цена новая", _this.getAttribute("data-sum"));
       counter.innerHTML = counter.innerHTML*1 - counter.getAttribute("data-old-sum")*1 + _this.getAttribute("data-sum")*1;
       counter.setAttribute("data-old-sum", _this.getAttribute("data-sum"))
+      console.log(counter.innerHTML);
     };
     nav = _this.parentElement.parentElement.parentElement;
     nav_items = nav.querySelectorAll(".yy");
