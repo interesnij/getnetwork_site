@@ -290,7 +290,9 @@ function toast_warning(text) {
 
 on('#ajax', 'click', '.select_serve', function(event) {
   _this = this;
-  
+  if (event.target.classList.contains("get_object_info")) {
+    return
+  };
   counter = document.body.querySelector(".total_price_counter");
   counter_serve_price = counter.getAttribute("data-serve")*1;
   counter_serve_list = counter.parentElement
