@@ -354,15 +354,17 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         if _categories_names.iter().any(|i| i.to_string()==_serve_cat.cat_name) {
             tech_categories_ids.push(_serve_cat.tech_categories);
              // получим ids опций по умолчанию
-            let _serve_in_serve_categories = serve
-                .filter(schema::serve::serve_categories.eq(&_serve_cat.id))
-                .load::<Serve>(&_connection)
-                .expect("E");
-            for _s in _serve_in_serve_categories {
-                if _s.is_default {
-                    default_serve_ids.push(_s.id);
-                }
-            }
+             if tech_categories_ids.len() == 1 {
+                 let _current_serves = serve
+                     .filter(schema::serve::serve_categories.eq(&_serve_cat.id))
+                     .load::<ServeCategories>(&_connection)
+                     .expect("E");
+                 for _s in _current_serves[0] {
+                     if _s.is_default {
+                         default_serve_ids.push(_s.id);
+                     }
+                 }
+             }
         }
     };
     // теперь добавим остальные категории технологий
