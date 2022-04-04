@@ -48,14 +48,14 @@
     border: 1px solid rgba(127,127,127, 0.7) !important;
 }
 
-.table tr:hover td:after {
+.select_serve:hover td:after {
 	border-top: 1px solid rgba(127,127,127, 0.7);
 	border-bottom: 1px solid rgba(127,127,127, 0.7);
 }
-.table tr:hover td:first-child:after {
+.select_serve:hover td:first-child:after {
 	border-left: 1px solid rgba(127,127,127, 0.7);
 }
-.table tr:hover td:last-child:after {
+.select_serve:hover td:last-child:after {
 	border-right: 1px solid rgba(127,127,127, 0.7);
 }
 
