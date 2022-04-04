@@ -35,7 +35,12 @@ pub async fn index(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
 
     let mut data = Context::new();
     let params = web::Query::<SParams>::from_query(&req.query_string());
-    println!("{:?}", params.is_ok()); 
+    if params.is_ok() {
+        if params.q != "".to_string() {
+            println!("{:?}", params.q);
+        }
+    }
+
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
