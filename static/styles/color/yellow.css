@@ -44,8 +44,18 @@
 .svg_default {
     color: rgba(0, 0, 0, 0.5) !important;
 }
-.border, .yy_tab :hover, .select_serve :hover {
+.border {
     border: 1px solid rgba(127,127,127, 0.7) !important;
+}
+.select_serve:hover td:after {
+	border-top: 1px solid rgba(127,127,127, 0.7);
+	border-bottom: 1px solid rgba(127,127,127, 0.7);
+}
+.select_serve:hover td:first-child:after {
+	border-left: 1px solid rgba(127,127,127, 0.7);
+}
+.select_serve:hover td:last-child:after {
+	border-right: 1px solid rgba(127,127,127, 0.7);
 }
 
 .svg_info {
