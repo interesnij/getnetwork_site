@@ -20,13 +20,12 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
-    if web::Query::<SearchParams>::from_query(&req.query_string()) {
-        let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
-        let _q = params.q.clone();
-    } else {
-        let _q = "".to_string();
-    }
-    let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
+
+    let params = match web::Query::<SearchParams>::from_query(&req.query_string()).unwrap() {
+        Ok(o) => o,
+        Err(_request) => SearchParams{q: ""},
+    };
+
     let _q = params.q.clone();
     let _q_standalone = "%".to_owned() + &_q + "%";
 
