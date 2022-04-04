@@ -127,7 +127,6 @@
                             {% endif %}
 
                             <div data-sum="{{ category.default_price }}" class="tab_{{ loop.index }} fade tab-pane {% if loop.first %}in active{% endif %}">
-                              <br>
                                 <table class="table">
                                     <h4>
                                       <span data-pk="{{ category.id }}" data-type="serve_category" owner-pk="{{ object.id }}" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up">
@@ -136,20 +135,20 @@
                                     </h4>
                                     <tbody>
 
-                                        {% for serve in object_list %} 
+                                        {% for serve in object_list %}
                                         <tr class="{% if serve.is_default %}is_default hover{% else %}select_serve pointer{% endif %}">
                                             <td style="width:52%">
                                                 <a class="pointer underline get_object_info" data-pk="{{ serve.id }}" data-type="serve" owner-pk="{{ object.id }}" owner-type="service">
                                                     {{ serve.cat_name }} => {{ serve.name }} ({{ serve.id }})
                                                 </a>
                                             </td>
-                                            <td class="price_td" tooltip="Сумма" flow="up" style="width:12%"><span class="price">{{ serve.price }}</span> ₽</td>
+                                            <td class="price_td" style="width:12%">Цена: <span class="price">{{ serve.price }}</span> ₽</td>
                                             {% if serve.price_acc %}
-                                            <td class="price_acc_td" tooltip="Со скидкой" flow="up" style="width:12%">↓ <span class="price_acc">{{ serve.price_acc }}</span> ₽</td>
+                                            <td class="price_acc_td" style="width:12%">По скидке: <span class="price_acc">{{ serve.price_acc }}</span> ₽</td>
                                             {% else %}
                                             <td style="width:12%"></td>
                                             {% endif %}
-                                            <td tooltip="Человеко-часы" flow="up" style="width:12%">{{ serve.man_hours }} ⌛</td>
+                                            <td style="width:12%">Часов: {{ serve.man_hours }}</td>
                                             <td style="width:12%">
                                               {% if not serve.is_default %}
                                                 Выбрать
