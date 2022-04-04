@@ -354,7 +354,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
         }
         let mut default_serve_ids = Vec::new();
         let _serve_in_serve_categories = serve
-            .filter(schema::serve::serve_categories.eq(&_serve_cat))
+            .filter(schema::serve::serve_categories.eq(&_serve_cat.id))
             .load::<Serve>(&_connection)
             .expect("E");
         for _s in _serve_in_serve_categories {
