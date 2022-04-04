@@ -7,7 +7,7 @@
 	background-size: 20px 20px;
 	background-position: center center;
 }
-tr:hover, tr.hover {
+.hover {
   background-color: #fff !important;
 }
 .small-section, .mob_menu, .banner_block {
@@ -46,7 +46,7 @@ tr:hover, tr.hover {
 .svg_default {
     color: rgba(0, 0, 0, 0.5) !important;
 }
-.border, .yy_tab :hover {
+.border, .yy_tab :hover, .select_serve :hover {
     border: 1px solid rgba(127,127,127, 0.7) !important;
 }
 

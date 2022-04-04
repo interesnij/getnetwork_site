@@ -10,7 +10,7 @@
   padding: 17px;
   box-shadow: 0 14px 28px rgb(255 255 255 / 50%), 0 10px 10px rgb(255 255 255 / 25%) !important;
 }
-tr:hover, tr.hover {
+.hover {
   background-color: #2f4f4f !important;
 }
 .mob_menu {
@@ -65,7 +65,7 @@ tr:hover, tr.hover {
 .svg_default {
     color: rgba(255, 255, 255, 0.5) !important;
 }
-.border, .yy_tab :hover {
+.border, .yy_tab :hover, .select_serve :hover {
     border: 1px solid rgba(255,255,255, 0.7) !important;
 }
 .shadow{
