@@ -333,8 +333,9 @@ on('#ajax', 'click', '.select_serve', function() {
     counter.setAttribute("data-serve", counter_serve_price + serve_price);
     _this.classList.add("hover");
     _this.querySelector(".action_text").innerHTML = '<span class="wow fadeIn" data-wow-duration="0.5s">Выбрано</span>';
-    new_list = counter_serve_list.push(serve_pk);
-    counter.parentElement.setAttribute("data-servelist", new_list)
+    counter_serve_list.push(serve_pk);
+    console.log(counter_serve_list);
+    counter.parentElement.setAttribute("data-servelist", counter_serve_list)
   }
   else {
     // если опция выбрана, надо снять выделение и счетчик уменьшить на сумму опции.
