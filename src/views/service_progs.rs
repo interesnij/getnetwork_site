@@ -331,11 +331,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     // 2. получаем категории опций, исключая дубли.
     let mut serve_categories_ids = Vec::new();
     let mut serve_ids = Vec::new();
-    let mut default_serve_ids = Vec::new();
     for _serve in __serves.iter() {
-        if _serve.is_default {
-            default_serve_ids.push(_serve.id);
-        }
         serve_ids.push(_serve.id);
         if serve_categories_ids.iter().any(|&i| i==_serve.serve_categories) {
             continue;
@@ -355,6 +351,16 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     for _serve_cat in __serve_categories.iter() {
         if _categories_names.iter().any(|i| i.to_string()==_serve_cat.cat_name) {
             tech_categories_ids.push(_serve_cat.tech_categories);
+        }
+        let mut default_serve_ids = Vec::new();
+        let _serve_in_serve_categories = serve
+            .filter(schema::serve::serve_categories.eq(&_serve_cat))
+            .load::<Serve>(&_connection)
+            .expect("E");
+        for _s in _serve_in_serve_categories {
+            if _serve.is_default {
+                default_serve_ids.push(_serve.id);
+            }
         }
     };
     // теперь добавим остальные категории технологий
