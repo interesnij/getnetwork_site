@@ -292,9 +292,9 @@ on('#ajax', 'click', '.select_serve', function() {
   _this = this;
   counter = document.body.querySelector(".total_price_counter");
   counter_serve_price = counter.getAttribute("data-serve")*1;
-  counter_serve_list = counter.parentElement.getAttribute("data-servelist").replace("]", ",]");
+  counter_serve_list = counter.parentElement.getAttribute("data-servelist");
   console.log(counter_serve_list);
-  serve_pk = _this.querySelector(".get_object_info").getAttribute("data-pk")
+  serve_pk = _this.querySelector(".get_object_info").getAttribute("data-pk");
 
   // для начала мы уберем выбранные опции во вкладках
   // выбранной категории (напр категории "моб. разработка")
@@ -334,6 +334,7 @@ on('#ajax', 'click', '.select_serve', function() {
     counter.setAttribute("data-serve", counter_serve_price + serve_price);
     _this.classList.add("hover");
     _this.querySelector(".action_text").innerHTML = '<span class="wow fadeIn" data-wow-duration="0.5s">Выбрано</span>';
+    console.log(serve_pk);
     counter_serve_list.push(serve_pk);
     counter.parentElement.setAttribute("data-servelist", counter_serve_list)
   }
