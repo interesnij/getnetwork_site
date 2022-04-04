@@ -338,7 +338,7 @@ on('#ajax', 'click', '.select_serve', function() {
     counter.innerHTML = counter.innerHTML*1 - serve_price;
     counter.setAttribute("data-serve", counter_serve_price - serve_price);
     _this.classList.remove("hover");
-    _this.querySelector(".action_text").innerHTML = '<span class="wow fadeIn" data-wow-duration="0.3s">Выбрать</span>';
+    _this.querySelector(".action_text").innerHTML = '<span class="wow fadeIn" data-wow-duration="0.8s">Выбрать</span>';
   }
 });
 
