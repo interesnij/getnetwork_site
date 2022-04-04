@@ -229,19 +229,19 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     let mut data = Context::new();
     let mut _template = "".to_string();
 
-    if _object_type == "tech_category".to_string() {
-        // тип запрашиваемого объекта "tech_category".
+    if _object_type == "serve_category".to_string() {
+        // тип запрашиваемого объекта "serve_category".
         // получаем объект и записываем в контекст, получаем строку шаблона
-        use crate::models::TechCategories;
-        use crate::schema::tech_categories::dsl::*;
+        use crate::models::ServeCategories;
+        use crate::schema::serve_categories::dsl::*;
 
-        let _tech_category = tech_categories
-            .filter(schema::tech_categories::id.eq(&_object_pk))
-            .load::<TechCategories>(&_connection)
+        let _serve_category = serve_categories
+            .filter(schema::serve_categories::id.eq(&_object_pk))
+            .load::<ServeCategories>(&_connection)
             .expect("E");
-        data.insert("object", &_tech_category[0]);
-        data.insert("object_type", &"tech_category".to_string());
-        _template = _type + &"load/tech_category.html".to_string();
+        data.insert("object", &_serve_category[0]);
+        data.insert("object_type", &"serve_category".to_string());
+        _template = _type + &"load/serve_category.html".to_string();
     } else if _object_type == "serve".to_string() {
         // тип запрашиваемого объекта - опция.
         // получаем объект и записываем в контекст, получаем строку шаблона
@@ -268,34 +268,6 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
                 .expect("E");
             data.insert("service", &_service[0]);
             data.insert("owner_type", &"service".to_string());
-
-            // получаем предыдущую и следующую опцию. Как вариант.
-            // Ведь можем передать и весь список опций
-            let _serve_items = serve_items.filter(schema::serve_items::service_id.eq(_service_id)).load::<ServeItems>(&_connection).expect("E");
-            let mut serve_stack_of_service = Vec::new();
-            for _serve_item in _serve_items.iter() {
-                serve_stack_of_service.push(_serve_item.serve_id);
-            };
-            let serve_of_service = schema::serve::table
-                .filter(schema::serve::id.eq(any(serve_stack_of_service)))
-                .order(schema::serve::serve_position.asc())
-                .load::<Serve>(&_connection)
-                .expect("E");
-
-            for (i, item) in serve_of_service.iter().enumerate().rev() {
-                if item.id == _object_pk {
-                    if (i + 1) != serve_of_service.len() {
-                        let _prev = Some(&serve_of_service[i + 1]);
-                        data.insert("prev", &_prev);
-                    };
-                    if i != 0 {
-                        let _next = Some(&serve_of_service[i - 1]);
-                        data.insert("next", &_next);
-                    };
-                    break;
-                }
-            };
-
         }
         _template = _type + &"load/serve.html".to_string();
     }
