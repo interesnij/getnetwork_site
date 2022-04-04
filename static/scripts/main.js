@@ -372,7 +372,7 @@ function service_tab_action(_this, tab_class){
 
     tabs_panes = tabs.querySelectorAll(".tab-pane");
     for (var i = 0; i < tabs_panes.length; i++){
-        serve_list = tab_panes[i].querySelectorAll(".select_serve");
+        serve_list = tabs_panes[i].querySelectorAll(".select_serve");
         for (var i2 = 0; i2 < serve_list.length; i2++){
           // также нужно уменьшить счетчик цены на сумму всех выбранных опций в других
           // вкладках. А также уменьшить "data-serve" счетчика
