@@ -21,11 +21,11 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
 
     let _connection = establish_connection();
 
-    let mut params = web::Query::<SearchParams>::from_query(&req.query_string());
+    let params = web::Query::<SearchParams>::from_query(&req.query_string());
     let mut _q : String;
     if params.is_ok() {
-        params = params.unwrap();
-        _q = params.q.clone();
+        let params_2 = params.unwrap();
+        _q = params_2.q.clone();
     } else {
         _q = "".to_string();
     }
