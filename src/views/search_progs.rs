@@ -15,24 +15,20 @@ use std::default::Default;
 pub struct SearchParams {
     pub q: String,
 }
-impl Default for SearchParams {
-    fn default() -> Self {
-        SearchParams { q: "".to_string() }
-    }
-}
 
 pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
 
-    let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
-    //let mut _q = "".to_string();
-    //if params.is_some() {
-    //    let _psr = params.unwrap();
-    //    _q = _psr.parse().q.clone();
-    //}
-    let _q = params.q.clone();
+    let mut params = web::Query::<SearchParams>::from_query(&req.query_string());
+    let mut _q : String;
+    if params.is_ok() {
+        params = params.unwrap();
+        _q = params.q.clone();
+    } else {
+        _q = "".to_string();
+    }
     let _q_standalone = "%".to_owned() + &_q + "%";
 
     let _blogs = schema::blogs::table
