@@ -150,13 +150,11 @@
                                             {% endif %}
                                             <td style="width:12%">Часы: {{ serve.man_hours }}</td>
                                             <td class="action_text" style="width:12%">
-                                              <span class="wow fadeIn" data-wow-duration="0.1s">
                                                 {% if not serve.is_default %}
                                                   Выбрать
                                                 {% else %}
                                                   Выбрано
                                                 {% endif %}
-                                              </span>
                                             </td>
                                         </tr>
                                         {% endfor %}
