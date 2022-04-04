@@ -331,7 +331,11 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     // 2. получаем категории опций, исключая дубли.
     let mut serve_categories_ids = Vec::new();
     let mut serve_ids = Vec::new();
+    let mut default_serve_ids = Vec::new();
     for _serve in __serves.iter() {
+        if _serve.is_default {
+            default_serve_ids.push(_serve.id);
+        }
         serve_ids.push(_serve.id);
         if serve_categories_ids.iter().any(|&i| i==_serve.serve_categories) {
             continue;
@@ -427,6 +431,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     data.insert("tags_count", &_tags.len());
     data.insert("is_admin", &_is_admin);
     data.insert("default_price", &default_price);
+    data.insert("default_servelist", &default_serve_ids);
 
     let _template = _type + &"services/service.html".to_string();
     let _rendered = tera.render(&_template, &data).unwrap();
