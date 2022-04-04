@@ -21,7 +21,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
 
     let _connection = establish_connection();
 
-    let f_params : Result<(), ParseIntError> = web::Query::<SearchParams>::from_query(&req.query_string());
+    let f_params : Result<(), SearchParams> = web::Query::<SearchParams>::from_query(&req.query_string());
     let params = match f_params.unwrap() {
         Ok(params)  => params,
         Err(e) => SearchParams{q:"".to_string()},
