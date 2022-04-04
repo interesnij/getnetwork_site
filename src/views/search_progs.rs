@@ -23,7 +23,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
 
     let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
     let params = match params {
-        Ok(o) => o,
+        Ok(R) => R,
         Err(error) => SearchParams {q: "".to_owned()},
     };
 
