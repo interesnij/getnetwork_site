@@ -292,6 +292,8 @@ on('#ajax', 'click', '.select_serve', function() {
   _this = this;
   counter = document.body.querySelector(".total_price_counter");
   counter_serve_price = counter.getAttribute("data-serve")*1;
+  counter_serve_list = counter.getAttribute("data-servelist");
+  serve_pk = _this.querySelector(".get_object_info").getAttribute("data-pk")
 
   // для начала мы уберем выбранные опции во вкладках
   // выбранной категории (напр категории "моб. разработка")
@@ -331,6 +333,7 @@ on('#ajax', 'click', '.select_serve', function() {
     counter.setAttribute("data-serve", counter_serve_price + serve_price);
     _this.classList.add("hover");
     _this.querySelector(".action_text").innerHTML = '<span class="wow fadeIn" data-wow-duration="0.5s">Выбрано</span>';
+    counter_serve_list.push(serve_pk)
   }
   else {
     // если опция выбрана, надо снять выделение и счетчик уменьшить на сумму опции.
@@ -339,6 +342,10 @@ on('#ajax', 'click', '.select_serve', function() {
     counter.setAttribute("data-serve", counter_serve_price - serve_price);
     _this.classList.remove("hover");
     _this.querySelector(".action_text").innerHTML = 'Выбрать';
+    var index = counter_serve_list.indexOf(serve_pk);
+    if (index > -1) {
+      counter_serve_list.splice(index, 1);
+    }
   }
 });
 
@@ -346,9 +353,6 @@ function service_tab_action(_this, tab_class){
   if (!_this.classList.contains("active")){
     if (_this.getAttribute("data-sum")){
       counter = document.body.querySelector(".total_price_counter");
-      console.log("цена counter", counter.innerHTML);
-      console.log("старая цена counter", counter.getAttribute("data-oldsum"));
-      console.log("цена новая", _this.getAttribute("data-sum"));
       counter.innerHTML = counter.innerHTML*1 - counter.getAttribute("data-oldsum")*1 + _this.getAttribute("data-sum")*1;
       counter.setAttribute("data-oldsum", _this.getAttribute("data-sum"))
     };
