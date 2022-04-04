@@ -217,10 +217,10 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         if wrap._owner_type != "".to_string() {
             _owner_type = wrap._owner_type.clone();
         }
-        if wrap._object_id != "".to_string() {
+        if wrap._object_id != 0 {
             _object_id = wrap._object_id.clone();
         }
-        if wrap._owner_pk != "".to_string() {
+        if wrap._owner_pk != 0 {
             _owner_pk = wrap._owner_pk.clone();
         }
     }
