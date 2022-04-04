@@ -295,7 +295,7 @@ on('#ajax', 'click', '.select_serve', function() {
   counter_serve_list = counter.parentElement
     .getAttribute("data-servelist")
     .replace('[', "")
-    .replace(']', ",")
+    .replace(']', "")
     .split(',');
   serve_pk = _this.querySelector(".get_object_info").getAttribute("data-pk");
 
