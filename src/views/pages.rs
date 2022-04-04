@@ -36,7 +36,7 @@ pub async fn index(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     let mut data = Context::new();
     let params = web::Query::<SParams>::from_query(&req.query_string());
     if params.is_ok() {
-        wrap = params.unwrap();
+        let wrap = params.unwrap();
         if wrap.q != "".to_string() {
             println!("{:?}", wrap.q.clone());
         }
