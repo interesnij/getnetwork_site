@@ -290,14 +290,13 @@ function toast_warning(text) {
 
 on('#ajax', 'click', '.select_serve', function(event) {
   _this = this;
-  console.log(event.target.querySelector("get_object_info"));
-  console.log(event.target.getAttribute("data-type"));
-  if (event.target.classList.contains("is_load_object")) {
+  target = vent.target;
+  if (target.classList.contains("is_load_object")) {
     create_fullscreen(
-      "/load_item/?_object_type=" + event.getAttribute("data-type")
-      + "&_owner_type=" + event.target.getAttribute("owner-type")
-      + "&_object_pk=" + event.target.getAttribute("data-pk")
-      + "&_owner_pk=" + event.target.getAttribute("owner-pk"),
+      "/load_item/?_object_type=" + target.getAttribute("data-type")
+      + "&_owner_type=" + target.getAttribute("owner-type")
+      + "&_object_pk=" + target.getAttribute("data-pk")
+      + "&_owner_pk=" + target.getAttribute("owner-pk"),
       "worker_fullscreen"
     );
     return
