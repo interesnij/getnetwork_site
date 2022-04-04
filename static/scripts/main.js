@@ -330,7 +330,7 @@ on('#ajax', 'click', '.select_serve', function() {
     counter.innerHTML = counter.innerHTML*1 + serve_price;
     counter.setAttribute("data-serve", counter_serve_price + serve_price);
     _this.classList.add("hover");
-    _this.querySelector("wow").innerHTML = "Выбрано";
+    _this.querySelector(".wow").innerHTML = "Выбрано";
   }
   else {
     // если опция выбрана, надо снять выделение и счетчик уменьшить на сумму опции.
@@ -338,7 +338,7 @@ on('#ajax', 'click', '.select_serve', function() {
     counter.innerHTML = counter.innerHTML*1 - serve_price;
     counter.setAttribute("data-serve", counter_serve_price - serve_price);
     _this.classList.remove("hover");
-    _this.querySelector("wow").innerHTML = "Выбрать";
+    _this.querySelector(".wow").innerHTML = "Выбрать";
   }
 });
 
