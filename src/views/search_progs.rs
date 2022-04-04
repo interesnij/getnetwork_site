@@ -23,7 +23,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
 
     let params = match web::Query::<SearchParams>::from_query(&req.query_string()).unwrap() {
         Ok(o) => o,
-        Err(_request) => SearchParams{q: ""},
+        Err(_) => SearchParams{q: "".to_string()},
     };
 
     let _q = params.q.clone();
