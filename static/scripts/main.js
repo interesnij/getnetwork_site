@@ -288,8 +288,17 @@ function toast_warning(text) {
     toasts.showWarning(text)
 }
 
-on('#ajax', 'click', '.select_serve', function() {
+on('#ajax', 'click', '.select_serve', function(event) {
   _this = this;
+  if (event.target.classList.contains("get_object_info")) {
+    create_fullscreen(
+      "/load_item/?_object_type=" + event.getAttribute("data-type")
+      + "&_owner_type=" + event.getAttribute("owner-type")
+      + "&_object_pk=" + event.getAttribute("data-pk")
+      + "&_owner_pk=" + event.getAttribute("owner-pk"),
+      "worker_fullscreen"
+    );
+  }
   counter = document.body.querySelector(".total_price_counter");
   counter_serve_price = counter.getAttribute("data-serve")*1;
   counter_serve_list = counter.parentElement
