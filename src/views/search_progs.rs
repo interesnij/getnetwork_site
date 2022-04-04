@@ -13,7 +13,7 @@ use diesel::prelude::*;
 
 #[derive(Debug, Deserialize)]
 pub struct SearchParams {
-    pub q: Option<String>,
+    pub q: String,
 }
 
 pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
@@ -23,7 +23,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
 
     let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
     let _q = params.q.clone();
-    let _q_standalone = "%".to_owned() + &Some(_q).to_string() + "%";
+    let _q_standalone = "%".to_owned() + &_q + "%";
 
     let _blogs = schema::blogs::table
         .filter(schema::blogs::title.eq(&_q_standalone))
