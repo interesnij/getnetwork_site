@@ -25,7 +25,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     let mut _q = "".to_string();
     if params.is_some() {
         let _psr = params.unwrap();
-        _q = _psr.q.clone();
+        _q = _psr.q.parse().clone();
     }
     let _q_standalone = "%".to_owned() + &_q + "%";
 
