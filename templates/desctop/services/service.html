@@ -166,20 +166,6 @@
                     </div>
                 </section>
                 {% endfor %}
-                <div class="mt-40 align-right">
-                    <a data-sum="{{ default_price }}"
-                       data-pk="{{ object.id }}"
-                       class="btn btn-medium btn-mod border btn-round create_order_form_of_service"
-                     >
-                      Сумма
-                      <span data-serve="0"
-                            data-oldsum="{{ default_price }}"
-                            class="total_price_counter">
-                            {{ default_price }}
-                      </span> ₽.
-                      Перейти к заказу
-                    </a>
-                </div>
 
                 {% if images %}
                 <h4 class="mt-20">Изображения</h4>
@@ -209,5 +195,17 @@
             </div>
         </div>
     </div>
+    <section class="border" style="position: sticky;bottom: 0;"> 
+        <h2 data-sum="{{ default_price }}"
+            data-pk="{{ object.id }}"
+            class="section-title font-alt create_order_form_of_service">
+            Сумма <span data-serve="0"
+                        data-oldsum="{{ default_price }}"
+                        class="total_price_counter">
+                      {{ default_price }}
+                  </span>
+             ₽. Перейти к заказу
+        </h2>
+    </section>
 </section>
 {% endblock %}
