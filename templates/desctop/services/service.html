@@ -149,12 +149,14 @@
                                             <td style="width:12%"></td>
                                             {% endif %}
                                             <td style="width:12%">Часы: {{ serve.man_hours }}</td>
-                                            <td style="width:12%">
-                                              {% if not serve.is_default %}
-                                                Выбрать
-                                              {% else %}
-                                                Выбрано
-                                              {% endif %}
+                                            <td class="action_text" style="width:12%">
+                                              <span class="wow fadeIn">
+                                                {% if not serve.is_default %}
+                                                  Выбрать
+                                                {% else %}
+                                                  Выбрано
+                                                {% endif %}
+                                              <span>
                                             </td>
                                         </tr>
                                         {% endfor %}

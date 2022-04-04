@@ -1,36 +1,3 @@
-function update_query_string(key, value, url) {
-    if (!url) url = window.location.href;
-    var re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
-        hash;
-
-    if (re.test(url)) {
-        if (typeof value !== 'undefined' && value !== null) {
-            return url.replace(re, '$1' + key + "=" + value + '$2$3');
-        }
-        else {
-            hash = url.split('#');
-            url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
-            if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
-                url += '#' + hash[1];
-            }
-            return url;
-        }
-    }
-    else {
-        if (typeof value !== 'undefined' && value !== null) {
-            var separator = url.indexOf('?') !== -1 ? '&' : '?';
-            hash = url.split('#');
-            url = hash[0] + separator + key + '=' + value;
-            if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
-                url += '#' + hash[1];
-            }
-            return url;
-        }
-        else {
-            return url;
-        }
-    }
-};
 
 function get_document_opacity_0() {
   document.body.style.overflowY = "hidden";
@@ -363,6 +330,7 @@ on('#ajax', 'click', '.select_serve', function() {
     counter.innerHTML = counter.innerHTML*1 + serve_price;
     counter.setAttribute("data-serve", counter_serve_price + serve_price);
     _this.classList.add("hover");
+    _this.querySelector("wow").innerHTML = "Выбрано";
   }
   else {
     // если опция выбрана, надо снять выделение и счетчик уменьшить на сумму опции.
@@ -370,6 +338,7 @@ on('#ajax', 'click', '.select_serve', function() {
     counter.innerHTML = counter.innerHTML*1 - serve_price;
     counter.setAttribute("data-serve", counter_serve_price - serve_price);
     _this.classList.remove("hover");
+    _this.querySelector("wow").innerHTML = "Выбрать";
   }
 });
 
