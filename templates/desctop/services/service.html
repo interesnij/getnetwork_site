@@ -136,7 +136,7 @@
                                     <tbody>
 
                                         {% for serve in object_list %}
-                                        <tr class="{% if serve.is_default %}is_default hover{% else %}select_serve{% endif %}">
+                                        <tr class="{% if serve.is_default %}is_default hover{% else %}select_serve pointer{% endif %}">
                                             <td class="is_load_object" style="width:52%" data-pk="{{ serve.id }}" data-type="serve" owner-pk="{{ object.id }}" owner-type="service">
                                                 <a class="pointer underline get_object_info">
                                                     {{ serve.cat_name }} => {{ serve.name }} ({{ serve.id }})
