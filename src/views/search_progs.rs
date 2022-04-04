@@ -16,8 +16,8 @@ pub struct SearchParams {
     pub q: String,
 }
 impl Default for SearchParams {
-    pub fn default() -> Self {
-        SearchParams { q: "" }
+    fn default() -> Self {
+        SearchParams { q: "".to_string() }
     }
 }
 
