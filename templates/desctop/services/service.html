@@ -195,17 +195,17 @@
             </div>
         </div>
     </div>
-    <section class="border" style="position: sticky;bottom: 0;"> 
-        <h2 data-sum="{{ default_price }}"
+    <section class="border" style="position: sticky;bottom: 0;">
+        <h3 data-sum="{{ default_price }}"
             data-pk="{{ object.id }}"
-            class="section-title font-alt create_order_form_of_service">
+            class="section-title create_order_form_of_service">
             Сумма <span data-serve="0"
                         data-oldsum="{{ default_price }}"
                         class="total_price_counter">
                       {{ default_price }}
                   </span>
              ₽. Перейти к заказу
-        </h2>
+        </h3>
     </section>
 </section>
 {% endblock %}
