@@ -290,17 +290,18 @@ function toast_warning(text) {
 
 on('#ajax', 'click', '.select_serve', function(event) {
   _this = this;
-  console.log(event.target);
-  console.log(event.getAttribute("data-type"));
-  if (event.target.classList.contains("get_object_info")) {
+  console.log(event.target.querySelector("get_object_info"));
+  console.log(event.target.getAttribute("data-type"));
+  if (event.target.classList.contains("is_load_object")) {
     create_fullscreen(
       "/load_item/?_object_type=" + event.getAttribute("data-type")
-      + "&_owner_type=" + event.getAttribute("owner-type")
-      + "&_object_pk=" + event.getAttribute("data-pk")
-      + "&_owner_pk=" + event.getAttribute("owner-pk"),
+      + "&_owner_type=" + event.target.getAttribute("owner-type")
+      + "&_object_pk=" + event.target.getAttribute("data-pk")
+      + "&_owner_pk=" + event.target.getAttribute("owner-pk"),
       "worker_fullscreen"
     );
-  }
+    return
+  };
   counter = document.body.querySelector(".total_price_counter");
   counter_serve_price = counter.getAttribute("data-serve")*1;
   counter_serve_list = counter.parentElement
