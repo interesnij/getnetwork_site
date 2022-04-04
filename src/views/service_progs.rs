@@ -357,7 +357,7 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
              if tech_categories_ids.len() == 1 {
                  let _current_serves = serve
                      .filter(schema::serve::serve_categories.eq(&_serve_cat.id))
-                     .load::<ServeCategories>(&_connection)
+                     .load::<Serve>(&_connection)
                      .expect("E");
                  for _s in _current_serves {
                      if _s.is_default {
