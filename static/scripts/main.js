@@ -398,6 +398,7 @@ function service_tab_action(_this, tab_class){
       tabs_panes[i].classList.remove("active", "in")
     };
 
+    counter.parentElement.setAttribute("data-servelist", counter_serve_list)
     cur = tabs.querySelector(tab_class);
     cur.classList.add("active", "in");
   }
