@@ -22,7 +22,7 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     let _connection = establish_connection();
 
     let params = Ok(web::Query::<SearchParams>::from_query(&req.query_string()).unwrap());
-
+    println("{:?}", params);
     let _q = params.q.clone();
     let _q_standalone = "%".to_owned() + &_q + "%";
 
