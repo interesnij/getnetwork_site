@@ -394,7 +394,8 @@ function service_tab_action(_this, tab_class){
     for (var i3 = 0; i3 < new_serve_list.length; i3++){
       new_arr.push(new_serve_list[i3].querySelector(".get_object_info").getAttribute("data-pk"))
     };
-    counter.parentElement.setAttribute("data-servelist", new_arr)
+    counter.parentElement.setAttribute("data-servelist", new_arr);
+    counter.innerHTML = cur.getAttribute("data-sum");
   }
 };
 
