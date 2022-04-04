@@ -291,7 +291,7 @@ function toast_warning(text) {
 on('#ajax', 'click', '.select_serve', function(event) {
   _this = this;
   target = event.target;
-  if (target.classList.contains("ajax")) {
+  if (target.classList.contains("get_object_info")) { 
     create_fullscreen(
       "/load_item/?_object_type=" + target.getAttribute("data-type")
       + "&_owner_type=" + target.getAttribute("owner-type")
