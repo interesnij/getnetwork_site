@@ -204,7 +204,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
 
     let mut _object_type : String = "".to_string();
     let mut _owner_type : String = "".to_string();
-    let mut _object_id : i32 = 0;
+    let mut _object_pk : i32 = 0;
     let mut _owner_pk : i32 = 0;
 
     let _connection = establish_connection();
@@ -217,8 +217,8 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         if wrap._owner_type != "".to_string() {
             _owner_type = wrap._owner_type.clone();
         }
-        if wrap._object_id != 0 {
-            _object_id = wrap._object_id.clone();
+        if wrap._object_pk != 0 {
+            _object_pk = wrap._object_pk.clone();
         }
         if wrap._owner_pk != 0 {
             _owner_pk = wrap._owner_pk.clone();
@@ -236,7 +236,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         use crate::schema::tech_categories::dsl::*;
 
         let _tech_category = tech_categories
-            .filter(schema::tech_categories::id.eq(&_object_id))
+            .filter(schema::tech_categories::id.eq(&_object_pk))
             .load::<TechCategories>(&_connection)
             .expect("E");
         data.insert("object", &_tech_category[0]);
@@ -251,7 +251,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         use schema::serve_items::dsl::serve_items;
 
         let _serve = serve
-            .filter(schema::serve::id.eq(&_object_id))
+            .filter(schema::serve::id.eq(&_object_pk))
             .load::<Serve>(&_connection)
             .expect("E");
         data.insert("object", &_serve[0]);
@@ -283,7 +283,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
                 .expect("E");
 
             for (i, item) in serve_of_service.iter().enumerate().rev() {
-                if item.id == _object_id {
+                if item.id == _object_pk {
                     if (i + 1) != serve_of_service.len() {
                         let _prev = Some(&serve_of_service[i + 1]);
                         data.insert("prev", &_prev);
