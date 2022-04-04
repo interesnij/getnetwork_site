@@ -34,7 +34,7 @@ pub async fn index(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     let _last_stores :Vec<Store> = stores.filter(is_store_active.eq(true)).order(store_created.desc()).limit(3).load(&_connection).expect(".");
 
     let mut data = Context::new();
-    let params = web::Query::<SParams>::from_query(&req.query_string())
+    let params = web::Query::<SParams>::from_query(&req.query_string());
     println!("{:?}", params);
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
