@@ -93,7 +93,7 @@ body{
 
 .window_fullscreen, .card_fullscreen {
   color: rgba(0,0,0, 0.9) !important;
-  background-color: #e6e3df !important;
+  background-color: rgba(255,255,255, 1) !important;
 }
 .mobile-nav .fa {
     color: #000000 !important;
