@@ -34,13 +34,6 @@ pub async fn index(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     let _last_stores :Vec<Store> = stores.filter(is_store_active.eq(true)).order(store_created.desc()).limit(3).load(&_connection).expect(".");
 
     let mut data = Context::new();
-    let params = web::Query::<SParams>::from_query(&req.query_string());
-    if params.is_ok() {
-        let wrap = params.unwrap();
-        if wrap.q != "".to_string() {
-            println!("{:?}", wrap.q.clone());
-        }
-    }
 
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
@@ -209,14 +202,34 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
     use crate::schema;
     use diesel::prelude::*;
 
+    let mut _object_type : String = "".to_string();
+    let mut _owner_type : String = "".to_string();
+    let mut _object_id : i32 = 0;
+    let mut _owner_pk : i32 = 0;
+
     let _connection = establish_connection();
-    let params = web::Query::<LoadParams>::from_query(&req.query_string()).unwrap();
+    let params = web::Query::<LoadParams>::from_query(&req.query_string());
+    if params.is_ok() {
+        let wrap = params.unwrap();
+        if wrap._object_type != "".to_string() {
+            _object_type = wrap._object_type.clone();
+        }
+        if wrap._owner_type != "".to_string() {
+            _owner_type = wrap._owner_type.clone();
+        }
+        if wrap._object_id != "".to_string() {
+            _object_id = wrap._object_id.clone();
+        }
+        if wrap._owner_pk != "".to_string() {
+            _owner_pk = wrap._owner_pk.clone();
+        }
+    }
+
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     let mut data = Context::new();
     let mut _template = "".to_string();
-    let _object_id : i32 = params._object_pk.clone();
 
-    if params._object_type.clone() == "tech_category".to_string() {
+    if _object_type == "tech_category".to_string() {
         // тип запрашиваемого объекта "tech_category".
         // получаем объект и записываем в контекст, получаем строку шаблона
         use crate::models::TechCategories;
@@ -229,7 +242,7 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         data.insert("object", &_tech_category[0]);
         data.insert("object_type", &"tech_category".to_string());
         _template = _type + &"load/tech_category.html".to_string();
-    } else if params._object_type.clone() == "serve".to_string() {
+    } else if _object_type == "serve".to_string() {
         // тип запрашиваемого объекта - опция.
         // получаем объект и записываем в контекст, получаем строку шаблона
         use crate::models::Serve;
@@ -243,12 +256,12 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
             .expect("E");
         data.insert("object", &_serve[0]);
         data.insert("object_type", &"serve".to_string());
-        if params._owner_type.clone() == "service".to_string() {
+        if _owner_type == "service".to_string() {
             // тип объекта-владельца - услуга.
             // получаем объект и записываем в контекст, получаем строку шаблона
             use crate::models::{Service, ServeItems};
             use crate::schema::services::dsl::services;
-            let _service_id : i32 = params._owner_pk.clone();
+            let _service_id : i32 = _owner_pk;
             let _service = services
                 .filter(schema::services::id.eq(&_service_id))
                 .load::<Service>(&_connection)
