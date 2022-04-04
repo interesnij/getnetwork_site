@@ -292,7 +292,7 @@ on('#ajax', 'click', '.select_serve', function() {
   _this = this;
   counter = document.body.querySelector(".total_price_counter");
   counter_serve_price = counter.getAttribute("data-serve")*1;
-  counter_serve_list = counter.parentElement.getAttribute("data-servelist");
+  counter_serve_list = counter.parentElement.getAttribute("data-servelist").replace("]", ",]");
   console.log(counter_serve_list);
   serve_pk = _this.querySelector(".get_object_info").getAttribute("data-pk")
 
