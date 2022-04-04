@@ -48,7 +48,7 @@
     border: 1px solid rgba(127,127,127, 0.7) !important;
 }
 
-.table tr:hover td:after {
+tbody tr:hover td:after {
 	content: '';
 	position: absolute;
 	top: 0px;
@@ -60,10 +60,10 @@
 	border-bottom: 1px solid rgba(127,127,127, 0.7);
 }
 
-.table tr:hover td:first-child:after {
+tbody tr:hover td:first-child:after {
 	border-left: 1px solid rgba(127,127,127, 0.7);
 }
-.table tr:hover td:last-child:after {
+tbody tr:hover td:last-child:after {
 	border-right: 1px solid rgba(127,127,127, 0.7);
 	width: auto;
 }
