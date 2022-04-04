@@ -290,7 +290,7 @@ function toast_warning(text) {
 
 on('#ajax', 'click', '.select_serve', function(event) {
   _this = this;
-  console.log(event.target.classList);
+  console.log(event.target);
   console.log(event.getAttribute("data-type"));
   if (event.target.classList.contains("get_object_info")) {
     create_fullscreen(
