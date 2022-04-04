@@ -48,7 +48,7 @@
     border: 1px solid rgba(127,127,127, 0.7) !important;
 }
 
-tbody tr:hover td:after {
+.select_serve:hover td:after {
 	content: '';
 	position: absolute;
 	top: 0px;
@@ -60,10 +60,10 @@ tbody tr:hover td:after {
 	border-bottom: 1px solid rgba(127,127,127, 0.7);
 }
 
-tbody tr:hover td:first-child:after {
+.select_serve tr:hover td:first-child:after {
 	border-left: 1px solid rgba(127,127,127, 0.7);
 }
-tbody tr:hover td:last-child:after {
+.select_serve tr:hover td:last-child:after {
 	border-right: 1px solid rgba(127,127,127, 0.7);
 	width: auto;
 }
