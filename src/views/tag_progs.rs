@@ -28,12 +28,12 @@ pub fn tag_routes(config: &mut web::ServiceConfig) {
     config.route("/tag_wikis/{id}/", web::get().to(tag_wikis_page));
     config.route("/tag_works/{id}/", web::get().to(tag_works_page));
     config.service(web::resource("/create_tag/")
-        .route(web::get().to(create_tag_page));
-        .route(web::post().to(create_tag));
+        .route(web::get().to(create_tag_page))
+        .route(web::post().to(create_tag))
     );
     config.service(web::resource("/edit_tag/{id}/")
-        .route(web::get().to(edit_tag_page));
-        .route(web::post().to(edit_tag));
+        .route(web::get().to(edit_tag_page))
+        .route(web::post().to(edit_tag))
     );
     config.route("/delete_tag/{id}/", web::get().to(delete_tag));
 }
