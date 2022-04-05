@@ -29,28 +29,28 @@ use crate::models::{
 };
 
 pub fn blog_routes(config: &mut web::ServiceConfig) {
-    config.route("/blog_categories/", web::get().to(blog_categories_page))
+    config.route("/blog_categories/", web::get().to(blog_categories_page));
     config.service(web::resource("/create_blog_categories/")
         .route(web::get().to(create_blog_categories_page))
         .route(web::post().to(create_blog_categories))
-    )
+    );
     config.service(web::resource("/edit_blog_category/{id}/")
         .route(web::get().to(edit_blog_category_page))
         .route(web::post().to(edit_blog_category))
-    )
+    );
     config.service(web::resource("/create_blog/")
         .route(web::get().to(create_blog_page))
         .route(web::post().to(create_blog))
-    )
+    );
     config.service(web::resource("/edit_blog/{id}/")
         .route(web::get().to(edit_blog_page))
         .route(web::post().to(edit_blog))
-    )
-    config.route("/edit_content_blog/{id}/", web::get().to(edit_content_blog_page))
-    config.route("/delete_blog/{id}/", web::get().to(delete_blog))
-    config.route("/delete_blog_category/{id}/", web::get().to(delete_blog_category))
-    config.service(web::resource("/blog/{cat_id}/{blog_id}/").route(web::get().to(get_blog_page)))
-    config.service(web::resource("/blog/{id}/").route(web::get().to(blog_category_page)))
+    );
+    config.route("/edit_content_blog/{id}/", web::get().to(edit_content_blog_page));
+    config.route("/delete_blog/{id}/", web::get().to(delete_blog));
+    config.route("/delete_blog_category/{id}/", web::get().to(delete_blog_category));
+    config.service(web::resource("/blog/{cat_id}/{blog_id}/").route(web::get().to(get_blog_page)));
+    config.service(web::resource("/blog/{id}/").route(web::get().to(blog_category_page)));
 }
 
 fn get_cats_for_blog(blog: &Blog) -> Vec<BlogCategories> {
