@@ -257,7 +257,7 @@ pub async fn get_load_page(req: HttpRequest) -> impl Responder {
         if _owner_type == "service".to_string() {
             // тип объекта-владельца - услуга.
             // получаем объект и записываем в контекст, получаем строку шаблона
-            use crate::models::{Service, ServeItems};
+            use crate::models::Service;
             use crate::schema::services::dsl::services;
             let _service_id : i32 = _owner_pk;
             let _service = services
