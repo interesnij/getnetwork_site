@@ -4,9 +4,9 @@ use actix_web::{
     HttpResponse,
     web
 };
-use tera::{Tera, Context};
 use serde::Deserialize;
-use crate::utils::{get_template_2, establish_connection};
+use tera::{Tera,Context};
+use crate::utils::{get_template_2, establish_connection, TEMPLATES};
 use crate::NewUser;
 use crate::diesel::RunQueryDsl;
 
@@ -49,7 +49,7 @@ pub async fn index(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"main/mainpage.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 pub async fn about(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {

@@ -1,5 +1,4 @@
 mod payload_handler;
-
 pub use self::{
     payload_handler::*
 };
@@ -13,6 +12,23 @@ use crate::models::{
     WikiCategories,
     WorkCategories,
 };
+use tera::{Tera, Context};
+use lazy_static::lazy_static;
+
+
+lazy_static! {
+    pub static ref TEMPLATES: Tera = {
+        let mut tera = match Tera::new("templates/**/*") {
+            Ok(t) => t,
+            Err(e) => {
+                println!("Template parsing error(s): {}", e);
+                ::std::process::exit(1);
+            }
+        };
+        tera.autoescape_on(vec!["html", ".sql"]);
+        tera
+    };
+}
 
 pub fn establish_connection() -> PgConnection {
     use dotenv::dotenv;
