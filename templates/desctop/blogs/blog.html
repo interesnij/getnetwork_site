@@ -13,13 +13,14 @@
     </div>
   </div>
 </section>
-{{ object.creator }}
+
 <section class="page-section">
     <div class="container relative">
         <div class="row">
             <div class="col-sm-8">
                 <div class="blog-item mb-80 mb-xs-40">
                     <div class="blog-item-body">
+                      {{ object.creator }}
                         <h1 class="mt-0 font-alt">{{ object.title }}</h1>
                         <div class="blog-item-data">
                           {{ object.blog_created | date(format="%Y-%m-%d %H:%M") }}
