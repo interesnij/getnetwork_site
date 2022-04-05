@@ -26,11 +26,11 @@ use models::{
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
-        let _tera = Tera::new("templates/**/*").unwrap();
+        //let _tera = Tera::new("templates/**/*").unwrap();
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
         App::new()
-            .data(_tera)
+            //.data(_tera)
             .service(_files)
             .service(_files2)
             .configure(routes)
