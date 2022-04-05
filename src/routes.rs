@@ -24,8 +24,9 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     .route("/serve_list/", web::get().to(pages::serve_list_page))
     .route("/load_item/", web::get().to(pages::get_load_page))
 
+    .configure(blog_progs::blog_routes)
     // search urls
-    .route("/search/", web::get().to(search_progs::search_page)) 
+    .route("/search/", web::get().to(search_progs::search_page))
     .route("/search_blogs/", web::get().to(search_progs::search_blogs_page))
     .route("/search_services/", web::get().to(search_progs::search_services_page))
     .route("/search_stores/", web::get().to(search_progs::search_stores_page))
@@ -106,30 +107,6 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     .route("/delete_work_category/{id}/", web::get().to(work_progs::delete_work_category))
     .service(web::resource("/work/{cat_id}/{work_id}/").route(web::get().to(work_progs::get_work_page)))
     .service(web::resource("/work/{id}/").route(web::get().to(work_progs::work_category_page)))
-
-    // blogs urls
-    .route("/blog_categories/", web::get().to(blog_progs::blog_categories_page))
-    .service(web::resource("/create_blog_categories/")
-        .route(web::get().to(blog_progs::create_blog_categories_page))
-        .route(web::post().to(blog_progs::create_blog_categories))
-    )
-    .service(web::resource("/edit_blog_category/{id}/")
-        .route(web::get().to(blog_progs::edit_blog_category_page))
-        .route(web::post().to(blog_progs::edit_blog_category))
-    )
-    .service(web::resource("/create_blog/")
-        .route(web::get().to(blog_progs::create_blog_page))
-        .route(web::post().to(blog_progs::create_blog))
-    )
-    .service(web::resource("/edit_blog/{id}/")
-        .route(web::get().to(blog_progs::edit_blog_page))
-        .route(web::post().to(blog_progs::edit_blog))
-    )
-    .route("/edit_content_blog/{id}/", web::get().to(blog_progs::edit_content_blog_page))
-    .route("/delete_blog/{id}/", web::get().to(blog_progs::delete_blog))
-    .route("/delete_blog_category/{id}/", web::get().to(blog_progs::delete_blog_category))
-    .service(web::resource("/blog/{cat_id}/{blog_id}/").route(web::get().to(blog_progs::get_blog_page)))
-    .service(web::resource("/blog/{id}/").route(web::get().to(blog_progs::blog_category_page)))
 
     // store urls
     .route("/store_categories/", web::get().to(store_progs::store_categories_page))

@@ -28,6 +28,31 @@ use crate::models::{
     Tag,
 };
 
+pub fn blog_routes(config: &mut web::ServiceConfig) {
+    .route("/blog_categories/", web::get().to(blog_categories_page))
+    .service(web::resource("/create_blog_categories/")
+        .route(web::get().to(create_blog_categories_page))
+        .route(web::post().to(create_blog_categories))
+    )
+    .service(web::resource("/edit_blog_category/{id}/")
+        .route(web::get().to(edit_blog_category_page))
+        .route(web::post().to(edit_blog_category))
+    )
+    .service(web::resource("/create_blog/")
+        .route(web::get().to(create_blog_page))
+        .route(web::post().to(create_blog))
+    )
+    .service(web::resource("/edit_blog/{id}/")
+        .route(web::get().to(edit_blog_page))
+        .route(web::post().to(edit_blog))
+    )
+    .route("/edit_content_blog/{id}/", web::get().to(edit_content_blog_page))
+    .route("/delete_blog/{id}/", web::get().to(delete_blog))
+    .route("/delete_blog_category/{id}/", web::get().to(delete_blog_category))
+    .service(web::resource("/blog/{cat_id}/{blog_id}/").route(web::get().to(get_blog_page)))
+    .service(web::resource("/blog/{id}/").route(web::get().to(blog_category_page)))
+}
+
 fn get_cats_for_blog(blog: &Blog) -> Vec<BlogCategories> {
     use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();
