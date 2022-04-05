@@ -2,14 +2,15 @@
 extern crate diesel;
 
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use tera::{Tera, Context};
+use tera::Context;
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
 use crate::utils::{
     category_form,
     get_template_2,
-    establish_connection
+    establish_connection,
+    TEMPLATES
 };
 use crate::schema;
 use crate::models::{
@@ -18,7 +19,7 @@ use crate::models::{
     TagItems,
 };
 
-pub async fn create_tag_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn create_tag_page(req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::tags;
 
     let mut data = Context::new();
@@ -34,7 +35,7 @@ pub async fn create_tag_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Re
 
     data.insert("all_tags", &all_tags);
     let _template = _type + &"tags/create_tag.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
@@ -60,7 +61,7 @@ pub async fn create_tag(mut payload: Multipart) -> impl Responder {
     return HttpResponse::Ok();
 }
 
-pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::blogs::dsl::blogs;
@@ -183,11 +184,11 @@ pub async fn tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i3
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"tags/tag.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn tag_blogs_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::blogs::dsl::blogs;
@@ -238,11 +239,11 @@ pub async fn tag_blogs_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"tags/tag_blogs.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn tag_services_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::services::dsl::services;
@@ -293,11 +294,11 @@ pub async fn tag_services_page(req: HttpRequest, tera: web::Data<Tera>, _id: web
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"tags/tag_services.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::stores::dsl::stores;
@@ -348,11 +349,11 @@ pub async fn tag_stores_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"tags/tag_stores.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn tag_wikis_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::wikis::dsl::wikis;
@@ -403,11 +404,11 @@ pub async fn tag_wikis_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"tags/tag_wikis.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::works::dsl::works;
@@ -458,11 +459,11 @@ pub async fn tag_works_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"tags/tag_works.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn tags_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn tags_page(req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::*;
 
     let mut data = Context::new();
@@ -479,11 +480,11 @@ pub async fn tags_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responde
     data.insert("tags", &all_tags);
     data.insert("tags_count", &all_tags.len());
     let _template = _type + &"tags/tags.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn edit_tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::*;
 
     let _tag_id : i32 = *_id;
@@ -500,7 +501,7 @@ pub async fn edit_tag_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Pa
 
     data.insert("tag", &_tag[0]);
     let _template = _type + &"tags/edit_tag.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 

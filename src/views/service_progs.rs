@@ -1,7 +1,7 @@
 extern crate diesel;
 
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use tera::{Tera, Context};
+use tera::Context;
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
@@ -9,7 +9,8 @@ use crate::utils::{
     store_form,
     category_form,
     get_template_2,
-    establish_connection
+    establish_connection,
+    TEMPLATES
 };
 use crate::schema;
 use crate::models::{
@@ -102,7 +103,7 @@ fn get_serves_for_service(service: &Service) -> Vec<Serve> {
         .expect("E")
 }
 
-pub async fn create_service_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn create_service_categories_page(req: HttpRequest) -> impl Responder {
         let mut data = Context::new();
         let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
         data.insert("service_categories", &_service_cats);
@@ -112,11 +113,11 @@ pub async fn create_service_categories_page(req: HttpRequest, tera: web::Data<Te
         data.insert("work_categories", &_work_cats);
         data.insert("is_admin", &_is_admin);
     let _template = _type + &"services/create_categories.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn create_service_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn create_service_page(req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::tags;
     use schema::serve::dsl::serve;
     use schema::serve_categories::dsl::serve_categories;
@@ -162,7 +163,7 @@ pub async fn create_service_page(req: HttpRequest, tera: web::Data<Tera>) -> imp
     data.insert("tech_categories", &all_tech_categories);
 
     let _template = _type + &"services/create_service.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
@@ -277,7 +278,7 @@ pub async fn create_service(mut payload: Multipart) -> impl Responder {
     HttpResponse::Ok()
 }
 
-pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: web::Path<(i32,i32)>) -> impl Responder {
+pub async fn get_service_page(req: HttpRequest, param: web::Path<(i32,i32)>) -> impl Responder {
     use diesel::pg::expression::dsl::any;
     use schema::services::dsl::services;
     use schema::service_images::dsl::service_images;
@@ -444,11 +445,11 @@ pub async fn get_service_page(req: HttpRequest, tera: web::Data<Tera>, param: we
     data.insert("default_servelist", &default_serve_ids);
 
     let _template = _type + &"services/service.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn service_category_page(req: HttpRequest, tera: web::Data<Tera>, id: web::Path<i32>) -> impl Responder {
+pub async fn service_category_page(req: HttpRequest, id: web::Path<i32>) -> impl Responder {
     use schema::service_categories::dsl::service_categories;
     use diesel::dsl::any;
     use crate::schema::tags_items::dsl::tags_items;
@@ -503,11 +504,11 @@ pub async fn service_category_page(req: HttpRequest, tera: web::Data<Tera>, id: 
     data.insert("category", &_category[0]);
 
     let _template = _type + &"services/category.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn service_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn service_categories_page(req: HttpRequest) -> impl Responder {
     use diesel::dsl::any;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::services::dsl::services;
@@ -552,11 +553,11 @@ pub async fn service_categories_page(req: HttpRequest, tera: web::Data<Tera>) ->
     data.insert("tags", &_tags);
     data.insert("tags_count", &_tags.len());
     let _template = _type + &"services/categories.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn edit_service_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_service_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::services::dsl::*;
     use schema::tags::dsl::*;
     use schema::serve::dsl::serve;
@@ -617,7 +618,7 @@ pub async fn edit_service_page(req: HttpRequest, tera: web::Data<Tera>, _id: web
     data.insert("videos", &_videos);
 
     let _template = _type + &"services/edit_service.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
@@ -626,7 +627,7 @@ use serde::Deserialize;
 pub struct ServiceParams {
     content: String,
 }
-pub async fn edit_content_service_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_content_service_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::services::dsl::*;
 
     let _service_id : i32 = *_id;
@@ -652,11 +653,11 @@ pub async fn edit_content_service_page(req: HttpRequest, tera: web::Data<Tera>, 
     data.insert("service", &_service[0]);
 
     let _template = _type + &"services/edit_content_service.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn edit_service_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_service_category_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::service_categories::dsl::*;
 
     let _cat_id : i32 = *_id;
@@ -673,7 +674,7 @@ pub async fn edit_service_category_page(req: HttpRequest, tera: web::Data<Tera>,
 
     data.insert("category", &_category[0]);
     let _template = _type + &"services/edit_category.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 

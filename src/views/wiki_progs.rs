@@ -2,7 +2,7 @@
 extern crate diesel;
 
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use tera::{Tera, Context};
+use tera::Context;
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
@@ -10,7 +10,8 @@ use crate::utils::{
     item_form,
     category_form,
     get_template_2,
-    establish_connection
+    establish_connection,
+    TEMPLATES
 };
 use crate::schema;
 use crate::models::{
@@ -78,7 +79,7 @@ fn get_wiki_for_category(category: &WikiCategories) -> Vec<Wiki> {
         .expect("could not load tags")
 }
 
-pub async fn create_wiki_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn create_wiki_categories_page(req: HttpRequest) -> impl Responder {
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
@@ -88,11 +89,11 @@ pub async fn create_wiki_categories_page(req: HttpRequest, tera: web::Data<Tera>
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
     let _template = _type + &"wikis/create_categories.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn create_wiki_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn create_wiki_page(req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::tags;
 
     let mut data = Context::new();
@@ -111,7 +112,7 @@ pub async fn create_wiki_page(req: HttpRequest, tera: web::Data<Tera>) -> impl R
 
     data.insert("tags", &all_tags);
     let _template = _type + &"wikis/create_wiki.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
@@ -213,7 +214,7 @@ pub async fn create_wiki(mut payload: Multipart) -> impl Responder {
     HttpResponse::Ok()
 }
 
-pub async fn get_wiki_page(req: HttpRequest, tera: web::Data<Tera>, param: web::Path<(i32,i32)>) -> impl Responder {
+pub async fn get_wiki_page(req: HttpRequest, param: web::Path<(i32,i32)>) -> impl Responder {
     use schema::wikis::dsl::wikis;
     use schema::wiki_images::dsl::wiki_images;
     use schema::wiki_videos::dsl::wiki_videos;
@@ -269,11 +270,11 @@ pub async fn get_wiki_page(req: HttpRequest, tera: web::Data<Tera>, param: web::
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"wikis/wiki.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn wiki_category_page(req: HttpRequest, tera: web::Data<Tera>, id: web::Path<i32>) -> impl Responder {
+pub async fn wiki_category_page(req: HttpRequest, id: web::Path<i32>) -> impl Responder {
     use schema::wiki_categories::dsl::wiki_categories;
     use diesel::dsl::any;
     use crate::schema::tags_items::dsl::tags_items;
@@ -329,11 +330,11 @@ pub async fn wiki_category_page(req: HttpRequest, tera: web::Data<Tera>, id: web
     data.insert("tags_count", &_tags.len());
 
     let _template = _type + &"wikis/category.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn wiki_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn wiki_categories_page(req: HttpRequest) -> impl Responder {
     use diesel::dsl::any;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::wikis::dsl::wikis;
@@ -379,11 +380,11 @@ pub async fn wiki_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> im
     data.insert("tags_count", &_tags.len());
 
     let _template = _type + &"wikis/categories.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn edit_wiki_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_wiki_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::wikis::dsl::*;
     use schema::tags::dsl::*;
     use crate::schema::wiki_images::dsl::wiki_images;
@@ -416,7 +417,7 @@ pub async fn edit_wiki_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::P
     data.insert("videos", &_videos);
 
     let _template = _type + &"wikis/edit_wiki.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
@@ -425,7 +426,7 @@ use serde::Deserialize;
 pub struct WikiParams {
     content: String,
 }
-pub async fn edit_content_wiki_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_content_wiki_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::wikis::dsl::*;
 
     let _wiki_id : i32 = *_id;
@@ -451,11 +452,11 @@ pub async fn edit_content_wiki_page(req: HttpRequest, tera: web::Data<Tera>, _id
     data.insert("wiki", &_wiki[0]);
 
     let _template = _type + &"wikis/edit_content_wiki.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn edit_wiki_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_wiki_category_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::wiki_categories::dsl::*;
 
     let _cat_id : i32 = *_id;
@@ -472,7 +473,7 @@ pub async fn edit_wiki_category_page(req: HttpRequest, tera: web::Data<Tera>, _i
 
     data.insert("category", &_category[0]);
     let _template = _type + &"wikis/edit_category.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 

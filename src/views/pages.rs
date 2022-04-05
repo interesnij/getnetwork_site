@@ -5,7 +5,7 @@ use actix_web::{
     web
 };
 use serde::Deserialize;
-use tera::{Tera,Context};
+use tera::Context;
 use crate::utils::{get_template_2, establish_connection, TEMPLATES};
 use crate::NewUser;
 use crate::diesel::RunQueryDsl;
@@ -15,7 +15,7 @@ use crate::diesel::RunQueryDsl;
 pub struct SParams {
     pub q: String,
 }
-pub async fn index(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn index(req: HttpRequest) -> impl Responder {
     use crate::diesel::QueryDsl;
     use crate::diesel::ExpressionMethods;
     use crate::schema::works::dsl::*;
@@ -52,7 +52,7 @@ pub async fn index(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
-pub async fn about(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn about(req: HttpRequest) -> impl Responder {
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
@@ -63,10 +63,10 @@ pub async fn about(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"about.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
-pub async fn signup(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn signup(req: HttpRequest) -> impl Responder {
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
@@ -77,7 +77,7 @@ pub async fn signup(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"signup.html".to_string();
-    let rendered = tera.render(&_template, &data).unwrap();
+    let rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(rendered)
 }
 pub async fn process_signup(data: web::Form<NewUser>) -> impl Responder {
@@ -116,7 +116,7 @@ pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Re
     return HttpResponse::Ok();
 }
 
-pub async fn feedback_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn feedback_list_page(req: HttpRequest) -> impl Responder {
     use crate::schema::feedbacks::dsl::feedbacks;
     use crate::models::Feedback;
 
@@ -134,11 +134,11 @@ pub async fn feedback_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl
     data.insert("feedback_list", &_feedbacks);
 
     let _template = _type + &"main/feedback_list.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn serve_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn serve_list_page(req: HttpRequest) -> impl Responder {
     use diesel::prelude::*;
     use crate::models::{Serve, TechCategories, ServeCategories};
     use crate::schema;
@@ -187,7 +187,7 @@ pub async fn serve_list_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Re
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"main/serve_list.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
@@ -198,7 +198,7 @@ pub struct LoadParams {
     pub _object_pk: i32,
     pub _owner_pk: i32,
 }
-pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn get_load_page(req: HttpRequest) -> impl Responder {
     use crate::schema;
     use diesel::prelude::*;
 
@@ -272,6 +272,6 @@ pub async fn get_load_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Resp
         _template = _type + &"load/serve.html".to_string();
     }
     data.insert("is_admin", &_is_admin);
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }

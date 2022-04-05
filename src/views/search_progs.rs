@@ -4,9 +4,9 @@ use actix_web::{
     HttpResponse,
     web
 };
-use tera::{Tera, Context};
+use tera::Context;
 use serde::Deserialize;
-use crate::utils::{get_template_2, establish_connection};
+use crate::utils::{get_template_2, establish_connection, TEMPLATES};
 use crate::schema;
 use diesel::prelude::*;
 use std::default::Default;
@@ -16,7 +16,7 @@ pub struct SearchParams {
     pub q: String,
 }
 
-pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn search_page(req: HttpRequest) -> impl Responder {
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
@@ -93,11 +93,11 @@ pub async fn search_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Respon
     data.insert("q", &_q);
 
     let _template = _type + &"search/all.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn search_blogs_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn search_blogs_page(req: HttpRequest) -> impl Responder {
     use crate::schema::blogs::dsl::blogs;
     use crate::models::Blog;
 
@@ -144,11 +144,11 @@ pub async fn search_blogs_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     data.insert("q", &_q);
 
     let _template = _type + &"search/blogs.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn search_services_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn search_services_page(req: HttpRequest) -> impl Responder {
     use crate::schema::services::dsl::services;
     use crate::models::Service;
 
@@ -195,11 +195,11 @@ pub async fn search_services_page(req: HttpRequest, tera: web::Data<Tera>) -> im
     data.insert("q", &_q);
 
     let _template = _type + &"search/services.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn search_stores_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn search_stores_page(req: HttpRequest) -> impl Responder {
     use crate::schema::stores::dsl::stores;
     use crate::models::Store;
 
@@ -246,11 +246,11 @@ pub async fn search_stores_page(req: HttpRequest, tera: web::Data<Tera>) -> impl
     data.insert("q", &_q);
 
     let _template = _type + &"search/stores.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn search_wikis_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn search_wikis_page(req: HttpRequest) -> impl Responder {
     use crate::schema::wikis::dsl::wikis;
     use crate::models::Wiki;
 
@@ -297,11 +297,11 @@ pub async fn search_wikis_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     data.insert("q", &_q);
 
     let _template = _type + &"search/wikis.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn search_works_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn search_works_page(req: HttpRequest) -> impl Responder {
     use crate::schema::works::dsl::works;
     use crate::models::Work;
 
@@ -348,6 +348,6 @@ pub async fn search_works_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     data.insert("q", &_q);
 
     let _template = _type + &"search/works.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }

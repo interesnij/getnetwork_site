@@ -2,7 +2,7 @@
 extern crate diesel;
 
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use tera::{Tera, Context};
+use tera::Context;
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use diesel::prelude::*;
@@ -10,7 +10,8 @@ use crate::utils::{
     store_form,
     category_form,
     get_template_2,
-    establish_connection
+    establish_connection,
+    TEMPLATES
 };
 use crate::schema;
 use crate::models::{
@@ -98,7 +99,7 @@ fn get_store_for_category(category: &StoreCategories) -> Vec<Store> {
         .expect("could not load tags")
 }
 
-pub async fn create_store_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn create_store_categories_page(req: HttpRequest) -> impl Responder {
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
@@ -108,11 +109,11 @@ pub async fn create_store_categories_page(req: HttpRequest, tera: web::Data<Tera
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
     let _template = _type + &"stores/create_categories.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn create_store_page(req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::tags;
     use schema::serve::dsl::serve;
     use schema::serve_categories::dsl::serve_categories;
@@ -162,7 +163,7 @@ pub async fn create_store_page(req: HttpRequest, tera: web::Data<Tera>) -> impl 
     data.insert("tags", &all_tags);
     data.insert("tech_categories", &all_tech_categories);
     let _template = _type + &"stores/create_store.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
@@ -279,7 +280,7 @@ pub async fn create_store(mut payload: Multipart) -> impl Responder {
     HttpResponse::Ok()
 }
 
-pub async fn get_store_page(req: HttpRequest, tera: web::Data<Tera>, param: web::Path<(i32,i32)>) -> impl Responder {
+pub async fn get_store_page(req: HttpRequest, param: web::Path<(i32,i32)>) -> impl Responder {
     use schema::stores::dsl::stores;
     use schema::store_images::dsl::store_images;
     use schema::store_videos::dsl::store_videos;
@@ -337,11 +338,11 @@ pub async fn get_store_page(req: HttpRequest, tera: web::Data<Tera>, param: web:
     data.insert("is_admin", &_is_admin);
 
     let _template = _type + &"stores/store.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn store_category_page(req: HttpRequest, tera: web::Data<Tera>, id: web::Path<i32>) -> impl Responder {
+pub async fn store_category_page(req: HttpRequest, id: web::Path<i32>) -> impl Responder {
     use schema::store_categories::dsl::store_categories;
     use diesel::dsl::any;
     use crate::schema::tags_items::dsl::tags_items;
@@ -397,11 +398,11 @@ pub async fn store_category_page(req: HttpRequest, tera: web::Data<Tera>, id: we
     data.insert("tags_count", &_tags.len());
 
     let _template = _type + &"stores/category.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn store_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> impl Responder {
+pub async fn store_categories_page(req: HttpRequest) -> impl Responder {
     use diesel::dsl::any;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::stores::dsl::stores;
@@ -446,11 +447,11 @@ pub async fn store_categories_page(req: HttpRequest, tera: web::Data<Tera>) -> i
     data.insert("tags_count", &_tags.len());
 
     let _template = _type + &"stores/categories.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn edit_store_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_store_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::stores::dsl::*;
     use schema::tags::dsl::*;
     use schema::serve::dsl::serve;
@@ -514,7 +515,7 @@ pub async fn edit_store_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::
     data.insert("videos", &_videos);
 
     let _template = _type + &"stores/edit_store.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
@@ -523,7 +524,7 @@ use serde::Deserialize;
 pub struct StoreParams {
     content: String,
 }
-pub async fn edit_content_store_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_content_store_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::stores::dsl::*;
 
     let _store_id : i32 = *_id;
@@ -549,11 +550,11 @@ pub async fn edit_content_store_page(req: HttpRequest, tera: web::Data<Tera>, _i
     data.insert("store", &_store[0]);
 
     let _template = _type + &"stores/edit_content_store.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
-pub async fn edit_store_category_page(req: HttpRequest, tera: web::Data<Tera>, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_store_category_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::store_categories::dsl::*;
 
     let _cat_id : i32 = *_id;
@@ -570,7 +571,7 @@ pub async fn edit_store_category_page(req: HttpRequest, tera: web::Data<Tera>, _
 
     data.insert("category", &_category[0]);
     let _template = _type + &"stores/edit_category.html".to_string();
-    let _rendered = tera.render(&_template, &data).unwrap();
+    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
 
