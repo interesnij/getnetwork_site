@@ -9,7 +9,6 @@ use actix_web::{
     HttpServer,
     App
 };
-use tera::Tera;
 use actix_files::Files;
 use crate::routes::routes;
 

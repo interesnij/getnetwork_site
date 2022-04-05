@@ -12,7 +12,7 @@ use crate::models::{
     WikiCategories,
     WorkCategories,
 };
-use tera::{Tera, Context};
+use tera::Tera;
 use lazy_static::lazy_static;
 
 

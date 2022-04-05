@@ -9,7 +9,6 @@ use serde::Deserialize;
 use crate::utils::{get_template_2, establish_connection, TEMPLATES};
 use crate::schema;
 use diesel::prelude::*;
-use std::default::Default;
 
 #[derive(Debug, Deserialize)]
 pub struct SearchParams {

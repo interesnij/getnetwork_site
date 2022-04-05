@@ -247,8 +247,6 @@ pub async fn get_load_page(req: HttpRequest) -> impl Responder {
         // получаем объект и записываем в контекст, получаем строку шаблона
         use crate::models::Serve;
         use crate::schema::serve::dsl::serve;
-        use diesel::pg::expression::dsl::any;
-        use schema::serve_items::dsl::serve_items;
 
         let _serve = serve
             .filter(schema::serve::id.eq(&_object_pk))
