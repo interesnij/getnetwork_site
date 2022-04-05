@@ -15,6 +15,15 @@ pub struct SearchParams {
     pub q: String,
 }
 
+pub fn search_routes(config: &mut web::ServiceConfig) {
+    config.route("/search/", web::get().to(search_page));
+    config.route("/search_blogs/", web::get().to(search_blogs_page));
+    config.route("/search_services/", web::get().to(search_services_page));
+    config.route("/search_stores/", web::get().to(search_stores_page));
+    config.route("/search_wikis/", web::get().to(search_wikis_page));
+    config.route("/search_works/", web::get().to(search_works_page));
+}
+
 pub async fn search_page(req: HttpRequest) -> impl Responder {
     use crate::models::{Work, Blog, Service, Store, Wiki};
 

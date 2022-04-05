@@ -29,6 +29,31 @@ use crate::models::{
     Tag,
 };
 
+pub fn work_routes(config: &mut web::ServiceConfig) {
+    config.route("/work_categories/", web::get().to(work_categories_page));
+    config.service(web::resource("/create_work_categories/")
+        .route(web::get().to(create_work_categories_page))
+        .route(web::post().to(create_work_categories))
+    );
+    config.service(web::resource("/edit_work_category/{id}/")
+        .route(web::get().to(edit_work_category_page))
+        .route(web::post().to(edit_work_category))
+    );
+    config.service(web::resource("/create_work/")
+        .route(web::get().to(create_work_page))
+        .route(web::post().to(create_work))
+    );
+    config.service(web::resource("/edit_work/{id}/")
+        .route(web::get().to(edit_work_page))
+        .route(web::post().to(edit_work))
+    );
+    config.route("/edit_content_work/{id}/", web::get().to(edit_content_work_page));
+    config.route("/delete_work/{id}/", web::get().to(delete_work));
+    config.route("/delete_work_category/{id}/", web::get().to(delete_work_category));
+    config.service(web::resource("/work/{cat_id}/{work_id}/").route(web::get().to(get_work_page)));
+    config.service(web::resource("/work/{id}/").route(web::get().to(work_category_page)));
+}
+
 fn get_cats_for_work(work: &Work) -> Vec<WorkCategories> {
     use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();

@@ -34,6 +34,31 @@ use crate::models::{
     ServeItems,
 };
 
+pub fn service_routes(config: &mut web::ServiceConfig) {
+    config.route("/service_categories/", web::get().to(service_categories_page));
+    config.service(web::resource("/create_service_categories/")
+        .route(web::get().to(create_service_categories_page))
+        .route(web::post().to(create_service_categories))
+    );
+    config.service(web::resource("/edit_service_category/{id}/")
+        .route(web::get().to(edit_service_category_page))
+        .route(web::post().to(edit_service_category))
+    );
+    config.service(web::resource("/create_service/")
+        .route(web::get().to(create_service_page))
+        .route(web::post().to(create_service))
+    );
+    config.service(web::resource("/edit_service/{id}/")
+        .route(web::get().to(edit_service_page))
+        .route(web::post().to(edit_service))
+    );
+    config.route("/edit_content_service/{id}/", web::get().to(edit_content_service_page));
+    config.route("/delete_service/{id}/", web::get().to(delete_service));
+    config.route("/delete_service_category/{id}/", web::get().to(delete_service_category));
+    config.service(web::resource("/service/{cat_id}/{service_id}/").route(web::get().to(get_service_page)));
+    config.service(web::resource("/service/{id}/").route(web::get().to(service_category_page)));
+}
+
 fn get_cats_for_service(service: &Service) -> (Vec<ServiceCategories>, Vec<String>) {
     use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();

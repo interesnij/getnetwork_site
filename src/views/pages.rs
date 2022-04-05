@@ -11,6 +11,17 @@ use crate::NewUser;
 use crate::diesel::RunQueryDsl;
 
 
+pub fn pages_routes(config: &mut web::ServiceConfig) {
+    config.route("/", web::get().to(index));
+    config.route("/about/", web::get().to(about));
+    config.route("/signup", web::get().to(signup));
+    config.route("/signup", web::post().to(process_signup));
+    config.route("/feedback/", web::post().to(create_feedback));
+    config.route("/feedback_list/", web::get().to(feedback_list_page));
+    config.route("/serve_list/", web::get().to(serve_list_page));
+    config.route("/load_item/", web::get().to(get_load_page));
+}
+
 #[derive(Debug, Deserialize)]
 pub struct SParams {
     pub q: String,

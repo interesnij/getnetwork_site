@@ -26,6 +26,40 @@ use serde::{Deserialize, Serialize};
 use std::str;
 
 
+pub fn serve_routes(config: &mut web::ServiceConfig) {
+    config.route("/serve/{id}/", web::get().to(get_serve_page));
+    config.route("/serve_categories/", web::get().to(serve_categories_page));
+
+    config.service(web::resource("/create_tech_categories/")
+        .route(web::get().to(create_tech_categories_page))
+        .route(web::post().to(create_tech_categories))
+    );
+    config.service(web::resource("/create_serve_categories/")
+        .route(web::get().to(create_serve_categories_page))
+        .route(web::post().to(create_serve_categories))
+    );
+    config.service(web::resource("/edit_tech_category/{id}/")
+        .route(web::get().to(edit_tech_category_page))
+        .route(web::post().to(edit_tech_category))
+    );
+    config.service(web::resource("/edit_serve_category/{id}/")
+        .route(web::get().to(edit_serve_category_page))
+        .route(web::post().to(edit_serve_category))
+    );
+
+    config.service(web::resource("/create_serve/")
+        .route(web::get().to(create_serve_page))
+        .route(web::post().to(create_serve))
+    );
+    config.service(web::resource("/edit_serve/{id}/")
+        .route(web::get().to(edit_serve_page))
+        .route(web::post().to(edit_serve))
+    );
+    config.route("/delete_serve/{id}/", web::get().to(delete_serve));
+    config.route("/delete_serve_category/{id}/", web::get().to(delete_serve_category));
+    config.route("/delete_tech_category/{id}/", web::get().to(delete_tech_category));
+}
+
 pub async fn serve_categories_page(req: HttpRequest) -> impl Responder {
     use crate::schema::serve::dsl::serve;
     use crate::schema::serve_categories::dsl::serve_categories;

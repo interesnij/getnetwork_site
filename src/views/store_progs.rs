@@ -35,6 +35,31 @@ use crate::models::{
     TechCategories,
 };
 
+pub fn store_routes(config: &mut web::ServiceConfig) {
+    config.route("/store_categories/", web::get().to(store_categories_page));
+    config.service(web::resource("/create_store_categories/")
+        .route(web::get().to(create_store_categories_page))
+        .route(web::post().to(create_store_categories))
+    );
+    config.service(web::resource("/edit_store_category/{id}/")
+        .route(web::get().to(edit_store_category_page))
+        .route(web::post().to(edit_store_category))
+    );
+    config.service(web::resource("/create_store/")
+        .route(web::get().to(create_store_page))
+        .route(web::post().to(create_store))
+    );
+    config.service(web::resource("/edit_store/{id}/")
+        .route(web::get().to(edit_store_page))
+        .route(web::post().to(edit_store))
+    );
+    config.route("/edit_content_store/{id}/", web::get().to(edit_content_store_page));
+    config.route("/delete_store/{id}/", web::get().to(delete_store));
+    config.route("/delete_store_category/{id}/", web::get().to(delete_store_category));
+    config.service(web::resource("/store/{cat_id}/{store_id}/").route(web::get().to(get_store_page)));
+    config.service(web::resource("/store/{id}/").route(web::get().to(store_category_page)));
+}
+
 fn get_cats_for_store(store: &Store) -> Vec<StoreCategories> {
     use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();
