@@ -307,11 +307,11 @@ pub async fn serve_list_page(req: HttpRequest) -> actix_web::Result<HttpResponse
         #[template(path = "desctop/main/serve_list.stpl")]
         struct Template {
             is_ajax:         bool,
-            tech_categories: Vec<TechCategories>
+            t_categories: Vec<TechCategories>
         }
         let body = Template {
             is_ajax:         is_ajax,
-            tech_categories: all_tech_categories,
+            t_categories: all_tech_categories,
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -322,11 +322,11 @@ pub async fn serve_list_page(req: HttpRequest) -> actix_web::Result<HttpResponse
         #[template(path = "mobile/main/serve_list.stpl")]
         struct Template {
             is_ajax:         bool,
-            tech_categories: Vec<TechCategories>
+            t_categories: Vec<TechCategories>
         }
         let body = Template {
             is_ajax:         is_ajax,
-            tech_categories: all_tech_categories,
+            t_categories: all_tech_categories,
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

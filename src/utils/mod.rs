@@ -18,6 +18,11 @@ use crate::models::{
     WikiCategories,
     WorkCategories,
 };
+use crate::diesel::{
+    RunQueryDsl,
+    ExpressionMethods,
+    QueryDsl,
+};
 
 
 pub fn establish_connection() -> PgConnection {
