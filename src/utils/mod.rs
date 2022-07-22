@@ -10,7 +10,7 @@ use actix_web::{
     web,
 };
 use serde::Deserialize;
-use crate::diesel::{Connection, PgConnection};
+use crate::diesel::{Connection, PgConnection, RunQueryDsl};
 use crate::models::{
     BlogCategories,
     ServiceCategories,
