@@ -429,7 +429,7 @@ on('body', 'click', '.ajax', function(event) {
     return
   };
 
-  url = "http://" + location.host + this.getAttribute("href");
+  url = "http://" + location.host + this.getAttribute("href") + "?ajax=1";
   _href = window.location.href;
   _search = window.location.search;
   _params = _search.replace( '?', '').split('&');
