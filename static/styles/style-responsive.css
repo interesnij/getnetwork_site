@@ -425,30 +425,12 @@ ul {
     .sp-logo-wrap .logo{
         padding: 20px 0 0 0;
     }
-    .sp-menu-links a{
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
     .sp-social-links{
         width: auto;
         position: static;
         padding-bottom: 10px;
     }
 
-    .countdown > li{
-        margin: 0 10px 20px;
-    }
-    .countdown-number{
-        width: 44px;
-        height: 44px;
-        font-size: 20px;
-        line-height: 44px;
-    }
-    .countdown-number > b{
-        bottom: -20px;
-        font-size: 9px;
-        color: rgba(255,255,255, .85);
-    }
     .text-mobile {
         font-size: 110%;
         line-height: 1.2;
