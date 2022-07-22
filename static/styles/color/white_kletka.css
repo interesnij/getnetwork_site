@@ -448,16 +448,6 @@ a.logo:hover{
     color: #111 !important;
 }
 
-.benefit-number{
-    color: rgba(0,0,0, .025) !important;
-}
-.benefit-item:after{
-    background: rgba(0,0,0, .015) !important;
-}
-.benefit-item:hover .benefit-number{
-    color: rgba(0,0,0, .035) !important;
-}
-
 .count-wrapper{
     border: 1px solid rgba(0,0,0, .09) !important;
 }

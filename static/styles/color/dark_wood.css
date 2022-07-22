@@ -443,16 +443,6 @@ a.logo:hover{
     color: #FFFFFF !important;
 }
 
-.benefit-number{
-    color: rgba(255,255,255, .025) !important;
-}
-.benefit-item:after{
-    background: rgba(255,255,255, .015) !important;
-}
-.benefit-item:hover .benefit-number{
-    color: rgba(255,255,255, .035) !important;
-}
-
 .count-wrapper{
     border: 1px solid rgba(255,255,255, .09) !important;
 }
