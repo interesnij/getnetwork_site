@@ -23,6 +23,7 @@ use crate::diesel::{
     ExpressionMethods,
     QueryDsl,
 };
+use actix_session::Session;
 
 
 pub fn establish_connection() -> PgConnection {

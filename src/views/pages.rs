@@ -37,7 +37,7 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
 pub struct SParams {
     pub q: String,
 }
-pub async fn index(req: HttpRequest) -> actix_web::Result<HttpResponse> {
+pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     use crate::models::{Work, Service, Wiki, Blog, Store};
 
     let _connection = establish_connection();
@@ -151,7 +151,7 @@ pub async fn index(req: HttpRequest) -> actix_web::Result<HttpResponse> {
     }
 }
 
-pub async fn about(req: HttpRequest) -> actix_web::Result<HttpResponse> {
+pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_signed_in(&session) {
@@ -237,7 +237,7 @@ pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Re
     return HttpResponse::Ok();
 }
 
-pub async fn feedback_list_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
+pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
         if !is_signed_in(&session) {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
         }
@@ -289,7 +289,7 @@ pub async fn feedback_list_page(req: HttpRequest) -> actix_web::Result<HttpRespo
         }
 }
 
-pub async fn serve_list_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
+pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     use crate::models::TechCategories;
     use crate::schema;
     use crate::schema::tech_categories::dsl::tech_categories;
@@ -341,7 +341,7 @@ pub struct LoadParams {
     pub _object_pk:   i32,
     pub _owner_pk:    i32,
 }
-pub async fn get_load_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
+pub async fn get_load_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     use crate::schema;
 
     let mut _object_type: String = "".to_string();
@@ -376,18 +376,19 @@ pub async fn get_load_page(req: HttpRequest) -> actix_web::Result<HttpResponse> 
             .load::<ServeCategories>(&_connection)
             .expect("E");
 
-        #[template(path = "desctop/load/serve_category.stpl")]
-        struct Template {
-            object:      ServeCategories,
-            object_type: String
-        }
-        let body = Template {
-            object:      _serve_category[0],
-            object_type: "serve_category".to_string(),
-        }
-        .render_once()
-        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+
+            #[template(path = "desctop/load/serve_category.stpl")]
+            struct Template {
+                object:      ServeCategories,
+                object_type: String
+            }
+            let body = Template {
+                object:      _serve_category[0],
+                object_type: "serve_category".to_string(),
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
 
     } else if _object_type == "serve".to_string() && _owner_type != "service".to_string() {
         use crate::models::Serve;
