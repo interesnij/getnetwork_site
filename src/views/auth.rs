@@ -42,65 +42,75 @@ pub fn auth_routes(config: &mut web::ServiceConfig) {
 
 
 pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    if is_desctop {
-        #[derive(TemplateOnce)]
-        #[template(path = "desctop/auth/signup.stpl")]
-        struct Template {
-            is_ajax: bool,
-        }
-        let body = Template {
-            is_ajax: is_ajax,
-        }
-        .render_once()
-        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+    if is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        #[derive(TemplateOnce)]
-        #[template(path = "mobile/auth/signup.stpl")]
-        struct Template {
-            is_ajax: bool,
+        use crate::utils::get_device_and_ajax;
+
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/auth/signup.stpl")]
+            struct Template {
+                is_ajax: bool,
+            }
+            let body = Template {
+                is_ajax: is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        let body = Template {
-            is_ajax: is_ajax,
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/auth/signup.stpl")]
+            struct Template {
+                is_ajax: bool,
+            }
+            let body = Template {
+                is_ajax: is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        .render_once()
-        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
     }
 }
 pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    if is_desctop {
-        #[derive(TemplateOnce)]
-        #[template(path = "desctop/auth/login.stpl")]
-        struct Template {
-            is_ajax: bool,
-        }
-        let body = Template {
-            is_ajax: is_ajax,
-        }
-        .render_once()
-        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+    if is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        #[derive(TemplateOnce)]
-        #[template(path = "mobile/auth/login.stpl")]
-        struct Template {
-            is_ajax: bool,
+        use crate::utils::get_device_and_ajax;
+
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/auth/login.stpl")]
+            struct Template {
+                is_ajax: bool,
+            }
+            let body = Template {
+                is_ajax: is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        let body = Template {
-            is_ajax: is_ajax,
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/auth/login.stpl")]
+            struct Template {
+                is_ajax: bool,
+            }
+            let body = Template {
+                is_ajax: is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        .render_once()
-        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
     }
 }
 
@@ -246,7 +256,7 @@ pub async fn process_signup(session: Session, req: HttpRequest) -> actix_web::Re
         let form_user = NewUser {
             username: params_2.username.clone(),
             email:    params_2.email.clone(),
-            password: params_2.password.clone(),
+            password: hash_password(&params_2.password.clone()),
             bio:      params_2.bio.clone(),
             image:    params_2.image.clone(),
             perm:     1,
