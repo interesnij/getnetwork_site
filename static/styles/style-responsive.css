@@ -235,14 +235,6 @@ ul {
     .blog-item-body .small{
         font-size: 13px;
     }
-    .fm-logo-wrap{
-        top: 17px;
-        left: 17px;
-    }
-    .fm-button{
-        top: 17px;
-        right: 17px;
-    }
 }
 
 @media only screen and (max-width: 767px) {
@@ -416,19 +408,6 @@ ul {
     .top-links li a:hover,
     .top-bar.dark .top-links li a:hover{
         background: none;
-    }
-
-    .sp-logo-wrap{
-        max-width: 100px;
-        margin: 0 auto;
-    }
-    .sp-logo-wrap .logo{
-        padding: 20px 0 0 0;
-    }
-    .sp-social-links{
-        width: auto;
-        position: static;
-        padding-bottom: 10px;
     }
 
     .text-mobile {
@@ -617,25 +596,11 @@ ul {
     .tpl-tabs > li.active a{
         background: #f5f5f5 !important;
     }
-
-    .fm-menu-links a{
-        font-size: 14px;
-    }
-    .fm-search {
-        width: 200px;
-    }
 }
 @media only screen and (max-width: 319px) {
       .nav-social-links{
           display: none;
       }
-}
-@media only screen and (max-height: 767px) {
-    .sp-social-links {
-        padding-bottom: 10px;
-        position: static;
-        width: auto;
-    }
 }
 .mobile .page-section, .mobile .home-section, .mobile .small-section{
     background-attachment: scroll;
