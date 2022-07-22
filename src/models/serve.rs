@@ -1,5 +1,12 @@
 use crate::schema;
-use diesel::{Queryable, Insertable};
+use crate::diesel::{
+    Queryable,
+    Insertable,
+    BelongingToDsl,
+    QueryDsl,
+    RunQueryDsl,
+    ExpressionMethods,
+};
 use serde::{Serialize, Deserialize};
 use crate::schema::{
     tech_categories,
@@ -42,6 +49,7 @@ pub struct ServeCategories {
     pub count:           i32,
     pub default_price:   i32,
 }
+
 #[derive(Insertable,AsChangeset)]
 #[table_name="serve_categories"]
 pub struct NewServeCategories {

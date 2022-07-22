@@ -1,5 +1,12 @@
 use crate::schema;
-use diesel::{Queryable, Insertable};
+use crate::diesel::{
+    Queryable,
+    Insertable,
+    BelongingToDsl,
+    QueryDsl,
+    RunQueryDsl,
+    ExpressionMethods,
+};
 use serde::{Serialize, Deserialize};
 use crate::models::User;
 use crate::schema::{
@@ -22,6 +29,43 @@ pub struct ServiceCategories {
     pub image:       Option<String>,
     pub count:       i32,
 }
+impl ServiceCategories {
+    pub fn get_services_list(&self, page: i32, limit: i32) -> (Vec<Service>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Service>;
+
+        if page > 1 {
+            have_next = page * limit + 1;
+            object_list = self.get_services(limit.into(), have_next.into());
+        }
+        else {
+            have_next = limit + 1;
+            object_list = self.get_services(limit.into(), 0);
+        }
+        if self.get_services(1, have_next.into()).len() > 0 {
+            next_page_number = page + 1;
+        }
+
+        return (object_list, next_page_number);
+    }
+    pub fn get_services(&self, limit: i64, offset: i64) -> Vec<Service> {
+        use crate::schema::services::dsl::services;
+
+        let _connection = establish_connection();
+        let ids = ServiceCategory::belonging_to(self)
+            .select(schema::service_category::service_id);
+        return services
+            .filter(schema::services::id.eq_any(ids))
+            .filter(schema::services::is_active.eq(true))
+            .order(schema::services::created.desc())
+            .limit(limit)
+            .offset(offset)
+            .load::<Service>(&_connection)
+            .expect("E.");
+    }
+}
+
 #[derive(Insertable)]
 #[table_name="service_categories"]
 pub struct NewServiceCategories {

@@ -1,5 +1,12 @@
 use crate::schema;
-use diesel::{Queryable, Insertable};
+use crate::diesel::{
+    Queryable,
+    Insertable,
+    BelongingToDsl,
+    QueryDsl,
+    RunQueryDsl,
+    ExpressionMethods,
+};
 use serde::{Serialize, Deserialize,};
 use crate::models::User;
 use crate::schema::{
@@ -22,6 +29,43 @@ pub struct StoreCategories {
     pub image:       Option<String>,
     pub count:       i32,
 }
+impl StoreCategories {
+    pub fn get_stores_list(&self, page: i32, limit: i32) -> (Vec<Store>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Store>;
+
+        if page > 1 {
+            have_next = page * limit + 1;
+            object_list = self.get_stores(limit.into(), have_next.into());
+        }
+        else {
+            have_next = limit + 1;
+            object_list = self.get_stores(limit.into(), 0);
+        }
+        if self.get_stores(1, have_next.into()).len() > 0 {
+            next_page_number = page + 1;
+        }
+
+        return (object_list, next_page_number);
+    }
+    pub fn get_stores(&self, limit: i64, offset: i64) -> Vec<Store> {
+        use crate::schema::stores::dsl::stores;
+
+        let _connection = establish_connection();
+        let ids = StoreCategory::belonging_to(self)
+            .select(schema::store_category::store_id);
+        return stores
+            .filter(schema::stores::id.eq_any(ids))
+            .filter(schema::stores::is_active.eq(true))
+            .order(schema::stores::created.desc())
+            .limit(limit)
+            .offset(offset)
+            .load::<Store>(&_connection)
+            .expect("E.");
+    }
+}
+
 #[derive(Insertable)]
 #[table_name="store_categories"]
 pub struct NewStoreCategories {

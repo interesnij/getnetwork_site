@@ -1,5 +1,12 @@
 use crate::schema;
-use diesel::{Queryable, Insertable};
+use crate::diesel::{
+    Queryable,
+    Insertable,
+    BelongingToDsl,
+    QueryDsl,
+    RunQueryDsl,
+    ExpressionMethods,
+};
 use serde::{Serialize, Deserialize};
 use crate::models::User;
 use crate::schema::{
@@ -23,6 +30,43 @@ pub struct WorkCategories {
     pub image:       Option<String>,
     pub count:       i32,
 }
+impl WorkCategories {
+    pub fn get_works_list(&self, page: i32, limit: i32) -> (Vec<Work>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Work>;
+
+        if page > 1 {
+            have_next = page * limit + 1;
+            object_list = self.get_works(limit.into(), have_next.into());
+        }
+        else {
+            have_next = limit + 1;
+            object_list = self.get_works(limit.into(), 0);
+        }
+        if self.get_works(1, have_next.into()).len() > 0 {
+            next_page_number = page + 1;
+        }
+
+        return (object_list, next_page_number);
+    }
+    pub fn get_works(&self, limit: i64, offset: i64) -> Vec<Work> {
+        use crate::schema::works::dsl::works;
+
+        let _connection = establish_connection();
+        let ids = WorkCategory::belonging_to(self)
+            .select(schema::work_category::work_id);
+        return works
+            .filter(schema::works::id.eq_any(ids))
+            .filter(schema::works::is_active.eq(true))
+            .order(schema::works::created.desc())
+            .limit(limit)
+            .offset(offset)
+            .load::<Work>(&_connection)
+            .expect("E.");
+    }
+}
+
 #[derive(Insertable)]
 #[table_name="work_categories"]
 pub struct NewWorkCategories {

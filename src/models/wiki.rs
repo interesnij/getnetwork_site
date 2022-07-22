@@ -1,5 +1,12 @@
 use crate::schema;
-use diesel::{Queryable, Insertable};
+use crate::diesel::{
+    Queryable,
+    Insertable,
+    BelongingToDsl,
+    QueryDsl,
+    RunQueryDsl,
+    ExpressionMethods,
+};
 use serde::{Serialize, Deserialize,};
 use crate::models::User;
 use crate::schema::{
@@ -22,6 +29,43 @@ pub struct WikiCategories {
     pub image:       Option<String>,
     pub count:       i32,
 }
+impl WikiCategories {
+    pub fn get_wikis_list(&self, page: i32, limit: i32) -> (Vec<Wiki>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Wiki>;
+
+        if page > 1 {
+            have_next = page * limit + 1;
+            object_list = self.get_wikis(limit.into(), have_next.into());
+        }
+        else {
+            have_next = limit + 1;
+            object_list = self.get_wikis(limit.into(), 0);
+        }
+        if self.get_wikis(1, have_next.into()).len() > 0 {
+            next_page_number = page + 1;
+        }
+
+        return (object_list, next_page_number);
+    }
+    pub fn get_wikis(&self, limit: i64, offset: i64) -> Vec<Wiki> {
+        use crate::schema::wikis::dsl::wikis;
+
+        let _connection = establish_connection();
+        let ids = WikiCategory::belonging_to(self)
+            .select(schema::wiki_category::wiki_id);
+        return wikis
+            .filter(schema::wikis::id.eq_any(ids))
+            .filter(schema::wikis::is_active.eq(true))
+            .order(schema::wikis::created.desc())
+            .limit(limit)
+            .offset(offset)
+            .load::<Wiki>(&_connection)
+            .expect("E.");
+    }
+}
+
 #[derive(Insertable)]
 #[table_name="wiki_categories"]
 pub struct NewWikiCategories {
