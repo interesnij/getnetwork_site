@@ -75,7 +75,7 @@ pub struct Serve {
 
 impl Serve {
     pub fn get_100_description(&self) -> String {
-        let _content = self.description;
+        let _content = self.description.clone();
         if _content.len() > 100 {
             return _content[..100].to_string();
         }
