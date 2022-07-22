@@ -428,7 +428,7 @@ on('body', 'click', '.ajax', function(event) {
     toast_info("Вы уже на этой странице");
     return
   };
-  ajax_get_reload(_url + "?ajax=1")
+  ajax_get_reload(this.getAttribute("href") + "?ajax=1")
 });
 
 init_wow();
