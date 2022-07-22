@@ -172,18 +172,6 @@ ul {
     .blog-item-date {
         border:none;
     }
-    .countdown > li{
-        margin: 0 20px;
-    }
-    .countdown-number{
-        width: 74px;
-        height: 74px;
-        font-size: 24px;
-        line-height: 64px;
-    }
-    .countdown-number > b{
-        bottom: 18px;
-    }
 }
 
 @media only screen and (max-width: 768px) {
@@ -309,7 +297,7 @@ ul {
         font-size: 60px;
         letter-spacing: 0.1em;
     }
-    .hs-line-14{ 
+    .hs-line-14{
         font-size: 24px;
         letter-spacing: 0.3em;
     }

@@ -191,16 +191,6 @@ function addStyleSheets(href) {
     $head.appendChild($link)
 };
 
-function init_wow(){
-    var wow = new WOW({
-      boxClass: 'wow',
-      animateClass: 'animated',
-      offset: 90,
-      mobile: false,
-      live: true
-  });
-  wow.init();
-};
 
 class ToastManager {
     constructor() {
@@ -336,7 +326,7 @@ on('#ajax', 'click', '.select_serve', function(event) {
     counter.innerHTML = counter.innerHTML*1 + serve_price;
     counter.setAttribute("data-serve", counter_serve_price + serve_price);
     _this.classList.add("hover");
-    _this.querySelector(".action_text").innerHTML = '<span class="wow fadeIn" data-wow-duration="0.5s">Выбрано</span>';
+    _this.querySelector(".action_text").innerHTML = 'Выбрано';
     counter_serve_list.push(serve_pk);
     counter.parentElement.setAttribute("data-servelist", counter_serve_list)
   }
@@ -431,7 +421,6 @@ on('body', 'click', '.ajax', function(event) {
   ajax_get_reload(this.getAttribute("href"))
 });
 
-init_wow();
 
 on('#ajax', 'click', '.s_1', function() {
   service_tab_action(this, ".tab_1")
