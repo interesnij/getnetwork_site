@@ -136,7 +136,7 @@ impl Service {
         let ids = ServiceCategory::belonging_to(self)
             .select(schema::service_category::service_categories_id);
         return service_categories
-            .filter(schema::service_categories::id.eq_any(ids)))
+            .filter(schema::service_categories::id.eq_any(ids))
             .load::<ServiceCategories>(&_connection)
             .expect("E");
     }
