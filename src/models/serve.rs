@@ -47,7 +47,7 @@ pub struct ServeCategories {
     pub tech_categories: i32,
     pub position:        i32,
     pub count:           i32,
-    pub default_price:   i32,
+    pub default_price:   Option<i32>,
 }
 
 #[derive(Insertable,AsChangeset)]
@@ -59,7 +59,7 @@ pub struct NewServeCategories {
     pub tech_categories: i32,
     pub position:        i32,
     pub count:           i32,
-    pub default_price:   i32,
+    pub default_price:   Option<i32>,
 }
 
 /////// Serve //////
