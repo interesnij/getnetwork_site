@@ -2,6 +2,13 @@ use crate::schema;
 use diesel::{Queryable, Insertable};
 use serde::{Serialize, Deserialize,};
 use crate::models::User;
+use crate::schema::{
+    wiki_categories,
+    wikis,
+    wiki_category,
+    wiki_images,
+    wiki_videos,
+};
 
 
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]

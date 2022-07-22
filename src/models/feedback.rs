@@ -1,7 +1,7 @@
 use crate::schema::feedbacks;
 use diesel::{Queryable, Insertable};
 use serde::{Serialize, Deserialize};
-
+use crate::schema::feedbacks;
 
 #[derive(Debug ,Queryable, Serialize, Identifiable)]
 pub struct Feedback {

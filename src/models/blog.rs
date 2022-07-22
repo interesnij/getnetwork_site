@@ -9,6 +9,14 @@ use crate::diesel::{
 };
 use serde::{Serialize,Deserialize};
 use crate::models::User;
+use crate::schema::{
+    blog_categories,
+    blogs,
+    blog_category,
+    blog_images,
+    blog_videos,
+    blog_comments,
+};
 
 
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]

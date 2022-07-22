@@ -1,7 +1,10 @@
 use crate::schema;
 use diesel::{Queryable, Insertable};
 use serde::{Serialize, Deserialize};
-
+use crate::schema::{
+    tags,
+    tags_items,
+};
 
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
 #[table_name="tags"]

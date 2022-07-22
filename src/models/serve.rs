@@ -1,7 +1,12 @@
 use crate::schema;
 use diesel::{Queryable, Insertable};
 use serde::{Serialize, Deserialize};
-
+use crate::schema::{
+    tech_categories,
+    serve_categories,
+    serve,
+    serve_items,
+};
 
 /////// TechCategories //////
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]

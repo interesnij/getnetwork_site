@@ -1,4 +1,5 @@
 use crate::schema;
+use crate::schema::users;
 use diesel::{
     Queryable,
     Insertable,
