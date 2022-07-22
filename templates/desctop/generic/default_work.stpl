@@ -1,14 +1,16 @@
 <li class="work-item">
   <a href="/work/1/<%= object.id %>/" class="ajax mfp-image">
     <div class="work-img">
-      <img class="image_fit_300" src="<%= object.image %>" alt="Work">
+      <img class="image_fit_300" src="<%= object.get_image() %>" alt="Work">
     </div>
     <div class="work-intro">
       <h3 class="work-title">
         <%= object.title %>
       </h3>
       <div class="work-descr">
-        <%= object.description %>
+        <% if object.description.is_some() { %>
+          <%= object.description.unwrap() %>
+        <% } %>
       </div>
     </div>
   </a>

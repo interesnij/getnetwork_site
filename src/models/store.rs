@@ -105,6 +105,14 @@ pub struct Store {
 }
 
 impl Store {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
     pub fn get_tags_for_blog(&self) -> Vec<Tag> {
         use crate::schema::tags_items::dsl::tags_items;
         use crate::schema::tags::dsl::tags;

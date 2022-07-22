@@ -102,6 +102,14 @@ pub struct Work {
     pub created:     chrono::NaiveDateTime,
 }
 impl Work {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
     pub fn get_categories(&self) -> Vec<WorkCategories> {
         use crate::schema::work_categories::dsl::work_categories;
 

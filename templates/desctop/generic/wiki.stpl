@@ -5,6 +5,8 @@
     </a>
   </h4>
   <p>
-    <%= object.description %>
+    <% if object.description.is_some() { %>
+      <%= object.description.unwrap() %>
+    <% } %>
   </p>
   </div>

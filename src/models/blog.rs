@@ -103,6 +103,14 @@ pub struct Blog {
 }
 
 impl Blog {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
     pub fn get_100_description(&self) -> String {
         if self.content.is_some() {
             let _content = self.content.as_deref().unwrap();
