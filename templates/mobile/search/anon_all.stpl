@@ -1,3 +1,125 @@
 <% include!("../anon_header.stpl"); %>
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>Поиск</span>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+      <form class="form mb-20" role="form">
+          <input data-folder="" value="<%= q %>" type="text" class="form-control general_search search_page" placeholder="Поиск...">
+      </form>
+    <div class="search_section">
+      <% let mut items_exists = false; %>
+
+      <% if services.len() > 0 { %>
+      <% items_exists = true; %>
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left">
+                <a data-q="<%= q %>" href="/search_services/" class="ajax">
+                  Услуги (<%= services_count %>)
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                <% for object in last_services.iter() { %>
+                  <% include!("../generic/default_service.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
+
+      <% if stores.len() > 0 { %>
+      <% items_exists = true; %>
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left">
+                <a data-q="<%= q %>" href="/search_stores/" class="ajax">
+                  Товары (<%= stores_count %>)
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                <% for object in last_stores.iter() { %>
+                  <% include!("../generic/default_store.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
+
+      <% if works.len() > 0 { %>
+      <% items_exists = true; %>
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left">
+                <a data-q="<%= q %>" href="/search_works/" class="ajax">
+                  Работы (<%= works_count %>)
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                <% for object in last_works.iter() { %>
+                  <% include!("../generic/default_work.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
+
+      <% if blogs.len() > 0 { %>
+      <% items_exists = true; %>
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left">
+                <a data-q="<%= q %>" href="/search_blogs/" class="section-more right ajax blog">
+                  Статьи блога (<%= blogs_count %>)
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                <% for object in last_blogs.iter() { %>
+                  <% include!("../generic/default_blog.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
+
+      <% if wikis.len() > 0 { %>
+      <% items_exists = true; %>
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left">
+                <a data-q="<%= q %>" href="/search_wikis/" class="ajax">
+                  Товары (<%= wikis_count %>)
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                <% for object in last_wikis.iter() { %>
+                  <% include!("../generic/default_wiki.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
+
+      <% if items_exists == false { %>
+          <div class="text-center">
+            <span class="widget-title font-alt">
+              По запросу "<%= q %>" ничего не найдено...
+            </span>
+          </div>
+        <% } %>
+    </div>
+  </div>
+</section>
 
 <% include!("../anon_footer.stpl"); %>

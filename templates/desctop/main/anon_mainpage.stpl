@@ -1,3 +1,29 @@
 <% include!("../anon_header.stpl"); %>
 
+<% include!("banner.stpl"); %>
+
+<% include!("about.stpl"); %>
+
+<hr class="mt-0 mb-0 " />
+<% include!("sections.stpl"); %>
+
+<hr class="mt-0 mb-0 " />
+<% include!("work.stpl"); %>
+
+<hr class="mt-0 mb-0 " />
+<% include!("blog.stpl"); %>
+
+
+<section class="border small-section bg-dark">
+    <div class="container relative">
+        <div class="align-center">
+            <h3 class="banner-heading font-alt">Хотите обсудить проект?</h3>
+            <div>
+                <a href="" class="btn btn-mod btn-border btn-medium btn-round ajax">Напишите нам</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 <% include!("../anon_footer.stpl"); %>

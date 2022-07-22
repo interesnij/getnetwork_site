@@ -1,4 +1,4 @@
-{% if last_blogs %}
+<% if last_blogs.len() > 0 { %>
 
 <section class="page-section">
     <div class="container relative">
@@ -9,10 +9,10 @@
             </a>
         </h2>
         <div class="row multi-columns-row">
-          {% for object in last_blogs %}
+          <% for object in last_blogs.iter() { %>
             {% include 'desctop/generic/default_blog.html' %}
-          {% endfor %}
+          <% } %>
         </div>
     </div>
 </section>
-{% endif %}
+<% } %>
