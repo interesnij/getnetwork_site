@@ -301,35 +301,74 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
         .expect("E.");
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    if is_desctop {
-        #[derive(TemplateOnce)]
-        #[template(path = "desctop/main/serve_list.stpl")]
-        struct Template {
-            is_ajax:         bool,
-            t_categories: Vec<TechCategories>
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/main/serve_list.stpl")]
+            struct Template {
+                request_user: User,
+                is_ajax:      bool,
+                t_categories: Vec<TechCategories>
+            }
+            let body = Template {
+                request_user: _request_user,
+                is_ajax:      is_ajax,
+                t_categories: all_tech_categories,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        let body = Template {
-            is_ajax:         is_ajax,
-            t_categories: all_tech_categories,
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/main/serve_list.stpl")]
+            struct Template {
+                request_user: User,
+                is_ajax:      bool,
+                t_categories: Vec<TechCategories>
+            }
+            let body = Template {
+                request_user: _request_user,
+                is_ajax:      is_ajax,
+                t_categories: all_tech_categories,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        .render_once()
-        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
     }
     else {
-        #[derive(TemplateOnce)]
-        #[template(path = "mobile/main/serve_list.stpl")]
-        struct Template {
-            is_ajax:         bool,
-            t_categories: Vec<TechCategories>
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/main/anon_serve_list.stpl")]
+            struct Template {
+                is_ajax:      bool,
+                t_categories: Vec<TechCategories>
+            }
+            let body = Template {
+                is_ajax:      is_ajax,
+                t_categories: all_tech_categories,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        let body = Template {
-            is_ajax:         is_ajax,
-            t_categories: all_tech_categories,
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/main/anon_serve_list.stpl")]
+            struct Template {
+                is_ajax:      bool,
+                t_categories: Vec<TechCategories>
+            }
+            let body = Template {
+                is_ajax:      is_ajax,
+                t_categories: all_tech_categories,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        .render_once()
-        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
     }
 }
 
