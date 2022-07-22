@@ -49,6 +49,7 @@ impl WikiCategories {
 
         return (object_list, next_page_number);
     }
+
     pub fn get_wikis(&self, limit: i64, offset: i64) -> Vec<Wiki> {
         use crate::schema::wikis::dsl::wikis;
 
@@ -61,6 +62,18 @@ impl WikiCategories {
             .order(schema::wikis::created.desc())
             .limit(limit)
             .offset(offset)
+            .load::<Wiki>(&_connection)
+            .expect("E.");
+    }
+
+    pub fn get_6_wikis(&self, limit: i64, offset: i64) -> Vec<Wiki> {
+        use crate::schema::wikis::dsl::wikis;
+
+        let _connection = establish_connection();
+        return wikis
+            .filter(schema::wikis::is_active.eq(true))
+            .order(schema::wikis::created.desc())
+            .limit(6)
             .load::<Wiki>(&_connection)
             .expect("E.");
     }
@@ -98,6 +111,19 @@ pub struct Wiki {
     pub is_active:   bool,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+}
+
+impl Wiki {
+    pub fn get_categories(&self) -> Vec<WikiCategories> {
+        use crate::schema::wiki_categories::dsl::wiki_categories;
+
+        let _connection = establish_connection();
+        let ids = WikiCategory::belonging_to(self).select(schema::wiki_category::wiki_categories_id);
+        return wiki_categories
+            .filter(schema::wiki_categories::id.eq_any(ids))
+            .load::<WikiCategories>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]

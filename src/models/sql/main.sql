@@ -444,12 +444,14 @@ CREATE TABLE tags (
     id            SERIAL PRIMARY KEY,
     name          VARCHAR(100) NOT NULL,
     position      INT NOT NULL,
-    count         INT,
-    blog_count    INT,
-    service_count INT,
-    store_count   INT,
-    wiki_count    INT,
-    work_count    INT,
+
+    count         INT NOT NULL,
+    blog_count    INT NOT NULL,
+    service_count INT NOT NULL,
+    store_count   INT NOT NULL,
+    wiki_count    INT NOT NULL,
+    work_count    INT NOT NULLs,
+
     user_id       INT NOT NULL,
 
     CONSTRAINT fk_tag_creator

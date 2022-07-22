@@ -66,6 +66,18 @@ impl BlogCategories {
             .load::<Blog>(&_connection)
             .expect("E.");
     }
+
+    pub fn get_6_blogs(limit: i64, offset: i64) -> Vec<Blog> {
+        use crate::schema::blogs::dsl::blogs;
+
+        let _connection = establish_connection();
+        return blogs
+            .filter(schema::blogs::is_active.eq(true))
+            .order(schema::blogs::created.desc())
+            .limit(6)
+            .load::<Blog>(&_connection)
+            .expect("E.");
+    }
 }
 
 #[derive(Insertable)]
@@ -116,6 +128,18 @@ impl Blog {
         else {
             return "".to_string();
         }
+    }
+
+    pub fn get_categories(&self) -> Vec<BlogCategories> {
+        let _connection = establish_connection();
+
+        let ids = BlogCategory::belonging_to(self)
+            .select(schema::blog_category::blog_categories_id);
+
+        return schema::blog_categories::table
+            .filter(schema::blog_categories::id.eq_any(ids))
+            .load::<BlogCategories>(&_connection)
+            .expect("E");
     }
 }
 

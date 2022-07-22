@@ -50,6 +50,7 @@ impl WorkCategories {
 
         return (object_list, next_page_number);
     }
+
     pub fn get_works(&self, limit: i64, offset: i64) -> Vec<Work> {
         use crate::schema::works::dsl::works;
 
@@ -62,6 +63,18 @@ impl WorkCategories {
             .order(schema::works::created.desc())
             .limit(limit)
             .offset(offset)
+            .load::<Work>(&_connection)
+            .expect("E.");
+    }
+
+    pub fn get_6_works(&self, limit: i64, offset: i64) -> Vec<Work> {
+        use crate::schema::works::dsl::works;
+
+        let _connection = establish_connection();
+        return works
+            .filter(schema::works::is_active.eq(true))
+            .order(schema::works::created.desc())
+            .limit(6)
             .load::<Work>(&_connection)
             .expect("E.");
     }
@@ -100,6 +113,19 @@ pub struct Work {
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
 }
+impl Work {
+    pub fn get_categories(&self) -> Vec<WorkCategories> {
+        use crate::schema::work_categories::dsl::work_categories;
+
+        let _connection = establish_connection();
+        let ids = WikiCategory::belonging_to(self).select(schema::work_category::work_categories_id);
+        return work_categories
+            .filter(schema::work_categories::id.eq_any(ids))
+            .load::<WorkCategories>(&_connection)
+            .expect("E");
+    }
+}
+
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="works"]
 pub struct EditWork {

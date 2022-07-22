@@ -49,6 +49,7 @@ impl ServiceCategories {
 
         return (object_list, next_page_number);
     }
+
     pub fn get_services(&self, limit: i64, offset: i64) -> Vec<Service> {
         use crate::schema::services::dsl::services;
 
@@ -61,6 +62,18 @@ impl ServiceCategories {
             .order(schema::services::created.desc())
             .limit(limit)
             .offset(offset)
+            .load::<Service>(&_connection)
+            .expect("E.");
+    }
+
+    pub fn get_6_services(limit: i64, offset: i64) -> Vec<Service> {
+        use crate::schema::services::dsl::services;
+
+        let _connection = establish_connection();
+        return services
+            .filter(schema::services::is_active.eq(true))
+            .order(schema::services::created.desc())
+            .limit(6)
             .load::<Service>(&_connection)
             .expect("E.");
     }
@@ -114,6 +127,18 @@ impl Service {
         else {
             return "".to_string();
         }
+    }
+
+    pub fn get_categories(&self) -> Vec<ServiceCategories> {
+        use crate::schema::service_categories::dsl::service_categories;
+
+        let _connection = establish_connection();
+        let ids = ServiceCategory::belonging_to(self)
+            .select(schema::service_category::service_categories_id);
+        return service_categories
+            .filter(schema::service_categories::id.eq_any(ids)))
+            .load::<ServiceCategories>(&_connection)
+            .expect("E");
     }
 }
 

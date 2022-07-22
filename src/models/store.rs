@@ -49,6 +49,7 @@ impl StoreCategories {
 
         return (object_list, next_page_number);
     }
+
     pub fn get_stores(&self, limit: i64, offset: i64) -> Vec<Store> {
         use crate::schema::stores::dsl::stores;
 
@@ -61,6 +62,18 @@ impl StoreCategories {
             .order(schema::stores::created.desc())
             .limit(limit)
             .offset(offset)
+            .load::<Store>(&_connection)
+            .expect("E.");
+    }
+
+    pub fn get_6_stores(limit: i64, offset: i64) -> Vec<Store> {
+        use crate::schema::stores::dsl::stores;
+
+        let _connection = establish_connection();
+        return stores
+            .filter(schema::stores::is_active.eq(true))
+            .order(schema::stores::created.desc())
+            .limit(6)
             .load::<Store>(&_connection)
             .expect("E.");
     }
