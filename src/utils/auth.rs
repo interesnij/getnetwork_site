@@ -8,7 +8,7 @@ use actix_web::{
   HttpRequest,
 };
 use crate::schema;
-use crate::{errors::AuthError, vars, models::SessionUser};
+use crate::{errors::AuthError, vars};
 use crate::models::{User, SessionUser};
 
 

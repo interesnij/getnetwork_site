@@ -13,7 +13,6 @@ use crate::models::{
     WorkCategories,
 };
 use actix_web::HttpRequest;
-use crate::diesel::RunQueryDsl;
 use crate::utils::establish_connection;
 
 

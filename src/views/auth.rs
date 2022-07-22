@@ -1,6 +1,7 @@
 use actix_web::{
     HttpRequest,
     HttpResponse,
+    Responder,
     web,
     error::InternalError,
     http::StatusCode,
@@ -206,9 +207,9 @@ pub async fn login_form(payload: &mut Multipart) -> LoginUser2 {
     form
 }
 
-pub async fn login(mut payload: Multipart, session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+pub async fn login(mut payload: Multipart, session: Session, req: HttpRequest) -> impl Responder {
     if is_signed_in(&session) {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Вы уже авторизованы"))
+        HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Вы уже авторизованы")
     }
     else {
         let form = login_form(payload.borrow_mut()).await;
