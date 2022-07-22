@@ -209,7 +209,7 @@ pub async fn login_form(payload: &mut Multipart) -> LoginUser2 {
 
 pub async fn login(mut payload: Multipart, session: Session, req: HttpRequest) -> impl Responder {
     if is_signed_in(&session) {
-        HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Вы уже авторизованы")
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
         let form = login_form(payload.borrow_mut()).await;
