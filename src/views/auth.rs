@@ -2,7 +2,6 @@ use actix_web::{
     HttpRequest,
     HttpResponse,
     web,
-    web::Query,
     error::InternalError,
     http::StatusCode,
 };
@@ -228,14 +227,14 @@ pub struct NewUserForm {
     pub image:    Option<String>,
 }
 
-pub async fn process_signup(session: Session, req: HttpRequest) -> impl Responder {
+pub async fn process_signup(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use crate::utils::{hash_password, set_current_user};
     use chrono::NaiveDate;
 
     let params = web::Query::<NewUserForm>::from_query(&req.query_string());
      // Если пользователь не аноним, то отправляем его на страницу новостей
     if is_signed_in(&session) {
-        HttpResponse::Ok().content_type("text/html; charset=utf-8").body("")
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Вы уже авторизованы"))
     }
     else if params.is_err() {
         HttpResponse::Ok().content_type("text/html; charset=utf-8").body("")

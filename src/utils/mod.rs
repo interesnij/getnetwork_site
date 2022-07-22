@@ -5,7 +5,10 @@ pub use self::{
     payload_handler::*,
     auth::*,
 };
-use actix_web::HttpRequest;
+use actix_web::{
+    HttpRequest,
+    web,
+};
 
 
 pub fn establish_connection() -> PgConnection {
