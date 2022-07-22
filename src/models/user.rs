@@ -14,6 +14,8 @@ use crate::models::{
 };
 use actix_web::HttpRequest;
 use crate::diesel::RunQueryDsl;
+use crate::utils::establish_connection;
+
 
 #[derive(Debug ,Queryable, Serialize, Identifiable)]
 pub struct User {
