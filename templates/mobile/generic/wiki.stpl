@@ -6,7 +6,7 @@
   </h4>
   <p>
     <% if object.description.is_some() { %>
-      <%= object.description.unwrap() %>
+      <%= object.description.as_deref().unwrap() %>
     <% } %>
   </p>
   </div>
