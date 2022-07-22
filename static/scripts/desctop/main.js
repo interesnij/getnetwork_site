@@ -21,10 +21,9 @@ function ajax_get_reload(url) {
       if ( this.readyState == 4 && this.status == 200 ) {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
-        ajax = elem_.querySelector("#reload_block");
         sidebar = elem_.querySelector(".sidebar");
         rtr = document.getElementById('ajax');
-        rtr.innerHTML = ajax.innerHTML;
+        rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
         document.title = elem_.querySelector('title').innerHTML;
         window.history.replaceState(null, null, url);
