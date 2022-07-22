@@ -27,13 +27,13 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
-        App::new() 
+        App::new()
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .service(_files)
             .service(_files2)
             .configure(routes)
     })
-    .bind("151.248.120.138:8015")?
+    .bind("194.58.90.123:8015")?
     //.bind("http://вселенная.рус:8000")?
     .run()
     .await
