@@ -421,7 +421,7 @@ pub async fn get_load_page(req: HttpRequest, session: Session) -> actix_web::Res
                 object_type: String
             }
             let body = Template {
-                object:      _serve_category[0],
+                object:      _serve_category.into_iter().nth(0).unwrap(),
                 object_type: "serve_category".to_string(),
             }
             .render_once()
@@ -444,7 +444,7 @@ pub async fn get_load_page(req: HttpRequest, session: Session) -> actix_web::Res
             object_type: String
         }
         let body = Template {
-            object:      _serve[0],
+            object:      _serve.into_iter().nth(0).unwrap(),
             object_type: "serve".to_string(),
         }
         .render_once()
@@ -477,9 +477,9 @@ pub async fn get_load_page(req: HttpRequest, session: Session) -> actix_web::Res
             service:     Service,
         }
         let body = Template {
-            object:      _serve[0],
+            object:      _serve.into_iter().nth(0).unwrap(),
             object_type: "serve".to_string(),
-            service:     _service[0],
+            service:     _service.into_iter().nth(0).unwrap(),
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
