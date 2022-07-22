@@ -428,27 +428,7 @@ on('body', 'click', '.ajax', function(event) {
     toast_info("Вы уже на этой странице");
     return
   };
-
-  url = "http://" + location.host + this.getAttribute("href") + "?ajax=1";
-  url.searchParams.delete('ajax');
-
-  _href = window.location.href;
-  _search = window.location.search;
-  _params = _search.replace( '?', '').split('&');
-  if (this.getAttribute("data-q")) {
-    if (_search.indexOf('q=') !== -1){
-      console.log(url + _search);
-      r = new URL(url + _search);
-      r.searchParams.delete('q');
-      __url = r;
-    } else { __url = url };
-    if (_params[1]) {
-      _url = __url + "&q=" + this.getAttribute("data-q");
-    } else {
-      _url = __url + "?q=" + this.getAttribute("data-q");
-    };
-  } else { _url = url + _search};
-  ajax_get_reload(_url)
+  ajax_get_reload(_url + "?ajax=1")
 });
 
 init_wow();
