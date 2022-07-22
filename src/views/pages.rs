@@ -414,7 +414,7 @@ pub async fn get_load_page(req: HttpRequest, session: Session) -> actix_web::Res
             .load::<ServeCategories>(&_connection)
             .expect("E");
 
-
+            #[derive(TemplateOnce)]
             #[template(path = "desctop/load/serve_category.stpl")]
             struct Template {
                 object:      ServeCategories,
@@ -437,6 +437,7 @@ pub async fn get_load_page(req: HttpRequest, session: Session) -> actix_web::Res
             .load::<Serve>(&_connection)
             .expect("E");
 
+        #[derive(TemplateOnce)]
         #[template(path = "desctop/load/serve.stpl")]
         struct Template {
             object:      Serve,
@@ -468,6 +469,7 @@ pub async fn get_load_page(req: HttpRequest, session: Session) -> actix_web::Res
             .load::<Service>(&_connection)
             .expect("E");
 
+        #[derive(TemplateOnce)]
         #[template(path = "desctop/load/serve.stpl")]
         struct Template {
             object:      Serve,
