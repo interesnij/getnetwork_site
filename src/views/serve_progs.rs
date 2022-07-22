@@ -1,15 +1,21 @@
-extern crate diesel;
+use actix_web::{
+    HttpRequest,
+    HttpResponse,
+    web,
+    error::InternalError,
+    http::StatusCode,
+};
 
-use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use tera::Context;
 use std::borrow::BorrowMut;
-use diesel::prelude::*;
+use crate::diesel::{
+    RunQueryDsl,
+    ExpressionMethods,
+    QueryDsl,
+};
 use crate::utils::{
     category_form,
     serve_category_form,
-    get_template_2,
     establish_connection,
-    TEMPLATES
 };
 use crate::schema;
 use crate::models::{
@@ -20,10 +26,12 @@ use crate::models::{
     TechCategories,
     NewTechCategories,
 };
+use actix_session::Session;
 use actix_multipart::{Field, Multipart};
 use futures::StreamExt;
 use serde::{Deserialize, Serialize};
 use std::str;
+use sailfish::TemplateOnce;
 
 
 pub fn serve_routes(config: &mut web::ServiceConfig) {
@@ -66,7 +74,9 @@ pub async fn serve_categories_page(req: HttpRequest) -> impl Responder {
 
     let _connection = establish_connection();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
+    let _serve_cats: Vec<ServeCategories> = serve_categories
+        .load(&_connection)
+        .expect("E");
 
     let mut data = Context::new();
     data.insert("service_categories", &_service_cats);
@@ -97,10 +107,16 @@ pub async fn get_serve_page(req: HttpRequest, _id: web::Path<i32>) -> impl Respo
     use schema::serve_categories::dsl::serve_categories;
 
     let _connection = establish_connection();
-    let _serve_id : i32 = *_id;
+    let _serve_id: i32 = *_id;
 
-    let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
-    let _s_category = serve_categories.filter(schema::serve_categories::id.eq(&_serve[0].serve_categories)).load::<ServeCategories>(&_connection).expect("E");
+    let _serve = serve
+        .filter(schema::serve::id.eq(&_serve_id))
+        .load::<Serve>(&_connection)
+        .expect("E");
+    let _s_category = serve_categories
+        .filter(schema::serve_categories::id.eq(&_serve[0].serve_categories))
+        .load::<ServeCategories>(&_connection)
+        .expect("E");
 
     let mut data = Context::new();
 
@@ -172,7 +188,7 @@ pub async fn create_serve_page(req: HttpRequest) -> impl Responder {
     let mut data = Context::new();
 
     let all_tech_categories :Vec<TechCategories> = tech_categories
-        .order(schema::tech_categories::tech_position.asc())
+        .order(schema::tech_categories::position.asc())
         .load(&_connection)
         .expect("E.");
     let mut _count: i32 = 0;
@@ -182,7 +198,7 @@ pub async fn create_serve_page(req: HttpRequest) -> impl Responder {
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
         let __serve_categories :Vec<ServeCategories> = serve_categories
             .filter(schema::serve_categories::tech_categories.eq(_cat.id))
-            .order(schema::serve_categories::serve_position.asc())
+            .order(schema::serve_categories::position.asc())
             .load(&_connection)
             .expect("E.");
         data.insert(&_let_serve_categories, &__serve_categories);
@@ -216,7 +232,7 @@ pub async fn create_serve_page(req: HttpRequest) -> impl Responder {
 pub async fn edit_tech_category_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::tech_categories::dsl::*;
 
-    let _cat_id : i32 = *_id;
+    let _cat_id: i32 = *_id;
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
@@ -238,7 +254,7 @@ pub async fn edit_serve_category_page(req: HttpRequest, _id: web::Path<i32>) -> 
     use schema::serve_categories::dsl::*;
     use schema::tech_categories::dsl::tech_categories;
 
-    let _cat_id : i32 = *_id;
+    let _cat_id: i32 = *_id;
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
@@ -273,7 +289,7 @@ pub async fn edit_serve_page(req: HttpRequest, _id: web::Path<i32>) -> impl Resp
     let mut data = Context::new();
 
     let all_tech_categories :Vec<TechCategories> = tech_categories
-        .order(schema::tech_categories::tech_position.asc())
+        .order(schema::tech_categories::position.asc())
         .load(&_connection)
         .expect("E.");
 
@@ -283,7 +299,7 @@ pub async fn edit_serve_page(req: HttpRequest, _id: web::Path<i32>) -> impl Resp
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
         let __serve_categories :Vec<ServeCategories> = serve_categories
             .filter(schema::serve_categories::tech_categories.eq(_cat.id))
-            .order(schema::serve_categories::serve_position.asc())
+            .order(schema::serve_categories::position.asc())
             .load(&_connection)
             .expect("E.");
         data.insert(&_let_serve_categories, &__serve_categories);
@@ -332,8 +348,8 @@ pub async fn create_tech_categories(mut payload: Multipart) -> impl Responder {
     let new_cat = NewTechCategories {
         name: form.name.clone(),
         description: Some(form.description.clone()),
-        tech_position: form.position.clone(),
-        tech_count: 0,
+        position: form.position,
+        count: 0,
     };
     let _new_tech = diesel::insert_into(tech_categories::table)
         .values(&new_cat)
@@ -343,41 +359,43 @@ pub async fn create_tech_categories(mut payload: Multipart) -> impl Responder {
 }
 
 pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
-    use schema::serve_categories;
+    use schema::serve_categories::dsl::serve_categories;
     use schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
     let form = serve_category_form(payload.borrow_mut()).await;
-    let _s_category = tech_categories.filter(schema::tech_categories::id.eq(form.tech_categories.clone())).load::<TechCategories>(&_connection).expect("E");
+    let _s_category = tech_categories
+        .filter(schema::tech_categories::id.eq(form.tech_categories))
+        .load::<TechCategories>(&_connection).expect("E");
 
     let new_cat = NewServeCategories {
         name: form.name.clone(),
         description: Some(form.description.clone()),
         cat_name: _s_category[0].name.clone(),
-        tech_categories: form.tech_categories.clone(),
-        serve_position: form.position.clone(),
-        serve_count: 0,
+        tech_categories: form.tech_categories,
+        position: form.position,
+        count: 0,
         default_price: 0
     };
     let _new_serve = diesel::insert_into(serve_categories::table)
         .values(&new_cat)
         .get_result::<ServeCategories>(&_connection)
-        .expect("Error saving post.");
+        .expect("E.");
     return HttpResponse::Ok();
 }
 pub async fn edit_tech_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
-    let _cat_id : i32 = *_id;
+    let _cat_id: i32 = *_id;
     let _category = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
 
     let form = category_form(payload.borrow_mut()).await;
     let new_cat = NewTechCategories {
         name: form.name.clone(),
         description: Some(form.description.clone()),
-        tech_position: form.position.clone(),
-        tech_count: _category[0].tech_count,
+        position: form.position,
+        count: _category[0].count,
     };
     diesel::update(&_category[0])
         .set(new_cat)
@@ -391,19 +409,27 @@ pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) ->
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
-    let _cat_id : i32 = *_id;
-    let s_category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
-    let t_category = tech_categories.filter(schema::tech_categories::id.eq(s_category[0].tech_categories)).load::<TechCategories>(&_connection).expect("E");
+    let _cat_id: i32 = *_id;
+
+    let s_category = serve_categories
+        .filter(schema::serve_categories::id.eq(_cat_id))
+        .load::<ServeCategories>(&_connection)
+        .expect("E");
+
+    let t_category = tech_categories
+        .filter(schema::tech_categories::id.eq(s_category[0].tech_categories))
+        .load::<TechCategories>(&_connection)
+        .expect("E");
 
     let form = serve_category_form(payload.borrow_mut()).await;
     let new_cat = NewServeCategories {
         name: form.name.clone(),
         description: Some(form.description.clone()),
         cat_name: t_category[0].name.clone(),
-        tech_categories: form.tech_categories.clone(),
-        serve_position: form.position.clone(),
-        serve_count: s_category[0].serve_count.clone(),
-        default_price: form.default_price.clone(),
+        tech_categories: form.tech_categories,
+        position: form.position,
+        count: s_category[0].count,
+        default_price: form.default_price,
     };
     diesel::update(&s_category[0])
         .set(new_cat)
@@ -417,7 +443,7 @@ pub struct ServeForm {
     pub name: String,
     pub cat_name: String,
     pub description: String,
-    pub serve_position: i32,
+    pub position: i32,
     pub serve_categories: i32,
     pub price: i32,
     pub price_acc: i32,
@@ -431,7 +457,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         name: "".to_string(),
         cat_name: "".to_string(),
         description: "".to_string(),
-        serve_position: 0,
+        position: 0,
         serve_categories: 0,
         price: 0,
         price_acc: 0,
@@ -446,12 +472,12 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         let mut field: Field = item.expect("split_payload err");
         let name = field.name();
 
-        if name == "serve_position" {
+        if name == "position" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
-                    form.serve_position = _int;
+                    form.position = _int;
                 }
             }
         }
@@ -549,7 +575,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
         name: form.name.clone(),
         cat_name: _category[0].name.clone(),
         description: form.description.clone(),
-        serve_position: form.serve_position.clone(),
+        position: form.position.clone(),
         serve_categories: _cat_id,
         price: form.price.clone(),
         price_acc: Some(form.price_acc.clone()),
@@ -570,7 +596,7 @@ pub async fn create_serve(mut payload: Multipart) -> impl Responder {
             .expect("E.");
     }
     diesel::update(&_category[0])
-        .set(schema::serve_categories::serve_count.eq(_category[0].serve_count + 1))
+        .set(schema::serve_categories::count.eq(_category[0].count + 1))
         .get_result::<ServeCategories>(&_connection)
         .expect("E.");
     return HttpResponse::Ok();
@@ -617,7 +643,7 @@ pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
         name: form.name.clone(),
         cat_name: _category[0].name.clone(),
         description: form.description.clone(),
-        serve_position: form.serve_position.clone(),
+        position: form.position.clone(),
         serve_categories: form.serve_categories.clone(),
         price: form.price.clone(),
         price_acc: Some(form.price_acc.clone()),
@@ -648,7 +674,7 @@ pub async fn delete_serve(_id: web::Path<i32>) -> impl Responder {
         .load::<ServeCategories>(&_connection)
         .expect("E");
     diesel::update(&_category[0])
-            .set(schema::serve_categories::serve_count.eq(&_category[0].serve_count - 1))
+            .set(schema::serve_categories::count.eq(&_category[0].count - 1))
             .get_result::<ServeCategories>(&_connection)
             .expect("Error.");
 
@@ -679,7 +705,7 @@ pub async fn delete_serve_category(_id: web::Path<i32>) -> impl Responder {
         .load::<TechCategories>(&_connection)
         .expect("E");
     diesel::update(&_category[0])
-            .set(schema::tech_categories::tech_count.eq(&_category[0].tech_count - 1))
+            .set(schema::tech_categories::count.eq(&_category[0].count - 1))
             .get_result::<TechCategories>(&_connection)
             .expect("E");
     HttpResponse::Ok()

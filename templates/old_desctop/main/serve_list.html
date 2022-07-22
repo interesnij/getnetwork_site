@@ -1,0 +1,24 @@
+{% extends "desctop/base.html" %}
+{% block title %}Список опций{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>Список опций</span>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container align-center">
+        <h1 class="magazine-logo-text black font-alt">Список опций</h1>
+    </div>
+    <div class="container relative">
+      {% include 'desctop/serve/serve_list.html' %}
+    </div>
+</section>
+
+{% endblock %}

@@ -1,18 +1,23 @@
-
-extern crate diesel;
-
-use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use tera::Context;
+use actix_web::{
+    HttpRequest,
+    HttpResponse,
+    web,
+    error::InternalError,
+    http::StatusCode,
+};
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
-use diesel::prelude::*;
+use crate::diesel::{
+    RunQueryDsl,
+    ExpressionMethods,
+    QueryDsl,
+};
 use crate::utils::{
     store_form,
     category_form,
-    get_template_2,
     establish_connection,
-    TEMPLATES
 };
+use actix_session::Session;
 use crate::schema;
 use crate::models::{
     StoreCategories,
@@ -34,6 +39,8 @@ use crate::models::{
     ServeCategories,
     TechCategories,
 };
+use sailfish::TemplateOnce;
+
 
 pub fn store_routes(config: &mut web::ServiceConfig) {
     config.route("/store_categories/", web::get().to(store_categories_page));
@@ -61,65 +68,61 @@ pub fn store_routes(config: &mut web::ServiceConfig) {
 }
 
 fn get_cats_for_store(store: &Store) -> Vec<StoreCategories> {
-    use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();
 
     let ids = StoreCategory::belonging_to(store).select(schema::store_category::store_categories_id);
     schema::store_categories::table
-        .filter(schema::store_categories::id.eq(any(ids)))
+        .filter(schema::store_categories::id.eq_any(ids))
         .load::<StoreCategories>(&_connection)
         .expect("could not load tags")
 }
 fn get_tags_for_store(store: &Store) -> Vec<Tag> {
     use crate::schema::tags_items::dsl::tags_items;
-    use diesel::dsl::any;
     let _connection = establish_connection();
 
-    let _tag_items = tags_items.filter(schema::tags_items::store_id.eq(&store.id)).load::<TagItems>(&_connection).expect("E");
-    let mut stack = Vec::new();
-    for _tag_item in _tag_items.iter() {
-        stack.push(_tag_item.tag_id);
-    };
+    let _tag_items = tags_items
+        .filter(schema::tags_items::store_id.eq(&store.id))
+        .select(schema::tags_items::tag_id)
+        .load::<i32>(&_connection)
+        .expect("E");
     schema::tags::table
-        .filter(schema::tags::id.eq(any(stack)))
+        .filter(schema::tags::id.eq_any(_tag_items))
         .load::<Tag>(&_connection)
         .expect("could not load tags")
 }
 fn get_serves_for_store(store: &Store) -> Vec<Serve> {
     use crate::schema::serve_items::dsl::serve_items;
-    use diesel::dsl::any;
     let _connection = establish_connection();
 
-    let _serve_items = serve_items.filter(schema::serve_items::store_id.eq(&store.id)).load::<ServeItems>(&_connection).expect("E");
-    let mut stack = Vec::new();
-    for _serve_item in _serve_items.iter() {
-        stack.push(_serve_item.serve_id);
-    };
+    let _serve_items = serve_items
+        .filter(schema::serve_items::store_id.eq(&store.id))
+        .select(schema::serve_items::serve_id)
+        .load::<i32>(&_connection)
+        .expect("E");
+
     schema::serve::table
-        .filter(schema::serve::id.eq(any(stack)))
+        .filter(schema::serve::id.eq_any(_serve_items))
         .load::<Serve>(&_connection)
         .expect("could not load tags")
 }
 fn get_6_store_for_category(category: &StoreCategories) -> Vec<Store> {
-    use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();
 
     let ids = StoreCategory::belonging_to(category).select(schema::store_category::store_id);
     schema::stores::table
-        .filter(schema::stores::id.eq(any(ids)))
-        .order(schema::stores::store_created.desc())
+        .filter(schema::stores::id.eq_any(ids))
+        .order(schema::stores::created.desc())
         .limit(6)
         .load::<Store>(&_connection)
-        .expect("could not load tags")
+        .expect("E")
 }
 fn get_store_for_category(category: &StoreCategories) -> Vec<Store> {
-    use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();
 
     let ids = StoreCategory::belonging_to(category).select(schema::store_category::store_id);
     schema::stores::table
-        .filter(schema::stores::id.eq(any(ids)))
-        .order(schema::stores::store_created.desc())
+        .filter(schema::stores::id.eq_any(ids))
+        .order(schema::stores::created.desc())
         .load::<Store>(&_connection)
         .expect("could not load tags")
 }
@@ -159,7 +162,7 @@ pub async fn create_store_page(req: HttpRequest) -> impl Responder {
         .expect("E.");
 
     let all_tech_categories :Vec<TechCategories> = tech_categories
-        .order(schema::tech_categories::tech_position.asc())
+        .order(schema::tech_categories::position.asc())
         .load(&_connection)
         .expect("E.");
     let mut _count: i32 = 0;
@@ -169,7 +172,7 @@ pub async fn create_store_page(req: HttpRequest) -> impl Responder {
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
         let __serve_categories :Vec<ServeCategories> = serve_categories
             .filter(schema::serve_categories::tech_categories.eq(_cat.id))
-            .order(schema::serve_categories::serve_position.asc())
+            .order(schema::serve_categories::position.asc())
             .load(&_connection)
             .expect("E.");
         data.insert(&_let_serve_categories, &__serve_categories);
@@ -200,7 +203,7 @@ pub async fn create_store_categories(mut payload: Multipart) -> impl Responder {
     let new_cat = NewStoreCategories {
         name: form.name.clone(),
         description: Some(form.description.clone()),
-        store_position: form.position.clone(),
+        position: form.position,
         image: Some(form.image.clone()),
         store_count: 0
     };
@@ -266,7 +269,7 @@ pub async fn create_store(mut payload: Multipart) -> impl Responder {
             .expect("Error saving store.");
             let _category = store_categories.filter(schema::store_categories::id.eq(category_id.1)).load::<StoreCategories>(&_connection).expect("E");
         diesel::update(&_category[0])
-            .set(schema::store_categories::store_count.eq(_category[0].store_count + 1))
+            .set(schema::store_categories::count.eq(_category[0].count + 1))
             .get_result::<StoreCategories>(&_connection)
             .expect("Error.");
     };
@@ -278,7 +281,7 @@ pub async fn create_store(mut payload: Multipart) -> impl Responder {
             blog_id: 0,
             wiki_id: 0,
             work_id: 0,
-            tag_created: chrono::Local::now().naive_utc(),
+            created: chrono::Local::now().naive_utc(),
         };
         diesel::insert_into(tags_items::table)
             .values(&new_tag)
@@ -286,7 +289,7 @@ pub async fn create_store(mut payload: Multipart) -> impl Responder {
             .expect("Error.");
             let _tag = tags.filter(schema::tags::id.eq(tag_id.1)).load::<Tag>(&_connection).expect("E");
         diesel::update(&_tag[0])
-            .set((schema::tags::tag_count.eq(_tag[0].tag_count + 1), schema::tags::store_count.eq(_tag[0].store_count + 1)))
+            .set((schema::tags::count.eq(_tag[0].count + 1), schema::tags::store_count.eq(_tag[0].store_count + 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
@@ -395,7 +398,7 @@ pub async fn store_category_page(req: HttpRequest, id: web::Path<i32>) -> impl R
         .filter(schema::stores::id.eq(any(ids)))
         .limit(page_size)
         .offset(offset)
-        .order(schema::stores::store_created.desc())
+        .order(schema::stores::created.desc())
         .load::<Store>(&_connection)
         .expect("could not load tags");
         if _stores.len() > 0 {
@@ -442,7 +445,7 @@ pub async fn store_categories_page(req: HttpRequest) -> impl Responder {
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
 
-    let _stores = stores.filter(schema::stores::is_store_active.eq(true)).load::<Store>(&_connection).expect("E");
+    let _stores = stores.filter(schema::stores::is_active.eq(true)).load::<Store>(&_connection).expect("E");
     let mut _count: i32 = 0;
     for _cat in _store_cats.iter() {
         _count += 1;
@@ -621,13 +624,13 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
     let _tags = get_tags_for_store(&_store[0]);
     for _category in _categories.iter() {
         diesel::update(_category)
-            .set(schema::store_categories::store_count.eq(_category.store_count - 1))
+            .set(schema::store_categories::count.eq(_category.count - 1))
             .get_result::<StoreCategories>(&_connection)
             .expect("Error.");
     };
     for _tag in _tags.iter() {
         diesel::update(_tag)
-            .set((schema::tags::tag_count.eq(_tag.tag_count - 1), schema::tags::store_count.eq(_tag.store_count - 1)))
+            .set((schema::tags::count.eq(_tag.count - 1), schema::tags::store_count.eq(_tag.store_count - 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
@@ -644,7 +647,7 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
         description: Some(form.description.clone()),
         link: Some(form.link.clone()),
         image: Some(form.main_image.clone()),
-        is_store_active: form.is_active.clone(),
+        is_active: form.is_active.clone(),
         price: form.price.clone(),
         price_acc: Some(form.price_acc.clone()),
         social_price: Some(form.social_price.clone()),
@@ -686,7 +689,7 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
             .expect("E.");
         let _category_2 = store_categories.filter(schema::store_categories::id.eq(category_id.1)).load::<StoreCategories>(&_connection).expect("E");
         diesel::update(&_category_2[0])
-            .set(schema::store_categories::store_count.eq(_category_2[0].store_count + 1))
+            .set(schema::store_categories::count.eq(_category_2[0].count + 1))
             .get_result::<StoreCategories>(&_connection)
             .expect("Error.");
     };
@@ -698,7 +701,7 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
             blog_id: 0,
             wiki_id: 0,
             work_id: 0,
-            tag_created: chrono::Local::now().naive_utc(),
+            created: chrono::Local::now().naive_utc(),
         };
         diesel::insert_into(schema::tags_items::table)
             .values(&_new_tag)
@@ -706,7 +709,7 @@ pub async fn edit_store(mut payload: Multipart, _id: web::Path<i32>) -> impl Res
             .expect("Error.");
         let _tag_2 = tags.filter(schema::tags::id.eq(_tag_id.1)).load::<Tag>(&_connection).expect("E");
         diesel::update(&_tag_2[0])
-            .set((schema::tags::tag_count.eq(_tag_2[0].tag_count + 1), schema::tags::store_count.eq(_tag_2[0].store_count + 1)))
+            .set((schema::tags::count.eq(_tag_2[0].count + 1), schema::tags::store_count.eq(_tag_2[0].store_count + 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
@@ -737,9 +740,9 @@ pub async fn edit_store_category(mut payload: Multipart, _id: web::Path<i32>) ->
     let _new_cat = EditStoreCategories {
         name: form.name.clone(),
         description: Some(form.description.clone()),
-        store_position: form.position.clone(),
+        position: form.position,
         image: Some(form.image.clone()),
-        store_count: _category[0].store_count,
+        count: _category[0].count,
     };
 
     diesel::update(&_category[0])
@@ -766,13 +769,13 @@ pub async fn delete_store(_id: web::Path<i32>) -> impl Responder {
     let _tags = get_tags_for_store(&_store[0]);
     for _category in _categories.iter() {
         diesel::update(_category)
-            .set(schema::store_categories::store_count.eq(_category.store_count - 1))
+            .set(schema::store_categories::count.eq(_category.count - 1))
             .get_result::<StoreCategories>(&_connection)
             .expect("Error.");
     };
     for _tag in _tags.iter() {
         diesel::update(_tag)
-            .set((schema::tags::tag_count.eq(_tag.tag_count - 1), schema::tags::store_count.eq(_tag.store_count - 1)))
+            .set((schema::tags::count.eq(_tag.count - 1), schema::tags::store_count.eq(_tag.store_count - 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };

@@ -1,17 +1,22 @@
-
-extern crate diesel;
-
-use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use tera::Context;
+use actix_web::{
+    HttpRequest,
+    HttpResponse,
+    web,
+    error::InternalError,
+    http::StatusCode,
+};
+use crate::diesel::{
+    RunQueryDsl,
+    ExpressionMethods,
+    QueryDsl,
+};
+use actix_session::Session;
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
-use diesel::prelude::*;
 use crate::utils::{
     item_form,
     category_form,
-    get_template_2,
     establish_connection,
-    TEMPLATES
 };
 use crate::schema;
 use crate::models::{
@@ -29,6 +34,7 @@ use crate::models::{
     NewTagItems,
     Tag,
 };
+use sailfish::TemplateOnce;
 
 
 pub fn wiki_routes(config: &mut web::ServiceConfig) {
@@ -57,56 +63,52 @@ pub fn wiki_routes(config: &mut web::ServiceConfig) {
 }
 
 fn get_cats_for_wiki(wiki: &Wiki) -> Vec<WikiCategories> {
-    use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();
 
     let ids = WikiCategory::belonging_to(wiki).select(schema::wiki_category::wiki_categories_id);
     schema::wiki_categories::table
-        .filter(schema::wiki_categories::id.eq(any(ids)))
+        .filter(schema::wiki_categories::id.eq_any(ids))
         .load::<WikiCategories>(&_connection)
         .expect("could not load tags")
 }
 fn get_tags_for_wiki(wiki: &Wiki) -> Vec<Tag> {
     use crate::schema::tags_items::dsl::tags_items;
-    use diesel::dsl::any;
     let _connection = establish_connection();
 
-    let _tag_items = tags_items.filter(schema::tags_items::wiki_id.eq(&wiki.id)).load::<TagItems>(&_connection).expect("E");
-    let mut stack = Vec::new();
-    for _tag_item in _tag_items.iter() {
-        stack.push(_tag_item.tag_id);
-    };
+    let _tag_items = tags_items
+        .filter(schema::tags_items::wiki_id.eq(&wiki.id))
+        .select(schema::tags_items::tag_id)
+        .load::<i32>(&_connection)
+        .expect("E");
+
     schema::tags::table
-        .filter(schema::tags::id.eq(any(stack)))
+        .filter(schema::tags::id.eq_any(_tag_items))
         .load::<Tag>(&_connection)
         .expect("could not load tags")
 }
 fn get_6_wiki_for_category(category: &WikiCategories) -> Vec<Wiki> {
-    use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();
 
     let ids = WikiCategory::belonging_to(category).select(schema::wiki_category::wiki_id);
     schema::wikis::table
-        .filter(schema::wikis::id.eq(any(ids)))
-        .order(schema::wikis::wiki_created.desc())
+        .filter(schema::wikis::id.eq_any(ids))
+        .order(schema::wikis::created.desc())
         .limit(6)
         .load::<Wiki>(&_connection)
-        .expect("could not load tags")
+        .expect("E")
 }
 fn get_wiki_for_category(category: &WikiCategories) -> Vec<Wiki> {
-    use diesel::pg::expression::dsl::any;
     let _connection = establish_connection();
 
     let ids = WikiCategory::belonging_to(category).select(schema::wiki_category::wiki_id);
     schema::wikis::table
-        .filter(schema::wikis::id.eq(any(ids)))
-        .order(schema::wikis::wiki_created.desc())
+        .filter(schema::wikis::id.eq_any(ids))
+        .order(schema::wikis::created.desc())
         .load::<Wiki>(&_connection)
-        .expect("could not load tags")
+        .expect("E")
 }
 
 pub async fn create_wiki_categories_page(req: HttpRequest) -> impl Responder {
-    let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
@@ -122,7 +124,6 @@ pub async fn create_wiki_categories_page(req: HttpRequest) -> impl Responder {
 pub async fn create_wiki_page(req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::tags;
 
-    let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
@@ -132,7 +133,7 @@ pub async fn create_wiki_page(req: HttpRequest) -> impl Responder {
     data.insert("is_admin", &_is_admin);
 
     let _connection = establish_connection();
-    let all_tags :Vec<Tag> = tags
+    let all_tags: Vec<Tag> = tags
         .load(&_connection)
         .expect("Error.");
 
@@ -150,9 +151,9 @@ pub async fn create_wiki_categories(mut payload: Multipart) -> impl Responder {
     let new_cat = NewWikiCategories {
         name: form.name.clone(),
         description: Some(form.description.clone()),
-        wiki_position: form.position.clone(),
+        position: form.position,
         image: Some(form.image.clone()),
-        wiki_count: 0
+        count: 0
     };
     let _new_wiki = diesel::insert_into(wiki_categories::table)
         .values(&new_cat)
@@ -161,7 +162,6 @@ pub async fn create_wiki_categories(mut payload: Multipart) -> impl Responder {
     return HttpResponse::Ok();
 }
 pub async fn create_wiki(mut payload: Multipart) -> impl Responder {
-    use schema::{wikis,wiki_images,wiki_videos,wiki_category,tags_items};
     use crate::schema::tags::dsl::tags;
     use crate::schema::wiki_categories::dsl::wiki_categories;
 
@@ -177,27 +177,27 @@ pub async fn create_wiki(mut payload: Multipart) -> impl Responder {
         1
     );
 
-    let _wiki = diesel::insert_into(wikis::table)
+    let _wiki = diesel::insert_into(schema::wikis::table)
         .values(&new_wiki)
         .get_result::<Wiki>(&_connection)
         .expect("Error saving wiki.");
 
     for image in form.images.iter().enumerate() {
-        let new_image = NewWikiImage::from_wiki_images_form(
+        let new_image = NewWikiImage::from_wiki_images_form (
             _wiki.id,
             image.1.to_string()
         );
-        diesel::insert_into(wiki_images::table)
+        diesel::insert_into(schema::wiki_images::table)
             .values(&new_image)
             .get_result::<WikiImage>(&_connection)
             .expect("Error saving wiki.");
         };
     for video in form.videos.iter().enumerate() {
-        let new_video = NewWikiVideo::from_wiki_videos_form(
+        let new_video = NewWikiVideo::from_wiki_videos_form (
             _wiki.id,
             video.1.to_string()
         );
-        diesel::insert_into(wiki_videos::table)
+        diesel::insert_into(schema::wiki_videos::table)
             .values(&new_video)
             .get_result::<WikiVideo>(&_connection)
             .expect("Error saving wiki.");
@@ -205,15 +205,19 @@ pub async fn create_wiki(mut payload: Multipart) -> impl Responder {
     for category_id in form.category_list.iter().enumerate() {
         let new_category = NewWikiCategory {
             wiki_categories_id: *category_id.1,
-            wiki_id: _wiki.id
+            wiki_id:            _wiki.id
         };
         diesel::insert_into(wiki_category::table)
             .values(&new_category)
             .get_result::<WikiCategory>(&_connection)
             .expect("Error saving wiki.");
-        let _category = wiki_categories.filter(schema::wiki_categories::id.eq(category_id.1)).load::<WikiCategories>(&_connection).expect("E");
+
+        let _category = wiki_categories
+            .filter(schema::wiki_categories::id.eq(category_id.1))
+            .load::<WikiCategories>(&_connection)
+            .expect("E");
         diesel::update(&_category[0])
-            .set(schema::wiki_categories::wiki_count.eq(_category[0].wiki_count + 1))
+            .set(schema::wiki_categories::count.eq(_category[0].count + 1))
             .get_result::<WikiCategories>(&_connection)
             .expect("Error.");
     };
@@ -225,15 +229,15 @@ pub async fn create_wiki(mut payload: Multipart) -> impl Responder {
             blog_id: 0,
             wiki_id: _wiki.id,
             work_id: 0,
-            tag_created: chrono::Local::now().naive_utc(),
+            created: chrono::Local::now().naive_utc(),
         };
-        diesel::insert_into(tags_items::table)
+        diesel::insert_into(schema::tags_items::table)
             .values(&new_tag)
             .get_result::<TagItems>(&_connection)
             .expect("Error.");
         let _tag = tags.filter(schema::tags::id.eq(tag_id.1)).load::<Tag>(&_connection).expect("E");
         diesel::update(&_tag[0])
-            .set((schema::tags::tag_count.eq(_tag[0].tag_count + 1), schema::tags::wiki_count.eq(_tag[0].wiki_count + 1)))
+            .set((schema::tags::count.eq(_tag[0].count + 1), schema::tags::wiki_count.eq(_tag[0].wiki_count + 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
@@ -247,10 +251,13 @@ pub async fn get_wiki_page(req: HttpRequest, param: web::Path<(i32,i32)>) -> imp
     use schema::wiki_categories::dsl::wiki_categories;
 
     let _connection = establish_connection();
-    let _wiki_id : i32 = param.1;
-    let _cat_id : i32 = param.0;
+    let _wiki_id: i32 = param.1;
+    let _cat_id: i32 = param.0;
 
-    let _wiki = wikis.filter(schema::wikis::id.eq(&_wiki_id)).load::<Wiki>(&_connection).expect("E");
+    let _wiki = wikis
+        .filter(schema::wikis::id.eq(&_wiki_id))
+        .load::<Wiki>(&_connection)
+        .expect("E");
 
     let _s_category = wiki_categories
         .filter(schema::wiki_categories::id.eq(&_cat_id))
@@ -260,7 +267,7 @@ pub async fn get_wiki_page(req: HttpRequest, param: web::Path<(i32,i32)>) -> imp
     let mut data = Context::new();
 
     let _category_wikis = get_wiki_for_category(&_s_category[0]);
-    let _category_wikis_len : usize = _category_wikis.len();
+    let _category_wikis_len: usize = _category_wikis.len();
     for (i, item) in _category_wikis.iter().enumerate().rev() {
         if item.id == _wiki_id {
             if (i + 1) != _category_wikis_len {
@@ -275,8 +282,8 @@ pub async fn get_wiki_page(req: HttpRequest, param: web::Path<(i32,i32)>) -> imp
         }
     };
 
-    let _images :Vec<WikiImage> = wiki_images.filter(schema::wiki_images::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
-    let _videos :Vec<WikiVideo> = wiki_videos.filter(schema::wiki_videos::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
+    let _images: Vec<WikiImage> = wiki_images.filter(schema::wiki_images::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
+    let _videos: Vec<WikiVideo> = wiki_videos.filter(schema::wiki_videos::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
     let _categories = get_cats_for_wiki(&_wiki[0]);
     let _tags = get_tags_for_wiki(&_wiki[0]);
 
@@ -302,10 +309,8 @@ pub async fn get_wiki_page(req: HttpRequest, param: web::Path<(i32,i32)>) -> imp
 
 pub async fn wiki_category_page(req: HttpRequest, id: web::Path<i32>) -> impl Responder {
     use schema::wiki_categories::dsl::wiki_categories;
-    use diesel::dsl::any;
     use crate::schema::tags_items::dsl::tags_items;
 
-    let mut data = Context::new();
     let page_size = 20;
     let mut offset = 0;
 
@@ -318,17 +323,20 @@ pub async fn wiki_category_page(req: HttpRequest, id: web::Path<i32>) -> impl Re
     data.insert("is_admin", &_is_admin);
     let _connection = establish_connection();
 
-    let _category = wiki_categories.filter(schema::wiki_categories::id.eq(*id)).load::<WikiCategories>(&_connection).expect("E");
+    let _category = wiki_categories
+        .filter(schema::wiki_categories::id.eq(*id))
+        .load::<WikiCategories>(&_connection)
+        .expect("E");
 
     data.insert("category", &_category[0]);
 
     loop {
         let ids = WikiCategory::belonging_to(&_category).select(schema::wiki_category::wiki_id);
         let _wikis = schema::wikis::table
-        .filter(schema::wikis::id.eq(any(ids)))
+        .filter(schema::wikis::id.eq_any(ids))
         .limit(page_size)
         .offset(offset)
-        .order(schema::wikis::wiki_created.desc())
+        .order(schema::wikis::created.desc())
         .load::<Wiki>(&_connection)
         .expect("could not load tags");
         if _wikis.len() > 0 {
@@ -337,18 +345,21 @@ pub async fn wiki_category_page(req: HttpRequest, id: web::Path<i32>) -> impl Re
         }
         else {break;}
     };
-
     let mut stack = Vec::new();
-    let _tag_items = tags_items.filter(schema::tags_items::wiki_id.ne(0)).load::<TagItems>(&_connection).expect("E");
+    let _tag_items = tags_items
+        .filter(schema::tags_items::wiki_id.ne(0))
+        .select(schema::tags_items::tag_id)
+        .load::<i32>(&_connection)
+        .expect("E");
     for _tag_item in _tag_items.iter() {
-        if stack.iter().any(|&i| i==_tag_item.tag_id) {
+        if stack.iter().any(|&i| i==_tag_item) {
             continue;
         } else {
-            stack.push(_tag_item.tag_id);
+            stack.push(_tag_item);
         }
     };
     let _tags = schema::tags::table
-        .filter(schema::tags::id.eq(any(stack)))
+        .filter(schema::tags::id.eq_any(stack))
         .load::<Tag>(&_connection)
         .expect("could not load tags");
 
@@ -361,7 +372,6 @@ pub async fn wiki_category_page(req: HttpRequest, id: web::Path<i32>) -> impl Re
 }
 
 pub async fn wiki_categories_page(req: HttpRequest) -> impl Responder {
-    use diesel::dsl::any;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::wikis::dsl::wikis;
 
@@ -375,12 +385,15 @@ pub async fn wiki_categories_page(req: HttpRequest) -> impl Responder {
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
 
-    let _wikis = wikis.filter(schema::wikis::is_wiki_active.eq(true)).load::<Wiki>(&_connection).expect("E");
+    let _wikis = wikis
+        .filter(schema::wikis::is_active.eq(true))
+        .load::<Wiki>(&_connection)
+        .expect("E");
     let mut _count: i32 = 0;
     for _cat in _wiki_cats.iter() {
         _count += 1;
         // для генерации переменной 1 2 3
-        let mut _let_int : String = _count.to_string().parse().unwrap();
+        let mut _let_int: String = _count.to_string().parse().unwrap();
         let _let_data_wikis: String = "wikis".to_string() + &_let_int;
         data.insert(&_let_data_wikis, &get_6_wiki_for_category(_cat));
     };
@@ -388,17 +401,21 @@ pub async fn wiki_categories_page(req: HttpRequest) -> impl Responder {
 
     let mut stack = Vec::new();
     for wiki in _wikis.iter() {
-        let _tag_items = tags_items.filter(schema::tags_items::wiki_id.eq(wiki.id)).load::<TagItems>(&_connection).expect("E");
+        let _tag_items = tags_items
+            .filter(schema::tags_items::wiki_id.eq(wiki.id))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         for _tag_item in _tag_items.iter() {
-            if stack.iter().any(|&i| i==_tag_item.tag_id) {
+            if stack.iter().any(|&i| i==_tag_item) {
                 continue;
             } else {
-                stack.push(_tag_item.tag_id);
+                stack.push(_tag_item);
             }
         };
     };
     let _tags = schema::tags::table
-        .filter(schema::tags::id.eq(any(stack)))
+        .filter(schema::tags::id.eq_any(stack))
         .load::<Tag>(&_connection)
         .expect("could not load tags");
 
@@ -411,8 +428,8 @@ pub async fn wiki_categories_page(req: HttpRequest) -> impl Responder {
 }
 
 pub async fn edit_wiki_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use schema::wikis::dsl::*;
-    use schema::tags::dsl::*;
+    use schema::wikis::dsl::wikis;
+    use schema::tags::dsl::tags;
     use crate::schema::wiki_images::dsl::wiki_images;
     use crate::schema::wiki_videos::dsl::wiki_videos;
 
@@ -426,10 +443,13 @@ pub async fn edit_wiki_page(req: HttpRequest, _id: web::Path<i32>) -> impl Respo
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
     let _connection = establish_connection();
-    let _wiki = wikis.filter(schema::wikis::id.eq(&_wiki_id)).load::<Wiki>(&_connection).expect("E");
+    let _wiki = wikis
+        .filter(schema::wikis::id.eq(&_wiki_id))
+        .load::<Wiki>(&_connection)
+        .expect("E");
 
     let _categories = get_cats_for_wiki(&_wiki[0]);
-    let _all_tags :Vec<Tag> = tags.load(&_connection).expect("Error.");
+    let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
     let _wiki_tags = get_tags_for_wiki(&_wiki[0]);
 
     let _images = wiki_images.filter(schema::wiki_images::wiki.eq(_wiki[0].id)).load::<WikiImage>(&_connection).expect("E");
@@ -453,11 +473,14 @@ pub struct WikiParams {
     content: String,
 }
 pub async fn edit_content_wiki_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use schema::wikis::dsl::*;
+    use schema::wikis::dsl::wikis;
 
-    let _wiki_id : i32 = *_id;
+    let _wiki_id: i32 = *_id;
     let _connection = establish_connection();
-    let _wiki = wikis.filter(schema::wikis::id.eq(&_wiki_id)).load::<Wiki>(&_connection).expect("E");
+    let _wiki = wikis
+        .filter(schema::wikis::id.eq(&_wiki_id))
+        .load::<Wiki>(&_connection)
+        .expect("E");
 
     let params = web::Query::<WikiParams>::from_query(&req.query_string()).unwrap();
     if params.content.clone() != "".to_string() {
@@ -467,7 +490,6 @@ pub async fn edit_content_wiki_page(req: HttpRequest, _id: web::Path<i32>) -> im
             .expect("E.");
     }
 
-    let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
@@ -483,10 +505,9 @@ pub async fn edit_content_wiki_page(req: HttpRequest, _id: web::Path<i32>) -> im
 }
 
 pub async fn edit_wiki_category_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use schema::wiki_categories::dsl::*;
+    use schema::wiki_categories::dsl::wiki_categories;
 
-    let _cat_id : i32 = *_id;
-    let mut data = Context::new();
+    let _cat_id: i32 = *_id;
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);
     data.insert("store_categories", &_store_cats);
@@ -495,7 +516,10 @@ pub async fn edit_wiki_category_page(req: HttpRequest, _id: web::Path<i32>) -> i
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
     let _connection = establish_connection();
-    let _category = wiki_categories.filter(schema::wiki_categories::id.eq(&_cat_id)).load::<WikiCategories>(&_connection).expect("E");
+    let _category = wiki_categories
+        .filter(schema::wiki_categories::id.eq(&_cat_id))
+        .load::<WikiCategories>(&_connection)
+        .expect("E");
 
     data.insert("category", &_category[0]);
     let _template = _type + &"wikis/edit_category.html".to_string();
@@ -515,20 +539,23 @@ pub async fn edit_wiki(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     use crate::schema::tags::dsl::tags;
 
     let _connection = establish_connection();
-    let _wiki_id : i32 = *_id;
-    let _wiki = wikis.filter(schema::wikis::id.eq(_wiki_id)).load::<Wiki>(&_connection).expect("E");
+    let _wiki_id: i32 = *_id;
+    let _wiki = wikis
+        .filter(schema::wikis::id.eq(_wiki_id))
+        .load::<Wiki>(&_connection)
+        .expect("E");
 
     let _categories = get_cats_for_wiki(&_wiki[0]);
     let _tags = get_tags_for_wiki(&_wiki[0]);
     for _category in _categories.iter() {
         diesel::update(_category)
-            .set(schema::wiki_categories::wiki_count.eq(_category.wiki_count - 1))
+            .set(schema::wiki_categories::count.eq(_category.count - 1))
             .get_result::<WikiCategories>(&_connection)
             .expect("Error.");
     };
     for _tag in _tags.iter() {
         diesel::update(_tag)
-            .set((schema::tags::tag_count.eq(_tag.tag_count - 1), schema::tags::wiki_count.eq(_tag.wiki_count - 1)))
+            .set((schema::tags::count.eq(_tag.count - 1), schema::tags::wiki_count.eq(_tag.wiki_count - 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
@@ -544,7 +571,7 @@ pub async fn edit_wiki(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
         description: Some(form.description.clone()),
         link: Some(form.link.clone()),
         image: Some(form.main_image.clone()),
-        is_wiki_active: form.is_active.clone()
+        is_active: form.is_active.clone()
     };
 
     diesel::update(&_wiki[0])
@@ -575,7 +602,7 @@ pub async fn edit_wiki(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     for category_id in form.category_list.iter().enumerate() {
         let new_category = NewWikiCategory {
             wiki_categories_id: *category_id.1,
-            wiki_id: _wiki_id
+            wiki_id:            _wiki_id
         };
         diesel::insert_into(schema::wiki_category::table)
             .values(&new_category)
@@ -583,7 +610,7 @@ pub async fn edit_wiki(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
             .expect("E.");
         let _category_2 = wiki_categories.filter(schema::wiki_categories::id.eq(category_id.1)).load::<WikiCategories>(&_connection).expect("E");
         diesel::update(&_category_2[0])
-            .set(schema::wiki_categories::wiki_count.eq(_category_2[0].wiki_count + 1))
+            .set(schema::wiki_categories::count.eq(_category_2[0].count + 1))
             .get_result::<WikiCategories>(&_connection)
             .expect("Error.");
     };
@@ -595,7 +622,7 @@ pub async fn edit_wiki(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
             blog_id: 0,
             wiki_id: _wiki_id,
             work_id: 0,
-            tag_created: chrono::Local::now().naive_utc(),
+            created: chrono::Local::now().naive_utc(),
         };
         diesel::insert_into(schema::tags_items::table)
             .values(&_new_tag)
@@ -603,7 +630,7 @@ pub async fn edit_wiki(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
             .expect("Error.");
         let _tag_2 = tags.filter(schema::tags::id.eq(_tag_id.1)).load::<Tag>(&_connection).expect("E");
         diesel::update(&_tag_2[0])
-            .set((schema::tags::tag_count.eq(_tag_2[0].tag_count + 1), schema::tags::wiki_count.eq(_tag_2[0].wiki_count + 1)))
+            .set((schema::tags::count.eq(_tag_2[0].count + 1), schema::tags::wiki_count.eq(_tag_2[0].wiki_count + 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
@@ -615,16 +642,16 @@ pub async fn edit_wiki_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     use crate::schema::wiki_categories::dsl::wiki_categories;
 
     let _connection = establish_connection();
-    let _cat_id : i32 = *_id;
+    let _cat_id: i32 = *_id;
     let _category = wiki_categories.filter(schema::wiki_categories::id.eq(_cat_id)).load::<WikiCategories>(&_connection).expect("E");
 
     let form = category_form(payload.borrow_mut()).await;
     let _new_cat = EditWikiCategories {
         name: form.name.clone(),
         description: Some(form.description.clone()),
-        wiki_position: form.position.clone(),
+        position: form.position,
         image: Some(form.image.clone()),
-        wiki_count: _category[0].wiki_count,
+        count: _category[0].count,
     };
 
     diesel::update(&_category[0])
@@ -643,20 +670,20 @@ pub async fn delete_wiki(_id: web::Path<i32>) -> impl Responder {
     use crate::schema::wiki_images::dsl::wiki_images;
 
     let _connection = establish_connection();
-    let _wiki_id : i32 = *_id;
+    let _wiki_id: i32 = *_id;
     let _wiki = wikis.filter(schema::wikis::id.eq(_wiki_id)).load::<Wiki>(&_connection).expect("E");
 
     let _categories = get_cats_for_wiki(&_wiki[0]);
     let _tags = get_tags_for_wiki(&_wiki[0]);
     for _category in _categories.iter() {
         diesel::update(_category)
-            .set(schema::wiki_categories::wiki_count.eq(_category.wiki_count - 1))
+            .set(schema::wiki_categories::count.eq(_category.count - 1))
             .get_result::<WikiCategories>(&_connection)
             .expect("Error.");
     };
     for _tag in _tags.iter() {
         diesel::update(_tag)
-            .set((schema::tags::tag_count.eq(_tag.tag_count - 1), schema::tags::wiki_count.eq(_tag.wiki_count - 1)))
+            .set((schema::tags::count.eq(_tag.count - 1), schema::tags::wiki_count.eq(_tag.wiki_count - 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
@@ -672,7 +699,7 @@ pub async fn delete_wiki_category(_id: web::Path<i32>) -> impl Responder {
     use crate::schema::wiki_categories::dsl::wiki_categories;
 
     let _connection = establish_connection();
-    let _cat_id : i32 = *_id;
+    let _cat_id: i32 = *_id;
     let _category = wiki_categories.filter(schema::wiki_categories::id.eq(_cat_id)).load::<WikiCategories>(&_connection).expect("E");
     diesel::delete(wiki_categories.filter(schema::wiki_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
     HttpResponse::Ok()

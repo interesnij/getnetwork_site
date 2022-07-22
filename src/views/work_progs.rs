@@ -1,16 +1,22 @@
-extern crate diesel;
-
-use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use tera::Context;
+use actix_web::{
+    HttpRequest,
+    HttpResponse,
+    web,
+    error::InternalError,
+    http::StatusCode,
+};
+use crate::diesel::{
+    RunQueryDsl,
+    ExpressionMethods,
+    QueryDsl,
+};
+use actix_session::Session;
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
-use diesel::prelude::*;
 use crate::utils::{
     item_form,
     category_form,
-    get_template_2,
     establish_connection,
-    TEMPLATES
 };
 use crate::schema;
 use crate::models::{
@@ -28,6 +34,8 @@ use crate::models::{
     NewTagItems,
     Tag,
 };
+use sailfish::TemplateOnce;
+
 
 pub fn work_routes(config: &mut web::ServiceConfig) {
     config.route("/work_categories/", web::get().to(work_categories_page));
@@ -86,7 +94,7 @@ fn get_6_work_for_category(category: &WorkCategories) -> Vec<Work> {
     let ids = WorkCategory::belonging_to(category).select(schema::work_category::work_id);
     schema::works::table
         .filter(schema::works::id.eq(any(ids)))
-        .order(schema::works::work_created.desc())
+        .order(schema::works::created.desc())
         .limit(6)
         .load::<Work>(&_connection)
         .expect("could not load tags")
@@ -98,7 +106,7 @@ fn get_work_for_category(category: &WorkCategories) -> Vec<Work> {
     let ids = WorkCategory::belonging_to(category).select(schema::work_category::work_id);
     schema::works::table
         .filter(schema::works::id.eq(any(ids)))
-        .order(schema::works::work_created.desc())
+        .order(schema::works::created.desc())
         .load::<Work>(&_connection)
         .expect("could not load tags")
 }
@@ -147,9 +155,9 @@ pub async fn create_work_categories(mut payload: Multipart) -> impl Responder {
     let new_cat = NewWorkCategories {
         name: form.name.clone(),
         description: Some(form.description.clone()),
-        work_position: form.position.clone(),
+        position: form.position.clone(),
         image: Some(form.image.clone()),
-        work_count: 0
+        count: 0
     };
     let _new_work = diesel::insert_into(work_categories::table)
         .values(&new_cat)
@@ -210,7 +218,7 @@ pub async fn create_work(mut payload: Multipart) -> impl Responder {
             .expect("E.");
         let _category = work_categories.filter(schema::work_categories::id.eq(category_id.1)).load::<WorkCategories>(&_connection).expect("E");
         diesel::update(&_category[0])
-            .set(schema::work_categories::work_count.eq(_category[0].work_count + 1))
+            .set(schema::work_categories::count.eq(_category[0].count + 1))
             .get_result::<WorkCategories>(&_connection)
             .expect("Error.");
     };
@@ -222,7 +230,7 @@ pub async fn create_work(mut payload: Multipart) -> impl Responder {
             blog_id: 0,
             wiki_id: 0,
             work_id: _work.id,
-            tag_created: chrono::Local::now().naive_utc(),
+            created: chrono::Local::now().naive_utc(),
         };
         diesel::insert_into(tags_items::table)
             .values(&new_tag)
@@ -230,7 +238,7 @@ pub async fn create_work(mut payload: Multipart) -> impl Responder {
             .expect("Error.");
         let _tag = tags.filter(schema::tags::id.eq(tag_id.1)).load::<Tag>(&_connection).expect("E");
         diesel::update(&_tag[0])
-            .set((schema::tags::tag_count.eq(_tag[0].tag_count + 1), schema::tags::work_count.eq(_tag[0].work_count + 1)))
+            .set((schema::tags::count.eq(_tag[0].count + 1), schema::tags::work_count.eq(_tag[0].work_count + 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
@@ -324,7 +332,7 @@ pub async fn work_category_page(req: HttpRequest, id: web::Path<i32>) -> impl Re
         .filter(schema::works::id.eq(any(ids)))
         .limit(page_size)
         .offset(offset)
-        .order(schema::works::work_created.desc())
+        .order(schema::works::created.desc())
         .load::<Work>(&_connection)
         .expect("could not load tags");
         if _works.len() > 0 {
@@ -371,7 +379,7 @@ pub async fn work_categories_page(req: HttpRequest) -> impl Responder {
     data.insert("work_categories", &_work_cats);
     data.insert("is_admin", &_is_admin);
 
-    let _works = works.filter(schema::works::is_work_active.eq(true)).load::<Work>(&_connection).expect("E");
+    let _works = works.filter(schema::works::is_active.eq(true)).load::<Work>(&_connection).expect("E");
     let mut _count: i32 = 0;
     for _cat in _work_cats.iter() {
         _count += 1;
@@ -519,13 +527,13 @@ pub async fn edit_work(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
     let _tags = get_tags_for_work(&_work[0]);
     for _category in _categories.iter() {
         diesel::update(_category)
-            .set(schema::work_categories::work_count.eq(_category.work_count - 1))
+            .set(schema::work_categories::count.eq(_category.count - 1))
             .get_result::<WorkCategories>(&_connection)
             .expect("Error.");
     };
     for _tag in _tags.iter() {
         diesel::update(_tag)
-            .set((schema::tags::tag_count.eq(_tag.tag_count - 1), schema::tags::work_count.eq(_tag.work_count - 1)))
+            .set((schema::tags::count.eq(_tag.count - 1), schema::tags::work_count.eq(_tag.work_count - 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
@@ -541,7 +549,7 @@ pub async fn edit_work(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
         description: Some(form.description.clone()),
         link: Some(form.link.clone()),
         image: Some(form.main_image.clone()),
-        is_work_active: form.is_active.clone()
+        is_active: form.is_active.clone()
     };
 
     diesel::update(&_work[0])
@@ -580,7 +588,7 @@ pub async fn edit_work(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
             .expect("E.");
         let _category_2 = work_categories.filter(schema::work_categories::id.eq(category_id.1)).load::<WorkCategories>(&_connection).expect("E");
         diesel::update(&_category_2[0])
-            .set(schema::work_categories::work_count.eq(_category_2[0].work_count + 1))
+            .set(schema::work_categories::count.eq(_category_2[0].count + 1))
             .get_result::<WorkCategories>(&_connection)
             .expect("Error.");
     };
@@ -592,7 +600,7 @@ pub async fn edit_work(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
             blog_id: 0,
             wiki_id: 0,
             work_id: _work_id,
-            tag_created: chrono::Local::now().naive_utc(),
+            created: chrono::Local::now().naive_utc(),
         };
         diesel::insert_into(schema::tags_items::table)
             .values(&_new_tag)
@@ -600,7 +608,7 @@ pub async fn edit_work(mut payload: Multipart, _id: web::Path<i32>) -> impl Resp
             .expect("Error.");
         let _tag_2 = tags.filter(schema::tags::id.eq(_tag_id.1)).load::<Tag>(&_connection).expect("E");
         diesel::update(&_tag_2[0])
-            .set((schema::tags::tag_count.eq(_tag_2[0].tag_count + 1), schema::tags::work_count.eq(_tag_2[0].work_count + 1)))
+            .set((schema::tags::count.eq(_tag_2[0].count + 1), schema::tags::work_count.eq(_tag_2[0].work_count + 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };
@@ -619,9 +627,9 @@ pub async fn edit_work_category(mut payload: Multipart, _id: web::Path<i32>) -> 
     let _new_cat = EditWorkCategories {
         name: form.name.clone(),
         description: Some(form.description.clone()),
-        work_position: form.position.clone(),
+        position: form.position.clone(),
         image: Some(form.image.clone()),
-        work_count: _category[0].work_count,
+        count: _category[0].count,
     };
 
     diesel::update(&_category[0])
@@ -647,13 +655,13 @@ pub async fn delete_work(_id: web::Path<i32>) -> impl Responder {
     let _tags = get_tags_for_work(&_work[0]);
     for _category in _categories.iter() {
         diesel::update(_category)
-            .set(schema::work_categories::work_count.eq(_category.work_count - 1))
+            .set(schema::work_categories::count.eq(_category.count - 1))
             .get_result::<WorkCategories>(&_connection)
             .expect("Error.");
     };
     for _tag in _tags.iter() {
         diesel::update(_tag)
-            .set((schema::tags::tag_count.eq(_tag.tag_count - 1), schema::tags::work_count.eq(_tag.work_count - 1)))
+            .set((schema::tags::count.eq(_tag.count - 1), schema::tags::work_count.eq(_tag.work_count - 1)))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     };

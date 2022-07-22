@@ -1,0 +1,13 @@
+{% if last_blogs %}
+
+<section class="page-section">
+    <div class="container relative">
+        <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+            Последние статьи
+        </h2>
+          {% for object in last_blogs %}
+            {% include 'desctop/generic/default_blog.html' %}
+          {% endfor %}
+    </div>
+</section>
+{% endif %}

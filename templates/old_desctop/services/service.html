@@ -1,0 +1,212 @@
+{% extends "desctop/base.html" %}
+{% block title %}Услуги | {{ object.title }}{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a class="ajax" href="/service_categories/">Услуги</a>
+            &nbsp;/&nbsp;
+            <a class="ajax" href="/service/{{ category.id }}/"> {{ category.name }}</a>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="blog-item-body">
+                    <h1 class="mt-0 font-alt">{{ object.title }}</h1>
+                    <div class="blog-item-data">
+                        | <a class="ajax" href="/edit_service/{{ object.id }}/">~</a>
+                        | <a class="ajax" href="/edit_content_service/{{ object.id }}/?content=">Aa</a>
+                        | <a class="pointer remove_service" data-pk="{{ object.id }}">x</a>
+                        <span class="separator">&nbsp;</span>
+                    </div>
+
+                </div>
+
+                {{ object.content | safe }}
+
+                {% for t_category in tech_categories %}
+                {% set is_main_cat = t_category.name in service_categories_names %}
+
+                  {% if loop.index == 1 %}
+                    {% set category_list = serve_categories1 %}
+                    {% set loop_index = 1 %}
+                  {% elif loop.index == 2 %}
+                    {% set category_list = serve_categories2 %}
+                    {% set loop_index = 2 %}
+                  {% elif loop.index == 3 %}
+                    {% set category_list = serve_categories3 %}
+                    {% set loop_index = 3 %}
+                  {% elif loop.index == 4 %}
+                    {% set category_list = serve_categories4 %}
+                    {% set loop_index = 4 %}
+                  {% endif %}
+                <section class="mb-20 mt-20 border">
+                  {% if is_main_cat %}
+                    <h2 class="section-title font-alt">
+                        {{ t_category.name }}
+                    </h2>
+                  {% else %}
+                    <h2 class="pointer section-title font-alt show_tech_category">
+                      <span class="cat_description">
+                        {{ t_category.description }}
+                        <span style="float:right;margin-right: 20px;">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                        </span>
+                      </span>
+                      <span class="cat_name hidden">
+                        {{ t_category.name }}
+                        <span style="float:right;margin-right: 20px;">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </span>
+                      </span>
+                    </h2>
+                  {% endif %}
+                    <div class="{% if not is_main_cat %}hidden is_not_main_cat{% endif %}">
+                        <div class="align-center">
+                            <ul class="nav nav-tabs tpl-minimal-tabs animate">
+                              {% for cat in category_list %}
+                                <li data-sum="{{ cat.default_price }}" class="yy pointer s_{{ loop.index }} {% if loop.first %}active{% endif %}">
+                                    <a class="pointer">{{ cat.name }}</a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="tab-content tpl-minimal-tabs-cont section-text">
+                          {% for category in category_list %}
+                            {% if loop_index == 1 %}
+                              {% if loop.index == 1 %}
+                                {% set object_list = _1serves1 %}
+                              {% elif loop.index == 2 %}
+                                {% set object_list = _1serves2 %}
+                              {% elif loop.index == 3 %}
+                                {% set object_list = _1serves3 %}
+                              {% elif loop.index == 4 %}
+                                {% set object_list = _1serves4 %}
+                              {% endif %}
+
+                            {% elif loop_index == 2 %}
+                              {% if loop.index == 1 %}
+                                {% set object_list = _2serves1 %}
+                              {% elif loop.index == 2 %}
+                                {% set object_list = _2serves2 %}
+                              {% elif loop.index == 3 %}
+                                {% set object_list = _2serves3 %}
+                              {% elif loop.index == 4 %}
+                                {% set object_list = _2serves4 %}
+                              {% endif %}
+
+                            {% elif loop_index == 3 %}
+                              {% if loop.index == 1 %}
+                                {% set object_list = _3serves1 %}
+                              {% elif loop.index == 2 %}
+                                {% set object_list = _3serves2 %}
+                              {% elif loop.index == 3 %}
+                                {% set object_list = _3serves3 %}
+                              {% elif loop.index == 4 %}
+                                {% set object_list = _3serves4 %}
+                              {% endif %}
+
+                            {% elif loop_index == 4 %}
+                              {% if loop.index == 1 %}
+                                {% set object_list = _4serves1 %}
+                              {% elif loop.index == 2 %}
+                                {% set object_list = _4serves2 %}
+                              {% elif loop.index == 3 %}
+                                {% set object_list = _4serves3 %}
+                              {% elif loop.index == 4 %}
+                                {% set object_list = _4serves4 %}
+                              {% endif %}
+                            {% endif %}
+
+                            <div data-sum="{{ category.default_price }}" class="tab_{{ loop.index }} fade tab-pane {% if loop.first %}in active{% endif %}">
+                                <table class="table">
+                                    <h4>
+                                      <span data-pk="{{ category.id }}" data-type="serve_category" owner-pk="{{ object.id }}" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up">
+                                        {{ t_category.name }} на {{ category.name }}
+                                      </span>
+                                    </h4>
+                                    <tbody>
+
+                                        {% for serve in object_list %}
+                                        <tr class="{% if serve.is_default %}is_default hover{% else %}select_serve pointer{% endif %}">
+                                            <td style="width:52%">
+                                                <a class="pointer underline get_object_info" data-pk="{{ serve.id }}" data-type="serve" owner-pk="{{ object.id }}" owner-type="service">
+                                                    {{ serve.cat_name }} => {{ serve.name }} ({{ serve.id }})
+                                                </a>
+                                            </td>
+                                            <td class="price_td" style="width:12%"><span class="price">{{ serve.price }}</span> ₽</td>
+                                            {% if serve.price_acc %}
+                                            <td class="price_acc_td" style="width:12%"><span class="price_acc">{{ serve.price_acc }}</span> ₽</td>
+                                            {% else %}
+                                            <td style="width:12%"></td>
+                                            {% endif %}
+                                            <td style="width:12%">Часы: {{ serve.man_hours }}</td>
+                                            <td class="action_text" style="width:12%">
+                                                {% if not serve.is_default %}
+                                                  Выбрать
+                                                {% else %}
+                                                  Выбрано
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                          {% endfor %}
+                        </div>
+                    </div>
+                </section>
+                {% endfor %}
+
+                {% if images %}
+                <h4 class="mt-20">Изображения</h4>
+                <div class="row multi-columns-row mb-30 mb-xs-10">
+                    {% for img in images %}
+                    <div class="col-md-6 col-lg-6 mb-md-10">
+                        <div class="post-prev-img">
+                            <img class="image_fit_300" src="{{ img.src }}" alt="img">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if videos %}
+                <h4>Видеозаписи</h4>
+                <div class="row multi-columns-row mb-30 mb-xs-10">
+                    {% for video in videos %}
+                      <video width="100%" height="100%" controls="controls">
+                        <source src="{{ video.src }}" type='video/mp4;'>
+                      </video>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-sm-4">
+                {% include 'desctop/services/sidebar.html' %}
+            </div>
+        </div>
+    </div>
+    <section class="border card_fullscreen" style="position: fixed;bottom: 10px;width: 100%;">
+        <h3 data-sum="{{ default_price }}"
+            data-pk="{{ object.id }}"
+            data-servelist="{{ default_servelist }}"
+            class="create_order_form_of_service pointer">
+            Сумма <span data-serve="0"
+                        data-oldsum="{{ default_price }}"
+                        class="total_price_counter">
+                      {{ default_price }}
+                  </span>
+             ₽. Перейти к заказу
+        </h3>
+    </section>
+</section>
+{% endblock %}

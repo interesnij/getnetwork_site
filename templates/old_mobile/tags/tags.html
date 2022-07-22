@@ -1,0 +1,24 @@
+{% extends "mobile/base.html" %}
+{% block title %}Ключевые слова{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+      <h5 class="widget-title font-alt">Теги ({{ tags_count }})</h5>
+      <div class="widget-body">
+          <div class="tags">
+            {% for tag in tags %}
+              <a class="ajax" href="/tag/{{ tag.id }}/">{{ tag.name }} ({{ tag.tag_count }})</a>
+            {% endfor %}
+          </div>
+      </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,16 @@
+
+<section class="page-section">
+    <div class="container relative">
+        <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+            Последние работы
+            <a href="/work_categories/" class="section-more right ajax blog">
+              Перейти в раздел
+            </a>
+        </h2>
+        <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
+          {% for object in last_works %}
+            {% include 'desctop/generic/default_work.html' %}
+          {% endfor %}
+        </ul>
+    </div>
+</section>

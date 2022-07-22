@@ -1,0 +1,64 @@
+{% extends "desctop/base.html" %}
+{% block title %}Создание опции{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+              <a class="ajax" href="/serve_categories/">Категории опций</a>
+            &nbsp;/&nbsp;
+            <span>Создание опции</span>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+        <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="text" name="name" placeholder="Название" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="text" name="description" placeholder="Описание" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="serve_position" placeholder="Порядок следования" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <label>Категория</label>
+              <select class="input-md form-control" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
+                {% for category in categories %}
+                  <option value="{{ category.id }}">
+                    {{ category.cat_name }} => {{ category.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="price" placeholder="Цена" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="man_hours" placeholder="Человеко-часы" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <label class="checkbox-inline">
+                <input type="checkbox" name="is_default" checked>
+                  Опция по умолчанию
+              </label>
+            </div>
+            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_serve_btn">Создать</button>
+        </form>
+
+        <section class="border small-section bg-dark">
+            {% include 'desctop/serve/serve_list.html' %}
+        </section>
+    </div>
+</section>
+{% endblock %}

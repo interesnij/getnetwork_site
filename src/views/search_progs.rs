@@ -1,14 +1,20 @@
 use actix_web::{
     HttpRequest,
-    Responder,
     HttpResponse,
-    web
+    web,
+    error::InternalError,
+    http::StatusCode,
 };
-use tera::Context;
+use crate::diesel::{
+    RunQueryDsl,
+    ExpressionMethods,
+    QueryDsl,
+};
+use actix_session::Session;
 use serde::Deserialize;
-use crate::utils::{get_template_2, establish_connection, TEMPLATES};
+use crate::utils::establish_connection;
 use crate::schema;
-use diesel::prelude::*;
+use sailfish::TemplateOnce;
 
 #[derive(Debug, Deserialize)]
 pub struct SearchParams {
@@ -43,7 +49,7 @@ pub async fn search_page(req: HttpRequest) -> impl Responder {
         .filter(schema::blogs::title.eq(&_q_standalone))
         .or_filter(schema::blogs::description.eq(&_q_standalone))
         .or_filter(schema::blogs::content.eq(&_q_standalone))
-        .order(schema::blogs::blog_created.desc())
+        .order(schema::blogs::created.desc())
         .limit(3)
         .load::<Blog>(&_connection)
         .expect("e");
@@ -51,7 +57,7 @@ pub async fn search_page(req: HttpRequest) -> impl Responder {
         .filter(schema::services::title.ilike(&_q_standalone))
         .or_filter(schema::services::description.ilike(&_q_standalone))
         .or_filter(schema::services::content.ilike(&_q_standalone))
-        .order(schema::services::service_created.desc())
+        .order(schema::services::created.desc())
         .limit(3)
         .load::<Service>(&_connection)
         .expect("e");
@@ -59,7 +65,7 @@ pub async fn search_page(req: HttpRequest) -> impl Responder {
         .filter(schema::stores::title.eq(&_q))
         .or_filter(schema::stores::description.eq(&_q_standalone))
         .or_filter(schema::stores::content.eq(&_q_standalone))
-        .order(schema::stores::store_created.desc())
+        .order(schema::stores::created.desc())
         .limit(3)
         .load::<Store>(&_connection)
         .expect("e");
@@ -67,7 +73,7 @@ pub async fn search_page(req: HttpRequest) -> impl Responder {
         .filter(schema::wikis::title.eq(&_q))
         .or_filter(schema::wikis::description.eq(&_q_standalone))
         .or_filter(schema::wikis::content.eq(&_q_standalone))
-        .order(schema::wikis::wiki_created.desc())
+        .order(schema::wikis::created.desc())
         .limit(3)
         .load::<Wiki>(&_connection)
         .expect("e");
@@ -75,7 +81,7 @@ pub async fn search_page(req: HttpRequest) -> impl Responder {
         .filter(schema::works::title.eq(&_q))
         .or_filter(schema::works::description.eq(&_q_standalone))
         .or_filter(schema::works::content.eq(&_q_standalone))
-        .order(schema::works::work_created.desc())
+        .order(schema::works::created.desc())
         .limit(3)
         .load::<Work>(&_connection)
         .expect("e");
@@ -125,7 +131,7 @@ pub async fn search_blogs_page(req: HttpRequest) -> impl Responder {
             .or_filter(schema::blogs::content.ilike(&_q_standalone))
             .limit(page_size)
             .offset(offset)
-            .order(schema::blogs::blog_created.desc())
+            .order(schema::blogs::created.desc())
             .load::<Blog>(&_connection)
             .expect("e");
         if _blogs.len() > 0 {
@@ -176,7 +182,7 @@ pub async fn search_services_page(req: HttpRequest) -> impl Responder {
             .or_filter(schema::services::content.ilike(&_q_standalone))
             .limit(page_size)
             .offset(offset)
-            .order(schema::services::service_created.desc())
+            .order(schema::services::created.desc())
             .load::<Service>(&_connection)
             .expect("e");
         if _services.len() > 0 {
@@ -227,7 +233,7 @@ pub async fn search_stores_page(req: HttpRequest) -> impl Responder {
             .or_filter(schema::stores::content.ilike(&_q_standalone))
             .limit(page_size)
             .offset(offset)
-            .order(schema::stores::store_created.desc())
+            .order(schema::stores::created.desc())
             .load::<Store>(&_connection)
             .expect("e");
         if _stores.len() > 0 {
@@ -278,7 +284,7 @@ pub async fn search_wikis_page(req: HttpRequest) -> impl Responder {
             .or_filter(schema::wikis::content.ilike(&_q_standalone))
             .limit(page_size)
             .offset(offset)
-            .order(schema::wikis::wiki_created.desc())
+            .order(schema::wikis::created.desc())
             .load::<Wiki>(&_connection)
             .expect("e");
         if _wikis.len() > 0 {
@@ -329,7 +335,7 @@ pub async fn search_works_page(req: HttpRequest) -> impl Responder {
             .or_filter(schema::works::content.ilike(&_q_standalone))
             .limit(page_size)
             .offset(offset)
-            .order(schema::works::work_created.desc())
+            .order(schema::works::created.desc())
             .load::<Work>(&_connection)
             .expect("e");
         if _works.len() > 0 {

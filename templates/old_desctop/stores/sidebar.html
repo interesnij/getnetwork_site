@@ -1,0 +1,39 @@
+<div class="widget">
+    <form class="form-inline form" role="form">
+        <div class="search-wrap">
+            <input type="text" class="form-control search-field" placeholder="Поиск...">
+        </div>
+    </form>
+</div>
+<div class="widget">
+    <h5 class="widget-title font-alt">Категории</h5>
+    <div class="widget-body">
+        <ul class="clearlist widget-menu">
+          {% for category in store_categories %}
+            <li>
+                <a class="ajax" href="/store/{{ category.id }}/">{{ category.name }}</a>
+                <small>
+                    - {{ category.store_count }}
+                </small>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="widget">
+    <h5 class="widget-title font-alt">Теги ({{ tags_count }})</h5>
+    <div class="widget-body">
+        <div class="tags">
+          {% for tag in tags %}
+            <a class="ajax" href="/tag/{{ tag.id }}/">{{ tag.name }} ({{ tag.tag_count }})</a>
+          {% endfor %}
+        </div>
+    </div>
+</div>
+{% if is_admin %}
+<div class="widget">
+  <a href="/create_store_categories/" class="ajax">Создать категорию</a><br>
+  <a href="/create_store/" class="ajax">Создать статью</a>
+</div>
+{% endif %}

@@ -1,0 +1,46 @@
+{% extends "desctop/base.html" %}
+{% block title %}Создание категории портфолио{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a class="ajax" href="/work_categories/">Портфолио</a>
+            &nbsp;/&nbsp;
+            <span>Создание категории портфолио</span>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+        <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="text" name="name" placeholder="Название" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <p>0</p>
+                <div style="display:inline-block" contenteditable="true" placeholder="Описание" class="input-md form-control content_1 smile_supported"></div>
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Обложка</label>
+                <input class="input-md form-control" class="input-md form-control" type="file" name="image" />
+            </div>
+            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_work_category_btn">Создать</button>
+        </form>
+        <div class="container">
+            {% for category in work_categories %}
+            <p>{{ category.name }}
+                | <a class="ajax" href="/edit_work_category/{{ category.id }}/">~</a>
+                | <a class="pointer remove_work_category" data-pk="{{ category.id }}">x</a>
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

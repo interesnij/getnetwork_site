@@ -4,7 +4,6 @@ use futures::StreamExt;
 use serde::{Deserialize, Serialize};
 use std::io::Write;
 use std::str;
-use rand::Rng;
 
 #[derive(Debug, Clone)]
 pub struct UploadedFiles {
@@ -22,54 +21,54 @@ impl UploadedFiles {
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Forms {
-    pub title: String,
-    pub description: String,
-    pub link: String,
-    pub main_image: String,
-    pub is_active: bool,
-    pub images: Vec<String>,
-    pub videos: Vec<String>,
+    pub title:         String,
+    pub description:   String,
+    pub link:          String,
+    pub main_image:    String,
+    pub is_active:     bool,
+    pub images:        Vec<String>,
+    pub videos:        Vec<String>,
     pub category_list: Vec<i32>,
-    pub tags_list: Vec<i32>,
+    pub tags_list:     Vec<i32>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct StoreForms {
-    pub title: String,
-    pub description: String,
-    pub link: String,
-    pub main_image: String,
-    pub is_active: bool,
-    pub price: i32,
-    pub price_acc: i32,
-    pub social_price: i32,
-    pub images: Vec<String>,
-    pub videos: Vec<String>,
+    pub title:         String,
+    pub description:   String,
+    pub link:          String,
+    pub main_image:    String,
+    pub is_active:     bool,
+    pub price:         i32,
+    pub price_acc:     i32,
+    pub social_price:  i32,
+    pub images:        Vec<String>,
+    pub videos:        Vec<String>,
     pub category_list: Vec<i32>,
-    pub tags_list: Vec<i32>,
-    pub serve_list: Vec<i32>,
+    pub tags_list:     Vec<i32>,
+    pub serve_list:    Vec<i32>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct FeedbackForm {
     pub username: String,
-    pub email: String,
-    pub message: String,
+    pub email:    String,
+    pub message:  String,
 }
 #[derive(Deserialize, Serialize, Debug)]
 pub struct CategoriesForm {
-    pub name: String,
+    pub name:        String,
     pub description: String,
-    pub position: i32,
-    pub image: String,
+    pub position:    i32,
+    pub image:       String,
 }
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ServeCategoriesForm {
-    pub name: String,
-    pub description: String,
+    pub name:            String,
+    pub description:     String,
     pub tech_categories: i32,
-    pub position: i32,
-    pub default_price: i32,
+    pub position:        i32,
+    pub default_price:   i32,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -161,10 +160,8 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
         }
 
         else if name == "main_image" {
-            let xxx1: i32 = rand::thread_rng().gen_range(0..100000);
-            let yyy1: String = xxx1.to_string();
-            let zzz1 = yyy1 + ".jpg";
-            let file = UploadedFiles::new(zzz1);
+            let _new_path = field.content_disposition().get_filename().unwrap();
+            let file = UploadedFiles::new(_new_path);
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -180,10 +177,8 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
         }
 
         else if name == "images[]" {
-            let xxx2: i32 = rand::thread_rng().gen_range(0..100000);
-            let yyy2: String = xxx2.to_string();
-            let zzz2 = yyy2 + ".jpg";
-            let file = UploadedFiles::new(zzz2);
+            let _new_path = field.content_disposition().get_filename().unwrap();
+            let file = UploadedFiles::new(_new_path);
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -202,10 +197,8 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
         }
 
         else if name == "videos[]" {
-            let xxx: i32 = rand::thread_rng().gen_range(0..100000);
-            let yyy: String = xxx.to_string();
-            let zzz = yyy + ".mp4";
-            let file = UploadedFiles::new(zzz);
+            let _new_path = field.content_disposition().get_filename().unwrap();
+            let file = UploadedFiles::new(_new_path);
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -238,10 +231,8 @@ pub async fn category_form(payload: &mut Multipart) -> CategoriesForm {
         let name = field.name();
 
         if name == "image" {
-            let xxx: i32 = rand::thread_rng().gen_range(0..10000000);
-            let yyy: String = xxx.to_string();
-            let zzz = yyy + ".jpg";
-            let file = UploadedFiles::new(zzz);
+            let _new_path = field.content_disposition().get_filename().unwrap();
+            let file = UploadedFiles::new(_new_path);
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("Failed to open hello.txt"))
                 .await
@@ -388,10 +379,8 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
         }
 
         else if name == "main_image" {
-            let xxx1: i32 = rand::thread_rng().gen_range(0..100000);
-            let yyy1: String = xxx1.to_string();
-            let zzz1 = yyy1 + ".jpg";
-            let file = UploadedFiles::new(zzz1);
+            let _new_path = field.content_disposition().get_filename().unwrap();
+            let file = UploadedFiles::new(_new_path);
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -407,10 +396,8 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
         }
 
         else if name == "images[]" {
-            let xxx2: i32 = rand::thread_rng().gen_range(0..100000);
-            let yyy2: String = xxx2.to_string();
-            let zzz2 = yyy2 + ".jpg";
-            let file = UploadedFiles::new(zzz2);
+            let _new_path = field.content_disposition().get_filename().unwrap();
+            let file = UploadedFiles::new(_new_path);
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -429,10 +416,8 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
         }
 
         else if name == "videos[]" {
-            let xxx: i32 = rand::thread_rng().gen_range(0..100000);
-            let yyy: String = xxx.to_string();
-            let zzz = yyy + ".mp4";
-            let file = UploadedFiles::new(zzz);
+            let _new_path = field.content_disposition().get_filename().unwrap();
+            let file = UploadedFiles::new(_new_path);
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await

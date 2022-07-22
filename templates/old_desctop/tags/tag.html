@@ -1,0 +1,110 @@
+{% extends "desctop/base.html" %}
+{% block title %}Ключевое слово {{ tag.name }}{% endblock %}
+{% block content %}
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a class="ajax" href="/tags/">Ключевые слова</a>
+            &nbsp;/&nbsp;
+            <span>{{ tag.name }}</span>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+      {% if services %}
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+                <a href="/tag_services/{{ tag.id }}/" class="ajax">
+                  Услуги ({{ services_count }})
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                {% for object in services %}
+                  {% include 'desctop/generic/default_service.html' %}
+                {% endfor %}
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      {% endif %}
+
+      {% if stores %}
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+                <a href="/tag_stores/{{ tag.id }}/" class="ajax">
+                  Товары ({{ stores_count }})
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                {% for object in stores %}
+                  {% include 'desctop/generic/default_store.html' %}
+                {% endfor %}
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      {% endif %}
+
+      {% if works %}
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+                <a href="/tag_works/{{ tag.id }}/" class="ajax">
+                  Работы ({{ works_count }})
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                {% for object in works %}
+                  {% include 'desctop/generic/default_work.html' %}
+                {% endfor %}
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      {% endif %}
+
+      {% if blogs %}
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+                <a href="/tag_blogs/{{ tag.id }}/" class="ajax">
+                  Статьи блога ({{ blogs_count }})
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                {% for object in blogs %}
+                  {% include 'desctop/generic/default_blog.html' %}
+                {% endfor %}
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      {% endif %}
+
+      {% if wikis %}
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+                <a href="/tag_wikis/{{ tag.id }}/" class="ajax">
+                  Товары ({{ wikis_count }})
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                {% for object in wikis %}
+                  {% include 'desctop/generic/default_wiki.html' %}
+                {% endfor %}
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      {% endif %}
+    </div>
+</section>
+
+{% endblock %}

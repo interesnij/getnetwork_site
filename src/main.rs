@@ -4,6 +4,8 @@ extern crate diesel;
 pub mod schema;
 pub mod models;
 pub mod routes;
+mod errors;
+mod vars;
 
 use actix_web::{
     HttpServer,
@@ -16,20 +18,17 @@ use crate::routes::routes;
 mod utils;
 #[macro_use]
 mod views;
-use models::{
-    NewUser,
-    //LoginUser
-};
 
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    use actix_redis::RedisSession;
+
     HttpServer::new(|| {
-        //let _tera = Tera::new("templates/**/*").unwrap();
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
-        App::new()
-            //.data(_tera)
+        App::new() 
+            .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .service(_files)
             .service(_files2)
             .configure(routes)

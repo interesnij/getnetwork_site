@@ -1,110 +1,107 @@
 use crate::schema::*;
 use diesel::{Queryable, Insertable};
-use serde::{
-    Serialize,
-    Deserialize,
-};
-
+use serde::{Serialize, Deserialize,};
 use crate::models::User;
+
 
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
 #[table_name="store_categories"]
 pub struct StoreCategories {
-    pub id: i32,
-    pub name: String,
+    pub id:          i32,
+    pub name:        String,
     pub description: Option<String>,
-    pub store_position: i32,
-    pub image: Option<String>,
-    pub store_count: i32,
+    pub position:    i32,
+    pub image:       Option<String>,
+    pub count:       i32,
 }
 #[derive(Insertable)]
 #[table_name="store_categories"]
 pub struct NewStoreCategories {
-    pub name: String,
+    pub name:        String,
     pub description: Option<String>,
-    pub store_position: i32,
-    pub image: Option<String>,
-    pub store_count: i32,
+    pub position:    i32,
+    pub image:       Option<String>,
+    pub count:       i32,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="store_categories"]
 pub struct EditStoreCategories {
-    pub name: String,
+    pub name:        String,
     pub description: Option<String>,
-    pub store_position: i32,
-    pub image: Option<String>,
-    pub store_count: i32,
+    pub position:    i32,
+    pub image:       Option<String>,
+    pub count:       i32,
 }
 
 #[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
-#[belongs_to(User, foreign_key="creator")]
+#[belongs_to(User)]
 pub struct Store {
-    pub id: i32,
-    pub title: String,
-    pub description: Option<String>,
-    pub content: Option<String>,
-    pub link: Option<String>,
-    pub image: Option<String>,
-    pub is_store_active: bool,
-    pub price: i32,
-    pub price_acc: Option<i32>,
+    pub id:           i32,
+    pub title:        String,
+    pub description:  Option<String>,
+    pub content:      Option<String>,
+    pub link:         Option<String>,
+    pub image:        Option<String>,
+    pub is_active:    bool,
+    pub price:        i32,
+    pub price_acc:    Option<i32>,
     pub social_price: Option<i32>,
-    pub creator: i32,
-    pub store_created: chrono::NaiveDateTime,
+    pub user_id:      i32,
+    pub created:      chrono::NaiveDateTime,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="stores"]
 pub struct EditStore {
-    pub title: String,
-    pub description: Option<String>,
-    pub link: Option<String>,
-    pub image: Option<String>,
-    pub is_store_active: bool,
-    pub price: i32,
-    pub price_acc: Option<i32>,
+    pub title:        String,
+    pub description:  Option<String>,
+    pub link:         Option<String>,
+    pub image:        Option<String>,
+    pub is_active:    bool,
+    pub price:        i32,
+    pub price_acc:    Option<i32>,
     pub social_price: Option<i32>,
 }
 
 #[derive(Serialize, Insertable)]
 #[table_name="stores"]
 pub struct NewStore {
-    pub title: String,
-    pub description: Option<String>,
-    pub link: Option<String>,
-    pub image: Option<String>,
-    pub is_store_active: bool,
-    pub price: i32,
-    pub price_acc: Option<i32>,
+    pub title:        String,
+    pub description:  Option<String>,
+    pub link:         Option<String>,
+    pub image:        Option<String>,
+    pub is_active:    bool,
+    pub price:        i32,
+    pub price_acc:    Option<i32>,
     pub social_price: Option<i32>,
-    pub creator: i32,
-    pub store_created: chrono::NaiveDateTime,
+    pub user_id:      i32,
+    pub created:      chrono::NaiveDateTime,
 }
 
 impl NewStore {
-    pub fn from_store_form(
+    pub fn from_store_form (
         title: String,
         description: String,
         link: String,
         image: String,
-        is_store_active: bool,
+        is_active: bool,
         price: i32,
         price_acc: i32,
         social_price: i32,
-        creator_id: i32
+        user_id: i32
     ) -> Self {
         NewStore {
             title: title,
             description: Some(description),
             link: Some(link),
             image: Some(image),
-            is_store_active: is_store_active,
+            is_active: is_active,
             price: price,
             price_acc: Some(price_acc),
             social_price: Some(social_price),
-            creator: creator_id,
-            store_created: chrono::Local::now().naive_utc(),
+            user_id: user_id,
+            created: chrono::Local::now().naive_utc(),
         }
     }
 }
@@ -115,31 +112,31 @@ impl NewStore {
 #[belongs_to(Store)]
 #[table_name="store_category"]
 pub struct StoreCategory {
-    pub id: i32,
+    pub id:                  i32,
     pub store_categories_id: i32,
-    pub store_id: i32,
+    pub store_id:            i32,
 }
 
 #[derive(Insertable)]
 #[table_name="store_category"]
 pub struct NewStoreCategory {
     pub store_categories_id: i32,
-    pub store_id: i32,
+    pub store_id:            i32,
 }
 
 #[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(Store, foreign_key="store")]
 pub struct StoreImage {
-    pub id: i32,
+    pub id:    i32,
     pub store: i32,
-    pub src: String,
+    pub src:   String,
 }
 
 #[derive(Serialize, Insertable)]
 #[table_name="store_images"]
 pub struct NewStoreImage {
     pub store: i32,
-    pub src: String,
+    pub src:   String,
 }
 
 impl NewStoreImage {
@@ -147,7 +144,7 @@ impl NewStoreImage {
         store_id: i32, src: String) -> Self {
         NewStoreImage {
             store: store_id,
-            src: src,
+            src:   src,
         }
     }
 }
@@ -155,24 +152,24 @@ impl NewStoreImage {
 #[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(Store, foreign_key="store")]
 pub struct StoreVideo {
-    pub id: i32,
+    pub id:    i32,
     pub store: i32,
-    pub src: String,
+    pub src:   String,
 }
 
 #[derive(Serialize, Insertable)]
 #[table_name="store_videos"]
 pub struct NewStoreVideo {
     pub store: i32,
-    pub src: String,
+    pub src:   String,
 }
 
 impl NewStoreVideo {
-    pub fn from_store_videos_form(
+    pub fn from_store_videos_form (
         store_id: i32, src: String) -> Self {
         NewStoreVideo {
             store: store_id,
-            src: src,
+            src:   src,
         }
     }
 }

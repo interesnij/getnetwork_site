@@ -1,14 +1,20 @@
 use actix_web::{
     HttpRequest,
-    Responder,
     HttpResponse,
-    web
+    web,
+    error::InternalError,
+    http::StatusCode,
 };
 use serde::Deserialize;
-use tera::Context;
-use crate::utils::{get_template_2, establish_connection, TEMPLATES};
+use crate::utils::establish_connection;
 use crate::NewUser;
-use crate::diesel::RunQueryDsl;
+use crate::diesel::{
+    RunQueryDsl,
+    ExpressionMethods,
+    QueryDsl,
+};
+use actix_session::Session;
+use sailfish::TemplateOnce;
 
 
 pub fn pages_routes(config: &mut web::ServiceConfig) {
@@ -27,22 +33,45 @@ pub struct SParams {
     pub q: String,
 }
 pub async fn index(req: HttpRequest) -> impl Responder {
-    use crate::diesel::QueryDsl;
-    use crate::diesel::ExpressionMethods;
-    use crate::schema::works::dsl::*;
-    use crate::schema::services::dsl::*;
-    use crate::schema::blogs::dsl::*;
-    use crate::schema::stores::dsl::*;
-    use crate::schema::wikis::dsl::*;
+    use crate::schema::works::dsl::works;
+    use crate::schema::services::dsl::services;
+    use crate::schema::blogs::dsl::blogs;
+    use crate::schema::stores::dsl::stores;
+    use crate::schema::wikis::dsl::wikis;
 
-    use crate::models::{Work,Service,Wiki,Blog,Store};
+    use crate::models::{Work, Service, Wiki, Blog, Store};
 
     let _connection = establish_connection();
-    let _last_works :Vec<Work> = works.filter(is_work_active.eq(true)).order(work_created.desc()).limit(3).load(&_connection).expect(".");
-    let _last_services :Vec<Service> = services.filter(is_service_active.eq(true)).order(service_created.desc()).limit(3).load(&_connection).expect(".");
-    let _last_wikis :Vec<Wiki> = wikis.filter(is_wiki_active.eq(true)).order(wiki_created.desc()).limit(3).load(&_connection).expect(".");
-    let _last_blogs :Vec<Blog> = blogs.filter(is_blog_active.eq(true)).order(blog_created.desc()).order(blog_created.desc()).limit(3).load(&_connection).expect(".");
-    let _last_stores :Vec<Store> = stores.filter(is_store_active.eq(true)).order(store_created.desc()).limit(3).load(&_connection).expect(".");
+    let _last_works :Vec<Work> = works
+        .filter(schema::works::is_active.eq(true))
+        .order(schema::works::created.desc())
+        .limit(3)
+        .load(&_connection)
+        .expect(".");
+    let _last_services :Vec<Service> = services
+        .filter(schema::services::is_active.eq(true))
+        .order(schema::services::created.desc())
+        .limit(3)
+        .load(&_connection)
+        .expect(".");
+    let _last_wikis :Vec<Wiki> = wikis
+        .filter(schema::wikis::is_active.eq(true))
+        .order(schema::wikis::created.desc())
+        .limit(3)
+        .load(&_connection)
+        .expect(".");
+    let _last_blogs :Vec<Blog> = blogs
+        .filter(schema::blogs::is_active.eq(true))
+        .order(schema::blogs::created.desc())
+        .limit(3)
+        .load(&_connection)
+        .expect(".");
+    let _last_stores :Vec<Store> = stores
+        .filter(schema::stores::is_active.eq(true))
+        .order(schema::stores::created.desc())
+        .limit(3)
+        .load(&_connection)
+        .expect(".");
 
     let mut data = Context::new();
 
@@ -63,6 +92,7 @@ pub async fn index(req: HttpRequest) -> impl Responder {
     let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
+
 pub async fn about(req: HttpRequest) -> impl Responder {
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
@@ -77,6 +107,7 @@ pub async fn about(req: HttpRequest) -> impl Responder {
     let _rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(_rendered)
 }
+
 pub async fn signup(req: HttpRequest) -> impl Responder {
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
@@ -91,6 +122,7 @@ pub async fn signup(req: HttpRequest) -> impl Responder {
     let rendered = TEMPLATES.render(&_template, &data).unwrap();
     HttpResponse::Ok().body(rendered)
 }
+
 pub async fn process_signup(data: web::Form<NewUser>) -> impl Responder {
     use crate::schema::users;
     use crate::models::User;
@@ -117,8 +149,8 @@ pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Re
     let form = feedback_form(payload.borrow_mut()).await;
     let new_feedback = NewFeedback {
         username: form.username.clone(),
-        email: form.email.clone(),
-        message: form.message.clone()
+        email:    form.email.clone(),
+        message:  form.message.clone()
     };
     let _new_feedback = diesel::insert_into(feedbacks::table)
         .values(&new_feedback)
@@ -132,7 +164,9 @@ pub async fn feedback_list_page(req: HttpRequest) -> impl Responder {
     use crate::models::Feedback;
 
     let _connection = establish_connection();
-    let _feedbacks = feedbacks.load::<Feedback>(&_connection).expect("E");
+    let _feedbacks = feedbacks
+        .load::<Feedback>(&_connection)
+        .expect("E");
 
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
@@ -162,8 +196,8 @@ pub async fn serve_list_page(req: HttpRequest) -> impl Responder {
     let _connection = establish_connection();
     let mut data = Context::new();
 
-    let all_tech_categories :Vec<TechCategories> = tech_categories
-        .order(schema::tech_categories::tech_position.asc())
+    let all_tech_categories: Vec<TechCategories> = tech_categories
+        .order(schema::tech_categories::position.asc())
         .load(&_connection)
         .expect("E.");
     let mut _count: i32 = 0;
@@ -173,7 +207,7 @@ pub async fn serve_list_page(req: HttpRequest) -> impl Responder {
         let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
         let __serve_categories :Vec<ServeCategories> = serve_categories
             .filter(schema::serve_categories::tech_categories.eq(_cat.id))
-            .order(schema::serve_categories::serve_position.asc())
+            .order(schema::serve_categories::position.asc())
             .load(&_connection)
             .expect("E.");
         data.insert(&_let_serve_categories, &__serve_categories);
@@ -205,9 +239,9 @@ pub async fn serve_list_page(req: HttpRequest) -> impl Responder {
 #[derive(Debug, Deserialize)]
 pub struct LoadParams {
     pub _object_type: String,
-    pub _owner_type: String,
-    pub _object_pk: i32,
-    pub _owner_pk: i32,
+    pub _owner_type:  String,
+    pub _object_pk:   i32,
+    pub _owner_pk:    i32,
 }
 pub async fn get_load_page(req: HttpRequest) -> impl Responder {
     use crate::schema;
