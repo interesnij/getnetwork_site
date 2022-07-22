@@ -1,7 +1,6 @@
 use crate::schema::*;
 use diesel::{Queryable, Insertable};
-use serde::{Serialize,Deserialize};
-use crate::models::User;
+use serde::{Serialize, Deserialize};
 
 
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]

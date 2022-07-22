@@ -2,7 +2,6 @@ use crate::schema::users;
 use diesel::{
     Queryable,
     Insertable,
-    RunQueryDsl
 };
 use serde::{Serialize, Deserialize};
 use actix_web::HttpRequest;
@@ -21,7 +20,7 @@ pub struct User {
 }
 
 impl User {
-    pub fn is_superuser(&self, req: HttpRequest) -> bool {
+    pub fn is_superuser(&self) -> bool {
         return self.perm > 59;
     }
 }

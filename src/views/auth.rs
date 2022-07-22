@@ -24,7 +24,7 @@ use actix_session::Session;
 use crate::errors::AuthError;
 use actix_multipart::{Field, Multipart};
 use std::borrow::BorrowMut;
-use futures_util::stream::StreamExt as _;
+//use futures_util::stream::StreamExt as _;
 use sailfish::TemplateOnce;
 
 
@@ -240,7 +240,7 @@ pub struct NewUserForm {
 
 pub async fn process_signup(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use crate::utils::{hash_password, set_current_user};
-    use chrono::NaiveDate;
+    //use chrono::NaiveDate;
 
     let params = web::Query::<NewUserForm>::from_query(&req.query_string());
      // Если пользователь не аноним, то отправляем его на страницу новостей

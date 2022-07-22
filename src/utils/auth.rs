@@ -1,15 +1,13 @@
 
-use serde::{Deserialize, Serialize};
 use argonautica::{Hasher, Verifier};
 use actix_session::Session;
-use diesel::prelude::*;
 use actix_web::{
   http::header::CONTENT_TYPE,
   HttpRequest,
 };
-use crate::schema;
+//use crate::schema;
 use crate::{errors::AuthError, vars};
-use crate::models::{User, SessionUser};
+use crate::models::SessionUser;
 
 
 pub fn hash_password(password: &str) -> String {
