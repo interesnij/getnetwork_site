@@ -8,7 +8,7 @@ function mob_menu_hide() {
 
 function ajax_get_reload(url) {
   var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-    ajax_link.open( 'GET', url, true );
+    ajax_link.open( 'GET', url + "?ajax=1", true );
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
       if ( this.readyState == 4 && this.status == 200 ) {
@@ -18,7 +18,6 @@ function ajax_get_reload(url) {
         rtr = document.getElementById('ajax');
         rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
-        document.title = elem_.querySelector('title').innerHTML;
         window.history.pushState({route: url}, "network", url);
         hide_nav_first_span();
         hide_nav_second_span();
