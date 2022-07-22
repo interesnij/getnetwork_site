@@ -161,7 +161,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
 
         else if name == "main_image" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path);
+            let file = UploadedFiles::new(_new_path.to_string());
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -178,7 +178,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
 
         else if name == "images[]" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path);
+            let file = UploadedFiles::new(_new_path.to_string());
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -198,7 +198,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
 
         else if name == "videos[]" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path);
+            let file = UploadedFiles::new(_new_path.to_string());
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -232,7 +232,7 @@ pub async fn category_form(payload: &mut Multipart) -> CategoriesForm {
 
         if name == "image" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path);
+            let file = UploadedFiles::new(_new_path.to_string());
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("Failed to open hello.txt"))
                 .await
@@ -380,7 +380,7 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
 
         else if name == "main_image" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path);
+            let file = UploadedFiles::new(_new_path.to_string());
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -397,7 +397,7 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
 
         else if name == "images[]" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path);
+            let file = UploadedFiles::new(_new_path.to_string());
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await
@@ -417,7 +417,7 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
 
         else if name == "videos[]" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path);
+            let file = UploadedFiles::new(_new_path.to_string());
             let file_path = file.path.clone();
             let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                 .await

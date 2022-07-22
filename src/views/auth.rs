@@ -2,6 +2,7 @@ use actix_web::{
     HttpRequest,
     HttpResponse,
     web,
+    web::Query,
     error::InternalError,
     http::StatusCode,
 };
@@ -17,6 +18,7 @@ use crate::diesel::{
     QueryDsl,
 };
 use crate::schema;
+use futures::StreamExt;
 use crate::models::{User, NewUser, SessionUser};
 use actix_session::Session;
 use crate::errors::AuthError;
@@ -103,7 +105,7 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
 }
 
 pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device;
+    use crate::utils::is_desctop;
 
     session.clear();
     if is_desctop(&req) {
@@ -205,9 +207,9 @@ pub async fn login_form(payload: &mut Multipart) -> LoginUser2 {
     form
 }
 
-pub async fn login(mut payload: Multipart, session: Session, req: HttpRequest) -> impl Responder {
+pub async fn login(mut payload: Multipart, session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     if is_signed_in(&session) {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Вы уже авторизованы"))
     }
     else {
         let form = login_form(payload.borrow_mut()).await;
