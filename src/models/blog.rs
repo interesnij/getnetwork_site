@@ -4,6 +4,8 @@ use crate::diesel::{
     Insertable,
     BelongingToDsl,
     QueryDsl,
+    RunQueryDsl,
+    ExpressionMethods,
 };
 use serde::{Serialize,Deserialize};
 use crate::models::User;
