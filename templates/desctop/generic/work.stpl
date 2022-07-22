@@ -9,7 +9,7 @@
       </h3>
       <div class="work-descr">
         <% if object.description.is_some() { %>
-          <%= object.description.unwrap() %>
+          <%= object.description.as_deref().unwrap() %>
         <% } %>
       </div>
     </div>
