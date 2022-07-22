@@ -67,7 +67,7 @@ impl WorkCategories {
             .expect("E.");
     }
 
-    pub fn get_6_works(&self, limit: i64, offset: i64) -> Vec<Work> {
+    pub fn get_6_works(&self, limit: i64) -> Vec<Work> {
         use crate::schema::works::dsl::works;
 
         let _connection = establish_connection();

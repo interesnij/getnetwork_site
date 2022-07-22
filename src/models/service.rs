@@ -66,7 +66,7 @@ impl ServiceCategories {
             .expect("E.");
     }
 
-    pub fn get_6_services(limit: i64, offset: i64) -> Vec<Service> {
+    pub fn get_6_services(limit: i64) -> Vec<Service> {
         use crate::schema::services::dsl::services;
 
         let _connection = establish_connection();

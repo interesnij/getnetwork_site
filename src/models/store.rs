@@ -66,7 +66,7 @@ impl StoreCategories {
             .expect("E.");
     }
 
-    pub fn get_6_stores(limit: i64, offset: i64) -> Vec<Store> {
+    pub fn get_6_stores(limit: i64) -> Vec<Store> {
         use crate::schema::stores::dsl::stores;
 
         let _connection = establish_connection();

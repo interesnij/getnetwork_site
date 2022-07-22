@@ -66,7 +66,7 @@ impl WikiCategories {
             .expect("E.");
     }
 
-    pub fn get_6_wikis(&self, limit: i64, offset: i64) -> Vec<Wiki> {
+    pub fn get_6_wikis(&self, limit: i64) -> Vec<Wiki> {
         use crate::schema::wikis::dsl::wikis;
 
         let _connection = establish_connection();

@@ -67,7 +67,7 @@ impl BlogCategories {
             .expect("E.");
     }
 
-    pub fn get_6_blogs(limit: i64, offset: i64) -> Vec<Blog> {
+    pub fn get_6_blogs(limit: i64) -> Vec<Blog> {
         use crate::schema::blogs::dsl::blogs;
 
         let _connection = establish_connection();
