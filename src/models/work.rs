@@ -118,7 +118,7 @@ impl Work {
         use crate::schema::work_categories::dsl::work_categories;
 
         let _connection = establish_connection();
-        let ids = WikiCategory::belonging_to(self).select(schema::work_category::work_categories_id);
+        let ids = WorkCategory::belonging_to(self).select(schema::work_category::work_categories_id);
         return work_categories
             .filter(schema::work_categories::id.eq_any(ids))
             .load::<WorkCategories>(&_connection)
