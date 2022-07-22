@@ -10,6 +10,7 @@ use actix_web::{
     web,
 };
 use serde::Deserialize;
+use diesel::PgConnection;
 
 
 pub fn establish_connection() -> PgConnection {

@@ -237,7 +237,7 @@ pub async fn process_signup(session: Session, req: HttpRequest) -> actix_web::Re
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Вы уже авторизованы"))
     }
     else if params.is_err() {
-        HttpResponse::Ok().content_type("text/html; charset=utf-8").body("")
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Параметры неверные"))
     }
     else {
         let _connection = establish_connection();
@@ -262,6 +262,6 @@ pub async fn process_signup(session: Session, req: HttpRequest) -> actix_web::Re
         };
 
         set_current_user(&session, &_session_user);
-        HttpResponse::Ok().content_type("text/html; charset=utf-8").body("ok")
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("ok"))
     }
 }
