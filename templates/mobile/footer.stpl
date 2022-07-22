@@ -1,4 +1,6 @@
 <div id="fullscreens_container"></div>
+
+<% if is_ajax == false { %>
 </span>
 </span>
 <svg fill="currentColor" class="mob_menu" height="33" viewBox="0 0 24 24" width="33">
@@ -110,3 +112,4 @@
 </body>
 
 </html>
+<% } %>

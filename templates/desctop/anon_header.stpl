@@ -1,3 +1,5 @@
+<% if is_ajax == false { %>
+
 <!doctype html>
 <html>
 
@@ -152,3 +154,4 @@
 
         <span id="ajax">
             <span id="reload_block">
+<% } %>
