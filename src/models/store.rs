@@ -138,9 +138,9 @@ impl NewStore {
         link: String,
         image: String,
         is_active: bool,
-        price: i32,
-        price_acc: i32,
-        social_price: i32,
+        price: Option<i32>,
+        price_acc: Option<i32>,
+        social_price: Option<i32>,
         user_id: i32
     ) -> Self {
         NewStore {
@@ -150,8 +150,8 @@ impl NewStore {
             image: Some(image),
             is_active: is_active,
             price: price,
-            price_acc: Some(price_acc),
-            social_price: Some(social_price),
+            price_acc: price_acc,
+            social_price: social_price,
             user_id: user_id,
             created: chrono::Local::now().naive_utc(),
         }
