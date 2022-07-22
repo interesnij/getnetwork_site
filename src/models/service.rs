@@ -169,7 +169,7 @@ impl Service {
             .expect("E");
 
         return serve
-            .filter(schema::serve::id.eq(any(_serve_items)))
+            .filter(schema::serve::id.eq_any(_serve_items))
             .load::<Serve>(&_connection)
             .expect("E");
     }
