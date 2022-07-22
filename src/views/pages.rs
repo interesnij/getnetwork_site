@@ -14,7 +14,6 @@ use crate::utils::{
     get_request_user_data,
     is_signed_in,
 };
-use crate::NewUser;
 use crate::diesel::{
     RunQueryDsl,
     ExpressionMethods,

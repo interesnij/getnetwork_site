@@ -9,21 +9,25 @@ use actix_web::{
     HttpRequest,
     web,
 };
+use crate::schema;
 use serde::Deserialize;
-use crate::diesel::{Connection, PgConnection, RunQueryDsl};
 use crate::models::{
     BlogCategories,
     ServiceCategories,
     StoreCategories,
     WikiCategories,
     WorkCategories,
+    User,
 };
 use crate::diesel::{
+    Connection,
+    PgConnection,
     RunQueryDsl,
     ExpressionMethods,
     QueryDsl,
 };
 use actix_session::Session;
+use crate::errors::AuthError;
 
 
 pub fn establish_connection() -> PgConnection {
