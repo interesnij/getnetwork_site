@@ -1,5 +1,10 @@
-use crate::schema::*;
-use diesel::{Queryable, Insertable};
+use crate::schema;
+use crate::diesel::{
+    Queryable,
+    Insertable,
+    BelongingToDsl,
+    QueryDsl,
+};
 use serde::{Serialize,Deserialize};
 use crate::models::User;
 
