@@ -61,11 +61,6 @@ ul {
     .tpl-alt-tabs > li{
         width: 170px;
     }
-
-    .split-section-wrapper {
-        padding: 0 50px;
-    }
-
 }
 @media only screen and (max-width: 1024px) {
     .hs-wrap {
@@ -132,19 +127,6 @@ ul {
         width: 200px;
     }
 
-    .split-section-headings,
-    .split-section-headings.left,
-    .split-section-headings.right,
-    .split-section-content,
-    .split-section-content.left,
-    .split-section-content.right{
-        float: none !important;
-        width: auto;
-    }
-    .split-section-headings .section-title{
-        font-size: 35px;
-        letter-spacing: 5px;
-    }
     .banner-text {
         text-align: center;
     }
@@ -476,7 +458,6 @@ ul {
         margin: 50px 0 -50px;
     }
     .section-title,
-    .split-section-headings .section-title,
     .wide-heading {
         font-size: 24px;
         letter-spacing: 2px;

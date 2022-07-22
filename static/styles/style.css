@@ -1464,58 +1464,6 @@ a.logo:hover{
     min-height: 600px;
 }
 
-.split-section{
-    width: 100%;
-    display: block;
-    position: relative;
-    overflow: hidden;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-position: center center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
-.split-section-headings{
-    width: 50%;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
-.ssh-table{
-    width: 100%;
-    min-height: 500px;
-    display: table;
-}
-.ssh-cell{
-    display: table-cell;
-    padding-left: 10px;
-    padding-right: 10px;
-    vertical-align: middle;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
-
-.split-section-content{
-    width: 50%;
-    position: relative;
-    overflow: hidden;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
-.split-section-wrapper{
-    padding: 0 80px;
-}
-
 .alt-service-grid{
     margin-top: -60px;
 }
