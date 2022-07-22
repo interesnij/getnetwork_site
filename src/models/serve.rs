@@ -83,12 +83,17 @@ pub struct Serve {
 
 impl Serve {
     pub fn get_100_description(&self) -> String {
-        let _content = self.description.clone();
-        if _content.len() > 100 {
-            return _content[..100].to_string();
+        if self.content.is_some() {
+            let _content = self.content.as_deref().unwrap();
+            if _content.len() > 100 {
+                return _content[..100].to_string();
+            }
+            else {
+                return _content.to_string();
+            }
         }
         else {
-            return _content.to_string();
+            return "".to_string();
         }
     }
 }
