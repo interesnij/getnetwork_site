@@ -62,63 +62,12 @@ pub fn blog_routes(config: &mut web::ServiceConfig) {
     config.service(web::resource("/blog/{id}/").route(web::get().to(blog_category_page)));
 }
 
-fn get_cats_for_blog(blog: &Blog) -> Vec<BlogCategories> {
-    let _connection = establish_connection();
-
-    let ids = BlogCategory::belonging_to(blog)
-        .select(schema::blog_category::blog_categories_id);
-
-    schema::blog_categories::table
-        .filter(schema::blog_categories::id.eq_any(ids))
-        .load::<BlogCategories>(&_connection)
-        .expect("E")
-}
-fn get_tags_for_blog(blog: &Blog) -> Vec<Tag> {
-    use crate::schema::tags_items::dsl::tags_items;
-    let _connection = establish_connection();
-
-    let _tag_items = tags_items
-        .filter(schema::tags_items::blog_id.eq(&blog.id))
-        .select(schema::tags_items::tag_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-    schema::tags::table
-        .filter(schema::tags::id.eq_any(_tag_items))
-        .load::<Tag>(&_connection)
-        .expect("E")
-}
-
-fn get_6_blog_for_category(category: &BlogCategories) -> Vec<Blog> {
-    let _connection = establish_connection();
-
-    let ids = BlogCategory::belonging_to(category).select(schema::blog_category::blog_id);
-    schema::blogs::table
-        .filter(schema::blogs::id.eq_any(ids))
-        .order(schema::blogs::created.desc())
-        .limit(6)
-        .load::<Blog>(&_connection)
-        .expect("E")
-}
-fn get_blog_for_category(category: &BlogCategories) -> Vec<Blog> {
-    let _connection = establish_connection();
-
-    let ids = BlogCategory::belonging_to(category)
-        .select(schema::blog_category::blog_id);
-    schema::blogs::table
-        .filter(schema::blogs::id.eq_any(ids))
-        .order(schema::blogs::created.desc())
-        .load::<Blog>(&_connection)
-        .expect("could not load tags")
-}
-
 pub async fn create_blog_categories_page(req: HttpRequest) -> impl Responder {
-
     HttpResponse::Ok().body(_rendered)
 }
 
 pub async fn create_blog_page(req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::tags;
-
 
     let _connection = establish_connection();
     let all_tags :Vec<Tag> = tags

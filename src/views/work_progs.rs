@@ -62,55 +62,6 @@ pub fn work_routes(config: &mut web::ServiceConfig) {
     config.service(web::resource("/work/{id}/").route(web::get().to(work_category_page)));
 }
 
-fn get_cats_for_work(work: &Work) -> Vec<WorkCategories> {
-    use diesel::pg::expression::dsl::any;
-    let _connection = establish_connection();
-
-    let ids = WorkCategory::belonging_to(work).select(schema::work_category::work_categories_id);
-    schema::work_categories::table
-        .filter(schema::work_categories::id.eq(any(ids)))
-        .load::<WorkCategories>(&_connection)
-        .expect("could not load tags")
-}
-fn get_tags_for_work(work: &Work) -> Vec<Tag> {
-    use crate::schema::tags_items::dsl::tags_items;
-    use diesel::dsl::any;
-    let _connection = establish_connection();
-
-    let _tag_items = tags_items.filter(schema::tags_items::work_id.eq(&work.id)).load::<TagItems>(&_connection).expect("E");
-    let mut stack = Vec::new();
-    for _tag_item in _tag_items.iter() {
-        stack.push(_tag_item.tag_id);
-    };
-    schema::tags::table
-        .filter(schema::tags::id.eq(any(stack)))
-        .load::<Tag>(&_connection)
-        .expect("could not load tags")
-}
-fn get_6_work_for_category(category: &WorkCategories) -> Vec<Work> {
-    use diesel::pg::expression::dsl::any;
-    let _connection = establish_connection();
-
-    let ids = WorkCategory::belonging_to(category).select(schema::work_category::work_id);
-    schema::works::table
-        .filter(schema::works::id.eq(any(ids)))
-        .order(schema::works::created.desc())
-        .limit(6)
-        .load::<Work>(&_connection)
-        .expect("could not load tags")
-}
-fn get_work_for_category(category: &WorkCategories) -> Vec<Work> {
-    use diesel::pg::expression::dsl::any;
-    let _connection = establish_connection();
-
-    let ids = WorkCategory::belonging_to(category).select(schema::work_category::work_id);
-    schema::works::table
-        .filter(schema::works::id.eq(any(ids)))
-        .order(schema::works::created.desc())
-        .load::<Work>(&_connection)
-        .expect("could not load tags")
-}
-
 pub async fn create_work_categories_page(req: HttpRequest) -> impl Responder {
     let mut data = Context::new();
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);

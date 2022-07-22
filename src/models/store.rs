@@ -8,7 +8,7 @@ use crate::diesel::{
     ExpressionMethods,
 };
 use serde::{Serialize, Deserialize,};
-use crate::models::User;
+use crate::models::{User, Tag, Serve};
 use crate::schema::{
     store_categories,
     stores,
@@ -114,6 +114,41 @@ pub struct Store {
     pub social_price: Option<i32>,
     pub user_id:      i32,
     pub created:      chrono::NaiveDateTime,
+}
+
+impl Store {
+    pub fn get_tags_for_blog(&self) -> Vec<Tag> {
+        use crate::schema::tags_items::dsl::tags_items;
+        use crate::schema::tags::dsl::tags;
+
+        let _connection = establish_connection();
+        let _tag_items = tags_items
+            .filter(schema::tags_items::store_id.eq(&self.id))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        return tags
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .load::<Tag>(&_connection)
+            .expect("E");
+    }
+
+    pub fn get_serves(&self) -> Vec<Serve> {
+        use schema::serve_items::dsl::serve_items;
+        use schema::serve::dsl::serve;
+
+        let _connection = establish_connection();
+        let _serve_items = serve_items
+            .filter(schema::serve_items::store_id.eq(&self.id))
+            .select(schema::serve_items::store_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        return serve
+            .filter(schema::serve::id.eq(any(_serve_items)))
+            .load::<Serve>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]

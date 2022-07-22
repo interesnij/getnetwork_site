@@ -8,7 +8,7 @@ use crate::diesel::{
     ExpressionMethods,
 };
 use serde::{Serialize, Deserialize};
-use crate::models::User;
+use crate::models::{User, Tag};
 use crate::schema::{
     work_categories,
     works,
@@ -123,6 +123,21 @@ impl Work {
             .filter(schema::work_categories::id.eq_any(ids))
             .load::<WorkCategories>(&_connection)
             .expect("E");
+    }
+
+    pub fn get_tags_for_blog(&self) -> Vec<Tag> {
+        use crate::schema::tags_items::dsl::tags_items;
+        let _connection = establish_connection();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::work_id.eq(&self.id))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        schema::tags::table
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .load::<Tag>(&_connection)
+            .expect("E")
     }
 }
 

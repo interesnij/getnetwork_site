@@ -62,52 +62,6 @@ pub fn wiki_routes(config: &mut web::ServiceConfig) {
     config.service(web::resource("/wiki/{id}/").route(web::get().to(wiki_category_page)));
 }
 
-fn get_cats_for_wiki(wiki: &Wiki) -> Vec<WikiCategories> {
-    let _connection = establish_connection();
-
-    let ids = WikiCategory::belonging_to(wiki).select(schema::wiki_category::wiki_categories_id);
-    schema::wiki_categories::table
-        .filter(schema::wiki_categories::id.eq_any(ids))
-        .load::<WikiCategories>(&_connection)
-        .expect("could not load tags")
-}
-fn get_tags_for_wiki(wiki: &Wiki) -> Vec<Tag> {
-    use crate::schema::tags_items::dsl::tags_items;
-    let _connection = establish_connection();
-
-    let _tag_items = tags_items
-        .filter(schema::tags_items::wiki_id.eq(&wiki.id))
-        .select(schema::tags_items::tag_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-
-    schema::tags::table
-        .filter(schema::tags::id.eq_any(_tag_items))
-        .load::<Tag>(&_connection)
-        .expect("could not load tags")
-}
-fn get_6_wiki_for_category(category: &WikiCategories) -> Vec<Wiki> {
-    let _connection = establish_connection();
-
-    let ids = WikiCategory::belonging_to(category).select(schema::wiki_category::wiki_id);
-    schema::wikis::table
-        .filter(schema::wikis::id.eq_any(ids))
-        .order(schema::wikis::created.desc())
-        .limit(6)
-        .load::<Wiki>(&_connection)
-        .expect("E")
-}
-fn get_wiki_for_category(category: &WikiCategories) -> Vec<Wiki> {
-    let _connection = establish_connection();
-
-    let ids = WikiCategory::belonging_to(category).select(schema::wiki_category::wiki_id);
-    schema::wikis::table
-        .filter(schema::wikis::id.eq_any(ids))
-        .order(schema::wikis::created.desc())
-        .load::<Wiki>(&_connection)
-        .expect("E")
-}
-
 pub async fn create_wiki_categories_page(req: HttpRequest) -> impl Responder {
     let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
     data.insert("service_categories", &_service_cats);

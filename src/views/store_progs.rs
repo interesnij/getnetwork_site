@@ -67,65 +67,6 @@ pub fn store_routes(config: &mut web::ServiceConfig) {
     config.service(web::resource("/store/{id}/").route(web::get().to(store_category_page)));
 }
 
-fn get_cats_for_store(store: &Store) -> Vec<StoreCategories> {
-    let _connection = establish_connection();
-
-    let ids = StoreCategory::belonging_to(store).select(schema::store_category::store_categories_id);
-    schema::store_categories::table
-        .filter(schema::store_categories::id.eq_any(ids))
-        .load::<StoreCategories>(&_connection)
-        .expect("could not load tags")
-}
-fn get_tags_for_store(store: &Store) -> Vec<Tag> {
-    use crate::schema::tags_items::dsl::tags_items;
-    let _connection = establish_connection();
-
-    let _tag_items = tags_items
-        .filter(schema::tags_items::store_id.eq(&store.id))
-        .select(schema::tags_items::tag_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-    schema::tags::table
-        .filter(schema::tags::id.eq_any(_tag_items))
-        .load::<Tag>(&_connection)
-        .expect("could not load tags")
-}
-fn get_serves_for_store(store: &Store) -> Vec<Serve> {
-    use crate::schema::serve_items::dsl::serve_items;
-    let _connection = establish_connection();
-
-    let _serve_items = serve_items
-        .filter(schema::serve_items::store_id.eq(&store.id))
-        .select(schema::serve_items::serve_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-
-    schema::serve::table
-        .filter(schema::serve::id.eq_any(_serve_items))
-        .load::<Serve>(&_connection)
-        .expect("could not load tags")
-}
-fn get_6_store_for_category(category: &StoreCategories) -> Vec<Store> {
-    let _connection = establish_connection();
-
-    let ids = StoreCategory::belonging_to(category).select(schema::store_category::store_id);
-    schema::stores::table
-        .filter(schema::stores::id.eq_any(ids))
-        .order(schema::stores::created.desc())
-        .limit(6)
-        .load::<Store>(&_connection)
-        .expect("E")
-}
-fn get_store_for_category(category: &StoreCategories) -> Vec<Store> {
-    let _connection = establish_connection();
-
-    let ids = StoreCategory::belonging_to(category).select(schema::store_category::store_id);
-    schema::stores::table
-        .filter(schema::stores::id.eq_any(ids))
-        .order(schema::stores::created.desc())
-        .load::<Store>(&_connection)
-        .expect("could not load tags")
-}
 
 pub async fn create_store_categories_page(req: HttpRequest) -> impl Responder {
     let mut data = Context::new();
