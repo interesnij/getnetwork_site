@@ -65,18 +65,6 @@ impl StoreCategories {
             .load::<Store>(&_connection)
             .expect("E.");
     }
-
-    pub fn get_6_stores(limit: i64) -> Vec<Store> {
-        use crate::schema::stores::dsl::stores;
-
-        let _connection = establish_connection();
-        return stores
-            .filter(schema::stores::is_active.eq(true))
-            .order(schema::stores::created.desc())
-            .limit(6)
-            .load::<Store>(&_connection)
-            .expect("E.");
-    }
 }
 
 #[derive(Insertable)]
@@ -148,6 +136,18 @@ impl Store {
             .filter(schema::serve::id.eq_any(_serve_items))
             .load::<Serve>(&_connection)
             .expect("E");
+    }
+
+    pub fn get_3_stores() -> Vec<Store> {
+        use crate::schema::stores::dsl::stores;
+
+        let _connection = establish_connection();
+        return stores
+            .filter(schema::stores::is_active.eq(true))
+            .order(schema::stores::created.desc())
+            .limit(6)
+            .load::<Store>(&_connection)
+            .expect("E.");
     }
 }
 

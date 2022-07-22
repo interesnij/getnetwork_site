@@ -66,18 +66,6 @@ impl WorkCategories {
             .load::<Work>(&_connection)
             .expect("E.");
     }
-
-    pub fn get_6_works(&self, limit: i64) -> Vec<Work> {
-        use crate::schema::works::dsl::works;
-
-        let _connection = establish_connection();
-        return works
-            .filter(schema::works::is_active.eq(true))
-            .order(schema::works::created.desc())
-            .limit(6)
-            .load::<Work>(&_connection)
-            .expect("E.");
-    }
 }
 
 #[derive(Insertable)]
@@ -123,6 +111,18 @@ impl Work {
             .filter(schema::work_categories::id.eq_any(ids))
             .load::<WorkCategories>(&_connection)
             .expect("E");
+    }
+
+    pub fn get_3_works() -> Vec<Work> {
+        use crate::schema::works::dsl::works;
+
+        let _connection = establish_connection();
+        return works
+            .filter(schema::works::is_active.eq(true))
+            .order(schema::works::created.desc())
+            .limit(3)
+            .load::<Work>(&_connection)
+            .expect("E.");
     }
 
     pub fn get_tags_for_blog(&self) -> Vec<Tag> {

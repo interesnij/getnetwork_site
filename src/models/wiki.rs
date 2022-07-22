@@ -65,18 +65,6 @@ impl WikiCategories {
             .load::<Wiki>(&_connection)
             .expect("E.");
     }
-
-    pub fn get_6_wikis(&self, limit: i64) -> Vec<Wiki> {
-        use crate::schema::wikis::dsl::wikis;
-
-        let _connection = establish_connection();
-        return wikis
-            .filter(schema::wikis::is_active.eq(true))
-            .order(schema::wikis::created.desc())
-            .limit(6)
-            .load::<Wiki>(&_connection)
-            .expect("E.");
-    }
 }
 
 #[derive(Insertable)]
@@ -138,6 +126,18 @@ impl Wiki {
             .filter(schema::tags::id.eq_any(_tag_items))
             .load::<Tag>(&_connection)
             .expect("E")
+    }
+
+    pub fn get_3_wikis() -> Vec<Wiki> {
+        use crate::schema::wikis::dsl::wikis;
+
+        let _connection = establish_connection();
+        return wikis
+            .filter(schema::wikis::is_active.eq(true))
+            .order(schema::wikis::created.desc())
+            .limit(6)
+            .load::<Wiki>(&_connection)
+            .expect("E.");
     }
 }
 

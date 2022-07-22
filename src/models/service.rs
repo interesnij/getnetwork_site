@@ -65,18 +65,6 @@ impl ServiceCategories {
             .load::<Service>(&_connection)
             .expect("E.");
     }
-
-    pub fn get_6_services(limit: i64) -> Vec<Service> {
-        use crate::schema::services::dsl::services;
-
-        let _connection = establish_connection();
-        return services
-            .filter(schema::services::is_active.eq(true))
-            .order(schema::services::created.desc())
-            .limit(6)
-            .load::<Service>(&_connection)
-            .expect("E.");
-    }
 }
 
 #[derive(Insertable)]
@@ -172,6 +160,18 @@ impl Service {
             .filter(schema::serve::id.eq_any(_serve_items))
             .load::<Serve>(&_connection)
             .expect("E");
+    }
+
+    pub fn get_6_services() -> Vec<Service> {
+        use crate::schema::services::dsl::services;
+
+        let _connection = establish_connection();
+        return services
+            .filter(schema::services::is_active.eq(true))
+            .order(schema::services::created.desc())
+            .limit(6)
+            .load::<Service>(&_connection)
+            .expect("E.");
     }
 }
 

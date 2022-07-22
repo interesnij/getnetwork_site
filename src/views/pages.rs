@@ -6,7 +6,11 @@ use actix_web::{
     http::StatusCode,
 };
 use serde::Deserialize;
-use crate::utils::establish_connection;
+use crate::utils::{
+    establish_connection,
+    get_device_and_ajax,
+    get_request_user_data,
+};
 use crate::NewUser;
 use crate::diesel::{
     RunQueryDsl,
@@ -19,78 +23,129 @@ use sailfish::TemplateOnce;
 
 pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/", web::get().to(index));
-    config.route("/about/", web::get().to(about));
-    config.route("/signup", web::get().to(signup));
-    config.route("/signup", web::post().to(process_signup));
-    config.route("/feedback/", web::post().to(create_feedback));
-    config.route("/feedback_list/", web::get().to(feedback_list_page));
-    config.route("/serve_list/", web::get().to(serve_list_page));
-    config.route("/load_item/", web::get().to(get_load_page));
+    //config.route("/about/", web::get().to(about));
+    //config.route("/feedback/", web::post().to(create_feedback));
+    //config.route("/feedback_list/", web::get().to(feedback_list_page));
+    //config.route("/serve_list/", web::get().to(serve_list_page));
+    //config.route("/load_item/", web::get().to(get_load_page));
 }
 
 #[derive(Debug, Deserialize)]
 pub struct SParams {
     pub q: String,
 }
-pub async fn index(req: HttpRequest) -> impl Responder {
-    use crate::schema::works::dsl::works;
-    use crate::schema::services::dsl::services;
-    use crate::schema::blogs::dsl::blogs;
-    use crate::schema::stores::dsl::stores;
-    use crate::schema::wikis::dsl::wikis;
-
+pub async fn index(req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use crate::models::{Work, Service, Wiki, Blog, Store};
 
     let _connection = establish_connection();
-    let _last_works :Vec<Work> = works
-        .filter(schema::works::is_active.eq(true))
-        .order(schema::works::created.desc())
-        .limit(3)
-        .load(&_connection)
-        .expect(".");
-    let _last_services :Vec<Service> = services
-        .filter(schema::services::is_active.eq(true))
-        .order(schema::services::created.desc())
-        .limit(3)
-        .load(&_connection)
-        .expect(".");
-    let _last_wikis :Vec<Wiki> = wikis
-        .filter(schema::wikis::is_active.eq(true))
-        .order(schema::wikis::created.desc())
-        .limit(3)
-        .load(&_connection)
-        .expect(".");
-    let _last_blogs :Vec<Blog> = blogs
-        .filter(schema::blogs::is_active.eq(true))
-        .order(schema::blogs::created.desc())
-        .limit(3)
-        .load(&_connection)
-        .expect(".");
-    let _last_stores :Vec<Store> = stores
-        .filter(schema::stores::is_active.eq(true))
-        .order(schema::stores::created.desc())
-        .limit(3)
-        .load(&_connection)
-        .expect(".");
+    let _last_works = Work::get_3_works();
+    let _last_services = Service::get_6_services();
+    let _last_wikis = Wiki::get_3_wikis();
+    let _last_blogs = Blog::get_3_blogs();
+    let _last_stores = Store::get_3_stores();
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-    let mut data = Context::new();
-
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("last_works", &_last_works);
-    data.insert("last_services", &_last_services);
-    data.insert("last_wikis", &_last_wikis);
-    data.insert("last_blogs", &_last_blogs);
-    data.insert("last_stores", &_last_stores);
-    data.insert("is_admin", &_is_admin);
-
-    let _template = _type + &"main/mainpage.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/main/mainpage.stpl")]
+            struct Template {
+                request_user:  User,
+                last_works:    Vec<Work>,
+                last_services: Vec<Service>,
+                last_wikis:    Vec<Wiki>,
+                last_blogs:    Vec<Blog>,
+                last_stores:   Vec<Store>,
+                is_ajax:       bool,
+            }
+            let body = Template {
+                request_user:  _request_user,
+                last_works:    _last_works,
+                last_services: _last_services,
+                last_wikis:    _last_wikis,
+                last_blogs:    _last_blogs,
+                last_stores:   _last_stores,
+                is_ajax:       is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/main/mainpage.stpl")]
+            struct Template {
+                request_user:  User,
+                last_works:    Vec<Work>,
+                last_services: Vec<Service>,
+                last_wikis:    Vec<Wiki>,
+                last_blogs:    Vec<Blog>,
+                last_stores:   Vec<Store>,
+                is_ajax:       bool,
+            }
+            let body = Template {
+                request_user:  _request_user,
+                last_works:    _last_works,
+                last_services: _last_services,
+                last_wikis:    _last_wikis,
+                last_blogs:    _last_blogs,
+                last_stores:   _last_stores,
+                is_ajax:       is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/main/anon_mainpage.stpl")]
+            struct Template {
+                last_works:    Vec<Work>,
+                last_services: Vec<Service>,
+                last_wikis:    Vec<Wiki>,
+                last_blogs:    Vec<Blog>,
+                last_stores:   Vec<Store>,
+                is_ajax:       bool,
+            }
+            let body = Template {
+                last_works:    _last_works,
+                last_services: _last_services,
+                last_wikis:    _last_wikis,
+                last_blogs:    _last_blogs,
+                last_stores:   _last_stores,
+                is_ajax:       is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/main/anon_mainpage.stpl")]
+            struct Template {
+                last_works:    Vec<Work>,
+                last_services: Vec<Service>,
+                last_wikis:    Vec<Wiki>,
+                last_blogs:    Vec<Blog>,
+                last_stores:   Vec<Store>,
+                is_ajax:       bool,
+            }
+            let body = Template {
+                last_works:    _last_works,
+                last_services: _last_services,
+                last_wikis:    _last_wikis,
+                last_blogs:    _last_blogs,
+                last_stores:   _last_stores,
+                is_ajax:       is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
 pub async fn about(req: HttpRequest) -> impl Responder {
