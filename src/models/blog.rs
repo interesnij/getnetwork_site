@@ -15,6 +15,43 @@ pub struct BlogCategories {
     pub count:       i32,
 }
 
+impl BlogCategories {
+    pub fn get_blogs_list(&self, page: i32, limit: i32) -> (Vec<Blog>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Blog>;
+
+        if page > 1 {
+            have_next = page * limit + 1;
+            object_list = self.get_blogs(limit.into(), have_next.into());
+        }
+        else {
+            have_next = limit + 1;
+            object_list = self.get_blogs(limit.into(), 0);
+        }
+        if self.get_blogs(1, have_next.into()).len() > 0 {
+            next_page_number = page + 1;
+        }
+
+        return (object_list, next_page_number);
+    }
+    pub fn get_blogs(&self, limit: i64, offset: i64) -> Vec<Blog> {
+        use crate::schema::blogs::dsl::blogs;
+
+        let _connection = establish_connection();
+        let ids = BlogCategory::belonging_to(self)
+            .select(schema::blog_category::blog_id);
+        return blogs
+            .filter(schema::blogs::id.eq_any(ids))
+            .filter(schema::blogs::is_active.eq(true))
+            .order(schema::blogs::created.desc())
+            .limit(limit)
+            .offset(offset)
+            .load::<Blog>(&_connection)
+            .expect("E.");
+    }
+}
+
 #[derive(Insertable)]
 #[table_name="blog_categories"]
 pub struct NewBlogCategories {
