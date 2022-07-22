@@ -64,6 +64,7 @@ pub struct NewUser {
     pub password: String,
     pub bio:      Option<String>,
     pub image:    Option<String>,
+    pub perm:     i16,
 }
 
 #[derive(Debug, Deserialize)]

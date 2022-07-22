@@ -247,6 +247,7 @@ pub async fn process_signup(session: Session, req: HttpRequest) -> impl Responde
             password: params_2.password.clone(),
             bio:      params_2.bio.clone(),
             image:    params_2.image.clone(),
+            perm:     1,
         };
 
         let _new_user = diesel::insert_into(schema::users::table)

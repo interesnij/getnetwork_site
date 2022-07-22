@@ -140,7 +140,7 @@ CREATE TABLE blog_comments (
             REFERENCES users(id),
 
     CONSTRAINT fk_blog_parent_comment
-        FOREIGN KEY(parent_comment_id)
+        FOREIGN KEY(parent_id)
             REFERENCES blog_comments(id)
 );
 CREATE INDEX blog_comments_id_idx ON blog_comments (blog_id);
@@ -210,7 +210,7 @@ CREATE TABLE services (
         FOREIGN KEY(user_id)
             REFERENCES users(id)
 );
-CREATE INDEX services_creator_idx ON services (creator);
+CREATE INDEX services_creator_idx ON services (user_id);
 
 CREATE TABLE service_category (
     id                    SERIAL PRIMARY KEY,
@@ -334,7 +334,7 @@ CREATE TABLE stores (
         FOREIGN KEY(user_id)
             REFERENCES users(id)
 );
-CREATE INDEX stores_creator_idx ON stores (creator);
+CREATE INDEX stores_creator_idx ON stores (user_id);
 
 CREATE TABLE store_category (
     id                  SERIAL PRIMARY KEY,
@@ -399,7 +399,7 @@ CREATE TABLE wikis (
         FOREIGN KEY(user_id)
             REFERENCES users(id)
 );
-CREATE INDEX wikis_creator_idx ON wikis (creator);
+CREATE INDEX wikis_creator_idx ON wikis (user_id);
 
 CREATE TABLE wiki_category (
     id                 SERIAL PRIMARY KEY,
