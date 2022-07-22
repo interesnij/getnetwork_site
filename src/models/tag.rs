@@ -30,7 +30,7 @@ pub struct Tag {
     pub user_id:       i32,
 }
 impl Tag {
-    pub fn get_tags(&self, page: i32, limit: i32) -> (Vec<Tag>, i32) {
+    pub fn get_tags_list(&self, page: i32, limit: i32) -> (Vec<Tag>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Tag>;
