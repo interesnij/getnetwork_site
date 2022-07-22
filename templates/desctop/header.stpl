@@ -71,7 +71,7 @@
                       <li>
                           <a href="/wiki_categories/" class="mn-has-sub ajax">База знаний</a>
                           <ul class="mn-sub wow fadeIn">
-                              <% for object in wikis.iter() { %>
+                              <% for object in wiki_cats.iter() { %>
                               <li>
                                   <a class="mn-group-title ajax" href="/wiki/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
