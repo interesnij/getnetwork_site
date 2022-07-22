@@ -11,6 +11,13 @@ use actix_web::{
 };
 use serde::Deserialize;
 use crate::diesel::{Connection, PgConnection};
+use crate::models::{
+    BlogCategories,
+    ServiceCategories,
+    StoreCategories,
+    WikiCategories,
+    WorkCategories,
+};
 
 
 pub fn establish_connection() -> PgConnection {
@@ -115,4 +122,33 @@ pub fn get_device_and_page_and_ajax(req: &HttpRequest) -> (bool, i32, bool) {
         }
     };
     (_type, page, is_ajax)
+}
+
+pub fn get_categories() -> (
+    Vec<ServiceCategories>,
+    Vec<StoreCategories>,
+    Vec<BlogCategories>,
+    Vec<WikiCategories>,
+    Vec<WorkCategories>
+) {
+    use crate::schema::service_categories::dsl::service_categories;
+    use crate::schema::store_categories::dsl::store_categories;
+    use crate::schema::blog_categories::dsl::blog_categories;
+    use crate::schema::work_categories::dsl::work_categories;
+    use crate::schema::wiki_categories::dsl::wiki_categories;
+
+    let _conn = establish_connection();
+    let _service_cats :Vec<ServiceCategories> = service_categories.load(&_conn).expect("Error");
+    let _store_cats :Vec<StoreCategories> = store_categories.load(&_conn).expect("Error");
+    let _blog_cats :Vec<BlogCategories> = blog_categories.load(&_conn).expect("Error");
+    let _wiki_cats :Vec<WikiCategories> = wiki_categories.load(&_conn).expect("Error");
+    let _work_cats :Vec<WorkCategories> = work_categories.load(&_conn).expect("Error");
+
+    return (
+        _service_cats,
+        _store_cats,
+        _blog_cats,
+        _wiki_cats,
+        _work_cats
+    );
 }
