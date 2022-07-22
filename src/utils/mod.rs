@@ -9,6 +9,7 @@ use actix_web::{
     HttpRequest,
     web,
 };
+use serde::Deserialize;
 
 
 pub fn establish_connection() -> PgConnection {

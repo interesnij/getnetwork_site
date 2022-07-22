@@ -1,5 +1,9 @@
 use crate::schema::users;
-use diesel::{Queryable, Insertable};
+use diesel::{
+    Queryable,
+    Insertable,
+    RunQueryDsl
+};
 use serde::{Serialize, Deserialize};
 use crate::models::{
     BlogCategories,
@@ -9,7 +13,7 @@ use crate::models::{
     WorkCategories,
 };
 use actix_web::HttpRequest;
-
+use crate::diesel::RunQueryDsl;
 
 #[derive(Debug ,Queryable, Serialize, Identifiable)]
 pub struct User {
