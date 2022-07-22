@@ -459,45 +459,11 @@ a.logo:hover{
 .count-descr{
     color: #999 !important;
 }
-.works-filter{
-    color: #555 !important;
-}
-.works-filter a{
-    color: #999 !important;
-}
-.works-filter a:hover{
-    color: #FFFFFF !important;
-}
-.works-filter a.active{
-    color: #FFFFFF !important;
-}
-.works-filter a.active:hover{
-    color: #FFFFFF !important;
-}
 
 .work-full{
     background: #000000 !important;
 }
-.work-loader{
-    background: #000000 !important;
-}
-.work-navigation{
-    background: #000000 !important;
-}
-.work-navigation a,
-.work-navigation a:visited{
-    color: #555 !important;
-}
-.work-navigation a:hover{
-    color: #FFFFFF !important;
-}
 
-.work-navigation a span{
-    background: #000000 !important;
-}
-.work-navigation span:hover{
-    background: #f7f7f7 !important;
-}
 .work-back-link{
     background: #fff !important;
     color: #151515 !important;
@@ -565,13 +531,6 @@ a.logo:hover{
 
 .contact-item a:hover{
     color: #FFFFFF !important;
-}
-.ci-icon{
-    color: #FFFFFF !important;
-}
-
-.ci-icon:before{
-    background: #FFFFFF !important;
 }
 
 .footer a{
@@ -735,30 +694,6 @@ a.blog-item-more:hover{
 .tpl-alt-tabs li.active span{
     color: #FFFFFF !important;
 
-}
-
-.toggle > dt > a{
-    border: 1px solid #e5e5e5 !important;
-}
-.toggle > dt > a:hover{
-    border-color: #ddd !important;
-    background-color: #fcfcfc !important;
-    color: #444 !important;
-}
-.toggle > dt > a.active{
-    color: #FFFFFF !important;
-    border-color: #ddd !important;
-    background-color: #fcfcfc !important;
-}
-.toggle > dt > a:after{
-    color: #999 !important;
-}
-.toggle > dt > a.active:after,
-.toggle > dt > a.active:hover:after{
-    color: #FFFFFF !important;
-}
-.toggle > dt > a:hover:after{
-    color: #444 !important;
 }
 
 .label-new{

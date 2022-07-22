@@ -464,26 +464,7 @@ a.logo:hover{
 .work-full{
     background: #fff !important;
 }
-.work-loader{
-    background: #fff !important;
-}
-.work-navigation{
-    background: #fff !important;
-}
-.work-navigation a,
-.work-navigation a:visited{
-    color: #555 !important;
-}
-.work-navigation a:hover{
-    color: #111 !important;
-}
 
-.work-navigation a span{
-    background: #fff !important;
-}
-.work-navigation span:hover{
-    background: #f7f7f7 !important;
-}
 .work-back-link{
     background: #fff !important;
     color: #151515 !important;
@@ -551,13 +532,6 @@ a.logo:hover{
 
 .contact-item a:hover{
     color: #000 !important;
-}
-.ci-icon{
-    color: #fff !important;
-}
-
-.ci-icon:before{
-    background: #111 !important;
 }
 
 .footer a{
@@ -721,30 +695,6 @@ a.blog-item-more:hover{
 }
 .tpl-alt-tabs li.active span{
     color: black !important;
-}
-
-.toggle > dt > a{
-    border: 1px solid #e5e5e5 !important;
-}
-.toggle > dt > a:hover{
-    border-color: #ddd !important;
-    background-color: #fcfcfc !important;
-    color: #444 !important;
-}
-.toggle > dt > a.active{
-    color: #000 !important;
-    border-color: #ddd !important;
-    background-color: #fcfcfc !important;
-}
-.toggle > dt > a:after{
-    color: #999 !important;
-}
-.toggle > dt > a.active:after,
-.toggle > dt > a.active:hover:after{
-    color: #111 !important;
-}
-.toggle > dt > a:hover:after{
-    color: #444 !important;
 }
 
 .label-new{
