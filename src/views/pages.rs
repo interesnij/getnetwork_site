@@ -1,15 +1,18 @@
 use actix_web::{
     HttpRequest,
     HttpResponse,
+    Responder,
     web,
     error::InternalError,
     http::StatusCode,
 };
+use crate::models::User;
 use serde::Deserialize;
 use crate::utils::{
     establish_connection,
     get_device_and_ajax,
     get_request_user_data,
+    is_signed_in,
 };
 use crate::NewUser;
 use crate::diesel::{

@@ -11,6 +11,7 @@ use crate::utils::{
     item_form,
     category_form,
     establish_connection,
+    is_signed_in,
 };
 use actix_session::Session;
 use crate::schema;
@@ -19,6 +20,7 @@ use crate::diesel::{
     ExpressionMethods,
     QueryDsl,
 };
+use crate::models::User;
 use crate::models::{
     BlogCategories,
     NewBlogCategories,

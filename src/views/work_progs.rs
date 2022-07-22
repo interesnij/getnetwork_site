@@ -5,6 +5,7 @@ use actix_web::{
     error::InternalError,
     http::StatusCode,
 };
+use crate::models::User;
 use crate::diesel::{
     RunQueryDsl,
     ExpressionMethods,
@@ -17,6 +18,7 @@ use crate::utils::{
     item_form,
     category_form,
     establish_connection,
+    is_signed_in,
 };
 use crate::schema;
 use crate::models::{

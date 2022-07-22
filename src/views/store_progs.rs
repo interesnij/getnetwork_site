@@ -5,6 +5,7 @@ use actix_web::{
     error::InternalError,
     http::StatusCode,
 };
+use crate::models::User;
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use crate::diesel::{
@@ -16,6 +17,7 @@ use crate::utils::{
     store_form,
     category_form,
     establish_connection,
+    is_signed_in,
 };
 use actix_session::Session;
 use crate::schema;

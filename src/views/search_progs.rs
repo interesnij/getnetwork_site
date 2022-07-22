@@ -12,9 +12,14 @@ use crate::diesel::{
 };
 use actix_session::Session;
 use serde::Deserialize;
-use crate::utils::establish_connection;
+use crate::utils::{
+    establish_connection,
+    is_signed_in,
+};
 use crate::schema;
 use sailfish::TemplateOnce;
+use crate::models::User;
+
 
 #[derive(Debug, Deserialize)]
 pub struct SearchParams {

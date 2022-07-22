@@ -17,7 +17,9 @@ use crate::utils::{
     item_form,
     category_form,
     establish_connection,
+    is_signed_in,
 };
+use crate::models::User;
 use crate::schema;
 use crate::models::{
     WikiCategories,
