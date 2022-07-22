@@ -121,8 +121,12 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
     if is_desctop(&req) {
         #[derive(TemplateOnce)]
         #[template(path = "desctop/auth/logout.stpl")]
-        struct Template;
-        let body = Template {}
+        struct Template {
+            is_ajax: bool,
+        }
+        let body = Template {
+            is_ajax: false,
+        }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
@@ -130,8 +134,12 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
     else {
         #[derive(TemplateOnce)]
         #[template(path = "mobile/auth/logout.stpl")]
-        struct Template;
-        let body = Template {}
+        struct Template {
+            is_ajax: bool,
+        }
+        let body = Template {
+            is_ajax: false,
+        }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
