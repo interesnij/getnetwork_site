@@ -48,6 +48,23 @@ pub struct Service {
     pub created:     chrono::NaiveDateTime,
 }
 
+impl Service {
+    pub fn get_100_description(&self) -> String {
+        if self.content.is_some() {
+            let _content = self.content.as_deref().unwrap();
+            if _content.len() > 100 {
+                return _content[..100].to_string();
+            }
+            else {
+                return _content.to_string();
+            }
+        }
+        else {
+            return "".to_string();
+        }
+    }
+}
+
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="services"]
 pub struct EditService {

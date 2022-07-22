@@ -65,6 +65,19 @@ pub struct Serve {
     pub is_default:       bool,
     pub user_id:          i32,
 }
+
+impl Serve {
+    pub fn get_100_description(&self) -> String {
+        let _content = self.description;
+        if _content.len() > 100 {
+            return _content[..100].to_string();
+        }
+        else {
+            return _content.to_string();
+        }
+    }
+}
+
 #[derive(Insertable,AsChangeset)]
 #[table_name="serve"]
 pub struct NewServe {

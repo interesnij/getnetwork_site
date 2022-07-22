@@ -49,6 +49,23 @@ pub struct Blog {
     pub created:     chrono::NaiveDateTime,
 }
 
+impl Blog {
+    pub fn get_100_description(&self) -> String {
+        if self.content.is_some() {
+            let _content = self.content.as_deref().unwrap();
+            if _content.len() > 100 {
+                return _content[..100].to_string();
+            }
+            else {
+                return _content.to_string();
+            }
+        }
+        else {
+            return "".to_string();
+        }
+    }
+}
+
 #[derive(Serialize, Insertable)]
 #[table_name="blogs"]
 pub struct NewBlog {
