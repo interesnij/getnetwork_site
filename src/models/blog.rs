@@ -17,6 +17,7 @@ use crate::schema::{
     blog_videos,
     blog_comments,
 };
+use crate::utils::establish_connection;
 
 
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]

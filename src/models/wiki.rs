@@ -9,6 +9,7 @@ use crate::schema::{
     wiki_images,
     wiki_videos,
 };
+use crate::utils::establish_connection;
 
 
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]

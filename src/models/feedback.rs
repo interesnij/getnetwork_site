@@ -2,6 +2,8 @@ use crate::schema::feedbacks;
 use diesel::{Queryable, Insertable};
 use serde::{Serialize, Deserialize};
 use crate::schema::feedbacks;
+use crate::utils::establish_connection;
+
 
 #[derive(Debug ,Queryable, Serialize, Identifiable)]
 pub struct Feedback {

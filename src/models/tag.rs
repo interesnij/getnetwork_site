@@ -5,6 +5,8 @@ use crate::schema::{
     tags,
     tags_items,
 };
+use crate::utils::establish_connection;
+
 
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
 #[table_name="tags"]

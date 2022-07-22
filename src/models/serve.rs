@@ -7,6 +7,8 @@ use crate::schema::{
     serve,
     serve_items,
 };
+use crate::utils::establish_connection;
+
 
 /////// TechCategories //////
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]

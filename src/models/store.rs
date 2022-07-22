@@ -9,6 +9,7 @@ use crate::schema::{
     store_images,
     store_videos,
 };
+use crate::utils::establish_connection;
 
 
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
