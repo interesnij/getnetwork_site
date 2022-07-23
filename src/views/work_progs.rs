@@ -520,7 +520,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                     store_id: 0,
                     blog_id: 0,
                     wiki_id: 0,
-                    work_id: _work_id,
+                    work_id: _work.id,
                     created: chrono::Local::now().naive_utc(),
                 };
                 diesel::insert_into(schema::tags_items::table)
