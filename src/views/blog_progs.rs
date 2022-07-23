@@ -182,6 +182,12 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
                 Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
         }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
     }
 }
 pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
@@ -330,6 +336,12 @@ pub async fn edit_content_blog_page(session: Session, mut payload: Multipart, re
                 Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
         }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
     }
 }
 pub async fn edit_content_blog(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
@@ -351,7 +363,7 @@ pub async fn edit_content_blog(session: Session, mut payload: Multipart, req: Ht
 
             let form = content_form(payload.borrow_mut()).await;
             let new_content = ContentForm {
-                content: Some(form.content.clone()),
+                content: form.content.clone(),
             };
             diesel::update(&_blog)
             .set(new_content)
