@@ -129,7 +129,7 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
 }
 
 pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use schema::tags::dsl::tags;
+    use schema::{tags::dsl::tags, tags_items::dsl::tags_items,};
     use crate::utils::{get_request_user_data, get_device_and_ajax};
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
