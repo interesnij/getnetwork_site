@@ -2,6 +2,7 @@ use actix_web::{
     web,
     HttpRequest,
     HttpResponse,
+    Responder,
     error::InternalError,
     http::StatusCode,
 };
@@ -713,7 +714,7 @@ pub async fn delete_blog_category(session: Session, _id: web::Path<i32>) -> impl
     HttpResponse::Ok()
 }
 
-pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> impl Responder {
+pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
     use schema::blogs::dsl::blogs;
     use schema::blog_categories::dsl::blog_categories;
     use schema::blog_images::dsl::blog_images;
@@ -723,35 +724,180 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _blog_id: i32 = param.1;
     let _cat_id: i32 = param.0;
 
-    let _blog = blogs
+    let _blogs = blogs
         .filter(schema::blogs::id.eq(&_blog_id))
         .load::<Blog>(&_connection)
         .expect("E");
-    let _s_category = blog_categories
+
+    let _blog = _blogs.into_iter().nth(0).unwrap();
+
+    let _categorys = blog_categories
         .filter(schema::blog_categories::id.eq(&_cat_id))
         .load::<BlogCategories>(&_connection)
         .expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
 
-    let _images :Vec<BlogImage> = blog_images.filter(schema::blog_images::blog.eq(&_blog_id)).load(&_connection).expect("E");
-    let _videos :Vec<BlogVideo> = blog_videos.filter(schema::blog_videos::blog.eq(&_blog_id)).load(&_connection).expect("E");
-    let _categories = get_cats_for_blog(&_blog[0]);
-    let _tags = get_tags_for_blog(&_blog[0]);
+    let _images: Vec<BlogImage> = blog_images.filter(schema::blog_images::blog.eq(&_blog_id)).load(&_connection).expect("E");
+    let _videos: Vec<BlogVideo> = blog_videos.filter(schema::blog_videos::blog.eq(&_blog_id)).load(&_connection).expect("E");
+    let _categories = _blog.get_categories();
+    let _tags = blog.get_tags();
+    let _tags_count = _tags.len();
 
-    let _category_blogs = get_blog_for_category(&_s_category[0]);
+    let prev: Option<i32> = None;
+    let next: Option<i32> = None;
+
+    let _category_blogs = _category.get_blogs_ids();
     let _category_blogs_len: usize = _category_blogs.len();
     for (i, item) in _category_blogs.iter().enumerate().rev() {
         if item.id == _blog_id {
             if (i + 1) != _category_blogs_len {
                 let _prev = Some(&_category_blogs[i + 1]);
-                data.insert("prev", &_prev);
+                prev = Some(&_category_blogs[i + 1]);
             };
             if i != 0 {
                 let _next = Some(&_category_blogs[i - 1]);
-                data.insert("next", &_next);
+                next = Some(&_category_blogs[i - 1]);
             };
             break;
         }
     };
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/tag_works.stpl")]
+            struct Template {
+                request_user: User,
+                object:       Blog,
+                images:       Vec<BlogImage>,
+                videos:       Vec<BlogVideo>,
+                categories:   Vec<BlogCategories>,
+                category:     BlogCategories,
+                all_tags:     Vec<Tag>,
+                tags_count:   usize,
+                tags_count:   usize,
+                prev:         Option<i32>,
+                next:         Option<i32>,
+                is_ajax:      bool,
+            }
+            let body = Template {
+                request_user: _request_user,
+                object:     _blog,
+                images:     _images,
+                videos:     _videos,
+                categories: _categories,
+                category:   _category,
+                all_tags:   _tags,
+                tags_count: _tags_count,
+                prev:       prev,
+                next:       next,
+                is_ajax:    is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/tag_works.stpl")]
+            struct Template {
+                request_user: User,
+                object:       Blog,
+                images:       Vec<BlogImage>,
+                videos:       Vec<BlogVideo>,
+                categories:   Vec<BlogCategories>,
+                category:     BlogCategories,
+                all_tags:     Vec<Tag>,
+                tags_count:   usize,
+                tags_count:   usize,
+                prev:         Option<i32>,
+                next:         Option<i32>,
+                is_ajax:      bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                object:     _blog,
+                images:     _images,
+                videos:     _videos,
+                categories: _categories,
+                category:   _category,
+                all_tags:   _tags,
+                tags_count: _tags_count,
+                prev:       prev,
+                next:       next,
+                is_ajax:    is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/anon_tag_works.stpl")]
+            struct Template {
+                object:     Blog,
+                images:     Vec<BlogImage>,
+                videos:     Vec<BlogVideo>,
+                categories: Vec<BlogCategories>,
+                category:   BlogCategories,
+                all_tags:   Vec<Tag>,
+                tags_count: usize,
+                prev:       Option<i32>,
+                next:       Option<i32>,
+                is_ajax:    bool,
+            }
+            let body = Template {
+                object:     _blog,
+                images:     _images,
+                videos:     _videos,
+                categories: _categories,
+                category:   _category,
+                all_tags:   _tags,
+                tags_count: _tags_count,
+                prev:       prev,
+                next:       next,
+                is_ajax:    is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/anon_tag_works.stpl")]
+            struct Template {
+                object:     Blog,
+                images:     Vec<BlogImage>,
+                videos:     Vec<BlogVideo>,
+                categories: Vec<BlogCategories>,
+                category:   BlogCategories,
+                all_tags:   Vec<Tag>,
+                tags_count: usize,
+                tags_count: usize,
+                prev:       Option<i32>,
+                next:       Option<i32>,
+                is_ajax:    bool,
+            }
+            let body = Template {
+                object:     _blog,
+                images:     _images,
+                videos:     _videos,
+                categories: _categories,
+                category:   _category,
+                all_tags:   _tags,
+                tags_count: _tags_count,
+                prev:       prev,
+                next:       next,
+                is_ajax:    is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 
     data.insert("object", &_blog[0]);
     data.insert("images", &_images);
@@ -819,6 +965,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::tags::dsl::tags;
     use crate::schema::blog_categories::dsl::blog_categories;
+    use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
     let mut stack = Vec::new();
@@ -839,7 +986,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
         .expect("could not load tags");
 
     let _blog_cats :Vec<BlogCategories> = blog_categories
-        .load(&_conn)
+        .load(&_connection)
         .expect("Error");
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
