@@ -204,7 +204,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
             use schema::{
                 tags::dsl::tags,
                 store_images::dsl::store_images,
-                setore_videos::dsl::store_videos,
+                store_videos::dsl::store_videos,
                 store_categories::dsl::store_categories,
             };
             use crate::utils::get_device_and_ajax;
@@ -631,7 +631,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 .get_result::<StoreCategory>(&_connection)
                 .expect("E.");
 
-                let _category_2 = store_categories.filter(schema::store_categories::id.eq(category_id)).load::<ServiceCategories>(&_connection).expect("E");
+                let _category_2 = store_categories.filter(schema::store_categories::id.eq(category_id)).load::<StoreCategories>(&_connection).expect("E");
                 diesel::update(&_category_2[0])
                     .set(schema::store_categories::count.eq(_category_2[0].count + 1))
                     .get_result::<StoreCategories>(&_connection)
