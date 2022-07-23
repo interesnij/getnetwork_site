@@ -450,7 +450,7 @@ CREATE TABLE tags (
     service_count INT NOT NULL,
     store_count   INT NOT NULL,
     wiki_count    INT NOT NULL,
-    work_count    INT NOT NULLs,
+    work_count    INT NOT NULL,
 
     user_id       INT NOT NULL,
 
