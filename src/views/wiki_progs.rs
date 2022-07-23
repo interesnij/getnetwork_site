@@ -518,8 +518,8 @@ pub async fn create_wiki(session: Session, mut payload: Multipart) -> impl Respo
                     tag_id: *tag_id,
                     service_id: 0,
                     store_id: 0,
+                    blog_id: 0, 
                     wiki_id: _wiki.id,
-                    wiki_id: 0,
                     work_id: 0,
                     created: chrono::Local::now().naive_utc(),
                 };
