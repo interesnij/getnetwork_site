@@ -578,7 +578,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
 
             diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(tag_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
 
             let form = item_form(payload.borrow_mut()).await;
