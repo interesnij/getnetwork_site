@@ -1,7 +1,7 @@
 use actix_web::web;
 
 use crate::views::{
-    //work_progs,
+    work_progs,
     blog_progs,
     service_progs,
     //store_progs,
@@ -20,7 +20,7 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     .configure(service_progs::service_routes)
     //.configure(store_progs::store_routes)
     .configure(wiki_progs::wiki_routes)
-    //.configure(work_progs::work_routes)
+    .configure(work_progs::work_routes)
     //.configure(search_progs::search_routes)
     //.configure(serve_progs::serve_routes)
     .configure(tag_progs::tag_routes)
