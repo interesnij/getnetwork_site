@@ -291,6 +291,8 @@ pub async fn edit_content_blog_page(session: Session, mut payload: Multipart, re
             use schema::blogs::dsl::blogs;
             use crate::utils::get_device_and_ajax;
 
+            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/edit_tag.stpl")]
@@ -362,6 +364,7 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use schema::blog_categories::dsl::blog_categories;
+            use crate::utils::get_device_and_ajax;
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
@@ -528,6 +531,7 @@ pub async fn edit_blog(session: Session, mut payload: Multipart, _id: web::Path<
     use crate::models::EditBlog;
     use crate::schema::blogs::dsl::blogs;
     use crate::schema::tags::dsl::tags;
+    use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::blog_images::dsl::blog_images;
     use crate::schema::blog_videos::dsl::blog_videos;
     use crate::schema::blog_category::dsl::blog_category;
@@ -683,8 +687,8 @@ pub async fn delete_blog(session: Session, _id: web::Path<i32>) -> impl Responde
             let _blog_id: i32 = *_id;
             let _blog = blogs.filter(schema::blogs::id.eq(_blog_id)).load::<Blog>(&_connection).expect("E");
 
-            let _categories = get_cats_for_blog(&_blog[0]);
-            let _tags = get_tags_for_blog(&_blog[0]);
+            let _categories = _blog.get_categories();
+            let _tags = _blog.get_tags();
             for _category in _categories.iter() {
                 diesel::update(_category)
                 .set(schema::blog_categories::count.eq(_category.count - 1))
@@ -755,8 +759,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _tags = _blog.get_tags();
     let _tags_count = _tags.len();
 
-    let prev: Option<i32> = None;
-    let next: Option<i32> = None;
+    let mut prev: Option<i32> = None;
+    let mut next: Option<i32> = None;
 
     let _category_blogs = _category.get_blogs_ids();
     let _category_blogs_len: usize = _category_blogs.len();

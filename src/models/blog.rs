@@ -68,9 +68,12 @@ impl BlogCategories {
     }
 
     pub fn get_blogs_ids(&self) -> Vec<i32> {
-        let ids = BlogCategory::belonging_to(self)
-            .select(schema::blog_category::blog_id);
-        return ids;
+        use crate::schema::blog_category::dsl::blog_category;
+        return blog_category
+            .filter(schema::blog_category::blog_categories_id.eq(self.id))
+            .select(schema::blog_category::blog_id)
+            .load::<i32>(&_connection)
+            .expect("E");
     }
 }
 
