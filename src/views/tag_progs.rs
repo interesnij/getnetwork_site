@@ -913,6 +913,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
     let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
     let _connection = establish_connection();
     let (all_tags, next_page_number) = Tag::get_tags_list(page, 20);
+    let tags_count = all_tags.len();
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -929,7 +930,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         all_tags,
-                tags_count:       all_tags.len(),
+                tags_count:       tags_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -950,7 +951,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         all_tags,
-                tags_count:       all_tags.len(),
+                tags_count:       tags_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -971,7 +972,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             }
             let body = Template {
                 all_tags:         all_tags,
-                tags_count:       all_tags.len(),
+                tags_count:       tags_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -990,7 +991,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             }
             let body = Template {
                 all_tags:         all_tags,
-                tags_count:       all_tags.len(),
+                tags_count:       tags_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
