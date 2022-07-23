@@ -16,40 +16,27 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     get_request_user_data,
+    get_device_and_page_and_ajax,
 };
 use crate::schema;
 use sailfish::TemplateOnce;
 use crate::models::User;
 
 
-#[derive(Debug, Deserialize)]
-pub struct SearchParams {
-    pub q: String,
-}
-
 pub fn search_routes(config: &mut web::ServiceConfig) {
-    config.route("/search/", web::get().to(search_page));
-    config.route("/search_blogs/", web::get().to(search_blogs_page));
-    config.route("/search_services/", web::get().to(search_services_page));
-    config.route("/search_stores/", web::get().to(search_stores_page));
-    config.route("/search_wikis/", web::get().to(search_wikis_page));
-    config.route("/search_works/", web::get().to(search_works_page));
+    config.route("/search/{q}/", web::get().to(search_page));
+    config.route("/search_blogs/{q}/", web::get().to(search_blogs_page));
+    config.route("/search_services/{q}/", web::get().to(search_services_page));
+    config.route("/search_stores/{q}/", web::get().to(search_stores_page));
+    config.route("/search_wikis/{q}/", web::get().to(search_wikis_page));
+    config.route("/search_works/{q}/", web::get().to(search_works_page));
 }
 
-pub async fn search_page(req: HttpRequest) -> impl Responder {
+pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
-
-    let params = web::Query::<SearchParams>::from_query(&req.query_string());
-    let mut _q : String;
-    if params.is_ok() {
-        let params_2 = params.unwrap();
-        _q = params_2.q.clone();
-    } else {
-        _q = "".to_string();
-    }
-    let _q_standalone = "%".to_owned() + &_q + "%";
+    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let _blogs = schema::blogs::table
         .filter(schema::blogs::title.eq(&_q_standalone))
@@ -59,6 +46,8 @@ pub async fn search_page(req: HttpRequest) -> impl Responder {
         .limit(3)
         .load::<Blog>(&_connection)
         .expect("e");
+    let _blogs_count = _blogs.len();
+
     let _services = schema::services::table
         .filter(schema::services::title.ilike(&_q_standalone))
         .or_filter(schema::services::description.ilike(&_q_standalone))
@@ -67,6 +56,8 @@ pub async fn search_page(req: HttpRequest) -> impl Responder {
         .limit(3)
         .load::<Service>(&_connection)
         .expect("e");
+    let _services_count = _services.len();
+
     let _stores = schema::stores::table
         .filter(schema::stores::title.eq(&_q))
         .or_filter(schema::stores::description.eq(&_q_standalone))
@@ -75,6 +66,8 @@ pub async fn search_page(req: HttpRequest) -> impl Responder {
         .limit(3)
         .load::<Store>(&_connection)
         .expect("e");
+    let _stores_count = _stores.len();
+
     let _wikis = schema::wikis::table
         .filter(schema::wikis::title.eq(&_q))
         .or_filter(schema::wikis::description.eq(&_q_standalone))
@@ -83,6 +76,8 @@ pub async fn search_page(req: HttpRequest) -> impl Responder {
         .limit(3)
         .load::<Wiki>(&_connection)
         .expect("e");
+
+    let _works_count = _works.len();
     let _works = schema::works::table
         .filter(schema::works::title.eq(&_q))
         .or_filter(schema::works::description.eq(&_q_standalone))
@@ -92,282 +87,868 @@ pub async fn search_page(req: HttpRequest) -> impl Responder {
         .load::<Work>(&_connection)
         .expect("e");
 
-    let mut data = Context::new();
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("blogs", &_blogs);
-    data.insert("services", &_services);
-    data.insert("stores", &_stores);
-    data.insert("wikis", &_wikis);
-    data.insert("works", &_works);
-    data.insert("blogs_count", &_blogs.len());
-    data.insert("services_count", &_services.len());
-    data.insert("stores_count", &_stores.len());
-    data.insert("wikis_count", &_wikis.len());
-    data.insert("works_count", &_works.len());
-    data.insert("is_admin", &_is_admin);
-    data.insert("q", &_q);
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-    let _template = _type + &"search/all.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/all.stpl")]
+            struct Template {
+                request_user:   User,
+                works_list:     Vec<Work>,
+                services_list:  Vec<Service>,
+                wikis_list:     Vec<Wiki>,
+                blogs_list:     Vec<Blog>,
+                stores_list:    Vec<Store>,
+
+                works_count:    usize,
+                services_count: usize,
+                wikis_count:    usize,
+                blogs_count:    usize,
+                stores_count:   usize,
+                is_ajax:        bool,
+                q:              String,
+            }
+            let body = Template {
+                request_user:   _request_user,
+                works_list:     _works,
+                services_list:  _services,
+                wikis_list:     _wikis,
+                blogs_list:     _blogs,
+                stores_list:    _stores,
+
+                works_count:    works_count,
+                services_count: services_count,
+                wikis_counts:   wikis_count,
+                blogs_count:    blogs_count,
+                stores_count:   stores_count,
+                is_ajax:        is_ajax,
+                q:              q,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/all.stpl")]
+            struct Template {
+                request_user:   User,
+                works_list:     Vec<Work>,
+                services_list:  Vec<Service>,
+                wikis_list:     Vec<Wiki>,
+                blogs_list:     Vec<Blog>,
+                stores_list:    Vec<Store>,
+
+                works_count:    usize,
+                services_count: usize,
+                wikis_count:    usize,
+                blogs_count:    usize,
+                stores_count:   usize,
+                is_ajax:        bool,
+                q:              String,
+            }
+            let body = Template {
+                request_user:   _request_user,
+                works_list:     _works,
+                services_list:  _services,
+                wikis_list:     _wikis,
+                blogs_list:     _blogs,
+                stores_list:    _stores,
+
+                works_count:    works_count,
+                services_count: services_count,
+                wikis_counts:   wikis_count,
+                blogs_count:    blogs_count,
+                stores_count:   stores_count,
+                is_ajax:        is_ajax,
+                q:              q,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/anon_all.stpl")]
+            struct Template {
+                works_list:     Vec<Work>,
+                services_list:  Vec<Service>,
+                wikis_list:     Vec<Wiki>,
+                blogs_list:     Vec<Blog>,
+                stores_list:    Vec<Store>,
+
+                works_count:    usize,
+                services_count: usize,
+                wikis_count:    usize,
+                blogs_count:    usize,
+                stores_count:   usize,
+                is_ajax:        bool,
+                q:              String,
+            }
+            let body = Template {
+                works_list:     _works,
+                services_list:  _services,
+                wikis_list:     _wikis,
+                blogs_list:     _blogs,
+                stores_list:    _stores,
+
+                works_count:    works_count,
+                services_count: services_count,
+                wikis_counts:   wikis_count,
+                blogs_count:    blogs_count,
+                stores_count:   stores_count,
+                is_ajax:        is_ajax,
+                q:              q,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/anon_all.stpl")]
+            struct Template {
+                works_list:     Vec<Work>,
+                services_list:  Vec<Service>,
+                wikis_list:     Vec<Wiki>,
+                blogs_list:     Vec<Blog>,
+                stores_list:    Vec<Store>,
+
+                works_count:    usize,
+                services_count: usize,
+                wikis_count:    usize,
+                blogs_count:    usize,
+                stores_count:   usize,
+                is_ajax:        bool,
+                q:              String,
+            }
+            let body = Template {
+                works_list:     _works,
+                services_list:  _services,
+                wikis_list:     _wikis,
+                blogs_list:     _blogs,
+                stores_list:    _stores,
+
+                works_count:    works_count,
+                services_count: services_count,
+                wikis_counts:   wikis_count,
+                blogs_count:    blogs_count,
+                stores_count:   stores_count,
+                is_ajax:        is_ajax,
+                q:              q,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
-pub async fn search_blogs_page(req: HttpRequest) -> impl Responder {
+pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
     use crate::schema::blogs::dsl::blogs;
     use crate::models::Blog;
 
     let _connection = establish_connection();
-    let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
-    let _q = params.q.clone();
-    let _q_standalone = "%".to_owned() + &_q + "%";
+    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
-    let page_size = 20;
-    let mut offset = 0;
-    let mut data = Context::new();
-
-    loop {
-        let _blogs = blogs
-            .filter(schema::blogs::title.ilike(&_q_standalone))
-            .or_filter(schema::blogs::description.ilike(&_q_standalone))
-            .or_filter(schema::blogs::content.ilike(&_q_standalone))
-            .limit(page_size)
-            .offset(offset)
-            .order(schema::blogs::created.desc())
-            .load::<Blog>(&_connection)
-            .expect("e");
-        if _blogs.len() > 0 {
-            data.insert("blogs", &_blogs);
-            data.insert("blogs_count", &blogs
-                .filter(schema::blogs::title.ilike(&_q_standalone))
-                .or_filter(schema::blogs::description.ilike(&_q_standalone))
-                .or_filter(schema::blogs::content.ilike(&_q_standalone))
-                .load::<Blog>(&_connection)
-                .expect("E")
-                .len());
-            offset += page_size;
-        }
-        else {break;}
+    let mut next_page_number = 0;
+    let offset: i32;
+    let next_item: i32;
+    if page > 1 {
+        offset = (page - 1) * 20;
+        next_item = page * 20 + 1;
+    }
+    else {
+        offset = 0;
+        next_item = 21;
     }
 
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-    data.insert("q", &_q);
+    let _blogs = blogs
+        .filter(schema::blogs::title.ilike(&_q_standalone))
+        .or_filter(schema::blogs::description.ilike(&_q_standalone))
+        .or_filter(schema::blogs::content.ilike(&_q_standalone))
+        .limit(20)
+        .offset(offset)
+        .order(schema::blogs::created.desc())
+        .load::<Blog>(&_connection)
+        .expect("e");
 
-    let _template = _type + &"search/blogs.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    let blogs_count = _blogs.len();
+
+    if _blogs = blogs
+        .filter(schema::blogs::title.ilike(&_q_standalone))
+        .or_filter(schema::blogs::description.ilike(&_q_standalone))
+        .or_filter(schema::blogs::content.ilike(&_q_standalone))
+        .limit(1)
+        .offset(next_item)
+        .select(schema::blogs::id)
+        .load::<i32>(&_connection)
+        .expect("e")
+        .len() > 0 {
+            next_page_number = page + 1;
+        }
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/blogs.stpl")]
+            struct Template {
+                request_user:     User,
+                blogs_list:       Vec<Blog>,
+                blogs_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                blogs_list:       _blogs,
+                blogs_count:      blogs_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/blogs.stpl")]
+            struct Template {
+                request_user:     User,
+                blogs_list:       Vec<Blog>,
+                blogs_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                blogs_list:       _blogs,
+                blogs_count:      blogs_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/anon_blogs.stpl")]
+            struct Template {
+                blogs_list:       Vec<Blog>,
+                blogs_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                blogs_list:       _blogs,
+                blogs_count:      blogs_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/anon_blogs.stpl")]
+            struct Template {
+                blogs_list:       Vec<Blog>,
+                blogs_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                blogs_list:       _blogs,
+                blogs_count:      blogs_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+
 }
 
-pub async fn search_services_page(req: HttpRequest) -> impl Responder {
+pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
     use crate::schema::services::dsl::services;
     use crate::models::Service;
 
     let _connection = establish_connection();
-    let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
-    let _q = params.q.clone();
-    let _q_standalone = "%".to_owned() + &_q + "%";
+    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
-    let page_size = 20;
-    let mut offset = 0;
-    let mut data = Context::new();
-
-    loop {
-        let _services = services
-            .filter(schema::services::title.ilike(&_q_standalone))
-            .or_filter(schema::services::description.ilike(&_q_standalone))
-            .or_filter(schema::services::content.ilike(&_q_standalone))
-            .limit(page_size)
-            .offset(offset)
-            .order(schema::services::created.desc())
-            .load::<Service>(&_connection)
-            .expect("e");
-        if _services.len() > 0 {
-            data.insert("services", &_services);
-            data.insert("services_count", &services
-                .filter(schema::services::title.ilike(&_q_standalone))
-                .or_filter(schema::services::description.ilike(&_q_standalone))
-                .or_filter(schema::services::content.ilike(&_q_standalone))
-                .load::<Service>(&_connection)
-                .expect("E")
-                .len());
-            offset += page_size;
-        }
-        else {break;}
+    let mut next_page_number = 0;
+    let offset: i32;
+    let next_item: i32;
+    if page > 1 {
+        offset = (page - 1) * 20;
+        next_item = page * 20 + 1;
+    }
+    else {
+        offset = 0;
+        next_item = 21;
     }
 
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-    data.insert("q", &_q);
+    let _services = services
+        .filter(schema::services::title.ilike(&_q_standalone))
+        .or_filter(schema::services::description.ilike(&_q_standalone))
+        .or_filter(schema::services::content.ilike(&_q_standalone))
+        .limit(20)
+        .offset(offset)
+        .order(schema::services::created.desc())
+        .load::<Service>(&_connection)
+        .expect("e");
 
-    let _template = _type + &"search/services.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    let services_count = _services.len();
+
+    if _services = services
+        .filter(schema::services::title.ilike(&_q_standalone))
+        .or_filter(schema::services::description.ilike(&_q_standalone))
+        .or_filter(schema::services::content.ilike(&_q_standalone))
+        .limit(1)
+        .offset(next_item)
+        .select(schema::services::id)
+        .load::<i32>(&_connection)
+        .expect("e")
+        .len() > 0 {
+            next_page_number = page + 1;
+        }
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/services.stpl")]
+            struct Template {
+                request_user:     User,
+                services_list:    Vec<Service>,
+                services_count:   usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                services_list:    _services,
+                services_count:   services_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/services.stpl")]
+            struct Template {
+                request_user:     User,
+                services_list:    Vec<Service>,
+                services_count:   usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                services_list:    _services,
+                services_count:   services_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/anon_services.stpl")]
+            struct Template {
+                services_list:    Vec<Service>,
+                services_count:   usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                services_list:    _services,
+                services_count:   services_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/anon_services.stpl")]
+            struct Template {
+                services_list:    Vec<Service>,
+                services_count:   usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                services_list:    _services,
+                services_count:   services_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+
 }
 
-pub async fn search_stores_page(req: HttpRequest) -> impl Responder {
+pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
     use crate::schema::stores::dsl::stores;
     use crate::models::Store;
 
     let _connection = establish_connection();
-    let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
-    let _q = params.q.clone();
-    let _q_standalone = "%".to_owned() + &_q + "%";
+    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
-    let page_size = 20;
-    let mut offset = 0;
-    let mut data = Context::new();
-
-    loop {
-        let _stores = stores
-            .filter(schema::stores::title.ilike(&_q_standalone))
-            .or_filter(schema::stores::description.ilike(&_q_standalone))
-            .or_filter(schema::stores::content.ilike(&_q_standalone))
-            .limit(page_size)
-            .offset(offset)
-            .order(schema::stores::created.desc())
-            .load::<Store>(&_connection)
-            .expect("e");
-        if _stores.len() > 0 {
-            data.insert("stores", &_stores);
-            data.insert("stores_count", &stores
-                .filter(schema::stores::title.ilike(&_q_standalone))
-                .or_filter(schema::stores::description.ilike(&_q_standalone))
-                .or_filter(schema::stores::content.ilike(&_q_standalone))
-                .load::<Store>(&_connection)
-                .expect("E")
-                .len());
-            offset += page_size;
-        }
-        else {break;}
+    let mut next_page_number = 0;
+    let offset: i32;
+    let next_item: i32;
+    if page > 1 {
+        offset = (page - 1) * 20;
+        next_item = page * 20 + 1;
+    }
+    else {
+        offset = 0;
+        next_item = 21;
     }
 
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-    data.insert("q", &_q);
+    let _stores = stores
+        .filter(schema::stores::title.ilike(&_q_standalone))
+        .or_filter(schema::stores::description.ilike(&_q_standalone))
+        .or_filter(schema::stores::content.ilike(&_q_standalone))
+        .limit(20)
+        .offset(offset)
+        .order(schema::stores::created.desc())
+        .load::<Store>(&_connection)
+        .expect("e");
 
-    let _template = _type + &"search/stores.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    let stores_count = _stores.len();
+
+    if _stores = stores
+        .filter(schema::stores::title.ilike(&_q_standalone))
+        .or_filter(schema::stores::description.ilike(&_q_standalone))
+        .or_filter(schema::stores::content.ilike(&_q_standalone))
+        .limit(1)
+        .offset(next_item)
+        .select(schema::stores::id)
+        .load::<i32>(&_connection)
+        .expect("e")
+        .len() > 0 {
+            next_page_number = page + 1;
+        }
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/stores.stpl")]
+            struct Template {
+                request_user:     User,
+                stores_list:       Vec<Store>,
+                stores_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                stores_list:       _stores,
+                stores_count:      stores_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/stores.stpl")]
+            struct Template {
+                request_user:     User,
+                stores_list:       Vec<Store>,
+                stores_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                stores_list:       _stores,
+                stores_count:      stores_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/anon_stores.stpl")]
+            struct Template {
+                stores_list:       Vec<Store>,
+                stores_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                stores_list:       _stores,
+                stores_count:      stores_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/anon_stores.stpl")]
+            struct Template {
+                stores_list:       Vec<Store>,
+                stores_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                stores_list:       _stores,
+                stores_count:      stores_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+
 }
 
-pub async fn search_wikis_page(req: HttpRequest) -> impl Responder {
+pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
     use crate::schema::wikis::dsl::wikis;
     use crate::models::Wiki;
 
     let _connection = establish_connection();
-    let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
-    let _q = params.q.clone();
-    let _q_standalone = "%".to_owned() + &_q + "%";
+    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
-    let page_size = 20;
-    let mut offset = 0;
-    let mut data = Context::new();
-
-    loop {
-        let _wikis = wikis
-            .filter(schema::wikis::title.ilike(&_q_standalone))
-            .or_filter(schema::wikis::description.ilike(&_q_standalone))
-            .or_filter(schema::wikis::content.ilike(&_q_standalone))
-            .limit(page_size)
-            .offset(offset)
-            .order(schema::wikis::created.desc())
-            .load::<Wiki>(&_connection)
-            .expect("e");
-        if _wikis.len() > 0 {
-            data.insert("wikis", &_wikis);
-            data.insert("wikis_count", &wikis
-                .filter(schema::wikis::title.ilike(&_q_standalone))
-                .or_filter(schema::wikis::description.ilike(&_q_standalone))
-                .or_filter(schema::wikis::content.ilike(&_q_standalone))
-                .load::<Wiki>(&_connection)
-                .expect("E")
-                .len());
-            offset += page_size;
-        }
-        else {break;}
+    let mut next_page_number = 0;
+    let offset: i32;
+    let next_item: i32;
+    if page > 1 {
+        offset = (page - 1) * 20;
+        next_item = page * 20 + 1;
+    }
+    else {
+        offset = 0;
+        next_item = 21;
     }
 
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-    data.insert("q", &_q);
+    let _wikis = wikis
+        .filter(schema::wikis::title.ilike(&_q_standalone))
+        .or_filter(schema::wikis::description.ilike(&_q_standalone))
+        .or_filter(schema::wikis::content.ilike(&_q_standalone))
+        .limit(20)
+        .offset(offset)
+        .order(schema::wikis::created.desc())
+        .load::<Wiki>(&_connection)
+        .expect("e");
 
-    let _template = _type + &"search/wikis.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    let wikis_count = _wikis.len();
+
+    if _wikis = wikis
+        .filter(schema::wikis::title.ilike(&_q_standalone))
+        .or_filter(schema::wikis::description.ilike(&_q_standalone))
+        .or_filter(schema::wikis::content.ilike(&_q_standalone))
+        .limit(1)
+        .offset(next_item)
+        .select(schema::wikis::id)
+        .load::<i32>(&_connection)
+        .expect("e")
+        .len() > 0 {
+            next_page_number = page + 1;
+        }
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/wikis.stpl")]
+            struct Template {
+                request_user:     User,
+                wikis_list:       Vec<Wiki>,
+                wikis_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                wikis_list:       _wikis,
+                wikis_count:      wikis_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/wikis.stpl")]
+            struct Template {
+                request_user:     User,
+                wikis_list:       Vec<Wiki>,
+                wikis_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                wikis_list:       _wikis,
+                wikis_count:      wikis_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/anon_wikis.stpl")]
+            struct Template {
+                wikis_list:       Vec<Wiki>,
+                wikis_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                wikis_list:       _wikis,
+                wikis_count:      wikis_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/anon_wikis.stpl")]
+            struct Template {
+                wikis_list:       Vec<Wiki>,
+                wikis_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                wikis_list:       _wikis,
+                wikis_count:      wikis_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+
 }
 
-pub async fn search_works_page(req: HttpRequest) -> impl Responder {
+pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
     use crate::schema::works::dsl::works;
     use crate::models::Work;
 
     let _connection = establish_connection();
-    let params = web::Query::<SearchParams>::from_query(&req.query_string()).unwrap();
-    let _q = params.q.clone();
-    let _q_standalone = "%".to_owned() + &_q + "%";
+    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
-    let page_size = 20;
-    let mut offset = 0;
-    let mut data = Context::new();
-
-    loop {
-        let _works = works
-            .filter(schema::works::title.ilike(&_q_standalone))
-            .or_filter(schema::works::description.ilike(&_q_standalone))
-            .or_filter(schema::works::content.ilike(&_q_standalone))
-            .limit(page_size)
-            .offset(offset)
-            .order(schema::works::created.desc())
-            .load::<Work>(&_connection)
-            .expect("e");
-        if _works.len() > 0 {
-            data.insert("works", &_works);
-            data.insert("works_count", &works
-                .filter(schema::works::title.ilike(&_q_standalone))
-                .or_filter(schema::works::description.ilike(&_q_standalone))
-                .or_filter(schema::works::content.ilike(&_q_standalone))
-                .load::<Work>(&_connection)
-                .expect("E")
-                .len());
-            offset += page_size;
-        }
-        else {break;}
+    let mut next_page_number = 0;
+    let offset: i32;
+    let next_item: i32;
+    if page > 1 {
+        offset = (page - 1) * 20;
+        next_item = page * 20 + 1;
+    }
+    else {
+        offset = 0;
+        next_item = 21;
     }
 
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-    data.insert("q", &_q);
+    let _works = works
+        .filter(schema::works::title.ilike(&_q_standalone))
+        .or_filter(schema::works::description.ilike(&_q_standalone))
+        .or_filter(schema::works::content.ilike(&_q_standalone))
+        .limit(20)
+        .offset(offset)
+        .order(schema::works::created.desc())
+        .load::<Work>(&_connection)
+        .expect("e");
 
-    let _template = _type + &"search/works.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    let works_count = _works.len();
+
+    if _works = works
+        .filter(schema::works::title.ilike(&_q_standalone))
+        .or_filter(schema::works::description.ilike(&_q_standalone))
+        .or_filter(schema::works::content.ilike(&_q_standalone))
+        .limit(1)
+        .offset(next_item)
+        .select(schema::works::id)
+        .load::<i32>(&_connection)
+        .expect("e")
+        .len() > 0 {
+            next_page_number = page + 1;
+        }
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/works.stpl")]
+            struct Template {
+                request_user:     User,
+                works_list:       Vec<Work>,
+                works_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                works_list:       _works,
+                works_count:      works_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/works.stpl")]
+            struct Template {
+                request_user:     User,
+                works_list:       Vec<Work>,
+                works_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                works_list:       _works,
+                works_count:      works_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/anon_works.stpl")]
+            struct Template {
+                works_list:       Vec<Work>,
+                works_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                works_list:       _works,
+                works_count:      works_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/anon_works.stpl")]
+            struct Template {
+                works_list:       Vec<Work>,
+                works_count:      usize,
+                is_ajax:          bool,
+                q:                String,
+                next_page_number: i32,
+            }
+            let body = Template {
+                works_list:       _works,
+                works_count:      works_count,
+                is_ajax:          is_ajax,
+                q:                q,
+                next_page_number: next_page_number,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+
 }
