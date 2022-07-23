@@ -49,7 +49,7 @@ pub fn tag_routes(config: &mut web::ServiceConfig) {
     config.route("/delete_tag/{id}/", web::get().to(delete_tag));
 }
 
-pub async fn create_tag_page(session: Session, req: HttpRequest) -> impl Responder {
+pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::utils::{get_request_user_data, get_device_and_ajax};
 
@@ -130,10 +130,11 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
 
 pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
-    use crate::utils::get_request_user_data;
+    use crate::utils::{get_request_user_data, get_device_and_ajax};
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _tag_id: i32 = *_id;
     let _tag = tags
         .filter(schema::tags::id.eq(_tag_id))
