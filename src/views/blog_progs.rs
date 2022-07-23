@@ -82,7 +82,7 @@ pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> 
 
             if is_desctop {
                 #[derive(TemplateOnce)]
-                #[template(path = "desctop/tags/create_categories.stpl")]
+                #[template(path = "desctop/blogs/create_categories.stpl")]
                 struct Template {
                     request_user: User,
                     blog_cats:    Vec<BlogCategories>,
@@ -99,7 +99,7 @@ pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> 
             }
             else {
                 #[derive(TemplateOnce)]
-                #[template(path = "mobile/tags/create_categories.stpl")]
+                #[template(path = "mobile/blogs/create_categories.stpl")]
                 struct Template {
                     request_user: User,
                     blog_cats:    Vec<BlogCategories>,
@@ -145,7 +145,7 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
 
             if is_desctop {
                 #[derive(TemplateOnce)]
-                #[template(path = "desctop/tags/create_blog.stpl")]
+                #[template(path = "desctop/blogs/create_blog.stpl")]
                 struct Template {
                     request_user: User,
                     blog_cats:    Vec<BlogCategories>,
@@ -164,7 +164,7 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
             }
             else {
                 #[derive(TemplateOnce)]
-                #[template(path = "mobile/tags/create_blog.stpl")]
+                #[template(path = "mobile/blogs/create_blog.stpl")]
                 struct Template {
                     request_user: User,
                     blog_cats:    Vec<BlogCategories>,
@@ -185,6 +185,8 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
     }
 }
 pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use schema::blogs::dsl::blogs;
+
     let _blog_id: i32 = *_id;
     let _connection = establish_connection();
     let _blogs = blogs.filter(schema::blogs::id.eq(&_blog_id)).load::<Blog>(&_connection).expect("E");
@@ -194,7 +196,6 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _blog.user_id == _request_user.id {
             use schema::{
-                blogs::dsl::blogs,
                 tags::dsl::tags,
                 blog_images::dsl::blog_images,
                 blog_videos::dsl::blog_videos,
@@ -215,7 +216,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                 .expect("Error");
             if is_desctop {
                 #[derive(TemplateOnce)]
-                #[template(path = "desctop/tags/edit_blog.stpl")]
+                #[template(path = "desctop/blogs/edit_blog.stpl")]
                 struct Template {
                     request_user: User,
                     blog:         Blog,
@@ -223,7 +224,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     images:       Vec<BlogImage>,
                     videos:       Vec<BlogVideo>,
                     tags_list:    Vec<Tag>,
-                    blog_cat:     Vec<BlogCategories>,
+                    blog_cats:    Vec<BlogCategories>,
 
                 }
                 let body = Template {
@@ -233,7 +234,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     images:       _images,
                     videos:       _videos,
                     tags_list:    _all_tags,
-                    blog_cat:     _blog_cat,
+                    blog_cats:    _blog_cats,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -241,7 +242,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
             }
             else {
                 #[derive(TemplateOnce)]
-                #[template(path = "mobile/tags/edit_blog.stpl")]
+                #[template(path = "mobile/blogs/edit_blog.stpl")]
                 struct Template {
                     request_user: User,
                     blog:         Blog,
@@ -249,7 +250,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     images:       Vec<BlogImage>,
                     videos:       Vec<BlogVideo>,
                     tags_list:    Vec<Tag>,
-                    blog_cat:     Vec<BlogCategories>,
+                    blog_cats:    Vec<BlogCategories>,
 
                 }
                 let body = Template {
@@ -259,7 +260,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     images:       _images,
                     videos:       _videos,
                     tags_list:    _all_tags,
-                    blog_cat:     _blog_cat,
+                    blog_cats:    _blog_cats,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -276,6 +277,8 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
 }
 
 pub async fn edit_content_blog_page(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::schema::blogs::dsl::blogs;
+
     let _blog_id: i32 = *_id;
     let _connection = establish_connection();
     let _blogs = blogs
@@ -288,7 +291,6 @@ pub async fn edit_content_blog_page(session: Session, mut payload: Multipart, re
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _request_user.id == _blog.user_id {
-            use schema::blogs::dsl::blogs;
             use crate::utils::get_device_and_ajax;
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -331,6 +333,8 @@ pub async fn edit_content_blog_page(session: Session, mut payload: Multipart, re
     }
 }
 pub async fn edit_content_blog(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+    use crate::schema::blogs::dsl::blogs;
+
     let _blog_id: i32 = *_id;
     let _connection = establish_connection();
     let _blogs = blogs
@@ -343,23 +347,22 @@ pub async fn edit_content_blog(session: Session, mut payload: Multipart, req: Ht
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _request_user.id == _blog.user_id {
-            use schema::blogs::dsl::blogs;
-            use crate::utils::content_form;
+            use crate::utils::{content_form, ContentForm};
 
             let form = content_form(payload.borrow_mut()).await;
-            let new_content = Content {
+            let new_content = ContentForm {
                 content: Some(form.content.clone()),
             };
-            diesel::update(&_blog[0])
+            diesel::update(&_blog)
             .set(new_content)
             .get_result::<Blog>(&_connection)
             .expect("E");
         }
     }
-    HttpResponse::Ok().body(_rendered)
+    HttpResponse::Ok().body("")
 }
 
-pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
@@ -707,7 +710,7 @@ pub async fn delete_blog(session: Session, _id: web::Path<i32>) -> impl Responde
             diesel::delete(blog_videos.filter(schema::blog_videos::blog.eq(_blog_id))).execute(&_connection).expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
             diesel::delete(blog_category.filter(schema::blog_category::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
-            diesel::delete(&_blog[0]).execute(&_connection).expect("E");
+            diesel::delete(&_blog).execute(&_connection).expect("E");
         }
     }
     HttpResponse::Ok()
