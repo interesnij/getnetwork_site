@@ -50,7 +50,7 @@ pub fn tag_routes(config: &mut web::ServiceConfig) {
 
 pub async fn create_tag_page(session: Session, req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::tags;
-    use crate::utils::get_request_user_data;
+    use crate::utils::{get_request_user_data, is_desctop};
 
     let _connection = establish_connection();
     let all_tags: Vec<Tag> = tags
@@ -59,7 +59,7 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> impl Respond
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if is_desctop {
+        if is_desctop(&req) {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/create_tag.stpl")]
             struct Template {
@@ -99,7 +99,7 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> impl Respond
     }
 }
 
-pub async fn create_tag(mut payload: Multipart) -> impl Responder {
+pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Responder {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
@@ -325,7 +325,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
     }
 }
 
-pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::models::Blog;
@@ -442,7 +442,7 @@ pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
     }
 }
 
-pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::models::Service;
@@ -559,7 +559,7 @@ pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> actix_w
     }
 }
 
-pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::stores::dsl::stores;
@@ -676,7 +676,7 @@ pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
     }
 }
 
-pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::models::Wiki;
@@ -790,7 +790,7 @@ pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
     }
 }
 
-pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::models::Work;
@@ -906,7 +906,7 @@ pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
     }
 }
 
-pub async fn tags_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
+pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_page_and_ajax;
 
     let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
@@ -1000,7 +1000,7 @@ pub async fn tags_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
     }
 }
 
-pub async fn edit_tag_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::*;
 
 
@@ -1054,7 +1054,7 @@ pub async fn edit_tag_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::
     }
 }
 
-pub async fn edit_tag(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_tag(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::models::EditTag;
     use crate::schema::tags::dsl::tags;
 
@@ -1084,7 +1084,7 @@ pub async fn edit_tag(mut payload: Multipart, _id: web::Path<i32>) -> impl Respo
     HttpResponse::Ok()
 }
 
-pub async fn delete_tag(_id: web::Path<i32>) -> impl Responder {
+pub async fn delete_tag(session: Session, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
 
