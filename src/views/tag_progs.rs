@@ -50,23 +50,13 @@ pub fn tag_routes(config: &mut web::ServiceConfig) {
 pub async fn create_tag_page(req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::tags;
 
-    let mut data = Context::new();
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
     let _connection = establish_connection();
     let all_tags: Vec<Tag> = tags
         .load(&_connection)
         .expect("Error.");
 
     data.insert("all_tags", &all_tags);
-    let _template = _type + &"tags/create_tag.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    //"tags/create_tag.html".to_string();
 }
 
 pub async fn create_tag(mut payload: Multipart) -> impl Responder {
@@ -74,7 +64,7 @@ pub async fn create_tag(mut payload: Multipart) -> impl Responder {
     let form = category_form(payload.borrow_mut()).await;
     let new_tag = NewTag {
         name: form.name.clone(),
-        position: form.position.clone(),
+        position: form.position,
         count: 0,
         blog_count: 0,
         service_count: 0,
@@ -85,18 +75,12 @@ pub async fn create_tag(mut payload: Multipart) -> impl Responder {
     let _new_tag = diesel::insert_into(schema::tags::table)
         .values(&new_tag)
         .get_result::<Tag>(&_connection)
-        .expect("Error saving tag.");
+        .expect("E.");
     return HttpResponse::Ok();
 }
 
 pub async fn tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use schema::tags::dsl::tags;
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::blogs::dsl::blogs;
-    use crate::schema::services::dsl::services;
-    use crate::schema::stores::dsl::stores;
-    use crate::schema::wikis::dsl::wikis;
-    use crate::schema::works::dsl::works;
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
@@ -129,22 +113,15 @@ pub async fn tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
         }
     };
 
-    let mut data = Context::new();
-
     let _blogs = schema::blogs::table
         .filter(schema::blogs::id.eq(any(&blog_stack)))
         .order(schema::blogs::created.desc())
         .limit(3)
         .load::<Blog>(&_connection)
         .expect("e");
-    if _blogs.len() > 0 {
-        data.insert("blogs", &_blogs);
-        data.insert("blogs_count", &blogs
-            .filter(schema::blogs::id.eq_any(&blog_stack))
-            .load::<Blog>(&_connection)
-            .expect("E")
-            .len());
-    }
+
+    data.insert("blogs", &_blogs);
+    data.insert("blogs_count", &blogs.len();
 
     let _services = schema::services::table
         .filter(schema::services::id.eq(any(&service_stack)))
@@ -152,14 +129,9 @@ pub async fn tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
         .limit(3)
         .load::<Service>(&_connection)
         .expect("e");
-    if _services.len() > 0 {
-        data.insert("services", &_services);
-        data.insert("services_count", &services
-            .filter(schema::services::id.eq_any(&service_stack))
-            .load::<Service>(&_connection)
-            .expect("E")
-            .len());
-    }
+
+    data.insert("services", &_services);
+    data.insert("services_count", &services;
 
     let _stores = schema::stores::table
         .filter(schema::stores::id.eq_any(&store_stack))
@@ -167,14 +139,10 @@ pub async fn tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
         .limit(3)
         .load::<Store>(&_connection)
         .expect("e");
-    if _stores.len() > 0 {
-        data.insert("stores", &_stores);
-        data.insert("stores_count", &stores
-            .filter(schema::stores::id.eq_any(&store_stack))
-            .load::<Store>(&_connection)
-            .expect("E")
-            .len());
-    }
+
+    data.insert("stores", &_stores);
+    data.insert("stores_count", &stores
+
 
     let _wikis = schema::wikis::table
         .filter(schema::wikis::id.eq_any(&wiki_stack))
@@ -182,14 +150,9 @@ pub async fn tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
         .limit(3)
         .load::<Wiki>(&_connection)
         .expect("e");
-    if _wikis.len() > 0 {
-        data.insert("wikis", &_wikis);
-        data.insert("wikis_count", &wikis
-            .filter(schema::wikis::id.eq_any(&wiki_stack))
-            .load::<Wiki>(&_connection)
-            .expect("E")
-            .len());
-    }
+
+    data.insert("wikis", &_wikis);
+    data.insert("wikis_count", &wikis;
 
     let _works = schema::works::table
         .filter(schema::works::id.eq_any(&work_stack))
@@ -197,27 +160,13 @@ pub async fn tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
         .limit(3)
         .load::<Work>(&_connection)
         .expect("e");
-    if _works.len() > 0 {
+
         data.insert("works", &_works);
-        data.insert("works_count", &works
-            .filter(schema::works::id.eq_any(&work_stack))
-            .load::<Work>(&_connection)
-            .expect("E")
-            .len());
-    }
+        data.insert("works_count", &works;
 
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
     data.insert("tag", &_tag[0]);
-    data.insert("is_admin", &_is_admin);
 
-    let _template = _type + &"tags/tag.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    //"tags/tag.html".to_string();
 }
 
 pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
@@ -227,7 +176,7 @@ pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> impl Respo
     use crate::models::Blog;
 
     let _connection = establish_connection();
-    let _tag_id : i32 = *_id;
+    let _tag_id: i32 = *_id;
     let page_size = 20;
     let mut offset = 0;
     let mut data = Context::new();
@@ -250,30 +199,13 @@ pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> impl Respo
             .order(schema::blogs::created.desc())
             .load::<Blog>(&_connection)
             .expect("e");
-        if _blogs.len() > 0 {
-            data.insert("blogs", &_blogs);
-            data.insert("blogs_count", &blogs
-                .filter(schema::blogs::id.eq_any(&_tag_items))
-                .load::<Blog>(&_connection)
-                .expect("could not load tags")
-                .len());
-            offset += page_size;
-        }
-        else {break;}
-    }
 
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
+        data.insert("blogs", &_blogs);
+        data.insert("blogs_count", &blogs
+
     data.insert("tag", &_tag[0]);
-    data.insert("is_admin", &_is_admin);
 
-    let _template = _type + &"tags/tag_blogs.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    //"tags/tag_blogs.html".to_string();
 }
 
 pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
@@ -283,7 +215,7 @@ pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> impl Re
     use crate::models::Service;
 
     let _connection = establish_connection();
-    let _tag_id : i32 = *_id;
+    let _tag_id: i32 = *_id;
     let page_size = 20;
     let mut offset = 0;
     let mut data = Context::new();

@@ -137,7 +137,7 @@ impl Service {
             .expect("E");
     }
 
-    pub fn get_tags_for_blog(&self) -> Vec<Tag> {
+    pub fn get_tags(&self) -> Vec<Tag> {
         use crate::schema::tags_items::dsl::tags_items;
         use crate::schema::tags::dsl::tags;
         let _connection = establish_connection();
@@ -178,6 +178,20 @@ impl Service {
             .filter(schema::services::is_active.eq(true))
             .order(schema::services::created.desc())
             .limit(6)
+            .load::<Service>(&_connection)
+            .expect("E.");
+    }
+
+    pub fn get_services_for_ids(limit: i64, offset: i64, ids: Vec<i32>) -> Vec<Service> {
+        use crate::schema::services::dsl::services;
+
+        let _connection = establish_connection();
+        return services
+            .filter(schema::services::id.eq_any(ids))
+            .filter(schema::services::is_active.eq(true))
+            .order(schema::services::created.desc())
+            .limit(limit)
+            .offset(offset)
             .load::<Service>(&_connection)
             .expect("E.");
     }

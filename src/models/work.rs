@@ -133,7 +133,7 @@ impl Work {
             .expect("E.");
     }
 
-    pub fn get_tags_for_blog(&self) -> Vec<Tag> {
+    pub fn get_tags(&self) -> Vec<Tag> {
         use crate::schema::tags_items::dsl::tags_items;
         let _connection = establish_connection();
 
@@ -146,6 +146,20 @@ impl Work {
             .filter(schema::tags::id.eq_any(_tag_items))
             .load::<Tag>(&_connection)
             .expect("E")
+    }
+
+    pub fn get_works_for_ids(limit: i64, offset: i64, ids: Vec<i32>) -> Vec<Work> {
+        use crate::schema::works::dsl::works;
+
+        let _connection = establish_connection();
+        return works
+            .filter(schema::works::id.eq_any(ids))
+            .filter(schema::works::is_active.eq(true))
+            .order(schema::works::created.desc())
+            .limit(limit)
+            .offset(offset)
+            .load::<Work>(&_connection)
+            .expect("E.");
     }
 }
 

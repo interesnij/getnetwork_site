@@ -113,7 +113,7 @@ impl Store {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags_for_blog(&self) -> Vec<Tag> {
+    pub fn get_tags(&self) -> Vec<Tag> {
         use crate::schema::tags_items::dsl::tags_items;
         use crate::schema::tags::dsl::tags;
 
@@ -154,6 +154,20 @@ impl Store {
             .filter(schema::stores::is_active.eq(true))
             .order(schema::stores::created.desc())
             .limit(6)
+            .load::<Store>(&_connection)
+            .expect("E.");
+    }
+
+    pub fn get_stores_for_ids(limit: i64, offset: i64, ids: Vec<i32>) -> Vec<Store> {
+        use crate::schema::stores::dsl::stores;
+
+        let _connection = establish_connection();
+        return stores
+            .filter(schema::stores::id.eq_any(ids))
+            .filter(schema::stores::is_active.eq(true))
+            .order(schema::stores::created.desc())
+            .limit(limit)
+            .offset(offset)
             .load::<Store>(&_connection)
             .expect("E.");
     }

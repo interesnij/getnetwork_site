@@ -121,7 +121,7 @@ impl Wiki {
             .expect("E");
     }
 
-    pub fn get_tags_for_blog(&self) -> Vec<Tag> {
+    pub fn get_tags(&self) -> Vec<Tag> {
         use crate::schema::tags_items::dsl::tags_items;
         let _connection = establish_connection();
 
@@ -144,6 +144,20 @@ impl Wiki {
             .filter(schema::wikis::is_active.eq(true))
             .order(schema::wikis::created.desc())
             .limit(6)
+            .load::<Wiki>(&_connection)
+            .expect("E.");
+    }
+
+    pub fn get_wikis_for_ids(limit: i64, offset: i64, ids: Vec<i32>) -> Vec<Wiki> {
+        use crate::schema::wikis::dsl::wikis;
+
+        let _connection = establish_connection();
+        return wikis
+            .filter(schema::wikis::id.eq_any(ids))
+            .filter(schema::wikis::is_active.eq(true))
+            .order(schema::wikis::created.desc())
+            .limit(limit)
+            .offset(offset)
             .load::<Wiki>(&_connection)
             .expect("E.");
     }
