@@ -724,6 +724,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _blog_id: i32 = param.1;
     let _cat_id: i32 = param.0;
 
+    let (id_desctop, is_ajax) = get_device_and_ajax(&req);
+
     let _blogs = blogs
         .filter(schema::blogs::id.eq(&_blog_id))
         .load::<Blog>(&_connection)
@@ -749,12 +751,12 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _category_blogs = _category.get_blogs_ids();
     let _category_blogs_len: usize = _category_blogs.len();
     for (i, item) in _category_blogs.iter().enumerate().rev() {
-        if item.id == _blog_id {
+        if item == _blog_id {
             if (i + 1) != _category_blogs_len {
-                prev = Some(&_category_blogs[i + 1]);
+                prev = Some(_category_blogs[i + 1]);
             };
             if i != 0 {
-                next = Some(&_category_blogs[i - 1]);
+                next = Some(_category_blogs[i - 1]);
             };
             break;
         }
@@ -906,7 +908,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
     let _categorys = blog_categories.filter(schema::blog_categories::id.eq(_cat_id)).load::<BlogCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
-    let (object_list, next_page_number) = _categorys.get_blogs_list(page, 20)
+    let (object_list, next_page_number) = _category.get_blogs_list(page, 20)
 
     let mut stack = Vec::new();
     let _tag_items = tags_items
@@ -1040,6 +1042,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
 
     let _tag_items = tags_items
         .filter(schema::tags_items::blog_id.ne(0))
+        .select(schema::tags_items::tag_id)
         .load::<i32>(&_connection)
         .expect("E");
 
