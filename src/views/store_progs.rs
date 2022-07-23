@@ -1089,7 +1089,7 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
         .load::<Tag>(&_connection)
         .expect("could not load tags");
 
-    let _store_cats :Vec<StoreCategories> = store_categories
+    let _store_cats: Vec<StoreCategories> = store_categories
         .load(&_connection)
         .expect("Error");
 
@@ -1142,7 +1142,7 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
             #[template(path = "desctop/stores/anon_categories.stpl")]
             struct Template {
                 is_ajax:      bool,
-                store_cats: Vec<Store>,
+                store_cats: Vec<StoreCategories>,
                 all_tags:     Vec<Tag>,
             }
             let body = Template {
