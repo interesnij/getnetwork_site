@@ -4,6 +4,7 @@ use actix_web::{
     web,
     error::InternalError,
     http::StatusCode,
+    Responder,
 };
 use crate::models::User;
 use std::borrow::BorrowMut;
@@ -388,6 +389,7 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
     }
     else {
         use crate::utils::get_device_and_ajax;
+        use crate::schema::tech_categories::dsl::tech_categories;
 
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
         let _request_user = get_request_user_data(&session);
@@ -400,8 +402,6 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
         }
         else {
-            use crate::schema::tech_categories::dsl::tech_categories;
-
             let _connection = establish_connection();
             let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
 
@@ -462,7 +462,7 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
         let _connection = establish_connection();
 
         let _categorys = serve_categories.filter(schema::serve_categories::id.eq(&_cat_id)).load::<ServeCategories>(&_connection).expect("E");
-        let _category = serve_categories.into_iter().nth(0).unwrap();
+        let _category = _categorys.into_iter().nth(0).unwrap();
         let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
         let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
 
@@ -528,7 +528,9 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
             tech_categories::dsl::tech_categories,
         };
 
+        let _connection = establish_connection();
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
         let _request_user = get_request_user_data(&session);
         let _cat_id: i32 = *_id;
         let all_tech_categories :Vec<TechCategories> = tech_categories
@@ -984,7 +986,7 @@ pub async fn delete_tech_category(session: Session, _id: web::Path<i32>) -> impl
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && category.user_id == _request_user.id {
+        if _request_user.perm == 60 && _category.user_id == _request_user.id {
             diesel::delete(tech_categories.filter(schema::tech_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
         }
     }
