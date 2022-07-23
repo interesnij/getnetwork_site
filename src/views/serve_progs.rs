@@ -639,6 +639,7 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
                 position: form.position,
                 count: 0,
                 default_price: Some(0),
+                user_id: _request_user.id,
             };
             let _new_serve = diesel::insert_into(schema::serve_categories::table)
                 .values(&new_cat)
@@ -871,9 +872,9 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
                 .get_result::<Serve>(&_connection)
                 .expect("E.");
 
-            if is_default == true {
+            if is_default == true && _category[0].default_price.is_some() && _serve.price.is_some() {
                 diesel::update(&_category[0])
-                .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price.unwrap()))
+                .set(schema::serve_categories::default_price.eq(_category[0].default_price.unwrap() + _serve.price.unwrap()))
                 .get_result::<ServeCategories>(&_connection)
                 .expect("E.");
             }
@@ -910,20 +911,20 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
 
             if _serve.is_default == true {
                 // если опция дефолтная
-                if is_default == false {
+                if is_default == false && _category[0].default_price.is_some() && _serve.price.is_some() {
                     // если в форме галочка снята
                     diesel::update(&_category[0])
-                        .set(schema::serve_categories::default_price.eq(_category[0].default_price - _serve.price.unwrap()))
+                        .set(schema::serve_categories::default_price.eq(_category[0].default_price.unwrap() - _serve.price.unwrap()))
                         .get_result::<ServeCategories>(&_connection)
                         .expect("E.");
                     }
                 }
             else {
                 // если опция не дефолтная
-                if is_default == true {
+                if is_default == true  && _category[0].default_price.is_some() && _serve.price.is_some(){
                     // если в форме галочка поставлена
                     diesel::update(&_category[0])
-                        .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price.unwrap()))
+                        .set(schema::serve_categories::default_price.eq(_category[0].default_price.unwrap() + _serve.price.unwrap()))
                         .get_result::<ServeCategories>(&_connection)
                         .expect("E.");
                 }
