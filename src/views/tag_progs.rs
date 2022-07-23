@@ -168,11 +168,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             struct Template {
                 tag:           Tag,
                 request_user:  User,
-                works:         Vec<Work>,
-                services:      Vec<Service>,
-                wikis:         Vec<Wiki>,
-                blogs:         Vec<Blog>,
-                stores:        Vec<Store>,
+                works_list:    Vec<Work>,
+                services_list: Vec<Service>,
+                wikis_list:    Vec<Wiki>,
+                blogs_list:    Vec<Blog>,
+                stores_list:   Vec<Store>,
 
                 works_count:   usize,
                 services_count:usize,
@@ -184,11 +184,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             let body = Template {
                 tag:           _tag.into_iter().nth(0).unwrap(),
                 request_user:  _request_user,
-                works:         _works,
-                services:      _services,
-                wikis:         _wikis,
-                blogs:         _blogs,
-                stores:        _stores,
+                works_list:    _works,
+                services_list: _services,
+                wikis_list:    _wikis,
+                blogs_list:    _blogs,
+                stores_list:   _stores,
 
                 works_count:   work_stack.len(),
                 services_count:service_stack.len(),
@@ -207,11 +207,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             struct Template {
                 tag:           Tag,
                 request_user:  User,
-                works:         Vec<Work>,
-                services:      Vec<Service>,
-                wikis:         Vec<Wiki>,
-                blogs:         Vec<Blog>,
-                stores:        Vec<Store>,
+                works_list:    Vec<Work>,
+                services_list: Vec<Service>,
+                wikis_list:    Vec<Wiki>,
+                blogs_list:    Vec<Blog>,
+                stores_list:   Vec<Store>,
 
                 works_count:   usize,
                 services_count:usize,
@@ -223,11 +223,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             let body = Template {
                 tag:           _tag.into_iter().nth(0).unwrap(),
                 request_user:  _request_user,
-                works:         _works,
-                services:      _services,
-                wikis:         _wikis,
-                blogs:         _blogs,
-                stores:        _stores,
+                works_list:    _works,
+                services_list: _services,
+                wikis_list:    _wikis,
+                blogs_list:    _blogs,
+                stores_list:   _stores,
 
                 works_count:   work_stack.len(),
                 services_count:service_stack.len(),
@@ -247,11 +247,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             #[template(path = "desctop/tags/anon_tag.stpl")]
             struct Template {
                 tag:           Tag,
-                works:         Vec<Work>,
-                services:      Vec<Service>,
-                wikis:         Vec<Wiki>,
-                blogs:         Vec<Blog>,
-                stores:        Vec<Store>,
+                works_list:    Vec<Work>,
+                services_list: Vec<Service>,
+                wikis_list:    Vec<Wiki>,
+                blogs_list:    Vec<Blog>,
+                stores_list:   Vec<Store>,
 
                 works_count:   usize,
                 services_count:usize,
@@ -262,11 +262,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             }
             let body = Template {
                 tag:           _tag.into_iter().nth(0).unwrap(),
-                works:         _works,
-                services:      _services,
-                wikis:         _wikis,
-                blogs:         _blogs,
-                stores:        _stores,
+                works_list:    _works,
+                services_list: _services,
+                wikis_list:    _wikis,
+                blogs_list:    _blogs,
+                stores_list:   _stores,
 
                 works_count:   work_stack.len(),
                 services_count:service_stack.len(),
@@ -284,11 +284,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             #[template(path = "mobile/tags/anon_tag.stpl")]
             struct Template {
                 tag:           Tag,
-                works:         Vec<Work>,
-                services:      Vec<Service>,
-                wikis:         Vec<Wiki>,
-                blogs:         Vec<Blog>,
-                stores:        Vec<Store>,
+                works_list:    Vec<Work>,
+                services_list: Vec<Service>,
+                wikis_list:    Vec<Wiki>,
+                blogs_list:    Vec<Blog>,
+                stores_list:   Vec<Store>,
 
                 works_count:   usize,
                 services_count:usize,
@@ -299,11 +299,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             }
             let body = Template {
                 tag:           _tag.into_iter().nth(0).unwrap(),
-                works:         _works,
-                services:      _services,
-                wikis:         _wikis,
-                blogs:         _blogs,
-                stores:        _stores,
+                works_list:    _works,
+                services_list: _services,
+                wikis_list:    _wikis,
+                blogs_list:    _blogs,
+                stores_list:   _stores,
 
                 works_count:   work_stack.len(),
                 services_count:service_stack.len(),
@@ -349,7 +349,7 @@ pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             struct Template {
                 request_user:     User,
                 tag:              Tag,
-                blogs:            Vec<Blog>,
+                blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -357,7 +357,7 @@ pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             let body = Template {
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                blogs:            _blogs,
+                blogs_list:       _blogs,
                 blogs_count:      _blogs.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -372,7 +372,7 @@ pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             struct Template {
                 request_user:     User,
                 tag:              Tag,
-                blogs:            Vec<Blog>,
+                blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -380,7 +380,7 @@ pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             let body = Template {
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                blogs:            _blogs,
+                blogs_list:       _blogs,
                 blogs_count:      _blogs.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -396,14 +396,14 @@ pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             #[template(path = "desctop/tags/anon_tag_blogs.stpl")]
             struct Template {
                 tag:              Tag,
-                blogs:            Vec<Blog>,
+                blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                blogs:            _blogs,
+                blogs_list:       _blogs,
                 blogs_count:      _blogs.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -417,14 +417,14 @@ pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             #[template(path = "mobile/tags/anon_tag_blogs.stpl")]
             struct Template {
                 tag:              Tag,
-                blogs:            Vec<Blog>,
+                blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                blogs:            _blogs,
+                blogs_list:       _blogs,
                 blogs_count:      _blogs.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -466,7 +466,7 @@ pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> actix_w
             struct Template {
                 request_user:     User,
                 tag:              Tag,
-                services:         Vec<Service>,
+                services_list:    Vec<Service>,
                 services_count:   usize,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -474,7 +474,7 @@ pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> actix_w
             let body = Template {
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                services:         _services,
+                services_list:    _services,
                 services_count:   _services.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -489,7 +489,7 @@ pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> actix_w
             struct Template {
                 request_user:     User,
                 tag:              Tag,
-                services:         Vec<Service>,
+                services_list:    Vec<Service>,
                 services_count:   usize,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -497,7 +497,7 @@ pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> actix_w
             let body = Template {
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                services:         _services,
+                services_list:    _services,
                 services_count:   _services.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -513,14 +513,14 @@ pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> actix_w
             #[template(path = "desctop/tags/anon_tag_services.stpl")]
             struct Template {
                 tag:              Tag,
-                services:         Vec<Service>,
+                services_list:    Vec<Service>,
                 services_count:   usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                services:         _services,
+                services_list:    _services,
                 services_count:   _services.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -534,14 +534,14 @@ pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> actix_w
             #[template(path = "mobile/tags/anon_tag_services.stpl")]
             struct Template {
                 tag:              Tag,
-                services:         Vec<Service>,
+                services_list:    Vec<Service>,
                 services_count:   usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                services:         _services,
+                services_list:    _services,
                 services_count:   _services.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -583,7 +583,7 @@ pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
             struct Template {
                 request_user:     User,
                 tag:              Tag,
-                stores:           Vec<Store>,
+                stores_list:      Vec<Store>,
                 stores_count:     usize,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -591,7 +591,7 @@ pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
             let body = Template {
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                stores:           _stores,
+                stores_list:      _stores,
                 stores_count:     _stores.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -606,7 +606,7 @@ pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
             struct Template {
                 request_user:     User,
                 tag:              Tag,
-                stores:           Vec<Store>,
+                stores_list:      Vec<Store>,
                 stores_count:     usize,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -614,7 +614,7 @@ pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
             let body = Template {
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                stores:           _stores,
+                stores_list:      _stores,
                 stores_count:     _stores.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -630,14 +630,14 @@ pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
             #[template(path = "desctop/tags/anon_tag_stores.stpl")]
             struct Template {
                 tag:              Tag,
-                stores:           Vec<Store>,
+                stores_list:      Vec<Store>,
                 stores_count:     usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                stores:           _stores,
+                stores_list:      _stores,
                 stores_count:     _stores.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -651,14 +651,14 @@ pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
             #[template(path = "mobile/tags/anon_tag_stores.stpl")]
             struct Template {
                 tag:              Tag,
-                stores:           Vec<Store>,
+                stores_list:      Vec<Store>,
                 stores_count:     usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                stores:           _stores,
+                stores_list:      _stores,
                 stores_count:     _stores.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -699,7 +699,7 @@ pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             struct Template {
                 request_user:     User,
                 tag:              Tag,
-                wikis:            Vec<Wiki>,
+                wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -707,7 +707,7 @@ pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             let body = Template {
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                wikis:            _wikis,
+                wikis_list:       _wikis,
                 wikis_count:      _wikis.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -721,14 +721,14 @@ pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             #[template(path = "mobile/tags/tag_wikis.stpl")]
             struct Template {
                 tag:              Tag,
-                wikis:            Vec<Wiki>,
+                wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                wikis:            _wikis,
+                wikis_list:       _wikis,
                 wikis_count:      _wikis.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -744,14 +744,14 @@ pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             #[template(path = "desctop/tags/anon_tag_wikis.stpl")]
             struct Template {
                 tag:              Tag,
-                wikis:            Vec<Wiki>,
+                wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                wikis:            _wikis,
+                wikis_list:       _wikis,
                 wikis_count:      _wikis.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -765,14 +765,14 @@ pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             #[template(path = "mobile/tags/anon_tag_wikis.stpl")]
             struct Template {
                 tag:              Tag,
-                wikis:            Vec<Wiki>,
+                wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                wikis:            _wikis,
+                wikis_list:       _wikis,
                 wikis_count:      _wikis.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -813,7 +813,7 @@ pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             struct Template {
                 request_user:     User,
                 tag:              Tag,
-                works:            Vec<Work>,
+                works_list:       Vec<Work>,
                 works_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -821,7 +821,7 @@ pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             let body = Template {
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                works:            _works,
+                works_list:       _works,
                 works_count:      _works.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -836,7 +836,7 @@ pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             struct Template {
                 request_user:     User,
                 tag:              Tag,
-                works:            Vec<Work>,
+                works_list:       Vec<Work>,
                 works_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -844,7 +844,7 @@ pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             let body = Template {
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                works:            _works,
+                works_list:       _works,
                 works_count:      _works.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -860,14 +860,14 @@ pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             #[template(path = "desctop/tags/anon_tag_works.stpl")]
             struct Template {
                 tag:              Tag,
-                works:            Vec<Work>,
+                works_list:       Vec<Work>,
                 works_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                works:            _works,
+                works_list:       _works,
                 works_count:      _works.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -881,14 +881,14 @@ pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
             #[template(path = "mobile/tags/anon_tag_works.stpl")]
             struct Template {
                 tag:              Tag,
-                works:            Vec<Work>,
+                works_list:       Vec<Work>,
                 works_count:      usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
-                works:            _works,
+                works_list:       _works,
                 works_count:      _works.len(),
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
