@@ -32,7 +32,7 @@ pub fn search_routes(config: &mut web::ServiceConfig) {
     config.route("/search_works/{q}/", web::get().to(search_works_page));
 }
 
-pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
+pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
@@ -43,49 +43,50 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .or_filter(schema::blogs::description.eq(&_q_standalone))
         .or_filter(schema::blogs::content.eq(&_q_standalone))
         .order(schema::blogs::created.desc())
-        .limit(3)
         .load::<Blog>(&_connection)
         .expect("e");
-    let _blogs_count = _blogs.len();
+    let blogs_count = _blogs.len();
+    let blog_list =  _blogs[..3];
 
     let _services = schema::services::table
         .filter(schema::services::title.ilike(&_q_standalone))
         .or_filter(schema::services::description.ilike(&_q_standalone))
         .or_filter(schema::services::content.ilike(&_q_standalone))
         .order(schema::services::created.desc())
-        .limit(3)
         .load::<Service>(&_connection)
         .expect("e");
-    let _services_count = _services.len();
+    let services_count = _services.len();
+    let service_list =  _services[..3];
 
     let _stores = schema::stores::table
         .filter(schema::stores::title.eq(&_q))
         .or_filter(schema::stores::description.eq(&_q_standalone))
         .or_filter(schema::stores::content.eq(&_q_standalone))
         .order(schema::stores::created.desc())
-        .limit(3)
         .load::<Store>(&_connection)
         .expect("e");
-    let _stores_count = _stores.len();
+    let stores_count = _stores.len();
+    let store_list =  _stores[..3];
 
     let _wikis = schema::wikis::table
         .filter(schema::wikis::title.eq(&_q))
         .or_filter(schema::wikis::description.eq(&_q_standalone))
         .or_filter(schema::wikis::content.eq(&_q_standalone))
         .order(schema::wikis::created.desc())
-        .limit(3)
         .load::<Wiki>(&_connection)
         .expect("e");
+    let wiki_count = _wikis.len();
+    let wiki_list =  _wikis[..3];
 
-    let _works_count = _works.len();
     let _works = schema::works::table
         .filter(schema::works::title.eq(&_q))
         .or_filter(schema::works::description.eq(&_q_standalone))
         .or_filter(schema::works::content.eq(&_q_standalone))
         .order(schema::works::created.desc())
-        .limit(3)
         .load::<Work>(&_connection)
         .expect("e");
+    let work_count = _works.len();
+    let work_list =  _works[..3];
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
@@ -112,11 +113,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             }
             let body = Template {
                 request_user:   _request_user,
-                works_list:     _works,
-                services_list:  _services,
-                wikis_list:     _wikis,
-                blogs_list:     _blogs,
-                stores_list:    _stores,
+                works_list:     work_list,
+                services_list:  service_list,
+                wikis_list:     wiki_list,
+                blogs_list:     blog_list,
+                stores_list:    store_list,
 
                 works_count:    works_count,
                 services_count: services_count,
@@ -151,11 +152,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             }
             let body = Template {
                 request_user:   _request_user,
-                works_list:     _works,
-                services_list:  _services,
-                wikis_list:     _wikis,
-                blogs_list:     _blogs,
-                stores_list:    _stores,
+                works_list:     work_list,
+                services_list:  service_list,
+                wikis_list:     wiki_list,
+                blogs_list:     blog_list,
+                stores_list:    store_list,
 
                 works_count:    works_count,
                 services_count: services_count,
@@ -190,11 +191,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 q:              String,
             }
             let body = Template {
-                works_list:     _works,
-                services_list:  _services,
-                wikis_list:     _wikis,
-                blogs_list:     _blogs,
-                stores_list:    _stores,
+                works_list:     work_list,
+                services_list:  service_list,
+                wikis_list:     wiki_list,
+                blogs_list:     blog_list,
+                stores_list:    store_list,
 
                 works_count:    works_count,
                 services_count: services_count,
@@ -227,11 +228,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 q:              String,
             }
             let body = Template {
-                works_list:     _works,
-                services_list:  _services,
-                wikis_list:     _wikis,
-                blogs_list:     _blogs,
-                stores_list:    _stores,
+                works_list:     work_list,
+                services_list:  service_list,
+                wikis_list:     wiki_list,
+                blogs_list:     blog_list,
+                stores_list:    store_list,
 
                 works_count:    works_count,
                 services_count: services_count,
@@ -248,7 +249,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     }
 }
 
-pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
+pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::schema::blogs::dsl::blogs;
     use crate::models::Blog;
 
@@ -280,7 +281,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
 
     let blogs_count = _blogs.len();
 
-    if _blogs = blogs
+    if blogs
         .filter(schema::blogs::title.ilike(&_q_standalone))
         .or_filter(schema::blogs::description.ilike(&_q_standalone))
         .or_filter(schema::blogs::content.ilike(&_q_standalone))
@@ -389,7 +390,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
 
 }
 
-pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
+pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::schema::services::dsl::services;
     use crate::models::Service;
 
@@ -421,7 +422,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
 
     let services_count = _services.len();
 
-    if _services = services
+    if services
         .filter(schema::services::title.ilike(&_q_standalone))
         .or_filter(schema::services::description.ilike(&_q_standalone))
         .or_filter(schema::services::content.ilike(&_q_standalone))
@@ -530,7 +531,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
 
 }
 
-pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
+pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::schema::stores::dsl::stores;
     use crate::models::Store;
 
@@ -562,7 +563,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
 
     let stores_count = _stores.len();
 
-    if _stores = stores
+    if stores
         .filter(schema::stores::title.ilike(&_q_standalone))
         .or_filter(schema::stores::description.ilike(&_q_standalone))
         .or_filter(schema::stores::content.ilike(&_q_standalone))
@@ -671,7 +672,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
 
 }
 
-pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
+pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::schema::wikis::dsl::wikis;
     use crate::models::Wiki;
 
@@ -703,7 +704,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
 
     let wikis_count = _wikis.len();
 
-    if _wikis = wikis
+    if wikis
         .filter(schema::wikis::title.ilike(&_q_standalone))
         .or_filter(schema::wikis::description.ilike(&_q_standalone))
         .or_filter(schema::wikis::content.ilike(&_q_standalone))
@@ -812,7 +813,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
 
 }
 
-pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<String>) -> impl Responder {
+pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::schema::works::dsl::works;
     use crate::models::Work;
 
@@ -844,7 +845,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
 
     let works_count = _works.len();
 
-    if _works = works
+    if works
         .filter(schema::works::title.ilike(&_q_standalone))
         .or_filter(schema::works::description.ilike(&_q_standalone))
         .or_filter(schema::works::content.ilike(&_q_standalone))

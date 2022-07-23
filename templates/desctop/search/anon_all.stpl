@@ -16,7 +16,7 @@
     <div class="search_section">
       <% let mut items_exists = false; %>
 
-      <% if services.len() > 0 { %>
+      <% if services_count > 0 { %>
       <% items_exists = true; %>
       <section class="page-section">
           <div class="container relative">
@@ -26,7 +26,7 @@
                 </a>
               </h2>
               <div class="row multi-columns-row">
-                <% for object in last_services.iter() { %>
+                <% for (i, object) in services_list.iter().enumerate() { %>
                   <% include!("../generic/default_service.stpl"); %>
                 <% } %>
               </div>
@@ -35,7 +35,7 @@
       <hr class="mt-0 mb-0 " />
       <% } %>
 
-      <% if stores.len() > 0 { %>
+      <% if stores_count > 0 { %>
       <% items_exists = true; %>
       <section class="page-section">
           <div class="container relative">
@@ -45,7 +45,7 @@
                 </a>
               </h2>
               <div class="row multi-columns-row">
-                <% for object in last_stores.iter() { %>
+                <% for (i, object) in stores_list.iter().enumerate() { %>
                   <% include!("../generic/default_store.stpl"); %>
                 <% } %>
               </div>
@@ -54,7 +54,7 @@
       <hr class="mt-0 mb-0 " />
       <% } %>
 
-      <% if works.len() > 0 { %>
+      <% if works_count > 0 { %>
       <% items_exists = true; %>
       <section class="page-section">
           <div class="container relative">
@@ -64,7 +64,7 @@
                 </a>
               </h2>
               <div class="row multi-columns-row">
-                <% for object in last_works.iter() { %>
+                <% for (i, object) in works_list.iter().enumerate() { %>
                   <% include!("../generic/default_work.stpl"); %>
                 <% } %>
               </div>
@@ -73,7 +73,7 @@
       <hr class="mt-0 mb-0 " />
       <% } %>
 
-      <% if blogs.len() > 0 { %>
+      <% if blogs_count > 0 { %>
       <% items_exists = true; %>
       <section class="page-section">
           <div class="container relative">
@@ -83,7 +83,7 @@
                 </a>
               </h2>
               <div class="row multi-columns-row">
-                <% for object in last_blogs.iter() { %>
+                <% for (i, object) in blogs_list.iter().enumerate() { %>
                   <% include!("../generic/default_blog.stpl"); %>
                 <% } %>
               </div>
@@ -92,7 +92,7 @@
       <hr class="mt-0 mb-0 " />
       <% } %>
 
-      <% if wikis.len() > 0 { %>
+      <% if wikis_count > 0 { %>
       <% items_exists = true; %>
       <section class="page-section">
           <div class="container relative">
@@ -102,7 +102,7 @@
                 </a>
               </h2>
               <div class="row multi-columns-row">
-                <% for object in last_wikis.iter() { %>
+                <% for (i, object) in wikis_list.iter().enumerate() { %>
                   <% include!("../generic/default_wiki.stpl"); %>
                 <% } %>
               </div>
