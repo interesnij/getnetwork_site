@@ -463,10 +463,10 @@ CREATE TABLE tags (
 CREATE TABLE tags_items (
     id         SERIAL PRIMARY KEY,
     tag_id     INT NOT NULL,
-    service_id INT,
-    store_id   INT,
-    blog_id    INT,
-    wiki_id    INT,
-    work_id    INT,
+    service_id INT NOT NULL,
+    store_id   INT NOT NULL,
+    blog_id    INT NOT NULL,
+    wiki_id    INT NOT NULL,
+    work_id    INT NOT NULL,
     created    TIMESTAMP NOT NULL
 );
