@@ -47,30 +47,69 @@ pub fn tag_routes(config: &mut web::ServiceConfig) {
     config.route("/delete_tag/{id}/", web::get().to(delete_tag));
 }
 
-pub async fn create_tag_page(req: HttpRequest) -> impl Responder {
+pub async fn create_tag_page(session: Session, req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::tags;
+    use crate::utils::get_request_user_data;
 
     let _connection = establish_connection();
     let all_tags: Vec<Tag> = tags
         .load(&_connection)
         .expect("Error.");
 
-    data.insert("all_tags", &all_tags);
-    //"tags/create_tag.html".to_string();
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/create_tag.stpl")]
+            struct Template {
+                request_user: User,
+                all_tags:     Vec<Tag>,
+                is_ajax:      bool,
+            }
+            let body = Template {
+                request_user: _request_user,
+                all_tags:     all_tags,
+                is_ajax:      is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/create_tag.stpl")]
+            struct Template {
+                request_user: User,
+                all_tags:     Vec<Tag>,
+                is_ajax:      bool,
+            }
+            let body = Template {
+                request_user: _request_user,
+                all_tags:     all_tags,
+                is_ajax:      is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
 }
 
 pub async fn create_tag(mut payload: Multipart) -> impl Responder {
     let _connection = establish_connection();
     let form = category_form(payload.borrow_mut()).await;
     let new_tag = NewTag {
-        name: form.name.clone(),
-        position: form.position,
-        count: 0,
-        blog_count: 0,
+        name:          form.name.clone(),
+        position:      form.position,
+        count:         0,
+        blog_count:    0,
         service_count: 0,
-        store_count: 0,
-        wiki_count: 0,
-        work_count: 0,
+        store_count:   0,
+        wiki_count:    0,
+        work_count:    0,
     };
     let _new_tag = diesel::insert_into(schema::tags::table)
         .values(&new_tag)
@@ -79,8 +118,9 @@ pub async fn create_tag(mut payload: Multipart) -> impl Responder {
     return HttpResponse::Ok();
 }
 
-pub async fn tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
+    use crate::utils::get_request_user_data;
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
@@ -113,73 +153,180 @@ pub async fn tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
         }
     };
 
-    let _blogs = schema::blogs::table
-        .filter(schema::blogs::id.eq(any(&blog_stack)))
-        .order(schema::blogs::created.desc())
-        .limit(3)
-        .load::<Blog>(&_connection)
-        .expect("e");
+    let _blogs = Blog::get_blogs_list_for_ids(0, 3, &blog_stack).0;
+    let _services = Service::get_services_list_for_ids(0, 3, &service_stack).0;
+    let _stores = Store::get_stores_list_for_ids(0, 3, &store_stack).0;
+    let _wikis = Wiki::get_wikis_list_for_ids(0, 3, &wiki_stack).0;
+    let _works = Work::get_works_list_for_ids(0, 3, &work_stack).0;
 
-    data.insert("blogs", &_blogs);
-    data.insert("blogs_count", &blogs.len();
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/tag.stpl")]
+            struct Template {
+                tag:           Tag,
+                request_user:  User,
+                works:         Vec<Work>,
+                services:      Vec<Service>,
+                wikis:         Vec<Wiki>,
+                blogs:         Vec<Blog>,
+                stores:        Vec<Store>,
 
-    let _services = schema::services::table
-        .filter(schema::services::id.eq(any(&service_stack)))
-        .order(schema::services::created.desc())
-        .limit(3)
-        .load::<Service>(&_connection)
-        .expect("e");
+                works_count:   usize,
+                services_count:usize,
+                wikis_count:   usize,
+                blogs_count:   usize,
+                stores_count:  usize,
+                is_ajax:       bool,
+            }
+            let body = Template {
+                tag:           _tag.into_iter().nth(0).unwrap(),
+                request_user:  _request_user,
+                works:         _works,
+                services:      _services,
+                wikis:         _wikis,
+                blogs:         _blogs,
+                stores:        _stores,
 
-    data.insert("services", &_services);
-    data.insert("services_count", &services;
+                works_count:   work_stack.len(),
+                services_count:service_stack.len(),
+                wikis_count:   wiki_stack.len(),
+                blogs_count:   blog_stack.len(),
+                stores_count:  store_stack.len(),
+                is_ajax:       is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/tag.stpl")]
+            struct Template {
+                tag:           Tag,
+                request_user:  User,
+                works:         Vec<Work>,
+                services:      Vec<Service>,
+                wikis:         Vec<Wiki>,
+                blogs:         Vec<Blog>,
+                stores:        Vec<Store>,
 
-    let _stores = schema::stores::table
-        .filter(schema::stores::id.eq_any(&store_stack))
-        .order(schema::stores::created.desc())
-        .limit(3)
-        .load::<Store>(&_connection)
-        .expect("e");
+                works_count:   usize,
+                services_count:usize,
+                wikis_count:   usize,
+                blogs_count:   usize,
+                stores_count:  usize,
+                is_ajax:       bool,
+            }
+            let body = Template {
+                tag:           _tag.into_iter().nth(0).unwrap(),
+                request_user:  _request_user,
+                works:         _works,
+                services:      _services,
+                wikis:         _wikis,
+                blogs:         _blogs,
+                stores:        _stores,
 
-    data.insert("stores", &_stores);
-    data.insert("stores_count", &stores
+                works_count:   work_stack.len(),
+                services_count:service_stack.len(),
+                wikis_count:   wiki_stack.len(),
+                blogs_count:   blog_stack.len(),
+                stores_count:  store_stack.len(),
+                is_ajax:       is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/anon_tag.stpl")]
+            struct Template {
+                tag:           Tag,
+                works:         Vec<Work>,
+                services:      Vec<Service>,
+                wikis:         Vec<Wiki>,
+                blogs:         Vec<Blog>,
+                stores:        Vec<Store>,
 
+                works_count:   usize,
+                services_count:usize,
+                wikis_count:   usize,
+                blogs_count:   usize,
+                stores_count:  usize,
+                is_ajax:       bool,
+            }
+            let body = Template {
+                tag:           _tag.into_iter().nth(0).unwrap(),
+                works:         _works,
+                services:      _services,
+                wikis:         _wikis,
+                blogs:         _blogs,
+                stores:        _stores,
 
-    let _wikis = schema::wikis::table
-        .filter(schema::wikis::id.eq_any(&wiki_stack))
-        .order(schema::wikis::created.desc())
-        .limit(3)
-        .load::<Wiki>(&_connection)
-        .expect("e");
+                works_count:   work_stack.len(),
+                services_count:service_stack.len(),
+                wikis_count:   wiki_stack.len(),
+                blogs_count:   blog_stack.len(),
+                stores_count:  store_stack.len(),
+                is_ajax:       is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/anon_tag.stpl")]
+            struct Template {
+                tag:           Tag,
+                works:         Vec<Work>,
+                services:      Vec<Service>,
+                wikis:         Vec<Wiki>,
+                blogs:         Vec<Blog>,
+                stores:        Vec<Store>,
 
-    data.insert("wikis", &_wikis);
-    data.insert("wikis_count", &wikis;
+                works_count:   usize,
+                services_count:usize,
+                wikis_count:   usize,
+                blogs_count:   usize,
+                stores_count:  usize,
+                is_ajax:       bool,
+            }
+            let body = Template {
+                tag:           _tag.into_iter().nth(0).unwrap(),
+                works:         _works,
+                services:      _services,
+                wikis:         _wikis,
+                blogs:         _blogs,
+                stores:        _stores,
 
-    let _works = schema::works::table
-        .filter(schema::works::id.eq_any(&work_stack))
-        .order(schema::works::created.desc())
-        .limit(3)
-        .load::<Work>(&_connection)
-        .expect("e");
-
-        data.insert("works", &_works);
-        data.insert("works_count", &works;
-
-    data.insert("tag", &_tag[0]);
-
-    //"tags/tag.html".to_string();
+                works_count:   work_stack.len(),
+                services_count:service_stack.len(),
+                wikis_count:   wiki_stack.len(),
+                blogs_count:   blog_stack.len(),
+                stores_count:  store_stack.len(),
+                is_ajax:       is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
-pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::blogs::dsl::blogs;
     use crate::models::Blog;
+    use crate::utils::get_device_and_page_and_ajax;
 
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
-    let page_size = 20;
-    let mut offset = 0;
-    let mut data = Context::new();
     let _tag = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
@@ -191,34 +338,112 @@ pub async fn tag_blogs_page(req: HttpRequest, _id: web::Path<i32>) -> impl Respo
         .load::<i32>(&_connection)
         .expect("E");
 
-    loop {
-        let _blogs = blogs
-            .filter(schema::blogs::id.eq_any(&_tag_items))
-            .limit(page_size)
-            .offset(offset)
-            .order(schema::blogs::created.desc())
-            .load::<Blog>(&_connection)
-            .expect("e");
+    let (_blogs, next_page_number) = Blog::get_blogs_list_for_ids(page, 20, &_tag_items);
 
-        data.insert("blogs", &_blogs);
-        data.insert("blogs_count", &blogs
-
-    data.insert("tag", &_tag[0]);
-
-    //"tags/tag_blogs.html".to_string();
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/tag_blogs.stpl")]
+            struct Template {
+                request_user:     User,
+                tag:              Tag,
+                blogs:            Vec<Blog>,
+                blogs_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                blogs:            _blogs,
+                blogs_count:      _blogs.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/tag_blogs.stpl")]
+            struct Template {
+                request_user:     User,
+                tag:              Tag,
+                blogs:            Vec<Blog>,
+                blogs_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                blogs:            _blogs,
+                blogs_count:      _blogs.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/anon_tag_blogs.stpl")]
+            struct Template {
+                tag:              Tag,
+                blogs:            Vec<Blog>,
+                blogs_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                blogs:            _blogs,
+                blogs_count:      _blogs.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/anon_tag_blogs.stpl")]
+            struct Template {
+                tag:              Tag,
+                blogs:            Vec<Blog>,
+                blogs_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                blogs:            _blogs,
+                blogs_count:      _blogs.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
-pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::services::dsl::services;
     use crate::models::Service;
+    use crate::utils::get_device_and_page_and_ajax;
 
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
-    let page_size = 20;
-    let mut offset = 0;
-    let mut data = Context::new();
     let _tag = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
@@ -229,51 +454,114 @@ pub async fn tag_services_page(req: HttpRequest, _id: web::Path<i32>) -> impl Re
         .select(schema::tags_items::service_id)
         .load::<i32>(&_connection)
         .expect("E");
-    loop {
-        let _services = services
-            .filter(schema::services::id.eq_any(&_tag_items))
-            .limit(page_size)
-            .offset(offset)
-            .order(schema::services::created.desc())
-            .load::<Service>(&_connection)
-            .expect("e");
-        if _services.len() > 0 {
-            data.insert("services", &_services);
-            data.insert("services_count", &services
-                .filter(schema::services::id.eq(any(&_tag_items)))
-                .load::<Service>(&_connection)
-                .expect("could not load tags")
-                .len());
-            offset += page_size;
+
+    let (_services, next_page_number) = Service::get_services_list_for_ids(page, 20, &_tag_items);
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/tag_services.stpl")]
+            struct Template {
+                request_user:     User,
+                tag:              Tag,
+                services:         Vec<Service>,
+                services_count:   usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                services:         _services,
+                services_count:   _services.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        else {break;}
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/tag_services.stpl")]
+            struct Template {
+                request_user:     User,
+                tag:              Tag,
+                services:         Vec<Service>,
+                services_count:   usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                services:         _services,
+                services_count:   _services.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
     }
-
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("tag", &_tag[0]);
-    data.insert("is_admin", &_is_admin);
-
-    let _template = _type + &"tags/tag_services.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/anon_tag_services.stpl")]
+            struct Template {
+                tag:              Tag,
+                services:         Vec<Service>,
+                services_count:   usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                services:         _services,
+                services_count:   _services.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/anon_tag_services.stpl")]
+            struct Template {
+                tag:              Tag,
+                services:         Vec<Service>,
+                services_count:   usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                services:         _services,
+                services_count:   _services.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
-pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::schema::stores::dsl::stores;
     use crate::models::Store;
+    use crate::utils::get_device_and_page_and_ajax;
 
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
     let _connection = establish_connection();
-    let _tag_id : i32 = *_id;
-    let page_size = 20;
-    let mut offset = 0;
-    let mut data = Context::new();
+    let _tag_id: i32 = *_id;
     let _tag = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
@@ -285,51 +573,111 @@ pub async fn tag_stores_page(req: HttpRequest, _id: web::Path<i32>) -> impl Resp
         .load::<i32>(&_connection)
         .expect("E");
 
-    loop {
-        let _stores = stores
-            .filter(schema::stores::id.eq_any(&_tag_items))
-            .limit(page_size)
-            .offset(offset)
-            .order(schema::stores::created.desc())
-            .load::<Store>(&_connection)
-            .expect("e");
-        if _stores.len() > 0 {
-            data.insert("stores", &_stores);
-            data.insert("stores_count", &stores
-                .filter(schema::stores::id.eq_any(&_tag_items))
-                .load::<Store>(&_connection)
-                .expect("could not load tags")
-                .len());
-            offset += page_size;
+    let (_stores, next_page_number) = Store::get_stores_list_for_ids(page, 20, &_tag_items);
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/tag_stores.stpl")]
+            struct Template {
+                request_user:     User,
+                tag:              Tag,
+                stores:           Vec<Store>,
+                stores_count:     usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                stores:           _stores,
+                stores_count:     _stores.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        else {break;}
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/tag_stores.stpl")]
+            struct Template {
+                request_user:     User,
+                tag:              Tag,
+                stores:           Vec<Store>,
+                stores_count:     usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                stores:           _stores,
+                stores_count:     _stores.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
     }
-
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("tag", &_tag[0]);
-    data.insert("is_admin", &_is_admin);
-
-    let _template = _type + &"tags/tag_stores.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/anon_tag_stores.stpl")]
+            struct Template {
+                tag:              Tag,
+                stores:           Vec<Store>,
+                stores_count:     usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                stores:           _stores,
+                stores_count:     _stores.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/anon_tag_stores.stpl")]
+            struct Template {
+                tag:              Tag,
+                stores:           Vec<Store>,
+                stores_count:     usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                stores:           _stores,
+                stores_count:     _stores.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
-pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::wikis::dsl::wikis;
     use crate::models::Wiki;
+    use crate::utils::get_device_and_page_and_ajax;
 
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
     let _connection = establish_connection();
-    let _tag_id : i32 = *_id;
-    let page_size = 20;
-    let mut offset = 0;
-    let mut data = Context::new();
+    let _tag_id: i32 = *_id;
     let _tag = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
@@ -338,54 +686,112 @@ pub async fn tag_wikis_page(req: HttpRequest, _id: web::Path<i32>) -> impl Respo
     let _tag_items = tags_items
         .filter(schema::tags_items::tag_id.eq(&_tag_id))
         .select(schema::tags_items::wiki_id)
-        .load::<TagItems>(&_connection)
+        .load::<i32>(&_connection)
         .expect("E");
 
-    loop {
-        let _wikis = wikis
-            .filter(schema::wikis::id.eq_any(&_tag_items))
-            .limit(page_size)
-            .offset(offset)
-            .order(schema::wikis::created.desc())
-            .load::<Wiki>(&_connection)
-            .expect("e");
-        if _wikis.len() > 0 {
-            data.insert("wikis", &_wikis);
-            data.insert("wikis_count", &wikis
-                .filter(schema::wikis::id.eq_any(&_tag_items))
-                .load::<Wiki>(&_connection)
-                .expect("could not load tags")
-                .len());
-            offset += page_size;
+    let (_wikis, next_page_number) = Wiki::get_wikis_list_for_ids(page, 20, &_tag_items);
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/tag_wikis.stpl")]
+            struct Template {
+                request_user:     User,
+                tag:              Tag,
+                wikis:            Vec<Wiki>,
+                wikis_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                wikis:            _wikis,
+                wikis_count:      _wikis.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        else {break;}
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/tag_wikis.stpl")]
+            struct Template {
+                tag:              Tag,
+                wikis:            Vec<Wiki>,
+                wikis_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                wikis:            _wikis,
+                wikis_count:      _wikis.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
     }
-
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("tag", &_tag[0]);
-    data.insert("is_admin", &_is_admin);
-
-    let _template = _type + &"tags/tag_wikis.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/anon_tag_wikis.stpl")]
+            struct Template {
+                tag:              Tag,
+                wikis:            Vec<Wiki>,
+                wikis_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                wikis:            _wikis,
+                wikis_count:      _wikis.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/anon_tag_wikis.stpl")]
+            struct Template {
+                tag:              Tag,
+                wikis:            Vec<Wiki>,
+                wikis_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                wikis:            _wikis,
+                wikis_count:      _wikis.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
-pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::works::dsl::works;
     use crate::models::Work;
+    use crate::utils::get_device_and_page_and_ajax;
 
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
     let _connection = establish_connection();
-    let _tag_id : i32 = *_id;
-    let page_size = 20;
-    let mut offset = 0;
-    let mut data = Context::new();
+    let _tag_id: i32 = *_id;
     let _tag = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
@@ -397,75 +803,202 @@ pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> impl Respo
         .load::<i32>(&_connection)
         .expect("E");
 
-    loop {
-        let _works = works
-            .filter(schema::works::id.eq_any(&_tag_items))
-            .limit(page_size)
-            .offset(offset)
-            .order(schema::works::created.desc())
-            .load::<Work>(&_connection)
-            .expect("e");
-        if _works.len() > 0 {
-            data.insert("works", &_works);
-            data.insert("works_count", &works
-                .filter(schema::works::id.eq_any(&_tag_items))
-                .load::<Work>(&_connection)
-                .expect("could not load tags")
-                .len());
-            offset += page_size;
+    let (_works, next_page_number) = Work::get_works_list_for_ids(page, 20, &_tag_items);
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/tag_works.stpl")]
+            struct Template {
+                request_user:     User,
+                tag:              Tag,
+                works:            Vec<Work>,
+                works_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                works:            _works,
+                works_count:      _works.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-        else {break;}
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/tag_works.stpl")]
+            struct Template {
+                request_user:     User,
+                tag:              Tag,
+                works:            Vec<Work>,
+                works_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                works:            _works,
+                works_count:      _works.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
     }
-
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("tag", &_tag[0]);
-    data.insert("is_admin", &_is_admin);
-
-    let _template = _type + &"tags/tag_works.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/anon_tag_works.stpl")]
+            struct Template {
+                tag:              Tag,
+                works:            Vec<Work>,
+                works_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                works:            _works,
+                works_count:      _works.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/anon_tag_works.stpl")]
+            struct Template {
+                tag:              Tag,
+                works:            Vec<Work>,
+                works_count:      usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                tag:              _tag.into_iter().nth(0).unwrap(),
+                works:            _works,
+                works_count:      _works.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
-pub async fn tags_page(req: HttpRequest) -> impl Responder {
+pub async fn tags_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
+    use crate::utils::get_device_and_page_and_ajax;
 
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
     let _connection = establish_connection();
-    let all_tags: Vec<Tag> = tags
-        .order(tag_count.desc())
-        .load(&_connection)
-        .expect("Error.");
+    let (all_tags, next_page_number) = Tag::get_tags_list(page, 20);
 
-    data.insert("tags", &all_tags);
-    data.insert("tags_count", &all_tags.len());
-    let _template = _type + &"tags/tags.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/tag_works.stpl")]
+            struct Template {
+                request_user:     User,
+                all_tags:         Vec<Tag>,
+                tags_count:       usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                all_tags:         all_tags,
+                tags_count:       all_tags.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/tag_works.stpl")]
+            struct Template {
+                request_user:     User,
+                all_tags:         Vec<Tag>,
+                tags_count:       usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                all_tags:         all_tags,
+                tags_count:       all_tags.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/anon_tag_works.stpl")]
+            struct Template {
+                all_tags:         Vec<Tag>,
+                tags_count:       usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                all_tags:         all_tags,
+                tags_count:       all_tags.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/anon_tag_works.stpl")]
+            struct Template {
+                all_tags:         Vec<Tag>,
+                tags_count:       usize,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                all_tags:         all_tags,
+                tags_count:       all_tags.len(),
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
-pub async fn edit_tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_tag_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::*;
 
     let _tag_id: i32 = *_id;
 
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
     let _connection = establish_connection();
     let _tag = tags
         .filter(schema::tags::id.eq(&_tag_id))
@@ -473,9 +1006,7 @@ pub async fn edit_tag_page(req: HttpRequest, _id: web::Path<i32>) -> impl Respon
         .expect("E");
 
     data.insert("tag", &_tag[0]);
-    let _template = _type + &"tags/edit_tag.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    "tags/edit_tag.html".to_string();
 }
 
 pub async fn edit_tag(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
