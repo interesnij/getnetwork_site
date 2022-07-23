@@ -70,373 +70,648 @@ pub fn serve_routes(config: &mut web::ServiceConfig) {
     config.route("/delete_tech_category/{id}/", web::get().to(delete_tech_category));
 }
 
-pub async fn serve_categories_page(req: HttpRequest) -> impl Responder {
-    use crate::schema::serve::dsl::serve;
-    use crate::schema::serve_categories::dsl::serve_categories;
+pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    if !is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+    }
+    else {
+        use crate::utils::get_device_and_ajax;
 
-    let _connection = establish_connection();
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    let _serve_cats: Vec<ServeCategories> = serve_categories
-        .load(&_connection)
-        .expect("E");
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm != 60 {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        }
+        else {
+            use crate::schema::serve::dsl::serve;
+            use crate::schema::serve_categories::dsl::serve_categories;
 
-    let mut data = Context::new();
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("serve_categories", &_serve_cats);
-    data.insert("is_admin", &_is_admin);
+            let _connection = establish_connection();
+            let _serve_cats: Vec<ServeCategories> = serve_categories
+                .load(&_connection)
+                .expect("E");
 
-    let mut _count: i32 = 0;
-    for _cat in _serve_cats.iter() {
-        _count += 1;
-        // для генерации переменной 1 2 3
-        let mut _let_int : String = _count.to_string().parse().unwrap();
-        let _serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(&_cat.id)).load(&_connection).expect("E");
-        let _let_data_serves: String = "serves".to_string() + &_let_int;
-        data.insert(&_let_data_serves, &_serves);
-    };
-
-    let _template = _type + &"serve/categories.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/serve/categories.stpl")]
+                struct Template {
+                    request_user: User,
+                    serve_cats:   Vec<ServeCategories>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    serve_cats:   _serve_cats,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/serve/categories.stpl")]
+                struct Template {
+                    request_user: User,
+                    serve_cats:   Vec<ServeCategories>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    serve_cats:   _serve_cats,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
 }
 
-pub async fn get_serve_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use schema::serve::dsl::serve;
-    use schema::serve_categories::dsl::serve_categories;
+pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    if !is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+    }
+    else {
+        use crate::utils::get_device_and_ajax;
 
-    let _connection = establish_connection();
-    let _serve_id: i32 = *_id;
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm != 60 {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        }
+        else {
+            use schema::serve::dsl::serve;
+            use schema::serve_categories::dsl::serve_categories;
 
-    let _serve = serve
-        .filter(schema::serve::id.eq(&_serve_id))
-        .load::<Serve>(&_connection)
-        .expect("E");
-    let _s_category = serve_categories
-        .filter(schema::serve_categories::id.eq(&_serve[0].serve_categories))
-        .load::<ServeCategories>(&_connection)
-        .expect("E");
+            let _connection = establish_connection();
+            let _serve_id: i32 = *_id;
 
-    let mut data = Context::new();
+            let _serves = serve
+                .filter(schema::serve::id.eq(&_serve_id))
+                .load::<Serve>(&_connection)
+                .expect("E");
+            let _serve = _serves.into_iter().nth(0).unwrap();
 
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("object", &_serve[0]);
-    data.insert("category", &_s_category[0]);
-    data.insert("is_admin", &_is_admin);
+            let _s_categorys = serve_categories
+                .filter(schema::serve_categories::id.eq(&_serve.serve_categories))
+                .load::<ServeCategories>(&_connection)
+                .expect("E");
+            let _s_category = _s_categorys.into_iter().nth(0).unwrap();
 
-    let _template = _type + &"serve/serve.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/serve/serve.stpl")]
+                struct Template {
+                    request_user: User,
+                    category:     ServeCategories,
+                    object:       Serve,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    category:     _s_category,
+                    object:       _serve,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/serve/serve.stpl")]
+                struct Template {
+                    request_user: User,
+                    category:     ServeCategories,
+                    object:       Serve,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    category:     _s_category,
+                    object:       _serve,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
 }
 
-pub async fn create_tech_categories_page(req: HttpRequest) -> impl Responder {
-    use schema::tech_categories::dsl::tech_categories;
-    let mut data = Context::new();
+pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    if !is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+    }
+    else {
+        use crate::utils::get_device_and_ajax;
 
-    let _connection = establish_connection();
-    let _categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("categories", &_categories);
-    data.insert("is_admin", &_is_admin);
-    let _template = _type + &"serve/create_tech_categories.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm != 60 {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        }
+        else {
+            use schema::tech_categories::dsl::tech_categories;
+
+            let _connection = establish_connection();
+            let _categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/serve/create_tech_categories.stpl")]
+                struct Template {
+                    request_user: User,
+                    categories:   Vec<TechCategories>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    categories:   _categories,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/serve/create_tech_categories.stpl")]
+                struct Template {
+                    request_user: User,
+                    categories:   Vec<TechCategories>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    categories:   _categories,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
 }
-pub async fn create_serve_categories_page(req: HttpRequest) -> impl Responder {
-    use schema::serve_categories::dsl::serve_categories;
-    use schema::tech_categories::dsl::tech_categories;
+pub async fn create_serve_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    if !is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+    }
+    else {
+        use crate::utils::get_device_and_ajax;
 
-    let mut data = Context::new();
-    let _connection = establish_connection();
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm != 60 {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        }
+        else {
+            use schema::serve_categories::dsl::serve_categories;
+            use schema::tech_categories::dsl::tech_categories;
 
-    let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
-    let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
+            let _connection = establish_connection();
+            let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
+            let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
 
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("categories", &_categories);
-    data.insert("tech_categories", &_tech_categories);
-    data.insert("is_admin", &_is_admin);
-    let _template = _type + &"serve/create_serve_categories.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/serve/create_serve_categories.stpl")]
+                struct Template {
+                    request_user: User,
+                    tech_cats:    Vec<TechCategories>,
+                    serve_cats:   Vec<ServeCategories>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tech_cats:    _tech_categories,
+                    serve_cats:   _categories,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/serve/create_serve_categories.stpl")]
+                struct Template {
+                    request_user: User,
+                    tech_cats:    Vec<TechCategories>,
+                    serve_cats:   Vec<ServeCategories>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tech_cats:    _tech_categories,
+                    serve_cats:   _categories,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
 }
-pub async fn create_serve_page(req: HttpRequest) -> impl Responder {
-    use crate::schema::{
-        serve::dsl::serve,
-        serve_categories::dsl::serve_categories,
-        tech_categories::dsl::tech_categories,
-    };
+pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    if !is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+    }
+    else {
+        use crate::utils::get_device_and_ajax;
 
-    let _connection = establish_connection();
-    let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
-    let mut data = Context::new();
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm != 60 {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        }
+        else {
+            use crate::schema::{
+                serve_categories::dsl::serve_categories,
+                tech_categories::dsl::tech_categories,
+            };
 
-    let all_tech_categories :Vec<TechCategories> = tech_categories
-        .order(schema::tech_categories::position.asc())
-        .load(&_connection)
-        .expect("E.");
-    let mut _count: i32 = 0;
-    for _cat in all_tech_categories.iter() {
-        _count += 1;
-        let mut _let_int : String = _count.to_string().parse().unwrap();
-        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
-        let __serve_categories :Vec<ServeCategories> = serve_categories
-            .filter(schema::serve_categories::tech_categories.eq(_cat.id))
-            .order(schema::serve_categories::position.asc())
+            let _connection = establish_connection();
+            let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
+            let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/serve/create_serve.stpl")]
+                struct Template {
+                    request_user: User,
+                    tech_cats:    Vec<TechCategories>,
+                    serve_cats:   Vec<ServeCategories>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tech_cats:    _tech_categories,
+                    serve_cats:   _categories,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/serve/create_serve.stpl")]
+                struct Template {
+                    request_user: User,
+                    tech_cats:    Vec<TechCategories>,
+                    serve_cats:   Vec<ServeCategories>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tech_cats:    _tech_categories,
+                    serve_cats:   _categories,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
+}
+
+pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    if !is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+    }
+    else {
+        use crate::utils::get_device_and_ajax;
+
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        let _request_user = get_request_user_data(&session);
+        let _cat_id: i32 = *_id;
+        let _connection = establish_connection();
+        let _categorys = tech_categories.filter(schema::tech_categories::id.eq(&_cat_id)).load::<TechCategories>(&_connection).expect("E");
+        let _category = _categorys.into_iter().nth(0).unwrap();
+
+        if _category.user_id != _request_user.id {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        }
+        else {
+            use crate::schema::tech_categories::dsl::tech_categories;
+
+            let _connection = establish_connection();
+            let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/serve/edit_tech_category.stpl")]
+                struct Template {
+                    request_user: User,
+                    tech_cats:    Vec<TechCategories>,
+                    category:     TechCategories,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tech_cats:    _tech_categories,
+                    category:     _category,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/serve/edit_tech_category.stpl")]
+                struct Template {
+                    request_user: User,
+                    tech_cats:    Vec<TechCategories>,
+                    category:     TechCategories,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tech_cats:    _tech_categories,
+                    category:     _category,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
+}
+
+pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    if !is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+    }
+    else {
+        use crate::utils::get_device_and_ajax;
+        use crate::schema::serve_categories::dsl::serve_categories;
+        use crate::schema::tech_categories::dsl::tech_categories;
+
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        let _request_user = get_request_user_data(&session);
+        let _cat_id: i32 = *_id;
+        let _connection = establish_connection();
+
+        let _categorys = serve_categories.filter(schema::serve_categories::id.eq(&_cat_id)).load::<ServeCategories>(&_connection).expect("E");
+        let _category = serve_categories.into_iter().nth(0).unwrap();
+        let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
+        let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
+
+        if _category.user_id != _request_user.id {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        }
+        else {
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/serve/edit_serve_category.stpl")]
+                struct Template {
+                    request_user: User,
+                    tech_cats:    Vec<TechCategories>,
+                    serve_cats:   Vec<ServeCategories>,
+                    category:     ServeCategories,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tech_cats:    _tech_categories,
+                    serve_cats:   _categories,
+                    category:     _category,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/serve/edit_serve_category.stpl")]
+                struct Template {
+                    request_user: User,
+                    tech_cats:    Vec<TechCategories>,
+                    serve_cats:   Vec<ServeCategories>,
+                    category:     ServeCategories,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tech_cats:    _tech_categories,
+                    serve_cats:   _categories,
+                    category:     _category,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
+}
+
+pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    if !is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+    }
+    else {
+        use crate::utils::get_device_and_ajax;
+        use crate::schema::{
+            serve::dsl::serve,
+            serve_categories::dsl::serve_categories,
+            tech_categories::dsl::tech_categories,
+        };
+
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        let _request_user = get_request_user_data(&session);
+        let _cat_id: i32 = *_id;
+        let all_tech_categories :Vec<TechCategories> = tech_categories
+            .order(schema::tech_categories::position.asc())
             .load(&_connection)
             .expect("E.");
-        data.insert(&_let_serve_categories, &__serve_categories);
+        let _serve_id: i32 = *_id;
+        let _serves = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
+        let _serve = _serves.into_iter().nth(0).unwrap();
+        let _serve_cats:Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
 
-        let mut _serve_count: i32 = 0;
-        for __cat in __serve_categories.iter() {
-            _serve_count += 1;
-            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
-            let _serve_int_dooble = "_".to_string() + &_let_int;
-            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
-            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
-            data.insert(&_let_serves, &__serves);
+        if _serve.user_id != _request_user.id {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
         }
-    };
-
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("tech_categories", &all_tech_categories);
-    data.insert("is_admin", &_is_admin);
-    data.insert("categories", &_categories);
-
-    let _template = _type + &"serve/create_serve.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
-}
-
-pub async fn edit_tech_category_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use schema::tech_categories::dsl::*;
-
-    let _cat_id: i32 = *_id;
-    let mut data = Context::new();
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-    let _connection = establish_connection();
-    let _category = tech_categories.filter(schema::tech_categories::id.eq(&_cat_id)).load::<TechCategories>(&_connection).expect("E");
-
-    data.insert("category", &_category[0]);
-    let _template = _type + &"serve/edit_tech_category.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
-}
-
-pub async fn edit_serve_category_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use schema::serve_categories::dsl::*;
-    use schema::tech_categories::dsl::tech_categories;
-
-    let _cat_id: i32 = *_id;
-    let mut data = Context::new();
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-
-    let _connection = establish_connection();
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(&_cat_id)).load::<ServeCategories>(&_connection).expect("E");
-    let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
-    let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
-
-    data.insert("category", &_category[0]);
-    data.insert("categories", &_categories);
-    data.insert("tech_categories", &_tech_categories);
-    let _template = _type + &"serve/edit_serve_category.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
-}
-
-pub async fn edit_serve_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::{
-        serve::dsl::serve,
-        serve_categories::dsl::serve_categories,
-        tech_categories::dsl::tech_categories,
-    };
-
-    let _connection = establish_connection();
-    let mut _count: i32 = 0;
-    let mut data = Context::new();
-
-    let all_tech_categories :Vec<TechCategories> = tech_categories
-        .order(schema::tech_categories::position.asc())
-        .load(&_connection)
-        .expect("E.");
-
-    for _cat in all_tech_categories.iter() {
-        _count += 1;
-        let mut _let_int : String = _count.to_string().parse().unwrap();
-        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
-        let __serve_categories :Vec<ServeCategories> = serve_categories
-            .filter(schema::serve_categories::tech_categories.eq(_cat.id))
-            .order(schema::serve_categories::position.asc())
-            .load(&_connection)
-            .expect("E.");
-        data.insert(&_let_serve_categories, &__serve_categories);
-
-        let mut _serve_count: i32 = 0;
-        for __cat in __serve_categories.iter() {
-            _serve_count += 1;
-            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
-            let _serve_int_dooble = "_".to_string() + &_let_int;
-            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
-            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
-            data.insert(&_let_serves, &__serves);
+        else {
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/serve/edit_serve.stpl")]
+                struct Template {
+                    request_user: User,
+                    tech_cats:    Vec<TechCategories>,
+                    serve_cats:   Vec<ServeCategories>,
+                    object:       Serve,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tech_cats:    all_tech_categories,
+                    serve_cats:   _serve_cats,
+                    object:       _serve,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/serve/edit_serve.stpl")]
+                struct Template {
+                    request_user: User,
+                    tech_cats:    Vec<TechCategories>,
+                    serve_cats:   Vec<ServeCategories>,
+                    object:       Serve,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tech_cats:    all_tech_categories,
+                    serve_cats:   _serve_cats,
+                    object:       _serve,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
-    };
-
-    let _serve_id : i32 = *_id;
-
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-    data.insert("tech_categories", &all_tech_categories);
-
-    let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
-    let _cat_id : i32 = _serve[0].serve_categories;
-    let _s_category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
-    let _serve_cats :Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
-
-    data.insert("serve", &_serve[0]);
-    data.insert("category", &_s_category[0]);
-    data.insert("serve_categories", &_serve_cats);
-
-    let _template = _type + &"serve/edit_serve.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+    }
 }
 
-pub async fn create_tech_categories(mut payload: Multipart) -> impl Responder {
-    use schema::tech_categories;
+pub async fn create_tech_categories(session: Session, mut payload: Multipart) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
 
-    let _connection = establish_connection();
-    let form = category_form(payload.borrow_mut()).await;
-    let new_cat = NewTechCategories {
-        name: form.name.clone(),
-        description: Some(form.description.clone()),
-        position: form.position,
-        count: 0,
-    };
-    let _new_tech = diesel::insert_into(tech_categories::table)
-        .values(&new_cat)
-        .get_result::<TechCategories>(&_connection)
-        .expect("E.");
+            use schema::tech_categories;
+
+            let _connection = establish_connection();
+            let form = category_form(payload.borrow_mut()).await;
+            let new_cat = NewTechCategories {
+                name: form.name.clone(),
+                description: Some(form.description.clone()),
+                position: form.position,
+                count: 0,
+            };
+            let _new_tech = diesel::insert_into(tech_categories::table)
+                .values(&new_cat)
+                .get_result::<TechCategories>(&_connection)
+                .expect("E.");
+        }
+    }
     return HttpResponse::Ok();
 }
 
-pub async fn create_serve_categories(mut payload: Multipart) -> impl Responder {
-    use schema::serve_categories::dsl::serve_categories;
-    use schema::tech_categories::dsl::tech_categories;
+pub async fn create_serve_categories(session: Session, mut payload: Multipart) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
 
-    let _connection = establish_connection();
-    let form = serve_category_form(payload.borrow_mut()).await;
-    let _s_category = tech_categories
-        .filter(schema::tech_categories::id.eq(form.tech_categories))
-        .load::<TechCategories>(&_connection).expect("E");
+            use schema::serve_categories::dsl::serve_categories;
+            use schema::tech_categories::dsl::tech_categories;
 
-    let new_cat = NewServeCategories {
-        name: form.name.clone(),
-        description: Some(form.description.clone()),
-        cat_name: _s_category[0].name.clone(),
-        tech_categories: form.tech_categories,
-        position: form.position,
-        count: 0,
-        default_price: 0
-    };
-    let _new_serve = diesel::insert_into(serve_categories::table)
-        .values(&new_cat)
-        .get_result::<ServeCategories>(&_connection)
-        .expect("E.");
+            let _connection = establish_connection();
+            let form = serve_category_form(payload.borrow_mut()).await;
+            let _s_category = tech_categories
+                .filter(schema::tech_categories::id.eq(form.tech_categories))
+                .load::<TechCategories>(&_connection).expect("E");
+
+            let new_cat = NewServeCategories {
+                name: form.name.clone(),
+                description: Some(form.description.clone()),
+                cat_name: _s_category[0].name.clone(),
+                tech_categories: form.tech_categories,
+                position: form.position,
+                count: 0,
+                default_price: 0
+            };
+            let _new_serve = diesel::insert_into(serve_categories::table)
+                .values(&new_cat)
+                .get_result::<ServeCategories>(&_connection)
+                .expect("E.");
+        }
+    }
     return HttpResponse::Ok();
 }
-pub async fn edit_tech_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+
+pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
     let _cat_id: i32 = *_id;
-    let _category = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
+    let _categorys = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
 
-    let form = category_form(payload.borrow_mut()).await;
-    let new_cat = NewTechCategories {
-        name: form.name.clone(),
-        description: Some(form.description.clone()),
-        position: form.position,
-        count: _category[0].count,
-    };
-    diesel::update(&_category[0])
-        .set(new_cat)
-        .get_result::<TechCategories>(&_connection)
-        .expect("E");
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 && _category.user_id == _request_user.id {
+
+            let form = category_form(payload.borrow_mut()).await;
+            let new_cat = NewTechCategories {
+                name: form.name.clone(),
+                description: Some(form.description.clone()),
+                position: form.position,
+                count: _category.count,
+            };
+            diesel::update(&_category)
+                .set(new_cat)
+                .get_result::<TechCategories>(&_connection)
+                .expect("E");
+        }
+    }
     return HttpResponse::Ok();
 }
 
-pub async fn edit_serve_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::serve_categories::dsl::serve_categories;
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
     let _cat_id: i32 = *_id;
 
-    let s_category = serve_categories
+    let s_categorys = serve_categories
         .filter(schema::serve_categories::id.eq(_cat_id))
         .load::<ServeCategories>(&_connection)
         .expect("E");
 
-    let t_category = tech_categories
-        .filter(schema::tech_categories::id.eq(s_category[0].tech_categories))
-        .load::<TechCategories>(&_connection)
-        .expect("E");
+    let s_category = s_categorys.into_iter().nth(0).unwrap();
 
-    let form = serve_category_form(payload.borrow_mut()).await;
-    let new_cat = NewServeCategories {
-        name: form.name.clone(),
-        description: Some(form.description.clone()),
-        cat_name: t_category[0].name.clone(),
-        tech_categories: form.tech_categories,
-        position: form.position,
-        count: s_category[0].count,
-        default_price: form.default_price,
-    };
-    diesel::update(&s_category[0])
-        .set(new_cat)
-        .get_result::<ServeCategories>(&_connection)
-        .expect("E");
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 && s_category.user_id == _request_user.id {
+            let t_category = tech_categories
+                .filter(schema::tech_categories::id.eq(s_category.tech_categories))
+                .load::<TechCategories>(&_connection)
+                .expect("E");
+
+            let form = serve_category_form(payload.borrow_mut()).await;
+            let new_cat = NewServeCategories {
+                name: form.name.clone(),
+                description: Some(form.description.clone()),
+                cat_name: t_category[0].name.clone(),
+                tech_categories: form.tech_categories,
+                position: form.position,
+                count: s_category.count,
+                default_price: form.default_price,
+            };
+            diesel::update(&s_category)
+                .set(new_cat)
+                .get_result::<ServeCategories>(&_connection)
+                .expect("E");
+        }
+    }
     return HttpResponse::Ok();
 }
 
@@ -469,7 +744,6 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
     };
 
     let mut is_default = false;
-
     while let Some(item) = payload.next().await {
         let mut field: Field = item.expect("split_payload err");
         let name = field.name();
@@ -558,157 +832,187 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
     form
 }
 
-pub async fn create_serve(mut payload: Multipart) -> impl Responder {
-    use crate::schema::{
-        serve_categories::dsl::serve_categories,
-    };
+pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Responder {
+    use crate::schema::serve_categories::dsl::serve_categories;
 
-    let _connection = establish_connection();
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            let _connection = establish_connection();
+            let form = serve_split_payload(payload.borrow_mut()).await;
+            let _cat_id = form.serve_categories.clone;
+            let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
 
-    let form = serve_split_payload(payload.borrow_mut()).await;
-    let _cat_id = form.serve_categories.clone();
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
+            let mut is_default = false;
+            if form.is_default.clone() == true {
+                is_default = true;
+            };
+            let _new_serve = NewServe {
+                name: form.name.clone(),
+                cat_name: _category[0].name.clone(),
+                description: form.description.clone(),
+                position: form.position,
+                serve_categories: _cat_id,
+                price: Some(form.price),
+                price_acc: Some(form.price_acc),
+                social_price: Some(form.social_price),
+                man_hours: form.man_hours,
+                is_default: is_default,
+            };
 
-    let mut is_default = false;
-    if form.is_default.clone() == true {
-        is_default = true;
-    };
-    let _new_serve = NewServe {
-        name: form.name.clone(),
-        cat_name: _category[0].name.clone(),
-        description: form.description.clone(),
-        position: form.position.clone(),
-        serve_categories: _cat_id,
-        price: form.price.clone(),
-        price_acc: Some(form.price_acc.clone()),
-        social_price: Some(form.social_price.clone()),
-        man_hours: form.man_hours.clone(),
-        is_default: is_default,
-    };
+            let _serve = diesel::insert_into(schema::serve::table)
+                .values(&_new_serve)
+                .get_result::<Serve>(&_connection)
+                .expect("E.");
 
-    let _serve = diesel::insert_into(schema::serve::table)
-        .values(&_new_serve)
-        .get_result::<Serve>(&_connection)
-        .expect("E.");
-
-    if is_default == true {
-        diesel::update(&_category[0])
-            .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price))
-            .get_result::<ServeCategories>(&_connection)
-            .expect("E.");
+            if is_default == true {
+                diesel::update(&_category[0])
+                .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price))
+                .get_result::<ServeCategories>(&_connection)
+                .expect("E.");
+            }
+            diesel::update(&_category[0])
+                .set(schema::serve_categories::count.eq(_category[0].count + 1))
+                .get_result::<ServeCategories>(&_connection)
+                .expect("E.");
+        }
     }
-    diesel::update(&_category[0])
-        .set(schema::serve_categories::count.eq(_category[0].count + 1))
-        .get_result::<ServeCategories>(&_connection)
-        .expect("E.");
     return HttpResponse::Ok();
 }
 
-pub async fn edit_serve(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::{
         serve::dsl::serve,
         serve_categories::dsl::serve_categories,
     };
 
-    let _serve_id : i32 = *_id;
+    let _serve_id: i32 = *_id;
     let _connection = establish_connection();
+    let _serves = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
+    let _serve = _serves.into_iter().nth(0).unwrap();
 
-    let _serve = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve[0].serve_categories)).load::<ServeCategories>(&_connection).expect("E");
-    let form = serve_split_payload(payload.borrow_mut()).await;
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 && _serve.user_id == _request_user.id {
+            let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve.serve_categories)).load::<ServeCategories>(&_connection).expect("E");
+            let form = serve_split_payload(payload.borrow_mut()).await;
 
-    let mut is_default = false;
-    if form.is_default.clone() == true {
-        is_default = true;
-    };
+            let mut is_default = false;
+            if form.is_default.clone() == true {
+                is_default = true;
+            };
 
-    if _serve[0].is_default == true {
-        // если опция дефолтная
-        if is_default == false {
-            // если в форме галочка снята
-            diesel::update(&_category[0])
-                .set(schema::serve_categories::default_price.eq(_category[0].default_price - _serve[0].price))
-                .get_result::<ServeCategories>(&_connection)
-                .expect("E.");
-    }}
-    else {
-        // если опция не дефолтная
-        if is_default == true {
-            // если в форме галочка поставлена
-            diesel::update(&_category[0])
-                .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve[0].price))
-                .get_result::<ServeCategories>(&_connection)
-                .expect("E.");
-    }}
+            if _serve.is_default == true {
+                // если опция дефолтная
+                if is_default == false {
+                    // если в форме галочка снята
+                    diesel::update(&_category[0])
+                        .set(schema::serve_categories::default_price.eq(_category[0].default_price - _serve.price))
+                        .get_result::<ServeCategories>(&_connection)
+                        .expect("E.");
+                    }
+                }
+            else {
+                // если опция не дефолтная
+                if is_default == true {
+                    // если в форме галочка поставлена
+                    diesel::update(&_category[0])
+                        .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price))
+                        .get_result::<ServeCategories>(&_connection)
+                        .expect("E.");
+                }
+            }
 
-    let _new_serve = NewServe {
-        name: form.name.clone(),
-        cat_name: _category[0].name.clone(),
-        description: form.description.clone(),
-        position: form.position.clone(),
-        serve_categories: form.serve_categories.clone(),
-        price: form.price.clone(),
-        price_acc: Some(form.price_acc.clone()),
-        social_price: Some(form.social_price.clone()),
-        man_hours: form.man_hours.clone(),
-        is_default: is_default,
-    };
+            let _new_serve = NewServe {
+                name: form.name.clone(),
+                cat_name: _category[0].name.clone(),
+                description: form.description.clone(),
+                position: form.position,
+                serve_categories: form.serve_categories,
+                price: form.price.clone(),
+                price_acc: Some(form.price_acc),
+                social_price: Some(form.social_price),
+                man_hours: form.man_hours,
+                is_default: is_default,
+            };
 
-    diesel::update(&_serve[0])
-        .set(_new_serve)
-        .get_result::<Serve>(&_connection)
-        .expect("E");
+            diesel::update(&_serve)
+                .set(_new_serve)
+                .get_result::<Serve>(&_connection)
+                .expect("E");
+        }
+    }
     return HttpResponse::Ok();
 }
 
 
-pub async fn delete_serve(_id: web::Path<i32>) -> impl Responder {
+pub async fn delete_serve(session: Session, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::serve::dsl::serve;
     use crate::schema::serve_categories::dsl::serve_categories;
 
     let _connection = establish_connection();
-    let _serve_id : i32 = *_id;
-    let _serve = serve.filter(schema::serve::id.eq(_serve_id)).load::<Serve>(&_connection).expect("E");
+    let _serve_id: i32 = *_id;
+    let _serves = serve.filter(schema::serve::id.eq(_serve_id)).load::<Serve>(&_connection).expect("E");
+    let _serve = _serves.into_iter().nth(0).unwrap();
 
-    let _cat_id : i32 = _serve[0].serve_categories;
-    let _category = serve_categories
-        .filter(schema::serve_categories::id.eq(_cat_id))
-        .load::<ServeCategories>(&_connection)
-        .expect("E");
-    diesel::update(&_category[0])
-            .set(schema::serve_categories::count.eq(&_category[0].count - 1))
-            .get_result::<ServeCategories>(&_connection)
-            .expect("Error.");
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 && _serve.user_id == _request_user.id {
+            let _cat_id: i32 = _serve.serve_categories;
+            let _category = serve_categories
+                .filter(schema::serve_categories::id.eq(_cat_id))
+                .load::<ServeCategories>(&_connection)
+                .expect("E");
+            diesel::update(&_category[0])
+                .set(schema::serve_categories::count.eq(&_category[0].count - 1))
+                .get_result::<ServeCategories>(&_connection)
+                .expect("Error.");
 
-    diesel::delete(&_serve[0]).execute(&_connection).expect("E");
+            diesel::delete(&_serve).execute(&_connection).expect("E");
+        }
+    }
     HttpResponse::Ok()
 }
 
-pub async fn delete_tech_category(_id: web::Path<i32>) -> impl Responder {
+pub async fn delete_tech_category(session: Session, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
-    let _cat_id : i32 = *_id;
-    let _category = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
-    diesel::delete(tech_categories.filter(schema::tech_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
+    let _cat_id: i32 = *_id;
+    let _categorys = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 && category.user_id == _request_user.id {
+            diesel::delete(tech_categories.filter(schema::tech_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
+        }
+    }
     HttpResponse::Ok()
 }
-pub async fn delete_serve_category(_id: web::Path<i32>) -> impl Responder {
+pub async fn delete_serve_category(session: Session, _id: web::Path<i32>) -> impl Responder {
+
     use crate::schema::serve_categories::dsl::serve_categories;
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
-    let _cat_id : i32 = *_id;
-    let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
-    diesel::delete(serve_categories.filter(schema::serve_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
+    let _cat_id: i32 = *_id;
+    let s_categories = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
+    let s_category = s_categories.into_iter().nth(0).unwrap();
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 && s_category.user_id == _request_user.id {
+            diesel::delete(serve_categories.filter(schema::serve_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
 
-    let _category = tech_categories
-        .filter(schema::tech_categories::id.eq(_cat_id))
-        .load::<TechCategories>(&_connection)
-        .expect("E");
-    diesel::update(&_category[0])
-            .set(schema::tech_categories::count.eq(&_category[0].count - 1))
-            .get_result::<TechCategories>(&_connection)
-            .expect("E");
+            let _category = tech_categories
+                .filter(schema::tech_categories::id.eq(_cat_id))
+                .load::<TechCategories>(&_connection)
+                .expect("E");
+            diesel::update(&_category)
+                .set(schema::tech_categories::count.eq(&_category[0].count - 1))
+                .get_result::<TechCategories>(&_connection)
+                .expect("E");
+        }
+    }
     HttpResponse::Ok()
 }

@@ -256,7 +256,8 @@ CREATE TABLE tech_categories (
     name        VARCHAR(100) NOT NULL,
     description VARCHAR(500),
     position    INT NOT NULL,
-    count       INT NOT NULL
+    count       INT NOT NULL,
+    user_id     INT NOT NULL,
 );
 
 CREATE TABLE serve_categories (
@@ -268,6 +269,7 @@ CREATE TABLE serve_categories (
     position        INT NOT NULL,
     count           INT NOT NULL,
     default_price   INT default 0,
+    user_id         INT NOT NULL,
 
     CONSTRAINT fk_tech_category
         FOREIGN KEY(tech_categories)

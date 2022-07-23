@@ -26,6 +26,7 @@ pub struct TechCategories {
     pub description: Option<String>,
     pub position:    i32,
     pub count:       i32,
+    pub user_id:     i32,
 }
 #[derive(Insertable,AsChangeset)]
 #[table_name="tech_categories"]
@@ -34,6 +35,7 @@ pub struct NewTechCategories {
     pub description: Option<String>,
     pub position:    i32,
     pub count:       i32,
+    pub user_id:     i32,
 }
 
 /////// ServeCategories //////
@@ -48,6 +50,7 @@ pub struct ServeCategories {
     pub position:        i32,
     pub count:           i32,
     pub default_price:   Option<i32>,
+    pub user_id:         i32,
 }
 
 #[derive(Insertable,AsChangeset)]
@@ -60,6 +63,7 @@ pub struct NewServeCategories {
     pub position:        i32,
     pub count:           i32,
     pub default_price:   Option<i32>,
+    pub user_id:         i32,
 }
 
 /////// Serve //////
