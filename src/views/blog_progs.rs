@@ -303,7 +303,7 @@ pub async fn edit_content_blog_page(session: Session, mut payload: Multipart, re
 
             if is_desctop {
                 #[derive(TemplateOnce)]
-                #[template(path = "desctop/tags/edit_tag.stpl")]
+                #[template(path = "desctop/blogs/edit_content_blog.stpl")]
                 struct Template {
                     request_user: User,
                     blog:         Blog,
@@ -320,7 +320,7 @@ pub async fn edit_content_blog_page(session: Session, mut payload: Multipart, re
             }
             else {
                 #[derive(TemplateOnce)]
-                #[template(path = "mobile/tags/edit_tag.stpl")]
+                #[template(path = "mobile/blogs/edit_content_blog.stpl")]
                 struct Template {
                     request_user: User,
                     blog:         Blog,

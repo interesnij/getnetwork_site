@@ -1,27 +1,28 @@
 use actix_web::{
+    web,
     HttpRequest,
     HttpResponse,
-    web,
+    Responder,
     error::InternalError,
     http::StatusCode,
 };
-use crate::models::User;
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
-use crate::diesel::{
-    RunQueryDsl,
-    ExpressionMethods,
-    QueryDsl,
-};
-use actix_session::Session;
 use crate::utils::{
-    store_form,
+    item_form,
     category_form,
     establish_connection,
     is_signed_in,
     get_request_user_data,
 };
+use actix_session::Session;
 use crate::schema;
+use crate::diesel::{
+    RunQueryDsl,
+    ExpressionMethods,
+    QueryDsl,
+};
+use crate::models::User;
 use crate::models::{
     ServiceCategories,
     NewServiceCategories,
@@ -36,11 +37,6 @@ use crate::models::{
     TagItems,
     NewTagItems,
     Tag,
-    Serve,
-    ServeCategories,
-    TechCategories,
-    NewServeItems,
-    ServeItems,
 };
 use sailfish::TemplateOnce;
 
@@ -66,814 +62,1108 @@ pub fn service_routes(config: &mut web::ServiceConfig) {
     config.route("/edit_content_service/{id}/", web::get().to(edit_content_service_page));
     config.route("/delete_service/{id}/", web::get().to(delete_service));
     config.route("/delete_service_category/{id}/", web::get().to(delete_service_category));
-    config.service(web::resource("/service/{cat_id}/{service_id}/").route(web::get().to(get_service_page)));
-    config.service(web::resource("/service/{id}/").route(web::get().to(service_category_page)));
+    config.service(web::resource("/services/{cat_id}/{service_id}/").route(web::get().to(get_service_page)));
+    config.service(web::resource("/services/{id}/").route(web::get().to(service_category_page)));
 }
 
+pub async fn create_service_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use schema::service_categories::dsl::service_categories;
+            use crate::utils::get_device_and_ajax;
 
-pub async fn create_service_categories_page(req: HttpRequest) -> impl Responder {
-        let mut data = Context::new();
-        let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-        data.insert("service_categories", &_service_cats);
-        data.insert("store_categories", &_store_cats);
-        data.insert("blog_categories", &_blog_cats);
-        data.insert("wiki_categories", &_wiki_cats);
-        data.insert("work_categories", &_work_cats);
-        data.insert("is_admin", &_is_admin);
-    let _template = _type + &"services/create_categories.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
-}
+            let _connection = establish_connection();
+            let _service_cats:Vec<ServiceCategories> = service_categories
+                .load(&_connection)
+                .expect("Error");
 
-pub async fn create_service_page(req: HttpRequest) -> impl Responder {
-    use schema::tags::dsl::tags;
-    use schema::serve::dsl::serve;
-    use schema::serve_categories::dsl::serve_categories;
-    use schema::tech_categories::dsl::tech_categories;
+            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-    let mut data = Context::new();
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-
-    let _connection = establish_connection();
-    let all_tags :Vec<Tag> = tags
-        .load(&_connection)
-        .expect("Error.");
-
-    let all_tech_categories: Vec<TechCategories> = tech_categories
-        .load(&_connection)
-        .expect("E.");
-
-    // генерация переменных шаблона, хранящих: категории опций и опции.
-    let mut _count: i32 = 0;
-    for _cat in all_tech_categories.iter() {
-        _count += 1;
-        let mut _let_int : String = _count.to_string().parse().unwrap();
-        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
-        let __serve_categories :Vec<ServeCategories> = serve_categories.filter(schema::serve_categories::tech_categories.eq(_cat.id)).load(&_connection).expect("E.");
-        data.insert(&_let_serve_categories, &__serve_categories);
-
-        let mut _serve_count: i32 = 0;
-        for __cat in __serve_categories.iter() {
-            _serve_count += 1;
-            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
-            let _serve_int_dooble = "_".to_string() + &_let_int;
-            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
-            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
-            data.insert(&_let_serves, &__serves);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/create_categories.stpl")]
+                struct Template {
+                    request_user: User,
+                    service_cats: Vec<ServiceCategories>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    service_cats: _service_cats,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/services/create_categories.stpl")]
+                struct Template {
+                    request_user: User,
+                    service_cats: Vec<ServiceCategories>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    service_cats: _service_cats,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
-    };
-
-    data.insert("tags", &all_tags);
-    data.insert("tech_categories", &all_tech_categories);
-
-    let _template = _type + &"services/create_service.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
 }
 
-pub async fn create_service_categories(mut payload: Multipart) -> impl Responder {
-    use schema::service_categories;
+pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use schema::tags::dsl::tags;
+            use schema::service_categories::dsl::service_categories;
+            use crate::utils::get_device_and_ajax;
 
+            let _connection = establish_connection();
+            let _service_cats:Vec<ServiceCategories> = service_categories
+                .load(&_connection)
+                .expect("Error");
+
+            let all_tags: Vec<Tag> = tags
+                .load(&_connection)
+                .expect("Error.");
+
+            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/create_service.stpl")]
+                struct Template {
+                    request_user: User,
+                    service_cats: Vec<ServiceCategories>,
+                    all_tags:     Vec<Tag>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    service_cats: _service_cats,
+                    all_tags:     all_tags,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/services/create_service.stpl")]
+                struct Template {
+                    request_user: User,
+                    service_cats: Vec<ServiceCategories>,
+                    all_tags:     Vec<Tag>,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    service_cats: _service_cats,
+                    all_tags:     all_tags,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
+}
+pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use schema::services::dsl::services;
+
+    let _service_id: i32 = *_id;
     let _connection = establish_connection();
-    let form = category_form(payload.borrow_mut()).await;
-    let new_cat = NewServiceCategories {
-        name: form.name.clone(),
-        description: Some(form.description.clone()),
-        position: form.position,
-        image: Some(form.image.clone()),
-        count: 0
-    };
-    let _new_service = diesel::insert_into(service_categories::table)
-        .values(&new_cat)
-        .get_result::<ServiceCategories>(&_connection)
-        .expect("E.");
+    let _services = services.filter(schema::services::id.eq(&_service_id)).load::<Service>(&_connection).expect("E");
+    let _service = _services.into_iter().nth(0).unwrap();
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 && _service.user_id == _request_user.id {
+            use schema::{
+                tags::dsl::tags,
+                service_images::dsl::service_images,
+                service_videos::dsl::service_videos,
+                service_categories::dsl::service_categories,
+            };
+            use crate::utils::get_device_and_ajax;
+
+            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+            let _categories = _service.get_categories();
+            let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
+            let _service_tags = _service.get_tags();
+
+            let _images = service_images.filter(schema::service_images::service.eq(_service.id)).load::<ServiceImage>(&_connection).expect("E");
+            let _videos = service_videos.filter(schema::service_videos::service.eq(_service.id)).load::<ServiceVideo>(&_connection).expect("E");
+
+            let _service_cats:Vec<ServiceCategories> = service_categories
+                .load(&_connection)
+                .expect("Error");
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/edit_service.stpl")]
+                struct Template {
+                    request_user: User,
+                    service:      Service,
+                    is_ajax:      bool,
+                    images:       Vec<ServiceImage>,
+                    videos:       Vec<ServiceVideo>,
+                    tags_list:    Vec<Tag>,
+                    service_cats: Vec<ServiceCategories>,
+
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    service:      _service,
+                    is_ajax:      is_ajax,
+                    images:       _images,
+                    videos:       _videos,
+                    tags_list:    _all_tags,
+                    service_cats: _service_cats,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/services/edit_service.stpl")]
+                struct Template {
+                    request_user: User,
+                    service:      Service,
+                    is_ajax:      bool,
+                    images:       Vec<ServiceImage>,
+                    videos:       Vec<ServiceVideo>,
+                    tags_list:    Vec<Tag>,
+                    service_cats: Vec<ServiceCategories>,
+
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    service:      _service,
+                    is_ajax:      is_ajax,
+                    images:       _images,
+                    videos:       _videos,
+                    tags_list:    _all_tags,
+                    service_cats: _service_cats,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
+}
+
+pub async fn edit_content_service_page(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::schema::services::dsl::services;
+
+    let _service_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _services = services
+        .filter(schema::services::id.eq(&_service_id))
+        .load::<Service>(&_connection)
+        .expect("E");
+
+    let _service = _services.into_iter().nth(0).unwrap();
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 && _request_user.id == _service.user_id {
+            use crate::utils::get_device_and_ajax;
+
+            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/edit_content_service.stpl")]
+                struct Template {
+                    request_user: User,
+                    service:      Service,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    service:      _service,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/services/edit_content_service.stpl")]
+                struct Template {
+                    request_user: User,
+                    service:      Service,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    service:      _service,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
+}
+pub async fn edit_content_service(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+    use crate::schema::services::dsl::services;
+
+    let _service_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _services = services
+        .filter(schema::services::id.eq(&_service_id))
+        .load::<Service>(&_connection)
+        .expect("E");
+
+    let _service = _services.into_iter().nth(0).unwrap();
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 && _request_user.id == _service.user_id {
+            use crate::utils::content_form;
+
+            let form = content_form(payload.borrow_mut()).await;
+            diesel::update(&_service)
+            .set(schema::services::content.eq(form.content.clone()))
+            .get_result::<Service>(&_connection)
+            .expect("E");
+        }
+    }
+    HttpResponse::Ok().body("")
+}
+
+pub async fn edit_service_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use schema::service_categories::dsl::service_categories;
+            use crate::utils::get_device_and_ajax;
+
+            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+            let _cat_id: i32 = *_id;
+            let _connection = establish_connection();
+            let _categorys = service_categories
+                .filter(schema::service_categories::id.eq(&_cat_id))
+                .load::<ServiceCategories>(&_connection)
+                .expect("E");
+
+            let _category = _categorys.into_iter().nth(0).unwrap();
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/edit_category.stpl")]
+                struct Template {
+                    request_user: User,
+                    category:     ServiceCategories,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    category:     _category,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/Services/edit_category.stpl")]
+                struct Template {
+                    request_user: User,
+                    category:     ServiceCategories,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    category:     _category,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
+        }
+    } else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
+    }
+}
+
+pub async fn create_service_categories(session: Session, mut payload: Multipart) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            let _connection = establish_connection();
+            let form = category_form(payload.borrow_mut()).await;
+            let new_cat = NewServiceCategories {
+                name:        form.name.clone(),
+                description: Some(form.description.clone()),
+                position:    form.position,
+                image:       Some(form.image.clone()),
+                count:       0
+            };
+            let _new_service = diesel::insert_into(schema::service_categories::table)
+                .values(&new_cat)
+                .get_result::<ServiceCategories>(&_connection)
+                .expect("E.");
+        }
+    }
     return HttpResponse::Ok();
 }
-pub async fn create_service(mut payload: Multipart) -> impl Responder {
+
+pub async fn create_service(session: Session, mut payload: Multipart) -> impl Responder {
     use crate::schema::tags::dsl::tags;
     use crate::schema::service_categories::dsl::service_categories;
 
-    let _connection = establish_connection();
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            let _connection = establish_connection();
 
-    let form = store_form(payload.borrow_mut()).await;
-    let new_service = NewService::from_service_form(
-        form.title.clone(),
-        form.description.clone(),
-        form.link.clone(),
-        form.main_image.clone(),
-        form.is_active.clone(),
-        1
-    );
+            let form = item_form(payload.borrow_mut()).await;
+            let new_service = NewService::from_service_form (
+                form.title.clone(),
+                form.description.clone(),
+                form.link.clone(),
+                form.main_image.clone(),
+                form.is_active.clone(),
+                _request_user.id,
+            );
 
-    let _service = diesel::insert_into(services::table)
-        .values(&new_service)
-        .get_result::<Service>(&_connection)
-        .expect("Error saving service.");
+            let _service = diesel::insert_into(schema::services::table)
+                .values(&new_service)
+                .get_result::<Service>(&_connection)
+                .expect("E.");
 
-    for image in form.images.iter().enumerate() {
-        let new_image = NewServiceImage::from_service_images_form(
-            _service.id,
-            image.1.to_string()
-        );
-        diesel::insert_into(schema::service_images::table)
-            .values(&new_image)
-            .get_result::<ServiceImage>(&_connection)
-            .expect("Error saving service.");
-        };
-    for video in form.videos.iter().enumerate() {
-        let new_video = NewServiceVideo::from_service_videos_form(
-            _service.id,
-            video.1.to_string()
-        );
-        diesel::insert_into(schema::service_videos::table)
-            .values(&new_video)
-            .get_result::<ServiceVideo>(&_connection)
-            .expect("Error saving service.");
-    };
-    for category_id in form.category_list.iter().enumerate() {
-        let new_category = NewServiceCategory {
-            service_categories_id: *category_id.1,
-            service_id: _service.id
-        };
-        diesel::insert_into(schema::service_category::table)
-            .values(&new_category)
-            .get_result::<ServiceCategory>(&_connection)
-            .expect("Error saving service.");
-        let _category = service_categories.filter(schema::service_categories::id.eq(category_id.1)).load::<ServiceCategories>(&_connection).expect("E");
-        diesel::update(&_category[0])
-            .set(schema::service_categories::count.eq(_category[0].count + 1))
-            .get_result::<ServiceCategories>(&_connection)
-            .expect("Error.");
-    };
-    for tag_id in form.tags_list.iter().enumerate() {
-        let new_tag = NewTagItems{
-            tag_id: *tag_id.1,
-            service_id: _service.id,
-            store_id: 0,
-            blog_id: 0,
-            wiki_id: 0,
-            work_id: 0,
-            created: chrono::Local::now().naive_utc(),
-        };
-        diesel::insert_into(schema::tags_items::table)
-            .values(&new_tag)
-            .get_result::<TagItems>(&_connection)
-            .expect("Error.");
-        let _tag = tags.filter(schema::tags::id.eq(tag_id.1)).load::<Tag>(&_connection).expect("E");
-        diesel::update(&_tag[0])
-            .set((schema::tags::count.eq(_tag[0].count + 1), schema::tags::service_count.eq(_tag[0].service_count + 1)))
-            .get_result::<Tag>(&_connection)
-            .expect("Error.");
-    };
+            for image in form.images.iter() {
+                let new_image = NewServiceImage::from_service_images_form (
+                    _service.id,
+                    image.to_string()
+                );
+                diesel::insert_into(schema::service_images::table)
+                    .values(&new_image)
+                    .get_result::<ServiceImage>(&_connection)
+                    .expect("E.");
+                };
+            for video in form.videos.iter() {
+                let new_video = NewServiceVideo::from_service_videos_form (
+                    _service.id,
+                    video.to_string()
+                );
+                diesel::insert_into(schema::service_videos::table)
+                    .values(&new_video)
+                    .get_result::<ServiceVideo>(&_connection)
+                    .expect("E.");
+            };
+            for category_id in form.category_list.iter() {
+                let new_category = NewServiceCategory {
+                    service_categories_id: *category_id,
+                    service_id: _service.id
+                };
+                diesel::insert_into(schema::service_category::table)
+                    .values(&new_category)
+                    .get_result::<ServiceCategory>(&_connection)
+                    .expect("E.");
 
-    for serve_id in form.serve_list.iter().enumerate() {
-        let new_serve = NewServeItems{
-            serve_id: *serve_id.1,
-            service_id: _service.id,
-            store_id: 0,
-            work_id: 0,
-        };
-        diesel::insert_into(schema::serve_items::table)
-            .values(&new_serve)
-            .get_result::<ServeItems>(&_connection)
-            .expect("Error.");
+                let _category = service_categories.filter(schema::service_categories::id.eq(category_id)).load::<ServiceCategories>(&_connection).expect("E");
+                diesel::update(&_category[0])
+                    .set(schema::service_categories::count.eq(_category[0].count + 1))
+                    .get_result::<ServiceCategories>(&_connection)
+                    .expect("Error.");
+            };
+            for tag_id in form.tags_list.iter() {
+                let new_tag = NewTagItems {
+                    tag_id: *tag_id,
+                    service_id: _service.id,
+                    store_id: 0,
+                    blog_id: 0,
+                    wiki_id: 0,
+                    work_id: 0,
+                    created: chrono::Local::now().naive_utc(),
+                };
+                diesel::insert_into(schema::tags_items::table)
+                    .values(&new_tag)
+                    .get_result::<TagItems>(&_connection)
+                    .expect("Error.");
+
+                let _tag = tags.filter(schema::tags::id.eq(tag_id)).load::<Tag>(&_connection).expect("E");
+                diesel::update(&_tag[0])
+                    .set((schema::tags::count.eq(_tag[0].count + 1), schema::tags::service_count.eq(_tag[0].service_count + 1)))
+                    .get_result::<Tag>(&_connection)
+                    .expect("Error.");
+            }
+        }
     };
     HttpResponse::Ok()
 }
 
-pub async fn get_service_page(req: HttpRequest, param: web::Path<(i32,i32)>) -> impl Responder {
+pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+    use crate::models::EditService;
+    use crate::schema::services::dsl::services;
+    use crate::schema::tags::dsl::tags;
+    use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::service_images::dsl::service_images;
+    use crate::schema::service_videos::dsl::service_videos;
+    use crate::schema::service_category::dsl::service_category;
+    use crate::schema::service_categories::dsl::service_categories;
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            let _connection = establish_connection();
+            let _service_id: i32 = *_id;
+            let _services = services
+                .filter(schema::services::id.eq(_service_id))
+                .load::<Service>(&_connection)
+                .expect("E");
+
+            let _service = _services.into_iter().nth(0).unwrap();
+
+            let _categories = _service.get_categories();
+            let _tags = _service.get_tags();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::service_categories::count.eq(_category.count - 1))
+                    .get_result::<ServiceCategories>(&_connection)
+                    .expect("Error.");
+            };
+            for _tag in _tags.iter() {
+                diesel::update(_tag)
+                .set((schema::tags::count.eq(_tag.count - 1), schema::tags::service_count.eq(_tag.service_count - 1)))
+                .get_result::<Tag>(&_connection)
+                .expect("Error.");
+            };
+
+            diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(service_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
+
+            let form = item_form(payload.borrow_mut()).await;
+            let _new_service = EditService {
+                title:       form.title.clone(),
+                description: Some(form.description.clone()),
+                link:        Some(form.link.clone()),
+                image:       Some(form.main_image.clone()),
+                is_active:   form.is_active.clone()
+            };
+
+            diesel::update(&_service)
+            .set(_new_service)
+            .get_result::<Service>(&_connection)
+            .expect("E");
+
+            for _image in form.images.iter() {
+                let new_edit_image = NewServiceImage::from_service_images_form (
+                    _service_id,
+                    _image.to_string()
+                );
+                diesel::insert_into(schema::service_images::table)
+                .values(&new_edit_image)
+                .get_result::<ServiceImage>(&_connection)
+                .expect("E.");
+            };
+            for _video in form.videos.iter() {
+                let new_video = NewServiceVideo::from_service_videos_form (
+                    _service_id,
+                    _video.to_string()
+                );
+                diesel::insert_into(schema::service_videos::table)
+                .values(&new_video)
+                .get_result::<ServiceVideo>(&_connection)
+                .expect("E.");
+            };
+            for category_id in form.category_list.iter() {
+                let new_category = NewServiceCategory {
+                    service_categories_id: *category_id,
+                    service_id:            _service_id
+                };
+                diesel::insert_into(schema::service_category::table)
+                .values(&new_category)
+                .get_result::<ServiceCategory>(&_connection)
+                .expect("E.");
+
+                let _category_2 = service_categories.filter(schema::service_categories::id.eq(category_id)).load::<ServiceCategories>(&_connection).expect("E");
+                diesel::update(&_category_2[0])
+                    .set(schema::service_categories::count.eq(_category_2[0].count + 1))
+                    .get_result::<ServiceCategories>(&_connection)
+                    .expect("Error.");
+            };
+            for _tag_id in form.tags_list.iter() {
+                let _new_tag = NewTagItems {
+                    tag_id:     *_tag_id,
+                    service_id: _service_id,
+                    store_id:   0,
+                    blog_id:    0,
+                    wiki_id:    0,
+                    work_id:    0,
+                    created:    chrono::Local::now().naive_utc(),
+                };
+                diesel::insert_into(schema::tags_items::table)
+                    .values(&_new_tag)
+                    .get_result::<TagItems>(&_connection)
+                    .expect("Error.");
+                let _tag_2 = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
+                diesel::update(&_tag_2[0])
+                    .set((schema::tags::count.eq(_tag_2[0].count + 1), schema::tags::service_count.eq(_tag_2[0].service_count + 1)))
+                    .get_result::<Tag>(&_connection)
+                    .expect("Error.");
+            };
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn edit_service_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+    use crate::models::EditServiceCategories;
+    use crate::schema::service_categories::dsl::service_categories;
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            let _connection = establish_connection();
+            let _cat_id: i32 = *_id;
+            let _category = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");
+
+            let form = category_form(payload.borrow_mut()).await;
+            let _new_cat = EditServiceCategories {
+                name:        form.name.clone(),
+                description: Some(form.description.clone()),
+                position:    form.position,
+                image:       Some(form.image.clone()),
+                count:       _category[0].count,
+            };
+
+            diesel::update(&_category[0])
+                .set(_new_cat)
+                .get_result::<ServiceCategories>(&_connection)
+                .expect("E");
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn delete_service(session: Session, _id: web::Path<i32>) -> impl Responder {
+    use crate::schema::services::dsl::services;
+    use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::service_category::dsl::service_category;
+    use crate::schema::service_videos::dsl::service_videos;
+    use crate::schema::service_images::dsl::service_images;
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            let _connection = establish_connection();
+            let _service_id: i32 = *_id;
+            let _services = services.filter(schema::services::id.eq(_service_id)).load::<Service>(&_connection).expect("E");
+
+            let _service = _services.into_iter().nth(0).unwrap();
+            let _categories = _service.get_categories();
+            let _tags = _service.get_tags();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                .set(schema::service_categories::count.eq(_category.count - 1))
+                .get_result::<ServiceCategories>(&_connection)
+                .expect("Error.");
+            };
+            for _tag in _tags.iter() {
+                diesel::update(_tag)
+                .set((schema::tags::count.eq(_tag.count - 1), schema::tags::service_count.eq(_tag.service_count - 1)))
+                .get_result::<Tag>(&_connection)
+                .expect("Error.");
+            };
+
+            diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(&_bservice).execute(&_connection).expect("E");
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn delete_service_category(session: Session, _id: web::Path<i32>) -> impl Responder {
+    use crate::schema::service_categories::dsl::service_categories;
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            let _connection = establish_connection();
+            let _cat_id: i32 = *_id;
+            let _category = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");
+            diesel::delete(service_categories.filter(schema::service_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
     use schema::services::dsl::services;
+    use schema::service_categories::dsl::service_categories;
     use schema::service_images::dsl::service_images;
     use schema::service_videos::dsl::service_videos;
-    use schema::service_categories::dsl::service_categories;
-    use crate::schema::{
-        serve::dsl::serve,
-        serve_categories::dsl::serve_categories,
-        tech_categories::dsl::tech_categories,
-    };
+    use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let _service_id : i32 = param.1;
-    let _cat_id : i32 = param.0;
-    let mut default_price : i32 = 0;
+    let _service_id: i32 = param.1;
+    let _cat_id: i32 = param.0;
 
-    let _service = services
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    let _services = services
         .filter(schema::services::id.eq(&_service_id))
         .load::<Service>(&_connection)
         .expect("E");
-    let _s_category = service_categories
+
+    let _service = _services.into_iter().nth(0).unwrap();
+
+    let _categorys = service_categories
         .filter(schema::service_categories::id.eq(&_cat_id))
         .load::<ServiceCategories>(&_connection)
         .expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
 
-    let mut data = Context::new();
+    let _images: Vec<ServiceImage> = service_images.filter(schema::service_images::service.eq(&_service_id)).load(&_connection).expect("E");
+    let _videos: Vec<ServiceVideo> = service_videos.filter(schema::service_videos::service.eq(&_service_id)).load(&_connection).expect("E");
+    let _categories = _service.get_categories();
+    let _tags = _service.get_tags();
+    let _tags_count = _tags.len();
 
-    let _category_services = get_service_for_category(&_s_category[0]);
+    let mut prev: Option<i32> = None;
+    let mut next: Option<i32> = None;
+
+    let _category_services = _category.get_services_ids();
     let _category_services_len: usize = _category_services.len();
     for (i, item) in _category_services.iter().enumerate().rev() {
-        if item.id == _service_id {
+        if item == &_service_id {
             if (i + 1) != _category_services_len {
-                let _prev = Some(&_category_services[i + 1]);
-                data.insert("prev", &_prev);
+                prev = Some(_category_services[i + 1]);
             };
             if i != 0 {
-                let _next = Some(&_category_services[i - 1]);
-                data.insert("next", &_next);
+                next = Some(_category_services[i - 1]);
             };
             break;
         }
     };
 
-    let _images: Vec<ServiceImage> = service_images
-        .filter(schema::service_images::service.eq(&_service_id))
-        .load(&_connection)
-        .expect("E");
-    let _videos: Vec<ServiceVideo> = service_videos
-        .filter(schema::service_videos::service.eq(&_service_id))
-        .load(&_connection)
-        .expect("E");
-    let (_categories, _categories_names) = get_cats_for_service(&_service[0]);
-    let _tags = get_tags_for_service(&_service[0]);
-
-    // нам надо показать выбор опций только в нужном диапазоне.
-    // поэтому мы по выбранным для объекта сервиса опциям получаем
-    // категории опций, а уже по тем - тех. категории.
-    // ИТАК: 1. получаем опции
-    let __serves = get_serves_for_service(&_service[0]);
-    // 2. получаем категории опций, исключая дубли.
-    let mut serve_categories_ids = Vec::new();
-    let mut serve_ids = Vec::new();
-    let mut default_serve_ids = Vec::new();
-
-    for _serve in __serves.iter() {
-        serve_ids.push(_serve.id);
-        if serve_categories_ids.iter().any(|&i| i==_serve.serve_categories) {
-            continue;
-        } else {
-            serve_categories_ids.push(_serve.serve_categories);
-        }
-    };
-    let __serve_categories = serve_categories
-        .filter(schema::serve_categories::id.eq_any(&serve_categories_ids))
-        .load::<ServeCategories>(&_connection)
-        .expect("E");
-
-    // 3. получаем технические категории, исключая дубли
-    let mut tech_categories_ids = Vec::new();
-
-    // сначала добавим категорию технологий по умолчанию
-    for _serve_cat in __serve_categories.iter() {
-        if _categories_names.iter().any(|i| i.to_string()==_serve_cat.cat_name) {
-            tech_categories_ids.push(_serve_cat.tech_categories);
-             // получим ids опций по умолчанию
-             if tech_categories_ids.len() == 1 {
-                 let _current_serves = serve
-                     .filter(schema::serve::serve_categories.eq(&_serve_cat.id))
-                     .load::<Serve>(&_connection)
-                     .expect("E");
-                 for _s in _current_serves {
-                     if _s.is_default {
-                         default_serve_ids.push(_s.id);
-                     }
-                 }
-             }
-        }
-    };
-    // теперь добавим остальные категории технологий
-    for _serve_cat in __serve_categories.iter() {
-        if tech_categories_ids.iter().any(|&i2| i2==_serve_cat.tech_categories) {
-            continue;
-        } else {
-            tech_categories_ids.push(_serve_cat.tech_categories);
-        }
-    };
-    let __tech_categories = tech_categories
-        .filter(schema::tech_categories::id.eq_any(&tech_categories_ids))
-        .load::<TechCategories>(&_connection)
-        .expect("E");
-
-    // 3. генерируем переменные для шаблона, которые будут хранить наши объекты опций
-    let mut _count: i32 = 0;
-
-    for _cat in __tech_categories.iter() {
-        let mut _serve_count: i32 = 0;
-        _count += 1;
-        let mut _let_int : String = _count.to_string().parse().unwrap();
-        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
-        let _serve_categories = serve_categories
-            .filter(schema::serve_categories::tech_categories.eq(_cat.id))
-            .filter(schema::serve_categories::id.eq_any(&serve_categories_ids))
-            //.order(schema::serve_categories::id.asc())
-            .load::<ServeCategories>(&_connection)
-            .expect("E.");
-        data.insert(&_let_serve_categories, &_serve_categories);
-        if _count == 1 {
-            default_price = _serve_categories[0].default_price;
-        }
-
-        for __cat in __serve_categories.iter() {
-            if __cat.tech_categories == _cat.id {
-                _serve_count += 1;
-                let _serve_int_dooble = "_".to_string() + &_cat.position.to_string();
-                let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_count.to_string();
-                let _serve_list = serve
-                    .filter(schema::serve::serve_categories.eq(__cat.id))
-                    .filter(schema::serve::id.eq_any(&serve_ids))
-                    .order(schema::serve::is_default.desc())
-                    .load::<Serve>(&_connection)
-                    .expect("E.");
-                data.insert(&_let_serves, &_serve_list);
-
-                //println!("===================");
-                //println!("_let_serves {:?}", _let_serves);
-                //println!("-------------------");
-                //for i in _serve_list.iter() {
-                //    println!("название опции {:?}", i.name);
-                //    println!("категория {:?}", i.cat_name);
-                //    println!("id {:?}", i.id);
-                //}
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/services/service.stpl")]
+            struct Template {
+                request_user: User,
+                object:       Service,
+                images:       Vec<ServiceImage>,
+                videos:       Vec<ServiceVideo>,
+                categories:   Vec<ServiceCategories>,
+                category:     ServiceCategories,
+                all_tags:     Vec<Tag>,
+                tags_count:   usize,
+                prev:         Option<i32>,
+                next:         Option<i32>,
+                is_ajax:      bool,
             }
+            let body = Template {
+                request_user: _request_user,
+                object:     _service,
+                images:     _images,
+                videos:     _videos,
+                categories: _categories,
+                category:   _category,
+                all_tags:   _tags,
+                tags_count: _tags_count,
+                prev:       prev,
+                next:       next,
+                is_ajax:    is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-    };
-
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("tech_categories", &__tech_categories);
-    data.insert("object", &_service[0]);
-    data.insert("images", &_images);
-    data.insert("videos", &_videos);
-    data.insert("categories", &_categories);
-    data.insert("service_categories_names", &_categories_names);
-    data.insert("category", &_s_category[0]);
-    data.insert("tags", &_tags);
-    data.insert("tags_count", &_tags.len());
-    data.insert("is_admin", &_is_admin);
-    data.insert("default_price", &default_price);
-    data.insert("default_servelist", &default_serve_ids);
-
-    let _template = _type + &"services/service.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/services/service.stpl")]
+            struct Template {
+                request_user: User,
+                object:       Service,
+                images:       Vec<ServiceImage>,
+                videos:       Vec<ServiceVideo>,
+                categories:   Vec<ServiceCategories>,
+                category:     ServiceCategories,
+                all_tags:     Vec<Tag>,
+                tags_count:   usize,
+                prev:         Option<i32>,
+                next:         Option<i32>,
+                is_ajax:      bool,
+            }
+            let body = Template {
+                request_user: _request_user,
+                object:     _service,
+                images:     _images,
+                videos:     _videos,
+                categories: _categories,
+                category:   _category,
+                all_tags:   _tags,
+                tags_count: _tags_count,
+                prev:       prev,
+                next:       next,
+                is_ajax:    is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/services/anon_service.stpl")]
+            struct Template {
+                object:     Service,
+                images:     Vec<ServiceImage>,
+                videos:     Vec<ServiceVideo>,
+                categories: Vec<ServiceCategories>,
+                category:   ServiceCategories,
+                all_tags:   Vec<Tag>,
+                tags_count: usize,
+                prev:       Option<i32>,
+                next:       Option<i32>,
+                is_ajax:    bool,
+            }
+            let body = Template {
+                object:     _service,
+                images:     _images,
+                videos:     _videos,
+                categories: _categories,
+                category:   _category,
+                all_tags:   _tags,
+                tags_count: _tags_count,
+                prev:       prev,
+                next:       next,
+                is_ajax:    is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/services/service.stpl")]
+            struct Template {
+                object:     Service,
+                images:     Vec<ServiceImage>,
+                videos:     Vec<ServiceVideo>,
+                categories: Vec<ServiceCategories>,
+                category:   ServiceCategories,
+                all_tags:   Vec<Tag>,
+                tags_count: usize,
+                prev:       Option<i32>,
+                next:       Option<i32>,
+                is_ajax:    bool,
+            }
+            let body = Template {
+                object:     _service,
+                images:     _images,
+                videos:     _videos,
+                categories: _categories,
+                category:   _category,
+                all_tags:   _tags,
+                tags_count: _tags_count,
+                prev:       prev,
+                next:       next,
+                is_ajax:    is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
-pub async fn service_category_page(req: HttpRequest, id: web::Path<i32>) -> impl Responder {
-    use schema::service_categories::dsl::service_categories;
+pub async fn service_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::schema::service_categories::dsl::service_categories;
     use crate::schema::tags_items::dsl::tags_items;
+    use crate::utils::get_device_and_page_and_ajax;
 
-    let mut data = Context::new();
-    let page_size = 20;
-    let mut offset = 0;
-
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
+    let _cat_id: i32 = *_id;
     let _connection = establish_connection();
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
-    let _category = service_categories.filter(schema::service_categories::id.eq(*id)).load::<ServiceCategories>(&_connection).expect("E");
-    loop {
-        let ids = ServiceCategory::belonging_to(&_category).select(schema::service_category::service_id);
-        let _services = schema::services::table
-        .filter(schema::services::id.eq_any(ids))
-        .limit(page_size)
-        .offset(offset)
-        .order(schema::services::created.desc())
-        .load::<Service>(&_connection)
-        .expect("could not load tags");
-        if _services.len() > 0 {
-            data.insert("services", &_services);
-            offset += page_size;
-        }
-        else {break;}
-    };
+    let _categorys = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
+    let (object_list, next_page_number) = _category.get_blogs_list(page, 20);
 
     let mut stack = Vec::new();
     let _tag_items = tags_items
         .filter(schema::tags_items::service_id.ne(0))
-        .load::<TagItems>(&_connection)
+        .select(schema::tags_items::tag_id)
+        .load::<i32>(&_connection)
         .expect("E");
     for _tag_item in _tag_items.iter() {
-        if stack.iter().any(|&i| i==_tag_item.tag_id) {
-            continue;
-        } else {
-            stack.push(_tag_item.tag_id);
+        if !stack.iter().any(|&i| i==_tag_item) {
+            stack.push(_tag_item);
         }
     };
     let _tags = schema::tags::table
+        .filter(schema::tags::id.eq_any(stack))
+        .load::<Tag>(&_connection)
+        .expect("E");
+
+    let tags_count = _tags.len();
+
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/services/category.stpl")]
+            struct Template {
+                request_user:     User,
+                all_tags:         Vec<Tag>,
+                tags_count:       usize,
+                category:         ServiceCategories,
+                object_list:      Vec<Service>,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                all_tags:         _tags,
+                tags_count:       tags_count,
+                category:        _category,
+                object_list:      object_list,
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/services/category.stpl")]
+            struct Template {
+                request_user:     User,
+                all_tags:         Vec<Tag>,
+                tags_count:       usize,
+                category:         ServiceCategories,
+                object_list:      Vec<Service>,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                request_user:     _request_user,
+                all_tags:         _tags,
+                tags_count:       tags_count,
+                category:        _category,
+                object_list:      object_list,
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/services/anon_category.stpl")]
+            struct Template {
+                all_tags:         Vec<Tag>,
+                tags_count:       usize,
+                category:         ServiceCategories,
+                object_list:      Vec<Service>,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                all_tags:         _tags,
+                tags_count:       tags_count,
+                category:        _category,
+                object_list:      object_list,
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/services/anon_category.stpl")]
+            struct Template {
+                all_tags:         Vec<Tag>,
+                tags_count:       usize,
+                category:         ServiceCategories,
+                object_list:      Vec<Service>,
+                next_page_number: i32,
+                is_ajax:          bool,
+            }
+            let body = Template {
+                all_tags:         _tags,
+                tags_count:       tags_count,
+                category:        _category,
+                object_list:      object_list,
+                next_page_number: next_page_number,
+                is_ajax:          is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+}
+
+pub async fn service_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::tags::dsl::tags;
+    use crate::schema::service_categories::dsl::service_categories;
+    use crate::utils::get_device_and_ajax;
+
+    let _connection = establish_connection();
+    let mut stack = Vec::new();
+
+    let _tag_items = tags_items
+        .filter(schema::tags_items::service_id.ne(0))
+        .select(schema::tags_items::tag_id)
+        .load::<i32>(&_connection)
+        .expect("E");
+
+    for _tag_item in _tag_items.iter() {
+        if !stack.iter().any(|&i| i==_tag_item) {
+            stack.push(_tag_item);
+        }
+    };
+    let _tags = tags
         .filter(schema::tags::id.eq_any(stack))
         .load::<Tag>(&_connection)
         .expect("could not load tags");
 
-    data.insert("tags", &_tags);
-    data.insert("tags_count", &_tags.len());
-
-    data.insert("category", &_category[0]);
-
-    let _template = _type + &"services/category.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
-}
-
-pub async fn service_categories_page(req: HttpRequest) -> impl Responder {
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::services::dsl::services;
-
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    let _connection = establish_connection();
-    let mut data = Context::new();
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-
-    let _services = services.filter(schema::services::is_active.eq(true)).load::<Service>(&_connection).expect("E");
-    let mut _count: i32 = 0;
-    for _cat in _service_cats.iter() {
-        _count += 1;
-        // для генерации переменной 1 2 3
-        let mut _let_int : String = _count.to_string().parse().unwrap();
-        let _let_data_services: String = "services".to_string() + &_let_int;
-        data.insert(&_let_data_services, &get_6_service_for_category(_cat));
-    };
-
-
-    let mut stack = Vec::new();
-    for service in _services.iter() {
-        let _tag_items = tags_items
-            .filter(schema::tags_items::service_id.eq(service.id))
-            .load::<TagItems>(&_connection)
-            .expect("E");
-        for _tag_item in _tag_items.iter() {
-            if stack.iter().any(|&i| i==_tag_item.tag_id) {
-                continue;
-            } else {
-                stack.push(_tag_item.tag_id);
-            }
-        };
-    };
-    let _tags = schema::tags::table
-        .filter(schema::tags::id.eq_any(stack))
-        .load::<Tag>(&_connection)
-        .expect("E");
-
-    data.insert("tags", &_tags);
-    data.insert("tags_count", &_tags.len());
-    let _template = _type + &"services/categories.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
-}
-
-pub async fn edit_service_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use schema::serve::dsl::serve;
-    use schema::services::dsl::services;
-    use schema::serve_categories::dsl::serve_categories;
-    use schema::tech_categories::dsl::tech_categories;
-    use crate::schema::service_images::dsl::service_images;
-    use crate::schema::service_videos::dsl::service_videos;
-
-    let _service_id : i32 = *_id;
-    let mut data = Context::new();
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-    let _connection = establish_connection();
-    let _service = services
-        .filter(schema::services::id.eq(&_service_id))
-        .load::<Service>(&_connection)
-        .expect("E");
-
-    let _categories = get_cats_for_service(&_service[0]).0;
-    let _all_tags :Vec<Tag> = tags.load(&_connection).expect("Error.");
-    let _service_tags = get_tags_for_service(&_service[0]);
-    let _serve_list = get_serves_for_service(&_service[0]);
-
-    let _images = service_images
-        .filter(schema::service_images::service.eq(_service[0].id))
-        .load::<ServiceImage>(&_connection)
-        .expect("E");
-    let _videos = service_videos
-        .filter(schema::service_videos::service.eq(_service[0].id))
-        .load::<ServiceVideo>(&_connection)
-        .expect("E");
-
-    let all_tech_categories: Vec<TechCategories> = tech_categories
+    let _service_cats :Vec<ServiceCategories> = service_categories
         .load(&_connection)
-        .expect("E.");
+        .expect("Error");
 
-    // генерация переменных шаблона, хранящих: категории опций и опции.
-    let mut _count: i32 = 0;
-    for _cat in all_tech_categories.iter() {
-        _count += 1;
-        let mut _let_int : String = _count.to_string().parse().unwrap();
-        let _let_serve_categories: String = "serve_categories".to_string() + &_let_int;
-        let __serve_categories: Vec<ServeCategories> = serve_categories
-            .filter(schema::serve_categories::tech_categories.eq(_cat.id))
-            .load(&_connection)
-            .expect("E.");
-        data.insert(&_let_serve_categories, &__serve_categories);
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-        let mut _serve_count: i32 = 0;
-        for __cat in __serve_categories.iter() {
-            _serve_count += 1;
-            let mut _serve_int : String = _serve_count.to_string().parse().unwrap();
-            let _serve_int_dooble = "_".to_string() + &_let_int;
-            let _let_serves: String = _serve_int_dooble.to_owned() + &"serves".to_string() + &_serve_int;
-            let __serves :Vec<Serve> = serve.filter(schema::serve::serve_categories.eq(__cat.id)).load(&_connection).expect("E.");
-            data.insert(&_let_serves, &__serves);
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/services/categories.stpl")]
+            struct Template {
+                request_user: User,
+                is_ajax:      bool,
+                service_cats: Vec<ServiceCategories>,
+                all_tags:     Vec<Tag>,
+            }
+            let body = Template {
+                request_user: _request_user,
+                is_ajax:      is_ajax,
+                service_cats: _blog_cats,
+                all_tags:     _tags,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-    };
-
-    data.insert("tech_categories", &all_tech_categories);
-    data.insert("service", &_service[0]);
-    data.insert("service_tags", &_service_tags);
-    data.insert("all_tags", &_all_tags);
-    data.insert("categories", &_categories);
-    data.insert("serve_list", &_serve_list);
-    data.insert("images", &_images);
-    data.insert("videos", &_videos);
-
-    let _template = _type + &"services/edit_service.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
-}
-
-use serde::Deserialize;
-#[derive(Debug, Deserialize)]
-pub struct ServiceParams {
-    content: String,
-}
-pub async fn edit_content_service_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use schema::services::dsl::services;
-
-    let _service_id : i32 = *_id;
-    let _connection = establish_connection();
-    let _service = services
-        .filter(schema::services::id.eq(&_service_id))
-        .load::<Service>(&_connection)
-        .expect("E");
-
-    let params = web::Query::<ServiceParams>::from_query(&req.query_string()).unwrap();
-    if params.content.clone() != "".to_string() {
-        diesel::update(&_service[0])
-            .set(schema::services::content.eq(&params.content.clone()))
-            .get_result::<Service>(&_connection)
-            .expect("E.");
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/services/categories.stpl")]
+            struct Template {
+                request_user: User,
+                is_ajax:      bool,
+                service_cats: Vec<ServiceCategories>,
+                all_tags:     Vec<Tag>,
+            }
+            let body = Template {
+                request_user: _request_user,
+                is_ajax:      is_ajax,
+                service_cats: _service_cats,
+                all_tags:     _tags,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
     }
-
-    let mut data = Context::new();
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-    data.insert("service", &_service[0]);
-
-    let _template = _type + &"services/edit_content_service.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
-}
-
-pub async fn edit_service_category_page(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use schema::service_categories::dsl::service_categories;
-
-    let _cat_id: i32 = *_id;
-    let mut data = Context::new();
-    let (_type, _is_admin, _service_cats, _store_cats, _blog_cats, _wiki_cats, _work_cats) = get_template_2(req);
-    data.insert("service_categories", &_service_cats);
-    data.insert("store_categories", &_store_cats);
-    data.insert("blog_categories", &_blog_cats);
-    data.insert("wiki_categories", &_wiki_cats);
-    data.insert("work_categories", &_work_cats);
-    data.insert("is_admin", &_is_admin);
-    let _connection = establish_connection();
-    let _category = service_categories
-        .filter(schema::service_categories::id.eq(&_cat_id))
-        .load::<ServiceCategories>(&_connection)
-        .expect("E");
-
-    data.insert("category", &_category[0]);
-    let _template = _type + &"services/edit_category.html".to_string();
-    let _rendered = TEMPLATES.render(&_template, &data).unwrap();
-    HttpResponse::Ok().body(_rendered)
-}
-
-
-pub async fn edit_service(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::EditService;
-    use crate::schema::services::dsl::services;
-    use crate::schema::service_category::dsl::service_category;
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::service_videos::dsl::service_videos;
-    use crate::schema::service_images::dsl::service_images;
-    use crate::schema::service_categories::dsl::service_categories;
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::serve_items::dsl::serve_items;
-
-    let _connection = establish_connection();
-    let _service_id : i32 = *_id;
-    let _service = services
-        .filter(schema::services::id.eq(_service_id))
-        .load::<Service>(&_connection)
-        .expect("E");
-
-    let _categories = get_cats_for_service(&_service[0]).0;
-    let _tags = get_tags_for_service(&_service[0]);
-    for _category in _categories.iter() {
-        diesel::update(_category)
-            .set(schema::service_categories::count.eq(_category.count - 1))
-            .get_result::<ServiceCategories>(&_connection)
-            .expect("Error.");
-    };
-    for _tag in _tags.iter() {
-        diesel::update(_tag)
-            .set((schema::tags::count.eq(_tag.count - 1), schema::tags::service_count.eq(_tag.service_count - 1)))
-            .get_result::<Tag>(&_connection)
-            .expect("Error.");
-    };
-
-    diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
-    diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
-    diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
-    diesel::delete(serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
-    diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
-
-    let form = store_form(payload.borrow_mut()).await;
-    let _new_service = EditService {
-        title: form.title.clone(),
-        description: Some(form.description.clone()),
-        link: Some(form.link.clone()),
-        image: Some(form.main_image.clone()),
-        is_active: form.is_active.clone()
-    };
-
-    diesel::update(&_service[0])
-        .set(_new_service)
-        .get_result::<Service>(&_connection)
-        .expect("E");
-
-    for _image in form.images.iter().enumerate() {
-        let new_edit_image = NewServiceImage::from_service_images_form (
-            _service_id,
-            _image.1.to_string()
-        );
-        diesel::insert_into(schema::service_images::table)
-            .values(&new_edit_image)
-            .get_result::<ServiceImage>(&_connection)
-            .expect("E.");
-        };
-    for _video in form.videos.iter().enumerate() {
-        let new_video = NewServiceVideo::from_service_videos_form (
-            _service_id,
-            _video.1.to_string()
-        );
-        diesel::insert_into(schema::service_videos::table)
-            .values(&new_video)
-            .get_result::<ServiceVideo>(&_connection)
-            .expect("E.");
-    };
-    for category_id in form.category_list.iter().enumerate() {
-        let new_category = NewServiceCategory {
-            service_categories_id: *category_id.1,
-            service_id: _service_id
-        };
-        diesel::insert_into(schema::service_category::table)
-            .values(&new_category)
-            .get_result::<ServiceCategory>(&_connection)
-            .expect("E.");
-        let _category_2 = service_categories.filter(schema::service_categories::id.eq(category_id.1)).load::<ServiceCategories>(&_connection).expect("E");
-        diesel::update(&_category_2[0])
-            .set(schema::service_categories::count.eq(_category_2[0].count + 1))
-            .get_result::<ServiceCategories>(&_connection)
-            .expect("Error.");
-    };
-    for _tag_id in form.tags_list.iter().enumerate() {
-        let _new_tag = NewTagItems{
-            tag_id: *_tag_id.1,
-            service_id: _service_id,
-            store_id: 0,
-            blog_id: 0,
-            wiki_id: 0,
-            work_id: 0,
-            created: chrono::Local::now().naive_utc(),
-        };
-        diesel::insert_into(schema::tags_items::table)
-            .values(&_new_tag)
-            .get_result::<TagItems>(&_connection)
-            .expect("Error.");
-        let _tag_2 = tags.filter(schema::tags::id.eq(_tag_id.1)).load::<Tag>(&_connection).expect("E");
-        diesel::update(&_tag_2[0])
-            .set((schema::tags::count.eq(_tag_2[0].count + 1), schema::tags::service_count.eq(_tag_2[0].service_count + 1)))
-            .get_result::<Tag>(&_connection)
-            .expect("Error.");
-    };
-    for _serve_id in form.serve_list.iter().enumerate() {
-        let _new_serve = NewServeItems{
-            serve_id: *_serve_id.1,
-            service_id: _service_id,
-            store_id: 0,
-            work_id: 0,
-        };
-        diesel::insert_into(schema::serve_items::table)
-            .values(&_new_serve)
-            .get_result::<ServeItems>(&_connection)
-            .expect("Error.");
-    };
-    HttpResponse::Ok()
-}
-
-pub async fn edit_service_category(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::EditServiceCategories;
-    use crate::schema::service_categories::dsl::service_categories;
-
-    let _connection = establish_connection();
-    let _cat_id: i32 = *_id;
-    let _category = service_categories
-        .filter(schema::service_categories::id.eq(_cat_id))
-        .load::<ServiceCategories>(&_connection)
-        .expect("E");
-
-    let form = category_form(payload.borrow_mut()).await;
-    let _new_cat = EditServiceCategories {
-        name: form.name.clone(),
-        description: Some(form.description.clone()),
-        position: form.position,
-        image: Some(form.image.clone()),
-        count: _category[0].count,
-    };
-
-    diesel::update(&_category[0])
-        .set(_new_cat)
-        .get_result::<ServiceCategories>(&_connection)
-        .expect("E");
-    HttpResponse::Ok()
-}
-
-
-pub async fn delete_service(_id: web::Path<i32>) -> impl Responder {
-    use crate::schema::services::dsl::services;
-    use crate::schema::service_category::dsl::service_category;
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::serve_items::dsl::serve_items;
-    use crate::schema::service_videos::dsl::service_videos;
-    use crate::schema::service_images::dsl::service_images;
-
-    let _connection = establish_connection();
-    let _service_id: i32 = *_id;
-    let _service = services
-        .filter(schema::services::id.eq(_service_id))
-        .load::<Service>(&_connection)
-        .expect("E");
-
-    let _categories = get_cats_for_service(&_service[0]).0;
-    let _tags = get_tags_for_service(&_service[0]);
-    for _category in _categories.iter() {
-        diesel::update(_category)
-            .set(schema::service_categories::count.eq(_category.count - 1))
-            .get_result::<ServiceCategories>(&_connection)
-            .expect("Error.");
-    };
-    for _tag in _tags.iter() {
-        diesel::update(_tag)
-            .set((schema::tags::count.eq(_tag.count - 1), schema::tags::service_count.eq(_tag.service_count - 1)))
-            .get_result::<Tag>(&_connection)
-            .expect("Error.");
-    };
-
-    diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
-    diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
-    diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
-    diesel::delete(serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
-    diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
-    diesel::delete(&_service[0]).execute(&_connection).expect("E");
-    HttpResponse::Ok()
-}
-pub async fn delete_service_category(_id: web::Path<i32>) -> impl Responder {
-    use crate::schema::service_categories::dsl::service_categories;
-
-    let _connection = establish_connection();
-    let _cat_id: i32 = *_id;
-    let _category = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");
-    diesel::delete(service_categories.filter(schema::service_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
-    HttpResponse::Ok()
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/services/anon_categories.stpl")]
+            struct Template {
+                is_ajax:      bool,
+                service_cats: Vec<ServiceCategories>,
+                all_tags:     Vec<Tag>,
+            }
+            let body = Template {
+                is_ajax:      is_ajax,
+                service_cats: _service_cats,
+                all_tags:     _tags,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/services/anon_categories.stpl")]
+            struct Template {
+                is_ajax:      bool,
+                service_cats: Vec<ServiceCategories>,
+                all_tags:     Vec<Tag>,
+            }
+            let body = Template {
+                is_ajax:      is_ajax,
+                service_cats: _service_cats,
+                all_tags:     _tags,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }

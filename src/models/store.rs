@@ -30,6 +30,16 @@ pub struct StoreCategories {
     pub count:       i32,
 }
 impl StoreCategories {
+    pub fn get_stores_ids(&self) -> Vec<i32> {
+        use crate::schema::store_category::dsl::store_category;
+
+        let _connection = establish_connection();
+        return store_category
+            .filter(schema::store_category::store_categories_id.eq(self.id))
+            .select(schema::store_category::store_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+    }
     pub fn get_stores_list(&self, page: i32, limit: i32) -> (Vec<Store>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
