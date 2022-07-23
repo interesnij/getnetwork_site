@@ -6,7 +6,7 @@ use actix_web::{
     error::InternalError,
     http::StatusCode,
 };
-use actix_multipart::{Field, Multipart};
+use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use crate::utils::{
     item_form,
@@ -208,7 +208,6 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                 blog_categories::dsl::blog_categories,
             };
             use crate::utils::get_device_and_ajax;
-            use crate::models::{BlogImage, BlogVideo, Tag};
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
             let _categories = _blog.get_categories();
@@ -363,11 +362,8 @@ pub async fn edit_content_blog(session: Session, mut payload: Multipart, req: Ht
             use crate::utils::content_form;
 
             let form = content_form(payload.borrow_mut()).await;
-            let new_content = ContentForm {
-                content: form.content.clone(),
-            };
             diesel::update(&_blog)
-            .set(schema::blogs::content: form.content.clone())
+            .set(schema::blogs::content.eq(form.content.clone()))
             .get_result::<Blog>(&_connection)
             .expect("E");
         }
@@ -939,7 +935,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
     let _categorys = blog_categories.filter(schema::blog_categories::id.eq(_cat_id)).load::<BlogCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
-    let (object_list, next_page_number) = _category.get_blogs_list(page, 20)
+    let (object_list, next_page_number) = _category.get_blogs_list(page, 20);
 
     let mut stack = Vec::new();
     let _tag_items = tags_items
