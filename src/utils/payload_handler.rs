@@ -72,7 +72,7 @@ pub struct ServeCategoriesForm {
     pub default_price:   i32,
 }
 
-#[derive(Deserialize, AsChangeset, Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ContentForm {
     pub content: Option<String>,
 }

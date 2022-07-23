@@ -20,7 +20,6 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     get_request_user_data,
-    get_request_user_data,
 };
 use crate::schema;
 use crate::models::{
@@ -1111,7 +1110,7 @@ pub async fn delete_tag(session: Session, _id: web::Path<i32>) -> impl Responder
         if _request_user.perm == 60 {
             use crate::schema::tags::dsl::tags;
             use crate::schema::tags_items::dsl::tags_items;
-            
+
             let _connection = establish_connection();
             let _tag_id: i32 = *_id;
             let _tag = tags

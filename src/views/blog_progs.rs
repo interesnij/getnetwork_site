@@ -207,12 +207,13 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                 blog_videos::dsl::blog_videos,
                 blog_categories::dsl::blog_categories,
             };
+            use crate::utils::get_device_and_ajax;
             use crate::models::{BlogImage, BlogVideo, Tag};
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-            let _categories = get_cats_for_blog(&_blog);
+            let _categories = _blog.get_categories();
             let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
-            let _blog_tags = get_tags_for_blog(&_blog);
+            let _blog_tags = _blog.get_tags();
 
             let _images = blog_images.filter(schema::blog_images::blog.eq(_blog.id)).load::<BlogImage>(&_connection).expect("E");
             let _videos = blog_videos.filter(schema::blog_videos::blog.eq(_blog.id)).load::<BlogVideo>(&_connection).expect("E");
@@ -359,14 +360,14 @@ pub async fn edit_content_blog(session: Session, mut payload: Multipart, req: Ht
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _request_user.id == _blog.user_id {
-            use crate::utils::{content_form, ContentForm};
+            use crate::utils::content_form;
 
             let form = content_form(payload.borrow_mut()).await;
             let new_content = ContentForm {
                 content: form.content.clone(),
             };
             diesel::update(&_blog)
-            .set(new_content)
+            .set(schema::blogs::content: form.content.clone())
             .get_result::<Blog>(&_connection)
             .expect("E");
         }

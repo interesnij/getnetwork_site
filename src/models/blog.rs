@@ -69,6 +69,8 @@ impl BlogCategories {
 
     pub fn get_blogs_ids(&self) -> Vec<i32> {
         use crate::schema::blog_category::dsl::blog_category;
+
+        let _connection = establish_connection();
         return blog_category
             .filter(schema::blog_category::blog_categories_id.eq(self.id))
             .select(schema::blog_category::blog_id)
