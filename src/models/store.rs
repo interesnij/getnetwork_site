@@ -139,6 +139,18 @@ impl Store {
             .expect("E");
     }
 
+    pub fn get_categories(&self) -> Vec<StoreCategories> {
+        use crate::schema::store_categories::dsl::store_categories;
+
+        let _connection = establish_connection();
+        let ids = StoreCategory::belonging_to(self)
+            .select(schema::store_category::store_categories_id);
+        return store_categories
+            .filter(schema::store_categories::id.eq_any(ids))
+            .load::<StoreCategories>(&_connection)
+            .expect("E");
+    }
+
     pub fn get_serves(&self) -> Vec<Serve> {
         use schema::serve_items::dsl::serve_items;
         use schema::serve::dsl::serve;
