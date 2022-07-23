@@ -3,7 +3,7 @@ pub mod blog_progs;
 pub mod service_progs;
 //pub mod serve_progs;
 //pub mod store_progs;
-//pub mod wiki_progs;
+pub mod wiki_progs;
 pub mod pages;
 pub mod auth;
 pub mod tag_progs;
@@ -15,7 +15,7 @@ pub use self::{
     service_progs::*,
     //serve_progs::*,
     //store_progs::*,
-    //wiki_progs::*,
+    wiki_progs::*,
     pages::*,
     tag_progs::*,
     //search_progs::*,
