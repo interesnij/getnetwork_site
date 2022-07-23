@@ -241,7 +241,6 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
         }
         else {
-            use crate::utils::get_device_and_ajax;
             use crate::schema::feedbacks::dsl::feedbacks;
             use crate::models::Feedback;
 
@@ -292,7 +291,6 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
     use crate::models::TechCategories;
     use crate::schema;
     use crate::schema::tech_categories::dsl::tech_categories;
-    use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
     let all_tech_categories: Vec<TechCategories> = tech_categories

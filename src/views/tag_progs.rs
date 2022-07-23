@@ -4,6 +4,7 @@ use actix_web::{
     web,
     error::InternalError,
     http::StatusCode,
+    Responder,
 };
 use crate::models::User;
 use actix_multipart::Multipart;
@@ -900,7 +901,6 @@ pub async fn tag_works_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
 }
 
 pub async fn tags_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use schema::tags::dsl::tags;
     use crate::utils::get_device_and_page_and_ajax;
 
     let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
@@ -997,16 +997,55 @@ pub async fn tags_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
 pub async fn edit_tag_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::*;
 
-    let _tag_id: i32 = *_id;
 
+    let _tag_id: i32 = *_id;
     let _connection = establish_connection();
     let _tag = tags
         .filter(schema::tags::id.eq(&_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
 
-    data.insert("tag", &_tag[0]);
-    "tags/edit_tag.html".to_string();
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/tags/edit_tag.stpl")]
+            struct Template {
+                request_user: User,
+                tag:          Tag,
+                is_ajax:      bool,
+            }
+            let body = Template {
+                request_user: _request_user,
+                tag:          _tag.into_iter().nth(0).unwrap(),
+                is_ajax:      is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/tags/edit_tag.stpl")]
+            struct Template {
+                request_user: User,
+                tag:          Tag,
+                is_ajax:      bool,
+            }
+            let body = Template {
+                request_user: _request_user,
+                tag:          _tag.into_iter().nth(0).unwrap(),
+                is_ajax:      is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
 }
 
 pub async fn edit_tag(mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {

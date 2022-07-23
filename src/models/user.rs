@@ -5,7 +5,6 @@ use diesel::{
     Insertable,
 };
 use serde::{Serialize, Deserialize};
-use actix_web::HttpRequest;
 use crate::utils::establish_connection;
 
 
