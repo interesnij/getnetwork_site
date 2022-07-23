@@ -51,16 +51,18 @@ pub fn tag_routes(config: &mut web::ServiceConfig) {
 
 pub async fn create_tag_page(session: Session, req: HttpRequest) -> impl Responder {
     use schema::tags::dsl::tags;
-    use crate::utils::{get_request_user_data, is_desctop};
+    use crate::utils::{get_request_user_data, get_device_and_ajax};
 
     let _connection = establish_connection();
     let all_tags: Vec<Tag> = tags
         .load(&_connection)
         .expect("Error.");
 
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if is_desctop(&req) {
+        if is_desctop {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/create_tag.stpl")]
             struct Template {
