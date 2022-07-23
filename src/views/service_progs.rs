@@ -407,7 +407,7 @@ pub async fn edit_service_category_page(session: Session, req: HttpRequest, _id:
             }
             else {
                 #[derive(TemplateOnce)]
-                #[template(path = "mobile/Services/edit_category.stpl")]
+                #[template(path = "mobile/services/edit_category.stpl")]
                 struct Template {
                     request_user: User,
                     category:     ServiceCategories,
@@ -578,7 +578,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
 
             diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(service_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(tag_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
 
             let form = item_form(payload.borrow_mut()).await;
@@ -719,7 +719,7 @@ pub async fn delete_service(session: Session, _id: web::Path<i32>) -> impl Respo
             diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(&_bservice).execute(&_connection).expect("E");
+            diesel::delete(&_service).execute(&_connection).expect("E");
         }
     }
     HttpResponse::Ok()
@@ -935,7 +935,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
 
     let _categorys = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
-    let (object_list, next_page_number) = _category.get_blogs_list(page, 20);
+    let (object_list, next_page_number) = _category.get_services_list(page, 20);
 
     let mut stack = Vec::new();
     let _tag_items = tags_items
@@ -1103,7 +1103,7 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
             let body = Template {
                 request_user: _request_user,
                 is_ajax:      is_ajax,
-                service_cats: _blog_cats,
+                service_cats: _service_cats,
                 all_tags:     _tags,
             }
             .render_once()
