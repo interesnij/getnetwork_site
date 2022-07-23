@@ -606,6 +606,7 @@ pub async fn create_tech_categories(session: Session, mut payload: Multipart) ->
                 description: Some(form.description.clone()),
                 position: form.position,
                 count: 0,
+                user_id: _request_user.id,
             };
             let _new_tech = diesel::insert_into(tech_categories::table)
                 .values(&new_cat)
@@ -637,9 +638,9 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
                 tech_categories: form.tech_categories,
                 position: form.position,
                 count: 0,
-                default_price: 0
+                default_price: Some(0),
             };
-            let _new_serve = diesel::insert_into(serve_categories::table)
+            let _new_serve = diesel::insert_into(schema::serve_categories::table)
                 .values(&new_cat)
                 .get_result::<ServeCategories>(&_connection)
                 .expect("E.");
@@ -666,6 +667,7 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
                 description: Some(form.description.clone()),
                 position: form.position,
                 count: _category.count,
+                user_id: _request_user.id,
             };
             diesel::update(&_category)
                 .set(new_cat)
@@ -706,7 +708,8 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
                 tech_categories: form.tech_categories,
                 position: form.position,
                 count: s_category.count,
-                default_price: form.default_price,
+                default_price: Some(form.default_price),
+                user_id: _request_user.id,
             };
             diesel::update(&s_category)
                 .set(new_cat)
@@ -842,7 +845,7 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
         if _request_user.perm == 60 {
             let _connection = establish_connection();
             let form = serve_split_payload(payload.borrow_mut()).await;
-            let _cat_id = form.serve_categories.clone;
+            let _cat_id = form.serve_categories.clone();
             let _category = serve_categories.filter(schema::serve_categories::id.eq(_cat_id)).load::<ServeCategories>(&_connection).expect("E");
 
             let mut is_default = false;
@@ -852,14 +855,15 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
             let _new_serve = NewServe {
                 name: form.name.clone(),
                 cat_name: _category[0].name.clone(),
-                description: form.description.clone(),
+                description: Some(form.description.clone()),
                 position: form.position,
                 serve_categories: _cat_id,
                 price: Some(form.price),
                 price_acc: Some(form.price_acc),
                 social_price: Some(form.social_price),
-                man_hours: form.man_hours,
+                man_hours: Some(form.man_hours),
                 is_default: is_default,
+                user_id: _request_user.id,
             };
 
             let _serve = diesel::insert_into(schema::serve::table)
@@ -869,7 +873,7 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
 
             if is_default == true {
                 diesel::update(&_category[0])
-                .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price))
+                .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price.unwrap()))
                 .get_result::<ServeCategories>(&_connection)
                 .expect("E.");
             }
@@ -909,7 +913,7 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 if is_default == false {
                     // если в форме галочка снята
                     diesel::update(&_category[0])
-                        .set(schema::serve_categories::default_price.eq(_category[0].default_price - _serve.price))
+                        .set(schema::serve_categories::default_price.eq(_category[0].default_price - _serve.price.unwrap()))
                         .get_result::<ServeCategories>(&_connection)
                         .expect("E.");
                     }
@@ -919,7 +923,7 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 if is_default == true {
                     // если в форме галочка поставлена
                     diesel::update(&_category[0])
-                        .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price))
+                        .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price.unwrap()))
                         .get_result::<ServeCategories>(&_connection)
                         .expect("E.");
                 }
@@ -928,14 +932,15 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
             let _new_serve = NewServe {
                 name: form.name.clone(),
                 cat_name: _category[0].name.clone(),
-                description: form.description.clone(),
+                description: Some(form.description.clone()),
                 position: form.position,
                 serve_categories: form.serve_categories,
-                price: form.price.clone(),
+                price: Some(form.price),
                 price_acc: Some(form.price_acc),
                 social_price: Some(form.social_price),
-                man_hours: form.man_hours,
+                man_hours: Some(form.man_hours),
                 is_default: is_default,
+                user_id: _request_user.id,
             };
 
             diesel::update(&_serve)
@@ -1010,7 +1015,7 @@ pub async fn delete_serve_category(session: Session, _id: web::Path<i32>) -> imp
                 .filter(schema::tech_categories::id.eq(_cat_id))
                 .load::<TechCategories>(&_connection)
                 .expect("E");
-            diesel::update(&_category)
+            diesel::update(&_category[0])
                 .set(schema::tech_categories::count.eq(&_category[0].count - 1))
                 .get_result::<TechCategories>(&_connection)
                 .expect("E");
