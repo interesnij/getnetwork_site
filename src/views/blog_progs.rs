@@ -685,8 +685,9 @@ pub async fn delete_blog(session: Session, _id: web::Path<i32>) -> impl Responde
         if _request_user.perm == 60 {
             let _connection = establish_connection();
             let _blog_id: i32 = *_id;
-            let _blog = blogs.filter(schema::blogs::id.eq(_blog_id)).load::<Blog>(&_connection).expect("E");
+            let _blogs = blogs.filter(schema::blogs::id.eq(_blog_id)).load::<Blog>(&_connection).expect("E");
 
+            let _blog = _blogs.into_iter().nth(0).unwrap();
             let _categories = _blog.get_categories();
             let _tags = _blog.get_tags();
             for _category in _categories.iter() {
