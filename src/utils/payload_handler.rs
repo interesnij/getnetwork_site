@@ -74,7 +74,7 @@ pub struct ServeCategoriesForm {
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ContentForm {
-    pub content: String,
+    pub content: Option<String>,
 }
 
 pub async fn item_form(payload: &mut Multipart) -> Forms {
