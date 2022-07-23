@@ -68,8 +68,9 @@ impl BlogCategories {
     }
 
     pub fn get_blogs_ids(&self) -> Vec<i32> {
-        return BlogCategory::belonging_to(self)
+        let ids = BlogCategory::belonging_to(self)
             .select(schema::blog_category::blog_id);
+        return ids;
     }
 }
 

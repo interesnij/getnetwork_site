@@ -902,10 +902,12 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
     let _cat_id: i32 = *_id;
     let _connection = establish_connection();
+    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
+
     let _categorys = blog_categories.filter(schema::blog_categories::id.eq(_cat_id)).load::<BlogCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
+    let (object_list, next_page_number) = _categorys.get_blogs_list(page, 20)
 
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
     let mut stack = Vec::new();
     let _tag_items = tags_items
         .filter(schema::tags_items::blog_id.ne(0))
@@ -934,6 +936,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         BlogCategories,
+                object_list:      Vec<Blog>,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
@@ -942,6 +945,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         _tags,
                 tags_count:       tags_count,
                 category:        _category,
+                object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -957,6 +961,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         BlogCategories,
+                object_list:      Vec<Blog>,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
@@ -965,6 +970,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         _tags,
                 tags_count:       tags_count,
                 category:        _category,
+                object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -981,6 +987,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         BlogCategories,
+                object_list:      Vec<Blog>,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
@@ -988,6 +995,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         _tags,
                 tags_count:       tags_count,
                 category:        _category,
+                object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -1002,6 +1010,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         BlogCategories,
+                object_list:      Vec<Blog>,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
@@ -1009,6 +1018,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         _tags,
                 tags_count:       tags_count,
                 category:        _category,
+                object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -1017,13 +1027,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
-
-    data.insert("tags", &_tags);
-    data.insert("tags_count", &_tags.len());
-    data.insert("category", &_category[0]);
-
-    //"blogs/category.html".to_string();
-    HttpResponse::Ok().body(_rendered)
 }
 
 pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
