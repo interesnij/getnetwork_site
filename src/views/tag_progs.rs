@@ -167,6 +167,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
     let _wikis = Wiki::get_wikis_list_for_ids(0, 3, &wiki_stack).0;
     let _works = Work::get_works_list_for_ids(0, 3, &work_stack).0;
 
+    let blogs_count = _blogs.len();
+    let services_count = _services.len();
+    let stores_count = _stores.len();
+    let wikis_count = _wikis.len();
+    let works_count = _works.len();
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -197,11 +202,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 blogs_list:    _blogs,
                 stores_list:   _stores,
 
-                works_count:   work_stack.len(),
-                services_count:service_stack.len(),
-                wikis_count:   wiki_stack.len(),
-                blogs_count:   blog_stack.len(),
-                stores_count:  store_stack.len(),
+                works_count:   works_count,
+                services_count:services_count,
+                wikis_count:   wikis_count,
+                blogs_count:   blogs_count,
+                stores_count:  stores_count,
                 is_ajax:       is_ajax,
             }
             .render_once()
@@ -236,11 +241,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 blogs_list:    _blogs,
                 stores_list:   _stores,
 
-                works_count:   work_stack.len(),
-                services_count:service_stack.len(),
-                wikis_count:   wiki_stack.len(),
-                blogs_count:   blog_stack.len(),
-                stores_count:  store_stack.len(),
+                works_count:   works_count,
+                services_count:services_count,
+                wikis_count:   wikis_count,
+                blogs_count:   blogs_count,
+                stores_count:  stores_count,
                 is_ajax:       is_ajax,
             }
             .render_once()
@@ -275,11 +280,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 blogs_list:    _blogs,
                 stores_list:   _stores,
 
-                works_count:   work_stack.len(),
-                services_count:service_stack.len(),
-                wikis_count:   wiki_stack.len(),
-                blogs_count:   blog_stack.len(),
-                stores_count:  store_stack.len(),
+                works_count:   works_count,
+                services_count:services_count,
+                wikis_count:   wikis_count,
+                blogs_count:   blogs_count,
+                stores_count:  stores_count,
                 is_ajax:       is_ajax,
             }
             .render_once()
@@ -312,11 +317,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 blogs_list:    _blogs,
                 stores_list:   _stores,
 
-                works_count:   work_stack.len(),
-                services_count:service_stack.len(),
-                wikis_count:   wiki_stack.len(),
-                blogs_count:   blog_stack.len(),
-                stores_count:  store_stack.len(),
+                works_count:   works_count,
+                services_count:services_count,
+                wikis_count:   wikis_count,
+                blogs_count:   blogs_count,
+                stores_count:  stores_count,
                 is_ajax:       is_ajax,
             }
             .render_once()
@@ -347,7 +352,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
         .expect("E");
 
     let (_blogs, next_page_number) = Blog::get_blogs_list_for_ids(page, 20, &_tag_items);
-
+    let blog_count = _blogs.len();
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -365,7 +370,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 blogs_list:       _blogs,
-                blogs_count:      _blogs.len(),
+                blogs_count:      blog_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -388,7 +393,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 blogs_list:       _blogs,
-                blogs_count:      _blogs.len(),
+                blogs_count:      blog_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -411,7 +416,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 blogs_list:       _blogs,
-                blogs_count:      _blogs.len(),
+                blogs_count:      blog_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -432,7 +437,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 blogs_list:       _blogs,
-                blogs_count:      _blogs.len(),
+                blogs_count:      blog_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -464,7 +469,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
         .expect("E");
 
     let (_services, next_page_number) = Service::get_services_list_for_ids(page, 20, &_tag_items);
-
+    let service_count = _services.len();
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -482,7 +487,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 services_list:    _services,
-                services_count:   _services.len(),
+                services_count:   service_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -505,7 +510,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 services_list:    _services,
-                services_count:   _services.len(),
+                services_count:   service_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -528,7 +533,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 services_list:    _services,
-                services_count:   _services.len(),
+                services_count:   service_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -549,7 +554,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 services_list:    _services,
-                services_count:   _services.len(),
+                services_count:   service_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -582,6 +587,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
         .expect("E");
 
     let (_stores, next_page_number) = Store::get_stores_list_for_ids(page, 20, &_tag_items);
+    let stores_count = _stores.len();
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -599,7 +605,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 stores_list:      _stores,
-                stores_count:     _stores.len(),
+                stores_count:     stores_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -622,7 +628,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 stores_list:      _stores,
-                stores_count:     _stores.len(),
+                stores_count:     stores_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -645,7 +651,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 stores_list:      _stores,
-                stores_count:     _stores.len(),
+                stores_count:     stores_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -666,7 +672,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 stores_list:      _stores,
-                stores_count:     _stores.len(),
+                stores_count:     stores_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -698,6 +704,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
         .expect("E");
 
     let (_wikis, next_page_number) = Wiki::get_wikis_list_for_ids(page, 20, &_tag_items);
+    let wikis_count = _wikis.len();
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -715,7 +722,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 wikis_list:       _wikis,
-                wikis_count:      _wikis.len(),
+                wikis_count:      wikis_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -736,7 +743,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 wikis_list:       _wikis,
-                wikis_count:      _wikis.len(),
+                wikis_count:      wikis_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -759,7 +766,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 wikis_list:       _wikis,
-                wikis_count:      _wikis.len(),
+                wikis_count:      wikis_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -780,7 +787,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 wikis_list:       _wikis,
-                wikis_count:      _wikis.len(),
+                wikis_count:      wikis_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -812,6 +819,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
         .expect("E");
 
     let (_works, next_page_number) = Work::get_works_list_for_ids(page, 20, &_tag_items);
+    let works_count = _works.len();
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -829,7 +837,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 works_list:       _works,
-                works_count:      _works.len(),
+                works_count:      works_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -852,7 +860,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
                 request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 works_list:       _works,
-                works_count:      _works.len(),
+                works_count:      works_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -875,7 +883,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 works_list:       _works,
-                works_count:      _works.len(),
+                works_count:      works_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
@@ -896,7 +904,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
             let body = Template {
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 works_list:       _works,
-                works_count:      _works.len(),
+                works_count:      works_count,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
             }
