@@ -1015,7 +1015,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
 
 pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::*;
-
+    use crate::utils::get_device_and_ajax;
 
     let _tag_id: i32 = *_id;
     let _connection = establish_connection();
