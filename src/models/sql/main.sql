@@ -298,10 +298,10 @@ CREATE TABLE serve (
 
 CREATE TABLE serve_items (
     id         SERIAL PRIMARY KEY,
-    serve_id   INT,
-    service_id INT,
-    store_id   INT,
-    work_id    INT
+    serve_id   INT NOT NULL,
+    service_id INT NOT NULL,
+    store_id   INT NOT NULL,
+    work_id    INT NOT NULL
 );
 
 -- stores -------
