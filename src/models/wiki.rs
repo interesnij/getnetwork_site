@@ -148,7 +148,26 @@ impl Wiki {
             .expect("E.");
     }
 
-    pub fn get_wikis_for_ids(limit: i64, offset: i64, ids: Vec<i32>) -> Vec<Wiki> {
+    pub fn get_wikis_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Wiki>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Wiki>;
+
+        if page > 1 {
+            have_next = page * limit + 1;
+            object_list = Wiki::get_wikis_for_ids(limit.into(), have_next.into(), &ids);
+        }
+        else {
+            have_next = limit + 1;
+            object_list = Wiki::get_wikis_for_ids(limit.into(), 0, &ids);
+        }
+        if Wiki::get_wikis_for_ids(1, have_next.into(), &ids).len() > 0 {
+            next_page_number = page + 1;
+        }
+        // возвращает порцию статей и следующую страницу, если она есть
+        return (object_list, next_page_number);
+    }
+    pub fn get_wikis_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Wiki> {
         use crate::schema::wikis::dsl::wikis;
 
         let _connection = establish_connection();

@@ -158,7 +158,26 @@ impl Store {
             .expect("E.");
     }
 
-    pub fn get_stores_for_ids(limit: i64, offset: i64, ids: Vec<i32>) -> Vec<Store> {
+    pub fn get_stores_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Store>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Store>;
+
+        if page > 1 {
+            have_next = page * limit + 1;
+            object_list = Store::get_stores_for_ids(limit.into(), have_next.into(), &ids);
+        }
+        else {
+            have_next = limit + 1;
+            object_list = Store::get_stores_for_ids(limit.into(), 0, &ids);
+        }
+        if Store::get_stores_for_ids(1, have_next.into(), &ids).len() > 0 {
+            next_page_number = page + 1;
+        }
+        // возвращает порцию статей и следующую страницу, если она есть
+        return (object_list, next_page_number);
+    }
+    pub fn get_stores_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Store> {
         use crate::schema::stores::dsl::stores;
 
         let _connection = establish_connection();

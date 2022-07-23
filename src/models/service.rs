@@ -182,7 +182,26 @@ impl Service {
             .expect("E.");
     }
 
-    pub fn get_services_for_ids(limit: i64, offset: i64, ids: Vec<i32>) -> Vec<Service> {
+    pub fn get_services_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Service>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Service>;
+
+        if page > 1 {
+            have_next = page * limit + 1;
+            object_list = Service::get_services_for_ids(limit.into(), have_next.into(), &ids);
+        }
+        else {
+            have_next = limit + 1;
+            object_list = Service::get_services_for_ids(limit.into(), 0, &ids);
+        }
+        if Service::get_services_for_ids(1, have_next.into(), &ids).len() > 0 {
+            next_page_number = page + 1;
+        }
+        // возвращает порцию статей и следующую страницу, если она есть
+        return (object_list, next_page_number);
+    }
+    pub fn get_services_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Service> {
         use crate::schema::services::dsl::services;
 
         let _connection = establish_connection();
