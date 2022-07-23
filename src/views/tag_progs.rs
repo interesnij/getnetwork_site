@@ -20,6 +20,7 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     get_request_user_data,
+    get_request_user_data,
 };
 use crate::schema;
 use crate::models::{
@@ -1014,52 +1015,58 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
 }
 
 pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use schema::tags::dsl::*;
-    use crate::utils::get_device_and_ajax;
-
-    let _tag_id: i32 = *_id;
-    let _connection = establish_connection();
-    let _tag = tags
-        .filter(schema::tags::id.eq(&_tag_id))
-        .load::<Tag>(&_connection)
-        .expect("E");
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/tags/edit_tag.stpl")]
-            struct Template {
-                request_user: User,
-                tag:          Tag,
-                is_ajax:      bool,
+        if _request_user.perm == 60 {
+            use schema::tags::dsl::*;
+            use crate::utils::get_device_and_ajax;
+
+            let _tag_id: i32 = *_id;
+            let _connection = establish_connection();
+            let _tag = tags
+                .filter(schema::tags::id.eq(&_tag_id))
+                .load::<Tag>(&_connection)
+                .expect("E");
+
+            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/tags/edit_tag.stpl")]
+                struct Template {
+                    request_user: User,
+                    tag:          Tag,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tag:          _tag.into_iter().nth(0).unwrap(),
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                request_user: _request_user,
-                tag:          _tag.into_iter().nth(0).unwrap(),
-                is_ajax:      is_ajax,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/tags/edit_tag.stpl")]
+                struct Template {
+                    request_user: User,
+                    tag:          Tag,
+                    is_ajax:      bool,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    tag:          _tag.into_iter().nth(0).unwrap(),
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/tags/edit_tag.stpl")]
-            struct Template {
-                request_user: User,
-                tag:          Tag,
-                is_ajax:      bool,
-            }
-            let body = Template {
-                request_user: _request_user,
-                tag:          _tag.into_iter().nth(0).unwrap(),
-                is_ajax:      is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
         }
     }
     else {
@@ -1068,12 +1075,12 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
 }
 
 pub async fn edit_tag(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::EditTag;
-    use crate::schema::tags::dsl::tags;
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::models::EditTag;
+            use crate::schema::tags::dsl::tags;
+
             let _connection = establish_connection();
             let _tag_id : i32 = *_id;
             let _tag = tags
@@ -1098,12 +1105,13 @@ pub async fn edit_tag(session: Session, mut payload: Multipart, _id: web::Path<i
 }
 
 pub async fn delete_tag(session: Session, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::tags_items::dsl::tags_items;
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::schema::tags::dsl::tags;
+            use crate::schema::tags_items::dsl::tags_items;
+            
             let _connection = establish_connection();
             let _tag_id: i32 = *_id;
             let _tag = tags

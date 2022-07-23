@@ -62,6 +62,7 @@ pub struct CategoriesForm {
     pub position:    i32,
     pub image:       String,
 }
+
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ServeCategoriesForm {
     pub name:            String,
@@ -266,6 +267,28 @@ pub async fn category_form(payload: &mut Multipart) -> CategoriesForm {
                     } else if field.name() == "description" {
                         form.description = data_string
                     }
+                }
+            }
+        }
+    }
+    form
+}
+
+pub async fn content_form(payload: &mut Multipart) -> ContentForm {
+    let mut form: ContentForm = ContentForm {
+        content: None,
+    };
+
+    while let Some(item) = payload.next().await {
+        let mut field: Field = item.expect("split_payload err");
+        let name = field.name();
+
+        while let Some(chunk) = field.next().await {
+            let data = chunk.expect("split_payload err chunk");
+            if let Ok(s) = str::from_utf8(&data) {
+                let data_string = s.to_string();
+                if field.name() == "content" {
+                    form.content = Some(data_string)
                 }
             }
         }
