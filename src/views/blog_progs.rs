@@ -527,6 +527,11 @@ pub async fn create_blog(session: Session, mut payload: Multipart) -> impl Respo
 pub async fn edit_blog(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::models::EditBlog;
     use crate::schema::blogs::dsl::blogs;
+    use crate::schema::tags::dsl::tags;
+    use crate::schema::blog_images::dsl::blog_images;
+    use crate::schema::blog_videos::dsl::blog_videos;
+    use crate::schema::blog_category::dsl::blog_category;
+    use crate::schema::blog_categories::dsl::blog_categories;
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -555,10 +560,10 @@ pub async fn edit_blog(session: Session, mut payload: Multipart, _id: web::Path<
                 .expect("Error.");
             };
 
-            diesel::delete(schema::blog_images.filter(schema::blog_images::blog.eq(_blog_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::blog_videos.filter(schema::blog_videos::blog.eq(_blog_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::tags_items.filter(schema::tags_items::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::blog_category.filter(schema::blog_category::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
+            diesel::delete(blog_images.filter(schema::blog_images::blog.eq(_blog_id))).execute(&_connection).expect("E");
+            diesel::delete(blog_videos.filter(schema::blog_videos::blog.eq(_blog_id))).execute(&_connection).expect("E");
+            diesel::delete(tags_items.filter(schema::tags_items::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
+            diesel::delete(blog_category.filter(schema::blog_category::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
 
             let form = item_form(payload.borrow_mut()).await;
             let _new_blog = EditBlog {
@@ -666,6 +671,10 @@ pub async fn edit_blog_category(session: Session, mut payload: Multipart, _id: w
 
 pub async fn delete_blog(session: Session, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::blogs::dsl::blogs;
+    use crate::schema::tags_items::dsl::tags_items;
+    use crate::schema::blog_category::dsl::blog_category;
+    use crate::schema::blog_videos::dsl::blog_videos;
+    use crate::schema::blog_images::dsl::blog_images;
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -689,10 +698,10 @@ pub async fn delete_blog(session: Session, _id: web::Path<i32>) -> impl Responde
                 .expect("Error.");
             };
 
-            diesel::delete(schema::blog_images.filter(schema::blog_images::blog.eq(_blog_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::blog_videos.filter(schema::blog_videos::blog.eq(_blog_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::tags_items.filter(schema::tags_items::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::blog_category.filter(schema::blog_category::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
+            diesel::delete(blog_images.filter(schema::blog_images::blog.eq(_blog_id))).execute(&_connection).expect("E");
+            diesel::delete(blog_videos.filter(schema::blog_videos::blog.eq(_blog_id))).execute(&_connection).expect("E");
+            diesel::delete(tags_items.filter(schema::tags_items::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
+            diesel::delete(blog_category.filter(schema::blog_category::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
             diesel::delete(&_blog[0]).execute(&_connection).expect("E");
         }
     }
@@ -719,12 +728,13 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     use schema::blog_categories::dsl::blog_categories;
     use schema::blog_images::dsl::blog_images;
     use schema::blog_videos::dsl::blog_videos;
+    use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
     let _blog_id: i32 = param.1;
     let _cat_id: i32 = param.0;
 
-    let (id_desctop, is_ajax) = get_device_and_ajax(&req);
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     let _blogs = blogs
         .filter(schema::blogs::id.eq(&_blog_id))
@@ -742,7 +752,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _images: Vec<BlogImage> = blog_images.filter(schema::blog_images::blog.eq(&_blog_id)).load(&_connection).expect("E");
     let _videos: Vec<BlogVideo> = blog_videos.filter(schema::blog_videos::blog.eq(&_blog_id)).load(&_connection).expect("E");
     let _categories = _blog.get_categories();
-    let _tags = blog.get_tags();
+    let _tags = _blog.get_tags();
     let _tags_count = _tags.len();
 
     let prev: Option<i32> = None;
@@ -751,7 +761,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _category_blogs = _category.get_blogs_ids();
     let _category_blogs_len: usize = _category_blogs.len();
     for (i, item) in _category_blogs.iter().enumerate().rev() {
-        if item == _blog_id {
+        if item == &_blog_id {
             if (i + 1) != _category_blogs_len {
                 prev = Some(_category_blogs[i + 1]);
             };
