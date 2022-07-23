@@ -165,7 +165,7 @@ impl Blog {
             .expect("E.");
     }
 
-    pub fn get_blogs_list_for_ids(&self, page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Blog>, i32) {
+    pub fn get_blogs_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Blog>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Blog>;
