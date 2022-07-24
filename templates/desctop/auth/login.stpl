@@ -10,9 +10,9 @@
     </div>
     <div>
         <label for="password">Пароль:</label>
-        <input id="id_username" type="password" name="password">
+        <input id="id_password" type="password" name="password">
     </div>
-    <button type="button" id="#logg">Войти</button>
+    <button type="button" id="logg">Войти</button>
 </form>
 
 <% include!("../anon_footer.stpl"); %>
