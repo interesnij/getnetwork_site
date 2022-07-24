@@ -784,29 +784,29 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _category_blogs = _category.get_blogs_ids();
     let _category_blogs_len: usize = _category_blogs.len();
     for (i, item) in _category_blogs.iter().enumerate().rev() {
-        if item == _blog_id {
+        if item == &_blog_id {
             if (i + 1) != _category_blogs_len {
-                _prev = Some(i + 1);
+                _prev = Some((i + 1).try_into().unwrap());
             };
             if i != 0 {
-                _next = Some(i - 1);
+                _next = Some((i - 1).try_into().unwrap());
             };
             break;
         }
     };
     if _prev.is_some() {
-        prev = blogs
+        prev = Some(blogs
             .filter(schema::blogs::id.eq(_prev.unwrap()))
             .filter(schema::blogs::is_active.eq(true))
             .load::<Blog>(&_connection)
-            .expect("E");
+            .expect("E"));
     }
     if _next.is_some() {
-        next = blogs
+        next = Some(blogs
             .filter(schema::blogs::id.eq(_next.unwrap()))
             .filter(schema::blogs::is_active.eq(true))
             .load::<Blog>(&_connection)
-            .expect("E");
+            .expect("E"));
     }
 
     if is_signed_in(&session) {
