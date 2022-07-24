@@ -744,6 +744,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/tag_wikis.stpl")]
             struct Template {
+                request_user:     User,
                 tag:              Tag,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
@@ -751,6 +752,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
+                request_user:     _request_user,
                 tag:              _tag.into_iter().nth(0).unwrap(),
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
