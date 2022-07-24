@@ -20,14 +20,14 @@
             </div>
             <div class="mb-20 mb-md-10">
               <% if blog.description.is_some() { %>
-                <input value="<%= blog.description.unwrap() %>" class="input-md form-control" type="text" name="description" placeholder="Описание" />
+                <input value="<%= blog.description.as_deref().unwrap() %>" class="input-md form-control" type="text" name="description" placeholder="Описание" />
               <% } else { %>
                 <input value="" class="input-md form-control" type="text" name="description" placeholder="Описание" />
               <% } %>
             </div>
             <div class="mb-20 mb-md-10">
               <% if blog.link.is_some() { %>
-                <input value="<%= blog.link.unwrap() %>" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
+                <input value="<%= blog.link.as_deref().unwrap() %>" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
               <% } else { %>
                 <input value="" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
               <% } %>

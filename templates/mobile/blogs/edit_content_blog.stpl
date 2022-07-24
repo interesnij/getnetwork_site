@@ -17,7 +17,7 @@
         <form class="form" enctype="multipart/form-data">
           <div class="mb-20 mb-md-10">
             <% if blog.content.is_some() { %>
-              <% let blog_unwrap = blog.content.unwrap(); %>
+              <% let blog_unwrap = blog.content.as_deref().unwrap(); %>
               <p><%- blog_unwrap.len() %></p>
               <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
                 <%- blog_unwrap %>

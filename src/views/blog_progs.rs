@@ -268,7 +268,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                 let body = Template {
                     request_user: _request_user,
                     blog:         _blog,
-                    categories:   _categories, 
+                    categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
@@ -1030,7 +1030,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         else {
             #[derive(TemplateOnce)]
             #[template(path = "mobile/blogs/category.stpl")]
-            struct Template {
+            struct Template { 
                 request_user:     User,
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,

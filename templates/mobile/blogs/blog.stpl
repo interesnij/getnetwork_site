@@ -27,11 +27,11 @@
                             | <a class="ajax" href="/edit_content_blog/<%= object.id %>/">Aa</a>
                             | <a class="pointer remove_blog" data-pk="<%= object.id %>">x</a>
                           <% } %>
-                          
+
                           <span class="separator">&nbsp;</span>
                         </div>
                         <% if object.content.is_some() { %>
-                          <%- object.content.unwrap() %>
+                          <%- object.content.as_deref().unwrap() %>
                         <% } else { %>
                           Информация отсутствует.
                         <% } %>

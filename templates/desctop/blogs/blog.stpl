@@ -32,7 +32,7 @@
                           <span class="separator">&nbsp;</span>
                         </div>
                         <% if object.content.is_some() { %>
-                          <%- object.content.unwrap() %>
+                          <%- object.content.as_deref().unwrap() %>
                         <% } else { %>
                           Информация отсутствует.
                         <% } %>

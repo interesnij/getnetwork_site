@@ -19,9 +19,10 @@
             </div>
             <div class="mb-20 mb-md-10">
             <% if category.description.is_some() { %>
-              <p><%- category.description.unwrap().len() %></p>
+              <% let unwrap = category.description.as_deref().unwrap(); %>
+              <p><%- unwrap.len() %></p>
               <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
-                <%- category.description.unwrap() %>
+                <%- unwrap %>
               </div>
             <% } else { %>
               <p>0</p>
