@@ -113,11 +113,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             }
             let body = Template {
                 request_user:   _request_user,
-                works_list:     work_list,
-                services_list:  service_list,
-                wikis_list:     wiki_list,
-                blogs_list:     blog_list,
-                stores_list:    store_list,
+                works_list:     work_list.to_vec(),
+                services_list:  service_list.to_vec(),
+                wikis_list:     wiki_list.to_vec(),
+                blogs_list:     blog_list.to_vec(),
+                stores_list:    store_list.to_vec(),
 
                 works_count:    works_count,
                 services_count: services_count,
@@ -152,11 +152,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             }
             let body = Template {
                 request_user:   _request_user,
-                works_list:     work_list,
-                services_list:  service_list,
-                wikis_list:     wiki_list,
-                blogs_list:     blog_list,
-                stores_list:    store_list,
+                works_list:     work_list.to_vec(),
+                services_list:  service_list.to_vec(),
+                wikis_list:     wiki_list.to_vec(),
+                blogs_list:     blog_list.to_vec(),
+                stores_list:    store_list.to_vec(),
 
                 works_count:    works_count,
                 services_count: services_count,
@@ -191,11 +191,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 q:              String,
             }
             let body = Template {
-                works_list:     work_list,
-                services_list:  service_list,
-                wikis_list:     wiki_list,
-                blogs_list:     blog_list,
-                stores_list:    store_list,
+                works_list:     work_list.to_vec(),
+                services_list:  service_list.to_vec(),
+                wikis_list:     wiki_list.to_vec(),
+                blogs_list:     blog_list.to_vec(),
+                stores_list:    store_list.to_vec(),
 
                 works_count:    works_count,
                 services_count: services_count,
@@ -228,15 +228,15 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 q:              String,
             }
             let body = Template {
-                works_list:     work_list,
-                services_list:  service_list,
-                wikis_list:     wiki_list,
-                blogs_list:     blog_list,
-                stores_list:    store_list,
+                works_list:     work_list.to_vec(),
+                services_list:  service_list.to_vec(),
+                wikis_list:     wiki_list.to_vec(),
+                blogs_list:     blog_list.to_vec(),
+                stores_list:    store_list.to_vec(),
 
                 works_count:    works_count,
                 services_count: services_count,
-                wikis_counts:   wikis_count,
+                wikis_count:    wikis_count,
                 blogs_count:    blogs_count,
                 stores_count:   stores_count,
                 is_ajax:        is_ajax,

@@ -778,7 +778,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
     let _category_works = _category.get_all_works();
     let _category_works_len: usize = _category_works.len();
     for (i, item) in _category_works.iter().enumerate().rev() {
-        if item.id == &_work_id {
+        if item.id == _work_id {
             if (i + 1) != _category_works_len {
                 prev = Some(_category_works[i + 1]);
             };

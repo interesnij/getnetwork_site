@@ -784,7 +784,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
     let _category_stores = _category.get_all_stores();
     let _category_stores_len: usize = _category_stores.len();
     for (i, item) in _category_stores.iter().enumerate().rev() {
-        if item.id == &_store_id {
+        if item.id == _store_id {
             if (i + 1) != _category_stores_len {
                 prev = Some(_category_stores[i + 1]);
             };

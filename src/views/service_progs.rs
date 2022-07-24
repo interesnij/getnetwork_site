@@ -778,7 +778,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
     let _category_services = _category.get_all_services();
     let _category_services_len: usize = _category_services.len();
     for (i, item) in _category_services.iter().enumerate().rev() {
-        if item.id == &_service_id {
+        if item.id == _service_id {
             if (i + 1) != _category_services_len {
                 prev = Some(_category_services[i + 1]);
             };
