@@ -776,18 +776,18 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _tags = _blog.get_tags();
     let _tags_count = _tags.len();
 
-    let mut prev: Option<&Blog> = None;
-    let mut next: Option<&Blog> = None;
+    let mut prev: Option<Blog> = None;
+    let mut next: Option<Blog> = None;
 
     let _category_blogs = _category.get_all_blogs();
     let _category_blogs_len: usize = _category_blogs.len();
     for (i, item) in _category_blogs.iter().enumerate().rev() {
         if item.id == _blog_id {
             if (i + 1) != _category_blogs_len {
-                prev = Some(&_category_blogs[i + 1]);
+                prev = Some(_category_blogs[i + 1]);
             };
             if i != 0 {
-                next = Some(&_category_blogs[i - 1]);
+                next = Some(_category_blogs[i - 1]);
             };
             break;
         }
