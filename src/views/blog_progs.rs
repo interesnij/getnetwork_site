@@ -795,18 +795,22 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
         }
     };
     if _prev.is_some() {
-        prev = Some(blogs
+        prev = blogs
             .filter(schema::blogs::id.eq(_prev.unwrap()))
             .filter(schema::blogs::is_active.eq(true))
             .load::<Blog>(&_connection)
-            .expect("E"));
+            .expect("E")
+            .into_iter()
+            .nth(0);
     }
     if _next.is_some() {
-        next = Some(blogs
+        next = blogs
             .filter(schema::blogs::id.eq(_next.unwrap()))
             .filter(schema::blogs::is_active.eq(true))
             .load::<Blog>(&_connection)
-            .expect("E"));
+            .expect("E")
+            .into_iter()
+            .nth(0);
     }
 
     if is_signed_in(&session) {
