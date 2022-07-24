@@ -300,6 +300,6 @@ pub async fn process_signup(session: Session, mut payload: Multipart) -> impl Re
         };
 
         set_current_user(&session, &_session_user);
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        HttpResponse::Ok().content_type("text/html; charset=utf-8").body("")
     }
 }
