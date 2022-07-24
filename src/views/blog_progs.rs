@@ -760,6 +760,10 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 
     let _blog = _blogs.into_iter().nth(0).unwrap();
 
+    let all_categories = blog_categories
+        .load::<BlogCategories>(&_connection)
+        .expect("E");
+
     let _categorys = blog_categories
         .filter(schema::blog_categories::id.eq(&_cat_id))
         .load::<BlogCategories>(&_connection)
@@ -800,6 +804,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 images:       Vec<BlogImage>,
                 videos:       Vec<BlogVideo>,
                 categories:   Vec<BlogCategories>,
+                blog_cats:    Vec<BlogCategories>,
                 category:     BlogCategories,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
@@ -813,6 +818,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     _images,
                 videos:     _videos,
                 categories: _categories,
+                blog_cats:  all_categories,
                 category:   _category,
                 all_tags:   _tags,
                 tags_count: _tags_count,
@@ -833,6 +839,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 images:       Vec<BlogImage>,
                 videos:       Vec<BlogVideo>,
                 categories:   Vec<BlogCategories>,
+                blog_cats:    Vec<BlogCategories>,
                 category:     BlogCategories,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
@@ -847,6 +854,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 videos:     _videos,
                 categories: _categories,
                 category:   _category,
+                blog_cats:  all_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,
@@ -867,6 +875,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     Vec<BlogImage>,
                 videos:     Vec<BlogVideo>,
                 categories: Vec<BlogCategories>,
+                blog_cats:  Vec<BlogCategories>,
                 category:   BlogCategories,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
@@ -879,6 +888,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     _images,
                 videos:     _videos,
                 categories: _categories,
+                blog_cats:  all_categories,
                 category:   _category,
                 all_tags:   _tags,
                 tags_count: _tags_count,
@@ -898,6 +908,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     Vec<BlogImage>,
                 videos:     Vec<BlogVideo>,
                 categories: Vec<BlogCategories>,
+                blog_cats:  Vec<BlogCategories>,
                 category:   BlogCategories,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
@@ -910,6 +921,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     _images,
                 videos:     _videos,
                 categories: _categories,
+                blog_cats:  all_categories,
                 category:   _category,
                 all_tags:   _tags,
                 tags_count: _tags_count,
@@ -934,7 +946,15 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
     let _cat_id: i32 = *_id;
     let _connection = establish_connection();
-    let _categorys = blog_categories.filter(schema::blog_categories::id.eq(_cat_id)).load::<BlogCategories>(&_connection).expect("E");
+
+    let all_categories = blog_categories
+        .load::<BlogCategories>(&_connection)
+        .expect("E");
+
+    let _categorys = blog_categories
+        .filter(schema::blog_categories::id.eq(_cat_id))
+        .load::<BlogCategories>(&_connection)
+        .expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
     let (object_list, next_page_number) = _category.get_blogs_list(page, 20);
 
@@ -966,6 +986,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         BlogCategories,
+                blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -975,6 +996,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         _tags,
                 tags_count:       tags_count,
                 category:        _category,
+                blog_cats:        all_categories,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -991,6 +1013,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         BlogCategories,
+                blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1000,6 +1023,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         _tags,
                 tags_count:       tags_count,
                 category:        _category,
+                blog_cats:        all_categories,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1017,6 +1041,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         BlogCategories,
+                blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1025,6 +1050,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         _tags,
                 tags_count:       tags_count,
                 category:        _category,
+                blog_cats:        all_categories,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1040,6 +1066,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         BlogCategories,
+                blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1048,6 +1075,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         _tags,
                 tags_count:       tags_count,
                 category:        _category,
+                blog_cats:        all_categories,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
