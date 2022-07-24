@@ -81,23 +81,15 @@ impl BlogCategories {
             .expect("E.");
     }
 
-    pub fn get_all_blogs(&self) -> Vec<Blog> {
+    pub fn get_blogs_ids(&self) -> Vec<i32> {
         use crate::schema::blog_category::dsl::blog_category;
-        use crate::schema::blogs::dsl::blogs;
 
         let _connection = establish_connection();
-        let ids = blog_category
+        return blog_category
             .filter(schema::blog_category::blog_categories_id.eq(self.id))
             .select(schema::blog_category::blog_id)
             .load::<i32>(&_connection)
             .expect("E");
-
-        return blogs
-            .filter(schema::blogs::id.eq_any(ids))
-            .filter(schema::blogs::is_active.eq(true))
-            .order(schema::blogs::created.desc())
-            .load::<Blog>(&_connection)
-            .expect("E.");
     }
 }
 

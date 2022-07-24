@@ -30,23 +30,15 @@ pub struct ServiceCategories {
     pub count:       i32,
 }
 impl ServiceCategories {
-    pub fn get_all_services(&self) -> Vec<Service> {
+    pub fn get_services_ids(&self) -> Vec<i32> {
         use crate::schema::service_category::dsl::service_category;
-        use crate::schema::services::dsl::services;
 
         let _connection = establish_connection();
-        let ids = service_category
+        return service_category
             .filter(schema::service_category::service_categories_id.eq(self.id))
             .select(schema::service_category::service_id)
             .load::<i32>(&_connection)
             .expect("E");
-
-        return services
-            .filter(schema::services::id.eq_any(ids))
-            .filter(schema::services::is_active.eq(true))
-            .order(schema::services::created.desc())
-            .load::<Service>(&_connection)
-            .expect("E.");
     }
     pub fn get_services_list(&self, page: i32, limit: i32) -> (Vec<Service>, i32) {
         let mut next_page_number = 0;

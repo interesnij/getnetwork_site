@@ -775,7 +775,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
     let mut prev: Option<Wiki> = None;
     let mut next: Option<Wiki> = None;
 
-    let _category_wikis = _category.get_all_wikis();
+    let _category_wikis = _category.get_wikis_ids();
     let _category_wikis_len: usize = _category_wikis.len();
     for (i, item) in _category_wikis.iter().enumerate().rev() {
         if item.id == _wiki_id {

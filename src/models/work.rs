@@ -31,23 +31,15 @@ pub struct WorkCategories {
     pub count:       i32,
 }
 impl WorkCategories {
-    pub fn get_all_works(&self) -> Vec<Work> {
+    pub fn get_works_ids(&self) -> Vec<i32> {
         use crate::schema::work_category::dsl::work_category;
-        use crate::schema::works::dsl::works;
 
         let _connection = establish_connection();
-        let ids = work_category
+        return work_category
             .filter(schema::work_category::work_categories_id.eq(self.id))
             .select(schema::work_category::work_id)
             .load::<i32>(&_connection)
             .expect("E");
-
-        return works
-            .filter(schema::works::id.eq_any(ids))
-            .filter(schema::works::is_active.eq(true))
-            .order(schema::works::created.desc())
-            .load::<Work>(&_connection)
-            .expect("E.");
     }
     pub fn get_works_list(&self, page: i32, limit: i32) -> (Vec<Work>, i32) {
         let mut next_page_number = 0;

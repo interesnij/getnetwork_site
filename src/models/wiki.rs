@@ -30,7 +30,7 @@ pub struct WikiCategories {
     pub count:       i32,
 }
 impl WikiCategories {
-    pub fn get_all_wikis(&self) -> Vec<Wiki> {
+    pub fn get_wikis_ids(&self) -> Vec<Wiki> {
         use crate::schema::wiki_category::dsl::wiki_category;
         use crate::schema::wikis::dsl::wikis;
 

@@ -775,7 +775,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
     let mut prev: Option<Service> = None;
     let mut next: Option<Service> = None;
 
-    let _category_services = _category.get_all_services();
+    let _category_services = _category.get_services_ids();
     let _category_services_len: usize = _category_services.len();
     for (i, item) in _category_services.iter().enumerate().rev() {
         if item.id == _service_id {

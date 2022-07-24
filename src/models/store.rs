@@ -30,23 +30,15 @@ pub struct StoreCategories {
     pub count:       i32,
 }
 impl StoreCategories {
-    pub fn get_all_stores(&self) -> Vec<Store> {
+    pub fn get_stores_ids(&self) -> Vec<i32> {
         use crate::schema::store_category::dsl::store_category;
-        use crate::schema::stores::dsl::stores;
 
         let _connection = establish_connection();
-        let ids = store_category
+        return store_category
             .filter(schema::store_category::store_categories_id.eq(self.id))
             .select(schema::store_category::store_id)
             .load::<i32>(&_connection)
             .expect("E");
-
-        return stores
-            .filter(schema::stores::id.eq_any(ids))
-            .filter(schema::stores::is_active.eq(true))
-            .order(schema::stores::created.desc())
-            .load::<Store>(&_connection)
-            .expect("E.");
     }
     pub fn get_stores_list(&self, page: i32, limit: i32) -> (Vec<Store>, i32) {
         let mut next_page_number = 0;
