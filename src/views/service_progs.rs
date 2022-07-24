@@ -230,7 +230,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     is_ajax:      bool,
                     images:       Vec<ServiceImage>,
                     videos:       Vec<ServiceVideo>,
-                    tags_list:    Vec<Tag>,
+                    all_tags:     Vec<Tag>,
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
 
@@ -242,7 +242,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
-                    tags_list:    _all_tags,
+                    all_tags:     _all_tags,
                     service_tags: _service_tags,
                     service_cats: _service_cats,
                 }
@@ -260,7 +260,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     is_ajax:      bool,
                     images:       Vec<ServiceImage>,
                     videos:       Vec<ServiceVideo>,
-                    tags_list:    Vec<Tag>,
+                    all_tags:     Vec<Tag>,
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
 
@@ -272,7 +272,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
-                    tags_list:    _all_tags,
+                    all_tags:     _all_tags,
                     service_tags: _service_tags,
                     service_cats: _service_cats,
                 }

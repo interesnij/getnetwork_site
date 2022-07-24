@@ -230,7 +230,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     is_ajax:      bool,
                     images:       Vec<WorkImage>,
                     videos:       Vec<WorkVideo>,
-                    tags_list:    Vec<Tag>,
+                    all_tags:     Vec<Tag>,
                     work_tags:    Vec<Tag>,
                     work_cats:    Vec<WorkCategories>,
 
@@ -242,7 +242,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
-                    tags_list:    _all_tags,
+                    all_tags:     _all_tags,
                     work_tags:    _work_tags,
                     work_cats:    _work_cats,
                 }
@@ -260,7 +260,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     is_ajax:      bool,
                     images:       Vec<WorkImage>,
                     videos:       Vec<WorkVideo>,
-                    tags_list:    Vec<Tag>,
+                    all_tags:     Vec<Tag>,
                     work_tags:    Vec<Tag>,
                     work_cats:    Vec<WorkCategories>,
 
@@ -272,7 +272,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
-                    tags_list:    _all_tags,
+                    all_tags:     _all_tags,
                     work_tags:    _work_tags,
                     work_cats:    _work_cats,
                 }

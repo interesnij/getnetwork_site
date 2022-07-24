@@ -41,7 +41,7 @@
                 <label>Категории</label>
                 <select class="form-control" name="category_list[]" multiple="">
                   <% for category in blog_cats.iter() { %>
-                    <option <% if categories.iter().any(|&i| i==category) { %>selected=""<% } %> value="<%= category.id %>"><%= category.name %></option>
+                    <option <% if categories.iter().any(|&i| i.id==category.id) { %>selected=""<% } %> value="<%= category.id %>"><%= category.name %></option>
                   <% } %>
                 </select>
             </div>
@@ -49,7 +49,7 @@
                 <label>Теги</label>
                 <select class="form-control" name="tags_list[]" multiple="">
                   <% for tag in all_tags.iter() { %>
-                    <option <% if blog_tags.iter().any(|&i| i==tag) { %>selected=""<% } %> value="<%= tag.id %>"><%= tag.name %></option>
+                    <option <% if blog_tags.iter().any(|&i| i.id==tag.id) { %>selected=""<% } %> value="<%= tag.id %>"><%= tag.name %></option>
                   <% } %>
                 </select>
             </div>

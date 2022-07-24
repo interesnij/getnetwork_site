@@ -230,7 +230,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                     is_ajax:      bool,
                     images:       Vec<WikiImage>,
                     videos:       Vec<WikiVideo>,
-                    tags_list:    Vec<Tag>,
+                    all_tags:     Vec<Tag>,
                     wiki_tags:    Vec<Tag>,
                     wiki_cats:    Vec<WikiCategories>,
 
@@ -242,7 +242,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
-                    tags_list:    _all_tags,
+                    all_tags:     _all_tags,
                     wiki_tags:    _wiki_tags,
                     wiki_cats:    _wiki_cats,
                 }
@@ -260,7 +260,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                     is_ajax:      bool,
                     images:       Vec<WikiImage>,
                     videos:       Vec<WikiVideo>,
-                    tags_list:    Vec<Tag>,
+                    all_tags:     Vec<Tag>,
                     wiki_tags:    Vec<Tag>,
                     wiki_cats:    Vec<WikiCategories>,
 
@@ -272,7 +272,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
-                    tags_list:    _all_tags,
+                    all_tags:     _all_tags,
                     wiki_tags:    _wiki_tags,
                     wiki_cats:    _wiki_cats,
                 }

@@ -230,7 +230,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     is_ajax:      bool,
                     images:       Vec<StoreImage>,
                     videos:       Vec<StoreVideo>,
-                    tags_list:    Vec<Tag>,
+                    all_tags:     Vec<Tag>,
                     store_tags:   Vec<Tag>,
                     store_cats: Vec<StoreCategories>,
 
@@ -242,7 +242,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
-                    tags_list:    _all_tags,
+                    all_tags:     _all_tags,
                     store_tags:   _store_tags,
                     store_cats: _store_cats,
                 }
@@ -260,7 +260,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     is_ajax:      bool,
                     images:       Vec<StoreImage>,
                     videos:       Vec<StoreVideo>,
-                    tags_list:    Vec<Tag>,
+                    all_tags:     Vec<Tag>,
                     store_tags:   Vec<Tag>,
                     store_cats:   Vec<StoreCategories>,
 
@@ -272,7 +272,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
-                    tags_list:    _all_tags,
+                    all_tags:     _all_tags,
                     store_tags:   _store_tags,
                     store_cats:   _store_cats,
                 }
