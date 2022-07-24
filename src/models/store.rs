@@ -32,6 +32,7 @@ pub struct StoreCategories {
 impl StoreCategories {
     pub fn get_all_stores(&self) -> Vec<Store> {
         use crate::schema::store_category::dsl::store_category;
+        use crate::schema::stores::dsl::stores;
 
         let _connection = establish_connection();
         let ids = store_category

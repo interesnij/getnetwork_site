@@ -33,6 +33,7 @@ pub struct WorkCategories {
 impl WorkCategories {
     pub fn get_all_works(&self) -> Vec<Work> {
         use crate::schema::work_category::dsl::work_category;
+        use crate::schema::works::dsl::works;
 
         let _connection = establish_connection();
         let ids = work_category
@@ -45,7 +46,7 @@ impl WorkCategories {
             .filter(schema::works::id.eq_any(ids))
             .filter(schema::works::is_active.eq(true))
             .order(schema::works::created.desc())
-            .load::<Wiki>(&_connection)
+            .load::<Work>(&_connection)
             .expect("E.");
     }
     pub fn get_works_list(&self, page: i32, limit: i32) -> (Vec<Work>, i32) {

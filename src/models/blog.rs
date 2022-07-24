@@ -83,6 +83,7 @@ impl BlogCategories {
 
     pub fn get_all_blogs(&self) -> Vec<Blog> {
         use crate::schema::blog_category::dsl::blog_category;
+        use crate::schema::blogs::dsl::blogs;
 
         let _connection = establish_connection();
         let ids = blog_category

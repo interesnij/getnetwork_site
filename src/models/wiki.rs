@@ -32,6 +32,7 @@ pub struct WikiCategories {
 impl WikiCategories {
     pub fn get_all_wikis(&self) -> Vec<Wiki> {
         use crate::schema::wiki_category::dsl::wiki_category;
+        use crate::schema::wikis::dsl::wikis;
 
         let _connection = establish_connection();
         let ids = wiki_category

@@ -19,7 +19,7 @@
       <section class="page-section">
           <div class="container relative">
               <div class="row multi-columns-row">
-                <% for object in services_list.iter() { %>
+                <% for (i, object) in services_list.iter().enumerate() { %>
                   <% include!("../generic/default_service.stpl"); %>
                 <% } %>
                 <% if next_page_number > 0 { %>
