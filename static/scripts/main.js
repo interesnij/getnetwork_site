@@ -566,7 +566,7 @@ on('body', 'click', '#logg', function() {
   _this = this;
   form = _this.parentElement;
   response = form.querySelector(".api_response");
-  
+
   if (!form.querySelector("#id_username").value){
     form.querySelector("#id_username").style.border = "1px #FF0000 solid";
     response.innerHTML = "Введите логин!";
@@ -600,6 +600,40 @@ on('body', 'click', '#logg', function() {
     form.querySelector("#id_username").style.display = "block";
     form.querySelector("#id_username").value = '';
     form.querySelector("#id_password").value = '';
+  }};
+  link.send(form_data);
+});
+
+on('body', 'click', '#signup', function() {
+  _this = this;
+  form = _this.parentElement;
+  username = form.querySelector("#id_username");
+  if (!username.value){
+    username.style.border = "1px #FF0000 solid";
+    toast_error("Логин - обязательное поле!");
+    return
+  } else if (!form.querySelector("#id_password").value){
+    form.querySelector("#id_password").style.border = "1px #FF0000 solid";
+    toast_error("Пароль - обязательное поле!");
+    return
+  }
+  else {
+    this.disabled = true
+  }
+
+  form_data = new FormData(form);
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', "/signup/", true );
+
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    window.location.href = "/"
+    }
+  else {
+    _this.disabled = false;
+    response.style.display = "block";
+    response.innerHTML = "not ok";
+    response.classList.add("error");
   }};
   link.send(form_data);
 });
