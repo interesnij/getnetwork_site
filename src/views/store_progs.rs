@@ -787,7 +787,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
     let mut iter: i32 = 0;
     for item in _category_stores.iter().rev() {
         if item == &_store_id {
-            if (iter + 1) != _category_blogs_len {
+            if (iter + 1) != _category_stores_len {
                 prev = stores
                     .filter(schema::stores::id.eq(iter + 1))
                     .filter(schema::stores::is_active.eq(true))

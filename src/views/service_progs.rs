@@ -781,7 +781,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
     let mut iter: i32 = 0;
     for item in _category_services.iter().rev() {
         if item == &_service_id {
-            if (iter + 1) != _category_works_len {
+            if (iter + 1) != _category_services_len {
                 prev = services
                     .filter(schema::services::id.eq(iter + 1))
                     .filter(schema::services::is_active.eq(true))

@@ -776,7 +776,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
     let mut next: Option<Work> = None;
 
     let _category_works = _category.get_works_ids();
-    let _category_works_len: usize = _category_works.len() as i32;
+    let _category_works_len = _category_works.len() as i32;
 
     let mut iter: i32 = 0;
     for item in _category_works.iter().rev() {
@@ -790,7 +790,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                     .into_iter()
                     .nth(0);
             };
-            if i != 0 {
+            if iter != 0 {
                 next = works
                     .filter(schema::works::id.eq(iter - 1))
                     .filter(schema::works::is_active.eq(true))
