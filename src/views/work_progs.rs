@@ -225,21 +225,25 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "desctop/works/edit_work.stpl")]
                 struct Template {
                     request_user: User,
-                    work:         Work,
+                    work:         Vec<WorkCategories>,
+                    categories:   _categories,
                     is_ajax:      bool,
                     images:       Vec<WorkImage>,
                     videos:       Vec<WorkVideo>,
                     tags_list:    Vec<Tag>,
+                    work_tags:    Vec<Tag>,
                     work_cats:    Vec<WorkCategories>,
 
                 }
                 let body = Template {
                     request_user: _request_user,
                     work:         _work,
+                    categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
                     tags_list:    _all_tags,
+                    work_tags:    _work_tags,
                     work_cats:    _work_cats,
                 }
                 .render_once()
@@ -252,20 +256,24 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 struct Template {
                     request_user: User,
                     work:         Work,
+                    categories:   Vec<WorkCategories>,
                     is_ajax:      bool,
                     images:       Vec<WorkImage>,
                     videos:       Vec<WorkVideo>,
                     tags_list:    Vec<Tag>,
+                    work_tags:    Vec<Tag>,
                     work_cats:    Vec<WorkCategories>,
 
                 }
                 let body = Template {
                     request_user: _request_user,
                     work:         _work,
+                    categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
                     tags_list:    _all_tags,
+                    work_tags:    _work_tags,
                     work_cats:    _work_cats,
                 }
                 .render_once()

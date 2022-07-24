@@ -225,21 +225,25 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[template(path = "desctop/stores/edit_store.stpl")]
                 struct Template {
                     request_user: User,
-                    store:      Store,
+                    store:        Store,
+                    categories:   Vec<StoreCategories>,
                     is_ajax:      bool,
                     images:       Vec<StoreImage>,
                     videos:       Vec<StoreVideo>,
                     tags_list:    Vec<Tag>,
+                    store_tags:   Vec<Tag>,
                     store_cats: Vec<StoreCategories>,
 
                 }
                 let body = Template {
                     request_user: _request_user,
                     store:      _store,
+                    categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
                     tags_list:    _all_tags,
+                    store_tags:   _store_tags,
                     store_cats: _store_cats,
                 }
                 .render_once()
@@ -251,22 +255,26 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[template(path = "mobile/stores/edit_store.stpl")]
                 struct Template {
                     request_user: User,
-                    store:      Store,
+                    store:        Store,
+                    categories:   Vec<StoreCategories>,
                     is_ajax:      bool,
                     images:       Vec<StoreImage>,
                     videos:       Vec<StoreVideo>,
                     tags_list:    Vec<Tag>,
-                    store_cats: Vec<StoreCategories>,
+                    store_tags:   Vec<Tag>,
+                    store_cats:   Vec<StoreCategories>,
 
                 }
                 let body = Template {
                     request_user: _request_user,
-                    store:      _store,
+                    store:        _store,
+                    categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
                     tags_list:    _all_tags,
-                    store_cats: _store_cats,
+                    store_tags:   _store_tags,
+                    store_cats:   _store_cats,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

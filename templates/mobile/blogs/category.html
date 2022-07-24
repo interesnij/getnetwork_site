@@ -13,9 +13,6 @@
 </section>
 <section class="page-section">
     <div class="container relative">
-        <div class="row">
-            <div class="col-sm-8">
-                <div class="row multi-columns-row">
                   <% if object_list.len() > 0 { %>
                     <% for object in object_list.iter() { %>
                       <% include!("../generic/blog.stpl"); %>
@@ -31,13 +28,10 @@
                     <span class="widget-title font-alt">Список пока пустой...</span>
                   </div>
                   <% } %>
-                </div>
-            </div>
-            <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">
-                <% include!("sidebar.stpl"); %>
-            </div>
-        </div>
     </div>
 </section>
+<div class="sidebar">
+    <% include!("sidebar.stpl"); %>
+</div>
 
 <% include!("../footer.stpl"); %>

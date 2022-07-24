@@ -46,7 +46,7 @@
                 </a>
               </h2>
               <div class="row multi-columns-row">
-                <% for (i, object) in stores_list.iter().enumerate() { %>
+                <% for object in stores_list.iter() { %>
                   <% include!("../generic/default_store.stpl"); %>
                 <% } %>
               </div>
@@ -65,7 +65,7 @@
                 </a>
               </h2>
               <div class="row multi-columns-row">
-                <% for (i, object) in works_list.iter().enumerate() { %>
+                <% for object in works_list.iter() { %>
                   <% include!("../generic/default_work.stpl"); %>
                 <% } %>
               </div>
@@ -84,7 +84,7 @@
                 </a>
               </h2>
               <div class="row multi-columns-row">
-                <% for (i, object) in blogs_list.iter().enumerate() { %>
+                <% for object in blogs_list.iter() { %>
                   <% include!("../generic/default_blog.stpl"); %>
                 <% } %>
               </div>
@@ -103,7 +103,7 @@
                 </a>
               </h2>
               <div class="row multi-columns-row">
-                <% for (i, object) in wikis_list.iter().enumerate() { %>
+                <% for object in wikis_list.iter() { %>
                   <% include!("../generic/default_wiki.stpl"); %>
                 <% } %>
               </div>
@@ -122,5 +122,4 @@
     </div>
   </div>
 </section>
-
 <% include!("../footer.stpl"); %>

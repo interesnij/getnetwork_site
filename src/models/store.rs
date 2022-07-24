@@ -30,6 +30,14 @@ pub struct StoreCategories {
     pub count:       i32,
 }
 impl StoreCategories {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
     pub fn get_stores_ids(&self) -> Vec<i32> {
         use crate::schema::store_category::dsl::store_category;
 

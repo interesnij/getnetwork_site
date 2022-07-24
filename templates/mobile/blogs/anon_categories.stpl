@@ -1,3 +1,43 @@
 <% include!("../anon_header.stpl"); %>
 
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">
+                Главная
+            </a>
+            &nbsp;/&nbsp;
+            <span>Наш блог</span>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container align-center">
+        <h1 class="magazine-logo-text black font-alt">Наш блог</h1>
+    </div>
+    <div class="container relative">
+                <% for category in blog_cats.iter() { %>
+
+                <% let get_6_blogs = category.get_6_blogs(); %>
+
+                <h3 class="blog-item-title font-alt mb-10">
+                    <a class="ajax" href="/blog/<%= category.id %>/">
+                        <%= category.name %>
+                    </a>
+                </h3>
+                <hr class="mt-0 mb-30">
+                <div class="row multi-columns-row">
+                    <% for object in get_6_blogs.iter() { %>
+                        <% include!("../generic/blog.stpl"); %>
+                    <% } %>
+                </div>
+
+                <% } %>
+      </div>
+</section>
+
+<div class="sidebar">
+    <% include!("sidebar.stpl"); %>
+</div>
 <% include!("../anon_footer.stpl"); %>

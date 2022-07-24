@@ -226,20 +226,24 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 struct Template {
                     request_user: User,
                     service:      Service,
+                    categories:   Vec<ServiceCategories>,
                     is_ajax:      bool,
                     images:       Vec<ServiceImage>,
                     videos:       Vec<ServiceVideo>,
                     tags_list:    Vec<Tag>,
+                    service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
 
                 }
                 let body = Template {
                     request_user: _request_user,
                     service:      _service,
+                    categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
                     tags_list:    _all_tags,
+                    service_tags: _service_tags,
                     service_cats: _service_cats,
                 }
                 .render_once()
@@ -252,20 +256,24 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 struct Template {
                     request_user: User,
                     service:      Service,
+                    categories:   Vec<ServiceCategories>,
                     is_ajax:      bool,
                     images:       Vec<ServiceImage>,
                     videos:       Vec<ServiceVideo>,
                     tags_list:    Vec<Tag>,
+                    service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
 
                 }
                 let body = Template {
                     request_user: _request_user,
                     service:      _service,
+                    categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
                     tags_list:    _all_tags,
+                    service_tags: _service_tags,
                     service_cats: _service_cats,
                 }
                 .render_once()

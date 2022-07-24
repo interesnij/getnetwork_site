@@ -226,20 +226,24 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 struct Template {
                     request_user: User,
                     wiki:         Wiki,
+                    categories:   Vec<WikiCategories>,
                     is_ajax:      bool,
                     images:       Vec<WikiImage>,
                     videos:       Vec<WikiVideo>,
                     tags_list:    Vec<Tag>,
+                    wiki_tags:    Vec<Tag>,
                     wiki_cats:    Vec<WikiCategories>,
 
                 }
                 let body = Template {
                     request_user: _request_user,
                     wiki:         _wiki,
+                    categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
                     tags_list:    _all_tags,
+                    wiki_tags:    _wiki_tags,
                     wiki_cats:    _wiki_cats,
                 }
                 .render_once()
@@ -252,20 +256,24 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 struct Template {
                     request_user: User,
                     wiki:         Wiki,
+                    categories:   Vec<WikiCategories>,
                     is_ajax:      bool,
                     images:       Vec<WikiImage>,
                     videos:       Vec<WikiVideo>,
                     tags_list:    Vec<Tag>,
+                    wiki_tags:    Vec<Tag>,
                     wiki_cats:    Vec<WikiCategories>,
 
                 }
                 let body = Template {
                     request_user: _request_user,
                     wiki:         _wiki,
+                    categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
                     tags_list:    _all_tags,
+                    wiki_tags:    _wiki_tags,
                     wiki_cats:    _wiki_cats,
                 }
                 .render_once()

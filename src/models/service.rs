@@ -30,6 +30,14 @@ pub struct ServiceCategories {
     pub count:       i32,
 }
 impl ServiceCategories {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
     pub fn get_services_ids(&self) -> Vec<i32> {
         use crate::schema::service_category::dsl::service_category;
 

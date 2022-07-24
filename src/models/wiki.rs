@@ -30,6 +30,14 @@ pub struct WikiCategories {
     pub count:       i32,
 }
 impl WikiCategories {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
     pub fn get_wikis_ids(&self) -> Vec<i32> {
         use crate::schema::wiki_category::dsl::wiki_category;
 
