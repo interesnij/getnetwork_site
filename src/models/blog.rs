@@ -81,7 +81,7 @@ impl BlogCategories {
             .expect("E.");
     }
 
-    pub fn get_blogs(&self) -> Vec<Blog> {
+    pub fn get_all_blogs(&self) -> Vec<Blog> {
         use crate::schema::blog_category::dsl::blog_category;
 
         let _connection = establish_connection();

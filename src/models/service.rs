@@ -30,7 +30,7 @@ pub struct ServiceCategories {
     pub count:       i32,
 }
 impl ServiceCategories {
-    pub fn get_services(&self) -> Vec<Service> {
+    pub fn get_all_services(&self) -> Vec<Service> {
         use crate::schema::service_category::dsl::service_category;
 
         let _connection = establish_connection();
