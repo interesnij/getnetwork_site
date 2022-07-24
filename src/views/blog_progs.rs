@@ -808,8 +808,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 category:     BlogCategories,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
-                prev:         Option<&Blog>,
-                next:         Option<&Blog>,
+                prev:         Option<Blog>,
+                next:         Option<Blog>,
                 is_ajax:      bool,
             }
             let body = Template {
@@ -843,8 +843,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 category:     BlogCategories,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
-                prev:         Option<&Blog>,
-                next:         Option<&Blog>,
+                prev:         Option<Blog>,
+                next:         Option<Blog>,
                 is_ajax:      bool,
             }
             let body = Template {
@@ -879,8 +879,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   BlogCategories,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
-                prev:       Option<&Blog>,
-                next:       Option<&Blog>,
+                prev:       Option<Blog>,
+                next:       Option<Blog>,
                 is_ajax:    bool,
             }
             let body = Template {
@@ -892,8 +892,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   _category,
                 all_tags:   _tags,
                 tags_count: _tags_count,
-                prev:       &prev,
-                next:       &next,
+                prev:       prev,
+                next:       next,
                 is_ajax:    is_ajax,
             }
             .render_once()
@@ -912,8 +912,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   BlogCategories,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
-                prev:       Option<&Blog>,
-                next:       Option<&Blog>,
+                prev:       Option<Blog>,
+                next:       Option<Blog>,
                 is_ajax:    bool,
             }
             let body = Template {
