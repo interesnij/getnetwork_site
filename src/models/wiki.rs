@@ -30,9 +30,8 @@ pub struct WikiCategories {
     pub count:       i32,
 }
 impl WikiCategories {
-    pub fn get_wikis_ids(&self) -> Vec<Wiki> {
+    pub fn get_wikis_ids(&self) -> Vec<i32> {
         use crate::schema::wiki_category::dsl::wiki_category;
-        use crate::schema::wikis::dsl::wikis;
 
         let _connection = establish_connection();
         let ids = wiki_category
@@ -40,13 +39,6 @@ impl WikiCategories {
             .select(schema::wiki_category::wiki_id)
             .load::<i32>(&_connection)
             .expect("E");
-
-        return wikis
-            .filter(schema::wikis::id.eq_any(ids))
-            .filter(schema::wikis::is_active.eq(true))
-            .order(schema::wikis::created.desc())
-            .load::<Wiki>(&_connection)
-            .expect("E.");
     }
     pub fn get_wikis_list(&self, page: i32, limit: i32) -> (Vec<Wiki>, i32) {
         let mut next_page_number = 0;

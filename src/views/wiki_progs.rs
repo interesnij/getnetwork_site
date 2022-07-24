@@ -781,7 +781,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
     let mut iter: i32 = 0;
     for item in _category_wikis.iter().rev() {
         if item == &_wiki_id {
-            if (iter + 1) != _category_works_len {
+            if (iter + 1) != _category_wikis_len {
                 prev = wikis
                     .filter(schema::wikis::id.eq(iter + 1))
                     .filter(schema::wikis::is_active.eq(true))
