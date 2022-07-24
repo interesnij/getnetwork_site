@@ -270,12 +270,12 @@ pub async fn signup_form(payload: &mut Multipart) -> NewUserForm {
     }
     form
 }
-pub async fn process_signup(session: Session, payload: &mut Multipart) -> impl Responder {
+pub async fn process_signup(session: Session, mut payload: Multipart) -> impl Responder {
     use crate::utils::{hash_password, set_current_user};
 
     // Если пользователь не аноним, то отправляем его на страницу новостей
     if is_signed_in(&session) {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        HttpResponse::Ok().content_type("text/html; charset=utf-8").body("")
     }
     else {
         let form = signup_form(payload.borrow_mut()).await;
