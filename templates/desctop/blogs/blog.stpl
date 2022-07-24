@@ -23,7 +23,7 @@
                         <div class="blog-item-data">
                           <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
 
-                          <% if request_user.is_superuser { %>
+                          <% if request_user.is_superuser() { %>
                             | <a class="ajax" href="/edit_blog/<%= object.id %>/">~</a>
                             | <a class="ajax" href="/edit_content_blog/<%= object.id %>/">Aa</a>
                             | <a class="pointer remove_blog" data-pk="<%= object.id %>">x</a>
@@ -31,7 +31,11 @@
 
                           <span class="separator">&nbsp;</span>
                         </div>
-                        <%- object.content %>
+                        <% if object.content.is_some() { %>
+                          <%- object.content.unwrap() %>
+                        <% } else { %>
+                          Информация отсутствует.
+                        <% } %>
                     </div>
 
                     <% if images.len() > 0 { %>

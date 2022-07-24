@@ -26,7 +26,11 @@
 
                           <span class="separator">&nbsp;</span>
                         </div>
-                        <%- object.content %>
+                        <% if object.content.is_some() { %>
+                          <%- object.content.unwrap() %>
+                        <% } else { %>
+                          Информация отсутствует.
+                        <% } %>
                     </div>
 
                     <% if images.len() > 0 { %>

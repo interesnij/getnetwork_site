@@ -9,6 +9,7 @@ use crate::diesel::{
     RunQueryDsl,
     ExpressionMethods,
     QueryDsl,
+    PgTextExpressionMethods,
 };
 use actix_session::Session;
 use serde::Deserialize;
@@ -124,7 +125,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 blogs_count:    blogs_count,
                 stores_count:   stores_count,
                 is_ajax:        is_ajax,
-                q:              q,
+                q:              q.to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -163,7 +164,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 blogs_count:    blogs_count,
                 stores_count:   stores_count,
                 is_ajax:        is_ajax,
-                q:              q,
+                q:              q.to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -202,7 +203,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 blogs_count:    blogs_count,
                 stores_count:   stores_count,
                 is_ajax:        is_ajax,
-                q:              q,
+                q:              q.to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -239,7 +240,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 blogs_count:    blogs_count,
                 stores_count:   stores_count,
                 is_ajax:        is_ajax,
-                q:              q,
+                q:              q.to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -260,8 +261,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let mut next_page_number = 0;
-    let offset: i32;
-    let next_item: i32;
+    let offset: i64;
+    let next_item: i64;
     if page > 1 {
         offset = (page - 1) * 20;
         next_item = page * 20 + 1;
@@ -314,7 +315,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -337,7 +338,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -360,7 +361,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -381,7 +382,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -404,8 +405,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let mut next_page_number = 0;
-    let offset: i32;
-    let next_item: i32;
+    let offset: i64;
+    let next_item: i64;
     if page > 1 {
         offset = (page - 1) * 20;
         next_item = page * 20 + 1;
@@ -458,7 +459,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 services_list:    _services,
                 services_count:   services_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -481,7 +482,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 services_list:    _services,
                 services_count:   services_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -504,7 +505,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 services_list:    _services,
                 services_count:   services_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -525,7 +526,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 services_list:    _services,
                 services_count:   services_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -548,8 +549,8 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let mut next_page_number = 0;
-    let offset: i32;
-    let next_item: i32;
+    let offset: i64;
+    let next_item: i64;
     if page > 1 {
         offset = (page - 1) * 20;
         next_item = page * 20 + 1;
@@ -602,7 +603,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 stores_list:       _stores,
                 stores_count:      stores_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -625,7 +626,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 stores_list:       _stores,
                 stores_count:      stores_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -648,7 +649,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 stores_list:       _stores,
                 stores_count:      stores_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -669,7 +670,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 stores_list:       _stores,
                 stores_count:      stores_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -692,8 +693,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let mut next_page_number = 0;
-    let offset: i32;
-    let next_item: i32;
+    let offset: i64;
+    let next_item: i64;
     if page > 1 {
         offset = (page - 1) * 20;
         next_item = page * 20 + 1;
@@ -746,7 +747,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -769,7 +770,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -792,7 +793,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -813,7 +814,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -836,8 +837,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let mut next_page_number = 0;
-    let offset: i32;
-    let next_item: i32;
+    let offset: i64;
+    let next_item: i64;
     if page > 1 {
         offset = (page - 1) * 20;
         next_item = page * 20 + 1;
@@ -890,7 +891,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 works_list:       _works,
                 works_count:      works_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -913,7 +914,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 works_list:       _works,
                 works_count:      works_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -936,7 +937,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 works_list:       _works,
                 works_count:      works_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -957,7 +958,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 works_list:       _works,
                 works_count:      works_count,
                 is_ajax:          is_ajax,
-                q:                q,
+                q:                q.to_string(),
                 next_page_number: next_page_number,
             }
             .render_once()

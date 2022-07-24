@@ -38,7 +38,7 @@
 
 
                 <div class="row mb-70 mt-20">
-                    <% for (i, object) in category.get_6_blogs.iter().enumerate() { %>
+                    <% for (i, object) in get_6_blogs.iter().enumerate() { %>
                     <% if i > 2 { %>
                     <div class="col-sm-6">
                         <div class="blog-post-prev-small clearfix">
