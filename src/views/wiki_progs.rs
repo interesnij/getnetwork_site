@@ -778,12 +778,24 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
     let _category_wikis = _category.get_wikis_ids();
     let _category_wikis_len: usize = _category_wikis.len();
     for (i, item) in _category_wikis.iter().enumerate().rev() {
-        if item.id == _wiki_id {
-            if (i + 1) != _category_wikis_len {
-                prev = Some(_category_wikis[i + 1]);
+        if item == &_wiki_id {
+            if (i + 1) != _category_works_len {
+                prev = wikis
+                    .filter(schema::wikis::id.eq((i + 1).try_into().unwrap()))
+                    .filter(schema::wikis::is_active.eq(true))
+                    .load::<Wiki>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
             };
             if i != 0 {
-                next = Some(_category_wikis[i - 1]);
+                next = wikis
+                    .filter(schema::wikis::id.eq((i - 1).try_into().unwrap()))
+                    .filter(schema::wikis::is_active.eq(true))
+                    .load::<Wiki>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
             };
             break;
         }

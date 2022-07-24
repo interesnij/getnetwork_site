@@ -778,12 +778,24 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
     let _category_works = _category.get_works_ids();
     let _category_works_len: usize = _category_works.len();
     for (i, item) in _category_works.iter().enumerate().rev() {
-        if item.id == _work_id {
+        if item == &_work_id {
             if (i + 1) != _category_works_len {
-                prev = Some(_category_works[i + 1]);
+                prev = works
+                    .filter(schema::works::id.eq((i + 1).try_into().unwrap()))
+                    .filter(schema::works::is_active.eq(true))
+                    .load::<Work>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
             };
             if i != 0 {
-                next = Some(_category_works[i - 1]);
+                next = works
+                    .filter(schema::works::id.eq((i - 1).try_into().unwrap()))
+                    .filter(schema::works::is_active.eq(true))
+                    .load::<Work>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
             };
             break;
         }

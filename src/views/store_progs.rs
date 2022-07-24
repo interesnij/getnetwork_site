@@ -784,12 +784,24 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
     let _category_stores = _category.get_stores_ids();
     let _category_stores_len: usize = _category_stores.len();
     for (i, item) in _category_stores.iter().enumerate().rev() {
-        if item.id == _store_id {
-            if (i + 1) != _category_stores_len {
-                prev = Some(_category_stores[i + 1]);
+        if item == &_store_id {
+            if (i + 1) != _category_blogs_len {
+                prev = stores
+                    .filter(schema::stores::id.eq((i + 1).try_into().unwrap()))
+                    .filter(schema::stores::is_active.eq(true))
+                    .load::<Store>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
             };
             if i != 0 {
-                next = Some(_category_stores[i - 1]);
+                prev = stores
+                    .filter(schema::stores::id.eq((i - 1).try_into().unwrap()))
+                    .filter(schema::stores::is_active.eq(true))
+                    .load::<Store>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
             };
             break;
         }

@@ -778,12 +778,24 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
     let _category_services = _category.get_services_ids();
     let _category_services_len: usize = _category_services.len();
     for (i, item) in _category_services.iter().enumerate().rev() {
-        if item.id == _service_id {
-            if (i + 1) != _category_services_len {
-                prev = Some(_category_services[i + 1]);
+        if item == &_service_id {
+            if (i + 1) != _category_works_len {
+                prev = services
+                    .filter(schema::services::id.eq((i + 1).try_into().unwrap()))
+                    .filter(schema::services::is_active.eq(true))
+                    .load::<Service>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
             };
             if i != 0 {
-                next = Some(_category_services[i - 1]);
+                next = services
+                    .filter(schema::services::id.eq((i - 1).try_into().unwrap()))
+                    .filter(schema::services::is_active.eq(true))
+                    .load::<Service>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
             };
             break;
         }
