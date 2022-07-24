@@ -118,7 +118,7 @@ pub struct EditServiceCategories {
     pub count:       i32,
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Service {
     pub id:          i32,

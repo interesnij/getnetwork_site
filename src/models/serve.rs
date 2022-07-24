@@ -67,7 +67,7 @@ pub struct NewServeCategories {
 }
 
 /////// Serve //////
-#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, Clone, Identifiable, Queryable, Associations)]
 #[belongs_to(ServeCategories, foreign_key="serve_categories")]
 #[table_name="serve"]
 pub struct Serve {

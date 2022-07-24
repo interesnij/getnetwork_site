@@ -119,7 +119,7 @@ pub struct EditStoreCategories {
     pub count:       i32,
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Store {
     pub id:           i32,

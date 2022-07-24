@@ -36,7 +36,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     use crate::models::{Work, Blog, Service, Store, Wiki};
 
     let _connection = establish_connection();
-    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let _q = q.clone();
+    let _q_standalone = "%".to_owned() + &_q + "%";
 
     let _blogs = schema::blogs::table
         .filter(schema::blogs::title.eq(&_q_standalone))
@@ -125,7 +126,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 blogs_count:    blogs_count,
                 stores_count:   stores_count,
                 is_ajax:        is_ajax,
-                q:              q.to_string(),
+                q:              _q,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -164,7 +165,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 blogs_count:    blogs_count,
                 stores_count:   stores_count,
                 is_ajax:        is_ajax,
-                q:              q.to_string(),
+                q:              _q,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -203,7 +204,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 blogs_count:    blogs_count,
                 stores_count:   stores_count,
                 is_ajax:        is_ajax,
-                q:              q.to_string(),
+                q:              _q,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -240,7 +241,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 blogs_count:    blogs_count,
                 stores_count:   stores_count,
                 is_ajax:        is_ajax,
-                q:              q.to_string(),
+                q:              _q,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -258,7 +259,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
     let page = get_page(&req);
 
     let _connection = establish_connection();
-    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let _q = q.clone();
+    let _q_standalone = "%".to_owned() + &_q + "%";
 
     let mut next_page_number = 0;
     let offset: i32;
@@ -315,7 +317,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -338,7 +340,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -361,7 +363,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -382,7 +384,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -402,7 +404,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
     let page = get_page(&req);
 
     let _connection = establish_connection();
-    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let _q = q.clone();
+    let _q_standalone = "%".to_owned() + &_q + "%";
 
     let mut next_page_number = 0;
     let offset: i32;
@@ -459,7 +462,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 services_list:    _services,
                 services_count:   services_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -482,7 +485,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 services_list:    _services,
                 services_count:   services_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -505,7 +508,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 services_list:    _services,
                 services_count:   services_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -526,7 +529,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 services_list:    _services,
                 services_count:   services_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -546,7 +549,8 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
     let page = get_page(&req);
 
     let _connection = establish_connection();
-    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let _q = q.clone();
+    let _q_standalone = "%".to_owned() + &_q + "%";
 
     let mut next_page_number = 0;
     let offset: i32;
@@ -603,7 +607,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 stores_list:       _stores,
                 stores_count:      stores_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -626,7 +630,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 stores_list:       _stores,
                 stores_count:      stores_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -649,7 +653,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 stores_list:       _stores,
                 stores_count:      stores_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -670,7 +674,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 stores_list:       _stores,
                 stores_count:      stores_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -690,7 +694,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
     let page = get_page(&req);
 
     let _connection = establish_connection();
-    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let _q = q.clone();
+    let _q_standalone = "%".to_owned() + &_q + "%";
 
     let mut next_page_number = 0;
     let offset: i32;
@@ -747,7 +752,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -770,7 +775,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -793,7 +798,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -814,7 +819,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -834,7 +839,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
     let page = get_page(&req);
 
     let _connection = establish_connection();
-    let _q_standalone = "%".to_owned() + &_q.clone() + "%";
+    let _q = q.clone();
+    let _q_standalone = "%".to_owned() + &_q + "%";
 
     let mut next_page_number = 0;
     let offset: i32;
@@ -891,7 +897,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 works_list:       _works,
                 works_count:      works_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -914,7 +920,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 works_list:       _works,
                 works_count:      works_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -937,7 +943,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 works_list:       _works,
                 works_count:      works_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -958,7 +964,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 works_list:       _works,
                 works_count:      works_count,
                 is_ajax:          is_ajax,
-                q:                q.to_string(),
+                q:                _q,
                 next_page_number: next_page_number,
             }
             .render_once()

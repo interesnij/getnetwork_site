@@ -120,7 +120,7 @@ pub struct EditBlogCategories {
     pub count:       i32,
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Blog {
     pub id:          i32,
