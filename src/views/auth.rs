@@ -242,31 +242,51 @@ pub struct NewUserForm {
     pub username: String,
     pub email:    String,
     pub password: String,
-    pub bio:      Option<String>,
-    pub image:    Option<String>,
 }
+pub async fn signup_form(payload: &mut Multipart) -> NewUserForm {
+    let mut form: NewUserForm = NewUserForm {
+        username: "".to_string(),
+        email:    "".to_string(),
+        password: "".to_string(),
+    };
 
-pub async fn process_signup(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    while let Some(item) = payload.next().await {
+        let mut field: Field = item.expect("split_payload err");
+        while let Some(chunk) = field.next().await {
+            let data = chunk.expect("split_payload err chunk");
+            if let Ok(s) = std::str::from_utf8(&data) {
+                let data_string = s.to_string();
+                if field.name() == "username" {
+                    form.username = data_string
+                }
+                else if field.name() == "email" {
+                    form.email = data_string
+                }
+                else if field.name() == "password" {
+                    form.password = data_string
+                }
+            }
+        }
+    }
+    form
+}
+pub async fn process_signup(session: Session, payload: &mut Multipart) -> actix_web::Result<HttpResponse> {
     use crate::utils::{hash_password, set_current_user};
-    //use chrono::NaiveDate;
 
-    let params = web::Query::<NewUserForm>::from_query(&req.query_string());
-     // Если пользователь не аноним, то отправляем его на страницу новостей
+    // Если пользователь не аноним, то отправляем его на страницу новостей
     if is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Вы уже авторизованы"))
     }
-    else if params.is_err() {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Параметры неверные"))
-    }
     else {
+        let form = signup_form(payload.borrow_mut()).await;
         let _connection = establish_connection();
         let params_2 = params.unwrap();
         let form_user = NewUser {
-            username: params_2.username.clone(),
-            email:    params_2.email.clone(),
-            password: hash_password(&params_2.password.clone()),
-            bio:      params_2.bio.clone(),
-            image:    params_2.image.clone(),
+            username: form.username.clone(),
+            email:    form.email.clone(),
+            password: hash_password(&form.password.clone()),
+            bio:      None,
+            image:    None,
             perm:     1,
         };
 
