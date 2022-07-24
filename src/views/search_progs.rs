@@ -46,7 +46,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Blog>(&_connection)
         .expect("e");
     let blogs_count = _blogs.len();
-    let blog_list =  _blogs[..3];
+    let blog_list = &_blogs[..3];
 
     let _services = schema::services::table
         .filter(schema::services::title.ilike(&_q_standalone))
@@ -56,7 +56,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Service>(&_connection)
         .expect("e");
     let services_count = _services.len();
-    let service_list =  _services[..3];
+    let service_list = &_services[..3];
 
     let _stores = schema::stores::table
         .filter(schema::stores::title.eq(&_q))
@@ -66,7 +66,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Store>(&_connection)
         .expect("e");
     let stores_count = _stores.len();
-    let store_list =  _stores[..3];
+    let store_list = &_stores[..3];
 
     let _wikis = schema::wikis::table
         .filter(schema::wikis::title.eq(&_q))
@@ -76,7 +76,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Wiki>(&_connection)
         .expect("e");
     let wiki_count = _wikis.len();
-    let wiki_list =  _wikis[..3];
+    let wiki_list = &_wikis[..3];
 
     let _works = schema::works::table
         .filter(schema::works::title.eq(&_q))
@@ -86,7 +86,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Work>(&_connection)
         .expect("e");
     let work_count = _works.len();
-    let work_list =  _works[..3];
+    let work_list = &_works[..3];
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
@@ -261,8 +261,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let mut next_page_number = 0;
-    let offset: i64;
-    let next_item: i64;
+    let offset: i32;
+    let next_item: i32;
     if page > 1 {
         offset = (page - 1) * 20;
         next_item = page * 20 + 1;
@@ -277,7 +277,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
         .or_filter(schema::blogs::description.ilike(&_q_standalone))
         .or_filter(schema::blogs::content.ilike(&_q_standalone))
         .limit(20)
-        .offset(offset)
+        .offset(offset.into())
         .order(schema::blogs::created.desc())
         .load::<Blog>(&_connection)
         .expect("e");
@@ -289,7 +289,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
         .or_filter(schema::blogs::description.ilike(&_q_standalone))
         .or_filter(schema::blogs::content.ilike(&_q_standalone))
         .limit(1)
-        .offset(next_item)
+        .offset(next_item.into())
         .select(schema::blogs::id)
         .load::<i32>(&_connection)
         .expect("e")
@@ -405,8 +405,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let mut next_page_number = 0;
-    let offset: i64;
-    let next_item: i64;
+    let offset: i32;
+    let next_item: i32;
     if page > 1 {
         offset = (page - 1) * 20;
         next_item = page * 20 + 1;
@@ -421,7 +421,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
         .or_filter(schema::services::description.ilike(&_q_standalone))
         .or_filter(schema::services::content.ilike(&_q_standalone))
         .limit(20)
-        .offset(offset)
+        .offset(offset.into())
         .order(schema::services::created.desc())
         .load::<Service>(&_connection)
         .expect("e");
@@ -433,7 +433,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
         .or_filter(schema::services::description.ilike(&_q_standalone))
         .or_filter(schema::services::content.ilike(&_q_standalone))
         .limit(1)
-        .offset(next_item)
+        .offset(next_item.into())
         .select(schema::services::id)
         .load::<i32>(&_connection)
         .expect("e")
@@ -549,8 +549,8 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let mut next_page_number = 0;
-    let offset: i64;
-    let next_item: i64;
+    let offset: i32;
+    let next_item: i32;
     if page > 1 {
         offset = (page - 1) * 20;
         next_item = page * 20 + 1;
@@ -565,7 +565,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
         .or_filter(schema::stores::description.ilike(&_q_standalone))
         .or_filter(schema::stores::content.ilike(&_q_standalone))
         .limit(20)
-        .offset(offset)
+        .offset(offset.into())
         .order(schema::stores::created.desc())
         .load::<Store>(&_connection)
         .expect("e");
@@ -577,7 +577,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
         .or_filter(schema::stores::description.ilike(&_q_standalone))
         .or_filter(schema::stores::content.ilike(&_q_standalone))
         .limit(1)
-        .offset(next_item)
+        .offset(next_item.into())
         .select(schema::stores::id)
         .load::<i32>(&_connection)
         .expect("e")
@@ -693,8 +693,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let mut next_page_number = 0;
-    let offset: i64;
-    let next_item: i64;
+    let offset: i32;
+    let next_item: i32;
     if page > 1 {
         offset = (page - 1) * 20;
         next_item = page * 20 + 1;
@@ -709,7 +709,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
         .or_filter(schema::wikis::description.ilike(&_q_standalone))
         .or_filter(schema::wikis::content.ilike(&_q_standalone))
         .limit(20)
-        .offset(offset)
+        .offset(offset.into())
         .order(schema::wikis::created.desc())
         .load::<Wiki>(&_connection)
         .expect("e");
@@ -721,7 +721,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
         .or_filter(schema::wikis::description.ilike(&_q_standalone))
         .or_filter(schema::wikis::content.ilike(&_q_standalone))
         .limit(1)
-        .offset(next_item)
+        .offset(next_item.into())
         .select(schema::wikis::id)
         .load::<i32>(&_connection)
         .expect("e")
@@ -837,8 +837,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
 
     let mut next_page_number = 0;
-    let offset: i64;
-    let next_item: i64;
+    let offset: i32;
+    let next_item: i32;
     if page > 1 {
         offset = (page - 1) * 20;
         next_item = page * 20 + 1;
@@ -853,7 +853,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
         .or_filter(schema::works::description.ilike(&_q_standalone))
         .or_filter(schema::works::content.ilike(&_q_standalone))
         .limit(20)
-        .offset(offset)
+        .offset(offset.into())
         .order(schema::works::created.desc())
         .load::<Work>(&_connection)
         .expect("e");
@@ -865,7 +865,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
         .or_filter(schema::works::description.ilike(&_q_standalone))
         .or_filter(schema::works::content.ilike(&_q_standalone))
         .limit(1)
-        .offset(next_item)
+        .offset(next_item.into())
         .select(schema::works::id)
         .load::<i32>(&_connection)
         .expect("e")
