@@ -907,7 +907,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
         }
         else {
             #[derive(TemplateOnce)]
-            #[template(path = "mobile/services/service.stpl")]
+            #[template(path = "mobile/services/anon_service.stpl")]
             struct Template {
                 object:     Service,
                 images:     Vec<ServiceImage>,

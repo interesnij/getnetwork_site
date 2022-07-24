@@ -797,7 +797,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     .nth(0);
             };
             if iter != 0 {
-                prev = stores
+                next = stores
                     .filter(schema::stores::id.eq(iter - 1))
                     .filter(schema::stores::is_active.eq(true))
                     .load::<Store>(&_connection)
@@ -913,7 +913,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
         }
         else {
             #[derive(TemplateOnce)]
-            #[template(path = "mobile/stores/store.stpl")]
+            #[template(path = "mobile/stores/anon_store.stpl")]
             struct Template {
                 object:     Store,
                 images:     Vec<StoreImage>,

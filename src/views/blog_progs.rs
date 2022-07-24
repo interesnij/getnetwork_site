@@ -916,7 +916,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
         }
         else {
             #[derive(TemplateOnce)]
-            #[template(path = "mobile/blogs/blog.stpl")]
+            #[template(path = "mobile/blogs/anon_blog.stpl")]
             struct Template {
                 object:     Blog,
                 images:     Vec<BlogImage>,

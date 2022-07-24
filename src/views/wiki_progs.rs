@@ -907,7 +907,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
         }
         else {
             #[derive(TemplateOnce)]
-            #[template(path = "mobile/wikis/wiki.stpl")]
+            #[template(path = "mobile/wikis/anon_wiki.stpl")]
             struct Template {
                 object:     Wiki,
                 images:     Vec<WikiImage>,

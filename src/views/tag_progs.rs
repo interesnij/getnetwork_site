@@ -941,7 +941,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
         let _request_user = get_request_user_data(&session);
         if is_desctop {
             #[derive(TemplateOnce)]
-            #[template(path = "desctop/tags/tag_works.stpl")]
+            #[template(path = "desctop/tags/tags.stpl")]
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
@@ -962,7 +962,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
         }
         else {
             #[derive(TemplateOnce)]
-            #[template(path = "mobile/tags/tag_works.stpl")]
+            #[template(path = "mobile/tags/tags.stpl")]
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
@@ -985,7 +985,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
     else {
         if is_desctop {
             #[derive(TemplateOnce)]
-            #[template(path = "desctop/tags/anon_tag_works.stpl")]
+            #[template(path = "desctop/tags/anon_tags.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
@@ -1004,7 +1004,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
         }
         else {
             #[derive(TemplateOnce)]
-            #[template(path = "mobile/tags/anon_tag_works.stpl")]
+            #[template(path = "mobile/tags/anon_tags.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,

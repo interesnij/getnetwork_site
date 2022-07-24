@@ -907,7 +907,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
         }
         else {
             #[derive(TemplateOnce)]
-            #[template(path = "mobile/works/work.stpl")]
+            #[template(path = "mobile/works/anon_work.stpl")]
             struct Template {
                 object:     Work,
                 images:     Vec<WorkImage>,
