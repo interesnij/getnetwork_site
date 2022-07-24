@@ -780,7 +780,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let mut next: Option<Blog> = None;
 
     let _category_blogs = _category.get_blogs_ids();
-    let _category_blogs_len: usize = _category_blogs.len();
+    let _category_blogs_len = _category_blogs.len() as i32;
     let mut iter: i32 = 0;
     for item in _category_blogs.iter().rev() {
         if item == &_blog_id {
