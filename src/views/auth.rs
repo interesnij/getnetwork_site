@@ -270,7 +270,7 @@ pub async fn signup_form(payload: &mut Multipart) -> NewUserForm {
     }
     form
 }
-pub async fn process_signup(session: Session, payload: &mut Multipart) -> actix_web::Result<HttpResponse> {
+pub async fn process_signup(session: Session, payload: &mut Multipart) -> impl Responder {
     use crate::utils::{hash_password, set_current_user};
 
     // Если пользователь не аноним, то отправляем его на страницу новостей
@@ -280,7 +280,6 @@ pub async fn process_signup(session: Session, payload: &mut Multipart) -> actix_
     else {
         let form = signup_form(payload.borrow_mut()).await;
         let _connection = establish_connection();
-        let params_2 = params.unwrap();
         let form_user = NewUser {
             username: form.username.clone(),
             email:    form.email.clone(),
