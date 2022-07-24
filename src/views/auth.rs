@@ -288,6 +288,9 @@ pub async fn process_signup(session: Session, mut payload: Multipart) -> impl Re
             image:    None,
             perm:     1,
         };
+        println!("{:?}", form.username.clone());
+        println!("{:?}", form.email.clone());
+        println!("{:?}", form.password.clone());
 
         let _new_user = diesel::insert_into(schema::users::table)
             .values(&form_user)
