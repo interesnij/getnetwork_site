@@ -1,19 +1,22 @@
 <% include!("../anon_header.stpl"); %>
 
-<form enctype="multipart/form-data" method="POST" style="margin-top: 100px;">
+<form class="form" style="margin-top: 100px;">
+    <div>
+      <p class="api_response"></p>
+    </div>
     <div>
         <label for="username">Логин:</label>
-        <input type="text" name="username">
+        <input id="id_username" type="text" name="username">
     </div>
     <div>
         <label for="email">Почта:</label>
-        <input type="email" name="email">
+        <input id="id_email" type="email" name="email">
     </div>
     <div>
         <label for="password">Пароль:</label>
-        <input type="password" name="password">
+        <input id="id_password" type="password" name="password">
     </div>
-    <input type="submit" value="Регистрация">
+    <button type="button" id="#signup">Регистрация</button>
 </form>
 
 <% include!("../anon_footer.stpl"); %>
