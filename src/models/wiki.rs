@@ -34,7 +34,7 @@ impl WikiCategories {
         use crate::schema::wiki_category::dsl::wiki_category;
 
         let _connection = establish_connection();
-        let ids = wiki_category
+        return wiki_category
             .filter(schema::wiki_category::wiki_categories_id.eq(self.id))
             .select(schema::wiki_category::wiki_id)
             .load::<i32>(&_connection)
