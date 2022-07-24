@@ -778,8 +778,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 
     let mut _prev: Option<i32> = None;
     let mut _next: Option<i32> = None;
-    let prev: Option<Blog> = None;
-    let next: Option<Blog> = None;
+    let mut prev: Option<Blog> = None;
+    let mut next: Option<Blog> = None;
 
     let _category_blogs = _category.get_blogs_ids();
     let _category_blogs_len: usize = _category_blogs.len();
