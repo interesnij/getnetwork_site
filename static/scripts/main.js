@@ -565,8 +565,9 @@ on('#ajax', 'click', '.show_tech_category', function() {
 on('body', 'click', '#logg', function() {
   _this = this;
   form = _this.parentElement;
-  response = form.querySelector(".api_response")
-  if (!_user_phone){
+  response = form.querySelector(".api_response");
+  
+  if (!form.querySelector("#id_username").value){
     form.querySelector("#id_username").style.border = "1px #FF0000 solid";
     response.innerHTML = "Введите логин!";
     response.classList.add("error");
