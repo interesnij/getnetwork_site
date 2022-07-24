@@ -275,7 +275,7 @@ pub async fn process_signup(session: Session, payload: &mut Multipart) -> impl R
 
     // Если пользователь не аноним, то отправляем его на страницу новостей
     if is_signed_in(&session) {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Вы уже авторизованы"))
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
         let form = signup_form(payload.borrow_mut()).await;
@@ -300,6 +300,6 @@ pub async fn process_signup(session: Session, payload: &mut Multipart) -> impl R
         };
 
         set_current_user(&session, &_session_user);
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("ok"))
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
 }
