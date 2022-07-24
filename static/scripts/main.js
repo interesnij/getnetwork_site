@@ -608,6 +608,7 @@ on('body', 'click', '#signup', function() {
   _this = this;
   form = _this.parentElement;
   username = form.querySelector("#id_username");
+  response = form.querySelector(".api_response");
   if (!username.value){
     username.style.border = "1px #FF0000 solid";
     toast_error("Логин - обязательное поле!");
