@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<form action="/signup/" method="POST" style="margin-top: 100px;">
+<form enctype="multipart/form-data" method="POST" style="margin-top: 100px;">
     <div>
         <label for="username">Логин:</label>
         <input type="text" name="username">
