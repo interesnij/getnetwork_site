@@ -46,7 +46,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .order(schema::blogs::created.desc())
         .load::<Blog>(&_connection)
         .expect("e");
-    let blogs_count = _blogs.len();
+    let blog_count = _blogs.len();
     let blog_list = &_blogs[..3];
 
     let _services = schema::services::table
@@ -56,7 +56,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .order(schema::services::created.desc())
         .load::<Service>(&_connection)
         .expect("e");
-    let services_count = _services.len();
+    let service_count = _services.len();
     let service_list = &_services[..3];
 
     let _stores = schema::stores::table
@@ -66,7 +66,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .order(schema::stores::created.desc())
         .load::<Store>(&_connection)
         .expect("e");
-    let stores_count = _stores.len();
+    let store_count = _stores.len();
     let store_list = &_stores[..3];
 
     let _wikis = schema::wikis::table
@@ -122,7 +122,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
 
                 works_count:    work_count,
                 services_count: service_count,
-                wikis_counts:   wiki_count,
+                wikis_count:   wiki_count,
                 blogs_count:    blog_count,
                 stores_count:   store_count,
                 is_ajax:        is_ajax,
@@ -161,7 +161,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
 
                 works_count:    work_count,
                 services_count: service_count,
-                wikis_counts:   wiki_count,
+                wikis_count:   wiki_count,
                 blogs_count:    blog_count,
                 stores_count:   store_count,
                 is_ajax:        is_ajax,
@@ -200,7 +200,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
 
                 works_count:    work_count,
                 services_count: service_count,
-                wikis_counts:   wiki_count,
+                wikis_count:   wiki_count,
                 blogs_count:    blog_count,
                 stores_count:   store_count,
                 is_ajax:        is_ajax,
