@@ -776,12 +776,14 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
     let mut next: Option<Work> = None;
 
     let _category_works = _category.get_works_ids();
-    let _category_works_len: usize = _category_works.len();
-    for (i, item) in _category_works.iter().enumerate().rev() {
+    let _category_works_len: usize = _category_works.len() as i32;
+
+    let mut iter: i32 = 0;
+    for item in _category_works.iter().rev() {
         if item == &_work_id {
-            if (i + 1) != _category_works_len {
+            if (iter + 1) != _category_works_len {
                 prev = works
-                    .filter(schema::works::id.eq((i + 1).try_into().unwrap()))
+                    .filter(schema::works::id.eq(iter + 1))
                     .filter(schema::works::is_active.eq(true))
                     .load::<Work>(&_connection)
                     .expect("E")
@@ -790,7 +792,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             };
             if i != 0 {
                 next = works
-                    .filter(schema::works::id.eq((i - 1).try_into().unwrap()))
+                    .filter(schema::works::id.eq(iter - 1))
                     .filter(schema::works::is_active.eq(true))
                     .load::<Work>(&_connection)
                     .expect("E")
@@ -799,6 +801,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             };
             break;
         }
+        iter += 1;
     };
 
     if is_signed_in(&session) {

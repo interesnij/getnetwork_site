@@ -776,21 +776,23 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
     let mut next: Option<Service> = None;
 
     let _category_services = _category.get_services_ids();
-    let _category_services_len: usize = _category_services.len();
-    for (i, item) in _category_services.iter().enumerate().rev() {
+    let _category_services_len = _category_services.len() as i32;
+
+    let mut iter: i32 = 0;
+    for item in _category_services.iter().rev() {
         if item == &_service_id {
-            if (i + 1) != _category_works_len {
+            if (iter + 1) != _category_works_len {
                 prev = services
-                    .filter(schema::services::id.eq((i + 1).try_into().unwrap()))
+                    .filter(schema::services::id.eq(iter + 1))
                     .filter(schema::services::is_active.eq(true))
                     .load::<Service>(&_connection)
                     .expect("E")
                     .into_iter()
                     .nth(0);
             };
-            if i != 0 {
+            if iter != 0 {
                 next = services
-                    .filter(schema::services::id.eq((i - 1).try_into().unwrap()))
+                    .filter(schema::services::id.eq(iter - 1))
                     .filter(schema::services::is_active.eq(true))
                     .load::<Service>(&_connection)
                     .expect("E")
@@ -799,6 +801,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             };
             break;
         }
+        iter += 1;
     };
 
     if is_signed_in(&session) {
