@@ -41,7 +41,7 @@ impl WikiCategories {
             .load::<i32>(&_connection)
             .expect("E");
 
-        return stores
+        return wikis
             .filter(schema::wikis::id.eq_any(ids))
             .filter(schema::wikis::is_active.eq(true))
             .order(schema::wikis::created.desc())

@@ -42,7 +42,7 @@ impl WorkCategories {
             .load::<i32>(&_connection)
             .expect("E");
 
-        return stores
+        return works
             .filter(schema::works::id.eq_any(ids))
             .filter(schema::works::is_active.eq(true))
             .order(schema::works::created.desc())

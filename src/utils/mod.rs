@@ -30,7 +30,7 @@ use actix_session::Session;
 use crate::errors::AuthError;
 
 
-lazy_static! {
+//lazy_static! {
     pub fn establish_connection() -> PgConnection {
         use dotenv::dotenv;
 
@@ -126,7 +126,7 @@ lazy_static! {
             _work_cats
         );
     }
-}
+//}
 
 pub fn get_page(req: &HttpRequest) -> i32 {
     #[derive(Debug, Deserialize)]
