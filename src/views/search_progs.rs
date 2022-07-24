@@ -16,7 +16,6 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     get_request_user_data,
-    get_device_and_page_and_ajax,
 };
 use crate::schema;
 use sailfish::TemplateOnce;
@@ -252,10 +251,13 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
 pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::schema::blogs::dsl::blogs;
     use crate::models::Blog;
+    use crate::utils::{get_device_and_ajax, get_page};
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
 
     let _connection = establish_connection();
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
     let mut next_page_number = 0;
     let offset: i32;
@@ -393,10 +395,13 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
 pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::schema::services::dsl::services;
     use crate::models::Service;
+    use crate::utils::{get_device_and_ajax, get_page};
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
 
     let _connection = establish_connection();
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
     let mut next_page_number = 0;
     let offset: i32;
@@ -534,10 +539,13 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
 pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::schema::stores::dsl::stores;
     use crate::models::Store;
+    use crate::utils::{get_device_and_ajax, get_page};
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
 
     let _connection = establish_connection();
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
     let mut next_page_number = 0;
     let offset: i32;
@@ -675,10 +683,13 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
 pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::schema::wikis::dsl::wikis;
     use crate::models::Wiki;
+    use crate::utils::{get_device_and_ajax, get_page};
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
 
     let _connection = establish_connection();
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
     let mut next_page_number = 0;
     let offset: i32;
@@ -816,10 +827,13 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
 pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::schema::works::dsl::works;
     use crate::models::Work;
+    use crate::utils::{get_device_and_ajax, get_page};
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
 
     let _connection = establish_connection();
     let _q_standalone = "%".to_owned() + &_q.clone() + "%";
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
     let mut next_page_number = 0;
     let offset: i32;

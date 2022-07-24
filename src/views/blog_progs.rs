@@ -772,13 +772,13 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _tags = _blog.get_tags();
     let _tags_count = _tags.len();
 
-    let mut prev: Option<i32> = None;
-    let mut next: Option<i32> = None;
+    let mut prev: Option<Blog> = None;
+    let mut next: Option<Blog> = None;
 
-    let _category_blogs = _category.get_blogs_ids();
+    let _category_blogs = _category.get_blogs();
     let _category_blogs_len: usize = _category_blogs.len();
     for (i, item) in _category_blogs.iter().enumerate().rev() {
-        if item == &_blog_id {
+        if item.id == &_blog_id {
             if (i + 1) != _category_blogs_len {
                 prev = Some(_category_blogs[i + 1]);
             };
@@ -803,8 +803,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 category:     BlogCategories,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
-                prev:         Option<i32>,
-                next:         Option<i32>,
+                prev:         Option<Blog>,
+                next:         Option<Blog>,
                 is_ajax:      bool,
             }
             let body = Template {
@@ -836,8 +836,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 category:     BlogCategories,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
-                prev:         Option<i32>,
-                next:         Option<i32>,
+                prev:         Option<Blog>,
+                next:         Option<Blog>,
                 is_ajax:      bool,
             }
             let body = Template {
@@ -870,8 +870,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   BlogCategories,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
-                prev:       Option<i32>,
-                next:       Option<i32>,
+                prev:       Option<Blog>,
+                next:       Option<Blog>,
                 is_ajax:    bool,
             }
             let body = Template {
@@ -901,8 +901,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   BlogCategories,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
-                prev:       Option<i32>,
-                next:       Option<i32>,
+                prev:       Option<Blog>,
+                next:       Option<Blog>,
                 is_ajax:    bool,
             }
             let body = Template {
@@ -927,12 +927,13 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::blog_categories::dsl::blog_categories;
     use crate::schema::tags_items::dsl::tags_items;
-    use crate::utils::get_device_and_page_and_ajax;
+    use crate::utils::{get_device_and_ajax, get_page};
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
 
     let _cat_id: i32 = *_id;
     let _connection = establish_connection();
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
-
     let _categorys = blog_categories.filter(schema::blog_categories::id.eq(_cat_id)).load::<BlogCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
     let (object_list, next_page_number) = _category.get_blogs_list(page, 20);

@@ -1,0 +1,71 @@
+<% include!("../header.stpl"); %>
+
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">
+                Главная
+            </a>
+            &nbsp;/&nbsp;
+            <span>Наш блог</span>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container align-center">
+        <h1 class="magazine-logo-text black font-alt">Наш блог</h1>
+    </div>
+    <div class="container relative">
+        <div class="row">
+            <div class="col-sm-8">
+                <% for category in blog_cats.iter() { %>
+
+                <% let get_6_blogs = category.get_6_blogs(); %>
+                <h3 class="blog-item-title font-alt mb-10">
+                    <a class="ajax" href="/blog/<%= category.id %>/">
+                        <%= category.name %>
+                    </a>
+                </h3>
+                <hr class="mt-0 mb-30">
+                <div class="row multi-columns-row">
+                    <% for (i, object) in get_6_blogs.iter().enumerate() { %>
+                      <% if i < 3 { %>
+                        <% include!("../generic/blog.stpl"); %>
+                      <% } %>
+                    <% } %>
+                </div>
+
+
+                <div class="row mb-70 mt-20">
+                    <% for (i, object) in category.get_6_blogs.iter().enumerate() { %>
+                    <% if i > 2 { %>
+                    <div class="col-sm-6">
+                        <div class="blog-post-prev-small clearfix">
+                            <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/">
+                                <img src="<%= object.get_image() %>" alt="img" class="widget-posts-img">
+                            </a>
+                            <div class="widget-posts-descr">
+                                <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/">
+                                  <%= object.title %>
+                                </a>
+                                <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+                                <p><%= object.get_100_description() %></p>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                  <% } %>
+                </div>
+
+                <% } %>
+            </div>
+            <div class="col-sm-4">
+              <% include!("sidebar.stpl"); %>
+            </div>
+        </div>
+
+</section>
+
+
+<% include!("../footer.stpl"); %>

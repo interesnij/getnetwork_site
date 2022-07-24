@@ -338,9 +338,11 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::models::Blog;
-    use crate::utils::get_device_and_page_and_ajax;
+    use crate::utils::{get_device_and_ajax, get_page};
 
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
+
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
     let _tag = tags
@@ -455,9 +457,11 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::models::Service;
-    use crate::utils::get_device_and_page_and_ajax;
+    use crate::utils::{get_device_and_ajax, get_page};
 
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
+
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
     let _tag = tags
@@ -572,9 +576,11 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::models::Store;
-    use crate::utils::get_device_and_page_and_ajax;
+    use crate::utils::{get_device_and_ajax, get_page};
 
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
+
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
     let _tag = tags
@@ -689,9 +695,11 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::models::Wiki;
-    use crate::utils::get_device_and_page_and_ajax;
+    use crate::utils::{get_device_and_ajax, get_page};
 
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
+
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
     let _tag = tags
@@ -804,9 +812,11 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
     use schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
     use crate::models::Work;
-    use crate::utils::get_device_and_page_and_ajax;
+    use crate::utils::{get_device_and_ajax, get_page};
 
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
+
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
     let _tag = tags
@@ -918,9 +928,11 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
 }
 
 pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_page_and_ajax;
+    use crate::utils::{get_device_and_ajax, get_page};
 
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
+
     let _connection = establish_connection();
     let (all_tags, next_page_number) = Tag::get_tags_list(page, 20);
     let tags_count = all_tags.len();

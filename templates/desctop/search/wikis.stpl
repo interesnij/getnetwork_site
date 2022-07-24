@@ -5,7 +5,7 @@
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <a data-q="<%= q %>" href="/search/" class="ajax">Общий поиск</a>
+            <a href="/search/<%= q %>/" class="ajax">Общий поиск</a>
         </div>
     </div>
 </section>
@@ -15,12 +15,17 @@
           <input data-folder="_blogs" value="<%= q %>" type="text" class="form-control general_search search_page" placeholder="Поиск...">
       </form>
     <div class="search_section">
-      <% if wikis.len() > 0 { %>
+      <% if wikis_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
               <div class="row multi-columns-row">
-                <% for object in wikis.iter() { %>
+                <% for object in wikis_list.iter() { %>
                   <% include!("../generic/default_wiki.stpl"); %>
+                <% } %>
+                <% if next_page_number > 0 { %>
+                  <div class="load centered m-1 next_page_list" data-link="/search_wikis/<%=q%>/?page=<%= next_page_number %>">
+                    <img src="/static/images/preloader.gif">
+                  </div>
                 <% } %>
               </div>
           </div>

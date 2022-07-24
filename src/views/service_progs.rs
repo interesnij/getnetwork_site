@@ -772,13 +772,13 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
     let _tags = _service.get_tags();
     let _tags_count = _tags.len();
 
-    let mut prev: Option<i32> = None;
-    let mut next: Option<i32> = None;
+    let mut prev: Option<Service> = None;
+    let mut next: Option<Service> = None;
 
-    let _category_services = _category.get_services_ids();
+    let _category_services = _category.get_services();
     let _category_services_len: usize = _category_services.len();
     for (i, item) in _category_services.iter().enumerate().rev() {
-        if item == &_service_id {
+        if item.id == &_service_id {
             if (i + 1) != _category_services_len {
                 prev = Some(_category_services[i + 1]);
             };
@@ -803,8 +803,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 category:     ServiceCategories,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
-                prev:         Option<i32>,
-                next:         Option<i32>,
+                prev:         Option<Service>,
+                next:         Option<Service>,
                 is_ajax:      bool,
             }
             let body = Template {
@@ -836,8 +836,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 category:     ServiceCategories,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
-                prev:         Option<i32>,
-                next:         Option<i32>,
+                prev:         Option<Service>,
+                next:         Option<Service>,
                 is_ajax:      bool,
             }
             let body = Template {
@@ -870,8 +870,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 category:   ServiceCategories,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
-                prev:       Option<i32>,
-                next:       Option<i32>,
+                prev:       Option<Service>,
+                next:       Option<Service>,
                 is_ajax:    bool,
             }
             let body = Template {
@@ -901,8 +901,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 category:   ServiceCategories,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
-                prev:       Option<i32>,
-                next:       Option<i32>,
+                prev:       Option<Service>,
+                next:       Option<Service>,
                 is_ajax:    bool,
             }
             let body = Template {
@@ -927,11 +927,13 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
 pub async fn service_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::service_categories::dsl::service_categories;
     use crate::schema::tags_items::dsl::tags_items;
-    use crate::utils::get_device_and_page_and_ajax;
+    use crate::utils::{get_device_and_ajax, get_page};
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let page = get_page(&req);
 
     let _cat_id: i32 = *_id;
     let _connection = establish_connection();
-    let (is_desctop, page, is_ajax) = get_device_and_page_and_ajax(&req);
 
     let _categorys = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();

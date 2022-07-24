@@ -30,15 +30,22 @@ pub struct StoreCategories {
     pub count:       i32,
 }
 impl StoreCategories {
-    pub fn get_stores_ids(&self) -> Vec<i32> {
+    pub fn get_stores(&self) -> Vec<Store> {
         use crate::schema::store_category::dsl::store_category;
 
         let _connection = establish_connection();
-        return store_category
+        let ids = store_category
             .filter(schema::store_category::store_categories_id.eq(self.id))
             .select(schema::store_category::store_id)
             .load::<i32>(&_connection)
             .expect("E");
+
+        return stores
+            .filter(schema::stores::id.eq_any(ids))
+            .filter(schema::stores::is_active.eq(true))
+            .order(schema::stores::created.desc())
+            .load::<Store>(&_connection)
+            .expect("E.");
     }
     pub fn get_stores_list(&self, page: i32, limit: i32) -> (Vec<Store>, i32) {
         let mut next_page_number = 0;
@@ -72,6 +79,21 @@ impl StoreCategories {
             .order(schema::stores::created.desc())
             .limit(limit)
             .offset(offset)
+            .load::<Store>(&_connection)
+            .expect("E.");
+    }
+
+    pub fn get_6_stores(&self) -> Vec<Store> {
+        use crate::schema::stores::dsl::stores;
+
+        let _connection = establish_connection();
+        let ids = StoreCategory::belonging_to(self)
+            .select(schema::store_category::store_id);
+        return stores
+            .filter(schema::stores::id.eq_any(ids))
+            .filter(schema::stores::is_active.eq(true))
+            .order(schema::stores::created.desc())
+            .limit(6)
             .load::<Store>(&_connection)
             .expect("E.");
     }
