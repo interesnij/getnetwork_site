@@ -784,10 +784,10 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     for (i, item) in _category_blogs.iter().enumerate().rev() {
         if item.id == _blog_id {
             if (i + 1) != _category_blogs_len {
-                _prev = Some(i + 1);
+                _prev = Some((i + 1.try_into().unwrap());
             };
             if i != 0 {
-                _next = Some(i - 1);
+                _next = Some((i - 1.try_into().unwrap());
             };
             break;
         }
