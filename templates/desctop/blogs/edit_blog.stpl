@@ -14,19 +14,19 @@
 
 <section class="page-section">
     <div class="container relative">
-        <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
+        <form class="form mb-20 col-md-8 col-md-offset-2" enctype="multipart/form-data">
             <div class="mb-20 mb-md-10">
                 <input value="<%= blog.title %>" class="input-md form-control" type="text" name="title" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
-              <% if object.description.is_some() { %>
+              <% if blog.description.is_some() { %>
                 <input value="<%= blog.description.unwrap() %>" class="input-md form-control" type="text" name="description" placeholder="Описание" />
               <% } else { %>
                 <input value="" class="input-md form-control" type="text" name="description" placeholder="Описание" />
               <% } %>
             </div>
             <div class="mb-20 mb-md-10">
-              <% if object.link.is_some() { %>
+              <% if blog.link.is_some() { %>
                 <input value="<%= blog.link.unwrap() %>" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
               <% } else { %>
                 <input value="" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
@@ -73,7 +73,7 @@
             </div>
             <div class="mb-20 mb-md-10">
               <label class="checkbox-inline">
-                <input type="checkbox" name="is_active" <% if blog.is_blog_active %>checked<% } %>>
+                <input type="checkbox" name="is_active" <% if blog.is_blog_active { %>checked<% } %>>
                   Статья открыта
               </label>
             </div>
@@ -81,6 +81,4 @@
         </form>
     </div>
 </section>
-
-
 <% include!("../footer.stpl"); %>

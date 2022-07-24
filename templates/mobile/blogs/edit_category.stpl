@@ -18,8 +18,8 @@
                 <input value="<%= category.name %>" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
-            <% if object.content.is_some() { %>
-              <p><%- category.description.len() %></p>
+            <% if category.description.is_some() { %>
+              <p><%- category.description.unwrap().len() %></p>
               <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
                 <%- category.description.unwrap() %>
               </div>

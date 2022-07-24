@@ -16,10 +16,11 @@
     <div class="container relative">
         <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
           <div class="mb-20 mb-md-10">
-            <% if object.content.is_some() { %>
-              <p><%- blog.content.len() %></p>
+            <% if blog.content.is_some() { %>
+              <% let blog_unwrap = blog.content.unwrap(); %>
+              <p><%- blog_unwrap.len() %></p>
               <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
-                <%- blog.content.unwrap() %>
+                <%- blog_unwrap %>
               </div>
             <% } else { %>
               <p>0</p>

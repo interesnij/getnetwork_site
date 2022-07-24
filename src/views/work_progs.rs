@@ -225,8 +225,8 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "desctop/works/edit_work.stpl")]
                 struct Template {
                     request_user: User,
-                    work:         Vec<WorkCategories>,
-                    categories:   _categories,
+                    work:         Work,
+                    categories:   Vec<WorkCategories>,
                     is_ajax:      bool,
                     images:       Vec<WorkImage>,
                     videos:       Vec<WorkVideo>,
