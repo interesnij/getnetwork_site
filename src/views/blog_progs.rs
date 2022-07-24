@@ -776,8 +776,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _tags = _blog.get_tags();
     let _tags_count = _tags.len();
 
-    let mut _prev: Option<i32> = None;
-    let mut _next: Option<i32> = None;
     let mut prev: Option<Blog> = None;
     let mut next: Option<Blog> = None;
 
@@ -786,32 +784,26 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     for (i, item) in _category_blogs.iter().enumerate().rev() {
         if item == &_blog_id {
             if (i + 1) != _category_blogs_len {
-                _prev = Some((i + 1).try_into().unwrap());
+                prev = blogs
+                    .filter(schema::blogs::id.eq((i + 1).try_into().unwrap()))
+                    .filter(schema::blogs::is_active.eq(true))
+                    .load::<Blog>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
             };
             if i != 0 {
-                _next = Some((i - 1).try_into().unwrap());
+                prev = blogs
+                    .filter(schema::blogs::id.eq((i - 1).try_into().unwrap()))
+                    .filter(schema::blogs::is_active.eq(true))
+                    .load::<Blog>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
             };
             break;
         }
     };
-    if _prev.is_some() {
-        prev = blogs
-            .filter(schema::blogs::id.eq(_prev.unwrap()))
-            .filter(schema::blogs::is_active.eq(true))
-            .load::<Blog>(&_connection)
-            .expect("E")
-            .into_iter()
-            .nth(0);
-    }
-    if _next.is_some() {
-        next = blogs
-            .filter(schema::blogs::id.eq(_next.unwrap()))
-            .filter(schema::blogs::is_active.eq(true))
-            .load::<Blog>(&_connection)
-            .expect("E")
-            .into_iter()
-            .nth(0);
-    }
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);

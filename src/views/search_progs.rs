@@ -34,6 +34,7 @@ pub fn search_routes(config: &mut web::ServiceConfig) {
 
 pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::models::{Work, Blog, Service, Store, Wiki};
+    use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
     let _q = q.clone();
