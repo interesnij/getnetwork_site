@@ -237,7 +237,7 @@ pub async fn login(mut payload: Multipart, session: Session, req: HttpRequest) -
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct NewUserForm {
     pub username: String,
     pub email:    String,
