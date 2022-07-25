@@ -41,9 +41,9 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     let _q_standalone = "%".to_owned() + &_q + "%";
 
     let _blogs = schema::blogs::table
-        .filter(schema::blogs::title.eq(&_q_standalone))
-        .or_filter(schema::blogs::description.eq(&_q_standalone))
-        .or_filter(schema::blogs::content.eq(&_q_standalone))
+        .filter(schema::blogs::title.ilike(&_q_standalone))
+        .or_filter(schema::blogs::description.ilike(&_q_standalone))
+        .or_filter(schema::blogs::content.ilike(&_q_standalone))
         .order(schema::blogs::created.desc())
         .load::<Blog>(&_connection)
         .expect("e");
@@ -73,9 +73,9 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     }
 
     let _stores = schema::stores::table
-        .filter(schema::stores::title.eq(&_q))
-        .or_filter(schema::stores::description.eq(&_q_standalone))
-        .or_filter(schema::stores::content.eq(&_q_standalone))
+        .filter(schema::stores::title.ilike(&_q))
+        .or_filter(schema::stores::description.ilike(&_q_standalone))
+        .or_filter(schema::stores::content.ilike(&_q_standalone))
         .order(schema::stores::created.desc())
         .load::<Store>(&_connection)
         .expect("e");
@@ -89,9 +89,9 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     }
 
     let _wikis = schema::wikis::table
-        .filter(schema::wikis::title.eq(&_q))
-        .or_filter(schema::wikis::description.eq(&_q_standalone))
-        .or_filter(schema::wikis::content.eq(&_q_standalone))
+        .filter(schema::wikis::title.ilike(&_q))
+        .or_filter(schema::wikis::description.ilike(&_q_standalone))
+        .or_filter(schema::wikis::content.ilike(&_q_standalone))
         .order(schema::wikis::created.desc())
         .load::<Wiki>(&_connection)
         .expect("e");
@@ -105,9 +105,9 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     }
 
     let _works = schema::works::table
-        .filter(schema::works::title.eq(&_q))
-        .or_filter(schema::works::description.eq(&_q_standalone))
-        .or_filter(schema::works::content.eq(&_q_standalone))
+        .filter(schema::works::title.ilike(&_q))
+        .or_filter(schema::works::description.ilike(&_q_standalone))
+        .or_filter(schema::works::content.ilike(&_q_standalone))
         .order(schema::works::created.desc())
         .load::<Work>(&_connection)
         .expect("e");
