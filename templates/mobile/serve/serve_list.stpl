@@ -4,7 +4,7 @@
 <div class="container relative">
   <% for (i, tech_category) in tech_cats.iter().enumerate() { %>
 
-  <h2>
+  <h2> 
     <a style="padding:5px" class="ajax border" href="/tech_categories/<%= tech_category.id %>/">
       <%= tech_category.name %>
     </a>
