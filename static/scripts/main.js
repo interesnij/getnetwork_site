@@ -483,7 +483,7 @@ on('body', 'click', '.anon_color_change', function() {
     this.setAttribute("data-color", "white");
     new_color = "white"
   };
-  if new_color != color {
+  if (new_color != color) {
     setCookie("backgroud", new_color, 90);
   }
 });
