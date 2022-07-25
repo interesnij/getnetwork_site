@@ -792,21 +792,23 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 
     let _category_blogs = _category.get_blogs_ids();
     let _category_blogs_len = _category_blogs.len() as i32;
-    let mut iter: i32 = 0;
-    for item in _category_blogs.iter().rev() {
+
+    for (i, item) in _category_blogs.iter().enumerate().rev() {
         if item == &_blog_id {
-            if (iter + 1) != _category_blogs_len {
+            if (i + 1) != _category_blogs_len {
+                let _prev = Some(&_category_blogs[i + 1]);
                 prev = blogs
-                    .filter(schema::blogs::id.eq(item + 1))
+                    .filter(schema::blogs::id.eq(_prev)
                     .filter(schema::blogs::is_active.eq(true))
                     .load::<Blog>(&_connection)
                     .expect("E")
                     .into_iter()
                     .nth(0);
             };
-            if iter != 0 {
+            if i != 0 {
+                let _next = Some(&_category_blogs[i - 1]);
                 next = blogs
-                    .filter(schema::blogs::id.eq(item - 1))
+                    .filter(schema::blogs::id.eq(_next))
                     .filter(schema::blogs::is_active.eq(true))
                     .load::<Blog>(&_connection)
                     .expect("E")
@@ -815,7 +817,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             };
             break;
         }
-        iter += 1;
     };
 
     if is_signed_in(&session) {
