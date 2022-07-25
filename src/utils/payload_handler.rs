@@ -201,30 +201,31 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
                     .unwrap()
                     .expect("E");
             };
-            if field.content_type().to_string() == "image/jpeg".to_string() {
-                files.push(file.clone());
-                form.images.push(file.path.clone().replace("./","/"));
-            };
+            files.push(file.clone());
+            form.images.push(file.path.clone().replace("./","/"));
         }
 
         else if name == "videos[]" {
-            let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path.to_string());
-            let file_path = file.path.clone();
-            let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                .await
-                .unwrap();
-            while let Some(chunk) = field.next().await {
-                let data = chunk.unwrap();
-                f = web::block(move || f.write_all(&data).map(|_| f))
+            let _new_path = field.content_disposition().get_filename();
+            if _new_path.is_none() {
+                continue;
+            }
+            else {
+                let file = UploadedFiles::new(_new_path.unwrap().to_string());
+                let file_path = file.path.clone();
+                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                     .await
-                    .unwrap()
+                    .unwrap();
+                while let Some(chunk) = field.next().await {
+                    let data = chunk.unwrap();
+                    f = web::block(move || f.write_all(&data).map(|_| f))
+                        .await
+                        .unwrap()
                     .expect("E");
-            };
-            if field.content_type().to_string() == "video/mp4".to_string() {
+                };
                 files.push(file.clone());
                 form.videos.push(file.path.clone().replace("./","/"));
-            };
+            }
         }
     }
     form
