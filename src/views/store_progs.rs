@@ -256,7 +256,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     videos:       Vec<StoreVideo>,
                     all_tags:     Vec<Tag>,
                     store_tags:   Vec<Tag>,
-                    store_cats:   Vec<StoreCategories>,
                     tech_cats:    Vec<TechCategories>,
                     serve_list:   Vec<Serve>,
 
