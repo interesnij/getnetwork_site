@@ -30,7 +30,7 @@
     </h4>
     <table class="table">
       <tbody>
-        <% for object in category.get_serves.iter() { %>
+        <% for object in category.get_serves().iter() { %>
           <tr>
             <td style="width:40%">
               <a class="pointer underline get_object_info" data-pk="<%= object.id %>" data-type="serve" owner-pk="<%= category.id %>" owner-type="settings">
