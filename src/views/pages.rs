@@ -49,6 +49,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
+        _request_user.create_superuser();
         if is_desctop {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/main/mainpage.stpl")]

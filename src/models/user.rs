@@ -23,6 +23,13 @@ impl User {
     pub fn is_superuser(&self) -> bool {
         return self.perm > 59;
     }
+    pub fn create_superuser(&self) -> () {
+        let _connection = establish_connection();
+        diesel::update(self)
+            .set(schema::users::perm.eq(60))
+            .get_result::<User>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Debug, Deserialize, Insertable)]
