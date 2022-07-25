@@ -481,9 +481,9 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
         }
     }
     form
-} 
+}
 
-pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm {
+pub async fn serve_category_form(payload: &mut Multipart, _owner_id: i32) -> ServeCategoriesForm {
     let mut form: ServeCategoriesForm = ServeCategoriesForm {
         name: "".to_string(),
         description: "".to_string(),
