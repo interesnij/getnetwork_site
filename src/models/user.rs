@@ -6,7 +6,7 @@ use diesel::{
 };
 use serde::{Serialize, Deserialize};
 use crate::utils::establish_connection;
-use crate::diesel::ExpressionMethods;
+use crate::diesel::{ExpressionMethods, RunQueryDsl};
 
 
 #[derive(Debug ,Queryable, Serialize, Identifiable)]
