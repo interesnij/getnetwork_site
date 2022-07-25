@@ -796,9 +796,9 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     for (i, item) in _category_blogs.iter().enumerate().rev() {
         if item == &_blog_id {
             if (i + 1) != _category_blogs_len {
-                let _prev = Some(&_category_blogs[i + 1]);
-                prev = blogs
-                    .filter(schema::blogs::id.eq(_prev.unwrap()))
+                let _next = Some(&_category_blogs[i + 1]);
+                next = blogs
+                    .filter(schema::blogs::id.eq(_next.unwrap()))
                     .filter(schema::blogs::is_active.eq(true))
                     .load::<Blog>(&_connection)
                     .expect("E")
@@ -806,9 +806,9 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                     .nth(0);
             };
             if i != 0 {
-                let _next = Some(&_category_blogs[i - 1]);
-                next = blogs
-                    .filter(schema::blogs::id.eq(_next.unwrap()))
+                let _prev = Some(&_category_blogs[i - 1]);
+                prev = blogs
+                    .filter(schema::blogs::id.eq(_prev.unwrap()))
                     .filter(schema::blogs::is_active.eq(true))
                     .load::<Blog>(&_connection)
                     .expect("E")
