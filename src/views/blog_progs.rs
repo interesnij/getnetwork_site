@@ -372,7 +372,7 @@ pub async fn edit_content_blog(session: Session, payload: Multipart, req: HttpRe
         if _request_user.perm == 60 && _request_user.id == _blog.user_id {
             use crate::utils::content_form;
 
-            let form = content_form(payload.borrow_mut()).await;
+            let form = content_form.await;
             diesel::update(&_blog)
             .set(schema::blogs::content.eq(form.content.clone()))
             .get_result::<Blog>(&_connection)
