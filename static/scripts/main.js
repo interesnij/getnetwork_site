@@ -507,16 +507,10 @@ on('body', 'click', '.prev_item', function(event) {
 on('body', 'input', '.general_search', function() {
     _this = this;
     _href = window.location.href;
-    _search = window.location.search;
-    _params = _search.replace( '?', '').split('&');
 
     if (_this.classList.contains("search-field") && !document.body.querySelector(".search_section")) {
-        r = new URL("http://" + location.host + "/search/" + _search);
-        if (_search.indexOf('q=') !== -1){
-          r.searchParams.delete('q')
-        };
-        r.searchParams.append('q', _this.value);
-      ajax_get_reload(r)
+      ajax_get_reload("/search/" + _this.value + "/");
+      return;
     }
     else if (document.body.querySelector(".search_section")) {
       if (_this.getAttribute("data-folder")) {
@@ -524,13 +518,9 @@ on('body', 'input', '.general_search', function() {
       } else {
         folder = ""
       };
-      r = new URL("http://" + location.host + "/search" + folder + "/" + _search);
-      if (_search.indexOf('q=') !== -1){
-        r.searchParams.delete('q')
-      };
-      r.searchParams.append('q', _this.value);
+      url = "/search" + folder + "/" + _this.value + "/";
     var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-      ajax_link.open( 'GET', r, true );
+      ajax_link.open( 'GET', url, true );
       ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
@@ -541,7 +531,7 @@ on('body', 'input', '.general_search', function() {
           div = document.body.querySelector(".search_section");
           div.innerHTML = '';
           div.innerHTML = search.innerHTML;
-          document.title = elem_.querySelector("title").innerHTML;
+          //document.title = elem_.querySelector("title").innerHTML;
           window.history.replaceState(null, null, r);
         }
       }
