@@ -35,13 +35,13 @@
             <td style="width:40%">
               <a class="pointer underline get_object_info" data-pk="<%= object.id %>" data-type="serve" owner-pk="<%= category.id %>" owner-type="settings">
                 <% if object.is_default { %>(*) <% } %>
-                <%= object.cat_name %> => <%= object.name %> (<%= object.id %>)
+                <%= category.name %> => <%= object.name %> (<%= object.id %>)
               </a>
             </td>
-            <td style="width:14%"><% object.price %> ₽</td>
-            <td style="width:12%" <% if object.price_ac.is_some() { %><%= object.price_acc.unwrap() %> ↓₽<% } %></td>
+            <td style="width:14%"><% if object.price.is_some() { %><%= object.price.unwrap() %> ₽<% } %></td>
+            <td style="width:12%"><% if object.price_acc.is_some() { %><%= object.price_acc.unwrap() %> ↓₽<% } %></td>
             <td style="width:12%"><% if object.social_price.is_some() { %><%= object.social_price.unwrap() %> ♡<% } %></td>
-            <td style="width:12%"><%= object.man_hours.unwrap() %> ⌛</td>
+            <td style="width:12%"><% if object.man_hours.is_some() { %><%= object.man_hours.unwrap() %> ⌛<% } %></td>
 
               if is_admin
               <td style="width:5%"><a class="ajax" href="/edit_serve/<%= object.id %>/">~</a></td>
