@@ -777,11 +777,15 @@ pub async fn delete_service_category(session: Session, _id: web::Path<i32>) -> i
 }
 
 pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
-    use schema::services::dsl::services;
-    use schema::service_categories::dsl::service_categories;
-    use schema::service_images::dsl::service_images;
-    use schema::service_videos::dsl::service_videos;
+    use schema::{
+        services::dsl::services,
+        service_categories::dsl::service_categories,
+        service_images::dsl::service_images,
+        service_videos::dsl::service_videos,
+        tech_categories::dsl::tech_categories,
+    };
     use crate::utils::get_device_and_ajax;
+    use crate::models::TechCategories;
 
     let _connection = establish_connection();
     let _service_id: i32 = param.1;
@@ -794,6 +798,10 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
         .load::<Service>(&_connection)
         .expect("E");
 
+    let _tech_categories = tech_categories
+        .load::<TechCategories>(&_connection)
+        .expect("E");
+
     let _service = _services.into_iter().nth(0).unwrap();
 
     let _categorys = service_categories
@@ -804,7 +812,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
 
     let _images: Vec<ServiceImage> = service_images.filter(schema::service_images::service.eq(&_service_id)).load(&_connection).expect("E");
     let _videos: Vec<ServiceVideo> = service_videos.filter(schema::service_videos::service.eq(&_service_id)).load(&_connection).expect("E");
-    let _categories = _service.get_categories();
     let _tags = _service.get_tags();
     let _tags_count = _tags.len();
 
@@ -850,8 +857,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 object:       Service,
                 images:       Vec<ServiceImage>,
                 videos:       Vec<ServiceVideo>,
-                categories:   Vec<ServiceCategories>,
                 category:     ServiceCategories,
+                tech_cats:    Vec<TechCategories>,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
                 prev:         Option<Service>,
@@ -863,8 +870,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 object:     _service,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
+                tech_cats:  _tech_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,
@@ -883,8 +890,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 object:       Service,
                 images:       Vec<ServiceImage>,
                 videos:       Vec<ServiceVideo>,
-                categories:   Vec<ServiceCategories>,
                 category:     ServiceCategories,
+                tech_cats:    Vec<TechCategories>,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
                 prev:         Option<Service>,
@@ -896,8 +903,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 object:     _service,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
+                tech_cats:  _tech_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,
@@ -917,8 +924,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 object:     Service,
                 images:     Vec<ServiceImage>,
                 videos:     Vec<ServiceVideo>,
-                categories: Vec<ServiceCategories>,
                 category:   ServiceCategories,
+                tech_cats:    Vec<TechCategories>,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
                 prev:       Option<Service>,
@@ -929,8 +936,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 object:     _service,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
+                tech_cats:  _tech_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,
@@ -948,8 +955,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 object:     Service,
                 images:     Vec<ServiceImage>,
                 videos:     Vec<ServiceVideo>,
-                categories: Vec<ServiceCategories>,
                 category:   ServiceCategories,
+                tech_cats:    Vec<TechCategories>,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
                 prev:       Option<Service>,
@@ -960,8 +967,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 object:     _service,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
+                tech_cats:  _tech_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,

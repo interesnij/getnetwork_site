@@ -16,7 +16,7 @@
       <% if services_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left">
                 <a href="/tag_services/<%= tag.id %>/" class="ajax">
                   Услуги (<%= services_count %>)
                 </a>
@@ -34,7 +34,7 @@
       <% if stores_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left">
                 <a href="/tag_stores/<%= tag.id %>/" class="ajax">
                   Товары (<%= stores_count %>)
                 </a>
@@ -52,7 +52,7 @@
       <% if works_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left">
                 <a href="/tag_works/<%= tag.id %>/" class="ajax">
                   Работы (<%= works_count %>)
                 </a>
@@ -70,7 +70,7 @@
       <% if blogs_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left">
                 <a href="/tag_blogs/<%= tag.id %>/" class="ajax">
                   Статьи блога (<%= blogs_count %>)
                 </a>
@@ -88,7 +88,7 @@
       <% if wikis_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left">
                 <a href="/tag_wikis/<%= tag.id %>/" class="ajax">
                   Товары (<%= wikis_count %>)
                 </a>

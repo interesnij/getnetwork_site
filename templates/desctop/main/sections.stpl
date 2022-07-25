@@ -1,6 +1,6 @@
 <section class="page-section">
     <div class="container relative">
-        <h5 class="section-title font-alt mb-70 mb-sm-40">
+        <h5 class="section-title font-alt">
             Разделы сайта
         </h5>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">

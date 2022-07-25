@@ -16,9 +16,9 @@
       <% if wikis_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
-                  Статьи блога (<%= wikis_count %>)
-              </h5>
+            <h5 class="section-title font-alt align-left">
+              Обучающие статьи (<%= wikis_count %>)
+            </h5>
               <div class="row multi-columns-row">
                 <% for object in wikis_list.iter() { %>
                   <% include!("../generic/default_wiki.stpl"); %>
