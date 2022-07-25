@@ -48,7 +48,13 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Blog>(&_connection)
         .expect("e");
     let blog_count = _blogs.len();
-    let blog_list = &_blogs[..3] || _blogs;
+    let blog_list: Vec<Blog>;
+    if blog_count > 2 {
+        blog_list = &_blogs[..3].to_vec();
+    }
+    else {
+        blog_list = _blogs;
+    }
 
     let _services = schema::services::table
         .filter(schema::services::title.ilike(&_q_standalone))
@@ -118,7 +124,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 works_list:     work_list.to_vec(),
                 services_list:  service_list.to_vec(),
                 wikis_list:     wiki_list.to_vec(),
-                blogs_list:     blog_list.to_vec(),
+                blogs_list:     blog_list,
                 stores_list:    store_list.to_vec(),
 
                 works_count:    work_count,
@@ -157,7 +163,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 works_list:     work_list.to_vec(),
                 services_list:  service_list.to_vec(),
                 wikis_list:     wiki_list.to_vec(),
-                blogs_list:     blog_list.to_vec(),
+                blogs_list:     blog_list,
                 stores_list:    store_list.to_vec(),
 
                 works_count:    work_count,
@@ -196,7 +202,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 works_list:     work_list.to_vec(),
                 services_list:  service_list.to_vec(),
                 wikis_list:     wiki_list.to_vec(),
-                blogs_list:     blog_list.to_vec(),
+                blogs_list:     blog_list,
                 stores_list:    store_list.to_vec(),
 
                 works_count:    work_count,
@@ -233,7 +239,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 works_list:     work_list.to_vec(),
                 services_list:  service_list.to_vec(),
                 wikis_list:     wiki_list.to_vec(),
-                blogs_list:     blog_list.to_vec(),
+                blogs_list:     blog_list,
                 stores_list:    store_list.to_vec(),
 
                 works_count:    work_count,
