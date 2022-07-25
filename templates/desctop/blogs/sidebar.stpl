@@ -11,7 +11,7 @@
         <ul class="clearlist widget-menu">
           <% for category in blog_cats.iter() { %>
             <li>
-                <a class="ajax" href="/blog/<%= category.id %>/"><%= category.name %>/a>
+                <a class="ajax" href="/blog/<%= category.id %>/"><%= category.name %></a>
                 <small>
                     - <%= category.count %>
                 </small>

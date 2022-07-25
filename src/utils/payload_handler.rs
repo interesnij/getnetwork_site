@@ -161,20 +161,25 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
         }
 
         else if name == "main_image" {
-            let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path.to_string());
-            let file_path = file.path.clone();
-            let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                .await
-                .unwrap();
-            while let Some(chunk) = field.next().await {
-                let data = chunk.unwrap();
-                f = web::block(move || f.write_all(&data).map(|_| f))
-                    .await
-                    .unwrap()
-                    .expect("E");
+            let _new_path = field.content_disposition().get_filename();
+            if _new_path.is_none() {
+                continue;
             }
-            form.main_image = file.path.clone().replace("./","/");
+            else {
+                let file = UploadedFiles::new(_new_path.unwrap().to_string());
+                let file_path = file.path.clone();
+                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
+                    .await
+                    .unwrap();
+                while let Some(chunk) = field.next().await {
+                    let data = chunk.unwrap();
+                    f = web::block(move || f.write_all(&data).map(|_| f))
+                        .await
+                        .unwrap()
+                        .expect("E");
+                    }
+                form.main_image = file.path.clone().replace("./","/");
+            }
         }
 
         else if name == "images[]" {
