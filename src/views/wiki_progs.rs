@@ -447,7 +447,7 @@ pub async fn create_wiki_categories(session: Session, mut payload: Multipart) ->
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewWikiCategories {
                 name:        form.name.clone(),
                 description: Some(form.description.clone()),
@@ -473,7 +473,7 @@ pub async fn create_wiki(session: Session, mut payload: Multipart) -> impl Respo
         if _request_user.perm == 60 {
             let _connection = establish_connection();
 
-            let form = item_form(payload.borrow_mut()).await;
+            let form = item_form(payload.borrow_mut(), _request_user.id).await;
             let new_wiki = NewWiki::from_wiki_form (
                 form.title.clone(),
                 form.description.clone(),
@@ -592,7 +592,7 @@ pub async fn edit_wiki(session: Session, mut payload: Multipart, _id: web::Path<
             diesel::delete(tags_items.filter(schema::tags_items::wiki_id.eq(_wiki_id))).execute(&_connection).expect("E");
             diesel::delete(wiki_category.filter(schema::wiki_category::wiki_id.eq(_wiki_id))).execute(&_connection).expect("E");
 
-            let form = item_form(payload.borrow_mut()).await;
+            let form = item_form(payload.borrow_mut(), _request_user.id).await;
             let _new_wiki = EditWiki {
                 title:       form.title.clone(),
                 description: Some(form.description.clone()),
@@ -678,7 +678,7 @@ pub async fn edit_wiki_category(session: Session, mut payload: Multipart, _id: w
             let _cat_id: i32 = *_id;
             let _category = wiki_categories.filter(schema::wiki_categories::id.eq(_cat_id)).load::<WikiCategories>(&_connection).expect("E");
 
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let _new_cat = EditWikiCategories {
                 name:        form.name.clone(),
                 description: Some(form.description.clone()),

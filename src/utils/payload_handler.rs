@@ -14,14 +14,23 @@ pub struct UploadedFiles {
     pub path: String,
 }
 impl UploadedFiles {
-    fn new(filename: String) -> UploadedFiles {
-        let format_folder = "./media/".to_string();
+    fn new(filename: String, owner_id: i32) -> UploadedFiles {
+        use chrono::Datelike;
+
+        let now = chrono::Local::now().naive_utc();
+        let format_folder = format!(
+            "./media/{}/{}/{}/{}/",
+            owner_id.to_string(),
+            now.year().to_string(),
+            now.month().to_string(),
+            now.day().to_string(),
+        );
+        let format_path = format_folder.clone() + &filename.to_string();
         create_dir_all(format_folder).unwrap();
-        let _path = format!("./media/{}", filename.to_string());
-        println!("{:?}", _path);
+
         UploadedFiles {
             name: filename.to_string(),
-            path: _path,
+            path: format_path.to_string(),
         }
     }
 }
@@ -84,7 +93,7 @@ pub struct ContentForm {
     pub content: Option<String>,
 }
 
-pub async fn item_form(payload: &mut Multipart) -> Forms {
+pub async fn item_form(payload: &mut Multipart, owner_id: i32) -> Forms {
     let mut files: Vec<UploadedFiles> = Vec::new();
 
     let mut form: Forms = Forms {
@@ -169,9 +178,8 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
 
         else if name == "main_image" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            println!("new_path{:?}", _new_path);
             if _new_path != "" {
-                let file = UploadedFiles::new(_new_path.to_string());
+                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
                 let file_path = file.path.clone();
                 let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                     .await
@@ -190,7 +198,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
         else if name == "images[]" {
             let _new_path = field.content_disposition().get_filename().unwrap();
             if _new_path != "" {
-                let file = UploadedFiles::new(_new_path.to_string());
+                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
                 let file_path = file.path.clone();
                 let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                     .await
@@ -210,7 +218,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
         else if name == "videos[]" {
             let _new_path = field.content_disposition().get_filename().unwrap();
             if _new_path != "" {
-                let file = UploadedFiles::new(_new_path.to_string());
+                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
                 let file_path = file.path.clone();
                 let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                     .await
@@ -229,7 +237,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
     }
     form
 }
-pub async fn category_form(payload: &mut Multipart) -> CategoriesForm {
+pub async fn category_form(payload: &mut Multipart, owner_id: i32) -> CategoriesForm {
     let mut form: CategoriesForm = CategoriesForm {
         name: "".to_string(),
         description: "".to_string(),
@@ -243,19 +251,21 @@ pub async fn category_form(payload: &mut Multipart) -> CategoriesForm {
 
         if name == "image" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path.to_string());
-            let file_path = file.path.clone();
-            let mut f = web::block(move || std::fs::File::create(&file_path).expect("Failed to open hello.txt"))
-                .await
-                .unwrap();
-            while let Some(chunk) = field.next().await {
-                let data = chunk.unwrap();
-                f = web::block(move || f.write_all(&data).map(|_| f))
+            if _new_path != "" {
+                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
+                let file_path = file.path.clone();
+                let mut f = web::block(move || std::fs::File::create(&file_path).expect("Failed to open hello.txt"))
                     .await
-                    .unwrap()
-                    .expect("Failed to open hello.txt");
+                    .unwrap();
+                while let Some(chunk) = field.next().await {
+                    let data = chunk.unwrap();
+                    f = web::block(move || f.write_all(&data).map(|_| f))
+                        .await
+                        .unwrap()
+                        .expect("Failed to open hello.txt");
+                }
+                form.image = file.path.clone().replace("./","/");
             }
-            form.image = file.path.clone().replace("./","/")
         }
         else if name == "position" {
             while let Some(chunk) = field.next().await {
@@ -306,7 +316,7 @@ pub async fn content_form(payload: &mut Multipart) -> ContentForm {
     form
 }
 
-pub async fn store_form(payload: &mut Multipart) -> StoreForms {
+pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
     let mut files: Vec<UploadedFiles> = Vec::new();
 
     let mut form: StoreForms = StoreForms {
@@ -413,63 +423,65 @@ pub async fn store_form(payload: &mut Multipart) -> StoreForms {
 
         else if name == "main_image" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path.to_string());
-            let file_path = file.path.clone();
-            let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                .await
-                .unwrap();
-            while let Some(chunk) = field.next().await {
-                let data = chunk.unwrap();
-                f = web::block(move || f.write_all(&data).map(|_| f))
+            if _new_path != "" {
+                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
+                let file_path = file.path.clone();
+                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                     .await
-                    .unwrap()
-                    .expect("E");
+                    .unwrap();
+                while let Some(chunk) = field.next().await {
+                    let data = chunk.unwrap();
+                    f = web::block(move || f.write_all(&data).map(|_| f))
+                        .await
+                        .unwrap()
+                        .expect("E");
+                }
+                form.main_image = file.path.clone().replace("./","/");
             }
-            form.main_image = file.path.clone().replace("./","/");
         }
 
         else if name == "images[]" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path.to_string());
-            let file_path = file.path.clone();
-            let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                .await
-                .unwrap();
-            while let Some(chunk) = field.next().await {
-                let data = chunk.unwrap();
-                f = web::block(move || f.write_all(&data).map(|_| f))
+            if _new_path != "" {
+                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
+                let file_path = file.path.clone();
+                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                     .await
-                    .unwrap()
-                    .expect("E");
-            };
-            if field.content_type().to_string() == "image/jpeg".to_string() {
+                    .unwrap();
+                while let Some(chunk) = field.next().await {
+                    let data = chunk.unwrap();
+                    f = web::block(move || f.write_all(&data).map(|_| f))
+                        .await
+                        .unwrap()
+                        .expect("E");
+                };
                 files.push(file.clone());
                 form.images.push(file.path.clone().replace("./","/"));
-            };
+            }
         }
 
         else if name == "videos[]" {
             let _new_path = field.content_disposition().get_filename().unwrap();
-            let file = UploadedFiles::new(_new_path.to_string());
-            let file_path = file.path.clone();
-            let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                .await
-                .unwrap();
-            while let Some(chunk) = field.next().await {
-                let data = chunk.unwrap();
-                f = web::block(move || f.write_all(&data).map(|_| f))
+            if _new_path != "" {
+                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
+                let file_path = file.path.clone();
+                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
                     .await
-                    .unwrap()
-                    .expect("E");
-            };
-            if field.content_type().to_string() == "video/mp4".to_string() {
+                    .unwrap();
+                while let Some(chunk) = field.next().await {
+                    let data = chunk.unwrap();
+                    f = web::block(move || f.write_all(&data).map(|_| f))
+                        .await
+                        .unwrap()
+                        .expect("E");
+                };
                 files.push(file.clone());
                 form.videos.push(file.path.clone().replace("./","/"));
-            };
+            }
         }
     }
     form
-}
+} 
 
 pub async fn serve_category_form(payload: &mut Multipart) -> ServeCategoriesForm {
     let mut form: ServeCategoriesForm = ServeCategoriesForm {

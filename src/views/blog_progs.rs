@@ -447,7 +447,7 @@ pub async fn create_blog_categories(session: Session, mut payload: Multipart) ->
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewBlogCategories {
                 name:        form.name.clone(),
                 description: Some(form.description.clone()),
@@ -473,7 +473,7 @@ pub async fn create_blog(session: Session, mut payload: Multipart) -> impl Respo
         if _request_user.perm == 60 {
             let _connection = establish_connection();
 
-            let form = item_form(payload.borrow_mut()).await;
+            let form = item_form(payload.borrow_mut(), _request_user.id).await;
             let new_blog = NewBlog::from_blog_form (
                 form.title.clone(),
                 form.description.clone(),
@@ -592,7 +592,7 @@ pub async fn edit_blog(session: Session, mut payload: Multipart, _id: web::Path<
             diesel::delete(tags_items.filter(schema::tags_items::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
             diesel::delete(blog_category.filter(schema::blog_category::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
 
-            let form = item_form(payload.borrow_mut()).await;
+            let form = item_form(payload.borrow_mut(), _request_user.id).await;
             let _new_blog = EditBlog {
                 title:       form.title.clone(),
                 description: Some(form.description.clone()),
@@ -678,7 +678,7 @@ pub async fn edit_blog_category(session: Session, mut payload: Multipart, _id: w
             let _cat_id: i32 = *_id;
             let _category = blog_categories.filter(schema::blog_categories::id.eq(_cat_id)).load::<BlogCategories>(&_connection).expect("E");
 
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let _new_cat = EditBlogCategories {
                 name:        form.name.clone(),
                 description: Some(form.description.clone()),

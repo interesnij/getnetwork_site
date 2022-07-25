@@ -447,7 +447,7 @@ pub async fn create_service_categories(session: Session, mut payload: Multipart)
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewServiceCategories {
                 name:        form.name.clone(),
                 description: Some(form.description.clone()),
@@ -473,7 +473,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
         if _request_user.perm == 60 {
             let _connection = establish_connection();
 
-            let form = item_form(payload.borrow_mut()).await;
+            let form = item_form(payload.borrow_mut(), _request_user.id).await;
             let new_service = NewService::from_service_form (
                 form.title.clone(),
                 form.description.clone(),
@@ -592,7 +592,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
 
-            let form = item_form(payload.borrow_mut()).await;
+            let form = item_form(payload.borrow_mut(), _request_user.id).await;
             let _new_service = EditService {
                 title:       form.title.clone(),
                 description: Some(form.description.clone()),
@@ -678,7 +678,7 @@ pub async fn edit_service_category(session: Session, mut payload: Multipart, _id
             let _cat_id: i32 = *_id;
             let _category = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");
 
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let _new_cat = EditServiceCategories {
                 name:        form.name.clone(),
                 description: Some(form.description.clone()),

@@ -447,7 +447,7 @@ pub async fn create_work_categories(session: Session, mut payload: Multipart) ->
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewWorkCategories {
                 name:        form.name.clone(),
                 description: Some(form.description.clone()),
@@ -473,7 +473,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
         if _request_user.perm == 60 {
             let _connection = establish_connection();
 
-            let form = item_form(payload.borrow_mut()).await;
+            let form = item_form(payload.borrow_mut(), _request_user.id).await;
             let new_work = NewWork::from_work_form (
                 form.title.clone(),
                 form.description.clone(),
@@ -592,7 +592,7 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
             diesel::delete(tags_items.filter(schema::tags_items::work_id.eq(_work_id))).execute(&_connection).expect("E");
             diesel::delete(work_category.filter(schema::work_category::work_id.eq(_work_id))).execute(&_connection).expect("E");
 
-            let form = item_form(payload.borrow_mut()).await;
+            let form = item_form(payload.borrow_mut(), _request_user.id).await;
             let _new_work = EditWork {
                 title:       form.title.clone(),
                 description: Some(form.description.clone()),
@@ -678,7 +678,7 @@ pub async fn edit_work_category(session: Session, mut payload: Multipart, _id: w
             let _cat_id: i32 = *_id;
             let _category = work_categories.filter(schema::work_categories::id.eq(_cat_id)).load::<WorkCategories>(&_connection).expect("E");
 
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let _new_cat = EditWorkCategories {
                 name:        form.name.clone(),
                 description: Some(form.description.clone()),

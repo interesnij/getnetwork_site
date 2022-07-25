@@ -600,7 +600,7 @@ pub async fn create_tech_categories(session: Session, mut payload: Multipart) ->
             use schema::tech_categories;
 
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewTechCategories {
                 name: form.name.clone(),
                 description: Some(form.description.clone()),
@@ -626,7 +626,7 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
             use schema::tech_categories::dsl::tech_categories;
 
             let _connection = establish_connection();
-            let form = serve_category_form(payload.borrow_mut()).await;
+            let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;
             let _s_category = tech_categories
                 .filter(schema::tech_categories::id.eq(form.tech_categories))
                 .load::<TechCategories>(&_connection).expect("E");
@@ -662,7 +662,7 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _category.user_id == _request_user.id {
 
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewTechCategories {
                 name: form.name.clone(),
                 description: Some(form.description.clone()),
@@ -701,7 +701,7 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
                 .load::<TechCategories>(&_connection)
                 .expect("E");
 
-            let form = serve_category_form(payload.borrow_mut()).await;
+            let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewServeCategories {
                 name: form.name.clone(),
                 description: Some(form.description.clone()),

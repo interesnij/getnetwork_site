@@ -107,7 +107,7 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_tag = NewTag {
                 name:          form.name.clone(),
                 position:      form.position,
@@ -1100,7 +1100,7 @@ pub async fn edit_tag(session: Session, mut payload: Multipart, _id: web::Path<i
                 .load::<Tag>(&_connection)
                 .expect("E");
 
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let _new_tag = EditTag {
                 name:     form.name.clone(),
                 position: form.position,
