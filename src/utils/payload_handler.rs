@@ -169,6 +169,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
 
         else if name == "main_image" {
             let _new_path = field.content_disposition().get_filename();
+            println!("new_path{:?}", _new_path);
             if _new_path.is_none() {
                 continue;
             }
