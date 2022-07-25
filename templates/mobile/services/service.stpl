@@ -145,7 +145,7 @@
                 <% } %>
             </div>
             <div class="col-sm-4">
-                <% include!('sidebar.stpl'); %>
+                <% include!("sidebar.stpl"); %>
             </div>
         </div>
     </div>
