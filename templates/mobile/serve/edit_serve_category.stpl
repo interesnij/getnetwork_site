@@ -35,7 +35,7 @@
             </div>
             <div class="mb-20 mb-md-10">
               <% if category.default_price.is_some() { %>
-                <input value="<%= category.default_price.as_deref().unwrap() %>" class="input-md form-control" type="number" name="default_price" placeholder="Начальная цена" />
+                <input value="<%= category.default_price.unwrap() %>" class="input-md form-control" type="number" name="default_price" placeholder="Начальная цена" />
               <% } else { %>
                 <input value="" class="input-md form-control" type="number" name="default_price" placeholder="Начальная цена" />
               <% } %>
@@ -51,8 +51,8 @@
             <button data-pk="<%= category.id %>" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_serve_category_btn">Изменить</button>
         </form>
         <section class="border small-section bg-dark">
-          <% for category in categories.iter() { %>
-          <p><%= category.cat_name %> => <%= category.name %>
+          <% for category in serve_cats.iter() { %>
+            <p><%= category.cat_name %> => <%= category.name %>
               | <a class="ajax" href="/edit_serve_category/<%= category.id %>/">~</a>
               | <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
             </p>

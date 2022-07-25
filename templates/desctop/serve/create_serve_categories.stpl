@@ -38,7 +38,7 @@
         </form>
 
         <section class="border small-section bg-dark">
-            <% for category in categories.iter() { %>
+            <% for category in serve_cats.iter() { %>
             <p><%= category.cat_name %> => <%= category.name %>
                 | <a class="ajax" href="/edit_serve_category/<%= category.id %>/">~</a>
                 | <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
