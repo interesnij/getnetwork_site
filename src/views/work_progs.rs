@@ -787,23 +787,24 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
     let mut next: Option<Work> = None;
 
     let _category_works = _category.get_works_ids();
-    let _category_works_len = _category_works.len() as i32;
+    let _category_works_len = _category_works.len();
 
-    let mut iter: i32 = 0;
-    for item in _category_works.iter().rev() {
+    for (i, item) in _category_works.iter().enumerate().rev() {
         if item == &_work_id {
-            if (iter + 1) != _category_works_len {
-                prev = works
-                    .filter(schema::works::id.eq(iter + 1))
+            if (i + 1) != _category_works_len {
+                let _next = Some(&_category_works[i + 1]);
+                next = works
+                    .filter(schema::works::id.eq(_next.unwrap()))
                     .filter(schema::works::is_active.eq(true))
                     .load::<Work>(&_connection)
                     .expect("E")
                     .into_iter()
                     .nth(0);
             };
-            if iter != 0 {
-                next = works
-                    .filter(schema::works::id.eq(iter - 1))
+            if i != 0 {
+                let _prev = Some(&_category_works[i - 1]);
+                prev = works
+                    .filter(schema::works::id.eq(_prev.unwrap()))
                     .filter(schema::works::is_active.eq(true))
                     .load::<Work>(&_connection)
                     .expect("E")
@@ -812,7 +813,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             };
             break;
         }
-        iter += 1;
     };
 
     if is_signed_in(&session) {

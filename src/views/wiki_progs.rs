@@ -787,23 +787,24 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
     let mut next: Option<Wiki> = None;
 
     let _category_wikis = _category.get_wikis_ids();
-    let _category_wikis_len = _category_wikis.len() as i32;
+    let _category_wikis_len = _category_wikis.len();
 
-    let mut iter: i32 = 0;
-    for item in _category_wikis.iter().rev() {
+    for (i, item) in _category_wikis.iter().enumerate().rev() {
         if item == &_wiki_id {
-            if (iter + 1) != _category_wikis_len {
-                prev = wikis
-                    .filter(schema::wikis::id.eq(iter + 1))
+            if (i + 1) != _category_wikis_len {
+                let _next = Some(&_category_wikis[i + 1]);
+                next = wikis
+                    .filter(schema::wikis::id.eq(_next.unwrap()))
                     .filter(schema::wikis::is_active.eq(true))
                     .load::<Wiki>(&_connection)
                     .expect("E")
                     .into_iter()
                     .nth(0);
             };
-            if iter != 0 {
-                next = wikis
-                    .filter(schema::wikis::id.eq(iter - 1))
+            if i != 0 {
+                let _prev = Some(&_category_wikis[i - 1]);
+                prev = wikis
+                    .filter(schema::wikis::id.eq(_prev.unwrap()))
                     .filter(schema::wikis::is_active.eq(true))
                     .load::<Wiki>(&_connection)
                     .expect("E")
@@ -812,7 +813,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             };
             break;
         }
-        iter += 1;
     };
 
     if is_signed_in(&session) {

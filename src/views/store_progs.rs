@@ -793,23 +793,24 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
     let mut next: Option<Store> = None;
 
     let _category_stores = _category.get_stores_ids();
-    let _category_stores_len = _category_stores.len() as i32;
+    let _category_stores_len = _category_stores.len();
 
-    let mut iter: i32 = 0;
-    for item in _category_stores.iter().rev() {
+    for (i, item) in _category_stores.iter().enumerate().rev() {
         if item == &_store_id {
-            if (iter + 1) != _category_stores_len {
-                prev = stores
-                    .filter(schema::stores::id.eq(iter + 1))
+            if (i + 1) != _category_stores_len {
+                let _next = Some(&_category_stores[i + 1]);
+                next = stores
+                    .filter(schema::stores::id.eq(_next.unwrap()))
                     .filter(schema::stores::is_active.eq(true))
                     .load::<Store>(&_connection)
                     .expect("E")
                     .into_iter()
                     .nth(0);
             };
-            if iter != 0 {
-                next = stores
-                    .filter(schema::stores::id.eq(iter - 1))
+            if i != 0 {
+                let _prev = Some(&_category_stores[i - 1]);
+                prev = stores
+                    .filter(schema::stores::id.eq(_prev.unwrap()))
                     .filter(schema::stores::is_active.eq(true))
                     .load::<Store>(&_connection)
                     .expect("E")
@@ -818,7 +819,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
             };
             break;
         }
-        iter += 1;
     };
 
     if is_signed_in(&session) {
