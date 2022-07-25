@@ -35,7 +35,7 @@
                   Информация отсутствует.
                 <% } %>
 
-                <% let serv_categories = service.get_categories(); %>
+                <% let serv_categories = object.get_categories(); %>
                 <% for (i, t_category) in tech_cats.iter().enumerate() { %>
                   <% let is_main_cat = serv_categories.iter().any(|i| i.id==t_category.id); %>
                   <% let s_cats = t_category.get_serve_categories(); %>
