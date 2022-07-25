@@ -537,7 +537,7 @@ on('body', 'input', '.general_search', function() {
           div.innerHTML = '';
           div.innerHTML = search.innerHTML;
           //document.title = elem_.querySelector("title").innerHTML;
-          window.history.replaceState(null, null, r);
+          window.history.replaceState(null, null, url);
         }
       }
       ajax_link.send();
