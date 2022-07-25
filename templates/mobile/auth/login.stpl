@@ -1,15 +1,18 @@
 <% include!("../anon_header.stpl"); %>
 
-<form action="" method="POST">
+<form class="form" style="margin-top: 100px;">
+    <div>
+      <p class="api_response"></p>
+    </div>
     <div>
         <label for="username">Логин:</label>
-        <input type="text" name="username">
+        <input id="id_username" type="text" name="username">
     </div>
     <div>
         <label for="password">Пароль:</label>
-        <input type="password" name="password">
+        <input id="id_password" type="password" name="password">
     </div>
-    <input type="submit" value="Войти">
+    <button type="button" id="logg">Войти</button>
 </form>
 
 <% include!("../anon_footer.stpl"); %>

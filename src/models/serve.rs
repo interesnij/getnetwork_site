@@ -28,6 +28,18 @@ pub struct TechCategories {
     pub count:       i32,
     pub user_id:     i32,
 }
+
+impl TechCategories {
+    pub fn get_serve_categories(&self) -> Vec<ServeCategories> {
+        use crate::schema::serve_categories::dsl::serve_categories;
+
+        let _connection = establish_connection();
+        return serve_categories
+            .filter(schema::serve_categories::tech_categories.eq(self.id))
+            .load::<ServeCategories>(&_connection)
+            .expect("E");
+    }
+}
 #[derive(Insertable,AsChangeset)]
 #[table_name="tech_categories"]
 pub struct NewTechCategories {
@@ -51,6 +63,17 @@ pub struct ServeCategories {
     pub count:           i32,
     pub default_price:   Option<i32>,
     pub user_id:         i32,
+}
+impl ServeCategories {
+    pub fn get_serves(&self) -> Vec<Serve> {
+        use crate::schema::serve::dsl::serve;
+
+        let _connection = establish_connection();
+        return serve
+            .filter(schema::serve::serve_categories.eq(self.id))
+            .load::<Serve>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Insertable,AsChangeset)]
