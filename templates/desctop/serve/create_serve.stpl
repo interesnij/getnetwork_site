@@ -26,7 +26,7 @@
             <div class="mb-20 mb-md-10">
               <label>Категория</label>
               <select class="input-md form-control" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
-                <% for category in categories.iter() { %>
+                <% for category in serve_cats.iter() { %>
                   <option value="<%= category.id %>">
                     <%= category.cat_name %> => <%= category.name %>
                   </option>

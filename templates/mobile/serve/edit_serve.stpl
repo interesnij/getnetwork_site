@@ -37,7 +37,7 @@
               <label>Категория</label>
               <select class="input-md form-control" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
                 <% for cat in serve_cats.iter() { %>
-                  <option <% if cat.id == category.serve_categories { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
+                  <option <% if cat.id == object.serve_categories { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
                 <% } %>
               </select>
             </div>

@@ -226,12 +226,12 @@ pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> 
                 #[template(path = "desctop/serve/create_tech_categories.stpl")]
                 struct Template {
                     request_user: User,
-                    categories:   Vec<TechCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
-                    categories:   _categories,
+                    tech_cats:    _categories,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
@@ -243,12 +243,12 @@ pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> 
                 #[template(path = "mobile/serve/create_tech_categories.stpl")]
                 struct Template {
                     request_user: User,
-                    categories:   Vec<TechCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
-                    categories:   _categories,
+                    tech_cats:    _categories,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
