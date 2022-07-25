@@ -1,5 +1,105 @@
 <% include!("../header.stpl"); %>
 
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <a class="ajax" href="/store_categories/">Блог</a>
+                    &nbsp;/&nbsp;
+                    <span>Создание товара</span>
+                </div>
+    </div>
+</section>
 
+<section class="page-section">
+    <div class="container relative">
+        <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="text" name="title" placeholder="Название" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="price" placeholder="Цена" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="text" name="description" placeholder="Описание" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Обложка</label>
+                <input class="input-md form-control" type="file" name="main_image" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="price" placeholder="Цена" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Категории</label>
+                <select class="form-control" name="category_list[]" multiple="">
+                  <% for category in store_cats.iter() { %>
+                    <option value="<%= category.id %>"><%= category.name %></option>
+                  <% } %>
+                </select>
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Теги</label>
+                <select class="form-control" name="tags_list[]" multiple="">
+                  <% for tag in all_tags.iter() { %>
+                    <option value="<%= tag.id %>"><%= tag.name %></option>
+                  <% } %>
+                </select>
+            </div>
+
+            <hr class="mt-0 mb-0 " />
+            <% for tech_category in tech_cats.iter() { %>
+            <h4>Тех-категория: <%= tech_category.name %></h4>
+              <% for category in tech_category.get_serve_categories().iter() { %>
+
+                <div class="mb-20 mb-md-10">
+                  <label>Список опций <%= category.name %></label>
+                  <select class="form-control" name="serve_list[]" multiple="">
+                    <% for object in category.get_serves().iter() { %>
+                      <option value="<%= object.id %>">
+                        <%= object.name %>
+                      </option>
+                    <% } %>
+                  </select>
+                </div>
+              <% } %>
+            <% } %>
+
+            <hr class="mt-0 mb-0 " />
+
+            <div class="mb-20 mb-md-10">
+                <label>Изображения</label>
+                <input type="file" multiple name="images[]" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Видеозаписи</label>
+                <input type="file" multiple name="videos[]" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <label class="checkbox-inline">
+                <input type="checkbox" name="is_active" checked>
+                  Статья открыта
+              </label>
+            </div>
+            <button style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_store_btn">Отправить</button>
+        </form>
+    </div>
+</section>
 
 <% include!("../footer.stpl"); %>

@@ -44,6 +44,25 @@
                   <% } %>
                 </select>
             </div>
+            <hr class="mt-0 mb-0 " />
+            <% for tech_category in tech_cats.iter() { %>
+            <h4>Тех-категория: <%= tech_category.name %></h4>
+              <% for category in tech_category.get_serve_categories().iter() { %>
+
+                <div class="mb-20 mb-md-10">
+                  <label>Список опций <%= category.name %></label>
+                  <select class="form-control" name="serve_list[]" multiple="">
+                    <% for object in category.get_serves().iter() { %>
+                      <option value="<%= object.id %>">
+                        <%= object.name %>
+                      </option>
+                    <% } %>
+                  </select>
+                </div>
+              <% } %>
+            <% } %>
+
+            <hr class="mt-0 mb-0 " />
             <div class="mb-20 mb-md-10">
                 <label>Изображения</label>
                 <input type="file" multiple name="images[]" />
@@ -62,7 +81,5 @@
         </form>
     </div>
 </section>
-
-
 
 <% include!("../footer.stpl"); %>
