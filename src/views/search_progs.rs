@@ -64,7 +64,13 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Service>(&_connection)
         .expect("e");
     let service_count = _services.len();
-    let service_list = &_services[..3];
+    let service_list: Vec<Service>;
+    if service_count > 2 {
+        service_list = _services[..3].to_vec();
+    }
+    else {
+        service_list = _services;
+    }
 
     let _stores = schema::stores::table
         .filter(schema::stores::title.eq(&_q))
@@ -74,7 +80,13 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Store>(&_connection)
         .expect("e");
     let store_count = _stores.len();
-    let store_list = &_stores[..3];
+    let store_list: Vec<Store>;
+    if store_count > 2 {
+        store_list = _stores[..3].to_vec();
+    }
+    else {
+        store_list = _stores;
+    }
 
     let _wikis = schema::wikis::table
         .filter(schema::wikis::title.eq(&_q))
@@ -84,7 +96,13 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Wiki>(&_connection)
         .expect("e");
     let wiki_count = _wikis.len();
-    let wiki_list = &_wikis[..3];
+    let wiki_list: Vec<Wiki>;
+    if wiki_count > 2 {
+        wiki_list = _wikis[..3].to_vec();
+    }
+    else {
+        wiki_list = _wikis;
+    }
 
     let _works = schema::works::table
         .filter(schema::works::title.eq(&_q))
@@ -94,7 +112,13 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Work>(&_connection)
         .expect("e");
     let work_count = _works.len();
-    let work_list = &_works[..3];
+    let work_list: Vec<Work>;
+    if work_count > 2 {
+        work_list = _works[..3].to_vec();
+    }
+    else {
+        work_list = _works;
+    }
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
@@ -121,11 +145,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             }
             let body = Template {
                 request_user:   _request_user,
-                works_list:     work_list.to_vec(),
-                services_list:  service_list.to_vec(),
-                wikis_list:     wiki_list.to_vec(),
+                works_list:     work_list,
+                services_list:  service_list,
+                wikis_list:     wiki_list,
                 blogs_list:     blog_list,
-                stores_list:    store_list.to_vec(),
+                stores_list:    store_list,
 
                 works_count:    work_count,
                 services_count: service_count,
@@ -160,11 +184,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             }
             let body = Template {
                 request_user:   _request_user,
-                works_list:     work_list.to_vec(),
-                services_list:  service_list.to_vec(),
-                wikis_list:     wiki_list.to_vec(),
+                works_list:     work_list,
+                services_list:  service_list,
+                wikis_list:     wiki_list,
                 blogs_list:     blog_list,
-                stores_list:    store_list.to_vec(),
+                stores_list:    store_list,
 
                 works_count:    work_count,
                 services_count: service_count,
@@ -199,11 +223,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 q:              String,
             }
             let body = Template {
-                works_list:     work_list.to_vec(),
-                services_list:  service_list.to_vec(),
-                wikis_list:     wiki_list.to_vec(),
+                works_list:     work_list,
+                services_list:  service_list,
+                wikis_list:     wiki_list,
                 blogs_list:     blog_list,
-                stores_list:    store_list.to_vec(),
+                stores_list:    store_list,
 
                 works_count:    work_count,
                 services_count: service_count,
@@ -236,11 +260,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 q:              String,
             }
             let body = Template {
-                works_list:     work_list.to_vec(),
-                services_list:  service_list.to_vec(),
-                wikis_list:     wiki_list.to_vec(),
+                works_list:     work_list,
+                services_list:  service_list,
+                wikis_list:     wiki_list,
                 blogs_list:     blog_list,
-                stores_list:    store_list.to_vec(),
+                stores_list:    store_list,
 
                 works_count:    work_count,
                 services_count: service_count,
