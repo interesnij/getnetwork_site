@@ -797,7 +797,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
         if item == &_blog_id {
             if (iter + 1) != _category_blogs_len {
                 prev = blogs
-                    .filter(schema::blogs::id.eq(iter + 1))
+                    .filter(schema::blogs::id.eq(item + 1))
                     .filter(schema::blogs::is_active.eq(true))
                     .load::<Blog>(&_connection)
                     .expect("E")
@@ -806,7 +806,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             };
             if iter != 0 {
                 next = blogs
-                    .filter(schema::blogs::id.eq(iter - 1))
+                    .filter(schema::blogs::id.eq(item - 1))
                     .filter(schema::blogs::is_active.eq(true))
                     .load::<Blog>(&_connection)
                     .expect("E")
