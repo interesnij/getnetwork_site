@@ -355,7 +355,7 @@ pub async fn edit_content_store_page(session: Session, payload: Multipart, req: 
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
     }
 }
-pub async fn edit_content_store(session: Session, payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_content_store(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::stores::dsl::stores;
 
     let _store_id: i32 = *_id;
