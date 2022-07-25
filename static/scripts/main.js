@@ -394,21 +394,37 @@ function service_tab_action(_this, tab_class){
 
 function on(elSelector, eventName, selector, fn) {var element = document.querySelector(elSelector);element.addEventListener(eventName, function(event) {var possibleTargets = element.querySelectorAll(selector);var target = event.target;for (var i = 0, l = possibleTargets.length; i < l; i++) {var el = target;var p = possibleTargets[i];while (el && el !== element) {if (el === p) {return fn.call(p, event);}el = el.parentNode;}}});};
 
+function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        let c = cookies[i].trim().split('=');
+        if (c[0] === name) {
+            return c[1];
+        }
+    }
+    return "";
+}
+function setCookie(name, value, days) {
+    let cookie = `${name}=${encodeURIComponent(value)}`;
+
+    if (days) {
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + days);
+        cookie += `; expires=${expiry.toUTCString()}`;
+    }
+    document.cookie = cookie;
+};
+
 function get_custom_design() {
   color = "white";
-  params = window.location.search.replace( '?', '').split('&');
+  backgroud = getCookie("backgroud");
+  if (backgroud != "") {
+    color = backgroud;
+  }
 
-    if (params[0] && params[0].split("=")[0] == "f") {
-      color = params[0].split("=")[1]}
-    else if (params[1] && params[1].split("=")[0] == "f") {
-      color = params[1].split("=")[1]
-    } else if (params[2] && params[2].split("=")[0] == "f") {
-      color = params[2].split("=")[1]
-    };
-
-    addStyleSheets("/static/styles/color/" + color + ".css")
-    btn = document.body.querySelector(".anon_color_change");
-    btn.setAttribute("data-color", color)
+  addStyleSheets("/static/styles/color/" + color + ".css")
+  btn = document.body.querySelector(".anon_color_change");
+  btn.setAttribute("data-color", color)
 };
 get_custom_design();
 
@@ -467,20 +483,7 @@ on('body', 'click', '.anon_color_change', function() {
     this.setAttribute("data-color", "white");
     new_color = "white"
   };
-  _href = window.location.href;
-  _search = window.location.search;
-  _params = _search.replace( '?', '').split('&');
-  if (_search.indexOf('f=') !== -1){
-    r = new URL(_href);
-    r.searchParams.delete('f');
-    __url = r;
-  } else { __url = _href };
-  if (_params[1]) {
-    _url = __url + "&f=" + new_color;
-  } else {
-    _url = __url + "?f=" + new_color;
-  };
-  window.history.replaceState(null, null, _url);
+  setCookie("backgroud", new_color, 90)
 });
 on('body', 'click', '.this_fullscreen_hide', function() {
   close_fullscreen()

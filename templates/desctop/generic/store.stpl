@@ -1,4 +1,4 @@
-<div class="col-md-6 mb-60 mb-xs-40">
+<div class="col-lg-4 col-md-6 mb-60 mb-xs-40">
   <div class="post-prev-img">
     <a class="ajax" href="/store/<%= category.id %>/<%= object.id %>/">
       <img src="<%= object.get_image() %>" alt="img">
