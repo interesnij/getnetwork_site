@@ -293,7 +293,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
     }
 }
 
-pub async fn edit_content_work_page(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn edit_content_work_page(session: Session, payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::works::dsl::works;
 
     let _work_id: i32 = *_id;
@@ -355,7 +355,7 @@ pub async fn edit_content_work_page(session: Session, mut payload: Multipart, re
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
     }
 }
-pub async fn edit_content_work(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_content_work(session: Session, payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::works::dsl::works;
 
     let _work_id: i32 = *_id;

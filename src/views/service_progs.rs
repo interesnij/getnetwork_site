@@ -293,7 +293,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
     }
 }
 
-pub async fn edit_content_service_page(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn edit_content_service_page(session: Session, payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::services::dsl::services;
 
     let _service_id: i32 = *_id;
@@ -355,7 +355,7 @@ pub async fn edit_content_service_page(session: Session, mut payload: Multipart,
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
     }
 }
-pub async fn edit_content_service(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_content_service(session: Session, payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::services::dsl::services;
 
     let _service_id: i32 = *_id;
@@ -791,7 +791,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
 
     for (i, item) in _category_services.iter().enumerate().rev() {
         if item == &_service_id {
-            if (i + 1) != _category_blogs_len {
+            if (i + 1) != _category_services_len {
                 let _next = Some(&_category_services[i + 1]);
                 next = services
                     .filter(schema::services::id.eq(_next.unwrap()))
