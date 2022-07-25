@@ -131,8 +131,13 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use schema::tags::dsl::tags;
-            use schema::store_categories::dsl::store_categories;
+            use schema::{
+                tags::dsl::tags,
+                tech_categories::dsl::tech_categories,
+                store_categories::dsl::store_categories,
+            };
+            use crate::models::TechCategories;
+
             use crate::utils::get_device_and_ajax;
 
             let _connection = establish_connection();
@@ -143,6 +148,9 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
             let all_tags: Vec<Tag> = tags
                 .load(&_connection)
                 .expect("Error.");
+            let _tech_categories = tech_categories
+                .load::<TechCategories>(&_connection)
+                .expect("E");
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
@@ -152,12 +160,14 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
                 struct Template {
                     request_user: User,
                     store_cats:   Vec<StoreCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     store_cats:   _store_cats,
+                    tech_cats:    _tech_categories,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
@@ -170,13 +180,15 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
                 #[template(path = "mobile/stores/create_store.stpl")]
                 struct Template {
                     request_user: User,
-                    store_cats: Vec<StoreCategories>,
+                    store_cats:   Vec<StoreCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     store_cats:   _store_cats,
+                    tech_cats:    _tech_categories,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
@@ -209,8 +221,10 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 store_images::dsl::store_images,
                 store_videos::dsl::store_videos,
                 store_categories::dsl::store_categories,
+                tech_categories::dsl::tech_categories,
             };
             use crate::utils::get_device_and_ajax;
+            use crate::models:: {TechCategories, Serve};
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
             let _categories = _store.get_categories();
@@ -223,31 +237,42 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
             let _store_cats:Vec<StoreCategories> = store_categories
                 .load(&_connection)
                 .expect("Error");
+
+            let _tech_categories = tech_categories
+                .load::<TechCategories>(&_connection)
+                .expect("E");
+
+            let serve_list = _store.get_serves();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/edit_store.stpl")]
                 struct Template {
                     request_user: User,
                     store:        Store,
-                    categories:   Vec<StoreCategories>,
+                    store_cats:   Vec<StoreCategories>,
                     is_ajax:      bool,
                     images:       Vec<StoreImage>,
                     videos:       Vec<StoreVideo>,
                     all_tags:     Vec<Tag>,
                     store_tags:   Vec<Tag>,
-                    store_cats: Vec<StoreCategories>,
+                    store_cats:   Vec<StoreCategories>,
+                    tech_cats:    Vec<TechCategories>,
+                    serve_list:   Vec<Serve>,
 
                 }
                 let body = Template {
                     request_user: _request_user,
-                    store:      _store,
-                    categories:   _categories,
+                    store:        _store,
+                    store_cats:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
                     all_tags:     _all_tags,
                     store_tags:   _store_tags,
-                    store_cats: _store_cats,
+                    store_cats:   _store_cats,
+                    tech_cats:    _tech_categories,
+                    serve_list:   serve_list,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -259,14 +284,15 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 struct Template {
                     request_user: User,
                     store:        Store,
-                    categories:   Vec<StoreCategories>,
+                    store_cats:   Vec<StoreCategories>,
                     is_ajax:      bool,
                     images:       Vec<StoreImage>,
                     videos:       Vec<StoreVideo>,
                     all_tags:     Vec<Tag>,
                     store_tags:   Vec<Tag>,
                     store_cats:   Vec<StoreCategories>,
-
+                    tech_cats:    Vec<TechCategories>,
+                    serve_list:   Vec<Serve>,
                 }
                 let body = Template {
                     request_user: _request_user,
@@ -278,6 +304,8 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     all_tags:     _all_tags,
                     store_tags:   _store_tags,
                     store_cats:   _store_cats,
+                    tech_cats:    _tech_categories,
+                    serve_list:   serve_list,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
