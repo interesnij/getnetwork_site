@@ -22,7 +22,7 @@
       <section class="page-section">
           <div class="container relative">
               <h2 class="section-title font-alt align-left">
-                <a data-q="<%= q %>" href="/search_services/" class="ajax">
+                <a href="/search_services/<%= q %>/" class="ajax">
                   Услуги (<%= services_count %>)
                 </a>
               </h2>
@@ -41,7 +41,7 @@
       <section class="page-section">
           <div class="container relative">
               <h2 class="section-title font-alt align-left">
-                <a data-q="<%= q %>" href="/search_stores/" class="ajax">
+                <a href="/search_stores/<%= q %>/" class="ajax">
                   Товары (<%= stores_count %>)
                 </a>
               </h2>
@@ -60,7 +60,7 @@
       <section class="page-section">
           <div class="container relative">
               <h2 class="section-title font-alt align-left">
-                <a data-q="<%= q %>" href="/search_works/" class="ajax">
+                <a href="/search_works/<%= q %>/" class="ajax">
                   Работы (<%= works_count %>)
                 </a>
               </h2>
@@ -79,7 +79,7 @@
       <section class="page-section">
           <div class="container relative">
               <h2 class="section-title font-alt align-left">
-                <a data-q="<%= q %>" href="/search_blogs/" class="section-more right ajax blog">
+                <a href="/search_blogs/<%= q %>/" class="ajax blog">
                   Статьи блога (<%= blogs_count %>)
                 </a>
               </h2>
@@ -98,7 +98,7 @@
       <section class="page-section">
           <div class="container relative">
               <h2 class="section-title font-alt align-left">
-                <a data-q="<%= q %>" href="/search_wikis/" class="ajax">
+                <a href="/search_wikis/<%= q %>/" class="ajax">
                   Товары (<%= wikis_count %>)
                 </a>
               </h2>
