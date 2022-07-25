@@ -553,14 +553,14 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     serve_cats:   Vec<ServeCategories>,
-                    object:       Serve,
+                    serve:        Serve,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     tech_cats:    all_tech_categories,
                     serve_cats:   _serve_cats,
-                    object:       _serve,
+                    serve:        _serve,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
@@ -574,14 +574,14 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     serve_cats:   Vec<ServeCategories>,
-                    object:       Serve,
+                    serve:        Serve,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     tech_cats:    all_tech_categories,
                     serve_cats:   _serve_cats,
-                    object:       _serve,
+                    serve:        _serve,
                     is_ajax:      is_ajax,
                 }
                 .render_once()

@@ -71,7 +71,7 @@
             </div>
             <div class="mb-20 mb-md-10">
               <label class="checkbox-inline">
-                <input type="checkbox" name="is_default" <% if serve.is_active { %>checked<% } %>>
+                <input type="checkbox" name="is_default" <% if serve.is_default { %>checked<% } %>>
                 Опция по умолчанию
               </label>
             </div>
