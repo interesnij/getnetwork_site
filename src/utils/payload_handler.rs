@@ -2,8 +2,11 @@ use actix_multipart::{Field, Multipart};
 use actix_web::web;
 use futures::StreamExt;
 use serde::{Deserialize, Serialize};
-use std::io::Write;
-use std::str;
+use std::{
+    io::Write,
+    fs::create_dir_all,
+    str,
+};
 
 #[derive(Debug, Clone)]
 pub struct UploadedFiles {
@@ -12,6 +15,8 @@ pub struct UploadedFiles {
 }
 impl UploadedFiles {
     fn new(filename: String) -> UploadedFiles {
+        let format_folder = "./media/".to_string();
+        create_dir_all(format_folder).unwrap();
         UploadedFiles {
             name: filename.to_string(),
             path: format!("./media/{}", filename.to_string()),
