@@ -18,7 +18,7 @@
                   <a class="ajax" href="/tag/<%= tag.id %>/"><%= tag.name %> (<%= tag.count %>)</a>
                 <% } %>
                 <% if next_page_number > 0 { %>
-                  <div class="load centered m-1 next_page_list" data-link="/tags/<%= tag.id %>/?page=<%= next_page_number %>">
+                  <div class="load centered m-1 next_page_list" data-link="/tags/?page=<%= next_page_number %>">
                     <img src="/static/images/preloader.gif">
                   </div>
                 <% } %>
