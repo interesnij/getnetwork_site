@@ -145,8 +145,8 @@ impl Blog {
         }
     }
     pub fn get_100_description(&self) -> String {
-        if self.content.is_some() {
-            let _content = self.content.as_deref().unwrap();
+        if self.description.is_some() {
+            let _content = self.description.as_deref().unwrap();
             if _content.len() > 100 {
                 return _content[..100].to_string();
             }
