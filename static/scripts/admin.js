@@ -107,7 +107,7 @@ function send_category_data(form, url) {
 };
 
 function send_content_data(url) {
-  form = this.parentElement.parentElement;
+  form = this.parentElement;
   text_val1 = form.querySelector(".smile_supported");
   _val1 = format_text(text_val1);
   form_data = new FormData(form);
