@@ -290,7 +290,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
     }
 }
 
-pub async fn edit_content_blog_page(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn edit_content_blog_page(session: Session, payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::blogs::dsl::blogs;
 
     let _blog_id: i32 = *_id;
@@ -1030,7 +1030,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         else {
             #[derive(TemplateOnce)]
             #[template(path = "mobile/blogs/category.stpl")]
-            struct Template { 
+            struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,

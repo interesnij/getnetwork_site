@@ -6,6 +6,7 @@ use diesel::{
 };
 use serde::{Serialize, Deserialize};
 use crate::utils::establish_connection;
+use crate::diesel::ExpressionMethods;
 
 
 #[derive(Debug ,Queryable, Serialize, Identifiable)]
