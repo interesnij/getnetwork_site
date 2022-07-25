@@ -17,9 +17,11 @@ impl UploadedFiles {
     fn new(filename: String) -> UploadedFiles {
         let format_folder = "./media/".to_string();
         create_dir_all(format_folder).unwrap();
+        let _path = format!("./media/{}", filename.to_string());
+        println!("{:?}", _path);
         UploadedFiles {
             name: filename.to_string(),
-            path: format!("./media/{}", filename.to_string()),
+            path: _path,
         }
     }
 }
@@ -183,7 +185,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
                         .unwrap()
                         .expect("E");
                     }
-                form.main_image = file.path.clone().replace("./","/");
+                form.main_image = file_path.replace("./","/");
             }
         }
 
