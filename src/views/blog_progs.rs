@@ -798,7 +798,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             if (i + 1) != _category_blogs_len {
                 let _prev = Some(&_category_blogs[i + 1]);
                 prev = blogs
-                    .filter(schema::blogs::id.eq(_prev)
+                    .filter(schema::blogs::id.eq(_prev))
                     .filter(schema::blogs::is_active.eq(true))
                     .load::<Blog>(&_connection)
                     .expect("E")
