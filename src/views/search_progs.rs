@@ -50,7 +50,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     let blog_count = _blogs.len();
     let blog_list: Vec<Blog>;
     if blog_count > 2 {
-        blog_list = &blogs[..3].to_vec();
+        blog_list = &_blogs[..3].to_vec();
     }
     else {
         blog_list = _blogs;
