@@ -131,9 +131,13 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use schema::tags::dsl::tags;
-            use schema::service_categories::dsl::service_categories;
+            use schema::{
+                tags::dsl::tags,
+                tech_categories::dsl::tech_categories,
+                service_categories::dsl::service_categories,
+            };
             use crate::utils::get_device_and_ajax;
+            use crate::models::TechCategories;
 
             let _connection = establish_connection();
             let _service_cats:Vec<ServiceCategories> = service_categories
@@ -143,6 +147,9 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
             let all_tags: Vec<Tag> = tags
                 .load(&_connection)
                 .expect("Error.");
+            let _tech_categories = tech_categories
+                .load::<TechCategories>(&_connection)
+                .expect("E");
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
@@ -152,12 +159,14 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
                 struct Template {
                     request_user: User,
                     service_cats: Vec<ServiceCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     service_cats: _service_cats,
+                    tech_cats:    _tech_categories,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
@@ -171,12 +180,14 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
                 struct Template {
                     request_user: User,
                     service_cats: Vec<ServiceCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     service_cats: _service_cats,
+                    tech_cats:    _tech_categories,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
@@ -209,8 +220,10 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 service_images::dsl::service_images,
                 service_videos::dsl::service_videos,
                 service_categories::dsl::service_categories,
+                tech_categories::dsl::tech_categories,
             };
             use crate::utils::get_device_and_ajax;
+            use crate::models:: TechCategories;
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
             let _categories = _service.get_categories();
@@ -223,6 +236,10 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
             let _service_cats:Vec<ServiceCategories> = service_categories
                 .load(&_connection)
                 .expect("Error");
+
+            let _tech_categories = tech_categories
+                .load::<TechCategories>(&_connection)
+                .expect("E");
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/edit_service.stpl")]
@@ -236,6 +253,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     all_tags:     Vec<Tag>,
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
+                    tech_cats:    Vec<ServiceCategories>,
 
                 }
                 let body = Template {
@@ -248,6 +266,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     all_tags:     _all_tags,
                     service_tags: _service_tags,
                     service_cats: _service_cats,
+                    tech_cats:    _tech_categories,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -266,7 +285,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     all_tags:     Vec<Tag>,
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
-
+                    tech_cats:    Vec<ServiceCategories>,
                 }
                 let body = Template {
                     request_user: _request_user,
@@ -278,6 +297,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     all_tags:     _all_tags,
                     service_tags: _service_tags,
                     service_cats: _service_cats,
+                    tech_cats:    _tech_categories,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
