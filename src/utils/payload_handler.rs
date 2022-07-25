@@ -185,7 +185,7 @@ pub async fn item_form(payload: &mut Multipart) -> Forms {
                         .unwrap()
                         .expect("E");
                     }
-                form.main_image = file_path.replace("./","/");
+                form.main_image = file.path.clone().replace("./","/");
             }
         }
 
