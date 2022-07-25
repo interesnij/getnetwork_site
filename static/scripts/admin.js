@@ -111,7 +111,7 @@ function send_content_data(url) {
   text_val1 = document.body.querySelector(".smile_supported");
   _val1 = format_text(text_val1);
   form_data = new FormData(form);
-  form_data.append(content, _val1);
+  form_data.append("content", _val1);
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', url, true );
