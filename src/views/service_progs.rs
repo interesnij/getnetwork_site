@@ -59,7 +59,10 @@ pub fn service_routes(config: &mut web::ServiceConfig) {
         .route(web::get().to(edit_service_page))
         .route(web::post().to(edit_service))
     );
-    config.route("/edit_content_service/{id}/", web::get().to(edit_content_service_page));
+    config.service(web::resource("/edit_content_service/{id}/")
+        .route(web::get().to(edit_content_service_page))
+        .route(web::post().to(edit_content_service))
+    );
     config.route("/delete_service/{id}/", web::get().to(delete_service));
     config.route("/delete_service_category/{id}/", web::get().to(delete_service_category));
     config.service(web::resource("/services/{cat_id}/{service_id}/").route(web::get().to(get_service_page)));

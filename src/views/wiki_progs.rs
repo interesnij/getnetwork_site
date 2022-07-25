@@ -59,7 +59,10 @@ pub fn wiki_routes(config: &mut web::ServiceConfig) {
         .route(web::get().to(edit_wiki_page))
         .route(web::post().to(edit_wiki))
     );
-    config.route("/edit_content_wiki/{id}/", web::get().to(edit_content_wiki_page));
+    config.service(web::resource("/edit_content_wiki/{id}/")
+        .route(web::get().to(edit_content_wiki_page))
+        .route(web::post().to(edit_content_wiki))
+    );
     config.route("/delete_wiki/{id}/", web::get().to(delete_wiki));
     config.route("/delete_wiki_category/{id}/", web::get().to(delete_wiki_category));
     config.service(web::resource("/wiki/{cat_id}/{wiki_id}/").route(web::get().to(get_wiki_page)));

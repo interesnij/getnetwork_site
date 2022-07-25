@@ -59,7 +59,10 @@ pub fn store_routes(config: &mut web::ServiceConfig) {
         .route(web::get().to(edit_store_page))
         .route(web::post().to(edit_store))
     );
-    config.route("/edit_content_store/{id}/", web::get().to(edit_content_store_page));
+    config.service(web::resource("/edit_content_store/{id}/")
+        .route(web::get().to(edit_content_store_page))
+        .route(web::post().to(edit_content_store))
+    );
     config.route("/delete_store/{id}/", web::get().to(delete_store));
     config.route("/delete_store_category/{id}/", web::get().to(delete_store_category));
     config.service(web::resource("/stores/{cat_id}/{store_id}/").route(web::get().to(get_store_page)));

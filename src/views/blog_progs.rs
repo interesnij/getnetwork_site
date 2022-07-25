@@ -59,7 +59,10 @@ pub fn blog_routes(config: &mut web::ServiceConfig) {
         .route(web::get().to(edit_blog_page))
         .route(web::post().to(edit_blog))
     );
-    config.route("/edit_content_blog/{id}/", web::get().to(edit_content_blog_page));
+    config.service(web::resource("/edit_content_blog/{id}/")
+        .route(web::get().to(edit_content_blog_page))
+        .route(web::post().to(edit_content_blog))
+    );
     config.route("/delete_blog/{id}/", web::get().to(delete_blog));
     config.route("/delete_blog_category/{id}/", web::get().to(delete_blog_category));
     config.service(web::resource("/blog/{cat_id}/{blog_id}/").route(web::get().to(get_blog_page)));
