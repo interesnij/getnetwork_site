@@ -37,7 +37,7 @@
                 <label>Обложка</label>
                 <input class="input-md form-control" type="file" name="main_image" />
             </div>
-            store
+
             <div class="mb-20 mb-md-10">
                 <label>Категории</label>
                 <select class="form-control" name="category_list[]" multiple="">

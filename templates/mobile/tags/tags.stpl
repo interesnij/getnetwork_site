@@ -1,5 +1,25 @@
 <% include!("../header.stpl"); %>
 
-
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>Ключевые слова</span>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+        <h5 class="widget-title font-alt">Теги (<%= tags_count %>)</h5>
+        <div class="widget-body">
+            <div class="tags">
+                <% for tag in all_tags.iter() { %>
+                  <a class="ajax" href="/tag/<%= tag.id %>/"><%= tag.name %> (<%= tag.count %>)</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>
 
 <% include!("../footer.stpl"); %>
