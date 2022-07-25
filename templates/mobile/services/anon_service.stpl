@@ -29,9 +29,9 @@
                   Информация отсутствует.
                 <% } %>
 
-                <% let service_categories = service.get_categories(); %>
+                <% let serv_categories = service.get_categories(); %>
                 <% for (i, t_category) in tech_cats.iter().enumerate() { %>
-                  <% let is_main_cat = service_categories.iter().any(|i| i.id==t_category.id); %>
+                  <% let is_main_cat = serv_categories.iter().any(|i| i.id==t_category.id); %>
                   <% let s_cats = t_category.get_serve_categories(); %>
 
                 <section class="mb-20 mt-20 border">
@@ -64,7 +64,7 @@
                         <div class="align-center">
                             <ul class="nav nav-tabs tpl-minimal-tabs animate">
                               <% for cat in s_cats.iter() { %>
-                                <li data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i %> <% if i == 0 { %>active<% } %>">
+                                <li data-sum="<%= cat.default_price.unwrap() %>" class="yy pointer s_<%= i %> <% if i == 0 { %>active<% } %>">
                                     <a class="pointer"><%= cat.name %></a>
                                 </li>
                               <% } %>
