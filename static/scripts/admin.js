@@ -107,19 +107,21 @@ function send_category_data(form, url) {
 };
 
 function send_content_data(url) {
-  text_val1 = document.body.querySelector(".content_1");
+  form = this.parentElement.parentElement;
+  text_val1 = form.querySelector(".smile_supported");
   _val1 = format_text(text_val1);
-  _text1 = _val1.innerHTML;
+  form_data = new FormData(form);
+  form_data.append(content, _val1);
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'GET', url + "?content=" + _text1, true );
+  link.open( 'POST', url, true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    alert(_text1)
+    alert("ok");
   } else {
-    //console.log(link.responseText)
+    alert("not ok");
   }};
-  link.send();
+  link.send(form_data);
 };
 
 function send_post_data(form, url) {
