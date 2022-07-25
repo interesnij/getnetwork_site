@@ -48,7 +48,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         .load::<Blog>(&_connection)
         .expect("e");
     let blog_count = _blogs.len();
-    let blog_list = &_blogs[..3];
+    let blog_list = &_blogs[..3] || _blogs;
 
     let _services = schema::services::table
         .filter(schema::services::title.ilike(&_q_standalone))
