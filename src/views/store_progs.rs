@@ -151,13 +151,13 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
                 #[template(path = "desctop/stores/create_store.stpl")]
                 struct Template {
                     request_user: User,
-                    store_cats: Vec<StoreCategories>,
+                    store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
-                    store_cats: _store_cats,
+                    store_cats:   _store_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
@@ -176,7 +176,7 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
                 }
                 let body = Template {
                     request_user: _request_user,
-                    store_cats: _store_cats,
+                    store_cats:   _store_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
