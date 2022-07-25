@@ -524,7 +524,8 @@ on('body', 'input', '.general_search', function() {
         folder = ""
       };
       url = "/search" + folder + "/" + _this.value + "/";
-    var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+
+      var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
       ajax_link.open( 'GET', url, true );
       ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       ajax_link.onreadystatechange = function () {
