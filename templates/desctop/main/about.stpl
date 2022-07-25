@@ -1,9 +1,9 @@
 <section class="page-section" id="about">
     <div class="container relative">
-        <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+        <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
             О проекте
             <a href="/about/" class="section-more right ajax">Узнать больше</a>
-        </h2>
+        </h5>
 
         <div class="section-text">
             <div class="row">

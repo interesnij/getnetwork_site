@@ -16,11 +16,11 @@
       <% if services_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
                 <a href="/tag_services/<%= tag.id %>/" class="ajax">
                   Услуги (<%= services_count %>)
                 </a>
-              </h2>
+              </h5>
               <div class="row multi-columns-row">
                 <% for (i, object) in services_list.iter().enumerate() { %>
                   <% include!("../generic/default_service.stpl"); %>
@@ -34,11 +34,11 @@
       <% if stores_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
                 <a href="/tag_stores/<%= tag.id %>/" class="ajax">
                   Товары (<%= stores_count %>)
                 </a>
-              </h2>
+              </h5>
               <div class="row multi-columns-row">
                 <% for object in stores_list.iter() { %>
                   <% include!("../generic/default_store.stpl"); %>
@@ -52,11 +52,11 @@
       <% if works_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
                 <a href="/tag_works/<%= tag.id %>/" class="ajax">
                   Работы (<%= works_count %>)
                 </a>
-              </h2>
+              </h5>
               <div class="row multi-columns-row">
                 <% for object in works_list.iter() { %>
                   <% include!("../generic/default_work.stpl"); %>
@@ -70,11 +70,11 @@
       <% if blogs_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
                 <a href="/tag_blogs/<%= tag.id %>/" class="ajax">
                   Статьи блога (<%= blogs_count %>)
                 </a>
-              </h2>
+              </h5>
               <div class="row multi-columns-row">
                 <% for object in blogs_list.iter() { %>
                   <% include!("../generic/default_blog.stpl"); %>
@@ -88,11 +88,11 @@
       <% if wikis_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
                 <a href="/tag_wikis/<%= tag.id %>/" class="ajax">
                   Товары (<%= wikis_count %>)
                 </a>
-              </h2>
+              </h5>
               <div class="row multi-columns-row">
                 <% for object in wikis_list.iter() { %>
                   <% include!("../generic/default_wiki.stpl"); %>

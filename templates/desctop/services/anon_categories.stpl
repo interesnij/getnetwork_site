@@ -56,9 +56,9 @@
 
 <section class="page-section">
     <div class="container relative">
-        <h2 class="section-title font-alt mb-40">
+        <h5 class="section-title font-alt mb-40">
             Наши услуги
-        </h2>
+        </h5>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
           <% for category in service_cats.iter() { %>
             <li>
@@ -76,9 +76,9 @@
 
 <section class="page-section">
     <div class="container relative">
-        <h2 class="section-title font-alt mb-70 mb-sm-40">
+        <h5 class="section-title font-alt mb-70 mb-sm-40">
             Почему мы?
-        </h2>
+        </h5>
 
         <div class="row multi-columns-row alt-features-grid">
             <div class="col-sm-6 col-md-4 col-lg-4">

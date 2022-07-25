@@ -1,8 +1,8 @@
 <section class="page-section">
     <div class="container relative">
-        <h2 class="section-title font-alt mb-70 mb-sm-40">
+        <h5 class="section-title font-alt mb-70 mb-sm-40">
             Разделы сайта
-        </h2>
+        </h5>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
             <li class="yy s_1 active">
                 <a><div class="alt-tabs-icon"><span class="icon-lightbulb"></span></div>Наши услуги</a>

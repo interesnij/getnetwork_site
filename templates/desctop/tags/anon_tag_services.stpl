@@ -16,9 +16,9 @@
       <% if services_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+              <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
                   Статьи блога (<%= services_count %>)
-              </h2>
+              </h5>
               <div class="row multi-columns-row">
                 <% for (i, object) in services_list.iter().enumerate() { %>
                   <% include!("../generic/default_service.stpl"); %>

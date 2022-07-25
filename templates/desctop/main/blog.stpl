@@ -2,12 +2,12 @@
 
 <section class="page-section">
     <div class="container relative">
-        <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+        <h5 class="section-title font-alt align-left mb-70 mb-sm-40">
             Последние статьи
             <a href="/blog_categories/" class="section-more right ajax blog">
               Перейти в раздел
             </a>
-        </h2>
+        </h5>
         <div class="row multi-columns-row">
           <% for object in last_blogs.iter() { %>
             <% include!("../generic/default_blog.stpl"); %>
