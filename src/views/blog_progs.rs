@@ -805,7 +805,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                     .nth(0);
             };
             if iter != 0 {
-                prev = blogs
+                next = blogs
                     .filter(schema::blogs::id.eq(iter - 1))
                     .filter(schema::blogs::is_active.eq(true))
                     .load::<Blog>(&_connection)
