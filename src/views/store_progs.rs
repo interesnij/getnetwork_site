@@ -270,7 +270,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     videos:       _videos,
                     all_tags:     _all_tags,
                     store_tags:   _store_tags,
-                    store_cats:   _store_cats,
                     tech_cats:    _tech_categories,
                     serve_list:   serve_list,
                 }
@@ -290,20 +289,18 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     videos:       Vec<StoreVideo>,
                     all_tags:     Vec<Tag>,
                     store_tags:   Vec<Tag>,
-                    store_cats:   Vec<StoreCategories>,
                     tech_cats:    Vec<TechCategories>,
                     serve_list:   Vec<Serve>,
                 }
                 let body = Template {
                     request_user: _request_user,
                     store:        _store,
-                    categories:   _categories,
+                    store_cats:   _store_cats,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
                     all_tags:     _all_tags,
                     store_tags:   _store_tags,
-                    store_cats:   _store_cats,
                     tech_cats:    _tech_categories,
                     serve_list:   serve_list,
                 }
