@@ -1,3 +1,109 @@
 <% include!("../anon_header.stpl"); %>
 
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a class="ajax" href="/tags/">Ключевые слова</a>
+            &nbsp;/&nbsp;
+            <span><%= tag.name %></span>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+      <% if services_count > 0 { %>
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+                <a href="/tag_services/<%= tag.id %>/" class="ajax">
+                  Услуги (<%= services_count %>)
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                <% for (i, object) in services_list.iter().enumerate() { %>
+                  <% include!("../generic/default_service.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
+
+      <% if stores_count > 0 { %>
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+                <a href="/tag_stores/<%= tag.id %>/" class="ajax">
+                  Товары (<%= stores_count %>)
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                <% for object in stores_list.iter() { %>
+                  <% include!("../generic/default_store.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
+
+      <% if works_count > 0 { %>
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+                <a href="/tag_works/<%= tag.id %>/" class="ajax">
+                  Работы (<%= works_count %>)
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                <% for object in works_list.iter() { %>
+                  <% include!("../generic/default_work.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
+
+      <% if blogs_count > 0 { %>
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+                <a href="/tag_blogs/<%= tag.id %>/" class="ajax">
+                  Статьи блога (<%= blogs_count %>)
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                <% for object in blogs_list.iter() { %>
+                  <% include!("../generic/default_blog.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
+
+      <% if wikis_count > 0 { %>
+      <section class="page-section">
+          <div class="container relative">
+              <h2 class="section-title font-alt align-left mb-70 mb-sm-40">
+                <a href="/tag_wikis/<%= tag.id %>/" class="ajax">
+                  Товары (<%= wikis_count %>)
+                </a>
+              </h2>
+              <div class="row multi-columns-row">
+                <% for object in wikis_list.iter() { %>
+                  <% include!("../generic/default_wiki.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
+    </div>
+</section>
+
+
 <% include!("../anon_footer.stpl"); %>

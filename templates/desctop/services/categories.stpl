@@ -1,5 +1,175 @@
 <% include!("../header.stpl"); %>
 
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>Услуги</span>
+        </div>
+    </div>
+</section>
 
+<section class="page-section" style="padding-top: 45px;">
+    <div class="container relative">
+        <div class="section-text">
+            <div class="row">
+                <div class="mb-sm-50">
+                    <p>
+                        <strong>Компания "Getnetwork"</strong> предоставляет услуги по разработке, доработке, поддержке больших,
+                        высоконагруженных проектов, а также по обучению и переподготовке ваших специалистов в данной сфере.<br>
+                        Мы считаем, что <strong>данная ниша бизнеса</strong>, как минимум, <strong>не освоена до конца</strong>. Сложности
+                        в данной проблематике создаёт и большое количество фирм, предлагающих подобные услуги,
+                        и <strong>вот почему</strong>:
+
+                    <ul class="my_ul">
+                        <li>Многие фирмы штампуют низкокачественные, ограниченные ресурсы, не достающие даже до плинтуса сетей типа "Вконтакте"
+                            или "Фейсбук". Часто в ход идут даже CMS - готовые движки для обычных задач, пригодные для небольших проектов.
+                        </li>
+                        <li>За неинтересные программные варианты требуется много денег. Часто даже не пишут, о каких суммах идет речь.
+                            Понятно, что вопрос сложный и сколько финансов точно надо — сразу никто не скажет. Но рамки-то?
+                        </li>
+                        <li>Нет никакой дополнительной информации — на чём пишут код, чем украшают, где хранить собираются, как реализуют важные
+                            требования сетей. А ведь фирмы-то торгуют не пирожками, а сайтами за миллионы. Проблема доверия здесь особенно
+                            нужна и важна.
+                        </li>
+                        <li>Часто заказчик хочет, например, соцсеть, так как у него есть инвестиции и он знает, что с помощью идеи (да даже не обязательно)
+                            и денег можно это сделать и потом получать неплохие дивиденды. И такие люди часто сами хотят обрести примерное
+                            понимание товара, который хотят купить. И видит он, например, «улучшенная геолокация» (это такая опция к сети).
+                            Что это такое? Почему прямо на сайте не добавить кнопочку «что это»?
+                        </li>
+                        <li>
+                            Портфолио если и присутствуют на сайтах фирм, то часто вызывают слезы. Даже в работах единственной замечательной
+                            фирмы, которую мы нашли в интернете, есть недопустимые нюансы. К примеру, отсутствие блочной подгрузки, котрая решает
+                            много важных задач сразу.
+                        </li>
+                    </ul>
+                    <br>
+                    <strong>Мы</strong> постарались учесть многие нюансы в организации производства самых сложных сайтов в мире и
+                    <strong>умеем показывать полную и прозрачную картину всего цикла создания высоконагруженных проектов</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+        <h2 class="section-title font-alt mb-40">
+            Наши услуги
+        </h2>
+        <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
+          <% for category in service_cats.iter() { %>
+            <li>
+              <a>
+                <div class="alt-tabs-icon">
+                  <img class="image_fit_200" src="<%= category.get_image() %>" alt="img" />
+                </div>
+                <%= category.name %>
+              </a>
+            </li>
+          <% } %>
+        </ul>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+        <h2 class="section-title font-alt mb-70 mb-sm-40">
+            Почему мы?
+        </h2>
+
+        <div class="row multi-columns-row alt-features-grid">
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="alt-features-item align-center">
+                    <div class="alt-features-icon">
+                        <span class="icon-flag"></span>
+                    </div>
+                    <h3 class="alt-features-title font-alt">Мы эффективные</h3>
+                    <div class="alt-features-descr align-left">
+                        В процессе становления нашего опыта мы не "завалили" ни один проект. Ни один
+                        заказчик не был расстроен результатом нашей работы.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="alt-features-item align-center">
+                    <div class="alt-features-icon">
+                        <span class="icon-clock"></span>
+                    </div>
+                    <h3 class="alt-features-title font-alt">Мы пунктуальные</h3>
+                    <div class="alt-features-descr align-left">
+                        Наши успехи в объектно-ориентированном программировании позволили накопить
+                        огромное количество программных пакетов и решений.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="alt-features-item align-center">
+                    <div class="alt-features-icon">
+                        <span class="icon-hotairballoon"></span>
+                    </div>
+                    <h3 class="alt-features-title font-alt">Мы узнаваемые</h3>
+                    <div class="alt-features-descr align-left">
+                        Всего за несколько лет упорного развития мы получили некоторую известность в России,
+                        поработав со знаменитыми в своих сферах людьми и организациями. Есть даже знакомые депутаты.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="alt-features-item align-center">
+                    <div class="alt-features-icon">
+                        <span class="icon-heart"></span>
+                    </div>
+                    <h3 class="alt-features-title font-alt">Мы любим своё дело</h3>
+                    <div class="alt-features-descr align-left">
+                        Пишем на чистых языках программирования, создаем только свои технические решения.
+                        И умеем всё.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="alt-features-item align-center">
+                    <div class="alt-features-icon">
+                        <span class="icon-linegraph"></span>
+                    </div>
+                    <h3 class="alt-features-title font-alt">Мы приносим прибыль</h3>
+                    <div class="alt-features-descr align-left">
+                        Представьте себе, что Вам сделали соцсеть навроде Youtube, с бизнес-логикой и монетизацией.
+                        Это сделает Вас богаче?
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="alt-features-item align-center">
+                    <div class="alt-features-icon">
+                        <span class="icon-chat"></span>
+                    </div>
+                    <h3 class="alt-features-title font-alt">Мы хотим дружить</h3>
+                    <div class="alt-features-descr align-left">
+                        getNetwork готов сотрудничать с Вами! Просто напишите нам и расскажите о своих идеях.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="border small-section bg-dark">
+    <div class="container relative">
+        <div class="align-center">
+            <h3 class="banner-heading font-alt">Хотите обсудить проект?</h3>
+            <div>
+                <a href="" class="btn btn-mod btn-border btn-medium btn-round ajax">Напишите нам</a>
+            </div>
+        </div>
+    </div>
+</section>
 
 <% include!("../footer.stpl"); %>
