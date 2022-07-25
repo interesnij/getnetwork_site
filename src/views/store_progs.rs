@@ -227,7 +227,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
             use crate::models:: {TechCategories, Serve};
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-            let _categories = _store.get_categories();
             let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
             let _store_tags = _store.get_tags();
 
@@ -263,7 +262,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 let body = Template {
                     request_user: _request_user,
                     store:        _store,
-                    store_cats:   _categories,
+                    store_cats:   _store_cats,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,

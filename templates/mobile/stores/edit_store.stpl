@@ -64,7 +64,7 @@
                 <label>Категории</label>
                 <select class="form-control" name="category_list[]" multiple="">
                   <% for category in store_cats.iter() { %>
-                    <option <% if categories.iter().any(|i| i.id==category.id) { %>selected=""<% } %> value="<%= category.id %>"><%= category.name %></option>
+                    <option <% if store.get_categories().iter().any(|i| i.id==category.id) { %>selected=""<% } %> value="<%= category.id %>"><%= category.name %></option>
                   <% } %>
                 </select>
             </div>
