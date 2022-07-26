@@ -16,9 +16,6 @@
     <div class="container">
                 <div class="blog-item-body">
                     <h1 class="mt-0 font-alt"><%= object.title %></h1>
-                    <div class="blog-item-data">
-                    </div>
-
                 </div>
 
                 <% if object.content.is_some() { %>
@@ -26,10 +23,12 @@
                 <% } else { %>
                   Информация отсутствует.
                 <% } %>
-
+                <% let mut default_price = 0; %>
                 <% let serv_categories = object.get_categories(); %>
+
                 <% for (i, t_category) in tech_cats.iter().enumerate() { %>
-                  <% let is_main_cat = serv_categories.iter().any(|i| i.id==t_category.id); %>
+
+                  <% let is_main_cat = object.get_tech_cats_ids().iter().any(|i| i==&t_category.id); %>
                   <% let s_cats = t_category.get_serve_categories(); %>
 
                 <section class="mb-20 mt-20 border">
@@ -82,7 +81,15 @@
                                     <tbody>
 
                                         <% for serve in category.get_serves().iter() { %>
-                                        <tr class="<% if serve.is_default { %>is_default hover<% } else { %>select_serve pointer<% } %>">
+                                          <% if serve.is_default { %>
+                                            <%
+                                              if serve.price_acc.is_some() {
+                                                default_price += serve.price_acc.unwrap();
+                                              } else {
+                                                default_price += serve.price.unwrap();
+                                              }
+                                            %>
+                                            <tr class="is_default hover">
                                             <td style="width:52%">
                                                 <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
                                                     <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
@@ -94,15 +101,27 @@
                                             <% } else { %>
                                               <td style="width:12%"></td>
                                             <% } %>
+
                                             <td style="width:12%">Часы: <%= serve.man_hours.unwrap() %></td>
-                                            <td class="action_text" style="width:12%">
-                                                <% if !serve.is_default { %>
-                                                  Выбрать
-                                                <% } else { %>
-                                                  Выбрано
-                                                <% } %>
-                                            </td>
+                                            <td class="action_text" style="width:12%">Выбрано</td>
                                         </tr>
+                                        <% } else { %>
+                                          <tr class="select_serve pointer">
+                                          <td style="width:52%">
+                                              <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
+                                                  <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
+                                              </a>
+                                          </td>
+                                          <td class="price_td" style="width:12%"><span class="price"><%= serve.price.unwrap() %></span> ₽</td>
+                                          <% if serve.price_acc.is_some() { %>
+                                            <td class="price_acc_td" style="width:12%"><span class="price_acc"><%= serve.price_acc.unwrap() %></span> ₽</td>
+                                          <% } else { %>
+                                            <td style="width:12%"></td>
+                                          <% } %>
+                                          <td style="width:12%">Часы: <%= serve.man_hours.unwrap() %></td>
+                                          <td class="action_text" style="width:12%">Выбрать<% } %>
+                                          </td>
+                                      </tr>
                                         <% } %>
                                     </tbody>
                                 </table>
@@ -140,14 +159,18 @@
                 <% include!("sidebar.stpl"); %>
             </div>
     <section class="border card_fullscreen" style="position: fixed;top: 10px;width: 100%;">
-        <h3 data-sum="{{ default_price }}"
-            data-pk="{{ object.id }}"
-            data-servelist="{{ default_servelist }}"
+        <h3 data-sum="<%= default_price %>"
+            data-pk="<%= object.id %>"
+            data-servelist="
+            <% for i in object.get_serves_ids().iter() { %>
+            i,
+            <% } %>
+            "
             class="create_order_form_of_service pointer">
             Сумма <span data-serve="0"
-                        data-oldsum="{{ default_price }}"
+                        data-oldsum="<%= default_price %>"
                         class="total_price_counter">
-                      {{ default_price }}
+                      <%= default_price %>
                   </span>
              ₽. Перейти к заказу
         </h3>
