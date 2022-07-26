@@ -1,5 +1,36 @@
 <% include!("../header.stpl"); %>
 
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <a class="ajax" href="/work/<%= work.id %>/"><%= work.title %></a>
+                    &nbsp;/&nbsp;
+                    <span>Изменение текста работы</span>
+                </div>
+    </div>
+</section>
 
+<section class="page-section">
+    <div class="container relative">
+        <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
+          <div class="mb-20 mb-md-10">
+            <% if work.content.is_some() { %>
+              <% let work_unwrap = work.content.unwrap(); %>
+              <p><%- work_unwrap.len() %></p>
+              <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
+                <%- work_unwrap %>
+              </div>
+            <% } else { %>
+              <p>0</p>
+              <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
+              </div>
+            <% } %>
+          </div>
+          <button data-pk="<%= work.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_text_work_btn">Изменить</button>
+        </form>
+    </div>
+</section>
 
 <% include!("../footer.stpl"); %>
