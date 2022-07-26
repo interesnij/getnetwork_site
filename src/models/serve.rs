@@ -149,7 +149,7 @@ pub struct EditServe {
     pub cat_name:         String,
     pub description:      Option<String>,
     pub position:         i32,
-    pub serve_categories: Option<i32>,
+    pub serve_categories: i32,
     pub price:            Option<i32>,
     pub price_acc:        Option<i32>,
     pub social_price:     Option<i32>,
