@@ -212,7 +212,7 @@ impl Service {
             .expect("E");
     }
     pub fn get_tech_cats_ids(&self) -> Vec<i32> {
-        let mut stack = Vec::new();
+        let mut stack: Vec<i32> = Vec::new();
         for _serv in self.get_serves() {
             if !stack.iter().any(|i| i==_serv.tech_cat_id) {
                 stack.push(_serv.tech_cat_id);
