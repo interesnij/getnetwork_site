@@ -137,7 +137,6 @@ pub struct Blog {
 }
 
 impl Blog {
-    #[cached]
     pub fn get_image(&self) -> String {
         if self.image.is_some() {
             return self.image.as_deref().unwrap().to_string();
