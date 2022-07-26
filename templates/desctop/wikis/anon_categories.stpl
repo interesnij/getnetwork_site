@@ -1,3 +1,141 @@
 <% include!("../anon_header.stpl"); %>
 
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <span>База знаний</span>
+                </div>
+    </div>
+</section>
+
+<section class="page-section small-section">
+    <div class="relative container-1400">
+      <div class="home-content">
+        <div class="home-text align-center">
+          <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+              <h1 class="hs-line-4 black font-alt">База знаний программиста</h1>
+              <h2 class="hs-line-15 font-alt mb-0">
+                Статьи о программировании на языках python, rust,
+                 javascript (и wasm), c++. Движки, технологии, связи, творчество.
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <hr class="mt-0 mb-0 black">
+
+  <div class="pt-10 container-1400 relative">
+      <div class="row">
+          <div class="col-sm-3">
+              <h3 class="section-title font-alt align-left mt-0 mb-70 mb-sm-40">
+                О проекте
+              </h3>
+          </div>
+
+          <div class="col-sm-9">
+              <div class="row">
+                  <div class="col-12">
+                      <div class="section-text mb-70 mb-xs-40">
+                          <p>
+                              Люди делятся на два примерных типа по отношению к себе и обществу. Первый
+                              особо популярен в наши дни: всё моё, я никому ничего не должен, надо всех
+                              обогнать и стать самым крутым. Второй тип - коллективистский. Такие люди
+                              стараются помочь обществу больше чем себе, и выбирают коллективное развитие в ущерб
+                              собственному.
+                          </p>
+                          <p>
+                              Я буду писать статьи на тему создания высоконагруженных веб-ресурсов на
+                              популярных языках программирования. Постараюсь выдавать структурированные и
+                              полные знания для такой цели, ибо в таком виде найти подсказки и советы в
+                              интернете неожиданно трудно.<br>
+                              Мне "не жалко" поделиться крутым опытом, так как я воспитываю в себе второй
+                               тип личности, описанный выше.
+                          </p>
+
+
+                          <ul class="list-unstyled lead">
+                              <li>— Python, Django, PostgreSQL, js, Bootstrap</li>
+                              <li>— Rust, Actix-web, PostgreSQL, Diesel, Tera</li>
+                              <li>— Linux, Nginx, Git, Gunicorn, Supervisor</li>
+                              <li>— Docker, Celery, Redis, Websockets</li>
+                              <li>— проверенные примеры, полные и с расшифровкой</li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <hr class="mt-0 mb-0 black">
+
+  <section class="page-section">
+    <div class="container-1400 relative">
+        <div class="row">
+            <div class="col-sm-4">
+                <h3 class="section-title font-alt align-left mt-0 mb-70 mb-sm-40">
+                  Цифры
+                </h3>
+            </div>
+            <div class="col-sm-8">
+                <div class="row multi-columns-row features-grid">
+                    <div class="col-sm-6 col-md-3 col-lg-3">
+                        <div class="features-item pt-0 pb-0 align-center">
+                            <div class="count-number">4</div>
+                            <h3 class="alt-features-title font-alt">Языка</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-3">
+                        <div class="features-item pt-0 pb-0 align-center">
+                            <div class="count-number">3</div>
+                            <h3 class="alt-features-title font-alt">Стека</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-3">
+                        <div class="features-item pt-0 pb-0 align-center">
+                            <div class="count-number">10</div>
+                            <h3 class="alt-features-title font-alt">Статей</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-3">
+                        <div class="features-item pt-0 pb-0 align-center">
+                            <div class="count-number">100</div>
+                            <h3 class="alt-features-title font-alt">Просмотров</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<hr class="mt-0 mb-0 black">
+<% for category in wiki_cats.iter() { %>
+
+<section class="page-section">
+    <div class="container-1400 relative">
+        <div class="row">
+            <div class="col-sm-4">
+                <h3 class="section-title font-alt align-left mt-0 mb-70 mb-sm-40">
+                  <a class="ajax" href="/wiki/<%= category.id %>/">
+                    <%= category.name %>
+                  </a>
+                </h3>
+            </div>
+            <div class="col-sm-8">
+                <div class="section-text">
+                  <% for object in category.get_6_wikis().iter() { %>
+                    <% include!("../generic/wiki.stpl"); %>
+                  <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<hr class="mt-0 mb-0 black">
+<% } %>
+
 <% include!("../anon_footer.stpl"); %>
