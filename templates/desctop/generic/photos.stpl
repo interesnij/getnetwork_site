@@ -1,10 +1,12 @@
 <% if images.len() > 0 { %>
-<h4 class="mt-20">Изображения</h4>
+<h6 class="mt-20">Изображения</h6>
 <div class="row multi-columns-row mb-30 mb-xs-10">
     <% for img in images.iter() { %>
     <div class="col-md-6 col-lg-6 mb-md-10">
         <div class="post-prev-img">
-            <img class="image_fit_300" src="<%= img.src %>" alt="img">
+          <div class="progressive replace" data-href="<%= img.src %>">
+            <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
+          </div>
         </div>
     </div>
     <% } %>

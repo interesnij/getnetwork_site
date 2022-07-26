@@ -62,9 +62,6 @@ a, b, div, ul, li{
     -webkit-tap-highlight-color: rgba(255,255,255,0) !important;
 }
 
-.page-loader{
-    background: #111 !important;
-}
 body{
     color: rgba(255,255,255, 0.8) !important;
     background-image: url('/static/images/dark_wood.jpg') !important;
@@ -283,9 +280,6 @@ a.bg-video-button-muted{
 .hs-line-1{
     color: #000000 !important;
 }
-.hs-line-2{
-    color: rgba(255,255,255, .85) !important;
-}
 
 .hs-line-3{
     color: rgba(255,255,255, .7) !important;
@@ -398,35 +392,6 @@ a.logo:hover{
 
 .alt-services-title{
     color: #FFFFFF !important;
-}
-
-.team-item-role{
-    color: #aaa !important;
-}
-
-.team-social-links a{
-    color: rgba(255,255,255, .4) !important;
-}
-
-.no-mobile .team-item:hover .team-item-image:after{
-    background: rgba(0,0,0, .93) !important;
-}
-.no-mobile .team-item:hover .team-item-descr{
-    color: #FFFFFF !important;
-}
-
-.no-mobile .team-social-links a:hover{
-    color: rgba(255,255,255, .75) !important;
-}
-
-.team-item.js-active .team-item-image:after{
-    background: rgba(0,0,0, .93) !important;
-}
-.team-item.js-active .team-item-descr{
-    color: #FFFFFF !important;
-}
-.team-item.js-active .team-social-links a:hover{
-    color: rgba(255,255,255, .75) !important;
 }
 
 .features-icon{
@@ -639,20 +604,6 @@ a.blog-item-more:hover{
     border-color: #aaa !important;
 }
 
-.pr-list li{
-    border-bottom: 1px solid #f1f1f1 !important;
-}
-.pr-list li:first-child{
-    border-top: 1px solid #f1f1f1 !important;
-}
-
-.pr-button{
-    border-top: 1px solid #f1f1f1 !important;
-}
-.pr-per{
-    color: #999 !important;
-}
-
 .tpl-tabs{
     border-color: #e5e5e5 !important;
 }
@@ -696,20 +647,6 @@ a.blog-item-more:hover{
 }
 .blog-post-prev-small{
     border-top: 1px dotted #eaeaea !important;
-}
-
-.blog-slide-title a{
-    color: rgba(0,0,0, .85) !important;
-}
-.blog-slide-title a:hover{
-    color: rgba(0,0,0, 1) !important;
-}
-
-.blog-slide-data a{
-    color: rgba(0,0,0, .65) !important;
-}
-.blog-slide-data a:hover{
-    color: rgba(0,0,0, 1) !important;
 }
 
 .play-video-link{
