@@ -703,13 +703,6 @@ a.blog-item-more:hover{
     border-top: 1px dotted #eaeaea !important;
 }
 
-.blog-post-prev-small a{
-    color: #555 !important;
-}
-.blog-post-prev-small a:hover{
-    color: #999 !important;
-}
-
 .blog-slide-title a{
     color: rgba(255,255,255, .85) !important;
 }
