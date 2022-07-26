@@ -878,7 +878,15 @@ select[multiple].form-group-lg .form-control {
 .fade.in {
   opacity: 1
 }
+.tab-content>.tab-pane {
+  display: none;
+  visibility: hidden
+}
 
+.tab-content>.active {
+  display: block;
+  visibility: visible
+}
 .hide {
   display: none !important
 }
