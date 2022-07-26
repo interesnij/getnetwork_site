@@ -778,7 +778,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
     let _category = _categorys.into_iter().nth(0).unwrap();
     let _wiki_categories = wiki_categories
         .load::<WikiCategories>(&_connection)
-        .expect("E"); 
+        .expect("E");
 
     let _images: Vec<WikiImage> = wiki_images.filter(schema::wiki_images::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
     let _videos: Vec<WikiVideo> = wiki_videos.filter(schema::wiki_videos::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
@@ -894,8 +894,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     Wiki,
                 images:     Vec<WikiImage>,
                 videos:     Vec<WikiVideo>,
-                categories: Vec<WikiCategories>,
                 category:   WikiCategories,
+                wiki_cats:  Vec<WikiCategories>,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
                 prev:       Option<Wiki>,
@@ -906,8 +906,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     _wiki,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
+                wiki_cats:  _wiki_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,
@@ -925,8 +925,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     Wiki,
                 images:     Vec<WikiImage>,
                 videos:     Vec<WikiVideo>,
-                categories: Vec<WikiCategories>,
                 category:   WikiCategories,
+                wiki_cats:  Vec<WikiCategories>,
                 all_tags:   Vec<Tag>,
                 tags_count: usize,
                 prev:       Option<Wiki>,
@@ -937,8 +937,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     _wiki,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
+                wiki_cats:  _wiki_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,
@@ -1054,6 +1054,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         WikiCategories,
+                wiki_cats:        Vec<WikiCategories>,
                 object_list:      Vec<Wiki>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1061,7 +1062,8 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             let body = Template {
                 all_tags:         _tags,
                 tags_count:       tags_count,
-                category:        _category,
+                category:         _category,
+                wiki_cats:        _wiki_categorys,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1077,6 +1079,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         WikiCategories,
+                wiki_cats:        Vec<WikiCategories>,
                 object_list:      Vec<Wiki>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1084,7 +1087,8 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             let body = Template {
                 all_tags:         _tags,
                 tags_count:       tags_count,
-                category:        _category,
+                category:         _category,
+                wiki_cats:        _wiki_categorys,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
