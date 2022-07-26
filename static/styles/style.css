@@ -12,8 +12,8 @@
 }
 
 .progressive img.preview {
-    filter: blur(2vw);
-    transform: scale(1.05)
+    /*filter: blur(2vw);
+    transform: scale(1.05)*/
 }
 .progressive img.reveal {
     position: absolute;
