@@ -35,6 +35,7 @@
                   Информация отсутствует.
                 <% } %>
 
+                <% let mut default_price = 0; %>
                 <% let serv_categories = object.get_categories(); %>
                 <% for (i, t_category) in tech_cats.iter().enumerate() { %>
                   % let is_main_cat = object.get_tech_cats_ids().iter().any(|i| i==&t_category.id); %>
