@@ -967,7 +967,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
     let _category = _categorys.into_iter().nth(0).unwrap();
     let (object_list, next_page_number) = _category.get_works_list(page, 20);
 
-    let _work_categorys = work_categories
+    let _work_categories = work_categories
         .load::<WorkCategories>(&_connection)
         .expect("E");
 
