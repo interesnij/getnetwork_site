@@ -25,7 +25,7 @@
 
 </div>
 <div class="body_overlay pointer"></div>
-<script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
+<script type="text/javascript" src="/static/scripts/progressive-image.js"></script>
 <script defer type="text/javascript" src="/static/scripts/desctop/main.js"></script>
 <script defer type="text/javascript" src="/static/scripts/main.js"></script>
 </body>
