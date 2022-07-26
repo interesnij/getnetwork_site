@@ -34,5 +34,8 @@
       <% } %>
     </div>
 </section>
+<div class="sidebar">
+    <% include!("sidebar.stpl"); %>
+</div>
 
 <% include!("../anon_footer.stpl"); %>

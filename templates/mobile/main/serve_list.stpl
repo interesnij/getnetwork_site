@@ -15,8 +15,11 @@
         <h1 class="magazine-logo-text black font-alt">Список опций</h1>
     </div>
     <div class="container relative">
-      
+
     </div>
 </section>
+<div class="sidebar">
+    <% include!("sidebar.stpl"); %>
+</div>
 
 <% include!("../footer.stpl"); %>

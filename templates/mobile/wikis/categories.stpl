@@ -121,7 +121,7 @@
             <div class="col-sm-4">
                 <h3 class="section-title font-alt align-left mt-0 mb-70 mb-sm-40">
                   <a class="ajax" href="/wiki/<%= category.id %>/">
-                    <%= category.name %>
+                    <%= category.name %> (<%= category.count %>)
                   </a>
                 </h3>
             </div>
@@ -138,4 +138,7 @@
 <hr class="mt-0 mb-0 black">
 <% } %>
 
+<div class="sidebar">
+    <% include!("sidebar.stpl"); %>
+</div>
 <% include!("../footer.stpl"); %>

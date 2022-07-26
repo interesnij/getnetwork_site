@@ -23,7 +23,7 @@
 
                 <h3 class="blog-item-title font-alt mb-10">
                     <a class="ajax" href="/blog/<%= category.id %>/">
-                        <%= category.name %>
+                        <%= category.name %> (<%= category.count %>)
                     </a>
                 </h3>
                 <hr class="mt-0 mb-30">

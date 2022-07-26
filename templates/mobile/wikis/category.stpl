@@ -14,7 +14,7 @@
 
 <section class="page-section">
     <div class="container relative">
-            <% if object_list.len() > 0 { %>
+            <% if category.count > 0 { %>
               <% for object in object_list.iter() { %>
                 <% include!("../generic/wiki.stpl"); %>
               <% } %>

@@ -16,7 +16,7 @@
     <div class="container relative">
       <div class="row">
           <div class="col-sm-8">
-            <% if object_list.len() > 0 { %>
+            <% if category.count > 0 { %>
               <% for object in object_list.iter() { %>
                 <% include!("../generic/wiki.stpl"); %>
               <% } %>

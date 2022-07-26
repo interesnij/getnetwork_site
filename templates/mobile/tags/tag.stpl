@@ -104,5 +104,8 @@
       <% } %>
     </div>
 </section>
+<div class="sidebar">
+    <% include!("sidebar.stpl"); %>
+</div>
 
 <% include!("../footer.stpl"); %>

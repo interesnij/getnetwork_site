@@ -30,7 +30,7 @@
                 <hr class="mt-0 mb-30">
                 <div class="row multi-columns-row">
                     <% for (i, object) in get_6_blogs.iter().enumerate() { %>
-                      <% if i < 3 { %>
+                      <% if i < 2 { %>
                         <% include!("../generic/blog.stpl"); %>
                       <% } %>
                     <% } %>
@@ -39,7 +39,7 @@
 
                 <div class="row mb-70 mt-20">
                     <% for (i, object) in get_6_blogs.iter().enumerate() { %>
-                    <% if i > 2 { %>
+                    <% if i > 1 { %>
                     <div class="col-sm-6">
                         <div class="blog-post-prev-small clearfix">
                             <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/">

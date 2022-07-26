@@ -1,3 +1,48 @@
 <% include!("../anon_header.stpl"); %>
 
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">
+                Главная
+            </a>
+            &nbsp;/&nbsp;
+            <span>Категории товаров</span>
+        </div>
+    </div>
+</section>
+
+<section class="page-section" style="padding-top: 45px;">
+    <div class="container relative">
+        <div class="row">
+            <div class="col-sm-8">
+                <% for category in store_cats.iter() { %>
+
+                <h3 class="blog-item-title font-alt mb-10">
+                    <a class="ajax" href="/store/<%= category.id %>/">
+                        <%= category.name %> (<%= category.count %>)
+                    </a>
+                </h3>
+                <div class="row multi-columns-row">
+                <% if category.count > 0 { %>
+                  <% let object_list = category.get_6_stores(); %>
+                    <% for object in object_list.iter() { %>
+                      <% include!("../generic/store.stpl"); %>
+                    <% } %>
+                  <% } else { %>
+                    <div class="text-center">
+                      <span class="widget-title font-alt">Список пока пустой...</span>
+                    </div>
+                  <% } %>
+                </div>
+                <% } %>
+            </div>
+            <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">
+                <% include!("sidebar.stpl"); %>
+            </div>
+        </div>
+
+    </div>
+</section>
+
 <% include!("../anon_footer.stpl"); %>

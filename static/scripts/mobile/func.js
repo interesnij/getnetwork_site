@@ -72,72 +72,52 @@ function toggle_nav_second_span(){
   second_span.classList.contains("btn_active") ? (hide_nav_second_span(), second_span.classList.remove("btn_active")) : (show_nav_second_span(), second_span.classList.add("btn_active"))
 };
 
-function mob_menu_btn_top() {
-  document.querySelector(".mob_menu").style.top = "15px";
-};
-function mob_menu_btn_medium() {
-  document.querySelector(".mob_menu").style.top = "50%";
-};
-function mob_menu_btn_bottom() {
-  document.querySelector(".mob_menu").style.top = "86%";
-};
-
 function get_active_button(){
   buttons = $mobile_nav.parentElement.querySelectorAll(".mobile_icon");
   path = document.location.pathname;
   for (var i = 0; i < buttons.length; i++){buttons[i].classList.remove("mobile_icon_current")};
   if (path == "/") {
       buttons[10].classList.add("mobile_icon_current");
-      mob_menu_btn_top();
     }
   else if (path.includes('service')) {
     buttons[0].classList.add("mobile_icon_current");
     buttons[11].classList.add("mobile_icon_current");
-    (path.includes('list') || path.includes('cat')) ? mob_menu_btn_medium() : mob_menu_btn_bottom();
   }
   else if (path.includes('works')) {
     buttons[1].classList.add("mobile_icon_current");
     buttons[11].classList.add("mobile_icon_current");
-    (path.includes('list') || path.includes('cat')) ? mob_menu_btn_medium() : mob_menu_btn_bottom();
+
   }
   else if (path.includes('store')) {
     buttons[2].classList.add("mobile_icon_current");
     buttons[11].classList.add("mobile_icon_current");
-    (path.includes('list') || path.includes('cat')) ? mob_menu_btn_medium() : mob_menu_btn_bottom();
   }
   else if (path.includes('blog')) {
     buttons[3].classList.add("mobile_icon_current");
     buttons[11].classList.add("mobile_icon_current");
-    (path.includes('list') || path.includes('cat')) ? mob_menu_btn_medium() : mob_menu_btn_bottom();
   }
   else if (path.includes('wiki')) {
     buttons[4].classList.add("mobile_icon_current");
     buttons[11].classList.add("mobile_icon_current");
-    (path.includes('list') || path.includes('cat')) ? mob_menu_btn_medium() : mob_menu_btn_bottom();
   }
 
   else if (path == "/contacts/") {
     buttons[5].classList.add("mobile_icon_current");
     buttons[12].classList.add("mobile_icon_current");
-    mob_menu_btn_medium()
   }
   else if (path == "/about/") {
     buttons[6].classList.add("mobile_icon_current");
     buttons[12].classList.add("mobile_icon_current");
-    mob_menu_btn_medium()
   }
   else if (path == "/tags/") {
     buttons[7].classList.add("mobile_icon_current");
     buttons[12].classList.add("mobile_icon_current");
-    mob_menu_btn_medium()
   }
   else if (path == "/search/") {
     buttons[8].classList.add("mobile_icon_current");
     buttons[12].classList.add("mobile_icon_current");
-    mob_menu_btn_medium()
   }
   else if (path == "/auth/" || path.substr(1, 5) == "users") {
     buttons[13].classList.add("mobile_icon_current");
-    mob_menu_btn_medium()
     }
 };

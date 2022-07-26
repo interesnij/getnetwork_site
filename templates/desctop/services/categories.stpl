@@ -66,7 +66,7 @@
                 <div class="alt-tabs-icon">
                   <img class="image_fit_200" src="<%= category.get_image() %>" alt="img" />
                 </div>
-                <%= category.name %>
+                <%= category.name %> (<%= category.count %>)
               </a>
             </li>
           <% } %>
