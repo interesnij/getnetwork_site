@@ -865,7 +865,7 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
                 man_hours: Some(form.man_hours),
                 is_default: is_default,
                 user_id: _request_user.id,
-                tech_cat_id: _category[0].tech_cat_id,
+                tech_cat_id: _category[0].tech_categories,
             };
 
             let _serve = diesel::insert_into(schema::serve::table)
@@ -943,7 +943,7 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 man_hours: Some(form.man_hours),
                 is_default: is_default,
                 user_id: _request_user.id,
-                tech_cat_id: _category[0].tech_cat_id,
+                tech_cat_id: _category[0].tech_categories,
             };
 
             diesel::update(&_serve)

@@ -170,7 +170,7 @@
     <section class="border card_fullscreen" style="position: fixed;top: 10px;width: 100%;">
         <h3 data-sum="<%= default_price %>"
             data-pk="<%= object.id %>"
-            data-servelist="<%= object.get_serves_ids() %>"
+            data-servelist="<%= object.get_serves_ids().iter() %>"
             class="create_order_form_of_service pointer">
             Сумма <span data-serve="0"
                         data-oldsum="<%= default_price %>"
