@@ -229,7 +229,9 @@ impl Service {
 
         let mut stack = Vec::new();
         for _serv in _serves.iter() {
-            if !stack.iter().any(|i| i==_serv.tech_cat_id) {
+            if stack.iter().any(|i| i==_serv.tech_cat_id) {
+                continue; 
+            } else {
                 stack.push(_serv.tech_cat_id);
             }
         }
