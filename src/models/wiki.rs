@@ -19,7 +19,7 @@ use crate::schema::{
 use crate::utils::establish_connection;
 
 
-#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Identifiable, Queryable, Associations)]
 #[table_name="wiki_categories"]
 pub struct WikiCategories {
     pub id:          i32,
@@ -120,7 +120,7 @@ pub struct EditWikiCategories {
     pub count:       i32,
 }
 
-#[derive(Debug, Serialize, Clone, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Wiki {
     pub id:          i32,
@@ -215,7 +215,7 @@ impl Wiki {
     }
 }
 
-#[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
+#[derive(Queryable, Serialize, PartialEq, Deserialize, AsChangeset, Debug)]
 #[table_name="wikis"]
 pub struct EditWiki {
     pub title:       String,
@@ -275,7 +275,7 @@ impl NewWiki {
     }
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
 #[belongs_to(Wiki, foreign_key="wiki")]
 pub struct WikiImage {
     pub id:   i32,
@@ -300,7 +300,7 @@ impl NewWikiImage {
     }
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
 #[belongs_to(Wiki, foreign_key="wiki")]
 pub struct WikiVideo {
     pub id:   i32,

@@ -19,7 +19,7 @@ use crate::schema::{
 use crate::utils::establish_connection;
 
 
-#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Identifiable, Queryable, Associations)]
 #[table_name="store_categories"]
 pub struct StoreCategories {
     pub id:          i32,
@@ -120,7 +120,7 @@ pub struct EditStoreCategories {
     pub count:       i32,
 }
 
-#[derive(Debug, Serialize, Clone, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Store {
     pub id:           i32,
@@ -293,7 +293,7 @@ impl NewStore {
 }
 
 
-#[derive(Identifiable, Queryable, Associations)]
+#[derive(Identifiable, PartialEq, Queryable, Associations)]
 #[belongs_to(StoreCategories)]
 #[belongs_to(Store)]
 #[table_name="store_category"]
@@ -310,7 +310,7 @@ pub struct NewStoreCategory {
     pub store_id:            i32,
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
 #[belongs_to(Store, foreign_key="store")]
 pub struct StoreImage {
     pub id:    i32,
@@ -335,7 +335,7 @@ impl NewStoreImage {
     }
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
 #[belongs_to(Store, foreign_key="store")]
 pub struct StoreVideo {
     pub id:    i32,

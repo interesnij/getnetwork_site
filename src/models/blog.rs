@@ -274,7 +274,7 @@ pub struct EditBlog {
     pub is_active:   bool,
 }
 
-#[derive(Identifiable, Queryable, Associations)]
+#[derive(Identifiable, PartialEq, Queryable, Associations)]
 #[belongs_to(BlogCategories)]
 #[belongs_to(Blog)]
 #[table_name="blog_category"]
@@ -291,7 +291,7 @@ pub struct NewBlogCategory {
     pub blog_id:            i32,
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
 #[belongs_to(Blog, foreign_key="blog")]
 pub struct BlogImage {
     pub id:   i32,
@@ -316,7 +316,7 @@ impl NewBlogImage {
     }
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
 #[belongs_to(Blog, foreign_key="blog")]
 pub struct BlogVideo {
     pub id:   i32,
@@ -341,7 +341,7 @@ impl NewBlogVideo {
     }
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
 #[belongs_to(Blog)]
 #[belongs_to(User)]
 pub struct BlogComment {

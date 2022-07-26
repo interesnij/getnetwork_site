@@ -20,7 +20,7 @@ use crate::utils::establish_connection;
 
 
 /////// WorkCategories //////
-#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Identifiable, Queryable, Associations)]
 #[table_name="work_categories"]
 pub struct WorkCategories {
     pub id:          i32,
@@ -120,7 +120,7 @@ pub struct EditWorkCategories {
 }
 
 /////// Work //////
-#[derive(Debug, Serialize, Clone, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Work {
     pub id:          i32,
@@ -257,7 +257,7 @@ impl NewWork {
 }
 
 /////// WorkCategory //////
-#[derive(Identifiable, Queryable, Associations)]
+#[derive(Identifiable, PartialEq, Queryable, Associations)]
 #[belongs_to(WorkCategories)]
 #[belongs_to(Work)]
 #[table_name="work_category"]
@@ -274,7 +274,7 @@ pub struct NewWorkCategory {
 }
 
 /////// WorkImage //////
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
 #[belongs_to(Work, foreign_key="work")]
 pub struct WorkImage {
     pub id:   i32,
@@ -298,7 +298,7 @@ impl NewWorkImage {
 }
 
 /////// WorkVideo //////
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
 #[belongs_to(Work, foreign_key="work")]
 pub struct WorkVideo {
     pub id:   i32,

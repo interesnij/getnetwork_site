@@ -9,7 +9,7 @@ use crate::utils::establish_connection;
 use crate::diesel::{ExpressionMethods, RunQueryDsl};
 
 
-#[derive(Debug ,Queryable, Serialize, Identifiable)]
+#[derive(Debug ,Queryable, PartialEq, Serialize, Identifiable)]
 pub struct User {
     pub id:       i32,
     pub username: String,
@@ -60,7 +60,7 @@ pub struct UserChange {
     pub image:    String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, PartialEq, Deserialize)]
 pub struct SessionUser {
     pub id:       i32,
     pub username: String,
