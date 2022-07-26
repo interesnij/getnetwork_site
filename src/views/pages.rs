@@ -21,7 +21,6 @@ use crate::diesel::{
 };
 use actix_session::Session;
 use sailfish::TemplateOnce;
-use cached::proc_macro::cached;
 
 
 pub fn pages_routes(config: &mut web::ServiceConfig) {
@@ -38,7 +37,6 @@ pub struct SParams {
     pub q: String,
 }
 
-#[cached]
 pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     use crate::models::{Work, Service, Wiki, Blog, Store};
 
