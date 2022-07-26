@@ -894,6 +894,9 @@ select[multiple].form-group-lg .form-control {
 .show {
   display: block !important
 }
+a {
+  text-decoration: auto;
+}
 
 .clearfix:before,
 .clearfix:after,
