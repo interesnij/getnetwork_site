@@ -18,10 +18,9 @@ use crate::schema::{
     blog_comments,
 };
 use crate::utils::establish_connection;
-use cached::proc_macro::cached;
 
 
-#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, Identifiable, PartialEq, Queryable, Associations)]
 #[table_name="blog_categories"]
 pub struct BlogCategories {
     pub id:          i32,
@@ -122,7 +121,7 @@ pub struct EditBlogCategories {
     pub count:       i32,
 }
 
-#[derive(Debug, Serialize, Clone, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Blog {
     pub id:          i32,

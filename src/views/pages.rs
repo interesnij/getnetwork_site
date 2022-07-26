@@ -39,7 +39,6 @@ pub struct SParams {
 
 pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     use crate::models::{Work, Service, Wiki, Blog, Store};
-    use cached::proc_macro::cached;
 
     let _connection = establish_connection();
     let _last_works = Work::get_3_works();
@@ -53,7 +52,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
         let _request_user = get_request_user_data(&session);
         //_request_user.create_superuser();
         if is_desctop {
-            #[cached]
+
             #[derive(TemplateOnce)]
             #[template(path = "desctop/main/mainpage.stpl")]
             struct Template {
