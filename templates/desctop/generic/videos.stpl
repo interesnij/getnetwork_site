@@ -1,0 +1,10 @@
+<% if videos.len() > 0 { %>
+<h4>Видеозаписи</h4>
+<div class="row multi-columns-row mb-30 mb-xs-10">
+    <% for video in videos.iter() { %>
+      <video width="100%" height="100%" controls="controls">
+        <source src="<%= video.src %>" type='video/mp4;'>
+      </video>
+    <% } %>
+</div>
+<% } %>
