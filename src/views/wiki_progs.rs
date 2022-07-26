@@ -971,6 +971,10 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
         .select(schema::tags_items::tag_id)
         .load::<i32>(&_connection)
         .expect("E");
+
+    let _wiki_categorys = wiki_categories
+        .load::<WikiCategories>(&_connection)
+        .expect("E");
     for _tag_item in _tag_items.iter() {
         if !stack.iter().any(|&i| i==_tag_item) {
             stack.push(_tag_item);
@@ -1003,7 +1007,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         _tags,
                 tags_count:       tags_count,
                 category:         _category,
-                wiki_cats:        _categorys,
+                wiki_cats:        _wiki_categorys,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1030,7 +1034,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         _tags,
                 tags_count:       tags_count,
                 category:         _category,
-                wiki_cats:        _categorys,
+                wiki_cats:        _wiki_categorys,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,

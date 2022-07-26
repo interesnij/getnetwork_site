@@ -965,12 +965,17 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
     let _category = _categorys.into_iter().nth(0).unwrap();
     let (object_list, next_page_number) = _category.get_works_list(page, 20);
 
+    let _work_categorys = work_categories
+        .load::<WorkCategories>(&_connection)
+        .expect("E");
+
     let mut stack = Vec::new();
     let _tag_items = tags_items
         .filter(schema::tags_items::work_id.ne(0))
         .select(schema::tags_items::tag_id)
         .load::<i32>(&_connection)
         .expect("E");
+
     for _tag_item in _tag_items.iter() {
         if !stack.iter().any(|&i| i==_tag_item) {
             stack.push(_tag_item);
@@ -993,6 +998,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         WorkCategories,
+                work_cats:        Vec<WorkCategories>,
                 object_list:      Vec<Work>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1001,7 +1007,8 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 request_user:     _request_user,
                 all_tags:         _tags,
                 tags_count:       tags_count,
-                category:        _category,
+                category:         _category,
+                work_cats:        _work_categorys,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1018,6 +1025,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         WorkCategories,
+                work_cats:        Vec<WorkCategories>,
                 object_list:      Vec<Work>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1026,7 +1034,8 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 request_user:     _request_user,
                 all_tags:         _tags,
                 tags_count:       tags_count,
-                category:        _category,
+                category:         _category,
+                work_cats:        _work_categorys,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
