@@ -2,7 +2,7 @@
     <div class="post-prev-img">
       <a href="/blog/1/<%= object.id %>/" class="ajax">
         <div class="progressive replace" data-href="<%= object.get_image() %>">
-          <img class="image_fit_300" src="/static/images/preloader.gif" alt="img" />
+          <img class="preview image_fit_300" src="/static/images/preloader.gif" alt="img" />
         </div>
       </a>
     </div>
