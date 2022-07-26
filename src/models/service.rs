@@ -214,7 +214,7 @@ impl Service {
     pub fn get_tech_cats_ids(&self) -> Vec<i32> {
         let mut stack = Vec::new();
         for _serv in self.get_serves().iter() {
-            if !stack.iter().any(|i| i==_serv.tech_cat_id) {
+            if !stack.iter().any(|i| i.tech_cat_id==_serv.tech_cat_id) {
                 stack.push(_serv.tech_cat_id);
             }
         }
