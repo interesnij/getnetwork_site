@@ -570,16 +570,7 @@ a.blog-item-more:hover{
 .blog-page-title{
     border-bottom: 1px solid #eee !important;
 }
-.comment-item{
-    border-top: 1px dotted #e9e9e9 !important;
-}
 
-.comment-item-data a:hover{
-    color: #FFFFFF !important;
-}
-.comment-author a{
-    color: #999 !important;
-}
 .widget-title{
     border-bottom: 1px solid #ccc !important;
 }
@@ -601,16 +592,6 @@ a.blog-item-more:hover{
 .tags a:hover{
     border-color: #333 !important;
     color: #FFFFFF !important;
-}
-
-.widget-comments{
-    color: #aaa !important;
-}
-.widget-comments li a{
-    color: #555 !important;
-}
-.widget-comments li a:hover{
-    color: #999 !important;
 }
 
 .pricing-item-inner{
