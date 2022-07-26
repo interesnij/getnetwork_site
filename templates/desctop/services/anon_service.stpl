@@ -1,7 +1,5 @@
 <% include!("../anon_header.stpl"); %>
 
-<% include!("../header.stpl"); %>
-
 <section class="bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
@@ -181,7 +179,5 @@
     </h3>
     </section>
 </section>
-
-<% include!("../footer.stpl"); %>
 
 <% include!("../anon_footer.stpl"); %>
