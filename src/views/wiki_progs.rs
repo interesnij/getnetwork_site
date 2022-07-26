@@ -776,10 +776,12 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
         .load::<WikiCategories>(&_connection)
         .expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
+    let _wiki_categories = wiki_categories
+        .load::<WikiCategories>(&_connection)
+        .expect("E"); 
 
     let _images: Vec<WikiImage> = wiki_images.filter(schema::wiki_images::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
     let _videos: Vec<WikiVideo> = wiki_videos.filter(schema::wiki_videos::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
-    let _categories = _wiki.get_categories();
     let _tags = _wiki.get_tags();
     let _tags_count = _tags.len();
 
@@ -825,8 +827,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 object:       Wiki,
                 images:       Vec<WikiImage>,
                 videos:       Vec<WikiVideo>,
-                categories:   Vec<WikiCategories>,
                 category:     WikiCategories,
+                wiki_cats:    Vec<WikiCategories>,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
                 prev:         Option<Wiki>,
@@ -838,8 +840,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     _wiki,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
+                wiki_cats:  _wiki_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,
@@ -858,8 +860,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 object:       Wiki,
                 images:       Vec<WikiImage>,
                 videos:       Vec<WikiVideo>,
-                categories:   Vec<WikiCategories>,
                 category:     WikiCategories,
+                wiki_cats:    Vec<WikiCategories>,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
                 prev:         Option<Wiki>,
@@ -871,8 +873,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     _wiki,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
+                wiki_cats:  _wiki_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,

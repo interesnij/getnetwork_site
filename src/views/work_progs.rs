@@ -776,10 +776,12 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
         .load::<WorkCategories>(&_connection)
         .expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
+    let _work_categories = work_categories
+        .load::<WorkCategories>(&_connection)
+        .expect("E");
 
     let _images: Vec<WorkImage> = work_images.filter(schema::work_images::work.eq(&_work_id)).load(&_connection).expect("E");
     let _videos: Vec<WorkVideo> = work_videos.filter(schema::work_videos::work.eq(&_work_id)).load(&_connection).expect("E");
-    let _categories = _work.get_categories();
     let _tags = _work.get_tags();
     let _tags_count = _tags.len();
 
@@ -825,8 +827,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 object:       Work,
                 images:       Vec<WorkImage>,
                 videos:       Vec<WorkVideo>,
-                categories:   Vec<WorkCategories>,
                 category:     WorkCategories,
+                work_cats:    Vec<WorkCategories>,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
                 prev:         Option<Work>,
@@ -838,8 +840,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     _work,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
+                work_cats:  _work_categorys,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,
@@ -858,8 +860,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 object:       Work,
                 images:       Vec<WorkImage>,
                 videos:       Vec<WorkVideo>,
-                categories:   Vec<WorkCategories>,
                 category:     WorkCategories,
+                work_cats:    Vec<WorkCategories>,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
                 prev:         Option<Work>,
@@ -871,8 +873,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     _work,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
+                work_cats:  _work_categorys,
                 all_tags:   _tags,
                 tags_count: _tags_count,
                 prev:       prev,
