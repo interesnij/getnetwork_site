@@ -31,7 +31,7 @@
                 <% let mut default_price = 0; %>
                 <% let serv_categories = object.get_categories(); %>
                 <% for (i, t_category) in tech_cats.iter().enumerate() { %>
-                  % let is_main_cat = object.get_tech_cats_ids().iter().any(|i| i==&t_category.id); %>
+                  <% let is_main_cat = object.get_tech_cats_ids().iter().any(|i| i==&t_category.id); %>
                   <% let s_cats = t_category.get_serve_categories(); %>
 
                 <section class="mb-20 mt-20 border">
