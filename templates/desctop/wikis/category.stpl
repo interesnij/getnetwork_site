@@ -1,5 +1,41 @@
 <% include!("../header.stpl"); %>
 
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <a class="ajax" href="/wiki_categories/">База знаний</a>
+                    &nbsp;/&nbsp;
+                    <span><%= category.name %></span>
+                </div>
+    </div>
+</section>
 
+<section class="page-section">
+    <div class="container relative">
+      <div class="row">
+          <div class="col-sm-8">
+            <% if object_list.len() > 0 { %>
+              <% for object in object_list.iter() { %>
+                <% include!("../generic/wiki.stpl"); %>
+              <% } %>
+              <% if next_page_number > 0 { %>
+                <div class="load centered m-1 next_page_list" data-link="/wiki/<%= category.id %>/?page=<%= next_page_number %>">
+                  <img src="/static/images/preloader.gif">
+                </div>
+              <% } %>
+            <% } else { %>
+              <div class="text-center">
+                <span class="widget-title font-alt">Список пока пустой...</span>
+              </div>
+            <% } %>
+          </div>
+          <div class="col-sm-4">
+            <% include!("sidebar.stpl"); %>
+          </div>
+      </div>
+    </div>
+</section>
 
 <% include!("../footer.stpl"); %>
