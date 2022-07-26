@@ -993,6 +993,9 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
     let _categorys = store_categories.filter(schema::store_categories::id.eq(_cat_id)).load::<StoreCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
     let (object_list, next_page_number) = _category.get_stores_list(page, 20);
+    let _wiki_store_categories = store_categories
+        .load::<StoreCategories>(&_connection)
+        .expect("E");
 
     let mut stack = Vec::new();
     let _tag_items = tags_items
@@ -1022,6 +1025,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         StoreCategories,
+                store_cats:       Vec<StoreCategories>,
                 object_list:      Vec<Store>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1030,7 +1034,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 request_user:     _request_user,
                 all_tags:         _tags,
                 tags_count:       tags_count,
-                category:        _category,
+                category:         _category,
+                store_cats:       _wiki_store_categories,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1047,6 +1052,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         StoreCategories,
+                store_cats:       Vec<StoreCategories>,
                 object_list:      Vec<Store>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1055,7 +1061,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 request_user:     _request_user,
                 all_tags:         _tags,
                 tags_count:       tags_count,
-                category:        _category,
+                category:         _category,
+                store_cats:       _wiki_store_categories,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
