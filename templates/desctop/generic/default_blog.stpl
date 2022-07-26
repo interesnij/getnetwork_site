@@ -4,7 +4,7 @@
         <div class="progressive replace" data-href="<%= object.get_image() %>">
           <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
         </div>
-      </a>
+      </a> 
     </div>
     <div class="post-prev-title font-alt">
         <a class="ajax" href="/blog/1/<%= object.id %>/"><%= object.title %></a>

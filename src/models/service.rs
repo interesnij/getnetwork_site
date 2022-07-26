@@ -201,6 +201,25 @@ impl Service {
             .load::<Serve>(&_connection)
             .expect("E");
     }
+    pub fn get_serves_ids(&self) -> Vec<i32> {
+        use schema::serve_items::dsl::serve_items;
+
+        let _connection = establish_connection();
+        return serve_items
+            .filter(schema::serve_items::service_id.eq(&self.id))
+            .select(schema::serve_items::serve_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+    }
+    pub fn get_tech_cats_ids(&self) -> Vec<i32> {
+        let mut stack = Vec::new();
+        for _serv in self.get_serves() {
+            if !stack.iter().any(|i| i==_serv.tech_cat_id) {
+                stack.push(_serv.tech_cat_id);
+            }
+        }
+        return stack;
+    }
 
     pub fn get_6_services() -> Vec<Service> {
         use crate::schema::services::dsl::services;

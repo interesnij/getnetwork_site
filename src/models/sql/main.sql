@@ -289,6 +289,7 @@ CREATE TABLE serve (
     man_hours        INT,
     is_default       boolean not null default false,
     user_id          INT NOT NULL,
+    tech_cat_id      INT NOT NULL,
 
     CONSTRAINT fk_serve_category
         FOREIGN KEY(serve_categories)

@@ -1,8 +1,10 @@
 <div class="mb-20 col-sm-10 col-md-6 col-lg-6 mb-md-50">
     <div class="post-prev-img">
-        <a href="/blog/1/<%= object.id %>/" class="ajax">
-          <img class="image_fit_300" src="<%= object.get_image() %>" alt="img" />
-        </a>
+      <a href="/blog/1/<%= object.id %>/" class="ajax">
+        <div class="progressive replace" data-href="<%= object.get_image() %>">
+          <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
+        </div>
+      </a>
     </div>
     <div class="post-prev-title font-alt">
         <a class="ajax" href="/blog/1/<%= object.id %>/"><%= object.title %></a>

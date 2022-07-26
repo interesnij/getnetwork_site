@@ -14,8 +14,6 @@
 
 <section class="page-section">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-8">
                 <div class="blog-item-body">
                     <h1 class="mt-0 font-alt"><%= object.title %></h1>
                     <div class="blog-item-data">
@@ -60,7 +58,7 @@
                       </span>
                     </h2>
                   <% } %>
-                    <div class="<% if !is_main_cat { %>hidden is_not_main_cat<% } %>>
+                    <div class="<% if !is_main_cat { %>hidden is_not_main_cat<% } %>">
                         <div class="align-center">
                             <ul class="nav nav-tabs tpl-minimal-tabs animate">
                               <% for cat in s_cats.iter() { %>
@@ -141,9 +139,7 @@
             <div class="col-sm-4">
                 <% include!("sidebar.stpl"); %>
             </div>
-        </div>
-    </div>
-    <section class="border card_fullscreen" style="position: fixed;bottom: 10px;width: 100%;">
+    <section class="border card_fullscreen" style="position: fixed;top: 10px;width: 100%;">
         <h3 data-sum="{{ default_price }}"
             data-pk="{{ object.id }}"
             data-servelist="{{ default_servelist }}"

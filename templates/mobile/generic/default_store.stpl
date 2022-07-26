@@ -1,7 +1,9 @@
 <div class="col-md-6 mb-60 mb-xs-40">
   <div class="post-prev-img">
     <a class="ajax" href="/store/1/<%= object.id %>/">
-      <img src="<%= object.get_image() %>" alt="img">
+      <div class="progressive replace" data-href="<%= object.get_image() %>">
+        <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
+      </div>
     </a>
     <div class="intro-label">
       <span class="label label-danger bg-red">Sale</span>
