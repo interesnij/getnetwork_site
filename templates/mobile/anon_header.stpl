@@ -19,7 +19,7 @@
 </head>
 <body>
   <%
-    use crate::utils::get_categories;
+    use crate::utils::get_tech_categories;
     let tech_cats = get_tech_categories();
   %>
     <div class="page mobile_page" id="top">
