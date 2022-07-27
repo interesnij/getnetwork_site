@@ -131,17 +131,25 @@ pub async fn create_work_page(session: Session, req: HttpRequest) -> actix_web::
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use schema::tags::dsl::tags;
-            use schema::work_categories::dsl::work_categories;
+            use schema::{
+                tags::dsl::tags,
+                work_categories::dsl::work_categories,
+                tech_categories::dsl::tech_categories,
+            };
             use crate::utils::get_device_and_ajax;
+            use crate::models::TechCategories;
 
             let _connection = establish_connection();
-            let _work_cats:Vec<WorkCategories> = work_categories
-                .load(&_connection)
+            let _work_cats = work_categories
+                .load::<WorkCategories>(&_connection)
                 .expect("Error");
 
-            let all_tags: Vec<Tag> = tags
-                .load(&_connection)
+            let _tech_cats = work_categories
+                .load::<TechCategories>(&_connection)
+                .expect("Error");
+
+            let all_tags = tags
+                .load::<Tag>(&_connection)
                 .expect("Error.");
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -152,12 +160,14 @@ pub async fn create_work_page(session: Session, req: HttpRequest) -> actix_web::
                 struct Template {
                     request_user: User,
                     work_cats:    Vec<WorkCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     work_cats:    _work_cats,
+                    tech_cats:    _tech_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
@@ -171,12 +181,14 @@ pub async fn create_work_page(session: Session, req: HttpRequest) -> actix_web::
                 struct Template {
                     request_user: User,
                     work_cats:    Vec<WorkCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     work_cats:    _work_cats,
+                    tech_cats:    _tech_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
@@ -214,15 +226,20 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
             let _categories = _work.get_categories();
-            let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
+            let _all_tags = tags.load::<Tag>(&_connection).expect("Error.");
             let _work_tags = _work.get_tags();
 
             let _images = work_images.filter(schema::work_images::work.eq(_work.id)).load::<WorkImage>(&_connection).expect("E");
             let _videos = work_videos.filter(schema::work_videos::work.eq(_work.id)).load::<WorkVideo>(&_connection).expect("E");
 
-            let _work_cats:Vec<WorkCategories> = work_categories
-                .load(&_connection)
+            let _work_cats = work_categories
+                .load::<WorkCategories>(&_connection)
                 .expect("Error");
+
+            let _tech_cats = work_categories
+                .load::<TechCategories>(&_connection)
+                .expect("Error");
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/works/edit_work.stpl")]
@@ -230,6 +247,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     request_user: User,
                     object:       Work,
                     categories:   Vec<WorkCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     is_ajax:      bool,
                     images:       Vec<WorkImage>,
                     videos:       Vec<WorkVideo>,
@@ -242,6 +260,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     request_user: _request_user,
                     object:       _work,
                     categories:   _categories,
+                    tech_cats:    _tech_cats,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
@@ -260,6 +279,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     request_user: User,
                     object:       Work,
                     categories:   Vec<WorkCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     is_ajax:      bool,
                     images:       Vec<WorkImage>,
                     videos:       Vec<WorkVideo>,
@@ -272,6 +292,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     request_user: _request_user,
                     object:       _work,
                     categories:   _categories,
+                    tech_cats:    _tech_cats,
                     is_ajax:      is_ajax,
                     images:       _images,
                     videos:       _videos,
