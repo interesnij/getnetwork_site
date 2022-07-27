@@ -7,7 +7,7 @@
             &nbsp;/&nbsp;
             <a class="ajax" href="/store_categories/">Магазин</a>
             &nbsp;/&nbsp;
-            <a class="ajax" href="/store/<%= category.id %>/"><%= category.name %></a>
+            <a class="ajax" href="/stores/<%= category.id %>/"><%= category.name %></a>
         </div>
     </div>
 </section>

@@ -8,7 +8,7 @@
       &nbsp;/&nbsp;
       <a class="ajax"href="/blog_categories/">Блог</a>
       &nbsp;/&nbsp;
-      <a class="ajax"href="/blog/<%= category.id %>/"> <%= category.name %></a>
+      <a class="ajax"href="/blogs/<%= category.id %>/"> <%= category.name %></a>
     </div>
   </div>
 </section>

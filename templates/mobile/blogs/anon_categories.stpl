@@ -22,7 +22,7 @@
                 <% let get_6_blogs = category.get_6_blogs(); %>
 
                 <h4 class="font-alt mb-10">
-                    <a class="ajax" href="/blog/<%= category.id %>/">
+                    <a class="ajax" href="/blogs/<%= category.id %>/">
                         <%= category.name %> (<%= category.count %>)
                     </a>
                 </h4>
@@ -37,7 +37,7 @@
       </div>
 </section>
 
-<div class="sidebar hidden"> 
+<div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
 <% include!("../anon_footer.stpl"); %>

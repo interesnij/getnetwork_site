@@ -64,7 +64,7 @@
       <span class="icon-layers"></span>
       <p>Разделы</p>
     </button>
-    <button href="" class="mobile_icon border pages_btn">
+    <button class="mobile_icon border pages_btn">
       <span class="icon-documents"></span>
       <p>Страницы</p>
     </button>

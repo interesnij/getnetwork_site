@@ -66,7 +66,7 @@ pub fn service_routes(config: &mut web::ServiceConfig) {
     config.route("/delete_service/{id}/", web::get().to(delete_service));
     config.route("/delete_service_category/{id}/", web::get().to(delete_service_category));
     config.service(web::resource("/services/{cat_id}/{service_id}/").route(web::get().to(get_service_page)));
-    config.service(web::resource("/services/{id}/").route(web::get().to(service_category_page)));
+    config.service(web::resource("/service/{id}/").route(web::get().to(service_category_page)));
 }
 
 pub async fn create_service_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {

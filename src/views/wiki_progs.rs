@@ -66,7 +66,7 @@ pub fn wiki_routes(config: &mut web::ServiceConfig) {
     config.route("/delete_wiki/{id}/", web::get().to(delete_wiki));
     config.route("/delete_wiki_category/{id}/", web::get().to(delete_wiki_category));
     config.service(web::resource("/wiki/{cat_id}/{wiki_id}/").route(web::get().to(get_wiki_page)));
-    config.service(web::resource("/wiki/{id}/").route(web::get().to(wiki_category_page)));
+    config.service(web::resource("/wikis/{id}/").route(web::get().to(wiki_category_page)));
 }
 
 pub async fn create_wiki_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {

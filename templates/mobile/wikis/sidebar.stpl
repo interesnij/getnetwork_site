@@ -11,7 +11,7 @@
         <ul class="clearlist widget-menu">
           <% for category in wiki_cats.iter() { %>
             <li>
-                <a class="ajax" href="/wiki/<%= category.id %>/"><%= category.name %></a>
+                <a class="ajax" href="/wikis/<%= category.id %>/"><%= category.name %></a>
                 <small>
                     - <%= category.count %>
                 </small>

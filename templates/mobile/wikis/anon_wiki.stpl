@@ -8,7 +8,7 @@
           &nbsp;/&nbsp;
           <a class="ajax" href="/wiki_categories/">База знаний</a>
           &nbsp;/&nbsp;
-          <a class="ajax" href="/wiki/<%= category.id %>/"><%= category.name %></a>
+          <a class="ajax" href="/wikis/<%= category.id %>/"><%= category.name %></a>
         </div>
       </div>
   </div>
