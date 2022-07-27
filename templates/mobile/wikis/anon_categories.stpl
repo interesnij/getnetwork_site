@@ -138,7 +138,7 @@
 <hr class="mt-0 mb-0 black">
 <% } %>
 
-<div class="sidebar">
+<div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
 <% include!("../anon_footer.stpl"); %>

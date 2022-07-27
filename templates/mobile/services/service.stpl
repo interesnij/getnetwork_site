@@ -167,7 +167,7 @@
     </section>
 </section>
 
-<div class="sidebar">
+<div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
 <% include!("../footer.stpl"); %>

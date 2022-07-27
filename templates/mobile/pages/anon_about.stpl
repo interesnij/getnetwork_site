@@ -1,7 +1,7 @@
 <% include!("../anon_header.stpl"); %>
 
 
-<div class="sidebar">
+<div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
 <% include!("../anon_footer.stpl"); %>
