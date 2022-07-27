@@ -384,7 +384,7 @@ pub struct LoadParams {
     pub _object_pk:   i32,
     pub _owner_pk:    i32,
 }
-pub async fn get_load_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
+pub async fn get_load_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use crate::schema;
 
     let mut _object_type: String = "".to_string();
@@ -446,11 +446,11 @@ pub async fn get_load_page(req: HttpRequest, session: Session) -> actix_web::Res
         #[template(path = "desctop/load/serve.stpl")]
         struct Template {
             object:      Serve,
-            object_type: String
+            //object_type: String
         }
         let body = Template {
             object:      _serve.into_iter().nth(0).unwrap(),
-            object_type: "serve".to_string(),
+            //object_type: "serve".to_string(),
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

@@ -1,0 +1,46 @@
+<div class="widget">
+    <form class="form-inline form" role="form">
+        <div class="search-wrap">
+            <input type="text" class="form-control search-field" placeholder="Поиск...">
+        </div>
+    </form>
+</div>
+<div class="widget">
+    <h5 class="widget-title font-alt">Категории</h5>
+    <div class="widget-body">
+        <ul class="clearlist widget-menu">
+          <% for category in service_cats.iter() { %>
+            <li>
+                <a class="ajax" href="/services/<%= category.id %>/"><%= category.name %></a>
+                <small>
+                    - <%= category.count %>
+                </small>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+</div>
+
+<div class="widget">
+    <h5 class="widget-title font-alt">Теги (<%= tags_count %>)</h5>
+    <div class="widget-body">
+        <div class="tags">
+          <% for tag in all_tags.iter() { %>
+            <a class="ajax" href="/tag/<%= tag.id %>/"><%= tag.name %> (<%= tag.count %>)</a>
+          <% } %>
+        </div>
+    </div>
+</div>
+
+<!--
+<div class="widget">
+    <h5 class="widget-title font-alt">Архив</h5>
+    <div class="widget-body">
+        <ul class="clearlist widget-menu">
+            <li>
+                <a href="#" title="">February 2022</a>
+            </li>
+        </ul>
+    </div>
+</div>
+-->
