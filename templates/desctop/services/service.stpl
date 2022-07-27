@@ -35,8 +35,8 @@
                   Информация отсутствует.
                 <% } %>
 
+                <% let mut default_price = 0; %>
                 <% include!("../generic/form/serves_table.stpl"); %>
-
 
                 <% include!("../generic/photos.stpl"); %>
 

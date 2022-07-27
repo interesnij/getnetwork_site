@@ -77,6 +77,7 @@
                 </select>
             </div>
 
+            <% let mut default_price = 0; %>
             <% include!("../generic/form/edit_serves.stpl"); %>
 
             <div class="mb-20 mb-md-10">
