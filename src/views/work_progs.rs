@@ -986,18 +986,18 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[template(path = "desctop/works/category.stpl")]
             struct Template {
                 request_user:     User,
-                all_tags:         Vec<Tag>,
+                //all_tags:         Vec<Tag>,
                 category:         WorkCategories,
-                work_cats:        Vec<WorkCategories>,
+                //work_cats:        Vec<WorkCategories>,
                 object_list:      Vec<Work>,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 request_user:     _request_user,
-                all_tags:         _tags,
+                //all_tags:         _tags,
                 category:         _category,
-                work_cats:        _work_categories,
+                //work_cats:        _work_categories,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1037,17 +1037,17 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "desctop/works/anon_category.stpl")]
             struct Template {
-                all_tags:         Vec<Tag>,
+                //all_tags:         Vec<Tag>,
                 category:         WorkCategories,
-                work_cats:        Vec<WorkCategories>,
+                //work_cats:        Vec<WorkCategories>,
                 object_list:      Vec<Work>,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
-                all_tags:         _tags,
+                //all_tags:         _tags,
                 category:         _category,
-                work_cats:        _work_categories,
+                //work_cats:        _work_categories,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1122,13 +1122,13 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
                 request_user: User,
                 is_ajax:      bool,
                 work_cats:    Vec<WorkCategories>,
-                all_tags:     Vec<Tag>,
+                //all_tags:     Vec<Tag>,
             }
             let body = Template {
                 request_user: _request_user,
                 is_ajax:      is_ajax,
                 work_cats:    _work_cats,
-                all_tags:     _tags,
+                //all_tags:     _tags,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1161,12 +1161,12 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
             struct Template {
                 is_ajax:      bool,
                 work_cats:    Vec<WorkCategories>,
-                all_tags:     Vec<Tag>,
+                //all_tags:     Vec<Tag>,
             }
             let body = Template {
                 is_ajax:      is_ajax,
                 work_cats:    _work_cats,
-                all_tags:     _tags,
+                //all_tags:     _tags,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

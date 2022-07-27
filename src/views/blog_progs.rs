@@ -783,7 +783,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 
     let _images: Vec<BlogImage> = blog_images.filter(schema::blog_images::blog.eq(&_blog_id)).load(&_connection).expect("E");
     let _videos: Vec<BlogVideo> = blog_videos.filter(schema::blog_videos::blog.eq(&_blog_id)).load(&_connection).expect("E");
-    let _categories = _blog.get_categories();
     let _tags = _blog.get_tags();
 
     let mut prev: Option<Blog> = None;
@@ -828,7 +827,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 object:       Blog,
                 images:       Vec<BlogImage>,
                 videos:       Vec<BlogVideo>,
-                categories:   Vec<BlogCategories>,
                 blog_cats:    Vec<BlogCategories>,
                 category:     BlogCategories,
                 all_tags:     Vec<Tag>,
@@ -841,7 +839,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     _blog,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 blog_cats:  all_categories,
                 category:   _category,
                 all_tags:   _tags,
@@ -861,7 +858,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 object:       Blog,
                 images:       Vec<BlogImage>,
                 videos:       Vec<BlogVideo>,
-                categories:   Vec<BlogCategories>,
                 blog_cats:    Vec<BlogCategories>,
                 category:     BlogCategories,
                 all_tags:     Vec<Tag>,
@@ -874,7 +870,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     _blog,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 category:   _category,
                 blog_cats:  all_categories,
                 all_tags:   _tags,
@@ -895,7 +890,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     Blog,
                 images:     Vec<BlogImage>,
                 videos:     Vec<BlogVideo>,
-                categories: Vec<BlogCategories>,
                 blog_cats:  Vec<BlogCategories>,
                 category:   BlogCategories,
                 all_tags:   Vec<Tag>,
@@ -907,7 +901,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     _blog,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 blog_cats:  all_categories,
                 category:   _category,
                 all_tags:   _tags,
@@ -926,7 +919,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     Blog,
                 images:     Vec<BlogImage>,
                 videos:     Vec<BlogVideo>,
-                categories: Vec<BlogCategories>,
                 blog_cats:  Vec<BlogCategories>,
                 category:   BlogCategories,
                 all_tags:   Vec<Tag>,
@@ -938,7 +930,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 object:     _blog,
                 images:     _images,
                 videos:     _videos,
-                categories: _categories,
                 blog_cats:  all_categories,
                 category:   _category,
                 all_tags:   _tags,
