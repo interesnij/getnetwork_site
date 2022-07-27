@@ -8,7 +8,7 @@ use crate::diesel::{
     ExpressionMethods,
 };
 use serde::{Serialize, Deserialize};
-use crate::models::{User, Tag};
+use crate::models::{User, Tag, Serve};
 use crate::schema::{
     work_categories,
     works,
