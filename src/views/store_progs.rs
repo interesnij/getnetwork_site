@@ -224,7 +224,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 tech_categories::dsl::tech_categories,
             };
             use crate::utils::get_device_and_ajax;
-            use crate::models:: {TechCategories, Serve};
+            use crate::models::TechCategories;
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
             let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");

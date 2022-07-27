@@ -13,8 +13,6 @@
 </section>
 <section class="page-section">
     <div class="container relative">
-        <div class="row">
-            <div class="col-md-6">
                 <div class="blog-item mb-80 mb-xs-40">
                     <div class="blog-item-body">
                         <h1 class="mt-0 font-alt"><%= object.title %></h1>
@@ -62,6 +60,8 @@
                         <% } else { %>
                           Информация отсутствует.
                         <% } %>
+
+                        <% include!("../generic/form/serves_table.stpl"); %>
                     </div>
                 </div>
                 <div class="clearfix mt-40">
@@ -75,14 +75,13 @@
                   <% } %>
                 </div>
             </div>
-            <div class="col-md-6">
             <% include!("../generic/photos.stpl"); %>
 
             <% include!("../generic/videos.stpl"); %>
-            </div>
         </div>
 
-    </div>
+      <% include!("../generic/form/btn_block.stpl"); %>
+
 </section>
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>

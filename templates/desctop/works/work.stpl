@@ -62,6 +62,8 @@
                         <% } else { %>
                           Информация отсутствует.
                         <% } %>
+
+                        <% include!("../generic/form/serves_table.stpl"); %>
                     </div>
                 </div>
                 <div class="clearfix mt-40">
@@ -81,8 +83,10 @@
               <% include!("../generic/videos.stpl"); %>
             </div>
         </div>
-
     </div>
+
+    <% include!("../generic/form/btn_block.stpl"); %>
+
 </section>
 
 <% include!("../footer.stpl"); %>

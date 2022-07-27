@@ -223,7 +223,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 tech_categories::dsl::tech_categories,
             };
             use crate::utils::get_device_and_ajax;
-            use crate::models:: {TechCategories, Serve};
+            use crate::models:: TechCategories;
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
             let _categories = _service.get_categories();
