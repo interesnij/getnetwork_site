@@ -144,7 +144,7 @@ pub async fn create_work_page(session: Session, req: HttpRequest) -> actix_web::
                 .load::<WorkCategories>(&_connection)
                 .expect("Error");
 
-            let _tech_cats = work_categories
+            let _tech_cats = tech_categories
                 .load::<TechCategories>(&_connection)
                 .expect("Error");
 
@@ -221,6 +221,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 work_images::dsl::work_images,
                 work_videos::dsl::work_videos,
                 work_categories::dsl::work_categories,
+                tech_categories::dsl::tech_categories,
             };
             use crate::utils::get_device_and_ajax;
 
@@ -236,7 +237,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 .load::<WorkCategories>(&_connection)
                 .expect("Error");
 
-            let _tech_cats = work_categories
+            let _tech_cats = tech_categories
                 .load::<TechCategories>(&_connection)
                 .expect("Error");
 
