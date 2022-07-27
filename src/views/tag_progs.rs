@@ -51,7 +51,7 @@ pub fn tag_routes(config: &mut web::ServiceConfig) {
 
 pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
-    use crate::utils::{get_request_user_data, get_device_and_ajax};
+    use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
     let all_tags: Vec<Tag> = tags

@@ -84,7 +84,6 @@ pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
         }
         else {
-            use crate::schema::serve::dsl::serve;
             use crate::schema::serve_categories::dsl::serve_categories;
 
             let _connection = establish_connection();
@@ -621,8 +620,6 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-
-            use schema::serve_categories::dsl::serve_categories;
             use schema::tech_categories::dsl::tech_categories;
 
             let _connection = establish_connection();
