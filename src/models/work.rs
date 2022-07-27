@@ -223,6 +223,32 @@ impl Work {
             .load::<Work>(&_connection)
             .expect("E.");
     }
+
+    pub fn get_serves(&self) -> Vec<Serve> {
+        use schema::serve_items::dsl::serve_items;
+        use schema::serve::dsl::serve;
+
+        let _connection = establish_connection();
+        let _serve_items = serve_items
+            .filter(schema::serve_items::work_id.eq(&self.id))
+            .select(schema::serve_items::store_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        return serve
+            .filter(schema::serve::id.eq_any(_serve_items))
+            .load::<Serve>(&_connection)
+            .expect("E");
+    }
+    pub fn get_tech_cats_ids(&self) -> Vec<i32> {
+        let mut stack = Vec::new();
+        for _serv in self.get_serves().iter() {
+            if stack.iter().any(|&i| i!=_serv.tech_cat_id) {
+                stack.push(_serv.tech_cat_id);
+            }
+        }
+        return stack;
+    }
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]

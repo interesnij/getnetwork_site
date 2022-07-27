@@ -17,6 +17,7 @@ use crate::models::{
     StoreCategories,
     WikiCategories,
     WorkCategories,
+    TechCategories,
     User,
 };
 use crate::diesel::{
@@ -88,27 +89,45 @@ use crate::errors::AuthError;
         Vec<StoreCategories>,
         Vec<BlogCategories>,
         Vec<WikiCategories>,
-        Vec<WorkCategories>
+        Vec<WorkCategories>,
+        Vec<TechCategories>
     ) {
-        use crate::schema::service_categories::dsl::service_categories;
-        use crate::schema::store_categories::dsl::store_categories;
-        use crate::schema::blog_categories::dsl::blog_categories;
-        use crate::schema::work_categories::dsl::work_categories;
-        use crate::schema::wiki_categories::dsl::wiki_categories;
+        use crate::schema::{
+            service_categories::dsl::service_categories,
+            store_categories::dsl::store_categories,
+            blog_categories::dsl::blog_categories,
+            work_categories::dsl::work_categories,
+            wiki_categories::dsl::wiki_categories,
+            tech_categories::dsl::tech_categories,
+        };
 
         let _conn = establish_connection();
-        let _service_cats :Vec<ServiceCategories> = service_categories.load(&_conn).expect("Error");
-        let _store_cats :Vec<StoreCategories> = store_categories.load(&_conn).expect("Error");
-        let _blog_cats :Vec<BlogCategories> = blog_categories.load(&_conn).expect("Error");
-        let _wiki_cats :Vec<WikiCategories> = wiki_categories.load(&_conn).expect("Error");
-        let _work_cats :Vec<WorkCategories> = work_categories.load(&_conn).expect("Error");
+        let _service_cats = service_categories
+            .load::<ServiceCategories>(&_conn)
+            .expect("Error");
+        let _store_cats = store_categories
+            .load::<StoreCategories>(&_conn)
+            .expect("Error");
+        let _blog_cats = blog_categories
+            .load::<BlogCategories>(&_conn)
+            .expect("Error");
+        let _wiki_cats = wiki_categories
+            .load::<WikiCategories>(&_conn)
+            .expect("Error");
+        let _work_cats = work_categories
+            .load::<WorkCategories>(&_conn)
+            .expect("Error");
+        let _tech_cats = work_categories
+            .load::<TechCategories>(&_conn)
+            .expect("Error");
 
         return (
             _service_cats,
             _store_cats,
             _blog_cats,
             _wiki_cats,
-            _work_cats
+            _work_cats,
+            _tech_cats,
         );
     }
 //}

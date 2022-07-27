@@ -146,6 +146,15 @@ impl Store {
             return "/static/images/img.jpg".to_string();
         }
     }
+    pub fn get_tech_cats_ids(&self) -> Vec<i32> {
+        let mut stack = Vec::new();
+        for _serv in self.get_serves().iter() {
+            if stack.iter().any(|&i| i!=_serv.tech_cat_id) {
+                stack.push(_serv.tech_cat_id);
+            }
+        }
+        return stack;
+    }
     pub fn get_tags(&self) -> Vec<Tag> {
         use crate::schema::tags_items::dsl::tags_items;
         use crate::schema::tags::dsl::tags;
