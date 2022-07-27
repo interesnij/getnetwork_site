@@ -117,7 +117,7 @@ use crate::errors::AuthError;
         let _work_cats = work_categories
             .load::<WorkCategories>(&_conn)
             .expect("Error");
-        let _tech_cats = work_categories
+        let _tech_cats = tech_categories
             .load::<TechCategories>(&_conn)
             .expect("Error");
 
