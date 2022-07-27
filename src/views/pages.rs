@@ -26,7 +26,7 @@ use sailfish::TemplateOnce;
 pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/", web::get().to(index));
     config.route("/about/", web::get().to(about));
-    //config.route("/feedback/", web::post().to(create_feedback));
+    config.route("/feedback/", web::post().to(create_feedback));
     config.route("/feedback_list/", web::get().to(feedback_list_page));
     config.route("/serve_list/", web::get().to(serve_list_page));
     config.route("/load_item/", web::get().to(get_load_page));

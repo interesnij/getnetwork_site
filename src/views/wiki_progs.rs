@@ -355,7 +355,7 @@ pub async fn edit_content_wiki_page(session: Session, payload: Multipart, req: H
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
     }
 }
-pub async fn edit_content_wiki(session: Session, mut payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_content_wiki(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::wikis::dsl::wikis;
 
     let _wiki_id: i32 = *_id;
@@ -783,7 +783,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
     let _images: Vec<WikiImage> = wiki_images.filter(schema::wiki_images::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
     let _videos: Vec<WikiVideo> = wiki_videos.filter(schema::wiki_videos::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
     let _tags = _wiki.get_tags();
-    let _tags_count = _tags.len();
 
     let mut prev: Option<Wiki> = None;
     let mut next: Option<Wiki> = None;
@@ -830,7 +829,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 category:     WikiCategories,
                 wiki_cats:    Vec<WikiCategories>,
                 all_tags:     Vec<Tag>,
-                tags_count:   usize,
                 prev:         Option<Wiki>,
                 next:         Option<Wiki>,
                 is_ajax:      bool,
@@ -843,7 +841,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   _category,
                 wiki_cats:  _wiki_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -863,7 +860,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 category:     WikiCategories,
                 wiki_cats:    Vec<WikiCategories>,
                 all_tags:     Vec<Tag>,
-                tags_count:   usize,
                 prev:         Option<Wiki>,
                 next:         Option<Wiki>,
                 is_ajax:      bool,
@@ -876,7 +872,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   _category,
                 wiki_cats:  _wiki_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -897,7 +892,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   WikiCategories,
                 wiki_cats:  Vec<WikiCategories>,
                 all_tags:   Vec<Tag>,
-                tags_count: usize,
                 prev:       Option<Wiki>,
                 next:       Option<Wiki>,
                 is_ajax:    bool,
@@ -909,7 +903,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   _category,
                 wiki_cats:  _wiki_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -928,7 +921,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   WikiCategories,
                 wiki_cats:  Vec<WikiCategories>,
                 all_tags:   Vec<Tag>,
-                tags_count: usize,
                 prev:       Option<Wiki>,
                 next:       Option<Wiki>,
                 is_ajax:    bool,
@@ -940,7 +932,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   _category,
                 wiki_cats:  _wiki_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -987,8 +978,6 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
         .load::<Tag>(&_connection)
         .expect("could not load tags");
 
-    let tags_count = _tags.len();
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -997,7 +986,6 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         WikiCategories,
                 wiki_cats:        Vec<WikiCategories>,
                 object_list:      Vec<Wiki>,
@@ -1007,7 +995,6 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 wiki_cats:        _wiki_categorys,
                 object_list:      object_list,
@@ -1024,7 +1011,6 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         WikiCategories,
                 wiki_cats:        Vec<WikiCategories>,
                 object_list:      Vec<Wiki>,
@@ -1034,7 +1020,6 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 wiki_cats:        _wiki_categorys,
                 object_list:      object_list,
@@ -1052,7 +1037,6 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[template(path = "desctop/wikis/anon_category.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         WikiCategories,
                 wiki_cats:        Vec<WikiCategories>,
                 object_list:      Vec<Wiki>,
@@ -1061,7 +1045,6 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
             let body = Template {
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 wiki_cats:        _wiki_categorys,
                 object_list:      object_list,
@@ -1077,7 +1060,6 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[template(path = "mobile/wikis/anon_category.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         WikiCategories,
                 wiki_cats:        Vec<WikiCategories>,
                 object_list:      Vec<Wiki>,
@@ -1086,7 +1068,6 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
             let body = Template {
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 wiki_cats:        _wiki_categorys,
                 object_list:      object_list,
