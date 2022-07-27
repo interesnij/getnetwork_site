@@ -809,6 +809,9 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
         .load::<ServiceCategories>(&_connection)
         .expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
+    let service_cats = service_categories
+        .load::<ServiceCategories>(&_connection)
+        .expect("E");
 
     let _images: Vec<ServiceImage> = service_images.filter(schema::service_images::service.eq(&_service_id)).load(&_connection).expect("E");
     let _videos: Vec<ServiceVideo> = service_videos.filter(schema::service_videos::service.eq(&_service_id)).load(&_connection).expect("E");
@@ -858,6 +861,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 images:       Vec<ServiceImage>,
                 videos:       Vec<ServiceVideo>,
                 category:     ServiceCategories,
+                service_cats: Vec<ServiceCategories>,
                 tech_cats:    Vec<TechCategories>,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
@@ -871,6 +875,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
+                service_cats: service_cats,
                 tech_cats:  _tech_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
@@ -891,6 +896,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 images:       Vec<ServiceImage>,
                 videos:       Vec<ServiceVideo>,
                 category:     ServiceCategories,
+                service_cats: Vec<ServiceCategories>,
                 tech_cats:    Vec<TechCategories>,
                 all_tags:     Vec<Tag>,
                 tags_count:   usize,
@@ -904,6 +910,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
+                service_cats: service_cats,
                 tech_cats:  _tech_categories,
                 all_tags:   _tags,
                 tags_count: _tags_count,
