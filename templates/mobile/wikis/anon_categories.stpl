@@ -119,11 +119,11 @@
     <div class="container-1400 relative">
         <div class="row">
             <div class="col-sm-4">
-                <h3 class="section-title font-alt align-left mt-0 mb-70 mb-sm-40">
+                <h4 class="section-title font-alt align-left mt-0 mb-70 mb-sm-40">
                   <a class="ajax" href="/wiki/<%= category.id %>/">
                     <%= category.name %> (<%= category.count %>)
                   </a>
-                </h3>
+                </h4>
             </div>
             <div class="col-sm-8">
                 <div class="section-text">

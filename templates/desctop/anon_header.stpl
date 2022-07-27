@@ -53,7 +53,7 @@
                           <ul class="mn-sub wow fadeIn">
                               <% for object in work_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/work/<%= object.id %>/"><%= object.name %> - <%= object.count %>}</a>
+                                  <a class="mn-group-title ajax" href="/work/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
