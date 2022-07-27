@@ -995,6 +995,10 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
 
     let _categorys = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
+    let service_cats = service_categories
+        .load::<ServiceCategories>(&_connection)
+        .expect("E");
+
     let (object_list, next_page_number) = _category.get_services_list(page, 20);
 
     let mut stack = Vec::new();
@@ -1025,6 +1029,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         ServiceCategories,
+                service_cats:     Vec<ServiceCategories>,
                 object_list:      Vec<Service>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1033,7 +1038,8 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                 request_user:     _request_user,
                 all_tags:         _tags,
                 tags_count:       tags_count,
-                category:        _category,
+                category:         _category,
+                service_cats:     service_cats,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1050,6 +1056,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 category:         ServiceCategories,
+                service_cats:     Vec<ServiceCategories>,
                 object_list:      Vec<Service>,
                 next_page_number: i32,
                 is_ajax:          bool,
@@ -1058,7 +1065,8 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                 request_user:     _request_user,
                 all_tags:         _tags,
                 tags_count:       tags_count,
-                category:        _category,
+                category:         _category,
+                service_cats:     service_cats,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
