@@ -785,7 +785,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _videos: Vec<BlogVideo> = blog_videos.filter(schema::blog_videos::blog.eq(&_blog_id)).load(&_connection).expect("E");
     let _categories = _blog.get_categories();
     let _tags = _blog.get_tags();
-    let _tags_count = _tags.len();
 
     let mut prev: Option<Blog> = None;
     let mut next: Option<Blog> = None;
@@ -833,7 +832,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 blog_cats:    Vec<BlogCategories>,
                 category:     BlogCategories,
                 all_tags:     Vec<Tag>,
-                tags_count:   usize,
                 prev:         Option<Blog>,
                 next:         Option<Blog>,
                 is_ajax:      bool,
@@ -847,7 +845,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 blog_cats:  all_categories,
                 category:   _category,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -868,7 +865,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 blog_cats:    Vec<BlogCategories>,
                 category:     BlogCategories,
                 all_tags:     Vec<Tag>,
-                tags_count:   usize,
                 prev:         Option<Blog>,
                 next:         Option<Blog>,
                 is_ajax:      bool,
@@ -882,7 +878,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   _category,
                 blog_cats:  all_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -904,7 +899,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 blog_cats:  Vec<BlogCategories>,
                 category:   BlogCategories,
                 all_tags:   Vec<Tag>,
-                tags_count: usize,
                 prev:       Option<Blog>,
                 next:       Option<Blog>,
                 is_ajax:    bool,
@@ -917,7 +911,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 blog_cats:  all_categories,
                 category:   _category,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -937,7 +930,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 blog_cats:  Vec<BlogCategories>,
                 category:   BlogCategories,
                 all_tags:   Vec<Tag>,
-                tags_count: usize,
                 prev:       Option<Blog>,
                 next:       Option<Blog>,
                 is_ajax:    bool,
@@ -950,7 +942,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 blog_cats:  all_categories,
                 category:   _category,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -1000,8 +991,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         .load::<Tag>(&_connection)
         .expect("could not load tags");
 
-    let tags_count = _tags.len();
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -1010,7 +999,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         BlogCategories,
                 blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
@@ -1020,7 +1008,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:        _category,
                 blog_cats:        all_categories,
                 object_list:      object_list,
@@ -1037,7 +1024,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         BlogCategories,
                 blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
@@ -1047,7 +1033,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:        _category,
                 blog_cats:        all_categories,
                 object_list:      object_list,
@@ -1065,7 +1050,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[template(path = "desctop/blogs/anon_category.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         BlogCategories,
                 blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
@@ -1074,7 +1058,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
             let body = Template {
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:        _category,
                 blog_cats:        all_categories,
                 object_list:      object_list,
@@ -1090,7 +1073,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[template(path = "mobile/blogs/anon_category.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         BlogCategories,
                 blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
@@ -1099,7 +1081,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
             let body = Template {
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:        _category,
                 blog_cats:        all_categories,
                 object_list:      object_list,

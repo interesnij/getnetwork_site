@@ -812,7 +812,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
     let _images: Vec<StoreImage> = store_images.filter(schema::store_images::store.eq(&_store_id)).load(&_connection).expect("E");
     let _videos: Vec<StoreVideo> = store_videos.filter(schema::store_videos::store.eq(&_store_id)).load(&_connection).expect("E");
     let _tags = _store.get_tags();
-    let _tags_count = _tags.len();
 
     let mut prev: Option<Store> = None;
     let mut next: Option<Store> = None;
@@ -859,7 +858,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 category:     StoreCategories,
                 store_cats:   Vec<StoreCategories>,
                 all_tags:     Vec<Tag>,
-                tags_count:   usize,
                 prev:         Option<Store>,
                 next:         Option<Store>,
                 is_ajax:      bool,
@@ -872,7 +870,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 category:   _category,
                 store_cats: _store_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -892,7 +889,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 category:     StoreCategories,
                 store_cats:   Vec<StoreCategories>,
                 all_tags:     Vec<Tag>,
-                tags_count:   usize,
                 prev:         Option<Store>,
                 next:         Option<Store>,
                 is_ajax:      bool,
@@ -905,7 +901,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 category:   _category,
                 store_cats: _store_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -926,7 +921,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 category:   StoreCategories,
                 store_cats: Vec<StoreCategories>,
                 all_tags:   Vec<Tag>,
-                tags_count: usize,
                 prev:       Option<Store>,
                 next:       Option<Store>,
                 is_ajax:    bool,
@@ -938,7 +932,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 category:   _category,
                 store_cats: _store_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -957,7 +950,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 category:   StoreCategories,
                 store_cats: Vec<StoreCategories>,
                 all_tags:   Vec<Tag>,
-                tags_count: usize,
                 prev:       Option<Store>,
                 next:       Option<Store>,
                 is_ajax:    bool,
@@ -969,7 +961,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 category:   _category,
                 store_cats: _store_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -1015,8 +1006,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
         .load::<Tag>(&_connection)
         .expect("E");
 
-    let tags_count = _tags.len();
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -1025,7 +1014,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         StoreCategories,
                 store_cats:       Vec<StoreCategories>,
                 object_list:      Vec<Store>,
@@ -1035,7 +1023,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 store_cats:       _wiki_store_categories,
                 object_list:      object_list,
@@ -1052,7 +1039,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         StoreCategories,
                 store_cats:       Vec<StoreCategories>,
                 object_list:      Vec<Store>,
@@ -1062,7 +1048,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 store_cats:       _wiki_store_categories,
                 object_list:      object_list,
@@ -1080,7 +1065,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             #[template(path = "desctop/stores/anon_category.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         StoreCategories,
                 store_cats:       Vec<StoreCategories>,
                 object_list:      Vec<Store>,
@@ -1089,7 +1073,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             }
             let body = Template {
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 store_cats:       _wiki_store_categories,
                 object_list:      object_list,
@@ -1105,7 +1088,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             #[template(path = "mobile/stores/anon_category.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         StoreCategories,
                 store_cats:       Vec<StoreCategories>,
                 object_list:      Vec<Store>,
@@ -1114,7 +1096,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             }
             let body = Template {
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 store_cats:       _wiki_store_categories,
                 object_list:      object_list,

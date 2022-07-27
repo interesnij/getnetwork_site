@@ -783,7 +783,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
     let _images: Vec<WorkImage> = work_images.filter(schema::work_images::work.eq(&_work_id)).load(&_connection).expect("E");
     let _videos: Vec<WorkVideo> = work_videos.filter(schema::work_videos::work.eq(&_work_id)).load(&_connection).expect("E");
     let _tags = _work.get_tags();
-    let _tags_count = _tags.len();
 
     let mut prev: Option<Work> = None;
     let mut next: Option<Work> = None;
@@ -830,7 +829,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 category:     WorkCategories,
                 work_cats:    Vec<WorkCategories>,
                 all_tags:     Vec<Tag>,
-                tags_count:   usize,
                 prev:         Option<Work>,
                 next:         Option<Work>,
                 is_ajax:      bool,
@@ -843,7 +841,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   _category,
                 work_cats:  _work_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -863,7 +860,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 category:     WorkCategories,
                 work_cats:    Vec<WorkCategories>,
                 all_tags:     Vec<Tag>,
-                tags_count:   usize,
                 prev:         Option<Work>,
                 next:         Option<Work>,
                 is_ajax:      bool,
@@ -876,7 +872,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   _category,
                 work_cats:  _work_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -897,7 +892,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   WorkCategories,
                 work_cats:  Vec<WorkCategories>,
                 all_tags:   Vec<Tag>,
-                tags_count: usize,
                 prev:       Option<Work>,
                 next:       Option<Work>,
                 is_ajax:    bool,
@@ -909,7 +903,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   _category,
                 work_cats:  _work_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -928,7 +921,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   WorkCategories,
                 work_cats:  Vec<WorkCategories>,
                 all_tags:   Vec<Tag>,
-                tags_count: usize,
                 prev:       Option<Work>,
                 next:       Option<Work>,
                 is_ajax:    bool,
@@ -940,7 +932,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 category:   _category,
                 work_cats:  _work_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -988,8 +979,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
         .load::<Tag>(&_connection)
         .expect("could not load tags");
 
-    let tags_count = _tags.len();
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -998,7 +987,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         WorkCategories,
                 work_cats:        Vec<WorkCategories>,
                 object_list:      Vec<Work>,
@@ -1008,7 +996,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 work_cats:        _work_categories,
                 object_list:      object_list,
@@ -1025,7 +1012,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         WorkCategories,
                 work_cats:        Vec<WorkCategories>,
                 object_list:      Vec<Work>,
@@ -1035,7 +1021,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 work_cats:        _work_categories,
                 object_list:      object_list,
@@ -1053,7 +1038,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[template(path = "desctop/works/anon_category.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         WorkCategories,
                 work_cats:        Vec<WorkCategories>,
                 object_list:      Vec<Work>,
@@ -1062,7 +1046,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
             let body = Template {
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 work_cats:        _work_categories,
                 object_list:      object_list,
@@ -1078,7 +1061,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[template(path = "mobile/works/anon_category.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         WorkCategories,
                 work_cats:        Vec<WorkCategories>,
                 object_list:      Vec<Work>,
@@ -1087,7 +1069,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
             let body = Template {
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 work_cats:        _work_categories,
                 object_list:      object_list,

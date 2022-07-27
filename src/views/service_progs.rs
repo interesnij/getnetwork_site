@@ -816,7 +816,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
     let _images: Vec<ServiceImage> = service_images.filter(schema::service_images::service.eq(&_service_id)).load(&_connection).expect("E");
     let _videos: Vec<ServiceVideo> = service_videos.filter(schema::service_videos::service.eq(&_service_id)).load(&_connection).expect("E");
     let _tags = _service.get_tags();
-    let _tags_count = _tags.len();
 
     let mut prev: Option<Service> = None;
     let mut next: Option<Service> = None;
@@ -864,7 +863,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 service_cats: Vec<ServiceCategories>,
                 tech_cats:    Vec<TechCategories>,
                 all_tags:     Vec<Tag>,
-                tags_count:   usize,
                 prev:         Option<Service>,
                 next:         Option<Service>,
                 is_ajax:      bool,
@@ -878,7 +876,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 service_cats: service_cats,
                 tech_cats:  _tech_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -899,7 +896,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 service_cats: Vec<ServiceCategories>,
                 tech_cats:    Vec<TechCategories>,
                 all_tags:     Vec<Tag>,
-                tags_count:   usize,
                 prev:         Option<Service>,
                 next:         Option<Service>,
                 is_ajax:      bool,
@@ -913,7 +909,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 service_cats: service_cats,
                 tech_cats:  _tech_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -935,7 +930,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 service_cats: Vec<ServiceCategories>,
                 tech_cats:  Vec<TechCategories>,
                 all_tags:   Vec<Tag>,
-                tags_count: usize,
                 prev:       Option<Service>,
                 next:       Option<Service>,
                 is_ajax:    bool,
@@ -948,7 +942,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 service_cats: service_cats,
                 tech_cats:  _tech_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -968,7 +961,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 service_cats: Vec<ServiceCategories>,
                 tech_cats:    Vec<TechCategories>,
                 all_tags:   Vec<Tag>,
-                tags_count: usize,
                 prev:       Option<Service>,
                 next:       Option<Service>,
                 is_ajax:    bool,
@@ -981,7 +973,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 service_cats: service_cats,
                 tech_cats:  _tech_categories,
                 all_tags:   _tags,
-                tags_count: _tags_count,
                 prev:       prev,
                 next:       next,
                 is_ajax:    is_ajax,
@@ -1028,8 +1019,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
         .load::<Tag>(&_connection)
         .expect("E");
 
-    let tags_count = _tags.len();
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -1038,7 +1027,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         ServiceCategories,
                 service_cats:     Vec<ServiceCategories>,
                 object_list:      Vec<Service>,
@@ -1048,7 +1036,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 service_cats:     service_cats,
                 object_list:      object_list,
@@ -1065,7 +1052,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             struct Template {
                 request_user:     User,
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         ServiceCategories,
                 service_cats:     Vec<ServiceCategories>,
                 object_list:      Vec<Service>,
@@ -1075,7 +1061,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             let body = Template {
                 request_user:     _request_user,
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 service_cats:     service_cats,
                 object_list:      object_list,
@@ -1093,7 +1078,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             #[template(path = "desctop/services/anon_category.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         ServiceCategories,
                 service_cats:     Vec<ServiceCategories>,
                 object_list:      Vec<Service>,
@@ -1102,7 +1086,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             }
             let body = Template {
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:         _category,
                 service_cats:     service_cats,
                 object_list:      object_list,
@@ -1118,7 +1101,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             #[template(path = "mobile/services/anon_category.stpl")]
             struct Template {
                 all_tags:         Vec<Tag>,
-                tags_count:       usize,
                 category:         ServiceCategories,
                 service_cats:     Vec<ServiceCategories>,
                 object_list:      Vec<Service>,
@@ -1127,7 +1109,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             }
             let body = Template {
                 all_tags:         _tags,
-                tags_count:       tags_count,
                 category:        _category,
                 service_cats:     service_cats,
                 object_list:      object_list,
