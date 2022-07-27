@@ -130,6 +130,14 @@ use crate::errors::AuthError;
             _tech_cats,
         );
     }
+    pub fn get_tech_categories() -> Vec<TechCategories> {
+        use crate::schema::tech_categories::dsl::tech_categories;
+
+        let _conn = establish_connection();
+        return tech_categories
+            .load::<TechCategories>(&_conn)
+            .expect("Error");
+    }
 //}
 
 pub fn get_page(req: &HttpRequest) -> i32 {
