@@ -1894,11 +1894,11 @@ a.logo:hover{
     transform: translateY(-50%);
 }
 
-.post-prev-img{
-    margin-bottom: 23px;
+.post-prev-img {
+    margin-bottom: 14px;
     position: relative;
 }
-.post-prev-img a{
+.post-prev-img a {
     -webkit-transition: all 0.2s cubic-bezier(0.300, 0.100, 0.580, 1.000);
     -moz-transition: all 0.2s cubic-bezier(0.300, 0.100, 0.580, 1.000);
     -o-transition: all 0.2s cubic-bezier(0.300, 0.100, 0.580, 1.000);
