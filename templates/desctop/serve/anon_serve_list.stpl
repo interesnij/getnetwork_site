@@ -8,25 +8,14 @@
     <a style="padding:5px" class="ajax border" href="/tech_categories/<%= tech_category.id %>/">
       <%= tech_category.name %>
     </a>
-    <% if request_user.is_superuser() { %>
-      <a class="ajax" href="/edit_tech_category/<%= tech_category.id %>/">~</a>
-      <a class="pointer remove_tech_category" data-pk="<%= tech_category.id %>">x</a>
-    <% } %>
   </h2>
 
   <% for category in tech_category.get_serve_categories().iter() { %>
-
   <div>
     <h4>
       <a class="ajax" href="/serve_categories/<%= category.id %>/">
         <%= category.name %>
       </a>
-      <span style="font-size:70%">
-        <% if request_user.is_superuser() { %>
-          <a class="ajax" href="/edit_serve_category/<%= category.id %>/">~</a>
-          <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
-        <% } %>
-      </span>
     </h4>
     <table class="table">
       <tbody>
@@ -42,11 +31,6 @@
             <td style="width:12%"><% if object.price_acc.is_some() { %><%= object.price_acc.unwrap() %> ↓₽<% } %></td>
             <td style="width:12%"><% if object.social_price.is_some() { %><%= object.social_price.unwrap() %> ♡<% } %></td>
             <td style="width:12%"><% if object.man_hours.is_some() { %><%= object.man_hours.unwrap() %> ⌛<% } %></td>
-
-            <% if request_user.is_superuser() { %>
-              <td style="width:5%"><a class="ajax" href="/edit_serve/<%= object.id %>/">~</a></td>
-              <td style="width:5%"><a class="pointer remove_serve" data-pk="<%= object.id %>">x</a></td>
-            <% } %>
           </tr>
         <% } %>
       </tbody>
