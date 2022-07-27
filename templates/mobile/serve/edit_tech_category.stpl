@@ -37,9 +37,17 @@
             </div>
             <button data-pk="<%= category.id %>" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_tech_category_btn">Изменить</button>
         </form>
+        <section class="border small-section bg-dark">
+          <% for category in tech_cats.iter() { %>
+            <p><%= category.name %>
+              | <a class="ajax" href="/edit_tech_category/<%= category.id %>/">~</a>
+              | <a class="pointer remove_tech_category" data-pk="<%= category.id %>">x</a>
+            </p>
+          <% } %>
+        </section>
     </div>
 </section>
 <div class="sidebar hidden">
-    
+
 </div>
 <% include!("../footer.stpl"); %>

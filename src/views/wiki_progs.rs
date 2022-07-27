@@ -1121,13 +1121,13 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 request_user: User,
                 is_ajax:      bool,
                 wiki_cats:    Vec<WikiCategories>,
-                all_tags:     Vec<Tag>,
+                //all_tags:     Vec<Tag>,
             }
             let body = Template {
                 request_user: _request_user,
                 is_ajax:      is_ajax,
                 wiki_cats:    _wiki_cats,
-                all_tags:     _tags,
+                //all_tags:     _tags,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
