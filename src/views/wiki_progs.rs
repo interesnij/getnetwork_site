@@ -228,7 +228,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "desctop/wikis/edit_wiki.stpl")]
                 struct Template {
                     request_user: User,
-                    wiki:         Wiki,
+                    object:       Wiki,
                     categories:   Vec<WikiCategories>,
                     is_ajax:      bool,
                     images:       Vec<WikiImage>,
@@ -240,7 +240,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 }
                 let body = Template {
                     request_user: _request_user,
-                    wiki:         _wiki,
+                    object:       _wiki,
                     categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
@@ -258,7 +258,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "mobile/wikis/edit_wiki.stpl")]
                 struct Template {
                     request_user: User,
-                    wiki:         Wiki,
+                    object:       Wiki,
                     categories:   Vec<WikiCategories>,
                     is_ajax:      bool,
                     images:       Vec<WikiImage>,
@@ -270,7 +270,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 }
                 let body = Template {
                     request_user: _request_user,
-                    wiki:         _wiki,
+                    object:       _wiki,
                     categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,

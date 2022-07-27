@@ -5,7 +5,7 @@
                 <div class="hs-line-4 font-alt black">
                     <a class="ajax" href="/">Главная</a>
                     &nbsp;/&nbsp;
-                    <a class="ajax" href="/stores/<%= store.id %>/"><%= store.title %></a>
+                    <a class="ajax" href="/stores/<%= object.id %>/"><%= object.title %></a>
                     &nbsp;/&nbsp;
                     <span>Изменение товара</span>
                 </div>
@@ -16,47 +16,47 @@
     <div class="container relative">
         <form class="form mb-20 col-md-8 col-md-offset-2" enctype="multipart/form-data">
             <div class="mb-20 mb-md-10">
-                <input value="<%= store.title %>" class="input-md form-control" type="text" name="title" placeholder="Название" />
+                <input value="<%= object.title %>" class="input-md form-control" type="text" name="title" placeholder="Название" />
             </div>
 
             <div class="mb-20 mb-md-10">
-              <% if store.price.is_some() { %>
-                <input value="<%= store.price.unwrap() %>" class="input-md form-control" type="number" name="price" placeholder="Цена" />
+              <% if object.price.is_some() { %>
+                <input value="<%= object.price.unwrap() %>" class="input-md form-control" type="number" name="price" placeholder="Цена" />
                 <% } else { %>
                 <input value="" class="input-md form-control" type="number" name="price" placeholder="Цена" />
               <% } %>
             </div>
             <div class="mb-20 mb-md-10">
-            <% if store.price_acc.is_some() { %>
-              <input value="<%= store.price_acc.unwrap() %>" class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
+            <% if object.price_acc.is_some() { %>
+              <input value="<%= object.price_acc.unwrap() %>" class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
               <% } else { %>
               <input value="" class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
             <% } %>
             </div>
             <div class="mb-20 mb-md-10">
-            <% if store.social_price.is_some() { %>
-              <input value="<%= store.social_price.unwrap() %>" class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
+            <% if object.social_price.is_some() { %>
+              <input value="<%= object.social_price.unwrap() %>" class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
             <% } else { %>
               <input value="" class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
             <% } %>
             </div>
 
             <div class="mb-20 mb-md-10">
-              <% if store.description.is_some() { %>
-                <input value="<%= store.description.as_deref().unwrap() %>" class="input-md form-control" type="text" name="description" placeholder="Описание" />
+              <% if object.description.is_some() { %>
+                <input value="<%= object.description.as_deref().unwrap() %>" class="input-md form-control" type="text" name="description" placeholder="Описание" />
               <% } else { %>
                 <input value="" class="input-md form-control" type="text" name="description" placeholder="Описание" />
               <% } %>
             </div>
             <div class="mb-20 mb-md-10">
-              <% if store.link.is_some() { %>
-                <input value="<%= store.link.as_deref().unwrap() %>" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
+              <% if object.link.is_some() { %>
+                <input value="<%= object.link.as_deref().unwrap() %>" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
               <% } else { %>
                 <input value="" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
               <% } %>
             </div>
             <div class="mb-20 mb-md-10">
-              <img style="height:50px" src="<%= store.get_image() %>" />
+              <img style="height:50px" src="<%= object.get_image() %>" />
               <label>Обложка</label>
               <input class="input-md form-control" type="file" name="main_image" />
             </div>
@@ -64,7 +64,7 @@
                 <label>Категории</label>
                 <select class="form-control" name="category_list[]" multiple="">
                   <% for category in store_cats.iter() { %>
-                    <option <% if store.get_categories().iter().any(|i| i.id==category.id) { %>selected=""<% } %> value="<%= category.id %>"><%= category.name %></option>
+                    <option <% if object.get_categories().iter().any(|i| i.id==category.id) { %>selected=""<% } %> value="<%= category.id %>"><%= category.name %></option>
                   <% } %>
                 </select>
             </div>
@@ -117,11 +117,11 @@
             </div>
             <div class="mb-20 mb-md-10">
               <label class="checkbox-inline">
-                <input type="checkbox" name="is_active" <% if store.is_active { %>checked<% } %>>
+                <input type="checkbox" name="is_active" <% if object.is_active { %>checked<% } %>>
                   Статья открыта
               </label>
             </div>
-            <button data-pk="<%= store.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_store_btn">Изменить</button>
+            <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_store_btn">Изменить</button>
         </form>
     </div>
 </section>

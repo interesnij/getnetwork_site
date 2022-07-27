@@ -247,7 +247,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 #[template(path = "desctop/services/edit_service.stpl")]
                 struct Template {
                     request_user: User,
-                    service:      Service,
+                    object:       Service,
                     categories:   Vec<ServiceCategories>,
                     is_ajax:      bool,
                     images:       Vec<ServiceImage>,
@@ -260,7 +260,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 }
                 let body = Template {
                     request_user: _request_user,
-                    service:      _service,
+                    object:       _service,
                     categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
@@ -280,7 +280,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 #[template(path = "mobile/services/edit_service.stpl")]
                 struct Template {
                     request_user: User,
-                    service:      Service,
+                    object:       Service,
                     categories:   Vec<ServiceCategories>,
                     is_ajax:      bool,
                     images:       Vec<ServiceImage>,
@@ -293,7 +293,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 }
                 let body = Template {
                     request_user: _request_user,
-                    service:      _service,
+                    object:       _service,
                     categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,

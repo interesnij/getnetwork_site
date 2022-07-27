@@ -248,7 +248,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[template(path = "desctop/stores/edit_store.stpl")]
                 struct Template {
                     request_user: User,
-                    store:        Store,
+                    object:       Store,
                     store_cats:   Vec<StoreCategories>,
                     is_ajax:      bool,
                     images:       Vec<StoreImage>,
@@ -261,7 +261,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 }
                 let body = Template {
                     request_user: _request_user,
-                    store:        _store,
+                    object:       _store,
                     store_cats:   _store_cats,
                     is_ajax:      is_ajax,
                     images:       _images,
@@ -280,7 +280,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[template(path = "mobile/stores/edit_store.stpl")]
                 struct Template {
                     request_user: User,
-                    store:        Store,
+                    object:       Store,
                     store_cats:   Vec<StoreCategories>,
                     is_ajax:      bool,
                     images:       Vec<StoreImage>,
@@ -292,7 +292,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 }
                 let body = Template {
                     request_user: _request_user,
-                    store:        _store,
+                    object:       _store,
                     store_cats:   _store_cats,
                     is_ajax:      is_ajax,
                     images:       _images,

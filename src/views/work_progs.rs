@@ -228,7 +228,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "desctop/works/edit_work.stpl")]
                 struct Template {
                     request_user: User,
-                    work:         Work,
+                    object:       Work,
                     categories:   Vec<WorkCategories>,
                     is_ajax:      bool,
                     images:       Vec<WorkImage>,
@@ -240,7 +240,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 }
                 let body = Template {
                     request_user: _request_user,
-                    work:         _work,
+                    object:       _work,
                     categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
@@ -258,7 +258,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "mobile/works/edit_work.stpl")]
                 struct Template {
                     request_user: User,
-                    work:         Work,
+                    object:       Work,
                     categories:   Vec<WorkCategories>,
                     is_ajax:      bool,
                     images:       Vec<WorkImage>,
@@ -270,7 +270,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 }
                 let body = Template {
                     request_user: _request_user,
-                    work:         _work,
+                    object:       _work,
                     categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,

@@ -228,7 +228,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "desctop/blogs/edit_blog.stpl")]
                 struct Template {
                     request_user: User,
-                    blog:         Blog,
+                    object:       Blog,
                     categories:   Vec<BlogCategories>,
                     is_ajax:      bool,
                     images:       Vec<BlogImage>,
@@ -240,7 +240,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                 }
                 let body = Template {
                     request_user: _request_user,
-                    blog:         _blog,
+                    object:       _blog,
                     categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
@@ -258,7 +258,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "mobile/blogs/edit_blog.stpl")]
                 struct Template {
                     request_user: User,
-                    blog:         Blog,
+                    object:       Blog,
                     categories:   Vec<BlogCategories>,
                     is_ajax:      bool,
                     images:       Vec<BlogImage>,
@@ -270,7 +270,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                 }
                 let body = Template {
                     request_user: _request_user,
-                    blog:         _blog,
+                    object:       _blog,
                     categories:   _categories,
                     is_ajax:      is_ajax,
                     images:       _images,
