@@ -16,7 +16,7 @@
         <div class="home-content">
             <div class="home-text">
                 <h2 class="hs-line-14 font-alt mb-50 mb-xs-30">
-                  <a class="ajax dark_target" href="/work/<%= object.id %>/">
+                  <a class="ajax dark_target" href="/works/<%= object.id %>/">
                     <%= object.name %>
                   </a>
                 </h2>

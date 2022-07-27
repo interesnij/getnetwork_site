@@ -5,7 +5,7 @@
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <a class="ajax" href="/wiki_categories/">Блог</a>
+            <a class="ajax" href="/wiki_categories/">База знаний</a>
             &nbsp;/&nbsp;
             <span>Изменение категории wiki</span>
         </div>
@@ -43,6 +43,6 @@
     </div>
 </section>
 <div class="sidebar hidden">
-    
+
 </div>
 <% include!("../footer.stpl"); %>

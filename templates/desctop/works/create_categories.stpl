@@ -5,7 +5,7 @@
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <a class="ajax" href="/work_categories/">Блог</a>
+            <a class="ajax" href="/work_categories/">Портфолио</a>
             &nbsp;/&nbsp;
             <span>Создание категории работ</span>
         </div>
