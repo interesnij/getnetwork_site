@@ -22,7 +22,7 @@
 </div>
 
 <div class="widget">
-    <h5 class="widget-title font-alt">Теги (<%= tags_count %>)</h5>
+    <h5 class="widget-title font-alt">Теги (<%= all_tags.len() %>)</h5>
     <div class="widget-body">
         <div class="tags">
           <% for tag in all_tags.iter() { %>
