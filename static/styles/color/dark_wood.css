@@ -5,6 +5,9 @@
 .small-section, .mob_menu, .banner_block {
   background: inherit !important;
 }
+.mobile_icon span {
+  color: rgb(255, 255, 255, 0.7) !important;
+}
 .hover {
   background-color: rgb(0, 0, 0, 0.7) !important;
 }

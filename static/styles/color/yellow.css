@@ -8,6 +8,9 @@
 .hs-line-14 {
   text-shadow: 0px 5px 3px rgb(0 0 0 / 30%);
 }
+.mobile_icon span {
+  color: rgb(0, 0, 0, 0.8) !important;
+}
 .mob_menu, .banner_block {
   background-color: #fee6a1 !important;;
 }

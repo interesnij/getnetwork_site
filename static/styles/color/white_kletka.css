@@ -10,6 +10,9 @@
 .hover {
   background-color: #fff !important;
 }
+.mobile_icon span {
+  color: rgb(0, 0, 0, 0.7) !important;
+}
 .small-section, .mob_menu, .banner_block {
   background-color: white !important;
 }
