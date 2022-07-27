@@ -241,7 +241,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 .load::<TechCategories>(&_connection)
                 .expect("E");
 
-            let serve_list = _service.get_serves();
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/edit_service.stpl")]
@@ -256,7 +255,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
                     tech_cats:    Vec<TechCategories>,
-                    serve_list:   Vec<Serve>,
                 }
                 let body = Template {
                     request_user: _request_user,
@@ -269,7 +267,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     service_tags: _service_tags,
                     service_cats: _service_cats,
                     tech_cats:    _tech_categories,
-                    serve_list:   serve_list,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -289,7 +286,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
                     tech_cats:    Vec<TechCategories>,
-                    serve_list:   Vec<Serve>,
                 }
                 let body = Template {
                     request_user: _request_user,
@@ -302,7 +298,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     service_tags: _service_tags,
                     service_cats: _service_cats,
                     tech_cats:    _tech_categories,
-                    serve_list:   serve_list,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

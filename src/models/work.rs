@@ -153,6 +153,17 @@ impl Work {
             .expect("E");
     }
 
+    pub fn get_serves_ids(&self) -> Vec<i32> {
+        use schema::serve_items::dsl::serve_items;
+
+        let _connection = establish_connection();
+        return serve_items
+            .filter(schema::serve_items::service_id.eq(&self.id))
+            .select(schema::serve_items::serve_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+    }
+
     pub fn get_3_works() -> Vec<Work> {
         use crate::schema::works::dsl::works;
 

@@ -241,8 +241,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 .load::<TechCategories>(&_connection)
                 .expect("E");
 
-            let serve_list = _store.get_serves();
-
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/edit_store.stpl")]
@@ -256,7 +254,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     all_tags:     Vec<Tag>,
                     store_tags:   Vec<Tag>,
                     tech_cats:    Vec<TechCategories>,
-                    serve_list:   Vec<Serve>,
 
                 }
                 let body = Template {
@@ -269,7 +266,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     all_tags:     _all_tags,
                     store_tags:   _store_tags,
                     tech_cats:    _tech_categories,
-                    serve_list:   serve_list,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -288,7 +284,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     all_tags:     Vec<Tag>,
                     store_tags:   Vec<Tag>,
                     tech_cats:    Vec<TechCategories>,
-                    serve_list:   Vec<Serve>,
                 }
                 let body = Template {
                     request_user: _request_user,
@@ -300,7 +295,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     all_tags:     _all_tags,
                     store_tags:   _store_tags,
                     tech_cats:    _tech_categories,
-                    serve_list:   serve_list,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
