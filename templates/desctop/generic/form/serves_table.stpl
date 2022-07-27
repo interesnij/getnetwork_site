@@ -11,12 +11,7 @@
   <% } else { %>
     <h2 class="pointer section-title font-alt show_tech_category">
       <span class="cat_description">
-        <% if t_category.description.is_some() { %>
-          <%- t_category.description.as_deref().unwrap() %>
-        <% } else { %>
-          Описание отсутствует.
-        <% } %>
-
+        <%= t_category.name %>
         <span style="float:right;margin-right: 20px;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
         </span>
