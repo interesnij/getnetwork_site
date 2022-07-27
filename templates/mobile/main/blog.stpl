@@ -3,9 +3,9 @@
 <section class="page-section">
     <div class="container relative">
         <h5 class="section-title font-alt align-left">
-            Последние статьи
+            Статьи
             <a href="/blog_categories/" class="section-more right ajax blog">
-              Перейти в раздел
+              еще
             </a>
         </h5>
         <div class="row multi-columns-row">

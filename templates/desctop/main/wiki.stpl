@@ -1,16 +1,16 @@
-<% if last_works.len() > 0 { %>
+<% if last_wikis.len() > 0 { %>
 
 <section class="page-section">
     <div class="container relative">
         <h5 class="section-title font-alt align-left">
-            Работы
-            <a href="/work_categories/" class="section-more right ajax blog">
+            Обучалки
+            <a href="/wiki_categories/" class="section-more right ajax blog">
               еще
             </a>
         </h5>
         <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
-          <% for object in last_works.iter() { %>
-            <% include!("../generic/default_work.stpl"); %>
+          <% for object in last_wikis.iter() { %>
+            <% include!("../generic/default_wiki.stpl"); %>
           <% } %>
         </ul>
     </div>

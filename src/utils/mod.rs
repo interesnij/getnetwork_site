@@ -56,21 +56,6 @@ use crate::errors::AuthError;
         desctop
     }
 
-    pub fn get_ajax(req: &HttpRequest) -> bool {
-        #[derive(Debug, Deserialize)]
-        struct Params {
-            pub ajax: Option<i32>,
-        }
-        let params_some = web::Query::<Params>::from_query(&req.query_string());
-        let mut is_ajax = false;
-        if params_some.is_ok() {
-            let params = params_some.unwrap();
-            if params.ajax.is_some() {
-                is_ajax = true;
-            }
-        }
-        is_ajax
-    }
     pub fn get_device_and_ajax(req: &HttpRequest) -> (bool, bool) {
         #[derive(Debug, Deserialize)]
         struct Params {
