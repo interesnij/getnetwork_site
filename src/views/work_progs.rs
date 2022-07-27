@@ -986,7 +986,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[template(path = "desctop/works/category.stpl")]
             struct Template {
                 request_user:     User,
-                //all_tags:         Vec<Tag>,
+                all_tags:         Vec<Tag>,
                 category:         WorkCategories,
                 //work_cats:        Vec<WorkCategories>,
                 object_list:      Vec<Work>,
@@ -995,7 +995,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
             let body = Template {
                 request_user:     _request_user,
-                //all_tags:         _tags,
+                all_tags:         _tags,
                 category:         _category,
                 //work_cats:        _work_categories,
                 object_list:      object_list,
@@ -1037,7 +1037,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "desctop/works/anon_category.stpl")]
             struct Template {
-                //all_tags:         Vec<Tag>,
+                all_tags:         Vec<Tag>,
                 category:         WorkCategories,
                 //work_cats:        Vec<WorkCategories>,
                 object_list:      Vec<Work>,
@@ -1045,7 +1045,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 is_ajax:          bool,
             }
             let body = Template {
-                //all_tags:         _tags,
+                all_tags:         _tags,
                 category:         _category,
                 //work_cats:        _work_categories,
                 object_list:      object_list,
