@@ -224,6 +224,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 tech_categories::dsl::tech_categories,
             };
             use crate::utils::get_device_and_ajax;
+            use crate::models::TechCategories;
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
             let _categories = _work.get_categories();
