@@ -142,9 +142,9 @@
                 <div class="section-text">
                     <div class="row">
                       <div class="mb-sm-50">
-                        <blockquote style="margin-bottom: 10px">
-                          <p style="text-decoration: underline;">Страницы</p>
-                        </blockquote>
+                        <p style="margin-bottom: 10px">
+                          <span style="text-decoration: underline;">Страницы</span>
+                        </p>
                         <p>
                           <strong>Сайт имеет много отдельных страниц</strong>:
                           <ul class="my_ul">

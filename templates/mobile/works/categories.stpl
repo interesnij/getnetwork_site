@@ -1,6 +1,31 @@
 <% include!("../header.stpl"); %>
 
 
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <span>Портфолио</span>
+                </div>
+    </div>
+</section>
+
+<% for object in work_cats.iter() { %>
+<section class="page-section need_darked_this fixed-height-small pt-0 pb-0 bg-dark-alfa-30" style="background-image: url(&quot;<%= object.get_image() %>&quot;);">
+    <div class="js-height-parent container relative" style="height: 600px;">
+        <div class="home-content">
+            <div class="home-text">
+                <h2 class="hs-line-14 font-alt mb-50 mb-xs-30">
+                  <a class="ajax dark_target" href="/work/<%= object.id %>/">
+                    <%= object.name %>
+                  </a>
+                </h2>
+            </div>
+        </div>
+    </div>
+</section>
+<% } %>
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>

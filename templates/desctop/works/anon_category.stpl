@@ -1,3 +1,43 @@
 <% include!("../anon_header.stpl"); %>
 
+<section class="home-section need_darked_this" style='background-image: url("<%= category.get_image() %>"); background-position: 50% -26px;'>
+    <div class="" style="height: 100vh">
+        <div class="home-content container">
+            <div class="home-text">
+                <h4 class="hs-line-8 no-transp font-alt mb-50 mb-xs-30">
+                <% let tags_count = all_tags.len(); %>
+                  <% for (i, tag) in all_tags.iter().enumerate() { %>
+                      <a class="ajax dark_target" href="/tag/<%= tag.id %>/"><%= tag.name %> (<%= tag.count %>)</a>
+                    <% if i != tags_count { %>, <% } %>
+                  <% } %>
+                </h4>
+                <h1 class="dark_target hs-line-14 font-alt mb-50 mb-xs-30">
+                    <%= category.name %>
+                </h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+  <div class="container relative">
+    <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
+      <% if category.count > 0 { %>
+        <% for object in object_list.iter() { %>
+          <% include!("../generic/work.stpl"); %>
+        <% } %>
+        <% if next_page_number > 0 { %>
+          <div class="load centered m-1 next_page_list" data-link="/works/<%= category.id %>/?page=<%= next_page_number %>">
+            <img src="/static/images/preloader.gif">
+          </div>
+        <% } %>
+      <% } else { %>
+      <div class="text-center">
+        <span class="widget-title font-alt">Список пока пустой...</span>
+      </div>
+      <% } %>
+    <ul>
+  </div>
+</section>
+
+
 <% include!("../anon_footer.stpl"); %>
