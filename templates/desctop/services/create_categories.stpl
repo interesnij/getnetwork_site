@@ -28,7 +28,7 @@
                 <label>Обложка</label>
                 <input class="input-md form-control" class="input-md form-control" type="file" name="image" />
             </div>
-            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_blog_category_btn">Создать</button>
+            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_service_category_btn">Создать</button>
         </form>
         <div class="container">
             <% for category in service_cats.iter() { %>
