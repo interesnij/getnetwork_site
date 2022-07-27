@@ -21,6 +21,7 @@
     </div>
 </div>
 
+<% if all_tags.len() > 0 { %>
 <div class="widget">
     <h5 class="widget-title font-alt">Теги (<%= all_tags.len() %>)</h5>
     <div class="widget-body">
@@ -31,6 +32,7 @@
         </div>
     </div>
 </div>
+<% } %>
 
 <!--
 <div class="widget">
