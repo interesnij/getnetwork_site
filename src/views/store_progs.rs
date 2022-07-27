@@ -780,6 +780,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
         store_categories::dsl::store_categories,
         tech_categories::dsl::tech_categories,
         store_videos::dsl::store_videos,
+        store_images::dsl::store_images,
     };
     use crate::utils::get_device_and_ajax;
     use crate::models::TechCategories;
