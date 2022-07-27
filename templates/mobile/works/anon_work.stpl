@@ -47,7 +47,7 @@
                                   <% let work_link = object.link.as_deref().unwrap(); %>
                                   <p>
                                     <strong>Ссылка:</strong>
-                                    <a href="work_link" target="_blank" rel="nofollow">work_link</a>
+                                    <a href="<%= work_link %>" target="_blank" rel="nofollow"><%= work_link %></a>
                                   </p>
                                 <% } %>
                             </div>

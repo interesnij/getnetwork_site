@@ -1,3 +1,5 @@
 <% include!("../anon_header.stpl"); %>
 
+<%= category.name %> (<%= category.cat_name %>): <%= object.name %>
+
 <% include!("../anon_footer.stpl"); %>

@@ -1,5 +1,5 @@
 <% include!("../header.stpl"); %>
 
-
+<%= category.name %> (<%= category.cat_name %>): <%= object.name %>
 
 <% include!("../footer.stpl"); %>

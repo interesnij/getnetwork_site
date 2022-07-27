@@ -1,5 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
+<%= category.name %> (<%= category.cat_name %>): <%= object.name %>
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
