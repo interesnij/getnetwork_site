@@ -8,7 +8,7 @@
       <label>Список опций <%= category.name %></label>
       <select class="form-control" name="serve_list[]" multiple="">
         <% for object in category.get_serves().iter() { %>
-          <option <% if serve_list.iter().any(|i| i==object.id) { %>selected=""<% } %> value="<%= object.id %>">
+          <option <% if serve_list.iter().any(|i| i==&object.id) { %>selected=""<% } %> value="<%= object.id %>">
             <%= object.name %>
           </option>
         <% } %>
