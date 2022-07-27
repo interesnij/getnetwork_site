@@ -1,5 +1,5 @@
 
-<p>Услуга - <%= service.title %></p>
+
 <% if object.description.is_some() { %>
   <%= object.description.as_deref().unwrap() %>
 <% } else { %>

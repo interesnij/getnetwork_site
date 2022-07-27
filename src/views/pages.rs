@@ -278,10 +278,12 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/main/feedback_list.stpl")]
                 struct Template {
+                    request_user:  User,
                     is_ajax:       bool,
                     feedback_list: Vec<Feedback>
                 }
                 let body = Template {
+                    request_user:  _request_user,
                     is_ajax:       is_ajax,
                     feedback_list: _feedbacks,
                 }
@@ -477,12 +479,12 @@ pub async fn get_load_page(req: HttpRequest, session: Session) -> actix_web::Res
         struct Template {
             object:      Serve,
             //object_type: String,
-            service:     Service,
+            //service:     Service,
         }
         let body = Template {
             object:      _serve.into_iter().nth(0).unwrap(),
             //object_type: "serve".to_string(),
-            service:     _service.into_iter().nth(0).unwrap(),
+            //service:     _service.into_iter().nth(0).unwrap(),
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
