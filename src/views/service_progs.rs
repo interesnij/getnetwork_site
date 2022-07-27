@@ -318,7 +318,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
     }
 }
 
-pub async fn edit_content_service_page(session: Session, payload: Multipart, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn edit_content_service_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::services::dsl::services;
 
     let _service_id: i32 = *_id;
@@ -961,7 +961,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 service_cats: Vec<ServiceCategories>,
                 tech_cats:    Vec<TechCategories>,
                 all_tags:   Vec<Tag>,
-                prev:       Option<Service>, 
+                prev:       Option<Service>,
                 next:       Option<Service>,
                 is_ajax:    bool,
             }
