@@ -136,6 +136,17 @@
                 <% include!("../generic/photos.stpl"); %>
 
                 <% include!("../generic/videos.stpl"); %>
+
+                <div class="clearfix mt-40">
+                  <% if next.is_some() { %>
+                    <% let _next = next.unwrap(); %>
+                    <a href="/services/<%= category.id %>/<%= _next.id %>/" class="ajax blog-item-more left">⇠&nbsp;&nbsp;<%= _next.title %></a>
+                  <% } %>
+                  <% if prev.is_some() { %>
+                    <% let _prev = prev.unwrap(); %>
+                    <a href="/services/<%= category.id %>/<%= _prev.id %>/" class="ajax blog-item-more right"><%= _prev.title %>&nbsp;&nbsp;⇢</a>
+                  <% } %>
+                </div>
             </div>
             <div class="col-sm-4">
                 <% include!("sidebar.stpl"); %>
@@ -147,7 +158,7 @@
         data-pk="<%= object.id %>"
         data-servelist="
         <% for i in object.get_serves_ids().iter() { %>
-        i,
+        <%= i %>,
         <% } %>
         "
         class="create_order_form_of_service pointer">

@@ -961,7 +961,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 service_cats: Vec<ServiceCategories>,
                 tech_cats:    Vec<TechCategories>,
                 all_tags:   Vec<Tag>,
-                prev:       Option<Service>,
+                prev:       Option<Service>, 
                 next:       Option<Service>,
                 is_ajax:    bool,
             }
@@ -1026,18 +1026,18 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             #[template(path = "desctop/services/category.stpl")]
             struct Template {
                 request_user:     User,
-                all_tags:         Vec<Tag>,
+                //all_tags:         Vec<Tag>,
                 category:         ServiceCategories,
-                service_cats:     Vec<ServiceCategories>,
+                //service_cats:     Vec<ServiceCategories>,
                 object_list:      Vec<Service>,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
                 request_user:     _request_user,
-                all_tags:         _tags,
+                //all_tags:         _tags,
                 category:         _category,
-                service_cats:     service_cats,
+                //service_cats:     service_cats,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1077,17 +1077,17 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             #[derive(TemplateOnce)]
             #[template(path = "desctop/services/anon_category.stpl")]
             struct Template {
-                all_tags:         Vec<Tag>,
+                //all_tags:         Vec<Tag>,
                 category:         ServiceCategories,
-                service_cats:     Vec<ServiceCategories>,
+                //service_cats:     Vec<ServiceCategories>,
                 object_list:      Vec<Service>,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
-                all_tags:         _tags,
+                //all_tags:         _tags,
                 category:         _category,
-                service_cats:     service_cats,
+                //service_cats:     service_cats,
                 object_list:      object_list,
                 next_page_number: next_page_number,
                 is_ajax:          is_ajax,
@@ -1162,13 +1162,13 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                 request_user: User,
                 is_ajax:      bool,
                 service_cats: Vec<ServiceCategories>,
-                all_tags:     Vec<Tag>,
+                //all_tags:     Vec<Tag>,
             }
             let body = Template {
                 request_user: _request_user,
                 is_ajax:      is_ajax,
                 service_cats: _service_cats,
-                all_tags:     _tags,
+                //all_tags:     _tags,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1201,12 +1201,12 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
             struct Template {
                 is_ajax:      bool,
                 service_cats: Vec<ServiceCategories>,
-                all_tags:     Vec<Tag>,
+                //all_tags:     Vec<Tag>,
             }
             let body = Template {
                 is_ajax:      is_ajax,
                 service_cats: _service_cats,
-                all_tags:     _tags,
+                //all_tags:     _tags,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
