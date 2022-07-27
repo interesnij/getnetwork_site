@@ -17,7 +17,6 @@ use crate::models::{
     StoreCategories,
     WikiCategories,
     WorkCategories,
-    TechCategories,
     User,
 };
 use crate::diesel::{
@@ -89,8 +88,7 @@ use crate::errors::AuthError;
         Vec<StoreCategories>,
         Vec<BlogCategories>,
         Vec<WikiCategories>,
-        Vec<WorkCategories>,
-        Vec<TechCategories>
+        Vec<WorkCategories>
     ) {
         use crate::schema::{
             service_categories::dsl::service_categories,
@@ -98,7 +96,6 @@ use crate::errors::AuthError;
             blog_categories::dsl::blog_categories,
             work_categories::dsl::work_categories,
             wiki_categories::dsl::wiki_categories,
-            tech_categories::dsl::tech_categories,
         };
 
         let _conn = establish_connection();
@@ -117,9 +114,6 @@ use crate::errors::AuthError;
         let _work_cats = work_categories
             .load::<WorkCategories>(&_conn)
             .expect("Error");
-        let _tech_cats = tech_categories
-            .load::<TechCategories>(&_conn)
-            .expect("Error");
 
         return (
             _service_cats,
@@ -127,16 +121,7 @@ use crate::errors::AuthError;
             _blog_cats,
             _wiki_cats,
             _work_cats,
-            _tech_cats,
         );
-    }
-    pub fn get_tech_categories() -> Vec<TechCategories> {
-        use crate::schema::tech_categories::dsl::tech_categories;
-
-        let _conn = establish_connection();
-        return tech_categories
-            .load::<TechCategories>(&_conn)
-            .expect("Error");
     }
 //}
 

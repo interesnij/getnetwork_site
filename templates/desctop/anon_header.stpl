@@ -36,7 +36,7 @@
                       </li>
                       <%
                         use crate::utils::get_categories;
-                        let (service_cats, store_cats, blog_cats, wiki_cats, work_cats, tech_cats) = get_categories();
+                        let (service_cats, store_cats, blog_cats, wiki_cats, work_cats) = get_categories();
                       %>
                       <li>
                           <a href="/service_categories/" class="mn-has-sub ajax">Услуги</a>

@@ -18,10 +18,6 @@
     <link class="color" type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css">
 </head>
 <body>
-  <%
-    use crate::utils::get_tech_categories;
-    let tech_cats = get_tech_categories();
-  %>
     <div class="page mobile_page" id="top">
         <span id="ajax">
             <span id="reload_block">

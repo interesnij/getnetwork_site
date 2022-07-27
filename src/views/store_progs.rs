@@ -775,11 +775,14 @@ pub async fn delete_store_category(session: Session, _id: web::Path<i32>) -> imp
 }
 
 pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
-    use schema::stores::dsl::stores;
-    use schema::store_categories::dsl::store_categories;
-    use schema::store_images::dsl::store_images;
-    use schema::store_videos::dsl::store_videos;
+    use schema::{
+        stores::dsl::stores,
+        store_categories::dsl::store_categories,
+        tech_categories::dsl::tech_categories,
+        store_videos::dsl::store_videos,
+    };
     use crate::utils::get_device_and_ajax;
+    use crate::models::TechCategories;
 
     let _connection = establish_connection();
     let _store_id: i32 = param.1;
@@ -801,6 +804,10 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
     let _category = _categorys.into_iter().nth(0).unwrap();
     let _store_categories = store_categories
         .load::<StoreCategories>(&_connection)
+        .expect("E");
+
+    let _tech_categories = tech_categories
+        .load::<TechCategories>(&_connection)
         .expect("E");
 
     let _images: Vec<StoreImage> = store_images.filter(schema::store_images::store.eq(&_store_id)).load(&_connection).expect("E");
@@ -850,7 +857,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:       Vec<StoreImage>,
                 videos:       Vec<StoreVideo>,
                 category:     StoreCategories,
-                //store_cats:   Vec<StoreCategories>,
+                tech_cats:    Vec<TechCategories>,
                 //all_tags:     Vec<Tag>,
                 prev:         Option<Store>,
                 next:         Option<Store>,
@@ -862,7 +869,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
-                //store_cats: _store_categories,
+                tech_cats:  _tech_categories,
                 //all_tags:   _tags,
                 prev:       prev,
                 next:       next,
@@ -881,6 +888,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:       Vec<StoreImage>,
                 videos:       Vec<StoreVideo>,
                 category:     StoreCategories,
+                tech_cats:    Vec<TechCategories>,
                 store_cats:   Vec<StoreCategories>,
                 all_tags:     Vec<Tag>,
                 prev:         Option<Store>,
@@ -893,6 +901,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
+                tech_cats:  _tech_categories,
                 store_cats: _store_categories,
                 all_tags:   _tags,
                 prev:       prev,
@@ -913,7 +922,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:     Vec<StoreImage>,
                 videos:     Vec<StoreVideo>,
                 category:   StoreCategories,
-                //store_cats: Vec<StoreCategories>,
+                tech_cats:  Vec<TechCategories>,
                 //all_tags:   Vec<Tag>,
                 prev:       Option<Store>,
                 next:       Option<Store>,
@@ -924,7 +933,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
-                //store_cats: _store_categories,
+                tech_cats:  _tech_categories,
                 //all_tags:   _tags,
                 prev:       prev,
                 next:       next,
@@ -942,6 +951,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:     Vec<StoreImage>,
                 videos:     Vec<StoreVideo>,
                 category:   StoreCategories,
+                tech_cats:  Vec<TechCategories>,
                 store_cats: Vec<StoreCategories>,
                 all_tags:   Vec<Tag>,
                 prev:       Option<Store>,
@@ -953,6 +963,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
+                tech_cats:  _tech_categories,
                 store_cats: _store_categories,
                 all_tags:   _tags,
                 prev:       prev,

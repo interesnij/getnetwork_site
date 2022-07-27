@@ -775,11 +775,15 @@ pub async fn delete_work_category(session: Session, _id: web::Path<i32>) -> impl
 }
 
 pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
-    use schema::works::dsl::works;
-    use schema::work_categories::dsl::work_categories;
-    use schema::work_images::dsl::work_images;
-    use schema::work_videos::dsl::work_videos;
+    use schema::{
+        works::dsl::works,
+        work_categories::dsl::work_categories,
+        work_images::dsl::work_images,
+        work_videos::dsl::work_videos,
+        tech_categories::dsl::tech_categories,
+    };
     use crate::utils::get_device_and_ajax;
+    use crate::models::TechCategories;
 
     let _connection = establish_connection();
     let _work_id: i32 = param.1;
@@ -801,6 +805,10 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
     let _category = _categorys.into_iter().nth(0).unwrap();
     let _work_categories = work_categories
         .load::<WorkCategories>(&_connection)
+        .expect("E");
+
+    let _tech_categories = tech_categories
+        .load::<TechCategories>(&_connection)
         .expect("E");
 
     let _images: Vec<WorkImage> = work_images.filter(schema::work_images::work.eq(&_work_id)).load(&_connection).expect("E");
@@ -850,7 +858,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:       Vec<WorkImage>,
                 videos:       Vec<WorkVideo>,
                 category:     WorkCategories,
-                //work_cats:    Vec<WorkCategories>,
+                tech_cats:    Vec<TechCategories>,
                 //all_tags:     Vec<Tag>,
                 prev:         Option<Work>,
                 next:         Option<Work>,
@@ -862,7 +870,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
-                //work_cats:  _work_categories,
+                tech_cats:  _tech_categories,
                 //all_tags:   _tags,
                 prev:       prev,
                 next:       next,
@@ -881,6 +889,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:       Vec<WorkImage>,
                 videos:       Vec<WorkVideo>,
                 category:     WorkCategories,
+                tech_cats:    Vec<TechCategories>,
                 work_cats:    Vec<WorkCategories>,
                 all_tags:     Vec<Tag>,
                 prev:         Option<Work>,
@@ -893,6 +902,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
+                tech_cats:  _tech_categories,
                 work_cats:  _work_categories,
                 all_tags:   _tags,
                 prev:       prev,
@@ -913,7 +923,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     Vec<WorkImage>,
                 videos:     Vec<WorkVideo>,
                 category:   WorkCategories,
-                //work_cats:  Vec<WorkCategories>,
+                tech_cats:    Vec<TechCategories>,
                 //all_tags:   Vec<Tag>,
                 prev:       Option<Work>,
                 next:       Option<Work>,
@@ -924,7 +934,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
-                //work_cats:  _work_categories,
+                tech_cats:  _tech_categories,
                 //all_tags:   _tags,
                 prev:       prev,
                 next:       next,
@@ -942,6 +952,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     Vec<WorkImage>,
                 videos:     Vec<WorkVideo>,
                 category:   WorkCategories,
+                tech_cats:  Vec<TechCategories>,
                 work_cats:  Vec<WorkCategories>,
                 all_tags:   Vec<Tag>,
                 prev:       Option<Work>,
@@ -953,6 +964,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
+                tech_cats:  _tech_categories,
                 work_cats:  _work_categories,
                 all_tags:   _tags,
                 prev:       prev,
