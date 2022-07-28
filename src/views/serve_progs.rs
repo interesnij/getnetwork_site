@@ -847,7 +847,7 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
 
             if is_default == true && _category[0].default_price.is_some() && _serve.price.is_some() {
                 diesel::update(&_category[0])
-                .set(schema::serve_categories::default_price.eq(_category[0].default_price.unwrap() + _serve.price.unwrap()))
+                .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price))
                 .get_result::<ServeCategories>(&_connection)
                 .expect("E.");
             }
@@ -887,7 +887,7 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 if is_default == false && _category[0].default_price.is_some() && _serve.price.is_some() {
                     // если в форме галочка снята
                     diesel::update(&_category[0])
-                        .set(schema::serve_categories::default_price.eq(_category[0].default_price.unwrap() - _serve.price.unwrap()))
+                        .set(schema::serve_categories::default_price.eq(_category[0].default_price - _serve.price))
                         .get_result::<ServeCategories>(&_connection)
                         .expect("E.");
                     }
@@ -897,7 +897,7 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 if is_default == true  && _category[0].default_price.is_some() && _serve.price.is_some(){
                     // если в форме галочка поставлена
                     diesel::update(&_category[0])
-                        .set(schema::serve_categories::default_price.eq(_category[0].default_price.unwrap() + _serve.price.unwrap()))
+                        .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price))
                         .get_result::<ServeCategories>(&_connection)
                         .expect("E.");
                 }
