@@ -58,7 +58,7 @@
                 <label>Тех. категории</label>
                 <select class="form-control" name="tech_cats_list[]" multiple="">
                   <% for cat in tech_cats.iter() { %>
-                    <option <% if object.get_tech_cats_ids().iter().any(|i| i.id==tag.id) { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
+                    <option <% if object.get_tech_cats_ids().iter().any(|i| i.id==cat.id) { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
                   <% } %>
                 </select>
             </div>

@@ -295,6 +295,7 @@ pub struct StoreForms {
     pub link:           String,
     pub main_image:     String,
     pub is_active:      bool,
+    pub price:          i32,
     pub images:         Vec<String>,
     pub videos:         Vec<String>,
     pub category_list:  Vec<i32>,
