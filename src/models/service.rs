@@ -8,7 +8,7 @@ use crate::diesel::{
     ExpressionMethods,
 };
 use serde::{Serialize, Deserialize};
-use crate::models::{User, Tag, Serve};
+use crate::models::{User, Tag, Serve, TechCategories};
 use crate::schema::{
     service_categories,
     services,
@@ -122,15 +122,15 @@ pub struct EditServiceCategories {
 #[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Service {
-    pub id:          i32,
-    pub title:       String,
-    pub description: Option<String>,
-    pub content:     Option<String>,
-    pub link:        Option<String>,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub user_id:     i32,
-    pub created:     chrono::NaiveDateTime,
+    pub id:            i32,
+    pub title:         String,
+    pub description:   Option<String>,
+    pub content:       Option<String>,
+    pub link:          Option<String>,
+    pub image:         Option<String>,
+    pub is_active:     bool,
+    pub user_id:       i32,
+    pub created:       chrono::NaiveDateTime,
 }
 
 impl Service {
@@ -211,14 +211,45 @@ impl Service {
             .load::<i32>(&_connection)
             .expect("E");
     }
-    pub fn get_tech_cats_ids(&self) -> Vec<i32> {
-        let mut stack = Vec::new();
-        for _serv in self.get_serves().iter() {
-            if stack.iter().any(|&i| i!=_serv.tech_cat_id) {
-                stack.push(_serv.tech_cat_id);
-            }
-        }
-        return stack;
+    pub fn get_open_tech_categories(&self) -> Vec<TechCategories> {
+        // получаем открытые тех.категории услуги
+        use crate::models::TechCategoriesItems;
+        use schema::{
+            serve_items::dsl::serve_items,
+            tech_categories::dsl::tech_categories,
+        };
+
+        let ids = tech_categories_items
+            .filter(schema::tech_categories_items::service_id.eq(&self.id))
+            .filter(schema::tech_categories_items::types.eq(1))
+            .select(schema::tech_categories_items::category_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        return tech_categories
+            .filter(schema::tech_categories::id.eq_any(ids)))
+            .load::<TechCategories>(&_connection)
+            .expect("E");
+    }
+    pub fn get_close_tech_categories(&self) -> Vec<TechCategories> {
+        // получаем закрытые тех.категории услуги
+        use crate::models::TechCategoriesItems;
+        use schema::{
+            serve_items::dsl::serve_items,
+            tech_categories::dsl::tech_categories,
+        };
+
+        let ids = tech_categories_items
+            .filter(schema::tech_categories_items::service_id.eq(&self.id))
+            .filter(schema::tech_categories_items::types.eq(2))
+            .select(schema::tech_categories_items::category_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        return tech_categories
+            .filter(schema::tech_categories::id.eq_any(ids)))
+            .load::<TechCategories>(&_connection)
+            .expect("E");
     }
 
     pub fn get_6_services() -> Vec<Service> {
@@ -270,11 +301,11 @@ impl Service {
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="services"]
 pub struct EditService {
-    pub title:       String,
-    pub description: Option<String>,
-    pub link:        Option<String>,
-    pub image:       Option<String>,
-    pub is_active:   bool,
+    pub title:         String,
+    pub description:   Option<String>,
+    pub link:          Option<String>,
+    pub image:         Option<String>,
+    pub is_active:     bool,
 }
 
 #[derive(Identifiable, PartialEq, Queryable, Associations)]
@@ -297,32 +328,33 @@ pub struct NewServiceCategory {
 #[derive(Serialize, Insertable)]
 #[table_name="services"]
 pub struct NewService {
-    pub title:       String,
-    pub description: Option<String>,
-    pub link:        Option<String>,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub user_id:     i32,
-    pub created:     chrono::NaiveDateTime,
+    pub title:         String,
+    pub description:   Option<String>,
+    pub content:       Option<String>,
+    pub link:          Option<String>,
+    pub image:         Option<String>,
+    pub is_active:     bool,
+    pub user_id:       i32,
+    pub created:       chrono::NaiveDateTime,
 }
 
 impl NewService {
     pub fn from_service_form (
-        title: String,
-        description: String,
-        link: String,
-        image: String,
-        is_active: bool,
-        user_id: i32
+        title:         String,
+        description:   String,
+        link:          String,
+        image:         String,
+        is_active:     bool,
+        user_id:       i32
     ) -> Self {
         NewService {
-            title: title,
-            description: Some(description),
-            link: Some(link),
-            image: Some(image),
-            is_active: is_active,
-            user_id: user_id,
-            created: chrono::Local::now().naive_utc(),
+            title:         title,
+            description:   Some(description),
+            link:          Some(link),
+            image:         Some(image),
+            is_active:     is_active,
+            user_id:       user_id,
+            created:       chrono::Local::now().naive_utc(),
         }
     }
 }

@@ -571,18 +571,20 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
 }
 
 pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::EditService;
-    use crate::schema::services::dsl::services;
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::service_images::dsl::service_images;
-    use crate::schema::service_videos::dsl::service_videos;
-    use crate::schema::service_category::dsl::service_category;
-    use crate::schema::service_categories::dsl::service_categories;
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::models::EditService;
+            use crate::schema::{
+                services::dsl::services,
+                tags::dsl::tags,
+                tags_items::dsl::tags_items,
+                service_images::dsl::service_images,
+                service_videos::dsl::service_videos,
+                service_category::dsl::service_category,
+                service_categories::dsl::service_categories,
+            };
+
             let _connection = establish_connection();
             let _service_id: i32 = *_id;
             let _services = services

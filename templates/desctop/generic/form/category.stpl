@@ -1,0 +1,38 @@
+<div data-sum="<%= category.default_price %>" class="tab_<%= i2 + 1 %> fade tab-pane <% if i2 == 0 { %>in active<% } %>">
+    <table class="table">
+        <h4>
+          <span data-pk="<%= category.id %>" data-type="serve_category" owner-pk="<%= object.id %>" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up">
+            <%= t_category.name %> на <%= category.name %>
+          </span>
+        </h4>
+        <tbody>
+
+        <% for serve in category.get_serves().iter() { %>
+          <% if serve.is_default { %>
+            <% default_price += serve.price; %>
+            <tr class="is_default hover">
+            <td style="width:52%">
+                <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
+                    <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
+                </a>
+            </td>
+            <td class="price_td" style="width:12%"><span class="price"><%= serve.price %></span> ₽</td>
+            <td style="width:12%">Часы: <%= serve.man_hours %></td>
+            <td class="action_text" style="width:12%">Выбрано</td>
+        </tr>
+        <% } else { %>
+          <tr class="select_serve pointer">
+          <td style="width:52%">
+              <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
+                  <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
+              </a>
+          </td>
+          <td class="price_td" style="width:12%"><span class="price"><%= serve.price %></span> ₽</td>
+          <td style="width:12%">Часы: <%= serve.man_hours %></td>
+          <td class="action_text" style="width:12%">Выбрать<% } %>
+          </td>
+      </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div> 

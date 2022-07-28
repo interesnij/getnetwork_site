@@ -8,7 +8,7 @@ use crate::diesel::{
     ExpressionMethods,
 };
 use serde::{Serialize, Deserialize,};
-use crate::models::{User, Tag, Serve};
+use crate::models::{User, Tag, Serve, TechCategories};
 use crate::schema::{
     store_categories,
     stores,
@@ -123,18 +123,17 @@ pub struct EditStoreCategories {
 #[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Store {
-    pub id:           i32,
-    pub title:        String,
-    pub description:  Option<String>,
-    pub content:      Option<String>,
-    pub link:         Option<String>,
-    pub image:        Option<String>,
-    pub is_active:    bool,
-    pub price:        Option<i32>,
-    pub price_acc:    Option<i32>,
-    pub social_price: Option<i32>,
-    pub user_id:      i32,
-    pub created:      chrono::NaiveDateTime,
+    pub id:          i32,
+    pub title:       String,
+    pub description: Option<String>,
+    pub content:     Option<String>,
+    pub link:        Option<String>,
+    pub image:       Option<String>,
+    pub is_active:   bool,
+    pub price:       i32,
+    pub price_acc:   Option<i32>,
+    pub user_id:     i32,
+    pub created:     chrono::NaiveDateTime,
 }
 
 impl Store {
@@ -145,15 +144,6 @@ impl Store {
         else {
             return "/static/images/img.jpg".to_string();
         }
-    }
-    pub fn get_tech_cats_ids(&self) -> Vec<i32> {
-        let mut stack = Vec::new();
-        for _serv in self.get_serves().iter() {
-            if stack.iter().any(|&i| i!=_serv.tech_cat_id) {
-                stack.push(_serv.tech_cat_id);
-            }
-        }
-        return stack;
     }
     pub fn get_tags(&self) -> Vec<Tag> {
         use crate::schema::tags_items::dsl::tags_items;
@@ -210,6 +200,46 @@ impl Store {
             .load::<i32>(&_connection)
             .expect("E");
     }
+    pub fn get_open_tech_categories(&self) -> Vec<TechCategories> {
+        // получаем открытые тех.категории товара
+        use crate::models::TechCategoriesItems;
+        use schema::{
+            serve_items::dsl::serve_items,
+            tech_categories::dsl::tech_categories,
+        };
+
+        let ids = tech_categories_items
+            .filter(schema::tech_categories_items::store_id.eq(&self.id))
+            .filter(schema::tech_categories_items::types.eq(1))
+            .select(schema::tech_categories_items::category_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        return tech_categories
+            .filter(schema::tech_categories::id.eq_any(ids)))
+            .load::<TechCategories>(&_connection)
+            .expect("E");
+    }
+    pub fn get_close_tech_categories(&self) -> Vec<TechCategories> {
+        // получаем закрытые тех.категории товара
+        use crate::models::TechCategoriesItems;
+        use schema::{
+            serve_items::dsl::serve_items,
+            tech_categories::dsl::tech_categories,
+        };
+
+        let ids = tech_categories_items
+            .filter(schema::tech_categories_items::store_id.eq(&self.id))
+            .filter(schema::tech_categories_items::types.eq(2))
+            .select(schema::tech_categories_items::category_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        return tech_categories
+            .filter(schema::tech_categories::id.eq_any(ids)))
+            .load::<TechCategories>(&_connection)
+            .expect("E");
+    }
 
     pub fn get_3_stores() -> Vec<Store> {
         use crate::schema::stores::dsl::stores;
@@ -260,54 +290,50 @@ impl Store {
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="stores"]
 pub struct EditStore {
-    pub title:        String,
-    pub description:  Option<String>,
-    pub link:         Option<String>,
-    pub image:        Option<String>,
-    pub is_active:    bool,
-    pub price:        Option<i32>,
-    pub price_acc:    Option<i32>,
-    pub social_price: Option<i32>,
+    pub title:       String,
+    pub description: Option<String>,
+    pub link:        Option<String>,
+    pub image:       Option<String>,
+    pub is_active:   bool,
+    pub price:       i32,
+    pub price_acc:   Option<i32>,
 }
 
 #[derive(Serialize, Insertable)]
 #[table_name="stores"]
 pub struct NewStore {
-    pub title:        String,
-    pub description:  Option<String>,
-    pub link:         Option<String>,
-    pub image:        Option<String>,
-    pub is_active:    bool,
-    pub price:        Option<i32>,
-    pub price_acc:    Option<i32>,
-    pub social_price: Option<i32>,
-    pub user_id:      i32,
-    pub created:      chrono::NaiveDateTime,
+    pub title:       String,
+    pub description: Option<String>,
+    pub link:        Option<String>,
+    pub image:       Option<String>,
+    pub is_active:   bool,
+    pub price:       i32,
+    pub price_acc:   Option<i32>,
+    pub user_id:     i32,
+    pub created:     chrono::NaiveDateTime,
 }
 
 impl NewStore {
     pub fn from_store_form (
-        title: String,
+        title:       String,
         description: String,
-        link: String,
-        image: String,
-        is_active: bool,
-        price: Option<i32>,
-        price_acc: Option<i32>,
-        social_price: Option<i32>,
-        user_id: i32
+        link:        String,
+        image:       String,
+        is_active:   bool,
+        price:       i32,
+        price_acc:   Option<i32>,
+        user_id:     i32
     ) -> Self {
         NewStore {
-            title: title,
+            title:       title,
             description: Some(description),
-            link: Some(link),
-            image: Some(image),
-            is_active: is_active,
-            price: price,
-            price_acc: price_acc,
-            social_price: social_price,
-            user_id: user_id,
-            created: chrono::Local::now().naive_utc(),
+            link:        Some(link),
+            image:       Some(image),
+            is_active:   is_active,
+            price:       price,
+            price_acc:   price_acc,
+            user_id:     user_id,
+            created:     chrono::Local::now().naive_utc(),
         }
     }
 }

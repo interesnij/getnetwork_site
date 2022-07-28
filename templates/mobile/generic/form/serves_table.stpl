@@ -1,22 +1,39 @@
 
-<% for (i, t_category) in tech_cats.iter().enumerate() { %>
-  <% let is_main_cat = object.get_tech_cats_ids().iter().any(|i| i==&t_category.id); %>
+<% for t_category in object.get_open_tech_categories().iter() { %>
   <% let s_cats = t_category.get_serve_categories(); %>
 
 <section class="mb-20 mt-20 border">
-  <% if is_main_cat { %>
     <h2 class="section-title font-alt">
         <%= t_category.name %>
     </h2>
-  <% } else { %>
+    <div class="">
+        <div class="align-center">
+            <ul class="nav nav-tabs tpl-minimal-tabs animate">
+              <% for (i, cat) in s_cats.iter().enumerate() { %>
+                <li data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i + 1 %> <% if i == 0 { %>active<% } %>">
+                    <a class="pointer"><%= cat.name %></a>
+                </li>
+              <% } %>
+            </ul>
+        </div>
+
+        <div class="tab-content tpl-minimal-tabs-cont section-text">
+          <% for (i, category) in s_cats.iter().enumerate() { %>
+            <% include!("category.stpl"); %>
+          <% } %>
+        </div>
+    </div>
+</section>
+<% } %>
+
+
+<% for t_category in object.get_close_tech_categories().iter() { %>
+  <% let s_cats = t_category.get_serve_categories(); %>
+
+<section class="mb-20 mt-20 border">
     <h2 class="pointer section-title font-alt show_tech_category">
       <span class="cat_description">
-        <% if t_category.description.is_some() { %>
-          <%- t_category.description.as_deref().unwrap() %>
-        <% } else { %>
-          Описание отсутствует.
-        <% } %>
-
+        <%= t_category.name %>
         <span style="float:right;margin-right: 20px;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
         </span>
@@ -28,12 +45,12 @@
         </span>
       </span>
     </h2>
-  <% } %>
-    <div class="<% if !is_main_cat { %>hidden is_not_main_cat<% } %>">
+
+    <div class="hidden is_not_main_cat">
         <div class="align-center">
             <ul class="nav nav-tabs tpl-minimal-tabs animate">
-              <% for cat in s_cats.iter() { %>
-                <li data-sum="<%= cat.default_price.unwrap() %>" class="yy pointer s_<%= i %> <% if i == 0 { %>active<% } %>">
+              <% for (i2, cat) in s_cats.iter().enumerate() { %>
+                <li data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i2 + 1 %> <% if i2 == 0 { %>active<% } %>">
                     <a class="pointer"><%= cat.name %></a>
                 </li>
               <% } %>
@@ -41,63 +58,8 @@
         </div>
 
         <div class="tab-content tpl-minimal-tabs-cont section-text">
-          <% for category in s_cats.iter() { %>
-
-            <div data-sum="<%= category.default_price.unwrap() %>" class="tab_<%= i %> fade tab-pane <% if i == 0 { %>in active<% } %>">
-                <table class="table">
-                    <h4>
-                      <span data-pk="<%= category.id %>" data-type="serve_category" owner-pk="<%= object.id %>" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up">
-                        <%= t_category.name %> на <%= category.name %>
-                      </span>
-                    </h4>
-                    <tbody>
-
-                    <% for serve in category.get_serves().iter() { %>
-                      <% if serve.is_default { %>
-                        <%
-                          if serve.price_acc.is_some() {
-                            default_price += serve.price_acc.unwrap();
-                          } else {
-                            default_price += serve.price.unwrap();
-                          }
-                        %>
-                        <tr class="is_default hover">
-                        <td style="width:52%">
-                            <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
-                                <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
-                            </a>
-                        </td>
-                        <td class="price_td" style="width:12%"><span class="price"><%= serve.price.unwrap() %></span> ₽</td>
-                        <% if serve.price_acc.is_some() { %>
-                          <td class="price_acc_td" style="width:12%"><span class="price_acc"><%= serve.price_acc.unwrap() %></span> ₽</td>
-                        <% } else { %>
-                          <td style="width:12%"></td>
-                        <% } %>
-
-                        <td style="width:12%">Часы: <%= serve.man_hours.unwrap() %></td>
-                        <td class="action_text" style="width:12%">Выбрано</td>
-                    </tr>
-                    <% } else { %>
-                      <tr class="select_serve pointer">
-                      <td style="width:52%">
-                          <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
-                              <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
-                          </a>
-                      </td>
-                      <td class="price_td" style="width:12%"><span class="price"><%= serve.price.unwrap() %></span> ₽</td>
-                      <% if serve.price_acc.is_some() { %>
-                        <td class="price_acc_td" style="width:12%"><span class="price_acc"><%= serve.price_acc.unwrap() %></span> ₽</td>
-                      <% } else { %>
-                        <td style="width:12%"></td>
-                      <% } %>
-                      <td style="width:12%">Часы: <%= serve.man_hours.unwrap() %></td>
-                      <td class="action_text" style="width:12%">Выбрать<% } %>
-                      </td>
-                  </tr>
-                    <% } %>
-                    </tbody>
-                </table>
-            </div>
+          <% for (i2, category) in s_cats.iter().enumerate() { %>
+            <% include!("category.stpl"); %>
           <% } %>
         </div>
     </div>

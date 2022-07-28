@@ -61,7 +61,7 @@ pub struct ServeCategories {
     pub tech_categories: i32,
     pub position:        i32,
     pub count:           i32,
-    pub default_price:   Option<i32>,
+    pub default_price:   i32,
     pub user_id:         i32,
 }
 impl ServeCategories {
@@ -85,7 +85,7 @@ pub struct NewServeCategories {
     pub tech_categories: i32,
     pub position:        i32,
     pub count:           i32,
-    pub default_price:   Option<i32>,
+    pub default_price:   i32,
     pub user_id:         i32,
 }
 
@@ -100,13 +100,10 @@ pub struct Serve {
     pub description:      Option<String>,
     pub position:         i32,
     pub serve_categories: i32,
-    pub price:            Option<i32>,
-    pub price_acc:        Option<i32>,
-    pub social_price:     Option<i32>,
-    pub man_hours:        Option<i32>,
+    pub price:            i32,
+    pub man_hours:        i32,
     pub is_default:       bool,
     pub user_id:          i32,
-    pub tech_cat_id:      i32,
 }
 
 impl Serve {
@@ -134,13 +131,10 @@ pub struct NewServe {
     pub description:      Option<String>,
     pub position:         i32,
     pub serve_categories: i32,
-    pub price:            Option<i32>,
-    pub price_acc:        Option<i32>,
-    pub social_price:     Option<i32>,
-    pub man_hours:        Option<i32>,
+    pub price:            i32,
+    pub man_hours:        i32,
     pub is_default:       bool,
     pub user_id:          i32,
-    pub tech_cat_id:      i32,
 }
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="serve"]
@@ -150,12 +144,9 @@ pub struct EditServe {
     pub description:      Option<String>,
     pub position:         i32,
     pub serve_categories: i32,
-    pub price:            Option<i32>,
-    pub price_acc:        Option<i32>,
-    pub social_price:     Option<i32>,
-    pub man_hours:        Option<i32>,
+    pub price:            i32,
+    pub man_hours:        i32,
     pub is_default:       bool,
-    pub tech_cat_id:      i32,
 }
 
 /////// ServeItems //////
@@ -175,4 +166,27 @@ pub struct NewServeItems {
     pub service_id: i32,
     pub store_id:   i32,
     pub work_id:    i32,
+}
+
+/////// ServeItems //////
+#[derive(Identifiable, PartialEq, Queryable, Associations)]
+#[table_name="tech_categories_items"]
+pub struct TechCategoriesItems {
+    pub id:          i32,
+    pub category_id: i32,
+    pub serve_id:    i32,
+    pub service_id:  i32,
+    pub store_id:    i32,
+    pub work_id:     i32,
+    pub types:       i16, // 1 активно, 2 неактивно
+}
+#[derive(Insertable)]
+#[table_name="tech_categories_items"]
+pub struct NewTechCategoriesItems {
+    pub category_id: i32,
+    pub serve_id:    i32,
+    pub service_id:  i32,
+    pub store_id:    i32,
+    pub work_id:     i32,
+    pub types:       i16,
 }

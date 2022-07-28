@@ -635,7 +635,7 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
                 tech_categories: form.tech_categories,
                 position: form.position,
                 count: 0,
-                default_price: Some(0),
+                default_price: 0,
                 user_id: _request_user.id,
             };
             let _new_serve = diesel::insert_into(schema::serve_categories::table)
@@ -706,7 +706,7 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
                 tech_categories: form.tech_categories,
                 position: form.position,
                 count: s_category.count,
-                default_price: Some(form.default_price),
+                default_price: form.default_price,
                 user_id: _request_user.id,
             };
             diesel::update(&s_category)
@@ -856,13 +856,10 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
                 description: Some(form.description.clone()),
                 position: form.position,
                 serve_categories: _cat_id,
-                price: Some(form.price),
-                price_acc: Some(form.price_acc),
-                social_price: Some(form.social_price),
-                man_hours: Some(form.man_hours),
+                price: form.price,
+                man_hours: form.man_hours,
                 is_default: is_default,
                 user_id: _request_user.id,
-                tech_cat_id: _category[0].tech_categories,
             };
 
             let _serve = diesel::insert_into(schema::serve::table)
@@ -934,13 +931,10 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 description: Some(form.description.clone()),
                 position: form.position,
                 serve_categories: form.serve_categories,
-                price: Some(form.price),
-                price_acc: Some(form.price_acc),
-                social_price: Some(form.social_price),
-                man_hours: Some(form.man_hours),
+                price: form.price,
+                man_hours: form.man_hours,
                 is_default: is_default,
                 user_id: _request_user.id,
-                tech_cat_id: _category[0].tech_categories,
             };
 
             diesel::update(&_serve)

@@ -16,13 +16,12 @@
   </div>
   <div class="post-prev-text align-center">
     <% if object.price_acc.is_some() { %>
-      <del><%= object.price.unwrap() %> ₽</del>
+      <del><%= object.price %> ₽</del>
       &nbsp;
       <strong><%= object.price_acc.unwrap() %> ₽</strong>
     <% } else { %>
-      <strong><%= object.price.unwrap() %> ₽</strong>
-    <% } %>
-  </div>
+      <strong><%= object.price %> ₽</strong>
+    <% }
   <div class="post-prev-more align-center">
     <a href="/store/1/<%= object.id %>/" class="btn border btn-mod ajax btn-round">
       Детали

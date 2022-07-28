@@ -8,7 +8,7 @@ use crate::diesel::{
     ExpressionMethods,
 };
 use serde::{Serialize, Deserialize};
-use crate::models::{User, Tag, Serve};
+use crate::models::{User, Tag, Serve, TechCategories};
 use crate::schema::{
     work_categories,
     works,
@@ -123,15 +123,16 @@ pub struct EditWorkCategories {
 #[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Work {
-    pub id:          i32,
-    pub title:       String,
-    pub description: Option<String>,
-    pub content:     Option<String>,
-    pub link:        Option<String>,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub user_id:     i32,
-    pub created:     chrono::NaiveDateTime,
+    pub id:            i32,
+    pub title:         String,
+    pub description:   Option<String>,
+    pub content:       Option<String>,
+    pub link:          Option<String>,
+    pub image:         Option<String>,
+    pub is_active:     bool,
+    pub default_price: i32,
+    pub user_id:       i32,
+    pub created:       chrono::NaiveDateTime,
 }
 impl Work {
     pub fn get_image(&self) -> String {
@@ -150,17 +151,6 @@ impl Work {
         return work_categories
             .filter(schema::work_categories::id.eq_any(ids))
             .load::<WorkCategories>(&_connection)
-            .expect("E");
-    }
-
-    pub fn get_serves_ids(&self) -> Vec<i32> {
-        use schema::serve_items::dsl::serve_items;
-
-        let _connection = establish_connection();
-        return serve_items
-            .filter(schema::serve_items::service_id.eq(&self.id))
-            .select(schema::serve_items::serve_id)
-            .load::<i32>(&_connection)
             .expect("E");
     }
 
@@ -240,36 +230,81 @@ impl Work {
             .load::<Serve>(&_connection)
             .expect("E");
     }
-    pub fn get_tech_cats_ids(&self) -> Vec<i32> {
-        let mut stack = Vec::new();
-        for _serv in self.get_serves().iter() {
-            if stack.iter().any(|&i| i!=_serv.tech_cat_id) {
-                stack.push(_serv.tech_cat_id);
-            }
-        }
-        return stack;
+
+    pub fn get_serves_ids(&self) -> Vec<i32> {
+        use schema::serve_items::dsl::serve_items;
+
+        let _connection = establish_connection();
+        return serve_items
+            .filter(schema::serve_items::service_id.eq(&self.id))
+            .select(schema::serve_items::serve_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+    }
+
+    pub fn get_open_tech_categories(&self) -> Vec<TechCategories> {
+        // получаем открытые тех.категории работы
+        use crate::models::TechCategoriesItems;
+        use schema::{
+            serve_items::dsl::serve_items,
+            tech_categories::dsl::tech_categories,
+        };
+
+        let ids = tech_categories_items
+            .filter(schema::tech_categories_items::work_id.eq(&self.id))
+            .filter(schema::tech_categories_items::types.eq(1))
+            .select(schema::tech_categories_items::category_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        return tech_categories
+            .filter(schema::tech_categories::id.eq_any(ids)))
+            .load::<TechCategories>(&_connection)
+            .expect("E");
+    }
+    pub fn get_close_tech_categories(&self) -> Vec<TechCategories> {
+        // получаем закрытые тех.категории работы
+        use crate::models::TechCategoriesItems;
+        use schema::{
+            serve_items::dsl::serve_items,
+            tech_categories::dsl::tech_categories,
+        };
+
+        let ids = tech_categories_items
+            .filter(schema::tech_categories_items::work_id.eq(&self.id))
+            .filter(schema::tech_categories_items::types.eq(2))
+            .select(schema::tech_categories_items::category_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        return tech_categories
+            .filter(schema::tech_categories::id.eq_any(ids)))
+            .load::<TechCategories>(&_connection)
+            .expect("E");
     }
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="works"]
 pub struct EditWork {
-    pub title:       String,
-    pub description: Option<String>,
-    pub link:        Option<String>,
-    pub image:       Option<String>,
-    pub is_active:   bool,
+    pub title:         String,
+    pub description:   Option<String>,
+    pub link:          Option<String>,
+    pub image:         Option<String>,
+    pub is_active:     bool,
+    pub default_price: i32,
 }
 #[derive(Serialize, Insertable)]
 #[table_name="works"]
 pub struct NewWork {
-    pub title:       String,
-    pub description: Option<String>,
-    pub link:        Option<String>,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub user_id:     i32,
-    pub created:     chrono::NaiveDateTime,
+    pub title:         String,
+    pub description:   Option<String>,
+    pub link:          Option<String>,
+    pub image:         Option<String>,
+    pub is_active:     bool,
+    pub default_price: i32,
+    pub user_id:       i32,
+    pub created:       chrono::NaiveDateTime,
 }
 
 impl NewWork {
@@ -279,6 +314,7 @@ impl NewWork {
         link: String,
         image: String,
         is_active: bool,
+        default_price: i32,
         user_id: i32
     ) -> Self {
         NewWork {
@@ -287,6 +323,7 @@ impl NewWork {
             link: Some(link),
             image: Some(image),
             is_active: is_active,
+            default_price: default_price,
             user_id: user_id,
             created: chrono::Local::now().naive_utc(),
         }
