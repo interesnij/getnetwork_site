@@ -49,7 +49,7 @@
                 <label>Теги</label>
                 <select class="form-control" name="tags_list[]" multiple="">
                   <% for tag in all_tags.iter() { %>
-                    <option <% if service_tags.iter().any(|i| i==tag.id) { %>selected=""<% } %> value="<%= tag.id %>"><%= tag.name %></option>
+                    <option <% if service_tags.iter().any(|i| i.id==tag.id) { %>selected=""<% } %> value="<%= tag.id %>"><%= tag.name %></option>
                   <% } %>
                 </select>
             </div>
@@ -58,7 +58,7 @@
                 <label>Тех. категории</label>
                 <select class="form-control" name="tech_cats_list[]" multiple="">
                   <% for cat in tech_cats.iter() { %>
-                    <option <% if object.get_tech_cats_ids().iter().any(|i| i.id==cat.id) { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
+                    <option <% if object.get_tech_cats_ids().iter().any(|i| i==cat.id) { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
                   <% } %>
                 </select>
             </div>
