@@ -347,6 +347,7 @@ function service_tab_action(_this, tab_class){
   if (!_this.classList.contains("active")){
     old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
     new_price = _this.getAttribute("data-sum")*1;
+    serves_ids = counter.parentElement.getAttribute("data-servelist");
 
     nav = _this.parentElement.parentElement.parentElement;
     nav_items = nav.querySelectorAll(".yy");
@@ -365,6 +366,10 @@ function service_tab_action(_this, tab_class){
             if (!serve_list[i2].classList.contains("is_default") && serve_list[i2].classList.contains("hover")){
               serve_list[i2].classList.remove("hover");
               old_price += serve_list[i2].querySelector(".price").innerHTML*1;
+              index = serves_ids.indexOf(serve_list[i2].querySelector(".get_object_info").getAttribute("data-pk"));
+              if (index >= 0) {
+                serves_ids.splice(index, 1);
+              }
             }
         };
       tabs_panes[i].classList.remove("active", "in")
@@ -376,12 +381,11 @@ function service_tab_action(_this, tab_class){
     counter.innerHTML = counter.innerHTML*1 - old_price + new_price;
 
     // после смены таба перезапишем список выбранных опций
-    new_serve_list = nav.parentElement.parentElement.querySelectorAll(".is_default");
-    new_arr = [];
+    new_serve_list = nav.cur.querySelectorAll(".is_default");
     for (var i = 0; i < new_serve_list.length; i++) {
-      new_arr.push(new_serve_list[i].querySelector(".get_object_info").getAttribute("data-pk"))
+      serves_ids.push(new_serve_list[i].querySelector(".get_object_info").getAttribute("data-pk"))
     };
-    counter.parentElement.setAttribute("data-servelist", new_arr);
+    counter.parentElement.setAttribute("data-servelist", serves_ids);
     ///////
   }
 };
