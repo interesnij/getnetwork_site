@@ -660,6 +660,12 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 tags::dsl::tags,
                 serve::dsl::serve,
                 service_categories::dsl::service_categories,
+                service_images::dsl::service_images,
+                service_videos::dsl::service_videos,
+                tags_items::dsl::tags_items,
+                serve_items::dsl::serve_items,
+                tech_categories_items::dsl::tech_categories_items,
+                service_category::dsl::service_category,
             };
             use crate::models::{
                 TechCategoriesItem,
@@ -696,12 +702,12 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 .expect("Error.");
             };
 
-            diesel::delete(schema::service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::tech_categories_items.filter(schema::tech_categories_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(schema::service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(tech_categories_items.filter(schema::tech_categories_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
 
             let form = store_form(payload.borrow_mut(), _request_user.id).await;
             let _new_service = EditService {
