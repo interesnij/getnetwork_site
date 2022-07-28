@@ -711,7 +711,7 @@ a.btn-mod:focus{
     font-size: 12px;
 }
 .form select[multiple]{
-    height: auto;
+    height: 300px;
 }
 
 .form input[type="text"]:focus,
@@ -765,12 +765,12 @@ a.btn-mod:focus{
 .form input[type="password"].input-sm,
 .form input[type="date"].input-sm,
 .form input[type="color"].input-sm,
-.form select.input-sm{
+.form select.input-sm {
     height: 31px;
     padding-left: 10px;
     padding-right: 10px;
 }
-.form textarea{
+.form textarea {
     font-size: 12px;
     font-weight: 400;
     text-transform: uppercase !important;
@@ -784,19 +784,8 @@ a.btn-mod:focus{
     border-radius: 0;
 }
 
-.form .form-group{
+.form .form-group {
     margin-bottom: 10px;
-}
-
-.form div.error{
-    margin-top: 20px;
-    padding: 13px 20px;
-    text-align: center;
-}
-.form div.success{
-    margin-top: 20px;
-    padding: 13px 20px;
-    text-align: center;
 }
 
 .form-tip{
@@ -806,7 +795,7 @@ a.btn-mod:focus{
     font-size: 12px;
 }
 
-.home-section{
+.home-section {
     width: 100%;
     display: block;
     position: relative;
@@ -820,23 +809,21 @@ a.btn-mod:focus{
     background-size: cover;
 }
 
-.home-content{
+.home-content {
     display: table;
     width: 100%;
     height: 100%;
     text-align: center;
-}
-
-.home-content{
     position: relative;
 }
-.home-text{
+
+.home-text {
     display: table-cell;
     height: 100%;
     vertical-align: middle;
 }
 
-.bg-video-wrapper{
+.bg-video-wrapper {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -844,19 +831,19 @@ a.btn-mod:focus{
     left: 0px;
     z-index: 0;
 }
-.bg-video-overlay{
+.bg-video-overlay {
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0px;
     left: 0px;
 }
-.bg-video-wrapper video{
+.bg-video-wrapper video {
     max-width: inherit;
     height: inherit;
     z-index: 0;
 }
-a.bg-video-button-muted{
+a.bg-video-button-muted {
     position: absolute;
     bottom: 0;
     left: 15px;
@@ -865,7 +852,7 @@ a.bg-video-button-muted{
     z-index: 1000;
 }
 
-.hs-wrap{
+.hs-wrap {
     max-width: 570px;
     margin: 0 auto;
     padding: 47px 30px 53px;
@@ -876,7 +863,7 @@ a.bg-video-button-muted{
     box-sizing: border-box;
 }
 
-.hs-wrap-1{
+.hs-wrap-1 {
     max-width: 350px;
     margin: 0 auto;
     position: relative;
@@ -886,7 +873,7 @@ a.bg-video-button-muted{
     box-sizing: border-box;
 }
 
-.hs-line-1{
+.hs-line-1 {
     margin-top: 0;
     position: relative;
     text-transform: uppercase;
@@ -895,7 +882,7 @@ a.bg-video-button-muted{
     letter-spacing: 51px;
     opacity: .9;
 }
-.hs-line-3{
+.hs-line-3 {
     margin-top: 0;
     position: relative;
     font-size: 13px;
@@ -904,7 +891,7 @@ a.bg-video-button-muted{
     letter-spacing: 2px;
 }
 
-.hs-line-4{
+.hs-line-4 {
     margin-top: 0;
     position: relative;
     font-size: 14px;
@@ -912,7 +899,7 @@ a.bg-video-button-muted{
     text-transform: uppercase;
     letter-spacing: 3px;
 }
-.hs-line-5{
+.hs-line-5 {
     margin-top: 0;
     position: relative;
     font-size: 62px;
@@ -922,7 +909,7 @@ a.bg-video-button-muted{
     letter-spacing: 0.32em;
     opacity: .85;
 }
-.hs-line-6{
+.hs-line-6 {
     margin-top: 0;
     position: relative;
     font-size: 19px;
@@ -930,10 +917,10 @@ a.bg-video-button-muted{
     line-height: 1.2;
     opacity: .35;
 }
-.hs-line-6.no-transp{
+.hs-line-6.no-transp {
     opacity: 1;
 }
-.hs-line-7{
+.hs-line-7 {
     margin-top: 0;
     position: relative;
     font-size: 64px;
@@ -942,7 +929,7 @@ a.bg-video-button-muted{
     letter-spacing: 2px;
     line-height: 1.2;
 }
-.hs-line-8{
+.hs-line-8 {
     margin-top: 0;
     position: relative;
     font-size: 16px;
@@ -951,11 +938,11 @@ a.bg-video-button-muted{
     line-height: 1.2;
     opacity: .75;
 }
-.hs-line-8.no-transp{
+.hs-line-8.no-transp {
     opacity: 1;
 }
 
-.hs-line-9{
+.hs-line-9 {
     margin-top: 0;
     position: relative;
     font-size: 96px;
@@ -964,7 +951,7 @@ a.bg-video-button-muted{
     letter-spacing: 2px;
     line-height: 1.2;
 }
-.hs-line-10{
+.hs-line-10 {
     margin-top: 0;
     display: inline-block;
     position: relative;
@@ -974,17 +961,17 @@ a.bg-video-button-muted{
     text-transform: uppercase;
     letter-spacing: 2px;
 }
-.hs-line-10 > span{
+.hs-line-10 > span {
     margin: 0 10px;
 }
-.hs-line-10.highlight{
+.hs-line-10.highlight {
     opacity: .65;
 }
-.hs-line-10.transparent{
+.hs-line-10.transparent {
     background: none;
     padding: 0;
 }
-.hs-line-11{
+.hs-line-11 {
     margin-top: 0;
     position: relative;
     font-size: 30px;
@@ -994,7 +981,7 @@ a.bg-video-button-muted{
     line-height: 1.8;
     opacity: .9;
 }
-.hs-line-12{
+.hs-line-12 {
     margin-top: 0;
     position: relative;
     font-size: 80px;
@@ -1003,7 +990,7 @@ a.bg-video-button-muted{
     text-transform: uppercase;
     letter-spacing: 0.4em;
 }
-.hs-line-13{
+.hs-line-13 {
     margin-top: 0;
     position: relative;
     font-size: 96px;
@@ -1012,7 +999,7 @@ a.bg-video-button-muted{
     text-transform: uppercase;
     letter-spacing: 0.3em;
 }
-.hs-line-14{
+.hs-line-14 {
     margin-top: 0;
     position: relative;
     font-size: 48px;
@@ -1021,7 +1008,7 @@ a.bg-video-button-muted{
     text-transform: uppercase;
     letter-spacing: 0.7em;
 }
-.hs-line-15{
+.hs-line-15 {
     margin-top: 0;
     position: relative;
     font-size: 36px;
@@ -1030,11 +1017,11 @@ a.bg-video-button-muted{
     letter-spacing: 0.2em;
     line-height: 1.3;
 }
-.no-transp{
+.no-transp {
     opacity: 1 !important;
 }
 
-.fullwidth-galley-content{
+.fullwidth-galley-content {
     position: absolute;
     top: 0;
     left: 0;
@@ -1042,27 +1029,27 @@ a.bg-video-button-muted{
     z-index: 25;
 }
 
-.top-bar{
+.top-bar {
     min-height: 40px;
     font-size: 11px;
     letter-spacing: 1px;
 }
 
-.top-links{
+.top-links {
     list-style: none;
     margin: 0;
     padding: 0;
     text-transform: uppercase;
 }
-.top-links li{
+.top-links li {
     float: left;
 }
-.top-links li .fa{
+.top-links li .fa {
     font-size: 14px;
     position: relative;
     top: 1px;
 }
-.top-links li a{
+.top-links li a {
     display: block;
     min-width: 40px;
     height: 40px;
@@ -1079,15 +1066,15 @@ a.bg-video-button-muted{
     -ms-transition: all 0.1s cubic-bezier(0.000, 0.000, 0.580, 1.000);
     transition: all 0.1s cubic-bezier(0.000, 0.000, 0.580, 1.000);
 }
-.top-bar.dark{
+.top-bar.dark {
     border-bottom: none;
 }
 
-.nav-logo-wrap{
+.nav-logo-wrap {
     float: left;
     margin-right: 20px;
 }
-.nav-logo-wrap .logo{
+.nav-logo-wrap .logo {
     display: table-cell;
     vertical-align: middle;
     max-width: 118px;
@@ -1098,15 +1085,15 @@ a.bg-video-button-muted{
     -ms-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
     transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
 }
-.nav-logo-wrap .logo img{
+.nav-logo-wrap .logo img {
     max-height: 100%;
 }
 .nav-logo-wrap .logo:before,
-.nav-logo-wrap .logo:after{
+.nav-logo-wrap .logo:after {
     display: none;
 }
 .logo,
-a.logo:hover{
+a.logo:hover {
     font-family: Dosis, arial, sans-serif;
     font-size: 18px;
     font-weight: 400 !important;
@@ -1115,7 +1102,7 @@ a.logo:hover{
     text-decoration: none;
 }
 
-.main-nav{
+.main-nav {
     width: 100%;
     height: 75px !important;
     position: relative;
@@ -1129,20 +1116,20 @@ a.logo:hover{
     -ms-transition: height 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
     transition: height 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
 }
-.small-height{
+.small-height {
     height: 55px !important;
 }
-.small-height .inner-nav ul li a{
+.small-height .inner-nav ul li a {
     height: 55px !important;
     line-height: 55px !important;
 }
-.inner-nav{
+.inner-nav {
     display: inline-block;
     position: relative;
     float: right;
     margin-top: 10px;
 }
-.inner-nav ul{
+.inner-nav ul {
     float: right;
     margin: auto;
     font-size: 11px;
@@ -1261,17 +1248,6 @@ a.logo:hover{
 
 .inner-nav li.js-opened .mn-sub{
     opacity: 1;
-}
-
-.main-nav.transparent{
-    background: transparent !important;
-}
-.main-nav.js-transparent{
-    -webkit-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
-    -moz-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
-    -o-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
-    -ms-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
-    transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
 }
 
 .mn-soc-link{

@@ -9,7 +9,6 @@ use actix_web::{
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use crate::utils::{
-    item_form,
     category_form,
     establish_connection,
     is_signed_in,
@@ -493,10 +492,11 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 service_categories::dsl::service_categories,
             };
             use crate::models::{TechCategoriesItem, NewTechCategoriesItem};
+            use crate::utils::store_form;
 
             let _connection = establish_connection();
 
-            let form = item_form(payload.borrow_mut(), _request_user.id).await;
+            let form = store_form(payload.borrow_mut(), _request_user.id).await;
             let new_service = NewService::from_service_form (
                 form.title.clone(),
                 form.description.clone(),
@@ -616,6 +616,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 service_categories::dsl::service_categories,
                 tech_categories_items::dsl::tech_categories_items,
             };
+            use crate::utils::store_form;
 
             let _connection = establish_connection();
             let _service_id: i32 = *_id;
@@ -648,7 +649,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             diesel::delete(tech_categories_items.filter(schema::tech_categories_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
 
-            let form = item_form(payload.borrow_mut(), _request_user.id).await;
+            let form = store_form(payload.borrow_mut(), _request_user.id).await;
             let _new_service = EditService {
                 title:       form.title.clone(),
                 description: Some(form.description.clone()),
