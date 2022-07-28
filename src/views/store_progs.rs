@@ -9,7 +9,6 @@ use actix_web::{
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use crate::utils::{
-    store_form,
     category_form,
     establish_connection,
     is_signed_in,
@@ -567,6 +566,76 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                     .get_result::<Tag>(&_connection)
                     .expect("Error.");
             }
+
+            // создаем связь с тех категориями, которые будут
+            // расширять списки опций, предлагая доп возможности и услуги
+            for cat_id in form.close_tech_cats_list.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: *cat_id,
+                    service_id:  0,
+                    store_id:    _store.id,
+                    work_id:     0,
+                    types:       2,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
+
+            // создаем опции услуги и записываем id опций в вектор.
+            let mut serve_ids = Vec::new();
+            for serve_id in form.serve_list.iter() {
+                let new_serve_form = NewServeItems {
+                    serve_id:   *serve_id,
+                    service_id: 0,
+                    store_id:   _store.id,
+                    work_id:    0,
+                };
+                diesel::insert_into(schema::serve_items::table)
+                    .values(&new_serve_form)
+                    .get_result::<ServeItems>(&_connection)
+                    .expect("Error.");
+                serve_ids.push(*serve_id);
+            }
+
+            // получаем опции, чтобы создать связи с их тех. категорией.
+            // это надо отрисовки тех категорий услуги, которые активны
+            let _serves = serve
+                .filter(schema::serve::id.eq_any(serve_ids))
+                .load::<Serve>(&_connection)
+                .expect("E");
+
+            let mut tech_cat_ids = Vec::new();
+            let mut store_price = 0;
+            for _serve in _serves.iter() {
+                if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
+                    tech_cat_ids.push(_serve.tech_cat_id);
+                }
+                store_price += _serve.price;
+            }
+
+            for id in tech_cat_ids.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: *id,
+                    service_id:  0,
+                    store_id:    _store.id,
+                    work_id:     0,
+                    types:       1,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
+
+            // фух. Связи созданы все, но надо еще посчитать цену
+            // услуги для калькулятора. Как? А  это будет сумма всех
+            // цен выбранных опций.
+            diesel::update(&_store)
+                .set(schema::stores::price.eq(store_price))
+                .get_result::<Store>(&_connection)
+                .expect("Error.");
         }
     };
     HttpResponse::Ok()
@@ -627,6 +696,8 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
             diesel::delete(store_videos.filter(schema::store_videos::store.eq(_store_id))).execute(&_connection).expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
             diesel::delete(store_category.filter(schema::store_category::store_id.eq(_store_id))).execute(&_connection).expect("E");
+            diesel::delete(serve_items.filter(schema::serve_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
+            diesel::delete(tech_categories_items.filter(schema::tech_categories_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
 
             let form = store_form(payload.borrow_mut(), _request_user.id).await;
             let _new_store = EditStore {
@@ -900,7 +971,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:       Vec<StoreImage>,
                 videos:       Vec<StoreVideo>,
                 category:     StoreCategories,
-                tech_cats:    Vec<TechCategories>,
+                //tech_cats:    Vec<TechCategories>,
                 store_cats:   Vec<StoreCategories>,
                 all_tags:     Vec<Tag>,
                 prev:         Option<Store>,
@@ -913,7 +984,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
-                tech_cats:  _tech_categories,
+                //tech_cats:  _tech_categories,
                 store_cats: _store_categories,
                 all_tags:   _tags,
                 prev:       prev,
@@ -961,7 +1032,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:     Vec<StoreImage>,
                 videos:     Vec<StoreVideo>,
                 category:   StoreCategories,
-                tech_cats:  Vec<TechCategories>,
+                //tech_cats:  Vec<TechCategories>,
                 store_cats: Vec<StoreCategories>,
                 all_tags:   Vec<Tag>,
                 prev:       Option<Store>,
@@ -973,7 +1044,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
-                tech_cats:  _tech_categories,
+                //tech_cats:  _tech_categories,
                 store_cats: _store_categories,
                 all_tags:   _tags,
                 prev:       prev,

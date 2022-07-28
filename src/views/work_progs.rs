@@ -573,6 +573,75 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                     .get_result::<Tag>(&_connection)
                     .expect("Error.");
             }
+            // создаем связь с тех категориями, которые будут
+            // расширять списки опций, предлагая доп возможности и услуги
+            for cat_id in form.close_tech_cats_list.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: *cat_id,
+                    service_id:  0,
+                    store_id:    0,
+                    work_id:     _work.id,
+                    types:       2,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
+
+            // создаем опции услуги и записываем id опций в вектор.
+            let mut serve_ids = Vec::new();
+            for serve_id in form.serve_list.iter() {
+                let new_serve_form = NewServeItems {
+                    serve_id:   *serve_id,
+                    service_id: 0,
+                    store_id:   0,
+                    work_id:    _work.id,
+                };
+                diesel::insert_into(schema::serve_items::table)
+                    .values(&new_serve_form)
+                    .get_result::<ServeItems>(&_connection)
+                    .expect("Error.");
+                serve_ids.push(*serve_id);
+            }
+
+            // получаем опции, чтобы создать связи с их тех. категорией.
+            // это надо отрисовки тех категорий услуги, которые активны
+            let _serves = serve
+                .filter(schema::serve::id.eq_any(serve_ids))
+                .load::<Serve>(&_connection)
+                .expect("E");
+
+            let mut tech_cat_ids = Vec::new();
+            let mut work_price = 0;
+            for _serve in _serves.iter() {
+                if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
+                    tech_cat_ids.push(_serve.tech_cat_id);
+                }
+                work_price += _serve.price;
+            }
+
+            for id in tech_cat_ids.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: *id,
+                    service_id:  0,
+                    store_id:    0,
+                    work_id:     _work.id,
+                    types:       1,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
+
+            // фух. Связи созданы все, но надо еще посчитать цену
+            // услуги для калькулятора. Как? А  это будет сумма всех
+            // цен выбранных опций.
+            diesel::update(&_work)
+                .set(schema::works::price.eq(work_price))
+                .get_result::<Work>(&_connection)
+                .expect("Error.");
         }
     };
     HttpResponse::Ok()
@@ -633,6 +702,8 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
             diesel::delete(work_videos.filter(schema::work_videos::work.eq(_work_id))).execute(&_connection).expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::work_id.eq(_work_id))).execute(&_connection).expect("E");
             diesel::delete(work_category.filter(schema::work_category::work_id.eq(_work_id))).execute(&_connection).expect("E");
+            diesel::delete(serve_items.filter(schema::serve_items::work_id.eq(_work_id))).execute(&_connection).expect("E");
+            diesel::delete(tech_categories_items.filter(schema::tech_categories_items::work_id.eq(_work_id))).execute(&_connection).expect("E");
 
             let form = store_form(payload.borrow_mut(), _request_user.id).await;
             let _new_work = EditWork {
@@ -704,6 +775,76 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
                     .get_result::<Tag>(&_connection)
                     .expect("Error.");
             };
+
+            // создаем связь с тех категориями, которые будут
+            // расширять списки опций, предлагая доп возможности и услуги
+            for cat_id in form.close_tech_cats_list.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: *cat_id,
+                    service_id:  0,
+                    store_id:    0,
+                    work_id:     _work.id,
+                    types:       2,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
+
+            // создаем опции услуги и записываем id опций в вектор.
+            let mut serve_ids = Vec::new();
+            for serve_id in form.serve_list.iter() {
+                let new_serve_form = NewServeItems {
+                    serve_id:   *serve_id,
+                    service_id: 0,
+                    store_id:   0,
+                    work_id:    _work.id,
+                };
+                diesel::insert_into(schema::serve_items::table)
+                    .values(&new_serve_form)
+                    .get_result::<ServeItems>(&_connection)
+                    .expect("Error.");
+                serve_ids.push(*serve_id);
+            }
+
+            // получаем опции, чтобы создать связи с их тех. категорией.
+            // это надо отрисовки тех категорий услуги, которые активны
+            let _serves = serve
+                .filter(schema::serve::id.eq_any(serve_ids))
+                .load::<Serve>(&_connection)
+                .expect("E");
+
+            let mut tech_cat_ids = Vec::new();
+            let mut work_price = 0;
+            for _serve in _serves.iter() {
+                if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
+                    tech_cat_ids.push(_serve.tech_cat_id);
+                }
+                work_price += _serve.price;
+            }
+
+            for id in tech_cat_ids.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: *id,
+                    service_id:  0,
+                    store_id:    0,
+                    work_id:     _work.id,
+                    types:       1,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
+
+            // фух. Связи созданы все, но надо еще посчитать цену
+            // услуги для калькулятора. Как? А  это будет сумма всех
+            // цен выбранных опций.
+            diesel::update(&_work)
+                .set(schema::works::price.eq(work_price))
+                .get_result::<Work>(&_connection)
+                .expect("Error.");
         }
     }
     HttpResponse::Ok()
@@ -906,7 +1047,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:       Vec<WorkImage>,
                 videos:       Vec<WorkVideo>,
                 category:     WorkCategories,
-                tech_cats:    Vec<TechCategories>,
+                //tech_cats:    Vec<TechCategories>,
                 work_cats:    Vec<WorkCategories>,
                 all_tags:     Vec<Tag>,
                 prev:         Option<Work>,
@@ -919,7 +1060,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
-                tech_cats:  _tech_categories,
+                //tech_cats:  _tech_categories,
                 work_cats:  _work_categories,
                 all_tags:   _tags,
                 prev:       prev,
@@ -967,7 +1108,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     Vec<WorkImage>,
                 videos:     Vec<WorkVideo>,
                 category:   WorkCategories,
-                tech_cats:  Vec<TechCategories>,
+                //tech_cats:  Vec<TechCategories>,
                 work_cats:  Vec<WorkCategories>,
                 all_tags:   Vec<Tag>,
                 prev:       Option<Work>,
@@ -979,7 +1120,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 images:     _images,
                 videos:     _videos,
                 category:   _category,
-                tech_cats:  _tech_categories,
+                //tech_cats:  _tech_categories,
                 work_cats:  _work_categories,
                 all_tags:   _tags,
                 prev:       prev,

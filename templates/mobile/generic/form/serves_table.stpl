@@ -1,5 +1,3 @@
-<% let mut default_price = 0; %>
-
 <% for t_category in object.get_open_tech_categories().iter() { %>
   <% let s_cats = t_category.get_serve_categories(); %>
 
