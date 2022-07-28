@@ -668,7 +668,6 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 TechCategoriesItem,
                 NewTechCategoriesItem,
                 Serve,
-                TechCategories,
                 ServeItems,
                 NewServeItems,
                 EditStore,

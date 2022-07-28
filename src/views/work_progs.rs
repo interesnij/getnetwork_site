@@ -673,7 +673,6 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
                 TechCategoriesItem,
                 NewTechCategoriesItem,
                 Serve,
-                TechCategories,
                 ServeItems,
                 NewServeItems,
                 EditWork,

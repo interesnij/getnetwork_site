@@ -671,7 +671,6 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 TechCategoriesItem,
                 NewTechCategoriesItem,
                 Serve,
-                TechCategories,
                 ServeItems,
                 NewServeItems,
                 EditService,
