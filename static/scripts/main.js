@@ -381,7 +381,7 @@ function service_tab_action(_this, tab_class){
     counter.innerHTML = counter.innerHTML*1 - old_price + new_price;
 
     // после смены таба перезапишем список выбранных опций
-    new_serve_list = nav.cur.querySelectorAll(".is_default");
+    new_serve_list = cur.querySelectorAll(".is_default");
     for (var i = 0; i < new_serve_list.length; i++) {
       serves_ids.push(new_serve_list[i].querySelector(".get_object_info").getAttribute("data-pk"))
     };
