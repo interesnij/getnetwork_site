@@ -500,7 +500,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
 
             let _connection = establish_connection();
 
-            let form = serve_form(payload.borrow_mut(), _request_user.id).await;
+            let form = store_form(payload.borrow_mut(), _request_user.id).await;
             let new_work = NewWork::from_work_form (
                 form.title.clone(),
                 form.description.clone(),
@@ -634,7 +634,7 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
             diesel::delete(tags_items.filter(schema::tags_items::work_id.eq(_work_id))).execute(&_connection).expect("E");
             diesel::delete(work_category.filter(schema::work_category::work_id.eq(_work_id))).execute(&_connection).expect("E");
 
-            let form = serve_form(payload.borrow_mut(), _request_user.id).await;
+            let form = store_form(payload.borrow_mut(), _request_user.id).await;
             let _new_work = EditWork {
                 title:       form.title.clone(),
                 description: Some(form.description.clone()),
