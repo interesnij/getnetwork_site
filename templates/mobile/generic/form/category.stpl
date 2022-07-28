@@ -11,8 +11,8 @@
           <% if serve.is_default { %>
             <%
               if i == 0 {
-                serves_ids.push_str(serve.id.to_string())
-                serves_ids.push_str(",")
+                serves_ids.push_str(serve.id.to_string());
+                serves_ids.push_str(",");
               }
             %>
             <tr class="is_default hover">
