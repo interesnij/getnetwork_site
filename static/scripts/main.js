@@ -307,7 +307,6 @@ on('#ajax', 'click', '.select_serve', function(event) {
             serve_list[i2].classList.remove("hover");
             _serve_price = serve_list[i2].querySelector(".price").innerHTML*1
             counter.innerHTML = counter.innerHTML*1 - _serve_price;
-            counter.setAttribute("data-serve", counter_serve_price - _serve_price);
             index = counter_serve_list.indexOf(serve_pk);
             if (index > -1) {
               counter_serve_list.splice(index, 1);
@@ -324,7 +323,6 @@ on('#ajax', 'click', '.select_serve', function(event) {
   if (!_this.classList.contains("hover")){
     // если до нажатия опция не выбрана...
     counter.innerHTML = counter.innerHTML*1 + serve_price;
-    counter.setAttribute("data-serve", counter_serve_price + serve_price);
     _this.classList.add("hover");
     _this.querySelector(".action_text").innerHTML = 'Выбрано';
     counter_serve_list.push(serve_pk);
@@ -334,7 +332,6 @@ on('#ajax', 'click', '.select_serve', function(event) {
     // если опция выбрана, надо снять выделение и счетчик уменьшить на сумму опции.
     // а также уменьшить "data-serve" счетчика
     counter.innerHTML = counter.innerHTML*1 - serve_price;
-    counter.setAttribute("data-serve", counter_serve_price - serve_price);
     _this.classList.remove("hover");
     _this.querySelector(".action_text").innerHTML = 'Выбрать';
     var index = counter_serve_list.indexOf(serve_pk);
@@ -348,10 +345,6 @@ on('#ajax', 'click', '.select_serve', function(event) {
 function service_tab_action(_this, tab_class){
   counter = document.body.querySelector(".total_price_counter");
   if (!_this.classList.contains("active")){
-    old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
-    new_price = _this.getAttribute("data-sum")*1;
-    counter.innerHTML = counter.innerHTML*1 - old_price + new_price;
-
     nav = _this.parentElement.parentElement.parentElement;
     nav_items = nav.querySelectorAll(".yy");
     for (var i = 0; i < nav_items.length; i++) {
@@ -366,10 +359,9 @@ function service_tab_action(_this, tab_class){
     for (var i = 0; i < tabs_panes.length; i++){
         serve_list = tabs_panes[i].querySelectorAll(".select_serve");
         for (var i2 = 0; i2 < serve_list.length; i2++){
-          // также нужно уменьшить счетчик цены на сумму всех выбранных опций в других
-          // вкладках. А также уменьшить "data-serve" счетчика
             if (!serve_list[i2].classList.contains("is_default") && serve_list[i2].classList.contains("hover")){
               serve_list[i2].classList.remove("hover");
+              old_price + serve_list[i2].querySelector(".price")*1;
             }
         };
       tabs_panes[i].classList.remove("active", "in")
@@ -377,6 +369,10 @@ function service_tab_action(_this, tab_class){
 
     cur = tabs.querySelector(tab_class);
     cur.classList.add("active", "in");
+
+    old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
+    new_price = _this.getAttribute("data-sum")*1;
+    counter.innerHTML = counter.innerHTML*1 - old_price + new_price;
 
     // после смены таба перезапишем список выбранных опций
     new_serve_list = nav.parentElement.parentElement.querySelectorAll(".is_default");
