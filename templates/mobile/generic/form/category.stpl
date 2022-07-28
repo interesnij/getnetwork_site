@@ -9,12 +9,6 @@
 
         <% for serve in category.get_serves().iter() { %>
           <% if serve.is_default { %>
-            <%
-              if i == 0 {
-                serves_ids.push_str(&serve.id.to_string());
-                serves_ids.push_str(",");
-              }
-            %>
             <tr class="is_default hover">
             <td style="width:52%">
                 <a class="get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">

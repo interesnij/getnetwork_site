@@ -83,7 +83,7 @@ function get_active_button(){
     buttons[0].classList.add("mobile_icon_current");
     buttons[11].classList.add("mobile_icon_current");
   }
-  else if (path.includes('works')) {
+  else if (path.includes('work')) {
     buttons[1].classList.add("mobile_icon_current");
     buttons[11].classList.add("mobile_icon_current");
 
