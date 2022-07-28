@@ -348,7 +348,7 @@ function service_tab_action(_this, tab_class){
     old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
     new_price = _this.getAttribute("data-sum")*1;
     serves_ids = counter.parentElement.getAttribute("data-servelist").split(",");
-
+    console.log(serves_ids);
     nav = _this.parentElement.parentElement.parentElement;
     nav_items = nav.querySelectorAll(".yy");
     for (var i = 0; i < nav_items.length; i++) {
