@@ -845,7 +845,7 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
                 .get_result::<Serve>(&_connection)
                 .expect("E.");
 
-            if is_default == true && _category[0].default_price.is_some() && _serve.price.is_some() {
+            if is_default == true {
                 diesel::update(&_category[0])
                 .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price))
                 .get_result::<ServeCategories>(&_connection)
@@ -884,7 +884,7 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
 
             if _serve.is_default == true {
                 // если опция дефолтная
-                if is_default == false && _category[0].default_price.is_some() && _serve.price.is_some() {
+                if is_default == false {
                     // если в форме галочка снята
                     diesel::update(&_category[0])
                         .set(schema::serve_categories::default_price.eq(_category[0].default_price - _serve.price))
@@ -894,7 +894,7 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 }
             else {
                 // если опция не дефолтная
-                if is_default == true  && _category[0].default_price.is_some() && _serve.price.is_some(){
+                if is_default == true {
                     // если в форме галочка поставлена
                     diesel::update(&_category[0])
                         .set(schema::serve_categories::default_price.eq(_category[0].default_price + _serve.price))

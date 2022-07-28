@@ -316,7 +316,6 @@ impl NewWork {
         link: String,
         image: String,
         is_active: bool,
-        default_price: i32,
         user_id: i32
     ) -> Self {
         NewWork {
@@ -325,7 +324,6 @@ impl NewWork {
             link: Some(link),
             image: Some(image),
             is_active: is_active,
-            default_price: default_price,
             user_id: user_id,
             created: chrono::Local::now().naive_utc(),
         }
