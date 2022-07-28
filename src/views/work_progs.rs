@@ -9,7 +9,6 @@ use actix_web::{
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use crate::utils::{
-    item_form,
     category_form,
     establish_connection,
     is_signed_in,
@@ -493,7 +492,6 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
         if _request_user.perm == 60 {
             use crate::schema::{
                 tags::dsl::tags,
-                works::dsl::works,
                 work_categories::dsl::work_categories,
                 serve::dsl::serve,
             };
@@ -502,7 +500,6 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                 TechCategoriesItem,
                 NewTechCategoriesItem,
                 Serve,
-                TechCategories,
                 ServeItems,
                 NewServeItems,
             };

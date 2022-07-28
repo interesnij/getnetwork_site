@@ -490,14 +490,12 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
             use crate::schema::{
                 tags::dsl::tags,
                 serve::dsl::serve,
-                services::dsl::services,
                 service_categories::dsl::service_categories,
             };
             use crate::models::{
                 TechCategoriesItem,
                 NewTechCategoriesItem,
                 Serve,
-                TechCategories,
                 ServeItems,
                 NewServeItems,
             };
