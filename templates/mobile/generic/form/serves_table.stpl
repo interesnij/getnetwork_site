@@ -10,7 +10,6 @@
             <ul class="nav nav-tabs tpl-minimal-tabs animate">
               <% for (i, cat) in s_cats.iter().enumerate() { %>
                 <% if i == 0 { %>
-                  <% default_price += cat.default_price; %>
                   <li data-sum="<%= cat.default_price %>" class="yy s_<%= i + 1 %> active">
                     <a class="pointer"><%= cat.name %></a>
                   </li>
