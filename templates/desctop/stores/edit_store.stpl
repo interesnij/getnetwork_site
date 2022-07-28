@@ -82,7 +82,7 @@
             <div class="mb-20 mb-md-10">
               <label class="checkbox-inline">
                 <input type="checkbox" name="is_active" <% if object.is_active { %>checked<% } %>>
-                  Статья открыта
+                  Товар открыт
               </label>
             </div>
             <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_store_btn">Изменить</button>

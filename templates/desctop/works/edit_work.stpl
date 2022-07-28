@@ -39,7 +39,7 @@
             </div>
 
             <% include!("../generic/form/edit_serves.stpl"); %>
-            
+
             <div class="mb-20 mb-md-10">
                 <label>Категории</label>
                 <select class="form-control" name="category_list[]" multiple="">
@@ -77,7 +77,7 @@
             <div class="mb-20 mb-md-10">
               <label class="checkbox-inline">
                 <input type="checkbox" name="is_active" <% if object.is_active { %>checked<% } %>>
-                  Статья открыта
+                  Работа открыта
               </label>
             </div>
             <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_work_btn">Изменить</button>

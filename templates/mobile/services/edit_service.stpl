@@ -55,8 +55,16 @@
             </div>
 
             <div class="mb-20 mb-md-10">
-                <label>Тех. категории</label>
-                <select class="form-control" name="tech_cats_list[]" multiple="">
+                <label>Активные тех. категории</label>
+                <select class="form-control" name="open_tech_cats_list[]" multiple="">
+                  <% for cat in tech_cats.iter() { %>
+                    <option <% if object.get_tech_cats_ids().iter().any(|i| i==&cat.id) { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
+                  <% } %>
+                </select>
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Закрытые тех. категории</label>
+                <select class="form-control" name="close_tech_cats_list[]" multiple="">
                   <% for cat in tech_cats.iter() { %>
                     <option <% if object.get_tech_cats_ids().iter().any(|i| i==&cat.id) { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
                   <% } %>
@@ -84,7 +92,7 @@
             <div class="mb-20 mb-md-10">
               <label class="checkbox-inline">
                 <input type="checkbox" name="is_active" <% if object.is_active { %>checked<% } %>>
-                  Статья открыта
+                  Услуга открыта
               </label>
             </div>
             <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_service_btn">Изменить</button>

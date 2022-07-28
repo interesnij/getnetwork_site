@@ -485,12 +485,15 @@ pub async fn create_service_categories(session: Session, mut payload: Multipart)
 }
 
 pub async fn create_service(session: Session, mut payload: Multipart) -> impl Responder {
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::service_categories::dsl::service_categories;
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::schema::{
+                tags::dsl::tags,
+                service_categories::dsl::service_categories,
+            };
+            use crate::models::{TechCategoriesItem, NewTechCategoriesItem};
+
             let _connection = establish_connection();
 
             let form = item_form(payload.borrow_mut(), _request_user.id).await;
@@ -565,6 +568,33 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                     .get_result::<Tag>(&_connection)
                     .expect("Error.");
             }
+
+            for cat_id in form.open_tech_cats_list.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: *cat_id,
+                    service_id:  _service.id,
+                    store_id:    0,
+                    work_id:     0,
+                    types:       1,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
+            for cat_id in form.close_tech_cats_list.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: *cat_id,
+                    service_id:  _service.id,
+                    store_id:    0,
+                    work_id:     0,
+                    types:       2,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
         }
     };
     HttpResponse::Ok()
@@ -574,15 +604,17 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::models::EditService;
+            use crate::models::{EditService, TechCategoriesItem, NewTechCategoriesItem};
             use crate::schema::{
                 services::dsl::services,
                 tags::dsl::tags,
+                serve::dsl::serve,
                 tags_items::dsl::tags_items,
                 service_images::dsl::service_images,
                 service_videos::dsl::service_videos,
                 service_category::dsl::service_category,
                 service_categories::dsl::service_categories,
+                tech_categories_items::dsl::tech_categories_items,
             };
 
             let _connection = establish_connection();
@@ -612,6 +644,8 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(tech_categories_items.filter(schema::tech_categories_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
 
             let form = item_form(payload.borrow_mut(), _request_user.id).await;
@@ -684,6 +718,33 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                     .get_result::<Tag>(&_connection)
                     .expect("Error.");
             };
+
+            for cat_id in form.open_tech_cats_list.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: *cat_id,
+                    service_id:  _service.id,
+                    store_id:    0,
+                    work_id:     0,
+                    types:       1,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
+            for cat_id in form.close_tech_cats_list.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: *cat_id,
+                    service_id:  _service.id,
+                    store_id:    0,
+                    work_id:     0,
+                    types:       2,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
         }
     }
     HttpResponse::Ok()

@@ -301,7 +301,8 @@ pub struct StoreForms {
     pub category_list:  Vec<i32>,
     pub tags_list:      Vec<i32>,
     pub serve_list:     Vec<i32>,
-    pub tech_cats_list: Vec<i32>,
+    pub open_tech_cats_list:  Vec<i32>,
+    pub close_tech_cats_list: Vec<i32>,
 }
 
 // форма для элементов с опциями / тех категориями
@@ -309,18 +310,19 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
     let mut files: Vec<UploadedFiles> = Vec::new();
 
     let mut form: StoreForms = StoreForms {
-        title:          "".to_string(),
-        description:    "".to_string(),
-        link:           "".to_string(),
-        main_image:     "".to_string(),
-        is_active:      true,
-        price:          0,
-        images:         Vec::new(),
-        videos:         Vec::new(),
-        category_list:  Vec::new(),
-        tags_list:      Vec::new(),
-        serve_list:     Vec::new(),
-        tech_cats_list: Vec::new(),
+        title:                "".to_string(),
+        description:          "".to_string(),
+        link:                 "".to_string(),
+        main_image:           "".to_string(),
+        is_active:            true,
+        price:                0,
+        images:               Vec::new(),
+        videos:               Vec::new(),
+        category_list:        Vec::new(),
+        tags_list:            Vec::new(),
+        serve_list:           Vec::new(),
+        open_tech_cats_list:  Vec::new(),
+        close_tech_cats_list: Vec::new(),
     };
 
     while let Some(item) = payload.next().await {
@@ -380,13 +382,23 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
                 }
             }
         }
-        else if name == "tech_cats_list[]" {
+        else if name == "open_tech_cats_list[]" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
                     let data_string = s.to_string();
                     let _int: i32 = data_string.parse().unwrap();
-                    form.tech_cats_list.push(_int);
+                    form.open_tech_cats_list.push(_int);
+                }
+            }
+        }
+        else if name == "close_tech_cats_list[]" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let data_string = s.to_string();
+                    let _int: i32 = data_string.parse().unwrap();
+                    form.close_tech_cats_list.push(_int);
                 }
             }
         }

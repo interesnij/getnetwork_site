@@ -65,7 +65,7 @@
             <div class="mb-20 mb-md-10">
               <label class="checkbox-inline">
                 <input type="checkbox" name="is_active" checked>
-                  Статья открыта
+                  Услуга открыта
               </label>
             </div>
             <button style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_service_btn">Отправить</button>
