@@ -617,7 +617,6 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 link:        Some(form.link.clone()),
                 image:       Some(form.main_image.clone()),
                 is_active:   form.is_active.clone(),
-                price:       0,
             };
 
             diesel::update(&_store)

@@ -621,14 +621,14 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
             let mut service_price = 0;
             for _serve in _serves.iter() {
                 if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
-                    tech_cat_ids.push(_serve.tech_categories);
+                    tech_cat_ids.push(_serve.tech_cat_id);
                 }
                 service_price += _serve.price;
             }
 
             for id in tech_cat_ids.iter() {
                 let new_cat = NewTechCategoriesItem {
-                    category_id: id,
+                    category_id: *id,
                     service_id:  _service.id,
                     store_id:    0,
                     work_id:     0,
@@ -696,12 +696,12 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 .expect("Error.");
             };
 
-            diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(tech_categories_items.filter(schema::tech_categories_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::tech_categories_items.filter(schema::tech_categories_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::service_category.filter(schema::service_category::service_id.eq(_service_id))).execute(&_connection).expect("E");
 
             let form = store_form(payload.borrow_mut(), _request_user.id).await;
             let _new_service = EditService {
@@ -817,14 +817,14 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             let mut service_price = 0;
             for _serve in _serves.iter() {
                 if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
-                    tech_cat_ids.push(_serve.tech_categories);
+                    tech_cat_ids.push(_serve.tech_cat_id);
                 }
                 service_price += _serve.price;
             }
 
             for id in tech_cat_ids.iter() {
                 let new_cat = NewTechCategoriesItem {
-                    category_id: id,
+                    category_id: *id,
                     service_id:  _service.id,
                     store_id:    0,
                     work_id:     0,

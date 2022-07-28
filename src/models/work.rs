@@ -292,7 +292,6 @@ pub struct EditWork {
     pub link:        Option<String>,
     pub image:       Option<String>,
     pub is_active:   bool,
-    pub price:       i32,
 }
 #[derive(Serialize, Insertable)]
 #[table_name="works"]
