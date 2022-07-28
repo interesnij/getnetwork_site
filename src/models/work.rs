@@ -282,6 +282,16 @@ impl Work {
             .load::<TechCategories>(&_connection)
             .expect("E");
     }
+    pub fn get_tech_cats_ids(&self) -> Vec<i32> {
+        use schema::tech_categories_items::dsl::tech_categories_items;
+
+        let _connection = establish_connection();
+        return tech_categories_items
+            .filter(schema::tech_categories_items::work_id.eq(&self.id))
+            .select(schema::tech_categories_items::category_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
