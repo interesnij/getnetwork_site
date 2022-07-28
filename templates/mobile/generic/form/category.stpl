@@ -11,7 +11,7 @@
           <% if serve.is_default { %>
             <tr class="is_default hover">
             <td style="width:52%">
-                <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
+                <a class="get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
                     <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
                 </a>
             </td>
@@ -21,14 +21,14 @@
         </tr>
         <% } else { %>
           <tr class="select_serve pointer">
-          <td style="width:52%">
+          <td style="width:55%">
               <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
                   <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
               </a>
           </td>
-          <td class="price_td" style="width:12%"><span class="price"><%= serve.price %></span> ₽</td>
-          <td style="width:12%">Часы: <%= serve.man_hours %></td>
-          <td class="action_text" style="width:12%">Выбрать<% } %>
+          <td class="price_td" style="width:15%"><span class="price"><%= serve.price %></span> ₽</td>
+          <td style="width:15%">Часы: <%= serve.man_hours %></td>
+          <td class="action_text" style="width:15%">Выбрать<% } %>
           </td>
       </tr>
         <% } %>

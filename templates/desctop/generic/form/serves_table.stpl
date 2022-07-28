@@ -2,7 +2,7 @@
 <% for t_category in object.get_open_tech_categories().iter() { %>
   <% let s_cats = t_category.get_serve_categories(); %>
 
-<section class="banner_block mb-20 mt-20 border" style="width:100%">
+<section class="banner_block mb-20 mt-20 border" style="width:100%;box-shadow: none !important;">
     <h2 class="section-title font-alt">
         <%= t_category.name %>
     </h2>

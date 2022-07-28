@@ -348,14 +348,13 @@ on('#ajax', 'click', '.select_serve', function(event) {
 function service_tab_action(_this, tab_class){
   counter = document.body.querySelector(".total_price_counter");
   if (!_this.classList.contains("active")){
-    // перезапишем счетчик цены
-    if (_this.getAttribute("data-sum")){
-      counter.innerHTML = counter.innerHTML*1 - counter.getAttribute("data-oldsum")*1 + _this.getAttribute("data-sum")*1;
-      counter.setAttribute("data-oldsum", _this.getAttribute("data-sum"));
-    };
+    old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
+    new_price = _this.getAttribute("data-sum")*1;
+    counter.innerHTML = counter.innerHTML*1 - old_price + new_price;
+
     nav = _this.parentElement.parentElement.parentElement;
     nav_items = nav.querySelectorAll(".yy");
-    for (var i = 0; i < nav_items.length; i++){
+    for (var i = 0; i < nav_items.length; i++) {
       nav_items[i].classList.remove("active", "in");
       nav_items[i].classList.add("pointer")
     };
@@ -376,19 +375,17 @@ function service_tab_action(_this, tab_class){
       tabs_panes[i].classList.remove("active", "in")
     };
 
-    cur = tabs.querySelector(tab_class);
-    cur.classList.add("active", "in");
-    // мы переключаем таб, а значит все записи о выбранных опциях,
-    // их сумме и ids мы сотрем и запишем новые - "data-serve" 0, а ids у нового активного таба.
+    //cur = tabs.querySelector(tab_class);
+    //cur.classList.add("active", "in");
 
-    counter.setAttribute("data-serve", 0);
-    new_serve_list = cur.querySelectorAll(".is_default");
+    // после смены таба перезапишем список выбранных опций
+    new_serve_list = nav.parentElement.parentElement.querySelectorAll(".is_default");
     new_arr = [];
-    for (var i3 = 0; i3 < new_serve_list.length; i3++){
-      new_arr.push(new_serve_list[i3].querySelector(".get_object_info").getAttribute("data-pk"))
+    for (var i = 0; i < new_serve_list.length; i++) {
+      new_arr.push(new_serve_list[i].querySelector(".get_object_info").getAttribute("data-pk"))
     };
     counter.parentElement.setAttribute("data-servelist", new_arr);
-    counter.innerHTML = cur.getAttribute("data-sum");
+    ///////
   }
 };
 
