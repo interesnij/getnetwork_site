@@ -706,14 +706,14 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
         .expect("E");
 
     let s_category = s_categorys.into_iter().nth(0).unwrap();
-    let _serves = serve_categories
-        .filter(schema::serve_categories::tech_categories.eq(_cat_id))
-        .load::<ServeCategories>(&_connection)
+    let _serves = serve
+        .filter(schema::serve::serve_categories.eq(_cat_id))
+        .load::<Serve>(&_connection)
         .expect("E");
 
     for _serve in _serves.iter() {
         diesel::update(_serve)
-            .set(schema::serves::cat_name.eq(s_category.name.clone()))
+            .set(schema::serve::cat_name.eq(s_category.name.clone()))
             .get_result::<Serve>(&_connection)
             .expect("Error.");
     };
