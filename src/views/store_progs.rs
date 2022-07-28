@@ -569,18 +569,30 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
 }
 
 pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::EditStore;
-    use crate::schema::stores::dsl::stores;
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::store_images::dsl::store_images;
-    use crate::schema::store_videos::dsl::store_videos;
-    use crate::schema::store_category::dsl::store_category;
-    use crate::schema::store_categories::dsl::store_categories;
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::schema::{
+                tags::dsl::tags,
+                serve::dsl::serve,
+                store_categories::dsl::store_categories,
+                store_images::dsl::store_images,
+                store_videos::dsl::store_videos,
+                tags_items::dsl::tags_items,
+                serve_items::dsl::serve_items,
+                tech_categories_items::dsl::tech_categories_items,
+                store_category::dsl::store_category,
+            };
+            use crate::models::{
+                TechCategoriesItem,
+                NewTechCategoriesItem,
+                Serve,
+                TechCategories,
+                ServeItem,
+                NewServeItem,
+                EditStore,
+            };
+
             let _connection = establish_connection();
             let _store_id: i32 = *_id;
             let _stores = stores
