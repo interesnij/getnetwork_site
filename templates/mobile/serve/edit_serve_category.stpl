@@ -34,11 +34,7 @@
                 <input value="<%= category.position %>" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
             </div>
             <div class="mb-20 mb-md-10">
-              <% if category.default_price.is_some() { %>
-                <input value="<%= category.default_price.unwrap() %>" class="input-md form-control" type="number" name="default_price" placeholder="Начальная цена" />
-              <% } else { %>
-                <input value="" class="input-md form-control" type="number" name="default_price" placeholder="Начальная цена" />
-              <% } %>
+                <input value="<%= category.default_price %>" class="input-md form-control" type="number" name="default_price" placeholder="Начальная цена" />
             </div>
             <div class="mb-20 mb-md-10">
               <label>Категория</label>
@@ -61,6 +57,6 @@
     </div>
 </section>
 <div class="sidebar hidden">
-    
+
 </div>
 <% include!("../footer.stpl"); %>

@@ -50,7 +50,7 @@
         <div class="align-center">
             <ul class="nav nav-tabs tpl-minimal-tabs animate">
               <% for (i2, cat) in s_cats.iter().enumerate() { %>
-                <li data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i2 + 1 %> <% if i2 == 0 { %>active<% } %>">
+                <li data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i + 1 %> <% if i == 0 { %>active<% } %>">
                     <a class="pointer"><%= cat.name %></a>
                 </li>
               <% } %>

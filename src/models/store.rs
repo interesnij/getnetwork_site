@@ -203,10 +203,11 @@ impl Store {
         // получаем открытые тех.категории товара
         use crate::models::TechCategoriesItems;
         use schema::{
-            serve_items::dsl::serve_items,
+            tech_categories_items::dsl::tech_categories_items,
             tech_categories::dsl::tech_categories,
         };
 
+        let _connection = establish_connection();
         let ids = tech_categories_items
             .filter(schema::tech_categories_items::store_id.eq(&self.id))
             .filter(schema::tech_categories_items::types.eq(1))
@@ -223,10 +224,11 @@ impl Store {
         // получаем закрытые тех.категории товара
         use crate::models::TechCategoriesItems;
         use schema::{
-            serve_items::dsl::serve_items,
+            tech_categories_items::dsl::tech_categories_items,
             tech_categories::dsl::tech_categories,
         };
 
+        let _connection = establish_connection();
         let ids = tech_categories_items
             .filter(schema::tech_categories_items::store_id.eq(&self.id))
             .filter(schema::tech_categories_items::types.eq(2))

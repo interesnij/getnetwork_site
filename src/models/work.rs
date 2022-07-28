@@ -130,7 +130,7 @@ pub struct Work {
     pub link:          Option<String>,
     pub image:         Option<String>,
     pub is_active:     bool,
-    pub default_price: i32,
+    //pub default_price: i32,
     pub user_id:       i32,
     pub created:       chrono::NaiveDateTime,
 }
@@ -246,10 +246,11 @@ impl Work {
         // получаем открытые тех.категории работы
         use crate::models::TechCategoriesItems;
         use schema::{
-            serve_items::dsl::serve_items,
+            tech_categories_items::dsl::tech_categories_items,
             tech_categories::dsl::tech_categories,
         };
 
+        let _connection = establish_connection();
         let ids = tech_categories_items
             .filter(schema::tech_categories_items::work_id.eq(&self.id))
             .filter(schema::tech_categories_items::types.eq(1))
@@ -266,10 +267,11 @@ impl Work {
         // получаем закрытые тех.категории работы
         use crate::models::TechCategoriesItems;
         use schema::{
-            serve_items::dsl::serve_items,
+            tech_categories_items::dsl::tech_categories_items,
             tech_categories::dsl::tech_categories,
         };
 
+        let _connection = establish_connection();
         let ids = tech_categories_items
             .filter(schema::tech_categories_items::work_id.eq(&self.id))
             .filter(schema::tech_categories_items::types.eq(2))
@@ -292,7 +294,7 @@ pub struct EditWork {
     pub link:          Option<String>,
     pub image:         Option<String>,
     pub is_active:     bool,
-    pub default_price: i32,
+    //pub default_price: i32,
 }
 #[derive(Serialize, Insertable)]
 #[table_name="works"]

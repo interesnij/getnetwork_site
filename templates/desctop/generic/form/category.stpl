@@ -1,4 +1,4 @@
-<div data-sum="<%= category.default_price %>" class="tab_<%= i2 + 1 %> fade tab-pane <% if i2 == 0 { %>in active<% } %>">
+<div data-sum="<%= category.default_price %>" class="tab_<%= i + 1 %> fade tab-pane <% if i == 0 { %>in active<% } %>">
     <table class="table">
         <h4>
           <span data-pk="<%= category.id %>" data-type="serve_category" owner-pk="<%= object.id %>" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up">
@@ -35,4 +35,4 @@
         <% } %>
         </tbody>
     </table>
-</div> 
+</div>
