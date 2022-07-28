@@ -2,7 +2,7 @@
 <% for t_category in object.get_open_tech_categories().iter() { %>
   <% let s_cats = t_category.get_serve_categories(); %>
 
-<section class="mb-20 banner_block mt-20 border">
+<section class="banner_block mb-20 mt-20 border" style="width:100%">
     <h2 class="section-title font-alt">
         <%= t_category.name %>
     </h2>
@@ -30,7 +30,7 @@
 <% for t_category in object.get_close_tech_categories().iter() { %>
   <% let s_cats = t_category.get_serve_categories(); %>
 
-<section class="mb-20 mt-20 border">
+<section class="banner_block mb-20 mt-20 border" style="width:100%">
     <h2 class="pointer section-title font-alt show_tech_category">
       <span class="cat_description">
         <%= t_category.name %>
