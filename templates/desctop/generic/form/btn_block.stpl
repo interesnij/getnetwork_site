@@ -1,4 +1,4 @@
-<section class="border card_fullscreen" style="position: fixed;bottom: 10px;width: 100%;">
+<section class="border card_fullscreen" style="position: fixed;z-index:1000;bottom: 10px;width: 100%;">
 <h3 data-sum="<%= default_price %>"
     data-pk="<%= object.id %>"
     data-servelist="<%= serves_ids %>"
