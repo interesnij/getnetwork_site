@@ -37,30 +37,15 @@ impl UploadedFiles {
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Forms {
-    pub title:         String,
-    pub description:   String,
-    pub link:          String,
-    pub main_image:    String,
-    pub is_active:     bool,
-    pub images:        Vec<String>,
-    pub videos:        Vec<String>,
-    pub category_list: Vec<i32>,
-    pub tags_list:     Vec<i32>,
-}
-
-#[derive(Deserialize, Serialize, Debug)]
-pub struct StoreForms {
-    pub title:         String,
-    pub description:   String,
-    pub link:          String,
-    pub main_image:    String,
-    pub is_active:     bool,
-    pub price:         i32,
-    pub images:        Vec<String>,
-    pub videos:        Vec<String>,
-    pub category_list: Vec<i32>,
-    pub tags_list:     Vec<i32>,
-    pub serve_list:    Vec<i32>,
+    pub title:          String,
+    pub description:    String,
+    pub link:           String,
+    pub main_image:     String,
+    pub is_active:      bool,
+    pub images:         Vec<String>,
+    pub videos:         Vec<String>,
+    pub category_list:  Vec<i32>,
+    pub tags_list:      Vec<i32>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -302,21 +287,39 @@ pub async fn content_form(payload: &mut Multipart) -> ContentForm {
     form
 }
 
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct StoreForms {
+    pub title:          String,
+    pub description:    String,
+    pub link:           String,
+    pub main_image:     String,
+    pub is_active:      bool,
+    pub images:         Vec<String>,
+    pub videos:         Vec<String>,
+    pub category_list:  Vec<i32>,
+    pub tags_list:      Vec<i32>,
+    pub serve_list:     Vec<i32>,
+    pub tech_cats_list: Vec<i32>,
+}
+
+// форма для элементов с опциями / тех категориями
 pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
     let mut files: Vec<UploadedFiles> = Vec::new();
 
     let mut form: StoreForms = StoreForms {
-        title: "".to_string(),
-        description: "".to_string(),
-        link: "".to_string(),
-        main_image: "".to_string(),
-        is_active: true,
-        price: 0,
-        images: Vec::new(),
-        videos: Vec::new(),
-        category_list: Vec::new(),
-        tags_list: Vec::new(),
-        serve_list: Vec::new(),
+        title:          "".to_string(),
+        description:    "".to_string(),
+        link:           "".to_string(),
+        main_image:     "".to_string(),
+        is_active:      true,
+        price:          0,
+        images:         Vec::new(),
+        videos:         Vec::new(),
+        category_list:  Vec::new(),
+        tags_list:      Vec::new(),
+        serve_list:     Vec::new(),
+        tech_cats_list: Vec::new(),
     };
 
     while let Some(item) = payload.next().await {
@@ -373,6 +376,16 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
                     let data_string = s.to_string();
                     let _int: i32 = data_string.parse().unwrap();
                     form.serve_list.push(_int);
+                }
+            }
+        }
+        else if name == "tech_cats_list[]" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let data_string = s.to_string();
+                    let _int: i32 = data_string.parse().unwrap();
+                    form.tech_cats_list.push(_int);
                 }
             }
         }
