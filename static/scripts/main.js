@@ -361,7 +361,7 @@ function service_tab_action(_this, tab_class){
         for (var i2 = 0; i2 < serve_list.length; i2++){
             if (!serve_list[i2].classList.contains("is_default") && serve_list[i2].classList.contains("hover")){
               serve_list[i2].classList.remove("hover");
-              old_price + serve_list[i2].querySelector(".price")*1;
+              old_price += serve_list[i2].querySelector(".price")*1;
             }
         };
       tabs_panes[i].classList.remove("active", "in")
