@@ -65,8 +65,6 @@
                           Информация отсутствует.
                         <% } %>
 
-                        <% let mut default_price = 0; %>
-                        <% let mut serves_ids = String::new(); %>
                         <% include!("../generic/form/serves_table.stpl"); %>
                     </div>
                 </div>
@@ -89,7 +87,6 @@
         </div>
     </div>
 
-    <% include!("../generic/form/btn_block.stpl"); %>
 </section>
 
 <% include!("../footer.stpl"); %>

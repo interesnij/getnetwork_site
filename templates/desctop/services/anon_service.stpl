@@ -26,8 +26,6 @@
                   Информация отсутствует.
                 <% } %>
 
-                <% let mut default_price = 0; %>
-                
                 <% include!("../generic/form/serves_table.stpl"); %>
 
                 <% include!("../generic/photos.stpl"); %>
@@ -50,8 +48,6 @@
             </div>
         </div>
     </div>
-
-    <% include!("../generic/form/btn_block.stpl"); %>
 </section>
 
 <% include!("../anon_footer.stpl"); %>

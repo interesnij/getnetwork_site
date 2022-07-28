@@ -56,7 +56,6 @@
                           Информация отсутствует.
                         <% } %>
 
-                        <% let mut default_price = 0; %>
                         <% include!("../generic/form/serves_table.stpl"); %>
                     </div>
                 </div>
@@ -77,7 +76,6 @@
             <% include!("../generic/videos.stpl"); %>
             </div>
 
-      <% include!("../generic/form/btn_block.stpl"); %>
 
 </section>
 <div class="sidebar hidden">
