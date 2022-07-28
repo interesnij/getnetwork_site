@@ -216,7 +216,7 @@ impl Store {
             .expect("E");
 
         return tech_categories
-            .filter(schema::tech_categories::id.eq_any(ids)))
+            .filter(schema::tech_categories::id.eq_any(ids))
             .load::<TechCategories>(&_connection)
             .expect("E");
     }
@@ -236,7 +236,7 @@ impl Store {
             .expect("E");
 
         return tech_categories
-            .filter(schema::tech_categories::id.eq_any(ids)))
+            .filter(schema::tech_categories::id.eq_any(ids))
             .load::<TechCategories>(&_connection)
             .expect("E");
     }
