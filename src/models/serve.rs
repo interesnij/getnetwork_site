@@ -175,7 +175,6 @@ pub struct NewServeItems {
 pub struct TechCategoriesItem {
     pub id:          i32,
     pub category_id: i32,
-    pub serve_id:    i32,
     pub service_id:  i32,
     pub store_id:    i32,
     pub work_id:     i32,
@@ -185,7 +184,6 @@ pub struct TechCategoriesItem {
 #[table_name="tech_categories_items"]
 pub struct NewTechCategoriesItem {
     pub category_id: i32,
-    pub serve_id:    i32,
     pub service_id:  i32,
     pub store_id:    i32,
     pub work_id:     i32,
