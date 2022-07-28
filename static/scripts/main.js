@@ -345,6 +345,9 @@ on('#ajax', 'click', '.select_serve', function(event) {
 function service_tab_action(_this, tab_class){
   counter = document.body.querySelector(".total_price_counter");
   if (!_this.classList.contains("active")){
+    old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
+    new_price = _this.getAttribute("data-sum")*1;
+
     nav = _this.parentElement.parentElement.parentElement;
     nav_items = nav.querySelectorAll(".yy");
     for (var i = 0; i < nav_items.length; i++) {
@@ -370,8 +373,6 @@ function service_tab_action(_this, tab_class){
     cur = tabs.querySelector(tab_class);
     cur.classList.add("active", "in");
 
-    old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
-    new_price = _this.getAttribute("data-sum")*1;
     counter.innerHTML = counter.innerHTML*1 - old_price + new_price;
 
     // после смены таба перезапишем список выбранных опций
