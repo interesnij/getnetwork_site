@@ -648,12 +648,26 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
 }
 
 pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::tech_categories::dsl::tech_categories;
+    use crate::schema::{
+        tech_categories::dsl::tech_categories,
+        serve_categories::dsl::serve_categories,
+    };
 
     let _connection = establish_connection();
     let _cat_id: i32 = *_id;
     let _categorys = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
+    let _serve_cats = serve_categories
+        .filter(schema::serve_categories::tech_categories.eq(_cat_id))
+        .load::<ServeCategories>(&_connection)
+        .expect("E");
+
+    for _cat in _serve_cats.iter() {
+        diesel::update(_cat)
+            .set(schema::serve_categories::cat_name.eq(_category.name.clone()))
+            .get_result::<ServeCategories>(&_connection)
+            .expect("Error.");
+    };
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -677,8 +691,11 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
 }
 
 pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::serve_categories::dsl::serve_categories;
-    use crate::schema::tech_categories::dsl::tech_categories;
+    use crate::schema::{
+        serve_categories::dsl::serve_categories,
+        serve::dsl::serve,
+        tech_categories::dsl::tech_categories,
+    };
 
     let _connection = establish_connection();
     let _cat_id: i32 = *_id;
@@ -689,6 +706,17 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
         .expect("E");
 
     let s_category = s_categorys.into_iter().nth(0).unwrap();
+    let _serves = serve_categories
+        .filter(schema::serve_categories::tech_categories.eq(_cat_id))
+        .load::<ServeCategories>(&_connection)
+        .expect("E");
+
+    for serve in _serves.iter() {
+        diesel::update(serve)
+            .set(schema::serve::cat_name.eq(s_category.name.clone()))
+            .get_result::<Serve>(&_connection)
+            .expect("Error.");
+    };
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
