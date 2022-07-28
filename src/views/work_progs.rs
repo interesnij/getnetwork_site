@@ -495,6 +495,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                 tags::dsl::tags,
                 works::dsl::works,
                 work_categories::dsl::work_categories,
+                serve::dsl::serve,
             };
             use crate::utils::store_form;
             use crate::models::{

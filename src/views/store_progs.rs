@@ -488,6 +488,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                 tags::dsl::tags,
                 store_categories::dsl::store_categories,
                 stores::dsl::stores,
+                serve::dsl::serve,
             };
             use crate::utils::store_form;
             use crate::models::{
