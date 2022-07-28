@@ -13,6 +13,7 @@ use crate::schema::{
     serve_categories,
     serve,
     serve_items,
+    tech_categories_items,
 };
 use crate::utils::establish_connection;
 
