@@ -9,7 +9,6 @@
 
         <% for serve in category.get_serves().iter() { %>
           <% if serve.is_default { %>
-            <% default_price += serve.price; %>
             <tr class="is_default hover">
             <td style="width:52%">
                 <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
