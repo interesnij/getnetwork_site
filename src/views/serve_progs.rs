@@ -657,17 +657,6 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
     let _cat_id: i32 = *_id;
     let _categorys = tech_categories.filter(schema::tech_categories::id.eq(_cat_id)).load::<TechCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
-    let _serve_cats = serve_categories
-        .filter(schema::serve_categories::tech_categories.eq(_cat_id))
-        .load::<ServeCategories>(&_connection)
-        .expect("E");
-
-    for _cat in _serve_cats.iter() {
-        diesel::update(_cat)
-            .set(schema::serve_categories::cat_name.eq(_category.name.clone()))
-            .get_result::<ServeCategories>(&_connection)
-            .expect("Error.");
-    };
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -686,6 +675,17 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
                 .get_result::<TechCategories>(&_connection)
                 .expect("E");
         }
+        let _serve_cats = serve_categories
+            .filter(schema::serve_categories::tech_categories.eq(_cat_id))
+            .load::<ServeCategories>(&_connection)
+            .expect("E");
+
+        for _cat in _serve_cats.iter() {
+            diesel::update(_cat)
+                .set(schema::serve_categories::cat_name.eq(_category.name.clone()))
+                .get_result::<ServeCategories>(&_connection)
+                .expect("Error.");
+        };
     }
     return HttpResponse::Ok();
 }
@@ -706,17 +706,6 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
         .expect("E");
 
     let s_category = s_categorys.into_iter().nth(0).unwrap();
-    let _serves = serve
-        .filter(schema::serve::serve_categories.eq(_cat_id))
-        .load::<Serve>(&_connection)
-        .expect("E");
-
-    for _serve in _serves.iter() {
-        diesel::update(_serve)
-            .set(schema::serve::cat_name.eq(s_category.name.clone()))
-            .get_result::<Serve>(&_connection)
-            .expect("Error.");
-    };
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -742,6 +731,17 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
                 .get_result::<ServeCategories>(&_connection)
                 .expect("E");
         }
+        let _serves = serve
+            .filter(schema::serve::serve_categories.eq(_cat_id))
+            .load::<Serve>(&_connection)
+            .expect("E");
+
+        for _serve in _serves.iter() {
+            diesel::update(_serve)
+                .set(schema::serve::cat_name.eq(s_category.name.clone()))
+                .get_result::<Serve>(&_connection)
+                .expect("Error.");
+        };
     }
     return HttpResponse::Ok();
 }
