@@ -15,19 +15,8 @@
   padding: 10px 15px
 }
 
-.nav>li>a:hover,
-.nav>li>a:focus {
-  text-decoration: none;
-  background-color: #eee
-}
-
-.nav>li.disabled>a {
-  color: #777
-}
-
 .nav>li.disabled>a:hover,
 .nav>li.disabled>a:focus {
-  color: #777;
   text-decoration: none;
   background-color: transparent;
   cursor: not-allowed
