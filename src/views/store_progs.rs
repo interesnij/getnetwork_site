@@ -482,16 +482,17 @@ pub async fn create_store_categories(session: Session, mut payload: Multipart) -
 }
 
 pub async fn create_store(session: Session, mut payload: Multipart) -> impl Responder {
-    use crate::schema::{
-        tags::dsl::tags,
-        store_categories::dsl::store_categories,
-        stores::dsl::stores,
-    };
-    use crate::schema::store_categories::dsl::store_categories;
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::schema::{
+                tags::dsl::tags,
+                store_categories::dsl::store_categories,
+                stores::dsl::stores,
+            };
+            use crate::schema::store_categories::dsl::store_categories;
+            use crate::utils::store_form;
+
             let _connection = establish_connection();
 
             let form = store_form(payload.borrow_mut(), _request_user.id).await;
@@ -595,8 +596,9 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 TechCategories,
                 ServeItems,
                 NewServeItem,
-                EditStores,
+                EditStore,
             };
+            use crate::utils::store_form;
 
             let _connection = establish_connection();
             let _store_id: i32 = *_id;

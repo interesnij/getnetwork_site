@@ -488,15 +488,16 @@ pub async fn create_work_categories(session: Session, mut payload: Multipart) ->
 }
 
 pub async fn create_work(session: Session, mut payload: Multipart) -> impl Responder {
-    use crate::schema::{
-        tags::dsl::tags,
-        works::dsl::works,
-        work_categories::dsl::work_categories,
-    };
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::schema::{
+                tags::dsl::tags,
+                works::dsl::works,
+                work_categories::dsl::work_categories,
+            };
+            use crate::utils::store_form;
+
             let _connection = establish_connection();
 
             let form = serve_form(payload.borrow_mut(), _request_user.id).await;
