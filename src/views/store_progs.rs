@@ -490,7 +490,6 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                 store_categories::dsl::store_categories,
                 stores::dsl::stores,
             };
-            use crate::schema::store_categories::dsl::store_categories;
             use crate::utils::store_form;
 
             let _connection = establish_connection();
@@ -595,7 +594,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 Serve,
                 TechCategories,
                 ServeItems,
-                NewServeItem,
+                NewServeItems,
                 EditStore,
             };
             use crate::utils::store_form;
