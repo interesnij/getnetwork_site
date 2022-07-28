@@ -482,7 +482,11 @@ pub async fn create_store_categories(session: Session, mut payload: Multipart) -
 }
 
 pub async fn create_store(session: Session, mut payload: Multipart) -> impl Responder {
-    use crate::schema::tags::dsl::tags;
+    use crate::schema::{
+        tags::dsl::tags,
+        store_categories::dsl::store_categories,
+        stores::dsl::stores,
+    };
     use crate::schema::store_categories::dsl::store_categories;
 
     if is_signed_in(&session) {
@@ -575,6 +579,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
             use crate::schema::{
                 tags::dsl::tags,
                 serve::dsl::serve,
+                stores::dsl::stores,
                 store_categories::dsl::store_categories,
                 store_images::dsl::store_images,
                 store_videos::dsl::store_videos,

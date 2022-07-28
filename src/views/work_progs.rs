@@ -488,8 +488,11 @@ pub async fn create_work_categories(session: Session, mut payload: Multipart) ->
 }
 
 pub async fn create_work(session: Session, mut payload: Multipart) -> impl Responder {
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::work_categories::dsl::work_categories;
+    use crate::schema::{
+        tags::dsl::tags,
+        works::dsl::works,
+        work_categories::dsl::work_categories,
+    };
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -581,6 +584,7 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
             use crate::schema::{
                 tags::dsl::tags,
                 serve::dsl::serve,
+                works::dsl::works,
                 work_categories::dsl::work_categories,
                 work_images::dsl::work_images,
                 work_videos::dsl::work_videos,

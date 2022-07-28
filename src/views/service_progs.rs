@@ -490,6 +490,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
             use crate::schema::{
                 tags::dsl::tags,
                 serve::dsl::serve,
+                services::dsl::services,
                 service_categories::dsl::service_categories,
             };
             use crate::models::{
@@ -666,6 +667,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 serve_items::dsl::serve_items,
                 tech_categories_items::dsl::tech_categories_items,
                 service_category::dsl::service_category,
+                services::dsl::services,
             };
             use crate::models::{
                 TechCategoriesItem,
