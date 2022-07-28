@@ -608,7 +608,6 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             use crate::schema::{
                 services::dsl::services,
                 tags::dsl::tags,
-                serve::dsl::serve,
                 tags_items::dsl::tags_items,
                 serve_items::dsl::serve_items,
                 service_images::dsl::service_images,
