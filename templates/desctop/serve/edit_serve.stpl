@@ -42,32 +42,10 @@
               </select>
             </div>
             <div class="mb-20 mb-md-10">
-              <% if object.price.is_some() { %>
-                <input value="<%= object.price.unwrap() %>" class="input-md form-control" type="number" name="price" placeholder="Цена" />
-              <% } else { %>
-                <input value="" class="input-md form-control" type="number" name="price" placeholder="Цена" />
-              <% } %>
+                <input value="<%= object.price %>" class="input-md form-control" type="number" name="price" placeholder="Цена" />
             </div>
             <div class="mb-20 mb-md-10">
-            <% if object.price.is_some() { %>
-              <input value="<%= object.price_acc.unwrap() %>" class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
-            <% } else { %>
-              <input value="" class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
-            <% } %>
-            </div>
-            <div class="mb-20 mb-md-10">
-            <% if object.social_price.is_some() { %>
-              <input value="<%= object.social_price.unwrap() %>" class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
-            <% } else { %>
-              <input value="" class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
-            <% } %>
-            </div>
-            <div class="mb-20 mb-md-10">
-            <% if object.man_hours.is_some() { %>
-              <input value="<%= object.man_hours.unwrap() %>" class="input-md form-control" type="number" name="man_hours" placeholder="Человеко-часы" />
-            <% } else { %>
-              <input value="" class="input-md form-control" type="number" name="man_hours" placeholder="Человеко-часы" />
-            <% } %>
+              <input value="<%= object.man_hours %>" class="input-md form-control" type="number" name="man_hours" placeholder="Человеко-часы" />
             </div>
             <div class="mb-20 mb-md-10">
               <label class="checkbox-inline">
