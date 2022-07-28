@@ -213,7 +213,6 @@ impl Service {
     }
     pub fn get_open_tech_categories(&self) -> Vec<TechCategories> {
         // получаем открытые тех.категории услуги
-        use crate::models::TechCategoriesItems;
         use schema::{
             tech_categories_items::dsl::tech_categories_items,
             tech_categories::dsl::tech_categories,
@@ -234,7 +233,6 @@ impl Service {
     }
     pub fn get_close_tech_categories(&self) -> Vec<TechCategories> {
         // получаем закрытые тех.категории услуги
-        use crate::models::TechCategoriesItems;
         use schema::{
             tech_categories_items::dsl::tech_categories_items,
             tech_categories::dsl::tech_categories,
