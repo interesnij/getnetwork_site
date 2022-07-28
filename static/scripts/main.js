@@ -375,8 +375,8 @@ function service_tab_action(_this, tab_class){
       tabs_panes[i].classList.remove("active", "in")
     };
 
-    //cur = tabs.querySelector(tab_class);
-    //cur.classList.add("active", "in");
+    cur = tabs.querySelector(tab_class);
+    cur.classList.add("active", "in");
 
     // после смены таба перезапишем список выбранных опций
     new_serve_list = nav.parentElement.parentElement.querySelectorAll(".is_default");

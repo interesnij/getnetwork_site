@@ -1,10 +1,10 @@
 <div data-sum="<%= category.default_price %>" class="tab_<%= i + 1 %> fade tab-pane <% if i == 0 { %>in active<% } %>">
     <table class="table">
-        <h4>
+        <h5>
           <span data-pk="<%= category.id %>" data-type="serve_category" owner-pk="<%= object.id %>" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up">
             <%= t_category.name %> на <%= category.name %>
           </span>
-        </h4>
+        </h5>
         <tbody>
 
         <% for serve in category.get_serves().iter() { %>

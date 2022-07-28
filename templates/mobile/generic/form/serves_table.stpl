@@ -3,9 +3,9 @@
   <% let s_cats = t_category.get_serve_categories(); %>
 
 <section class="banner_block mb-20 mt-20 border" style="width:100%;box-shadow: none !important;">
-    <h2 class="section-title font-alt">
+    <h3 class="section-title font-alt">
         <%= t_category.name %>
-    </h2>
+    </h3>
     <div class="">
         <div class="align-center">
             <ul class="nav nav-tabs tpl-minimal-tabs animate">
@@ -38,7 +38,7 @@
   <% let s_cats = t_category.get_serve_categories(); %>
 
 <section class="banner_block mb-20 mt-20 border" style="width:100%">
-    <h2 class="pointer section-title font-alt show_tech_category">
+    <h3 class="pointer section-title font-alt show_tech_category">
       <span class="cat_description">
         <%= t_category.name %>
         <span style="float:right;margin-right: 20px;">
@@ -51,7 +51,7 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </span>
       </span>
-    </h2>
+    </h3>
 
     <div class="hidden is_not_main_cat">
         <div class="align-center">
