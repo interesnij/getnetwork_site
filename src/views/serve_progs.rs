@@ -711,8 +711,8 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
         .load::<ServeCategories>(&_connection)
         .expect("E");
 
-    for serve in _serves.iter() {
-        diesel::update(serve)
+    for _serve in _serves.iter() {
+        diesel::update(_serve)
             .set(schema::serve::cat_name.eq(s_category.name.clone()))
             .get_result::<Serve>(&_connection)
             .expect("Error.");
