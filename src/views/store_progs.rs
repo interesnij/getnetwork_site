@@ -593,9 +593,9 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 NewTechCategoriesItem,
                 Serve,
                 TechCategories,
-                ServeItem,
+                ServeItems,
                 NewServeItem,
-                EditStore,
+                EditStores,
             };
 
             let _connection = establish_connection();

@@ -598,8 +598,8 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
                 NewTechCategoriesItem,
                 Serve,
                 TechCategories,
-                ServeItem,
-                NewServeItem,
+                ServeItems,
+                NewServeItems,
                 EditWork,
             };
             use crate::utils::store_form;

@@ -498,8 +498,8 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 NewTechCategoriesItem,
                 Serve,
                 TechCategories,
-                ServeItem,
-                NewServeItem,
+                ServeItems,
+                NewServeItems,
             };
             use crate::utils::store_form;
 
@@ -598,7 +598,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
             // создаем опции услуги и записываем id опций в вектор.
             let mut serve_ids = Vec::new();
             for serve_id in form.serve_list.iter() {
-                let new_serve_form = NewServeItem {
+                let new_serve_form = NewServeItems {
                     serve_id:   *serve_id,
                     service_id: _service.id,
                     store_id:   0,
@@ -606,7 +606,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 };
                 diesel::insert_into(schema::serve_items::table)
                     .values(&new_serve_form)
-                    .get_result::<ServeItem>(&_connection)
+                    .get_result::<ServeItems>(&_connection)
                     .expect("Error.");
                 serve_ids.push(*serve_id);
             }
@@ -674,8 +674,8 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 NewTechCategoriesItem,
                 Serve,
                 TechCategories,
-                ServeItem,
-                NewServeItem,
+                ServeItems,
+                NewServeItems,
                 EditService,
             };
             use crate::utils::store_form;
@@ -801,7 +801,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             // создаем опции услуги и записываем id опций в вектор.
             let mut serve_ids = Vec::new();
             for serve_id in form.serve_list.iter() {
-                let new_serve_form = NewServeItem {
+                let new_serve_form = NewServeItems {
                     serve_id:   *serve_id,
                     service_id: _service.id,
                     store_id:   0,
@@ -809,7 +809,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 };
                 diesel::insert_into(schema::serve_items::table)
                     .values(&new_serve_form)
-                    .get_result::<ServeItem>(&_connection)
+                    .get_result::<ServeItems>(&_connection)
                     .expect("Error.");
                 serve_ids.push(*serve_id);
             }
