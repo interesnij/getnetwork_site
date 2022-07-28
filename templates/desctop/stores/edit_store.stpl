@@ -20,25 +20,7 @@
             </div>
 
             <div class="mb-20 mb-md-10">
-              <% if object.price.is_some() { %>
-                <input value="<%= object.price.unwrap() %>" class="input-md form-control" type="number" name="price" placeholder="Цена" />
-                <% } else { %>
-                <input value="" class="input-md form-control" type="number" name="price" placeholder="Цена" />
-              <% } %>
-            </div>
-            <div class="mb-20 mb-md-10">
-            <% if object.price_acc.is_some() { %>
-              <input value="<%= object.price_acc.unwrap() %>" class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
-              <% } else { %>
-              <input value="" class="input-md form-control" type="number" name="price_acc" placeholder="Цена со скидкой" />
-            <% } %>
-            </div>
-            <div class="mb-20 mb-md-10">
-            <% if object.social_price.is_some() { %>
-              <input value="<%= object.social_price.unwrap() %>" class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
-            <% } else { %>
-              <input value="" class="input-md form-control" type="number" name="social_price" placeholder="Социальная цена" />
-            <% } %>
+                <input value="<%= object.price %>" class="input-md form-control" type="number" name="price" placeholder="Цена" />
             </div>
 
             <div class="mb-20 mb-md-10">

@@ -726,8 +726,6 @@ pub struct ServeForm {
     pub position: i32,
     pub serve_categories: i32,
     pub price: i32,
-    pub price_acc: i32,
-    pub social_price: i32,
     pub man_hours: i32,
     pub is_default: bool,
 }
@@ -740,8 +738,6 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         position: 0,
         serve_categories: 0,
         price: 0,
-        price_acc: 0,
-        social_price: 0,
         man_hours: 0,
         is_default: true,
     };
@@ -775,24 +771,6 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                 if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.price = _int;
-                }
-            }
-        }
-        else if name == "price_acc" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i32 = s.parse().unwrap();
-                    form.price_acc = _int;
-                }
-            }
-        }
-        else if name == "social_price" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i32 = s.parse().unwrap();
-                    form.social_price = _int;
                 }
             }
         }

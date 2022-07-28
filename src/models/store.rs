@@ -131,7 +131,6 @@ pub struct Store {
     pub image:       Option<String>,
     pub is_active:   bool,
     pub price:       i32,
-    pub price_acc:   Option<i32>,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
 }
@@ -296,7 +295,6 @@ pub struct EditStore {
     pub image:       Option<String>,
     pub is_active:   bool,
     pub price:       i32,
-    pub price_acc:   Option<i32>,
 }
 
 #[derive(Serialize, Insertable)]
@@ -308,7 +306,6 @@ pub struct NewStore {
     pub image:       Option<String>,
     pub is_active:   bool,
     pub price:       i32,
-    pub price_acc:   Option<i32>,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
 }
@@ -321,7 +318,6 @@ impl NewStore {
         image:       String,
         is_active:   bool,
         price:       i32,
-        price_acc:   Option<i32>,
         user_id:     i32
     ) -> Self {
         NewStore {
@@ -331,7 +327,6 @@ impl NewStore {
             image:       Some(image),
             is_active:   is_active,
             price:       price,
-            price_acc:   price_acc,
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
         }

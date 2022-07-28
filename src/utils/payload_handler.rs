@@ -55,9 +55,7 @@ pub struct StoreForms {
     pub link:          String,
     pub main_image:    String,
     pub is_active:     bool,
-    pub price:         Option<i32>,
-    pub price_acc:     Option<i32>,
-    pub social_price:  Option<i32>,
+    pub price:         i32,
     pub images:        Vec<String>,
     pub videos:        Vec<String>,
     pub category_list: Vec<i32>,
@@ -313,9 +311,7 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
         link: "".to_string(),
         main_image: "".to_string(),
         is_active: true,
-        price: None,
-        price_acc: None,
-        social_price: None,
+        price: 0,
         images: Vec::new(),
         videos: Vec::new(),
         category_list: Vec::new(),
@@ -327,7 +323,7 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
         let mut field: Field = item.expect("split_payload err");
         let name = field.name();
         let string_list = ["title", "description", "link"];
-        let i32_list = ["price", "price_acc", "social_price"];
+        let i32_list = ["price",];
 
         if string_list.contains(&name) {
             let mut _content = "".to_string();
@@ -354,11 +350,7 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
                     let data_string = s.to_string();
                     let _int: i32 = data_string.parse().unwrap();
                     if field.name() == "price" {
-                        form.price = Some(_int);
-                    } else if field.name() == "price_acc" {
-                        form.price_acc = Some(_int);
-                    } else if field.name() == "social_price" {
-                        form.social_price = Some(_int);
+                        form.price = _int;
                     }
                 }
             }
