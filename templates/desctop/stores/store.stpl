@@ -66,7 +66,7 @@
                         <% } %>
 
                         <% let mut default_price = 0; %>
-                        <% let mut serves_ids = Vec::new(); %>
+                        <% let mut serves_ids = String::new() %>
                         <% include!("../generic/form/serves_table.stpl"); %>
                     </div>
                 </div>
