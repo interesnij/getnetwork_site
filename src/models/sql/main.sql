@@ -258,7 +258,7 @@ CREATE TABLE tech_categories (
     description VARCHAR(1000),
     position    INT NOT NULL,
     count       INT NOT NULL,
-    user_id     INT NOT NULL,
+    user_id     INT NOT NULL
 );
 
 -- это категория опции (например, rust, python, react native)
@@ -271,11 +271,11 @@ CREATE TABLE serve_categories (
     position        INT NOT NULL,
     count           INT NOT NULL,
     default_price   INT NOT NULL, -- сумма всех опуий по умолчанию.
-    user_id         INT NOT NULL,
+    user_id         INT NOT NULL
 
     CONSTRAINT fk_tech_category
         FOREIGN KEY(tech_categories)
-            REFERENCES serve_categories(id)
+            REFERENCES tech_categories(id)
 );
 
 -- это опции (например, продвинутая админка)
@@ -293,7 +293,7 @@ CREATE TABLE serve (
 
     CONSTRAINT fk_serve_category
         FOREIGN KEY(serve_categories)
-            REFERENCES serve(id),
+            REFERENCES serve_categories(id),
     CONSTRAINT fk_serve_creator
         FOREIGN KEY(user_id)
             REFERENCES users(id)
@@ -315,7 +315,7 @@ CREATE TABLE tech_categories_items (
     category_id INT NOT NULL,     -- тех. категория (например, создание среднего магазина)
     service_id  INT NOT NULL,     -- услуга
     store_id    INT NOT NULL,     -- товар
-    work_id     INT NOT NULL      -- работа
+    work_id     INT NOT NULL,     -- работа
     types       SMALLINT NOT NULL -- тип: 1 - активно, 2 - неактивно
 );
 
