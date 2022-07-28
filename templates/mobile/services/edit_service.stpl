@@ -54,22 +54,7 @@
                 </select>
             </div>
 
-            <div class="mb-20 mb-md-10">
-                <label>Активные тех. категории</label>
-                <select class="form-control" name="open_tech_cats_list[]" multiple="">
-                  <% for cat in tech_cats.iter() { %>
-                    <option <% if object.get_tech_cats_ids().iter().any(|i| i==&cat.id) { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
-                  <% } %>
-                </select>
-            </div>
-            <div class="mb-20 mb-md-10">
-                <label>Закрытые тех. категории</label>
-                <select class="form-control" name="close_tech_cats_list[]" multiple="">
-                  <% for cat in tech_cats.iter() { %>
-                    <option <% if object.get_tech_cats_ids().iter().any(|i| i==&cat.id) { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
-                  <% } %>
-                </select>
-            </div>
+            <% include!("../generic/form/edit_serves.stpl"); %>
 
             <div class="mb-20 mb-md-10">
               <% for img in images.iter() { %>
