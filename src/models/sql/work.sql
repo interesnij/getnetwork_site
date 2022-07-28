@@ -18,6 +18,7 @@ CREATE TABLE works (
     link        VARCHAR(500),
     image       VARCHAR(500),
     is_active   BOOLEAN NOT NULL,
+    price       INT NOT NULL, 
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
 

@@ -1,9 +1,9 @@
 <section class="border card_fullscreen" style="position: fixed;z-index:1000;top: 10px;width: 100%;">
-<h3 data-sum="<%= default_price %>"
+<h3 data-sum="<%= object.default_price %>"
     data-pk="<%= object.id %>"
     data-servelist=""
     class="create_order_form_of_service pointer">
-    Сумма <span class="total_price_counter"><%= default_price %></span>
+    Сумма <span class="total_price_counter"><%= object.default_price %></span>
      ₽. Перейти к заказу
 </h3>
 </section>

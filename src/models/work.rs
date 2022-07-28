@@ -123,16 +123,16 @@ pub struct EditWorkCategories {
 #[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Work {
-    pub id:            i32,
-    pub title:         String,
-    pub description:   Option<String>,
-    pub content:       Option<String>,
-    pub link:          Option<String>,
-    pub image:         Option<String>,
-    pub is_active:     bool,
-    //pub default_price: i32,
-    pub user_id:       i32,
-    pub created:       chrono::NaiveDateTime,
+    pub id:          i32,
+    pub title:       String,
+    pub description: Option<String>,
+    pub content:     Option<String>,
+    pub link:        Option<String>,
+    pub image:       Option<String>,
+    pub is_active:   bool,
+    pub price:       i32,
+    pub user_id:     i32,
+    pub created:     chrono::NaiveDateTime,
 }
 impl Work {
     pub fn get_image(&self) -> String {
@@ -287,42 +287,45 @@ impl Work {
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="works"]
 pub struct EditWork {
-    pub title:         String,
-    pub description:   Option<String>,
-    pub link:          Option<String>,
-    pub image:         Option<String>,
-    pub is_active:     bool,
-    //pub default_price: i32,
+    pub title:       String,
+    pub description: Option<String>,
+    pub link:        Option<String>,
+    pub image:       Option<String>,
+    pub is_active:   bool,
+    pub price:       i32,
 }
 #[derive(Serialize, Insertable)]
 #[table_name="works"]
 pub struct NewWork {
-    pub title:         String,
-    pub description:   Option<String>,
-    pub link:          Option<String>,
-    pub image:         Option<String>,
-    pub is_active:     bool,
-    pub user_id:       i32,
-    pub created:       chrono::NaiveDateTime,
+    pub title:       String,
+    pub description: Option<String>,
+    pub link:        Option<String>,
+    pub image:       Option<String>,
+    pub is_active:   bool,
+    pub price:       i32,
+    pub user_id:     i32,
+    pub created:     chrono::NaiveDateTime,
 }
 
 impl NewWork {
     pub fn from_work_form (
-        title: String,
+        title:       String,
         description: String,
-        link: String,
-        image: String,
-        is_active: bool,
-        user_id: i32
+        link:        String,
+        image:       String,
+        is_active:   bool,
+        price:       i32,
+        user_id:     i32,
     ) -> Self {
         NewWork {
-            title: title,
+            title:       title,
             description: Some(description),
-            link: Some(link),
-            image: Some(image),
-            is_active: is_active,
-            user_id: user_id,
-            created: chrono::Local::now().naive_utc(),
+            link:        Some(link),
+            image:       Some(image),
+            is_active:   is_active,
+            price:       price,
+            user_id:     user_id,
+            created:     chrono::Local::now().naive_utc(),
         }
     }
 }

@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-
+  <% include!("../generic/form/btn_block.stpl"); %>
 </section>
 
 <% include!("../footer.stpl"); %>

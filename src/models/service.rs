@@ -122,15 +122,16 @@ pub struct EditServiceCategories {
 #[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Service {
-    pub id:            i32,
-    pub title:         String,
-    pub description:   Option<String>,
-    pub content:       Option<String>,
-    pub link:          Option<String>,
-    pub image:         Option<String>,
-    pub is_active:     bool,
-    pub user_id:       i32,
-    pub created:       chrono::NaiveDateTime,
+    pub id:          i32,
+    pub title:       String,
+    pub description: Option<String>,
+    pub content:     Option<String>,
+    pub link:        Option<String>,
+    pub image:       Option<String>,
+    pub is_active:   bool,
+    pub price:       i32,
+    pub user_id:     i32,
+    pub created:     chrono::NaiveDateTime,
 }
 
 impl Service {
@@ -211,7 +212,7 @@ impl Service {
             .load::<i32>(&_connection)
             .expect("E");
     }
-    pub fn get_tech_cats_ids(&self) -> Vec<i32> { 
+    pub fn get_tech_cats_ids(&self) -> Vec<i32> {
         use schema::tech_categories_items::dsl::tech_categories_items;
 
         let _connection = establish_connection();
@@ -311,11 +312,11 @@ impl Service {
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="services"]
 pub struct EditService {
-    pub title:         String,
-    pub description:   Option<String>,
-    pub link:          Option<String>,
-    pub image:         Option<String>,
-    pub is_active:     bool,
+    pub title:       String,
+    pub description: Option<String>,
+    pub link:        Option<String>,
+    pub image:       Option<String>,
+    pub is_active:   bool,
 }
 
 #[derive(Identifiable, PartialEq, Queryable, Associations)]
@@ -338,23 +339,25 @@ pub struct NewServiceCategory {
 #[derive(Serialize, Insertable)]
 #[table_name="services"]
 pub struct NewService {
-    pub title:         String,
-    pub description:   Option<String>,
-    pub link:          Option<String>,
-    pub image:         Option<String>,
-    pub is_active:     bool,
-    pub user_id:       i32,
-    pub created:       chrono::NaiveDateTime,
+    pub title:       String,
+    pub description: Option<String>,
+    pub link:        Option<String>,
+    pub image:       Option<String>,
+    pub is_active:   bool,
+    pub price:       i32,
+    pub user_id:     i32,
+    pub created:     chrono::NaiveDateTime,
 }
 
 impl NewService {
     pub fn from_service_form (
-        title:         String,
-        description:   String,
-        link:          String,
-        image:         String,
-        is_active:     bool,
-        user_id:       i32
+        title:       String,
+        description: String,
+        link:        String,
+        image:       String,
+        is_active:   bool,
+        price:       i32,
+        user_id:     i32
     ) -> Self {
         NewService {
             title:         title,
@@ -362,6 +365,7 @@ impl NewService {
             link:          Some(link),
             image:         Some(image),
             is_active:     is_active,
+            price:         price,
             user_id:       user_id,
             created:       chrono::Local::now().naive_utc(),
         }

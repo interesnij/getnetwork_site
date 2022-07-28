@@ -295,13 +295,11 @@ pub struct StoreForms {
     pub link:           String,
     pub main_image:     String,
     pub is_active:      bool,
-    pub price:          i32,
     pub images:         Vec<String>,
     pub videos:         Vec<String>,
     pub category_list:  Vec<i32>,
     pub tags_list:      Vec<i32>,
     pub serve_list:     Vec<i32>,
-    pub open_tech_cats_list:  Vec<i32>,
     pub close_tech_cats_list: Vec<i32>,
 }
 
@@ -315,13 +313,11 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
         link:                 "".to_string(),
         main_image:           "".to_string(),
         is_active:            true,
-        price:                0,
         images:               Vec::new(),
         videos:               Vec::new(),
         category_list:        Vec::new(),
         tags_list:            Vec::new(),
         serve_list:           Vec::new(),
-        open_tech_cats_list:  Vec::new(),
         close_tech_cats_list: Vec::new(),
     };
 
@@ -329,7 +325,6 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
         let mut field: Field = item.expect("split_payload err");
         let name = field.name();
         let string_list = ["title", "description", "link"];
-        let i32_list = ["price",];
 
         if string_list.contains(&name) {
             let mut _content = "".to_string();
@@ -345,19 +340,6 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
                         form.link = data_string;
                     }
 
-                }
-            }
-        }
-        else if i32_list.contains(&name) {
-            let mut _content = "".to_string();
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    let _int: i32 = data_string.parse().unwrap();
-                    if field.name() == "price" {
-                        form.price = _int;
-                    }
                 }
             }
         }
@@ -379,16 +361,6 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
                     let data_string = s.to_string();
                     let _int: i32 = data_string.parse().unwrap();
                     form.serve_list.push(_int);
-                }
-            }
-        }
-        else if name == "open_tech_cats_list[]" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    let _int: i32 = data_string.parse().unwrap();
-                    form.open_tech_cats_list.push(_int);
                 }
             }
         }

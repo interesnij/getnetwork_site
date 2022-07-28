@@ -489,9 +489,17 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
         if _request_user.perm == 60 {
             use crate::schema::{
                 tags::dsl::tags,
+                serve::dsl::serve,
                 service_categories::dsl::service_categories,
             };
-            use crate::models::{TechCategoriesItem, NewTechCategoriesItem};
+            use crate::models::{
+                TechCategoriesItem,
+                NewTechCategoriesItem,
+                Serve,
+                TechCategories,
+                ServeItem,
+                NewServeItem,
+            };
             use crate::utils::store_form;
 
             let _connection = establish_connection();
@@ -503,6 +511,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 form.link.clone(),
                 form.main_image.clone(),
                 form.is_active.clone(),
+                0,
                 _request_user.id,
             );
 
@@ -569,19 +578,8 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                     .expect("Error.");
             }
 
-            for cat_id in form.open_tech_cats_list.iter() {
-                let new_cat = NewTechCategoriesItem {
-                    category_id: *cat_id,
-                    service_id:  _service.id,
-                    store_id:    0,
-                    work_id:     0,
-                    types:       1,
-                };
-                diesel::insert_into(schema::tech_categories_items::table)
-                    .values(&new_cat)
-                    .get_result::<TechCategoriesItem>(&_connection)
-                    .expect("Error.");
-            }
+            // создаем связь с тех категориями, которые будут
+            // расширять списки опций, предлагая доп возможности и услуги
             for cat_id in form.close_tech_cats_list.iter() {
                 let new_cat = NewTechCategoriesItem {
                     category_id: *cat_id,
@@ -595,6 +593,60 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                     .get_result::<TechCategoriesItem>(&_connection)
                     .expect("Error.");
             }
+
+            // создаем опции услуги и записываем id опций в вектор.
+            let mut serve_ids = Vec::new();
+            for serve_id in form.serve_list.iter() {
+                let new_serve_form = NewServeItem {
+                    serve_id:   *serve_id,
+                    service_id: _service.id,
+                    store_id:   0,
+                    work_id:    0,
+                };
+                diesel::insert_into(schema::serve_items::table)
+                    .values(&new_serve_form)
+                    .get_result::<ServeItem>(&_connection)
+                    .expect("Error.");
+                serve_ids.push(*serve_id);
+            }
+
+            // получаем опции, чтобы создать связи с их тех. категорией.
+            // это надо отрисовки тех категорий услуги, которые активны
+            let _serves = serve
+                .filter(schema::serve::id.eq_any(serve_ids))
+                .load::<Serve>(&_connection)
+                .expect("E");
+
+            let mut tech_cat_ids = Vec::new();
+            let mut service_price = 0;
+            for _serve in _serves.iter() {
+                if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
+                    tech_cat_ids.push(_serve.tech_categories);
+                }
+                service_price += _serve.price;
+            }
+
+            for id in tech_cat_ids.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: id,
+                    service_id:  _service.id,
+                    store_id:    0,
+                    work_id:     0,
+                    types:       1,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
+
+            // фух. Связи созданы все, но надо еще посчитать цену
+            // услуги для калькулятора. Как? А  это будет сумма всех
+            // цен выбранных опций.
+            diesel::update(&_service)
+                .set(schema::services::price.eq(service_price))
+                .get_result::<Service>(&_connection)
+                .expect("Error.");
         }
     };
     HttpResponse::Ok()
@@ -604,17 +656,19 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::models::{EditService, TechCategoriesItem, NewTechCategoriesItem};
             use crate::schema::{
-                services::dsl::services,
                 tags::dsl::tags,
-                tags_items::dsl::tags_items,
-                serve_items::dsl::serve_items,
-                service_images::dsl::service_images,
-                service_videos::dsl::service_videos,
-                service_category::dsl::service_category,
+                serve::dsl::serve,
                 service_categories::dsl::service_categories,
-                tech_categories_items::dsl::tech_categories_items,
+            };
+            use crate::models::{
+                TechCategoriesItem,
+                NewTechCategoriesItem,
+                Serve,
+                TechCategories,
+                ServeItem,
+                NewServeItem,
+                EditService,
             };
             use crate::utils::store_form;
 
@@ -720,19 +774,8 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                     .expect("Error.");
             };
 
-            for cat_id in form.open_tech_cats_list.iter() {
-                let new_cat = NewTechCategoriesItem {
-                    category_id: *cat_id,
-                    service_id:  _service.id,
-                    store_id:    0,
-                    work_id:     0,
-                    types:       1,
-                };
-                diesel::insert_into(schema::tech_categories_items::table)
-                    .values(&new_cat)
-                    .get_result::<TechCategoriesItem>(&_connection)
-                    .expect("Error.");
-            }
+            // создаем связь с тех категориями, которые будут
+            // расширять списки опций, предлагая доп возможности и услуги
             for cat_id in form.close_tech_cats_list.iter() {
                 let new_cat = NewTechCategoriesItem {
                     category_id: *cat_id,
@@ -746,6 +789,60 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                     .get_result::<TechCategoriesItem>(&_connection)
                     .expect("Error.");
             }
+
+            // создаем опции услуги и записываем id опций в вектор.
+            let mut serve_ids = Vec::new();
+            for serve_id in form.serve_list.iter() {
+                let new_serve_form = NewServeItem {
+                    serve_id:   *serve_id,
+                    service_id: _service.id,
+                    store_id:   0,
+                    work_id:    0,
+                };
+                diesel::insert_into(schema::serve_items::table)
+                    .values(&new_serve_form)
+                    .get_result::<ServeItem>(&_connection)
+                    .expect("Error.");
+                serve_ids.push(*serve_id);
+            }
+
+            // получаем опции, чтобы создать связи с их тех. категорией.
+            // это надо отрисовки тех категорий услуги, которые активны
+            let _serves = serve
+                .filter(schema::serve::id.eq_any(serve_ids))
+                .load::<Serve>(&_connection)
+                .expect("E");
+
+            let mut tech_cat_ids = Vec::new();
+            let mut service_price = 0;
+            for _serve in _serves.iter() {
+                if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
+                    tech_cat_ids.push(_serve.tech_categories);
+                }
+                service_price += _serve.price;
+            }
+
+            for id in tech_cat_ids.iter() {
+                let new_cat = NewTechCategoriesItem {
+                    category_id: id,
+                    service_id:  _service.id,
+                    store_id:    0,
+                    work_id:     0,
+                    types:       1,
+                };
+                diesel::insert_into(schema::tech_categories_items::table)
+                    .values(&new_cat)
+                    .get_result::<TechCategoriesItem>(&_connection)
+                    .expect("Error.");
+            }
+
+            // фух. Связи созданы все, но надо еще посчитать цену
+            // услуги для калькулятора. Как? А  это будет сумма всех
+            // цен выбранных опций.
+            diesel::update(&_service)
+                .set(schema::services::price.eq(service_price))
+                .get_result::<Service>(&_connection)
+                .expect("Error.");
         }
     }
     HttpResponse::Ok()

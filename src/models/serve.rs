@@ -105,6 +105,7 @@ pub struct Serve {
     pub man_hours:        i32,
     pub is_default:       bool,
     pub user_id:          i32,
+    pub tech_cat_id:      i32,
 }
 
 impl Serve {
@@ -136,6 +137,7 @@ pub struct NewServe {
     pub man_hours:        i32,
     pub is_default:       bool,
     pub user_id:          i32,
+    pub tech_cat_id:      i32,
 }
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="serve"]

@@ -12,15 +12,16 @@ CREATE TABLE service_categories (
 );
 
 CREATE TABLE services (
-    id            SERIAL PRIMARY KEY,
-    title         VARCHAR(100) NOT NULL,
-    description   VARCHAR,
-    content       VARCHAR(30000),
-    link          VARCHAR(500),
-    image         VARCHAR(500),
-    is_active     BOOLEAN NOT NULL,
-    user_id       INT NOT NULL,
-    created       TIMESTAMP NOT NULL,
+    id          SERIAL PRIMARY KEY,
+    title       VARCHAR(100) NOT NULL,
+    description VARCHAR,
+    content     VARCHAR(30000),
+    link        VARCHAR(500),
+    image       VARCHAR(500),
+    is_active   BOOLEAN NOT NULL,
+    price       INT NOT NULL,
+    user_id     INT NOT NULL,
+    created     TIMESTAMP NOT NULL,
 
     CONSTRAINT fk_service_creator
         FOREIGN KEY(user_id)

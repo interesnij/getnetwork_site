@@ -82,6 +82,7 @@
               <% include!("../generic/videos.stpl"); %>
 
     </div>
+    <% include!("../generic/form/btn_block.stpl"); %>
 </section>
 
 <div class="sidebar hidden">

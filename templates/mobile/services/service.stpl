@@ -49,7 +49,7 @@
                     <a href="/services/<%= category.id %>/<%= _prev.id %>/" class="ajax blog-item-more right"><%= _prev.title %>&nbsp;&nbsp;⇢</a>
                   <% } %>
                 </div>
-
+        <% include!("../generic/form/btn_block.stpl"); %>
 </section>
 
 <div class="sidebar hidden">

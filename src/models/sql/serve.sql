@@ -40,6 +40,7 @@ CREATE TABLE serve (
     man_hours        INT NOT NULL,
     is_default       BOOLEAN NOT NULL, -- опция по умолчанию, т.е. без которой работа невозможна (например, админка)
     user_id          INT NOT NULL,
+    tech_cat_id      INT NOT NULL,
 
     CONSTRAINT fk_serve_category
         FOREIGN KEY(serve_categories)

@@ -73,5 +73,3 @@
     </div>
 </section>
 <% } %>
-
-<% include!("btn_block.stpl"); %>

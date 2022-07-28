@@ -503,6 +503,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                 form.link.clone(),
                 form.main_image.clone(),
                 form.is_active.clone(),
+                0,
                 _request_user.id,
             );
 
@@ -610,10 +611,10 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
                 .expect("Error.");
             };
 
-            diesel::delete(work_images.filter(schema::work_images::work.eq(_work_id))).execute(&_connection).expect("E");
-            diesel::delete(work_videos.filter(schema::work_videos::work.eq(_work_id))).execute(&_connection).expect("E");
-            diesel::delete(tags_items.filter(schema::tags_items::work_id.eq(_work_id))).execute(&_connection).expect("E");
-            diesel::delete(work_category.filter(schema::work_category::work_id.eq(_work_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::work_images.filter(schema::work_images::work.eq(_work_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::work_videos.filter(schema::work_videos::work.eq(_work_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::tags_items.filter(schema::tags_items::work_id.eq(_work_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::work_category.filter(schema::work_category::work_id.eq(_work_id))).execute(&_connection).expect("E");
 
             let form = item_form(payload.borrow_mut(), _request_user.id).await;
             let _new_work = EditWork {

@@ -497,7 +497,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                 form.link.clone(),
                 form.main_image.clone(),
                 form.is_active.clone(),
-                form.price,
+                0,
                 _request_user.id,
             );
 
@@ -617,7 +617,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 link:        Some(form.link.clone()),
                 image:       Some(form.main_image.clone()),
                 is_active:   form.is_active.clone(),
-                price:       form.price,
+                price:       0,
             };
 
             diesel::update(&_store)

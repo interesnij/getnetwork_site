@@ -1,4 +1,3 @@
-<% let mut default_price = 0; %>
 
 <% for t_category in object.get_open_tech_categories().iter() { %>
   <% let s_cats = t_category.get_serve_categories(); %>
@@ -13,7 +12,6 @@
               <% for (i, cat) in s_cats.iter().enumerate() { %>
 
                 <% if i == 0 { %>
-                  <% default_price += cat.default_price; %>
                   <li data-sum="<%= cat.default_price %>" class="yy s_<%= i + 1 %> active">
                       <a class="pointer"><%= cat.name %></a>
                   </li>
@@ -75,5 +73,3 @@
     </div>
 </section>
 <% } %>
-
-<% include!("btn_block.stpl"); %>
