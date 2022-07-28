@@ -610,6 +610,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 tags::dsl::tags,
                 serve::dsl::serve,
                 tags_items::dsl::tags_items,
+                serve_items::dsl::serve_items,
                 service_images::dsl::service_images,
                 service_videos::dsl::service_videos,
                 service_category::dsl::service_category,
