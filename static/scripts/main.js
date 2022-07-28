@@ -347,7 +347,7 @@ function service_tab_action(_this, tab_class){
   if (!_this.classList.contains("active")){
     old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
     new_price = _this.getAttribute("data-sum")*1;
-    serves_ids = counter.parentElement.getAttribute("data-servelist");
+    serves_ids = counter.parentElement.getAttribute("data-servelist").split(",");
 
     nav = _this.parentElement.parentElement.parentElement;
     nav_items = nav.querySelectorAll(".yy");
