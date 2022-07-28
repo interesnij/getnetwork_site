@@ -304,7 +304,6 @@ pub struct NewWork {
     pub link:          Option<String>,
     pub image:         Option<String>,
     pub is_active:     bool,
-    pub default_price: i32,
     pub user_id:       i32,
     pub created:       chrono::NaiveDateTime,
 }

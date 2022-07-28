@@ -58,7 +58,7 @@
         </div>
 
         <div class="tab-content tpl-minimal-tabs-cont section-text">
-          <% for (i2, category) in s_cats.iter().enumerate() { %>
+          <% for (i, category) in s_cats.iter().enumerate() { %>
             <% include!("category.stpl"); %>
           <% } %>
         </div>

@@ -332,7 +332,6 @@ pub struct NewServiceCategory {
 pub struct NewService {
     pub title:         String,
     pub description:   Option<String>,
-    pub content:       Option<String>,
     pub link:          Option<String>,
     pub image:         Option<String>,
     pub is_active:     bool,

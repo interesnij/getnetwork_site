@@ -171,7 +171,7 @@ pub struct NewServeItems {
 /////// ServeItems //////
 #[derive(Identifiable, PartialEq, Queryable, Associations)]
 #[table_name="tech_categories_items"]
-pub struct TechCategoriesItems {
+pub struct TechCategoriesItem {
     pub id:          i32,
     pub category_id: i32,
     pub serve_id:    i32,
@@ -182,7 +182,7 @@ pub struct TechCategoriesItems {
 }
 #[derive(Insertable)]
 #[table_name="tech_categories_items"]
-pub struct NewTechCategoriesItems {
+pub struct NewTechCategoriesItem {
     pub category_id: i32,
     pub serve_id:    i32,
     pub service_id:  i32,
