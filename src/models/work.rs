@@ -55,7 +55,7 @@ impl WorkCategories {
         let _connection = establish_connection();
         return works
             .filter(schema::works::id.eq_any(self.get_works_ids()))
-            .order(schema::works::position.desc())
+            .order(works::position.desc())
             .load::<Work>(&_connection)
             .expect("E");
     }
