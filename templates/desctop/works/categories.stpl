@@ -10,7 +10,7 @@
     </div>
 </section>
 
-<section class="page-section" style="padding-top: 45px;">
+<section class="page-section">
 <% for object in work_cats.iter() { %>
 <section class="need_darked_this fixed-height-small pt-0 pb-0 bg-dark-alfa-30" style="background-image: url(&quot;<%= object.get_image() %>&quot;);">
     <div class="js-height-parent container relative" style="height: 600px;">

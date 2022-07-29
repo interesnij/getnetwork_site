@@ -4,22 +4,16 @@
 
 <% include!("about.stpl"); %>
 
-<hr class="mt-0 mb-0 " />
 <% include!("sections.stpl"); %>
 
-<hr class="mt-0 mb-0 " />
 <% include!("service.stpl"); %>
 
-<hr class="mt-0 mb-0 " />
 <% include!("work.stpl"); %>
 
-<hr class="mt-0 mb-0 " />
 <% include!("store.stpl"); %>
 
-<hr class="mt-0 mb-0 " />
 <% include!("blog.stpl"); %>
 
-<hr class="mt-0 mb-0 " />
 <% include!("wiki.stpl"); %>
 
 <section class="border small-section bg-dark">

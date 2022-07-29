@@ -10,7 +10,8 @@
 
 <% let serve_list = object.get_serves_ids(); %>
 <% for tech_category in tech_cats.iter() { %>
-<h4>Тех-категория: <%= tech_category.name %></h4>
+<h5 class="show_next_element pointer">Тех-категория: <%= tech_category.name %></h5>
+<div class="hidden">
   <% for category in tech_category.get_serve_categories().iter() { %>
 
     <div class="mb-20 mb-md-10">
@@ -24,6 +25,7 @@
       </select>
     </div>
   <% } %>
+  </div>
 <% } %>
 
 <hr class="mt-0 mb-0 " />

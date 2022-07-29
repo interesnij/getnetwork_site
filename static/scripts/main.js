@@ -634,3 +634,7 @@ on('body', 'click', '#signup', function() {
   }};
   link.send(form_data);
 });
+
+on('#ajax', 'click', '.show_next_element', function() {
+  this.nextElementSibling.classList.toggle("hidden")
+});
