@@ -48,6 +48,16 @@ impl ServiceCategories {
             .load::<i32>(&_connection)
             .expect("E");
     }
+    pub fn get_all_services(&self) -> Vec<Service> {
+        use crate::schema::services::dsl::services;
+
+        let _connection = establish_connection();
+        return services
+            .filter(schema::services::id.eq_any(self.get_services_ids()))
+            .order(schema::services::position.desc())
+            .load::<Service>(&_connection)
+            .expect("E");
+    }
     pub fn get_services_list(&self, page: i32, limit: i32) -> (Vec<Service>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;

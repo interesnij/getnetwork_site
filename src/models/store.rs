@@ -48,6 +48,17 @@ impl StoreCategories {
             .load::<i32>(&_connection)
             .expect("E");
     }
+    pub fn get_all_stores(&self) -> Vec<Store> {
+        use crate::schema::stores::dsl::stores;
+
+        let _connection = establish_connection();
+        return stores
+            .filter(schema::stores::id.eq_any(self.get_stores_ids()))
+            .order(schema::stores::position.desc())
+            .load::<Store>(&_connection)
+            .expect("E");
+    }
+
     pub fn get_stores_list(&self, page: i32, limit: i32) -> (Vec<Store>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;

@@ -83,6 +83,7 @@
             </div>
             <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_work_btn">Изменить</button>
         </form>
+        
     </div>
 </section>
 

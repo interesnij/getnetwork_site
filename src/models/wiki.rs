@@ -48,6 +48,17 @@ impl WikiCategories {
             .load::<i32>(&_connection)
             .expect("E");
     }
+    pub fn get_all_wikis(&self) -> Vec<Wiki> {
+        use crate::schema::wikis::dsl::wikis;
+
+        let _connection = establish_connection();
+        return wikis
+            .filter(schema::wikis::id.eq_any(self.get_wikis_ids()))
+            .order(schema::wikis::position.desc())
+            .load::<Wiki>(&_connection)
+            .expect("E");
+    }
+
     pub fn get_wikis_list(&self, page: i32, limit: i32) -> (Vec<Wiki>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;

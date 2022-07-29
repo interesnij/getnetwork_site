@@ -60,6 +60,7 @@
             </div>
             <button style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_blog_btn">Отправить</button>
         </form>
+        
     </div>
 </section>
 

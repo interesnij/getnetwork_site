@@ -91,6 +91,17 @@ impl BlogCategories {
             .load::<i32>(&_connection)
             .expect("E");
     }
+    pub fn get_all_blogs(&self) -> Vec<Blog> {
+        use crate::schema::blogs::dsl::blogs;
+
+        let _connection = establish_connection();
+        return blogs
+            .filter(schema::blogs::id.eq_any(self.get_blogs_ids()))
+            .order(schema::blogs::position.desc())
+            .load::<Blog>(&_connection)
+            .expect("E");
+    }
+
     pub fn get_image(&self) -> String {
         if self.image.is_some() {
             return self.image.as_deref().unwrap().to_string();
