@@ -54,7 +54,7 @@
                 </select>
             </div>
 
-            <% include!("../generic/form/create_serves.stpl"); %>
+            <% include!("../generic/form/edit_serves.stpl"); %>
 
             <div class="mb-20 mb-md-10">
               <% for img in images.iter() { %>
