@@ -29,10 +29,8 @@
                 <input class="input-md form-control" type="file" name="main_image" />
             </div>
 
-            <% include!("../generic/form/create_serves.stpl"); %>
-            
             <div class="mb-20 mb-md-10">
-                <label>Категории</label>
+                <label>Категории новой работы</label>
                 <select class="form-control" name="category_list[]" multiple="">
                   <% for category in work_cats.iter() { %>
                     <option value="<%= category.id %>"><%= category.name %></option>
@@ -47,6 +45,9 @@
                   <% } %>
                 </select>
             </div>
+
+            <% include!("../generic/form/create_serves.stpl"); %>
+            
             <div class="mb-20 mb-md-10">
                 <label>Изображения</label>
                 <input type="file" multiple name="images[]" />
