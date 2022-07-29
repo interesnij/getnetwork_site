@@ -11,7 +11,9 @@
                 </div>
     </div>
 </section>
-
+<% for id in object.get_tech_cats_ids().iter() { %>
+  <%= id %>,
+<% } %>
 <section class="page-section">
     <div class="container relative">
         <form class="form mb-20 col-md-8 col-md-offset-2" enctype="multipart/form-data">
