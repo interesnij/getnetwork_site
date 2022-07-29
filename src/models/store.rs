@@ -54,7 +54,7 @@ impl StoreCategories {
         let _connection = establish_connection();
         return stores
             .filter(schema::stores::id.eq_any(self.get_stores_ids()))
-            .order(stores::position.desc())
+            .order(schema::stores::created.desc())
             .load::<Store>(&_connection)
             .expect("E");
     }

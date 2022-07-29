@@ -54,7 +54,7 @@ impl WikiCategories {
         let _connection = establish_connection();
         return wikis
             .filter(schema::wikis::id.eq_any(self.get_wikis_ids()))
-            .order(wikis::position.desc())
+            .order(schema::wikis::created.desc())
             .load::<Wiki>(&_connection)
             .expect("E");
     }

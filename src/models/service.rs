@@ -54,7 +54,7 @@ impl ServiceCategories {
         let _connection = establish_connection();
         return services
             .filter(schema::services::id.eq_any(self.get_services_ids()))
-            .order(services::position.desc())
+            .order(schema::services::created.desc())
             .load::<Service>(&_connection)
             .expect("E");
     }

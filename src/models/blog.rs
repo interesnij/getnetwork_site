@@ -97,7 +97,7 @@ impl BlogCategories {
         let _connection = establish_connection();
         return blogs
             .filter(schema::blogs::id.eq_any(self.get_blogs_ids()))
-            .order(blogs::position.desc())
+            .order(schema::blogs::created.desc())
             .load::<Blog>(&_connection)
             .expect("E");
     }
