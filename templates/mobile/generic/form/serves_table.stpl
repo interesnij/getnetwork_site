@@ -9,7 +9,7 @@
     </h3>
     <div class="">
         <div class="align-center">
-            <ul class="nav nav-tabs tpl-minimal-tabs animate">
+            <ul class="nav nav-tabs tpl-minimal-tabs animate price_mode">
               <% for (i, cat) in s_cats.iter().enumerate() { %>
                 <% if i == 0 { %>
                   <li data-sum="<%= cat.default_price %>" class="yy s_<%= i + 1 %> active">

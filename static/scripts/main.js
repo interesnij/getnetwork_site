@@ -342,13 +342,19 @@ on('#ajax', 'click', '.select_serve', function(event) {
   }
 });
 
-function service_tab_action(_this, tab_class){
+function service_tab_action(_this, tab_class) {
+  is_price_mode = false;
+  if _this.parentElement.classList.contains("price_mode") {
+      is_price_mode = true;
+  }
   counter = document.body.querySelector(".total_price_counter");
   if (!_this.classList.contains("active")){
-    old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
-    new_price = _this.getAttribute("data-sum")*1;
-    serves_ids = counter.parentElement.getAttribute("data-servelist").slice(-1).split(",");
-    console.log(serves_ids);
+    if (is_price_mode) {
+      old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
+      new_price = _this.getAttribute("data-sum")*1;
+      serves_ids = counter.parentElement.getAttribute("data-servelist").slice(-1).split(",");
+      console.log(serves_ids);
+    };
     nav = _this.parentElement.parentElement.parentElement;
     nav_items = nav.querySelectorAll(".yy");
     for (var i = 0; i < nav_items.length; i++) {
@@ -360,7 +366,8 @@ function service_tab_action(_this, tab_class){
     tabs = nav.querySelector(".tab-content");
 
     tabs_panes = tabs.querySelectorAll(".tab-pane");
-    for (var i = 0; i < tabs_panes.length; i++){
+    for (var i = 0; i < tabs_panes.length; i++) {
+      if (is_price_mode) {
         serve_list = tabs_panes[i].querySelectorAll(".select_serve");
         for (var i2 = 0; i2 < serve_list.length; i2++){
             if (!serve_list[i2].classList.contains("is_default") && serve_list[i2].classList.contains("hover")){
@@ -372,12 +379,14 @@ function service_tab_action(_this, tab_class){
               }
             }
         };
+      };
       tabs_panes[i].classList.remove("active", "in")
     };
 
     cur = tabs.querySelector(tab_class);
     cur.classList.add("active", "in");
 
+    if (is_price_mode) {
     counter.innerHTML = counter.innerHTML*1 - old_price + new_price;
 
     // после смены таба перезапишем список выбранных опций
@@ -387,6 +396,7 @@ function service_tab_action(_this, tab_class){
     };
     counter.parentElement.setAttribute("data-servelist", serves_ids);
     ///////
+    };
   }
 };
 

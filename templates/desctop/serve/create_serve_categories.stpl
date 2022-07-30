@@ -29,7 +29,7 @@
               <select class="input-md form-control" name="tech_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
                 <% for category in tech_cats.iter() { %>
                   <option value="<%= category.id %>">
-                    <%= category.name %>
+                    <%= category.name %> (Уровень <%= category.level %>)
                   </option>
                 <% } %>
               </select>
