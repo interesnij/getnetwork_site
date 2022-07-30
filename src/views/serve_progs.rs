@@ -45,6 +45,7 @@ pub fn serve_routes(config: &mut web::ServiceConfig) {
         .route(web::get().to(create_tech_categories_page))
         .route(web::post().to(create_tech_categories))
     );
+    config.route("/load_serve_categories_from_level/{level}/", web::get().to(load_serve_categories_from_level));
     config.service(web::resource("/create_serve_categories/")
         .route(web::get().to(create_serve_categories_page))
         .route(web::post().to(create_serve_categories))
@@ -318,6 +319,32 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
         }
     }
 }
+
+pub async fn load_serve_categories_from_level(session: Session, level: web::Path<i16>) -> actix_web::Result<HttpResponse> {
+    if !is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+    }
+    else {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm != 60 {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/serve/load_serve_categories.stpl")]
+            struct Template {
+                serve_cats: Vec<ServeCategories>,
+            }
+            let body = Template {
+                serve_cats: ServeCategories::get_categories_from_level(*level),
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+}
+
 pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))

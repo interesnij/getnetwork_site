@@ -68,6 +68,25 @@ pub struct ServeCategories {
     pub user_id:         i32,
 }
 impl ServeCategories {
+    pub fn get_categories_from_level(level: i16) -> Vec<ServeCategories> {
+        use crate::schema::{
+            serve_categories::dsl::serve_categories,
+            tech_categories::dsl::tech_categories,
+        };
+
+        let _connection = establish_connection();
+        let tech_cats_ids = tech_categories
+            .filter(schema::tech_categories::level.eq(level))
+            .select(schema::tech_categories::id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        return serve_categories
+            .filter(schema::serve_categories::tech_categories.eq_any(tech_cats_ids))
+            .load::<ServeCategories>(&_connection)
+            .expect("E");
+    }
+
     pub fn get_serves(&self) -> Vec<Serve> {
         use crate::schema::serve::dsl::serve;
 

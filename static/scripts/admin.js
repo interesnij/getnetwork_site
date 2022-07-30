@@ -322,3 +322,20 @@ on('body', 'click', '.remove_tag', function() {
   delete_item("/delete_tag/" + this.getAttribute("data-pk") + "/");
   this.parentElement.remove();
 });
+
+on('#ajax', 'change', '.load_tech_categories_from_level', function() {
+  val = this.value;
+  next = this.nextElementSibling;
+  block = next.querySelector(".form-control");
+  var link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+    link.open( 'GET', "/load_serve_categories_from_level/" + this.value + "/", true );
+    link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    link.onreadystatechange = function () {
+      if ( link.readyState == 4 ) {
+          if ( link.status == 200 ) {
+              block.innerHTML = link.responseText;
+          }
+      }
+  };
+  link.send( null );
+});

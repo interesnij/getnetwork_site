@@ -12,11 +12,11 @@
 
   <% for category in tech_category.get_serve_categories().iter() { %>
   <div>
-    <h6>
+    <h5>
       <a class="ajax" href="/serve_categories/<%= category.id %>/">
         <%= category.name %>
       </a>
-    </h6>
+    </h5>
     <table class="table">
       <tbody>
         <% for object in category.get_serves().iter() { %>

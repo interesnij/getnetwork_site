@@ -17,7 +17,7 @@
   <% for category in tech_category.get_serve_categories().iter() { %>
 
   <div>
-    <h6>
+    <h5>
       <a class="ajax" href="/serve_categories/<%= category.id %>/">
         <%= category.name %>
       </a>
@@ -27,7 +27,7 @@
           <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
         <% } %>
       </span>
-    </h6>
+    </h5>
     <table class="table">
       <tbody>
         <% for object in category.get_serves().iter() { %>

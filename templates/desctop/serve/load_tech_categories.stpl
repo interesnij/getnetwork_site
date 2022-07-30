@@ -1,0 +1,5 @@
+<% for category in serve_cats.iter() { %>
+  <option value="<%= category.id %>">
+    <%= category.cat_name %> => <%= category.name %>
+  </option>
+<% } %>
