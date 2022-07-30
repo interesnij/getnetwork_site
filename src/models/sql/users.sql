@@ -30,13 +30,13 @@ CREATE TABLE users (
 CREATE TABLE tags (
     id            SERIAL PRIMARY KEY,
     name          VARCHAR(100) NOT NULL,
-    position      INT NOT NULL,
-    count         INT NOT NULL,
-    blog_count    INT NOT NULL,
-    service_count INT NOT NULL,
-    store_count   INT NOT NULL,
-    wiki_count    INT NOT NULL,
-    work_count    INT NOT NULL,
+    position      SMALLINT NOT NULL,
+    count         SMALLINT NOT NULL,
+    blog_count    SMALLINT NOT NULL,
+    service_count SMALLINT NOT NULL,
+    store_count   SMALLINT NOT NULL,
+    wiki_count    SMALLINT NOT NULL,
+    work_count    SMALLINT NOT NULL,
     user_id       INT NOT NULL,
 
     CONSTRAINT fk_tag_creator

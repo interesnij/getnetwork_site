@@ -19,13 +19,13 @@ use crate::utils::establish_connection;
 pub struct Tag {
     pub id:            i32,
     pub name:          String,
-    pub position:      i32,
-    pub count:         i32,
-    pub blog_count:    i32,
-    pub service_count: i32,
-    pub store_count:   i32,
-    pub wiki_count:    i32,
-    pub work_count:    i32,
+    pub position:      i16,
+    pub count:         i16,
+    pub blog_count:    i16,
+    pub service_count: i16,
+    pub store_count:   i16,
+    pub wiki_count:    i16,
+    pub work_count:    i16,
     pub user_id:       i32,
 }
 impl Tag {
@@ -65,13 +65,13 @@ impl Tag {
 #[table_name="tags"]
 pub struct NewTag {
     pub name:          String,
-    pub position:      i32,
-    pub count:         i32,
-    pub blog_count:    i32,
-    pub service_count: i32,
-    pub store_count:   i32,
-    pub wiki_count:    i32,
-    pub work_count:    i32,
+    pub position:      i16,
+    pub count:         i16,
+    pub blog_count:    i16,
+    pub service_count: i16,
+    pub store_count:   i16,
+    pub wiki_count:    i16,
+    pub work_count:    i16,
     pub user_id:       i32,
 }
 
@@ -79,7 +79,7 @@ pub struct NewTag {
 #[table_name="tags"]
 pub struct EditTag {
     pub name:     String,
-    pub position: i32,
+    pub position: i16,
 }
 
 #[derive(Identifiable, Serialize, PartialEq, Queryable, Associations)]
