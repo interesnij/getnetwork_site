@@ -355,6 +355,7 @@ pub async fn load_form_from_level(session: Session, level: web::Path<i16>) -> ac
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
         }
         else {
+            use crate::schema::tech_categories::dsl::tech_categories;
             let _connection = establish_connection();
             let _tech_categories = tech_categories
                 .filter(schema::tech_categories::level.eq(*level))
