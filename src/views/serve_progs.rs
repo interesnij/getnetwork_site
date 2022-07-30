@@ -336,7 +336,7 @@ pub async fn load_serve_categories_from_level(session: Session, level: web::Path
                 serve_cats: Vec<ServeCategories>,
             }
             let body = Template {
-                serve_cats: ServeCategories::get_categories_from_level(*&level),
+                serve_cats: ServeCategories::get_categories_from_level(&*level),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -568,8 +568,8 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
         let _serve = _serves.into_iter().nth(0).unwrap();
 
         let _serve_cat = serve
-            .filter(schema::serve::id.eq(&_serve.serve_categories))
-            .load::<Serve>(&_connection)
+            .filter(schema::serve_categories::id.eq(&_serve.serve_categories))
+            .load::<ServeCategories>(&_connection)
             .expect("E")
             .into_iter()
             .nth(0)
