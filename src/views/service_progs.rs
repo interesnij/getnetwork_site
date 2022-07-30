@@ -261,7 +261,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     all_tags:     Vec<Tag>,
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
-                    tech_cats:    Vec<TechCategories>,
+                    tech_cats:    Vec<&TechCategories>,
                     level:        i16,
                 }
                 let body = Template {
@@ -294,7 +294,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     all_tags:     Vec<Tag>,
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
-                    tech_cats:    Vec<TechCategories>,
+                    tech_cats:    Vec<&TechCategories>,
                     level:        i16,
                 }
                 let body = Template {
