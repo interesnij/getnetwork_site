@@ -240,7 +240,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 .load::<TechCategories>(&_connection)
                 .expect("E");
 
-            let level = _tech_categories.into_iter().nth(0).unwrap().level;
+            let level = _tech_categories[0].level;
             let mut new_tech_stack = Vec::new();
             for cat in _tech_categories.iter() {
                 if cat.level == level {
