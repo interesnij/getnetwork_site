@@ -336,7 +336,7 @@ pub async fn load_serve_categories_from_level(session: Session, level: web::Path
                 serve_cats: Vec<ServeCategories>,
             }
             let body = Template {
-                serve_cats: ServeCategories::get_categories_from_level(*level),
+                serve_cats: ServeCategories::get_categories_from_level(*&level),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -559,14 +559,24 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
 
         let _request_user = get_request_user_data(&session);
         let _cat_id: i32 = *_id;
-        let all_tech_categories :Vec<TechCategories> = tech_categories
+        let all_tech_categories = tech_categories
             .order(schema::tech_categories::position.asc())
-            .load(&_connection)
+            .load::<TechCategories>(&_connection)
             .expect("E.");
         let _serve_id: i32 = *_id;
         let _serves = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
         let _serve = _serves.into_iter().nth(0).unwrap();
-        let _serve_cats:Vec<ServeCategories> = serve_categories.load(&_connection).expect("E");
+
+        let _tech_category = tech_categories
+            .filter(schema::tech_categories::id.eq(_serve.tech_categories))
+            .load::<TechCategories>(&_connection)
+            .expect("E.")
+            .into_iter()
+            .nth(0)
+            .unwrap();
+
+        let _level = _tech_category.level;
+        let _serve_cats = ServeCategories::get_categories_from_level(&_level);
 
         if _serve.user_id != _request_user.id {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -578,6 +588,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 struct Template {
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
+                    level:        i16,
                     serve_cats:   Vec<ServeCategories>,
                     object:       Serve,
                     is_ajax:      bool,
@@ -585,6 +596,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 let body = Template {
                     request_user: _request_user,
                     tech_cats:    all_tech_categories,
+                    level:        level,
                     serve_cats:   _serve_cats,
                     object:       _serve,
                     is_ajax:      is_ajax,
@@ -599,6 +611,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 struct Template {
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
+                    level:        i16,
                     serve_cats:   Vec<ServeCategories>,
                     object:       Serve,
                     is_ajax:      bool,
@@ -606,6 +619,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 let body = Template {
                     request_user: _request_user,
                     tech_cats:    all_tech_categories,
+                    level:        level,
                     serve_cats:   _serve_cats,
                     object:       _serve,
                     is_ajax:      is_ajax,

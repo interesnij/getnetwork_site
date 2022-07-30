@@ -68,7 +68,7 @@ pub struct ServeCategories {
     pub user_id:         i32,
 }
 impl ServeCategories {
-    pub fn get_categories_from_level(level: i16) -> Vec<ServeCategories> {
+    pub fn get_categories_from_level(level: &i16) -> Vec<ServeCategories> {
         use crate::schema::{
             serve_categories::dsl::serve_categories,
             tech_categories::dsl::tech_categories,

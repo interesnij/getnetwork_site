@@ -345,7 +345,7 @@ on('#ajax', 'click', '.select_serve', function(event) {
 function service_tab_action(_this, tab_class) {
   is_price_mode = false;
   if (_this.parentElement.classList.contains("price_mode")) {
-      is_price_mode = true;
+      is_price_mode = true; 
   }
   counter = document.body.querySelector(".total_price_counter");
   if (!_this.classList.contains("active")){

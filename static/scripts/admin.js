@@ -334,6 +334,15 @@ on('#ajax', 'change', '.load_tech_categories_from_level', function() {
       if ( link.readyState == 4 ) {
           if ( link.status == 200 ) {
               block.innerHTML = link.responseText;
+              if (block.getAttribute("data-cat-id")) {
+                options = block.querySelectorAll("option");
+                cat_id = block.getAttribute("data-cat-id");
+                for (var i = 0; i < options.length; i++) {
+                  if (options[i].val == cat_id) {
+                    options[i].setAttribute("selected", "selected");
+                  }
+                }
+              }
               next.classList.remove("hidden");
           }
       }
