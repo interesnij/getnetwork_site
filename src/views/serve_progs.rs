@@ -373,13 +373,11 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
                 struct Template {
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
-                    serve_cats:   Vec<ServeCategories>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     tech_cats:    _tech_categories,
-                    serve_cats:   _categories,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
@@ -392,13 +390,11 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
                 struct Template {
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
-                    serve_cats:   Vec<ServeCategories>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     tech_cats:    _tech_categories,
-                    serve_cats:   _categories,
                     is_ajax:      is_ajax,
                 }
                 .render_once()

@@ -711,7 +711,7 @@ a.btn-mod:focus{
     font-size: 12px;
 }
 .form select[multiple]{
-    height: 300px;
+    height: 100px;
 }
 
 .form input[type="text"]:focus,
