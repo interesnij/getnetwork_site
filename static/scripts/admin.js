@@ -325,7 +325,7 @@ on('body', 'click', '.remove_tag', function() {
 
 on('#ajax', 'change', '.load_tech_categories_from_level', function() {
   val = this.value;
-  next = this.nextElementSibling;
+  next = this.parentElement.nextElementSibling;
   block = next.querySelector(".form-control");
   var link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     link.open( 'GET', "/load_serve_categories_from_level/" + this.value + "/", true );
