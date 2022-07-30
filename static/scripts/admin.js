@@ -334,6 +334,7 @@ on('#ajax', 'change', '.load_tech_categories_from_level', function() {
       if ( link.readyState == 4 ) {
           if ( link.status == 200 ) {
               block.innerHTML = link.responseText;
+              next.classList.remove("hidden");
           }
       }
   };

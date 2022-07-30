@@ -27,17 +27,18 @@
                 <input class="input-md form-control" type="number" name="serve_position" placeholder="Порядок следования" />
             </div>
             <div class="mb-20 mb-md-10">
-              <label>Выберите уровень сложности</label>
+              <label>Уровень сложности</label>
               <select class="input-md form-control load_tech_categories_from_level" data-live-search="true" tabindex="-1" aria-hidden="true">
-                  <option value="1">Начальный</option>
-                  <option value="2">Продвинутый</option>
-                  <option value="3">Экспертный</option>
+                <option value="">Не выбрано</option>
+                <option value="1">Начальный</option>
+                <option value="2">Продвинутый</option>
+                <option value="3">Экспертный</option>
               </select>
             </div>
             <div class="mb-20 mb-md-10 hidden">
               <label>Категория</label>
               <select class="input-md form-control" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
-                
+
               </select>
             </div>
             <div class="mb-20 mb-md-10">
