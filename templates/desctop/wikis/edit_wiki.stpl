@@ -13,8 +13,8 @@
 </section>
 
 <section class="page-section">
-    <div class="container relative">
-        <form class="form mb-20 col-md-8 col-md-offset-2" enctype="multipart/form-data">
+    <div class="row container relative">
+        <form class="form mb-20 col-md-8" enctype="multipart/form-data">
             <div class="mb-20 mb-md-10">
                 <input value="<%= object.title %>" class="input-md form-control" type="text" name="title" placeholder="Название" />
             </div>
@@ -79,6 +79,22 @@
             </div>
             <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_wiki_btn">Изменить</button>
         </form>
+        <div class="col-md-4">
+            <% for category in wiki_cats.iter() { %>
+            <div class="margin-bottom:15px">
+              <h6><%= category.name %>
+                | <a class="ajax" href="/edit_wiki_category/<%= category.id %>/">~</a>
+                | <a class="pointer remove_wiki_category" data-pk="<%= category.id %>">x</a>
+              </h6>
+              <% for object in category.get_all_wikis().iter() { %>
+                <p><%= object.title %>
+                  | <a class="ajax" href="/edit_wiki/<%= object.id %>/">~</a>
+                  | <a class="pointer remove_wiki" data-pk="<%= object.id %>">x</a>
+                </p>
+              <% } %>
+            </div>
+            <% } %>
+        </div>
     </div>
 </section>
 
