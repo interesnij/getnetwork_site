@@ -944,7 +944,7 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 cat_name:         _category[0].name.clone(),
                 description:      Some(form.description.clone()),
                 position:         form.position,
-                serve_categories: _cat_id,
+                serve_categories: _serve.serve_categories,
                 price:            form.price,
                 man_hours:        form.man_hours,
                 is_default:       is_default,
