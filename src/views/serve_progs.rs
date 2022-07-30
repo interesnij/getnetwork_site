@@ -567,7 +567,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
         let _serves = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
         let _serve = _serves.into_iter().nth(0).unwrap();
 
-        let _serve_cat = serve
+        let _serve_cat = serve_categories
             .filter(schema::serve_categories::id.eq(&_serve.serve_categories))
             .load::<ServeCategories>(&_connection)
             .expect("E")
@@ -603,7 +603,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 let body = Template {
                     request_user: _request_user,
                     tech_cats:    all_tech_categories,
-                    level:        level,
+                    level:        _level,
                     serve_cats:   _serve_cats,
                     object:       _serve,
                     is_ajax:      is_ajax,
@@ -626,7 +626,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 let body = Template {
                     request_user: _request_user,
                     tech_cats:    all_tech_categories,
-                    level:        level,
+                    level:        _level,
                     serve_cats:   _serve_cats,
                     object:       _serve,
                     is_ajax:      is_ajax,
