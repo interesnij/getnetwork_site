@@ -19,11 +19,17 @@
                 <input value="<%= object.title %>" class="input-md form-control" type="text" name="title" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
+                <input value="<%= object.price %>" class="input-md form-control" type="number" name="price" placeholder="Цена" />
+            </div>
+            <div class="mb-20 mb-md-10">
               <% if object.description.is_some() { %>
                 <input value="<%= object.description.as_deref().unwrap() %>" class="input-md form-control" type="text" name="description" placeholder="Описание" />
               <% } else { %>
                 <input value="" class="input-md form-control" type="text" name="description" placeholder="Описание" />
               <% } %>
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input value="<%= object.position %>" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
             </div>
             <div class="mb-20 mb-md-10">
               <% if object.link.is_some() { %>
@@ -83,7 +89,7 @@
             </div>
             <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_work_btn">Изменить</button>
         </form>
-        
+
     </div>
 </section>
 

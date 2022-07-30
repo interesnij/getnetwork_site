@@ -24,6 +24,9 @@
             <div class="mb-20 mb-md-10">
                 <input class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
             </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="level" placeholder="Уровень сложности" />
+            </div>
             <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_tech_category_btn">Создать</button>
         </form>
         <section class="border small-section bg-dark">

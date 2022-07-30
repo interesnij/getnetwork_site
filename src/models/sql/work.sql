@@ -5,9 +5,9 @@ CREATE TABLE work_categories (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100) NOT NULL,
     description VARCHAR(500),
-    position    INT NOT NULL,
+    position    SMALLINT NOT NULL,
     image       VARCHAR(500),
-    count       INT NOT NULL
+    count       SMALLINT NOT NULL
 );
 
 CREATE TABLE works (
@@ -18,9 +18,10 @@ CREATE TABLE works (
     link        VARCHAR(500),
     image       VARCHAR(500),
     is_active   BOOLEAN NOT NULL,
-    price       INT NOT NULL, 
+    price       INT NOT NULL,
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
+    position    SMALLINT NOT NULL,
 
     CONSTRAINT fk_work_creator
         FOREIGN KEY(user_id)

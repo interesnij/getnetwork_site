@@ -5,9 +5,9 @@ CREATE TABLE store_categories (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100) NOT NULL,
     description VARCHAR(1000),
-    position    INT NOT NULL,
+    position    SMALLINT NOT NULL,
     image       VARCHAR(500),
-    count       INT NOT NULL
+    count       SMALLINT NOT NULL
 );
 
 CREATE TABLE stores (
@@ -21,6 +21,7 @@ CREATE TABLE stores (
     price        INT NOT NULL,
     user_id      INT NOT NULL,
     created      TIMESTAMP NOT NULL,
+    position     SMALLINT NOT NULL,
 
     CONSTRAINT fk_store_creator
         FOREIGN KEY(user_id)

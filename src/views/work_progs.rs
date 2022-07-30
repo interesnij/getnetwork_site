@@ -515,6 +515,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                 form.is_active.clone(),
                 0,
                 _request_user.id,
+                form.position,
             );
 
             let _work = diesel::insert_into(schema::works::table)
@@ -621,7 +622,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
             let mut tech_cat_ids = Vec::new();
             let mut work_price = 0;
             for _serve in _serves.iter() {
-                if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
+                if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
                     tech_cat_ids.push(_serve.tech_cat_id);
                 }
                 work_price += _serve.price;
@@ -716,7 +717,8 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
                 description: Some(form.description.clone()),
                 link:        Some(form.link.clone()),
                 image:       Some(form.main_image.clone()),
-                is_active:   form.is_active.clone()
+                is_active:   form.is_active.clone(),
+                position:    form.position,
             };
 
             diesel::update(&_work)
@@ -823,7 +825,7 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
             let mut tech_cat_ids = Vec::new();
             let mut work_price = 0;
             for _serve in _serves.iter() {
-                if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
+                if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
                     tech_cat_ids.push(_serve.tech_cat_id);
                 }
                 work_price += _serve.price;

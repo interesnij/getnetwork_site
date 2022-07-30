@@ -19,7 +19,13 @@
                 <input class="input-md form-control" type="text" name="title" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="price" placeholder="Цена" />
+            </div>
+            <div class="mb-20 mb-md-10">
                 <input class="input-md form-control" type="text" name="description" placeholder="Описание" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
             </div>
             <div class="mb-20 mb-md-10">
                 <input class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
@@ -47,7 +53,7 @@
             </div>
 
             <% include!("../generic/form/create_serves.stpl"); %>
-            
+
             <div class="mb-20 mb-md-10">
                 <label>Изображения</label>
                 <input type="file" multiple name="images[]" />

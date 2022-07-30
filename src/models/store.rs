@@ -25,9 +25,9 @@ pub struct StoreCategories {
     pub id:          i32,
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 impl StoreCategories {
     pub fn get_image(&self) -> String {
@@ -54,7 +54,7 @@ impl StoreCategories {
         let _connection = establish_connection();
         return stores
             .filter(schema::stores::id.eq_any(self.get_stores_ids()))
-            .order(schema::stores::created.desc())
+            .order(schema::stores::position.desc())
             .load::<Store>(&_connection)
             .expect("E");
     }
@@ -88,7 +88,7 @@ impl StoreCategories {
         return stores
             .filter(schema::stores::id.eq_any(ids))
             .filter(schema::stores::is_active.eq(true))
-            .order(schema::stores::created.desc())
+            .order(schema::stores::position.desc())
             .limit(limit)
             .offset(offset)
             .load::<Store>(&_connection)
@@ -104,7 +104,7 @@ impl StoreCategories {
         return stores
             .filter(schema::stores::id.eq_any(ids))
             .filter(schema::stores::is_active.eq(true))
-            .order(schema::stores::created.desc())
+            .order(schema::stores::position.desc())
             .limit(6)
             .load::<Store>(&_connection)
             .expect("E.");
@@ -116,9 +116,9 @@ impl StoreCategories {
 pub struct NewStoreCategories {
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -126,9 +126,9 @@ pub struct NewStoreCategories {
 pub struct EditStoreCategories {
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 
 #[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
@@ -144,6 +144,7 @@ pub struct Store {
     pub price:       i32,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+    pub position:    i16,
 }
 
 impl Store {
@@ -227,6 +228,7 @@ impl Store {
 
         return tech_categories
             .filter(schema::tech_categories::id.eq_any(ids))
+            .order(schema::tech_categories::position.desc())
             .load::<TechCategories>(&_connection)
             .expect("E");
     }
@@ -247,6 +249,7 @@ impl Store {
 
         return tech_categories
             .filter(schema::tech_categories::id.eq_any(ids))
+            .order(schema::tech_categories::position.desc())
             .load::<TechCategories>(&_connection)
             .expect("E");
     }
@@ -267,7 +270,7 @@ impl Store {
         let _connection = establish_connection();
         return stores
             .filter(schema::stores::is_active.eq(true))
-            .order(schema::stores::created.desc())
+            .order(schema::stores::position.desc())
             .limit(6)
             .load::<Store>(&_connection)
             .expect("E.");
@@ -299,7 +302,7 @@ impl Store {
         return stores
             .filter(schema::stores::id.eq_any(ids))
             .filter(schema::stores::is_active.eq(true))
-            .order(schema::stores::created.desc())
+            .order(schema::stores::position.desc())
             .limit(limit)
             .offset(offset)
             .load::<Store>(&_connection)
@@ -315,6 +318,7 @@ pub struct EditStore {
     pub link:        Option<String>,
     pub image:       Option<String>,
     pub is_active:   bool,
+    pub position:    i16,
 }
 
 #[derive(Serialize, Insertable)]
@@ -328,6 +332,7 @@ pub struct NewStore {
     pub price:       i32,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+    pub position:    i16,
 }
 
 impl NewStore {
@@ -338,7 +343,8 @@ impl NewStore {
         image:       String,
         is_active:   bool,
         price:       i32,
-        user_id:     i32
+        user_id:     i32,
+        position:    i16
     ) -> Self {
         NewStore {
             title:       title,
@@ -349,6 +355,7 @@ impl NewStore {
             price:       price,
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
+            position:    position,
         }
     }
 }

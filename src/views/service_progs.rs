@@ -512,6 +512,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 form.is_active.clone(),
                 0,
                 _request_user.id,
+                form.position,
             );
 
             let _service = diesel::insert_into(schema::services::table)
@@ -619,7 +620,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
             let mut tech_cat_ids = Vec::new();
             let mut service_price = 0;
             for _serve in _serves.iter() {
-                if !tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
+                if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
                     tech_cat_ids.push(_serve.tech_cat_id);
                 }
                 service_price += _serve.price;
@@ -714,7 +715,8 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 description: Some(form.description.clone()),
                 link:        Some(form.link.clone()),
                 image:       Some(form.main_image.clone()),
-                is_active:   form.is_active.clone()
+                is_active:   form.is_active.clone(),
+                position:    form.position,
             };
 
             diesel::update(&_service)
@@ -821,8 +823,6 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             let mut tech_cat_ids = Vec::new();
             let mut service_price = 0;
             for _serve in _serves.iter() {
-                //println!("serve.tech_cat_id{:?}", _serve.tech_cat_id);
-                //println!("{:?}", form.username.clone());
                 if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
                     tech_cat_ids.push(_serve.tech_cat_id);
                 }

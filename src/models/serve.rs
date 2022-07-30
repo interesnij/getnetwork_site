@@ -25,8 +25,9 @@ pub struct TechCategories {
     pub id:          i32,
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
-    pub count:       i32,
+    pub position:    i16,
+    pub count:       i16,
+    pub level:       i16,
     pub user_id:     i32,
 }
 
@@ -46,8 +47,9 @@ impl TechCategories {
 pub struct NewTechCategories {
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
-    pub count:       i32,
+    pub position:    i16,
+    pub count:       i16,
+    pub level:       i16,
     pub user_id:     i32,
 }
 
@@ -60,8 +62,8 @@ pub struct ServeCategories {
     pub description:     Option<String>,
     pub cat_name:        String,
     pub tech_categories: i32,
-    pub position:        i32,
-    pub count:           i32,
+    pub position:        i16,
+    pub count:           i16,
     pub default_price:   i32,
     pub user_id:         i32,
 }
@@ -84,8 +86,8 @@ pub struct NewServeCategories {
     pub description:     Option<String>,
     pub cat_name:        String,
     pub tech_categories: i32,
-    pub position:        i32,
-    pub count:           i32,
+    pub position:        i16,
+    pub count:           i16,
     pub default_price:   i32,
     pub user_id:         i32,
 }
@@ -99,13 +101,14 @@ pub struct Serve {
     pub name:             String,
     pub cat_name:         String,
     pub description:      Option<String>,
-    pub position:         i32,
+    pub position:         i16,
     pub serve_categories: i32,
     pub price:            i32,
-    pub man_hours:        i32,
+    pub man_hours:        i16,
     pub is_default:       bool,
     pub user_id:          i32,
     pub tech_cat_id:      i32,
+    pub types:            Option<String>,
 }
 
 impl Serve {
@@ -131,13 +134,14 @@ pub struct NewServe {
     pub name:             String,
     pub cat_name:         String,
     pub description:      Option<String>,
-    pub position:         i32,
+    pub position:         i16,
     pub serve_categories: i32,
     pub price:            i32,
-    pub man_hours:        i32,
+    pub man_hours:        i16,
     pub is_default:       bool,
     pub user_id:          i32,
     pub tech_cat_id:      i32,
+    pub types:            Option<String>,
 }
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="serve"]
@@ -145,11 +149,12 @@ pub struct EditServe {
     pub name:             String,
     pub cat_name:         String,
     pub description:      Option<String>,
-    pub position:         i32,
+    pub position:         i16,
     pub serve_categories: i32,
     pub price:            i32,
-    pub man_hours:        i32,
+    pub man_hours:        i16,
     pub is_default:       bool,
+    pub types:            Option<String>,
 }
 
 /////// ServeItems //////

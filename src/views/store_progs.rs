@@ -509,6 +509,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                 form.is_active.clone(),
                 0,
                 _request_user.id,
+                form.position,
             );
 
             let _store = diesel::insert_into(schema::stores::table)
@@ -616,7 +617,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
             let mut tech_cat_ids = Vec::new();
             let mut store_price = 0;
             for _serve in _serves.iter() {
-                if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
+                if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
                     tech_cat_ids.push(_serve.tech_cat_id);
                 }
                 store_price += _serve.price;
@@ -712,6 +713,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 link:        Some(form.link.clone()),
                 image:       Some(form.main_image.clone()),
                 is_active:   form.is_active.clone(),
+                position:    form.position,
             };
 
             diesel::update(&_store)
@@ -818,7 +820,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
             let mut tech_cat_ids = Vec::new();
             let mut store_price = 0;
             for _serve in _serves.iter() {
-                if tech_cat_ids.iter().any(|&i| i!=_serve.tech_cat_id) {
+                if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
                     tech_cat_ids.push(_serve.tech_cat_id);
                 }
                 store_price += _serve.price;

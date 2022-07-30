@@ -26,9 +26,9 @@ pub struct BlogCategories {
     pub id:          i32,
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 
 impl BlogCategories {
@@ -117,9 +117,9 @@ impl BlogCategories {
 pub struct NewBlogCategories {
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -127,9 +127,9 @@ pub struct NewBlogCategories {
 pub struct EditBlogCategories {
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 
 #[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]

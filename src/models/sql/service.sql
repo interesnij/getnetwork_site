@@ -6,9 +6,9 @@ CREATE TABLE service_categories (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100) NOT NULL,
     description VARCHAR(500),
-    position    INT NOT NULL,
+    position    SMALLINT NOT NULL,
     image       VARCHAR(500),
-    count       INT NOT NULL
+    count       SMALLINT NOT NULL
 );
 
 CREATE TABLE services (
@@ -22,6 +22,7 @@ CREATE TABLE services (
     price       INT NOT NULL,
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
+    position    SMALLINT NOT NULL,
 
     CONSTRAINT fk_service_creator
         FOREIGN KEY(user_id)

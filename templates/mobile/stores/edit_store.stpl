@@ -22,7 +22,9 @@
             <div class="mb-20 mb-md-10">
                 <input value="<%= object.price %>" class="input-md form-control" type="number" name="price" placeholder="Цена" />
             </div>
-
+            <div class="mb-20 mb-md-10">
+                <input value="<%= object.position %>" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+            </div>
             <div class="mb-20 mb-md-10">
               <% if object.description.is_some() { %>
                 <input value="<%= object.description.as_deref().unwrap() %>" class="input-md form-control" type="text" name="description" placeholder="Описание" />

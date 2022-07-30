@@ -26,9 +26,9 @@ pub struct WorkCategories {
     pub id:          i32,
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 impl WorkCategories {
     pub fn get_image(&self) -> String {
@@ -55,7 +55,7 @@ impl WorkCategories {
         let _connection = establish_connection();
         return works
             .filter(schema::works::id.eq_any(self.get_works_ids()))
-            .order(schema::works::created.desc())
+            .order(schema::works::position.desc())
             .load::<Work>(&_connection)
             .expect("E");
     }
@@ -89,7 +89,7 @@ impl WorkCategories {
         return works
             .filter(schema::works::id.eq_any(ids))
             .filter(schema::works::is_active.eq(true))
-            .order(schema::works::created.desc())
+            .order(schema::works::position.desc())
             .limit(limit)
             .offset(offset)
             .load::<Work>(&_connection)
@@ -104,7 +104,7 @@ impl WorkCategories {
         return works
             .filter(schema::works::id.eq_any(ids))
             .filter(schema::works::is_active.eq(true))
-            .order(schema::works::created.desc())
+            .order(schema::works::position.desc())
             .limit(6)
             .load::<Work>(&_connection)
             .expect("E.");
@@ -116,18 +116,18 @@ impl WorkCategories {
 pub struct NewWorkCategories {
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="work_categories"]
 pub struct EditWorkCategories {
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 
 /////// Work //////
@@ -144,6 +144,7 @@ pub struct Work {
     pub price:       i32,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+    pub position:    i16,
 }
 impl Work {
     pub fn get_image(&self) -> String {
@@ -171,7 +172,7 @@ impl Work {
         let _connection = establish_connection();
         return works
             .filter(schema::works::is_active.eq(true))
-            .order(schema::works::created.desc())
+            .order(schema::works::position.desc())
             .limit(3)
             .load::<Work>(&_connection)
             .expect("E.");
@@ -218,7 +219,7 @@ impl Work {
         return works
             .filter(schema::works::id.eq_any(ids))
             .filter(schema::works::is_active.eq(true))
-            .order(schema::works::created.desc())
+            .order(schema::works::position.desc())
             .limit(limit)
             .offset(offset)
             .load::<Work>(&_connection)
@@ -238,6 +239,7 @@ impl Work {
 
         return serve
             .filter(schema::serve::id.eq_any(_serve_items))
+            .order(schema::serve::position.desc())
             .load::<Serve>(&_connection)
             .expect("E");
     }
@@ -270,6 +272,7 @@ impl Work {
 
         return tech_categories
             .filter(schema::tech_categories::id.eq_any(ids))
+            .order(schema::tech_categories::position.desc())
             .load::<TechCategories>(&_connection)
             .expect("E");
     }
@@ -290,6 +293,7 @@ impl Work {
 
         return tech_categories
             .filter(schema::tech_categories::id.eq_any(ids))
+            .order(schema::tech_categories::position.desc())
             .load::<TechCategories>(&_connection)
             .expect("E");
     }
@@ -313,6 +317,7 @@ pub struct EditWork {
     pub link:        Option<String>,
     pub image:       Option<String>,
     pub is_active:   bool,
+    pub position:    i16,
 }
 #[derive(Serialize, Insertable)]
 #[table_name="works"]
@@ -325,6 +330,7 @@ pub struct NewWork {
     pub price:       i32,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+    pub position:    i16,
 }
 
 impl NewWork {
@@ -336,6 +342,7 @@ impl NewWork {
         is_active:   bool,
         price:       i32,
         user_id:     i32,
+        position:    i16,
     ) -> Self {
         NewWork {
             title:       title,
@@ -346,6 +353,7 @@ impl NewWork {
             price:       price,
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
+            position:    position,
         }
     }
 }

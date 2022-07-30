@@ -601,11 +601,12 @@ pub async fn create_tech_categories(session: Session, mut payload: Multipart) ->
             let _connection = establish_connection();
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewTechCategories {
-                name: form.name.clone(),
+                name:        form.name.clone(),
                 description: Some(form.description.clone()),
-                position: form.position,
-                count: 0,
-                user_id: _request_user.id,
+                position:    form.position,
+                count:       0,
+                level:       form.level,
+                user_id:     _request_user.id,
             };
             let _new_tech = diesel::insert_into(tech_categories::table)
                 .values(&new_cat)
@@ -664,11 +665,12 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
 
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewTechCategories {
-                name: form.name.clone(),
+                name:        form.name.clone(),
                 description: Some(form.description.clone()),
-                position: form.position,
-                count: _category.count,
-                user_id: _request_user.id,
+                position:    form.position,
+                count:       0,
+                level:       form.level,
+                user_id:     _request_user.id,
             };
             diesel::update(&_category)
                 .set(new_cat)
@@ -748,26 +750,28 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ServeForm {
-    pub name: String,
-    pub cat_name: String,
-    pub description: String,
-    pub position: i32,
+    pub name:             String,
+    pub cat_name:         String,
+    pub description:      String,
+    pub position:         i16,
     pub serve_categories: i32,
-    pub price: i32,
-    pub man_hours: i32,
-    pub is_default: bool,
+    pub price:            i32,
+    pub man_hours:        i16,
+    pub is_default:       bool,
+    pub types:            Option<String>,
 }
 
 pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
     let mut form: ServeForm = ServeForm {
-        name: "".to_string(),
-        cat_name: "".to_string(),
-        description: "".to_string(),
-        position: 0,
+        name:             "".to_string(),
+        cat_name:         "".to_string(),
+        description:      "".to_string(),
+        position:         0,
         serve_categories: 0,
-        price: 0,
-        man_hours: 0,
-        is_default: true,
+        price:            0,
+        man_hours:        0,
+        is_default:       true,
+        types:            None,
     };
 
     let mut is_default = false;
@@ -779,7 +783,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i32 = s.parse().unwrap();
+                    let _int: i16 = s.parse().unwrap();
                     form.position = _int;
                 }
             }
@@ -806,7 +810,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i32 = s.parse().unwrap();
+                    let _int: i16 = s.parse().unwrap();
                     form.man_hours = _int;
                 }
             }
@@ -832,6 +836,8 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                         form.name = data_string
                     } else if field.name() == "description" {
                         form.description = data_string
+                    } else if field.name() == "types" {
+                        form.types = Some(data_string)
                     };
                 }
             }
@@ -857,16 +863,17 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
                 is_default = true;
             };
             let _new_serve = NewServe {
-                name: form.name.clone(),
-                cat_name: _category[0].name.clone(),
-                description: Some(form.description.clone()),
-                position: form.position,
+                name:             form.name.clone(),
+                cat_name:         _category[0].name.clone(),
+                description:      Some(form.description.clone()),
+                position:         form.position,
                 serve_categories: _cat_id,
-                price: form.price,
-                man_hours: form.man_hours,
-                is_default: is_default,
-                user_id: _request_user.id,
-                tech_cat_id: _category[0].tech_categories,
+                price:            form.price,
+                man_hours:        form.man_hours,
+                is_default:       is_default,
+                user_id:          _request_user.id,
+                tech_cat_id:      _category[0].tech_categories,
+                types:            form.types,
             };
 
             let _serve = diesel::insert_into(schema::serve::table)
@@ -933,16 +940,17 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
             }
 
             let _new_serve = NewServe {
-                name: form.name.clone(),
-                cat_name: _category[0].name.clone(),
-                description: Some(form.description.clone()),
-                position: form.position,
-                serve_categories: form.serve_categories,
-                price: form.price,
-                man_hours: form.man_hours,
-                is_default: is_default,
-                user_id: _request_user.id,
-                tech_cat_id: _category[0].tech_categories,
+                name:             form.name.clone(),
+                cat_name:         _category[0].name.clone(),
+                description:      Some(form.description.clone()),
+                position:         form.position,
+                serve_categories: _cat_id,
+                price:            form.price,
+                man_hours:        form.man_hours,
+                is_default:       is_default,
+                user_id:          _request_user.id,
+                tech_cat_id:      _category[0].tech_categories,
+                types:            form.types,
             };
 
             diesel::update(&_serve)

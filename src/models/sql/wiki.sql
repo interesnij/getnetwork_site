@@ -5,9 +5,9 @@ CREATE TABLE wiki_categories (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100) NOT NULL,
     description VARCHAR(1000),
-    position    INT NOT NULL,
+    position    SMALLINT NOT NULL,
     image       VARCHAR(500),
-    count       INT NOT NULL
+    count       SMALLINT NOT NULL
 );
 
 CREATE TABLE wikis (

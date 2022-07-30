@@ -31,9 +31,11 @@
               </div>
             <% } %>
             </div>
-
             <div class="mb-20 mb-md-10">
                 <input value="<%= category.position %>" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input value="<%= category.level %>" class="input-md form-control" type="number" name="level" placeholder="Уровень сложности" />
             </div>
             <button data-pk="<%= category.id %>" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_tech_category_btn">Изменить</button>
         </form>

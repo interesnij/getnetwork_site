@@ -5,9 +5,10 @@
 CREATE TABLE tech_categories (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100) NOT NULL,
-    description VARCHAR(1000),
-    position    INT NOT NULL,
-    count       INT NOT NULL,
+    description VARCHAR(3000),
+    position    SMALLINT NOT NULL,
+    count       SMALLINT NOT NULL,
+    level       SMALLINT NOT NULL,
     user_id     INT NOT NULL
 );
 
@@ -15,11 +16,11 @@ CREATE TABLE tech_categories (
 CREATE TABLE serve_categories (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(100) NOT NULL,
-    description     VARCHAR(1000),
+    description     VARCHAR(3000),
     cat_name        VARCHAR(100) NOT NULL,
     tech_categories INT NOT NULL,
-    position        INT NOT NULL,
-    count           INT NOT NULL,
+    position        SMALLINT NOT NULL,
+    count           SMALLINT NOT NULL,
     default_price   INT NOT NULL, -- сумма всех опуий по умолчанию.
     user_id         INT NOT NULL,
 
@@ -34,13 +35,14 @@ CREATE TABLE serve (
     name             VARCHAR(100) NOT NULL,
     cat_name         VARCHAR(100) NOT NULL,
     description      VARCHAR(10000),
-    position         INT NOT NULL,
+    position         SMALLINT NOT NULL,
     serve_categories INT NOT NULL,
     price            INT NOT NULL,
-    man_hours        INT NOT NULL,
+    man_hours        SMALLINT NOT NULL,
     is_default       BOOLEAN NOT NULL, -- опция по умолчанию, т.е. без которой работа невозможна (например, админка)
     user_id          INT NOT NULL,
     tech_cat_id      INT NOT NULL,
+    types            VARCHAR(100),     -- класс опции для организации выбора между несколькими опциями
 
     CONSTRAINT fk_serve_category
         FOREIGN KEY(serve_categories)

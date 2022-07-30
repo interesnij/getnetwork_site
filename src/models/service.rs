@@ -25,9 +25,9 @@ pub struct ServiceCategories {
     pub id:          i32,
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 impl ServiceCategories {
     pub fn get_image(&self) -> String {
@@ -54,7 +54,7 @@ impl ServiceCategories {
         let _connection = establish_connection();
         return services
             .filter(schema::services::id.eq_any(self.get_services_ids()))
-            .order(schema::services::created.desc())
+            .order(schema::services::position.desc())
             .load::<Service>(&_connection)
             .expect("E");
     }
@@ -87,7 +87,7 @@ impl ServiceCategories {
         return services
             .filter(schema::services::id.eq_any(ids))
             .filter(schema::services::is_active.eq(true))
-            .order(schema::services::created.desc())
+            .order(schema::services::position.desc())
             .limit(limit)
             .offset(offset)
             .load::<Service>(&_connection)
@@ -102,7 +102,7 @@ impl ServiceCategories {
         return services
             .filter(schema::services::id.eq_any(ids))
             .filter(schema::services::is_active.eq(true))
-            .order(schema::services::created.desc())
+            .order(schema::services::position.desc())
             .limit(6)
             .load::<Service>(&_connection)
             .expect("E.");
@@ -114,9 +114,9 @@ impl ServiceCategories {
 pub struct NewServiceCategories {
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -124,9 +124,9 @@ pub struct NewServiceCategories {
 pub struct EditServiceCategories {
     pub name:        String,
     pub description: Option<String>,
-    pub position:    i32,
+    pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i32,
+    pub count:       i16,
 }
 
 #[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
@@ -142,6 +142,7 @@ pub struct Service {
     pub price:       i32,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+    pub position:    i16,
 }
 
 impl Service {
@@ -209,6 +210,7 @@ impl Service {
 
         return serve
             .filter(schema::serve::id.eq_any(_serve_items))
+            .order(schema::serve::position.desc())
             .load::<Serve>(&_connection)
             .expect("E");
     }
@@ -249,6 +251,7 @@ impl Service {
 
         return tech_categories
             .filter(schema::tech_categories::id.eq_any(ids))
+            .order(schema::tech_categories::position.desc())
             .load::<TechCategories>(&_connection)
             .expect("E");
     }
@@ -269,6 +272,7 @@ impl Service {
 
         return tech_categories
             .filter(schema::tech_categories::id.eq_any(ids))
+            .order(schema::tech_categories::position.desc())
             .load::<TechCategories>(&_connection)
             .expect("E");
     }
@@ -279,7 +283,7 @@ impl Service {
         let _connection = establish_connection();
         return services
             .filter(schema::services::is_active.eq(true))
-            .order(schema::services::created.desc())
+            .order(schema::services::position.desc())
             .limit(6)
             .load::<Service>(&_connection)
             .expect("E.");
@@ -311,7 +315,7 @@ impl Service {
         return services
             .filter(schema::services::id.eq_any(ids))
             .filter(schema::services::is_active.eq(true))
-            .order(schema::services::created.desc())
+            .order(schema::services::position.desc())
             .limit(limit)
             .offset(offset)
             .load::<Service>(&_connection)
@@ -327,6 +331,7 @@ pub struct EditService {
     pub link:        Option<String>,
     pub image:       Option<String>,
     pub is_active:   bool,
+    pub position:    i16,
 }
 
 #[derive(Identifiable, PartialEq, Queryable, Associations)]
@@ -357,6 +362,7 @@ pub struct NewService {
     pub price:       i32,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+    pub position:    i16,
 }
 
 impl NewService {
@@ -367,7 +373,8 @@ impl NewService {
         image:       String,
         is_active:   bool,
         price:       i32,
-        user_id:     i32
+        user_id:     i32,
+        position:    i16
     ) -> Self {
         NewService {
             title:         title,
@@ -378,6 +385,7 @@ impl NewService {
             price:         price,
             user_id:       user_id,
             created:       chrono::Local::now().naive_utc(),
+            position:      position,
         }
     }
 }
