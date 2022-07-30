@@ -567,8 +567,15 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
         let _serves = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
         let _serve = _serves.into_iter().nth(0).unwrap();
 
+        let _serve_cat = serve
+            .filter(schema::serve::id.eq(&_serve.serve_categories))
+            .load::<Serve>(&_connection)
+            .expect("E")
+            .into_iter()
+            .nth(0)
+            .unwrap();
         let _tech_category = tech_categories
-            .filter(schema::tech_categories::id.eq(_serve.tech_categories))
+            .filter(schema::tech_categories::id.eq(_serve_cat.tech_categories))
             .load::<TechCategories>(&_connection)
             .expect("E.")
             .into_iter()
