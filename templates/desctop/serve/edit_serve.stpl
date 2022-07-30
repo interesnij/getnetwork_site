@@ -77,10 +77,6 @@
                     Изменить
             </button>
         </form>
-
-        <section class="border small-section bg-dark">
-          <% include!("serve_list.stpl"); %>
-        </section>
     </div>
 </section>
 

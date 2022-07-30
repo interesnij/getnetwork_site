@@ -349,3 +349,20 @@ on('#ajax', 'change', '.load_tech_categories_from_level', function() {
   };
   link.send( null );
 });
+
+on('#ajax', 'change', '.load_serve_from_level', function() {
+  val = this.value;
+  next = this.parentElement.nextElementSibling;
+  var link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+    link.open( 'GET', "/load_form_from_level/" + this.value + "/", true );
+    link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    link.onreadystatechange = function () {
+      if ( link.readyState == 4 ) {
+          if ( link.status == 200 ) {
+              next.innerHTML = link.responseText;
+              next.classList.remove("hidden");
+          }
+      }
+  };
+  link.send( null );
+});

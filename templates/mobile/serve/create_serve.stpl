@@ -56,9 +56,6 @@
             <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_serve_btn">Создать</button>
         </form>
 
-        <section class="border small-section bg-dark">
-          <% include!("../serve/serve_list.stpl"); %>
-        </section>
     </div>
 </section>
 <div class="sidebar hidden">
