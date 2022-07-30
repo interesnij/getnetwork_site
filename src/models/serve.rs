@@ -41,9 +41,6 @@ impl TechCategories {
             .load::<ServeCategories>(&_connection)
             .expect("E");
     }
-    pub fn make_as_ref(&self) -> TechCategories {
-        return self;
-    }
 }
 #[derive(Insertable,AsChangeset)]
 #[table_name="tech_categories"]

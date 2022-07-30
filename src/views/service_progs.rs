@@ -241,12 +241,10 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 .expect("E");
 
             let level = _tech_categories[0].level;
-            let mut new_tech_stack = Vec::new();
-            for cat in _tech_categories.iter() {
-                if cat.level == level {
-                    new_tech_stack.push(cat);
-                }
-            }
+            let _tech_categories = tech_categories
+                .filter(schema::tech_categories::level.eq(level))
+                .load::<TechCategories>(&_connection)
+                .expect("E");
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -274,7 +272,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     all_tags:     _all_tags,
                     service_tags: _service_tags,
                     service_cats: _service_cats,
-                    tech_cats:    new_tech_stack,
+                    tech_cats:    _tech_categories,
                     level:        level,
                 }
                 .render_once()
@@ -307,7 +305,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     all_tags:     _all_tags,
                     service_tags: _service_tags,
                     service_cats: _service_cats,
-                    tech_cats:    new_tech_stack,
+                    tech_cats:    _tech_categories,
                     level:        level,
                 }
                 .render_once()
