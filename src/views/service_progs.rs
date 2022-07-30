@@ -244,7 +244,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
             let mut new_tech_stack = Vec::new();
             for cat in _tech_categories.iter() {
                 if cat.level == level {
-                    new_tech_stack.push(cat);
+                    new_tech_stack.push(cat.make_as_ref());
                 }
             }
 
@@ -261,7 +261,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     all_tags:     Vec<Tag>,
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
-                    tech_cats:    Vec<&TechCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     level:        i16,
                 }
                 let body = Template {
@@ -294,7 +294,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     all_tags:     Vec<Tag>,
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
-                    tech_cats:    Vec<&TechCategories>,
+                    tech_cats:    Vec<TechCategories>,
                     level:        i16,
                 }
                 let body = Template {
