@@ -232,8 +232,8 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
             let _images = service_images.filter(schema::service_images::service.eq(_service.id)).load::<ServiceImage>(&_connection).expect("E");
             let _videos = service_videos.filter(schema::service_videos::service.eq(_service.id)).load::<ServiceVideo>(&_connection).expect("E");
 
-            let _service_cats:Vec<ServiceCategories> = service_categories
-                .load(&_connection)
+            let _service_cats = service_categories
+                .load::<ServiceCategories>(&_connection)
                 .expect("Error");
 
             let _tech_categories = tech_categories
