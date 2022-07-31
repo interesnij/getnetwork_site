@@ -376,7 +376,7 @@ on('#ajax', 'click', '.select_close_tech_cat', function() {
   //}
   for (var i = 0; i < options.length; i++) {
     if (!options[i].classList.contains("selected")) {
-      console.log("selected");
+      console.log("selected - ", options[i].selected);
       options[i].classList.add("selected");
       options[i].classList.remove("not_selected");
       cat = next.querySelector('[data-pk=' + '"' + options[i].value + '"' + ']');
@@ -391,7 +391,7 @@ on('#ajax', 'click', '.select_close_tech_cat', function() {
       cat.classList.add("hidden");
     }
     else {
-      console.log("not selected");
+      console.log("selected - ", options[i].selected);
       this.classList.remove("selected");
       this.classList.add("not_selected");
       next.querySelector('[data-pk=' + '"' + this.value + '"' + ']').classList.remove("hidden");
