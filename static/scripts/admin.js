@@ -371,12 +371,14 @@ on('#ajax', 'click', '.select_close_tech_cat', function() {
   options = this.parentElement.querySelectorAll("option");
   next = this.parentElement.parentElement.nextElementSibling;
   cats = next.querySelectorAll(".open_tech_category");
-  for (var i = 0; i < cats.length; i++) {
-    cats[i].classList.remove("hidden");
-  }
+  //for (var i = 0; i < cats.length; i++) {
+  //  cats[i].classList.remove("hidden");
+  //}
   for (var i = 0; i < options.length; i++) {
     if (options[i].classList.contains("selected")) {
       console.log("selected");
+      cat.classList.remove("selected");
+      cat.classList.add("not_selected");
       cat = next.querySelector('[data-pk=' + '"' + options[i].value + '"' + ']');
       console.log(cat);
       if (cat) {
@@ -390,6 +392,9 @@ on('#ajax', 'click', '.select_close_tech_cat', function() {
     }
     else {
       console.log("not selected");
+      cat.classList.add("selected");
+      cat.classList.remove("not_selected");
+      next.querySelector('[data-pk=' + '"' + this.value + '"' + ']').classList.remove("hidden");
     }
   }
 });
