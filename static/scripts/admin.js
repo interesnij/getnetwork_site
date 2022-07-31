@@ -389,5 +389,9 @@ on('#ajax', 'change', '.close_tech_categories', function() {
 });
 
 on('#ajax', 'click', '.select_close_tech_cat', function() {
-  alert(this.value);
+  if (this.getAttribute("selected")) {
+    alert("selected");
+  } else {
+    alert("not selected");
+  }
 });
