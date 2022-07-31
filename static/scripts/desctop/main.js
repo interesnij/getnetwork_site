@@ -24,6 +24,7 @@ function ajax_get_reload(url) {
         sidebar = elem_.querySelector(".sidebar");
         rtr = document.getElementById('ajax');
         rtr.innerHTML = elem_.innerHTML;
+        document.title = rtr.querySelector(".doc_title").getAttribute("data-title");
         window.scrollTo(0,0);
         window.history.replaceState(null, null, url);
       }
