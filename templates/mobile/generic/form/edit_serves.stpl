@@ -1,4 +1,4 @@
-<% let tech_cats_ids = object.get_tech_cats_ids(); %>
+<% let tech_cats_ids = object.get_close_tech_cats_ids(); %>
 <% let serves_ids = object.get_serves_ids(); %>
 <div class="meta">
   <p class="tech_ids hidden">
@@ -11,7 +11,7 @@
       <span><%= id %></span>
     <% } %>
   </p>
-<div>
+</div>
 
 <div class="mb-20 mb-md-10">
   <label>Уровень сложности</label>
@@ -39,7 +39,7 @@
 </div>
 <div class="">
 <% for tech_category in tech_cats.iter() { %>
-<div class="open_tech_category" data-pk="<%= tech_category.id %>">
+<div class="open_tech_category <% if tech_cats_ids.iter().any(|i| i==&tech_category.id) { %>hidden<% } %>" data-pk="<%= tech_category.id %>">
   <h4 class="show_next_element pointer"><%= tech_category.name %> (Уровень <%= tech_category.level %>)</h4>
   <div class="hidden">
   <% for category in tech_category.get_serve_categories().iter() { %>

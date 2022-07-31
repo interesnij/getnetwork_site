@@ -224,12 +224,13 @@ impl Service {
             .load::<i32>(&_connection)
             .expect("E");
     }
-    pub fn get_tech_cats_ids(&self) -> Vec<i32> {
+    pub fn get_close_tech_cats_ids(&self) -> Vec<i32> {
         use schema::tech_categories_items::dsl::tech_categories_items;
 
         let _connection = establish_connection();
         return tech_categories_items
             .filter(schema::tech_categories_items::service_id.eq(&self.id))
+            .filter(schema::tech_categories_items::types.eq(2))
             .select(schema::tech_categories_items::category_id)
             .load::<i32>(&_connection)
             .expect("E");
