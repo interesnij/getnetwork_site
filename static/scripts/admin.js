@@ -392,8 +392,8 @@ on('#ajax', 'click', '.select_close_tech_cat', function() {
     }
     else {
       console.log("not selected");
-      cat.classList.add("selected");
-      cat.classList.remove("not_selected");
+      this.classList.add("selected");
+      this.classList.remove("not_selected");
       next.querySelector('[data-pk=' + '"' + this.value + '"' + ']').classList.remove("hidden");
     }
   }
