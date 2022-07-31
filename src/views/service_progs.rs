@@ -241,7 +241,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
             let _serve = _service.get_serves();
             let tech_id = _serve[0].tech_cat_id;
             let _tech_categories = tech_categories
-                .filter(schema::tech_categories::level.eq(level))
+                .filter(schema::tech_categories::id.eq(tech_id))
                 .load::<TechCategories>(&_connection)
                 .expect("E");
 
