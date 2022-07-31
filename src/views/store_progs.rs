@@ -238,6 +238,12 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
 
             let _tech_categories = tech_categories
                 .load::<TechCategories>(&_connection)
+                .expect("E"); 
+
+            let level = _tech_categories[0].level;
+            let _tech_categories = tech_categories
+                .filter(schema::tech_categories::level.eq(level))
+                .load::<TechCategories>(&_connection)
                 .expect("E");
 
             if is_desctop {

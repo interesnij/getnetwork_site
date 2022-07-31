@@ -146,6 +146,7 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
             let all_tags: Vec<Tag> = tags
                 .load(&_connection)
                 .expect("Error.");
+
             let _tech_categories = tech_categories
                 .load::<TechCategories>(&_connection)
                 .expect("E");
@@ -216,6 +217,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
         if _request_user.perm == 60 && _service.user_id == _request_user.id {
             use schema::{
                 tags::dsl::tags,
+                serve::dsl::serve,
                 service_images::dsl::service_images,
                 service_videos::dsl::service_videos,
                 service_categories::dsl::service_categories,
@@ -236,7 +238,10 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 .load::<ServiceCategories>(&_connection)
                 .expect("Error");
 
+            let _serve = _service.get_serves();
+            let tech_id = _serve[0].tech_cat_id;
             let _tech_categories = tech_categories
+                .filter(schema::tech_categories::level.eq(level))
                 .load::<TechCategories>(&_connection)
                 .expect("E");
 
