@@ -1,4 +1,4 @@
-<div data-title="" class="doc_title">
+<div data-title="<%= title %>" class="doc_title">
 <% if object.description.is_some() { %>
   <%= object.description.as_deref().unwrap() %>
 <% } else { %>
