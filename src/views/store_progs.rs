@@ -217,6 +217,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
         if _request_user.perm == 60 && _store.user_id == _request_user.id {
             use schema::{
                 tags::dsl::tags,
+                serve::dsl::serve,
                 store_images::dsl::store_images,
                 store_videos::dsl::store_videos,
                 store_categories::dsl::store_categories,
@@ -232,13 +233,16 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
             let _images = store_images.filter(schema::store_images::store.eq(_store.id)).load::<StoreImage>(&_connection).expect("E");
             let _videos = store_videos.filter(schema::store_videos::store.eq(_store.id)).load::<StoreVideo>(&_connection).expect("E");
 
-            let _store_cats:Vec<StoreCategories> = store_categories
-                .load(&_connection)
+            let _store_cats = store_categories
+                .load::<StoreCategories>(&_connection)
                 .expect("Error");
 
+            let _serve = _service.get_serves();
+            let tech_id = _serve[0].tech_cat_id;
             let _tech_categories = tech_categories
+                .filter(schema::tech_categories::id.eq(tech_id))
                 .load::<TechCategories>(&_connection)
-                .expect("E"); 
+                .expect("E");
 
             let level = _tech_categories[0].level;
             let _tech_categories = tech_categories
@@ -259,7 +263,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     all_tags:     Vec<Tag>,
                     store_tags:   Vec<Tag>,
                     tech_cats:    Vec<TechCategories>,
-
+                    level:        i16,
                 }
                 let body = Template {
                     request_user: _request_user,
@@ -271,6 +275,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     all_tags:     _all_tags,
                     store_tags:   _store_tags,
                     tech_cats:    _tech_categories,
+                    level:        level,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -289,6 +294,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     all_tags:     Vec<Tag>,
                     store_tags:   Vec<Tag>,
                     tech_cats:    Vec<TechCategories>,
+                    level:        i16,
                 }
                 let body = Template {
                     request_user: _request_user,
@@ -300,6 +306,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     all_tags:     _all_tags,
                     store_tags:   _store_tags,
                     tech_cats:    _tech_categories,
+                    level:        level,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

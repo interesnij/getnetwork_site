@@ -217,6 +217,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
         if _request_user.perm == 60 && _work.user_id == _request_user.id {
             use schema::{
                 tags::dsl::tags,
+                serve::dsl::serve,
                 work_images::dsl::work_images,
                 work_videos::dsl::work_videos,
                 work_categories::dsl::work_categories,
@@ -237,9 +238,18 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 .load::<WorkCategories>(&_connection)
                 .expect("Error");
 
+            let _serve = _service.get_serves();
+            let tech_id = _serve[0].tech_cat_id;
             let _tech_cats = tech_categories
+                .filter(schema::tech_categories::id.eq(tech_id))
                 .load::<TechCategories>(&_connection)
-                .expect("Error");
+                .expect("E");
+
+            let level = _tech_cats[0].level;
+            let _tech_cats = tech_categories
+                .filter(schema::tech_categories::level.eq(level))
+                .load::<TechCategories>(&_connection)
+                .expect("E");
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -255,7 +265,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     all_tags:     Vec<Tag>,
                     work_tags:    Vec<Tag>,
                     work_cats:    Vec<WorkCategories>,
-
+                    level:        i16,
                 }
                 let body = Template {
                     request_user: _request_user,
@@ -268,6 +278,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     all_tags:     _all_tags,
                     work_tags:    _work_tags,
                     work_cats:    _work_cats,
+                    level:        level,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -287,7 +298,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     all_tags:     Vec<Tag>,
                     work_tags:    Vec<Tag>,
                     work_cats:    Vec<WorkCategories>,
-
+                    level:        i16,
                 }
                 let body = Template {
                     request_user: _request_user,
@@ -300,6 +311,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     all_tags:     _all_tags,
                     work_tags:    _work_tags,
                     work_cats:    _work_cats,
+                    level:        level,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

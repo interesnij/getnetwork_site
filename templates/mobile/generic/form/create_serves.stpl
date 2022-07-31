@@ -1,30 +1,12 @@
-
 <div class="mb-20 mb-md-10">
-    <label>Закрытые тех. категории</label>
-    <select class="form-control" name="close_tech_cats_list[]" multiple="">
-      <% for cat in tech_cats.iter() { %>
-        <option value="<%= cat.id %>"><%= cat.name %> (Уровень <%= cat.level %>)</option>
-      <% } %>
-    </select>
+  <label>Уровень сложности</label>
+  <select class="input-md form-control load_serve_from_level" data-live-search="true" tabindex="-1" aria-hidden="true">
+    <option value="">Не выбрано</option>
+    <option value="1">Начальный</option>
+    <option value="2">Продвинутый</option>
+    <option value="3">Экспертный</option>
+  </select>
 </div>
+<div class="mb-20 mb-md-10 hidden">
 
-<hr class="mt-0 mb-0 " />
-<% for tech_category in tech_cats.iter() { %>
-<h5 class="show_next_element pointer"><%= tech_category.name %> (Уровень <%= tech_category.level %>)</h5>
-<div class="hidden">
-  <% for category in tech_category.get_serve_categories().iter() { %>
-
-    <div class="mb-20 mb-md-10">
-      <label><%= category.name %></label>
-      <select class="form-control" name="serve_list[]" multiple="">
-        <% for object in category.get_serves().iter() { %>
-          <option value="<%= object.id %>">
-            <%= object.name %>
-          </option>
-        <% } %>
-      </select>
-    </div>
-  <% } %>
-  </div>
-<% } %>
-<hr class="mt-0 mb-0 " />
+</div>
