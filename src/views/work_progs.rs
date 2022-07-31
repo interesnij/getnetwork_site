@@ -1123,7 +1123,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:    bool,
             }
             let body = Template {
-                title:      "Работа ".to_string() + &_store.title,
+                title:      "Работа ".to_string() + &_work.title,
                 object:     _work,
                 images:     _images,
                 videos:     _videos,
@@ -1152,7 +1152,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:    bool,
             }
             let body = Template {
-                title:      "Работа ".to_string() + &_store.title,
+                title:      "Работа ".to_string() + &_work.title,
                 object:     _work,
                 images:     _images,
                 videos:     _videos,

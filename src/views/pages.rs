@@ -446,7 +446,7 @@ pub async fn get_load_page(req: HttpRequest) -> actix_web::Result<HttpResponse> 
             .filter(schema::serve_categories::id.eq(&_object_pk))
             .load::<ServeCategories>(&_connection)
             .expect("E");
-        let _serve_category = _serve_categorys.into_iter().nth(0).unwrap()
+        let _serve_category = _serve_categorys.into_iter().nth(0).unwrap();
 
         #[derive(TemplateOnce)]
         #[template(path = "desctop/load/serve_category.stpl")]
