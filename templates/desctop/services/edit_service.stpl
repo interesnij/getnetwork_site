@@ -90,9 +90,7 @@
                   <% for cat in tech_cats.iter() { %>
                     <option
                       <% if tech_cats_ids.iter().any(|i| i==&cat.id) { %>
-                        class="selected select_close_tech_cat" selected=""
-                      <% } else { %>
-                        class="select_close_tech_cat not_selected"
+                        selected=""
                       <% } %>
                       value="<%= cat.id %>">
                         <%= cat.name %> (Уровень <%= cat.level %>)
