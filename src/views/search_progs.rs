@@ -73,7 +73,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     }
 
     let _stores = schema::stores::table
-        .filter(schema::stores::title.ilike(&_q))
+        .filter(schema::stores::title.ilike(&_q_standalone))
         .or_filter(schema::stores::description.ilike(&_q_standalone))
         .or_filter(schema::stores::content.ilike(&_q_standalone))
         .order(schema::stores::created.desc())
@@ -89,7 +89,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     }
 
     let _wikis = schema::wikis::table
-        .filter(schema::wikis::title.ilike(&_q))
+        .filter(schema::wikis::title.ilike(&_q_standalone))
         .or_filter(schema::wikis::description.ilike(&_q_standalone))
         .or_filter(schema::wikis::content.ilike(&_q_standalone))
         .order(schema::wikis::created.desc())
@@ -105,7 +105,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     }
 
     let _works = schema::works::table
-        .filter(schema::works::title.ilike(&_q))
+        .filter(schema::works::title.ilike(&_q_standalone))
         .or_filter(schema::works::description.ilike(&_q_standalone))
         .or_filter(schema::works::content.ilike(&_q_standalone))
         .order(schema::works::created.desc())
@@ -128,6 +128,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/all.stpl")]
             struct Template {
+                title:          String,
                 request_user:   User,
                 works_list:     Vec<Work>,
                 services_list:  Vec<Service>,
@@ -144,6 +145,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 q:              String,
             }
             let body = Template {
+                title:          "Общий поиск по фрагменту ".to_string() + &q,
                 request_user:   _request_user,
                 works_list:     work_list,
                 services_list:  service_list,
@@ -153,7 +155,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
 
                 works_count:    work_count,
                 services_count: service_count,
-                wikis_count:   wiki_count,
+                wikis_count:    wiki_count,
                 blogs_count:    blog_count,
                 stores_count:   store_count,
                 is_ajax:        is_ajax,
@@ -167,6 +169,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/all.stpl")]
             struct Template {
+                title:          String,
                 request_user:   User,
                 works_list:     Vec<Work>,
                 services_list:  Vec<Service>,
@@ -183,6 +186,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 q:              String,
             }
             let body = Template {
+                title:          "Общий поиск по фрагменту ".to_string() + &q,
                 request_user:   _request_user,
                 works_list:     work_list,
                 services_list:  service_list,
@@ -192,7 +196,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
 
                 works_count:    work_count,
                 services_count: service_count,
-                wikis_count:   wiki_count,
+                wikis_count:    wiki_count,
                 blogs_count:    blog_count,
                 stores_count:   store_count,
                 is_ajax:        is_ajax,
@@ -208,6 +212,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/anon_all.stpl")]
             struct Template {
+                title:          String,
                 works_list:     Vec<Work>,
                 services_list:  Vec<Service>,
                 wikis_list:     Vec<Wiki>,
@@ -223,6 +228,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 q:              String,
             }
             let body = Template {
+                title:          "Общий поиск по фрагменту ".to_string() + &q,
                 works_list:     work_list,
                 services_list:  service_list,
                 wikis_list:     wiki_list,
@@ -231,7 +237,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
 
                 works_count:    work_count,
                 services_count: service_count,
-                wikis_count:   wiki_count,
+                wikis_count:    wiki_count,
                 blogs_count:    blog_count,
                 stores_count:   store_count,
                 is_ajax:        is_ajax,
@@ -245,6 +251,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/anon_all.stpl")]
             struct Template {
+                title:          String,
                 works_list:     Vec<Work>,
                 services_list:  Vec<Service>,
                 wikis_list:     Vec<Wiki>,
@@ -260,6 +267,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 q:              String,
             }
             let body = Template {
+                title:          "Общий поиск по фрагменту ".to_string() + &q,
                 works_list:     work_list,
                 services_list:  service_list,
                 wikis_list:     wiki_list,
@@ -336,6 +344,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/blogs.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
@@ -344,6 +353,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск статей по фрагменту ".to_string() + &q,
                 request_user:     _request_user,
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
@@ -359,6 +369,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/blogs.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
@@ -367,6 +378,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск статей по фрагменту ".to_string() + &q,
                 request_user:     _request_user,
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
@@ -384,6 +396,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/anon_blogs.stpl")]
             struct Template {
+                title:            String,
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
                 is_ajax:          bool,
@@ -391,6 +404,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск статей по фрагменту ".to_string() + &q,
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
                 is_ajax:          is_ajax,
@@ -405,6 +419,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/anon_blogs.stpl")]
             struct Template {
+                title:            String,
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
                 is_ajax:          bool,
@@ -412,6 +427,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск статей по фрагменту ".to_string() + &q,
                 blogs_list:       _blogs,
                 blogs_count:      blogs_count,
                 is_ajax:          is_ajax,
@@ -481,6 +497,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/services.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 services_list:    Vec<Service>,
                 services_count:   usize,
@@ -489,6 +506,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск услуг по фрагменту ".to_string() + &q,
                 request_user:     _request_user,
                 services_list:    _services,
                 services_count:   services_count,
@@ -504,6 +522,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/services.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 services_list:    Vec<Service>,
                 services_count:   usize,
@@ -512,6 +531,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск услуг по фрагменту ".to_string() + &q,
                 request_user:     _request_user,
                 services_list:    _services,
                 services_count:   services_count,
@@ -529,6 +549,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/anon_services.stpl")]
             struct Template {
+                title:            String,
                 services_list:    Vec<Service>,
                 services_count:   usize,
                 is_ajax:          bool,
@@ -536,6 +557,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск услуг по фрагменту ".to_string() + &q,
                 services_list:    _services,
                 services_count:   services_count,
                 is_ajax:          is_ajax,
@@ -550,6 +572,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/anon_services.stpl")]
             struct Template {
+                title:            String,
                 services_list:    Vec<Service>,
                 services_count:   usize,
                 is_ajax:          bool,
@@ -557,6 +580,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск услуг по фрагменту ".to_string() + &q,
                 services_list:    _services,
                 services_count:   services_count,
                 is_ajax:          is_ajax,
@@ -626,14 +650,16 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/stores.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
-                stores_list:       Vec<Store>,
-                stores_count:      usize,
+                stores_list:      Vec<Store>,
+                stores_count:     usize,
                 is_ajax:          bool,
                 q:                String,
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск товаров по фрагменту ".to_string() + &q,
                 request_user:     _request_user,
                 stores_list:       _stores,
                 stores_count:      stores_count,
@@ -649,17 +675,19 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/stores.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
-                stores_list:       Vec<Store>,
-                stores_count:      usize,
+                stores_list:      Vec<Store>,
+                stores_count:     usize,
                 is_ajax:          bool,
                 q:                String,
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск товаров по фрагменту ".to_string() + &q,
                 request_user:     _request_user,
                 stores_list:       _stores,
-                stores_count:      stores_count,
+                stores_count:     stores_count,
                 is_ajax:          is_ajax,
                 q:                _q,
                 next_page_number: next_page_number,
@@ -674,15 +702,17 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/anon_stores.stpl")]
             struct Template {
-                stores_list:       Vec<Store>,
-                stores_count:      usize,
+                title:            String,
+                stores_list:      Vec<Store>,
+                stores_count:     usize,
                 is_ajax:          bool,
                 q:                String,
                 next_page_number: i32,
             }
             let body = Template {
-                stores_list:       _stores,
-                stores_count:      stores_count,
+                title:            "Поиск товаров по фрагменту ".to_string() + &q,
+                stores_list:      _stores,
+                stores_count:     stores_count,
                 is_ajax:          is_ajax,
                 q:                _q,
                 next_page_number: next_page_number,
@@ -695,15 +725,17 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/anon_stores.stpl")]
             struct Template {
-                stores_list:       Vec<Store>,
-                stores_count:      usize,
+                title:            String,
+                stores_list:      Vec<Store>,
+                stores_count:     usize,
                 is_ajax:          bool,
                 q:                String,
                 next_page_number: i32,
             }
             let body = Template {
-                stores_list:       _stores,
-                stores_count:      stores_count,
+                title:            "Поиск товаров по фрагменту ".to_string() + &q,
+                stores_list:      _stores,
+                stores_count:     stores_count,
                 is_ajax:          is_ajax,
                 q:                _q,
                 next_page_number: next_page_number,
@@ -771,6 +803,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/wikis.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
@@ -779,6 +812,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск статей по фрагменту ".to_string() + &q,
                 request_user:     _request_user,
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
@@ -794,6 +828,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/wikis.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
@@ -802,6 +837,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск статей по фрагменту ".to_string() + &q,
                 request_user:     _request_user,
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
@@ -819,6 +855,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/anon_wikis.stpl")]
             struct Template {
+                title:            String,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
                 is_ajax:          bool,
@@ -826,6 +863,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск статей по фрагменту ".to_string() + &q,
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 is_ajax:          is_ajax,
@@ -840,6 +878,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/anon_wikis.stpl")]
             struct Template {
+                title:            String,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
                 is_ajax:          bool,
@@ -847,6 +886,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск статей по фрагменту ".to_string() + &q,
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 is_ajax:          is_ajax,
@@ -916,6 +956,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/works.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 works_list:       Vec<Work>,
                 works_count:      usize,
@@ -924,6 +965,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск работ по фрагменту ".to_string() + &q,
                 request_user:     _request_user,
                 works_list:       _works,
                 works_count:      works_count,
@@ -939,6 +981,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/works.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 works_list:       Vec<Work>,
                 works_count:      usize,
@@ -947,6 +990,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск работ по фрагменту ".to_string() + &q,
                 request_user:     _request_user,
                 works_list:       _works,
                 works_count:      works_count,
@@ -964,6 +1008,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/search/anon_works.stpl")]
             struct Template {
+                title:            String,
                 works_list:       Vec<Work>,
                 works_count:      usize,
                 is_ajax:          bool,
@@ -971,6 +1016,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск работ по фрагменту ".to_string() + &q,
                 works_list:       _works,
                 works_count:      works_count,
                 is_ajax:          is_ajax,
@@ -985,6 +1031,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/search/anon_works.stpl")]
             struct Template {
+                title:            String,
                 works_list:       Vec<Work>,
                 works_count:      usize,
                 is_ajax:          bool,
@@ -992,6 +1039,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 next_page_number: i32,
             }
             let body = Template {
+                title:            "Поиск работ по фрагменту ".to_string() + &q,
                 works_list:       _works,
                 works_count:      works_count,
                 is_ajax:          is_ajax,

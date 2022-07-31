@@ -66,11 +66,13 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/create_tag.stpl")]
             struct Template {
+                title:        String,
                 request_user: User,
                 all_tags:     Vec<Tag>,
                 is_ajax:      bool,
             }
             let body = Template {
+                title:        "Создание тега".to_string(),
                 request_user: _request_user,
                 all_tags:     all_tags,
                 is_ajax:      is_ajax,
@@ -83,11 +85,13 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/create_tag.stpl")]
             struct Template {
+                title:        String,
                 request_user: User,
                 all_tags:     Vec<Tag>,
                 is_ajax:      bool,
             }
             let body = Template {
+                title:        "Создание тега".to_string(),
                 request_user: _request_user,
                 all_tags:     all_tags,
                 is_ajax:      is_ajax,
@@ -136,10 +140,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
     let _connection = establish_connection();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _tag_id: i32 = *_id;
-    let _tag = tags
+    let _tags = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
+    let _tag = _tags.into_iter().nth(0).unwrap();
 
     let _tag_items = tags_items
         .filter(schema::tags_items::tag_id.eq(&_tag_id))
@@ -181,6 +186,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/tag.stpl")]
             struct Template {
+                title:         String,
                 tag:           Tag,
                 request_user:  User,
                 works_list:    Vec<Work>,
@@ -197,7 +203,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 is_ajax:       bool,
             }
             let body = Template {
-                tag:           _tag.into_iter().nth(0).unwrap(),
+                title:         "Общий поиск по ключевому слову ".to_string() + &_tag.name,
+                tag:           _tag,
                 request_user:  _request_user,
                 works_list:    _works,
                 services_list: _services,
@@ -220,6 +227,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/tag.stpl")]
             struct Template {
+                title:         String,
                 tag:           Tag,
                 request_user:  User,
                 works_list:    Vec<Work>,
@@ -236,7 +244,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 is_ajax:       bool,
             }
             let body = Template {
-                tag:           _tag.into_iter().nth(0).unwrap(),
+                title:         "Общий поиск по ключевому слову ".to_string() + &_tag.name,
+                tag:           _tag,
                 request_user:  _request_user,
                 works_list:    _works,
                 services_list: _services,
@@ -261,6 +270,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/anon_tag.stpl")]
             struct Template {
+                title:         String,
                 tag:           Tag,
                 works_list:    Vec<Work>,
                 services_list: Vec<Service>,
@@ -276,7 +286,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 is_ajax:       bool,
             }
             let body = Template {
-                tag:           _tag.into_iter().nth(0).unwrap(),
+                title:         "Общий поиск по ключевому слову ".to_string() + &_tag.name,
+                tag:           _tag,
                 works_list:    _works,
                 services_list: _services,
                 wikis_list:    _wikis,
@@ -298,6 +309,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/anon_tag.stpl")]
             struct Template {
+                title:         String,
                 tag:           Tag,
                 works_list:    Vec<Work>,
                 services_list: Vec<Service>,
@@ -313,7 +325,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 is_ajax:       bool,
             }
             let body = Template {
-                tag:           _tag.into_iter().nth(0).unwrap(),
+                title:         "Общий поиск по ключевому слову ".to_string() + &_tag.name,
+                tag:           _tag,
                 works_list:    _works,
                 services_list: _services,
                 wikis_list:    _wikis,
@@ -345,10 +358,11 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
 
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
-    let _tag = tags
+    let _tags = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
+    let _tag = _tags.into_iter().nth(0).unwrap();
 
     let _tag_items = tags_items
         .filter(schema::tags_items::tag_id.eq(&_tag_id))
@@ -364,6 +378,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/tag_blogs.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 tag:              Tag,
                 blogs_list:       Vec<Blog>,
@@ -372,8 +387,9 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Поиск статей по ключевому слову ".to_string() + &_tag.name,
                 request_user:     _request_user,
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                tag:              _tag,
                 blogs_list:       _blogs,
                 blogs_count:      blog_count,
                 next_page_number: next_page_number,
@@ -387,6 +403,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/tag_blogs.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 tag:              Tag,
                 blogs_list:       Vec<Blog>,
@@ -395,8 +412,9 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Поиск статей по ключевому слову ".to_string() + &_tag.name,
                 request_user:     _request_user,
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                tag:              _tag,
                 blogs_list:       _blogs,
                 blogs_count:      blog_count,
                 next_page_number: next_page_number,
@@ -412,6 +430,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/anon_tag_blogs.stpl")]
             struct Template {
+                title:            String,
                 tag:              Tag,
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
@@ -419,7 +438,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                title:            "Поиск статей по ключевому слову ".to_string() + &_tag.name,
+                tag:              _tag,
                 blogs_list:       _blogs,
                 blogs_count:      blog_count,
                 next_page_number: next_page_number,
@@ -433,6 +453,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/anon_tag_blogs.stpl")]
             struct Template {
+                title:            String,
                 tag:              Tag,
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
@@ -440,7 +461,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                title:            "Поиск статей по ключевому слову ".to_string() + &_tag.name,
+                tag:              _tag,
                 blogs_list:       _blogs,
                 blogs_count:      blog_count,
                 next_page_number: next_page_number,
@@ -464,10 +486,11 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
 
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
-    let _tag = tags
+    let _tags = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
+    let _tag = _tags.into_iter().nth(0).unwrap();
 
     let _tag_items = tags_items
         .filter(schema::tags_items::tag_id.eq(&_tag_id))
@@ -483,6 +506,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/tag_services.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 tag:              Tag,
                 services_list:    Vec<Service>,
@@ -491,8 +515,9 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Поиск услуг по ключевому слову ".to_string() + &_tag.name,
                 request_user:     _request_user,
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                tag:              _tag,
                 services_list:    _services,
                 services_count:   service_count,
                 next_page_number: next_page_number,
@@ -506,6 +531,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/tag_services.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 tag:              Tag,
                 services_list:    Vec<Service>,
@@ -514,8 +540,9 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Поиск услуг по ключевому слову ".to_string() + &_tag.name,
                 request_user:     _request_user,
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                tag:              _tag,
                 services_list:    _services,
                 services_count:   service_count,
                 next_page_number: next_page_number,
@@ -531,6 +558,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/anon_tag_services.stpl")]
             struct Template {
+                title:            String,
                 tag:              Tag,
                 services_list:    Vec<Service>,
                 services_count:   usize,
@@ -538,7 +566,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                 is_ajax:          bool,
             }
             let body = Template {
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                title:            "Поиск услуг по ключевому слову ".to_string() + &_tag.name,
+                tag:              _tag,
                 services_list:    _services,
                 services_count:   service_count,
                 next_page_number: next_page_number,
@@ -552,6 +581,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/anon_tag_services.stpl")]
             struct Template {
+                title:            String,
                 tag:              Tag,
                 services_list:    Vec<Service>,
                 services_count:   usize,
@@ -559,7 +589,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                 is_ajax:          bool,
             }
             let body = Template {
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                title:            "Поиск услуг по ключевому слову ".to_string() + &_tag.name,
+                tag:              _tag,
                 services_list:    _services,
                 services_count:   service_count,
                 next_page_number: next_page_number,
@@ -583,10 +614,11 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
 
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
-    let _tag = tags
+    let _tags = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
+    let _tag = _tags.into_iter().nth(0).unwrap();
 
     let _tag_items = tags_items
         .filter(schema::tags_items::tag_id.eq(&_tag_id))
@@ -602,6 +634,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/tag_stores.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 tag:              Tag,
                 stores_list:      Vec<Store>,
@@ -610,8 +643,9 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Поиск товаров по ключевому слову ".to_string() + &_tag.name,
                 request_user:     _request_user,
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                tag:              _tag,
                 stores_list:      _stores,
                 stores_count:     stores_count,
                 next_page_number: next_page_number,
@@ -625,6 +659,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/tag_stores.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 tag:              Tag,
                 stores_list:      Vec<Store>,
@@ -633,8 +668,9 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Поиск товаров по ключевому слову ".to_string() + &_tag.name,
                 request_user:     _request_user,
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                tag:              _tag,
                 stores_list:      _stores,
                 stores_count:     stores_count,
                 next_page_number: next_page_number,
@@ -650,6 +686,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/anon_tag_stores.stpl")]
             struct Template {
+                title:            String,
                 tag:              Tag,
                 stores_list:      Vec<Store>,
                 stores_count:     usize,
@@ -657,7 +694,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                 is_ajax:          bool,
             }
             let body = Template {
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                title:            "Поиск товаров по ключевому слову ".to_string() + &_tag.name,
+                tag:              _tag,
                 stores_list:      _stores,
                 stores_count:     stores_count,
                 next_page_number: next_page_number,
@@ -671,6 +709,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/anon_tag_stores.stpl")]
             struct Template {
+                title:            String,
                 tag:              Tag,
                 stores_list:      Vec<Store>,
                 stores_count:     usize,
@@ -678,7 +717,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                 is_ajax:          bool,
             }
             let body = Template {
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                title:            "Поиск товаров по ключевому слову ".to_string() + &_tag.name,
+                tag:              _tag,
                 stores_list:      _stores,
                 stores_count:     stores_count,
                 next_page_number: next_page_number,
@@ -702,10 +742,11 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
 
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
-    let _tag = tags
+    let _tags = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
+    let _tag = _tags.into_iter().nth(0).unwrap();
 
     let _tag_items = tags_items
         .filter(schema::tags_items::tag_id.eq(&_tag_id))
@@ -721,6 +762,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/tag_wikis.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 tag:              Tag,
                 wikis_list:       Vec<Wiki>,
@@ -729,8 +771,9 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Поиск обучающих статей по ключевому слову ".to_string() + &_tag.name,
                 request_user:     _request_user,
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                tag:              _tag,
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 next_page_number: next_page_number,
@@ -744,6 +787,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/tag_wikis.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 tag:              Tag,
                 wikis_list:       Vec<Wiki>,
@@ -752,8 +796,9 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Поиск обучающих статей по ключевому слову ".to_string() + &_tag.name,
                 request_user:     _request_user,
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                tag:              _tag,
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 next_page_number: next_page_number,
@@ -769,6 +814,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/anon_tag_wikis.stpl")]
             struct Template {
+                title:            String,
                 tag:              Tag,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
@@ -776,7 +822,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                title:            "Поиск обучающих статей по ключевому слову ".to_string() + &_tag.name,
+                tag:              _tag,
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 next_page_number: next_page_number,
@@ -790,6 +837,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/anon_tag_wikis.stpl")]
             struct Template {
+                title:            String,
                 tag:              Tag,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
@@ -797,7 +845,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                title:            "Поиск обучающих статей по ключевому слову ".to_string() + &_tag.name,
+                tag:              _tag,
                 wikis_list:       _wikis,
                 wikis_count:      wikis_count,
                 next_page_number: next_page_number,
@@ -821,10 +870,11 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
 
     let _connection = establish_connection();
     let _tag_id: i32 = *_id;
-    let _tag = tags
+    let _tags = tags
         .filter(schema::tags::id.eq(_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
+    let _tag = _tags.into_iter().nth(0).unwrap();
 
     let _tag_items = tags_items
         .filter(schema::tags_items::tag_id.eq(&_tag_id))
@@ -840,6 +890,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/tag_works.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 tag:              Tag,
                 works_list:       Vec<Work>,
@@ -848,8 +899,9 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Поиск работ по ключевому слову ".to_string() + &_tag.name,
                 request_user:     _request_user,
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                tag:              _tag,
                 works_list:       _works,
                 works_count:      works_count,
                 next_page_number: next_page_number,
@@ -863,6 +915,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/tag_works.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 tag:              Tag,
                 works_list:       Vec<Work>,
@@ -871,8 +924,9 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Поиск работ по ключевому слову ".to_string() + &_tag.name,
                 request_user:     _request_user,
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                tag:              _tag,
                 works_list:       _works,
                 works_count:      works_count,
                 next_page_number: next_page_number,
@@ -888,6 +942,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/anon_tag_works.stpl")]
             struct Template {
+                title:            String,
                 tag:              Tag,
                 works_list:       Vec<Work>,
                 works_count:      usize,
@@ -895,7 +950,8 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                title:            "Поиск работ по ключевому слову ".to_string() + &_tag.name,
+                tag:              _tag,
                 works_list:       _works,
                 works_count:      works_count,
                 next_page_number: next_page_number,
@@ -909,6 +965,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/anon_tag_works.stpl")]
             struct Template {
+                title:            String,
                 tag:              Tag,
                 works_list:       Vec<Work>,
                 works_count:      usize,
@@ -916,7 +973,8 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:          bool,
             }
             let body = Template {
-                tag:              _tag.into_iter().nth(0).unwrap(),
+                title:            "Поиск работ по ключевому слову ".to_string() + &_tag.name,
+                tag:              _tag,
                 works_list:       _works,
                 works_count:      works_count,
                 next_page_number: next_page_number,
@@ -945,6 +1003,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/tags.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
@@ -952,6 +1011,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Ключевые слова".to_string(),
                 request_user:     _request_user,
                 all_tags:         all_tags,
                 tags_count:       tags_count,
@@ -966,6 +1026,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/tags.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
@@ -973,6 +1034,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Ключевые слова".to_string(),
                 request_user:     _request_user,
                 all_tags:         all_tags,
                 tags_count:       tags_count,
@@ -989,12 +1051,14 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/tags/anon_tags.stpl")]
             struct Template {
+                title:            String,
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Ключевые слова".to_string(),
                 all_tags:         all_tags,
                 tags_count:       tags_count,
                 next_page_number: next_page_number,
@@ -1008,12 +1072,14 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/tags/anon_tags.stpl")]
             struct Template {
+                title:            String,
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 next_page_number: i32,
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Ключевые слова".to_string(),
                 all_tags:         all_tags,
                 tags_count:       tags_count,
                 next_page_number: next_page_number,
@@ -1035,10 +1101,12 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
 
             let _tag_id: i32 = *_id;
             let _connection = establish_connection();
-            let _tag = tags
+            let _tags = tags
                 .filter(schema::tags::id.eq(&_tag_id))
                 .load::<Tag>(&_connection)
                 .expect("E");
+
+            let _tag = _tags.into_iter().nth(0).unwrap();
 
             let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
@@ -1046,13 +1114,15 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/edit_tag.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     tag:          Tag,
                     is_ajax:      bool,
                 }
                 let body = Template {
+                    title:        "Изменение тега ".to_string() + &_tag.name,
                     request_user: _request_user,
-                    tag:          _tag.into_iter().nth(0).unwrap(),
+                    tag:          _tag,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
@@ -1063,13 +1133,15 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/tags/edit_tag.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     tag:          Tag,
                     is_ajax:      bool,
                 }
                 let body = Template {
+                    title:        "Изменение тега ".to_string() + &_tag.name,
                     request_user: _request_user,
-                    tag:          _tag.into_iter().nth(0).unwrap(),
+                    tag:          _tag,
                     is_ajax:      is_ajax,
                 }
                 .render_once()

@@ -63,6 +63,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 last_blogs:    Vec<Blog>,
                 last_stores:   Vec<Store>,
                 is_ajax:       bool,
+                title:         String,
             }
             let body = Template {
                 request_user:  _request_user,
@@ -72,6 +73,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 last_blogs:    _last_blogs,
                 last_stores:   _last_stores,
                 is_ajax:       is_ajax,
+                title:         "Главная страница".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -88,6 +90,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 last_blogs:    Vec<Blog>,
                 last_stores:   Vec<Store>,
                 is_ajax:       bool,
+                title:         String,
             }
             let body = Template {
                 request_user:  _request_user,
@@ -97,6 +100,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 last_blogs:    _last_blogs,
                 last_stores:   _last_stores,
                 is_ajax:       is_ajax,
+                title:         "Главная страница".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -114,6 +118,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 last_blogs:    Vec<Blog>,
                 last_stores:   Vec<Store>,
                 is_ajax:       bool,
+                title:         String,
             }
             let body = Template {
                 last_works:    _last_works,
@@ -122,6 +127,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 last_blogs:    _last_blogs,
                 last_stores:   _last_stores,
                 is_ajax:       is_ajax,
+                title:         "Главная страница".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -137,6 +143,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 last_blogs:    Vec<Blog>,
                 last_stores:   Vec<Store>,
                 is_ajax:       bool,
+                title:         String,
             }
             let body = Template {
                 last_works:    _last_works,
@@ -145,6 +152,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 last_blogs:    _last_blogs,
                 last_stores:   _last_stores,
                 is_ajax:       is_ajax,
+                title:         "Главная страница".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -162,12 +170,14 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[derive(TemplateOnce)]
             #[template(path = "desctop/pages/about.stpl")]
             struct Template {
-                request_user:  User,
-                is_ajax:       bool,
+                request_user: User,
+                is_ajax:      bool,
+                title:        String,
             }
             let body = Template {
-                request_user:  _request_user,
-                is_ajax:       is_ajax,
+                request_user: _request_user,
+                is_ajax:      is_ajax,
+                title:        "О нас".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -177,12 +187,14 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[derive(TemplateOnce)]
             #[template(path = "mobile/pages/about.stpl")]
             struct Template {
-                request_user:  User,
-                is_ajax:       bool,
+                request_user: User,
+                is_ajax:      bool,
+                title:        String,
             }
             let body = Template {
-                request_user:  _request_user,
-                is_ajax:       is_ajax,
+                request_user: _request_user,
+                is_ajax:      is_ajax,
+                title:        "О нас".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -194,10 +206,12 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[derive(TemplateOnce)]
             #[template(path = "desctop/pages/anon_about.stpl")]
             struct Template {
-                is_ajax:       bool,
+                is_ajax: bool,
+                title:   String,
             }
             let body = Template {
-                is_ajax:       is_ajax,
+                is_ajax: is_ajax,
+                title:   "О нас".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -207,10 +221,12 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[derive(TemplateOnce)]
             #[template(path = "mobile/pages/anon_about.stpl")]
             struct Template {
-                is_ajax:       bool,
+                is_ajax: bool,
+                title:   String,
             }
             let body = Template {
-                is_ajax:       is_ajax,
+                is_ajax: is_ajax,
+                title:   "О нас".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -261,11 +277,13 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/main/feedback_list.stpl")]
                 struct Template {
+                    title:         String,
                     request_user:  User,
                     is_ajax:       bool,
-                    feedback_list: Vec<Feedback>
+                    feedback_list: Vec<Feedback>,
                 }
                 let body = Template {
+                    title:         "Сообщения с формы".to_string(),
                     request_user:  _request_user,
                     is_ajax:       is_ajax,
                     feedback_list: _feedbacks,
@@ -278,11 +296,13 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/main/feedback_list.stpl")]
                 struct Template {
+                    title:         String,
                     request_user:  User,
                     is_ajax:       bool,
-                    feedback_list: Vec<Feedback>
+                    feedback_list: Vec<Feedback>,
                 }
                 let body = Template {
+                    title:         "Сообщения с формы".to_string(),
                     request_user:  _request_user,
                     is_ajax:       is_ajax,
                     feedback_list: _feedbacks,
@@ -312,11 +332,13 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             #[derive(TemplateOnce)]
             #[template(path = "desctop/main/serve_list.stpl")]
             struct Template {
+                title:        String,
                 request_user: User,
                 is_ajax:      bool,
-                tech_cats:    Vec<TechCategories>
+                tech_cats:    Vec<TechCategories>,
             }
             let body = Template {
+                title:        "Список опций и услуг".to_string(),
                 request_user: _request_user,
                 is_ajax:      is_ajax,
                 tech_cats:    all_tech_categories,
@@ -329,11 +351,13 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             #[derive(TemplateOnce)]
             #[template(path = "mobile/main/serve_list.stpl")]
             struct Template {
+                title:        String,
                 request_user: User,
                 is_ajax:      bool,
-                tech_cats:    Vec<TechCategories>
+                tech_cats:    Vec<TechCategories>,
             }
             let body = Template {
+                title:        "Список опций и услуг".to_string(),
                 request_user: _request_user,
                 is_ajax:      is_ajax,
                 tech_cats:    all_tech_categories,
@@ -348,10 +372,12 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             #[derive(TemplateOnce)]
             #[template(path = "desctop/main/anon_serve_list.stpl")]
             struct Template {
+                title:     String,
                 is_ajax:   bool,
-                tech_cats: Vec<TechCategories>
+                tech_cats: Vec<TechCategories>,
             }
             let body = Template {
+                title:     "Список опций и услуг".to_string(),
                 is_ajax:   is_ajax,
                 tech_cats: all_tech_categories,
             }
@@ -363,10 +389,12 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             #[derive(TemplateOnce)]
             #[template(path = "mobile/main/anon_serve_list.stpl")]
             struct Template {
+                title:     String,
                 is_ajax:   bool,
-                tech_cats: Vec<TechCategories>
+                tech_cats: Vec<TechCategories>,
             }
             let body = Template {
+                title:     "Список опций и услуг".to_string(),
                 is_ajax:   is_ajax,
                 tech_cats: all_tech_categories,
             }
@@ -414,42 +442,49 @@ pub async fn get_load_page(req: HttpRequest) -> actix_web::Result<HttpResponse> 
         use crate::models::ServeCategories;
         use crate::schema::serve_categories::dsl::serve_categories;
 
-        let _serve_category = serve_categories
+        let _serve_categorys = serve_categories
             .filter(schema::serve_categories::id.eq(&_object_pk))
             .load::<ServeCategories>(&_connection)
             .expect("E");
+        let _serve_category = _serve_categorys.into_iter().nth(0).unwrap()
 
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/load/serve_category.stpl")]
-            struct Template {
-                object:      ServeCategories,
-                //object_type: String
-            }
-            let body = Template {
-                object:      _serve_category.into_iter().nth(0).unwrap(),
-                //object_type: "serve_category".to_string(),
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        #[derive(TemplateOnce)]
+        #[template(path = "desctop/load/serve_category.stpl")]
+        struct Template {
+            title:        String,
+            object:      ServeCategories,
+            //object_type: String,
+        }
+        let body = Template {
+            title:        "Информация о технология услуг".to_string() + &_serve_category.name,
+            object:      _serve_category,
+            //object_type: "serve_category".to_string(),
+        }
+        .render_once()
+        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
 
     } else if _object_type == "serve".to_string() && _owner_type != "service".to_string() {
         use crate::models::Serve;
         use crate::schema::serve::dsl::serve;
 
-        let _serve = serve
+        let _serves = serve
             .filter(schema::serve::id.eq(&_object_pk))
             .load::<Serve>(&_connection)
             .expect("E");
 
+        let _serve = _serves.into_iter().nth(0).unwrap();
+
         #[derive(TemplateOnce)]
         #[template(path = "desctop/load/serve.stpl")]
         struct Template {
+            title:        String,
             object:      Serve,
-            //object_type: String
+            //object_type: String,
         }
         let body = Template {
-            object:      _serve.into_iter().nth(0).unwrap(),
+            title:        "Информация об опции".to_string() + &_serve.name,
+            object:      _serve,
             //object_type: "serve".to_string(),
         }
         .render_once()
@@ -463,10 +498,11 @@ pub async fn get_load_page(req: HttpRequest) -> actix_web::Result<HttpResponse> 
             services::dsl::services
         };
 
-        let _serve = serve
+        let _serves = serve
             .filter(schema::serve::id.eq(&_object_pk))
             .load::<Serve>(&_connection)
             .expect("E");
+        let _serve = _serves.into_iter().nth(0).unwrap();
 
         let _service_id: i32 = _owner_pk;
         let _service = services
@@ -477,12 +513,14 @@ pub async fn get_load_page(req: HttpRequest) -> actix_web::Result<HttpResponse> 
         #[derive(TemplateOnce)]
         #[template(path = "desctop/load/serve.stpl")]
         struct Template {
+            title:        String,
             object:      Serve,
             //object_type: String,
             //service:     Service,
         }
         let body = Template {
-            object:      _serve.into_iter().nth(0).unwrap(),
+            title:        "Информация об опции услуги".to_string() + &_serve.name,
+            object:      _serve,
             //object_type: "serve".to_string(),
             //service:     _service.into_iter().nth(0).unwrap(),
         }

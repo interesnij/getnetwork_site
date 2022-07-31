@@ -87,11 +87,13 @@ pub async fn create_wiki_categories_page(session: Session, req: HttpRequest) -> 
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/create_categories.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     wiki_cats:    Vec<WikiCategories>,
                     is_ajax:      bool,
                 }
                 let body = Template {
+                    title:        "Создание категории статей".to_string(),
                     request_user: _request_user,
                     wiki_cats:    _wiki_cats,
                     is_ajax:      is_ajax,
@@ -104,11 +106,13 @@ pub async fn create_wiki_categories_page(session: Session, req: HttpRequest) -> 
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/create_categories.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     wiki_cats:    Vec<WikiCategories>,
                     is_ajax:      bool,
                 }
                 let body = Template {
+                    title:        "Создание категории статей".to_string(),
                     request_user: _request_user,
                     wiki_cats:    _wiki_cats,
                     is_ajax:      is_ajax,
@@ -150,12 +154,14 @@ pub async fn create_wiki_page(session: Session, req: HttpRequest) -> actix_web::
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/create_wiki.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     wiki_cats:    Vec<WikiCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
+                    title:        "Создание статьи".to_string(),
                     request_user: _request_user,
                     wiki_cats:    _wiki_cats,
                     all_tags:     all_tags,
@@ -169,12 +175,14 @@ pub async fn create_wiki_page(session: Session, req: HttpRequest) -> actix_web::
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/create_wiki.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     wiki_cats:    Vec<WikiCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
+                    title:        "Создание статьи".to_string(),
                     request_user: _request_user,
                     wiki_cats:    _wiki_cats,
                     all_tags:     all_tags,
@@ -227,6 +235,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/edit_wiki.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     object:       Wiki,
                     categories:   Vec<WikiCategories>,
@@ -239,6 +248,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
 
                 }
                 let body = Template {
+                    title:        "Изменение статьи ".to_string() + &_wiki.title,
                     request_user: _request_user,
                     object:       _wiki,
                     categories:   _categories,
@@ -257,6 +267,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/edit_wiki.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     object:       Wiki,
                     categories:   Vec<WikiCategories>,
@@ -269,6 +280,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
 
                 }
                 let body = Template {
+                    title:        "Изменение статьи ".to_string() + &_wiki.title,
                     request_user: _request_user,
                     object:       _wiki,
                     categories:   _categories,
@@ -316,13 +328,15 @@ pub async fn edit_content_wiki_page(session: Session, req: HttpRequest, _id: web
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/edit_content_wiki.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     wiki:         Wiki,
                     is_ajax:      bool,
                 }
                 let body = Template {
+                    title:        "Изменение текста статьи ".to_string() + &_wiki.title,
                     request_user: _request_user,
-                    wiki:        _wiki,
+                    wiki:         _wiki,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
@@ -333,11 +347,13 @@ pub async fn edit_content_wiki_page(session: Session, req: HttpRequest, _id: web
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/edit_content_wiki.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     wiki:         Wiki,
                     is_ajax:      bool,
                 }
                 let body = Template {
+                    title:        "Изменение текста статьи ".to_string() + &_wiki.title,
                     request_user: _request_user,
                     wiki:         _wiki,
                     is_ajax:      is_ajax,
@@ -403,11 +419,13 @@ pub async fn edit_wiki_category_page(session: Session, req: HttpRequest, _id: we
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/edit_category.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     category:     WikiCategories,
                     is_ajax:      bool,
                 }
                 let body = Template {
+                    title:        "Изменение категории обучающих статей ".to_string() + &_category.name,
                     request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
@@ -420,11 +438,13 @@ pub async fn edit_wiki_category_page(session: Session, req: HttpRequest, _id: we
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/edit_category.stpl")]
                 struct Template {
+                    title:        String,
                     request_user: User,
                     category:     WikiCategories,
                     is_ajax:      bool,
                 }
                 let body = Template {
+                    title:        "Изменение категории обучающих статей ".to_string() + &_category.name,
                     request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
@@ -822,6 +842,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/wikis/wiki.stpl")]
             struct Template {
+                title:        String,
                 request_user: User,
                 object:       Wiki,
                 images:       Vec<WikiImage>,
@@ -834,16 +855,17 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:      bool,
             }
             let body = Template {
+                title:        "Статья ".to_string() + &_store.title,
                 request_user: _request_user,
-                object:     _wiki,
-                images:     _images,
-                videos:     _videos,
-                category:   _category,
-                wiki_cats:  _wiki_categories,
-                all_tags:   _tags,
-                prev:       prev,
-                next:       next,
-                is_ajax:    is_ajax,
+                object:       _wiki,
+                images:       _images,
+                videos:       _videos,
+                category:     _category,
+                wiki_cats:    _wiki_categories,
+                all_tags:     _tags,
+                prev:         prev,
+                next:         next,
+                is_ajax:      is_ajax,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -853,6 +875,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/wikis/wiki.stpl")]
             struct Template {
+                title:        String,
                 request_user: User,
                 object:       Wiki,
                 images:       Vec<WikiImage>,
@@ -865,16 +888,17 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:      bool,
             }
             let body = Template {
+                title:        "Статья ".to_string() + &_store.title,
                 request_user: _request_user,
-                object:     _wiki,
-                images:     _images,
-                videos:     _videos,
-                category:   _category,
-                wiki_cats:  _wiki_categories,
-                all_tags:   _tags,
-                prev:       prev,
-                next:       next,
-                is_ajax:    is_ajax,
+                object:       _wiki,
+                images:       _images,
+                videos:       _videos,
+                category:     _category,
+                wiki_cats:    _wiki_categories,
+                all_tags:     _tags,
+                prev:         prev,
+                next:         next,
+                is_ajax:      is_ajax,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -886,6 +910,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/wikis/anon_wiki.stpl")]
             struct Template {
+                title:      String,
                 object:     Wiki,
                 images:     Vec<WikiImage>,
                 videos:     Vec<WikiVideo>,
@@ -897,6 +922,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:    bool,
             }
             let body = Template {
+                title:      "Статья ".to_string() + &_store.title,
                 object:     _wiki,
                 images:     _images,
                 videos:     _videos,
@@ -915,6 +941,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/wikis/anon_wiki.stpl")]
             struct Template {
+                title:      String,
                 object:     Wiki,
                 images:     Vec<WikiImage>,
                 videos:     Vec<WikiVideo>,
@@ -926,6 +953,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:    bool,
             }
             let body = Template {
+                title:      "Статья ".to_string() + &_store.title,
                 object:     _wiki,
                 images:     _images,
                 videos:     _videos,
@@ -984,6 +1012,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "desctop/wikis/category.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 all_tags:         Vec<Tag>,
                 category:         WikiCategories,
@@ -993,6 +1022,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Категория обучающих статей ".to_string() + &_category.name,
                 request_user:     _request_user,
                 all_tags:         _tags,
                 category:         _category,
@@ -1009,6 +1039,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "mobile/wikis/category.stpl")]
             struct Template {
+                title:            String,
                 request_user:     User,
                 all_tags:         Vec<Tag>,
                 category:         WikiCategories,
@@ -1018,6 +1049,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Категория обучающих статей ".to_string() + &_category.name,
                 request_user:     _request_user,
                 all_tags:         _tags,
                 category:         _category,
@@ -1036,6 +1068,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "desctop/wikis/anon_category.stpl")]
             struct Template {
+                title:            String,
                 all_tags:         Vec<Tag>,
                 category:         WikiCategories,
                 wiki_cats:        Vec<WikiCategories>,
@@ -1044,6 +1077,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Категория обучающих статей ".to_string() + &_category.name,
                 all_tags:         _tags,
                 category:         _category,
                 wiki_cats:        _wiki_categorys,
@@ -1059,6 +1093,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "mobile/wikis/anon_category.stpl")]
             struct Template {
+                title:            String,
                 all_tags:         Vec<Tag>,
                 category:         WikiCategories,
                 wiki_cats:        Vec<WikiCategories>,
@@ -1067,6 +1102,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 is_ajax:          bool,
             }
             let body = Template {
+                title:            "Категория обучающих статей ".to_string() + &_category.name,
                 all_tags:         _tags,
                 category:         _category,
                 wiki_cats:        _wiki_categorys,
@@ -1118,12 +1154,14 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
             #[derive(TemplateOnce)]
             #[template(path = "desctop/wikis/categories.stpl")]
             struct Template {
+                title:        String,
                 request_user: User,
                 is_ajax:      bool,
                 wiki_cats:    Vec<WikiCategories>,
                 //all_tags:     Vec<Tag>,
             }
             let body = Template {
+                title:        "Категории обучающих статей".to_string(),
                 request_user: _request_user,
                 is_ajax:      is_ajax,
                 wiki_cats:    _wiki_cats,
@@ -1137,12 +1175,14 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
             #[derive(TemplateOnce)]
             #[template(path = "mobile/wikis/categories.stpl")]
             struct Template {
+                title:        String,
                 request_user: User,
                 is_ajax:      bool,
                 wiki_cats:    Vec<WikiCategories>,
                 all_tags:     Vec<Tag>,
             }
             let body = Template {
+                title:        "Категории обучающих статей".to_string(),
                 request_user: _request_user,
                 is_ajax:      is_ajax,
                 wiki_cats:    _wiki_cats,
@@ -1158,11 +1198,13 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
             #[derive(TemplateOnce)]
             #[template(path = "desctop/wikis/anon_categories.stpl")]
             struct Template {
+                title:        String,
                 is_ajax:      bool,
                 wiki_cats:    Vec<WikiCategories>,
                 //all_tags:     Vec<Tag>,
             }
             let body = Template {
+                title:        "Категории обучающих статей".to_string(),
                 is_ajax:      is_ajax,
                 wiki_cats:    _wiki_cats,
                 //all_tags:     _tags,
@@ -1175,11 +1217,13 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
             #[derive(TemplateOnce)]
             #[template(path = "mobile/wikis/anon_categories.stpl")]
             struct Template {
+                title:        String,
                 is_ajax:      bool,
                 wiki_cats:    Vec<WikiCategories>,
                 all_tags:     Vec<Tag>,
             }
             let body = Template {
+                title:        "Категории обучающих статей".to_string(),
                 is_ajax:      is_ajax,
                 wiki_cats:    _wiki_cats,
                 all_tags:     _tags,

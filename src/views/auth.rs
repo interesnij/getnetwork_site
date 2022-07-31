@@ -54,9 +54,11 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
             #[template(path = "desctop/auth/signup.stpl")]
             struct Template {
                 is_ajax: bool,
+                title:   String,
             }
             let body = Template {
                 is_ajax: is_ajax,
+                title:   "Регистрация".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -67,9 +69,11 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
             #[template(path = "mobile/auth/signup.stpl")]
             struct Template {
                 is_ajax: bool,
+                title:   String,
             }
             let body = Template {
                 is_ajax: is_ajax,
+                title:   "Регистрация".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -90,9 +94,11 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
             #[template(path = "desctop/auth/login.stpl")]
             struct Template {
                 is_ajax: bool,
+                title:   String,
             }
             let body = Template {
                 is_ajax: is_ajax,
+                title:   "Вход".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -103,9 +109,11 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
             #[template(path = "mobile/auth/login.stpl")]
             struct Template {
                 is_ajax: bool,
+                title:   String,
             }
             let body = Template {
                 is_ajax: is_ajax,
+                title:   "Регистрация".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -123,9 +131,11 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
         #[template(path = "desctop/auth/logout.stpl")]
         struct Template {
             is_ajax: bool,
+            title:   String,
         }
         let body = Template {
             is_ajax: false,
+            title:   "Выход из аккаунта".to_string(),
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -136,9 +146,11 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
         #[template(path = "mobile/auth/logout.stpl")]
         struct Template {
             is_ajax: bool,
+            title:   String,
         }
         let body = Template {
             is_ajax: false,
+            title:   "Выход из аккаунта".to_string(),
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
