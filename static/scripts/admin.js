@@ -375,25 +375,17 @@ on('#ajax', 'click', '.select_close_tech_cat', function() {
   //  cats[i].classList.remove("hidden");
   //}
   for (var i = 0; i < options.length; i++) {
-    if (!options[i].classList.contains("selected")) {
-      console.log("selected - ", options[i].selected);
-      options[i].classList.add("selected");
-      options[i].classList.remove("not_selected");
+    if (!options[i].selected) {
       cat = next.querySelector('[data-pk=' + '"' + options[i].value + '"' + ']');
-      console.log(cat);
       if (cat) {
         cat_options = cat.querySelectorAll("option");
         for (var i = 0; i < cat_options.length; i++) {
-          cat_options[i].removeAttribute("selected");
-          console.log("cat_options removeAttribute");
+          cat_options[i].selected = false;
         }
       }
       cat.classList.add("hidden");
     }
     else {
-      console.log("selected - ", options[i].selected);
-      this.classList.remove("selected");
-      this.classList.add("not_selected");
       next.querySelector('[data-pk=' + '"' + this.value + '"' + ']').classList.remove("hidden");
     }
   }
