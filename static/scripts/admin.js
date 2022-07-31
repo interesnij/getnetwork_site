@@ -377,8 +377,8 @@ on('#ajax', 'click', '.select_close_tech_cat', function() {
   for (var i = 0; i < options.length; i++) {
     if (options[i].classList.contains("selected")) {
       console.log("selected");
-      cat.classList.remove("selected");
-      cat.classList.add("not_selected");
+      options[i].classList.remove("selected");
+      options[i].classList.add("not_selected");
       cat = next.querySelector('[data-pk=' + '"' + options[i].value + '"' + ']');
       console.log(cat);
       if (cat) {
