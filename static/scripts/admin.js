@@ -384,7 +384,7 @@ on('#ajax', 'change', '.close_tech_categories', function() {
       cat.classList.add("hidden");
     }
     else {
-      next.querySelector('[data-pk=' + '"' + this.value + '"' + ']').classList.remove("hidden");
+      next.querySelector('[data-pk=' + '"' + options[i].value + '"' + ']').classList.remove("hidden");
     }
   }
 });
