@@ -386,4 +386,8 @@ on('#ajax', 'change', '.close_tech_categories', function() {
       cat.classList.add("hidden");
     }
   }
-})
+});
+
+on('#ajax', 'click', '.select_close_tech_cat', function() {
+  alert(this.value);
+});

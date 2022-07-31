@@ -88,7 +88,15 @@
                 <label>Закрытые тех. категории</label>
                 <select class="form-control close_tech_categories" name="close_tech_cats_list[]" multiple="">
                   <% for cat in tech_cats.iter() { %>
-                    <option <% if tech_cats_ids.iter().any(|i| i==&cat.id) { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %> (Уровень <%= cat.level %>)</option>
+                    <option
+                      <% if tech_cats_ids.iter().any(|i| i==&cat.id) { %>
+                        class="selected" selected=""
+                      <% } else { %>
+                        class="select_close_tech_cat"
+                      <% } %>
+                      value="<%= cat.id %>">
+                        <%= cat.name %> (Уровень <%= cat.level %>)
+                    </option>
                   <% } %>
                 </select>
             </div>
