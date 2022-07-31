@@ -586,11 +586,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
         let _request_user = get_request_user_data(&session);
-        let _cat_id: i32 = *_id;
-        let all_tech_categories = tech_categories
-            .order(schema::tech_categories::position.asc())
-            .load::<TechCategories>(&_connection)
-            .expect("E.");
+        //let _cat_id: i32 = *_id;
         let _serve_id: i32 = *_id;
         let _serves = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
         let _serve = _serves.into_iter().nth(0).unwrap();

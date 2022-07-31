@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<section class="small-section bg-gray-lighter">
+<section data-title="" class="doc_title small-section bg-gray-lighter">
   <div class="relative container align-left">
       <div class="mt-30">
         <div class="mod-breadcrumbs font-alt align-right">
