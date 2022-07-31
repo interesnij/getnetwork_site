@@ -367,9 +367,9 @@ on('#ajax', 'change', '.load_serve_from_level', function() {
   link.send( null );
 });
 
-on('#ajax', 'change', '.close_tech_categories', function() {
-  options = this.querySelectorAll("option");
-  next = this.parentElement.nextElementSibling;
+on('#ajax', 'click', '.select_close_tech_cat', function() {
+  options = this.parentElement.querySelectorAll("option");
+  next = this.parentElement.parentElement.nextElementSibling;
   cats = next.querySelectorAll(".open_tech_category")
   for (var i = 0; i < cats.length; i++) {
     cats[i].classList.remove("hidden");
@@ -385,13 +385,5 @@ on('#ajax', 'change', '.close_tech_categories', function() {
       }
       cat.classList.add("hidden");
     }
-  }
-});
-
-on('#ajax', 'click', '.select_close_tech_cat', function() {
-  if (this.getAttribute("selected")) {
-    alert("selected");
-  } else {
-    alert("not selected");
   }
 });
