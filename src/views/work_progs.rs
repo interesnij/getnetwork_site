@@ -238,7 +238,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 .load::<WorkCategories>(&_connection)
                 .expect("Error");
 
-            let _serve = _service.get_serves();
+            let _serve = _work.get_serves();
             let tech_id = _serve[0].tech_cat_id;
             let _tech_cats = tech_categories
                 .filter(schema::tech_categories::id.eq(tech_id))

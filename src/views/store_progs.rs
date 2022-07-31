@@ -237,7 +237,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 .load::<StoreCategories>(&_connection)
                 .expect("Error");
 
-            let _serve = _service.get_serves();
+            let _serve = _store.get_serves();
             let tech_id = _serve[0].tech_cat_id;
             let _tech_categories = tech_categories
                 .filter(schema::tech_categories::id.eq(tech_id))
