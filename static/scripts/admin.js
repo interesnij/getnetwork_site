@@ -370,20 +370,26 @@ on('#ajax', 'change', '.load_serve_from_level', function() {
 on('#ajax', 'click', '.select_close_tech_cat', function() {
   options = this.parentElement.querySelectorAll("option");
   next = this.parentElement.parentElement.nextElementSibling;
-  cats = next.querySelectorAll(".open_tech_category")
+  cats = next.querySelectorAll(".open_tech_category");
   for (var i = 0; i < cats.length; i++) {
     cats[i].classList.remove("hidden");
   }
   for (var i = 0; i < options.length; i++) {
     if (options[i].classList.contains("selected")) {
+      console.log("selected");
       cat = next.querySelector('[data-pk=' + '"' + options[i].value + '"' + ']');
+      console.log(cat);
       if (cat) {
         cat_options = cat.querySelectorAll("option");
         for (var i = 0; i < cat_options.length; i++) {
           cat_options[i].removeAttribute("selected");
+          console.log("cat_options removeAttribute");
         }
       }
       cat.classList.add("hidden");
+    }
+    else {
+      console.log("not selected");
     }
   }
 });
