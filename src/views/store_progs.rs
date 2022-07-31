@@ -217,7 +217,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
         if _request_user.perm == 60 && _store.user_id == _request_user.id {
             use schema::{
                 tags::dsl::tags,
-                serve::dsl::serve,
                 store_images::dsl::store_images,
                 store_videos::dsl::store_videos,
                 store_categories::dsl::store_categories,

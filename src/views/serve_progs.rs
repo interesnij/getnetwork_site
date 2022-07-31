@@ -404,12 +404,12 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
                 #[template(path = "desctop/serve/create_serve.stpl")]
                 struct Template {
                     request_user: User,
-                    tech_cats:    Vec<TechCategories>,
+                    //tech_cats:    Vec<TechCategories>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
-                    tech_cats:    _tech_categories,
+                    //tech_cats:    _tech_categories,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
@@ -421,12 +421,12 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
                 #[template(path = "mobile/serve/create_serve.stpl")]
                 struct Template {
                     request_user: User,
-                    tech_cats:    Vec<TechCategories>,
+                    //tech_cats:    Vec<TechCategories>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
-                    tech_cats:    _tech_categories,
+                    //tech_cats:    _tech_categories,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
@@ -622,7 +622,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[template(path = "desctop/serve/edit_serve.stpl")]
                 struct Template {
                     request_user: User,
-                    tech_cats:    Vec<TechCategories>,
+                    //tech_cats:    Vec<TechCategories>,
                     level:        i16,
                     serve_cats:   Vec<ServeCategories>,
                     object:       Serve,
@@ -630,7 +630,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 }
                 let body = Template {
                     request_user: _request_user,
-                    tech_cats:    all_tech_categories,
+                    //tech_cats:    all_tech_categories,
                     level:        _level,
                     serve_cats:   _serve_cats,
                     object:       _serve,
@@ -645,7 +645,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[template(path = "mobile/serve/edit_serve.stpl")]
                 struct Template {
                     request_user: User,
-                    tech_cats:    Vec<TechCategories>,
+                    //tech_cats:    Vec<TechCategories>,
                     level:        i16,
                     serve_cats:   Vec<ServeCategories>,
                     object:       Serve,
@@ -653,7 +653,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 }
                 let body = Template {
                     request_user: _request_user,
-                    tech_cats:    all_tech_categories,
+                    //tech_cats:    all_tech_categories,
                     level:        _level,
                     serve_cats:   _serve_cats,
                     object:       _serve,

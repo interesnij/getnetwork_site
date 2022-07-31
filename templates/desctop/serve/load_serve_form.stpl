@@ -19,7 +19,7 @@
       <select class="form-control" name="serve_list[]" multiple="">
         <% for object in category.get_serves().iter() { %>
           <option value="<%= object.id %>">
-            <%= object.name %><%= object.name %> <% if object.is_default { %>*<% } %>
+            <%= object.name %><%= object.name %> <% if object.is_default { %>- по умолчанию<% } %>
           </option>
         <% } %>
       </select>

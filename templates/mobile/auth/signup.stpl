@@ -1,22 +1,35 @@
 <% include!("../anon_header.stpl"); %>
 
-<form class="form" style="margin-top: 100px;">
-    <div>
-      <p class="api_response"></p>
+<section class="bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>Регистрация</span>
+        </div>
     </div>
-    <div>
-        <label for="username">Логин:</label>
-        <input id="id_username" type="text" name="username">
+</section>
+<section class="page-section">
+    <div class="container relative">
+      <form class="form mb-20 col-md-offset-2">
+        <div>
+          <p class="api_response"></p>
+        </div>
+        <div>
+          <label for="username">Логин:</label>
+          <input id="id_username" type="text" name="username">
+        </div>
+        <div>
+          <label for="email">Почта:</label>
+          <input id="id_email" type="email" name="email">
+        </div>
+        <div>
+          <label for="password">Пароль:</label>
+          <input id="id_password" type="password" name="password">
+        </div>
+        <button type="button" id="signup">Регистрация</button>
+      </form>
     </div>
-    <div>
-        <label for="email">Почта:</label>
-        <input id="id_email" type="email" name="email">
-    </div>
-    <div>
-        <label for="password">Пароль:</label>
-        <input id="id_password" type="password" name="password">
-    </div>
-    <button type="button" id="signup">Регистрация</button>
-</form>
+</section>
 
 <% include!("../anon_footer.stpl"); %>

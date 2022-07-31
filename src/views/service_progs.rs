@@ -217,7 +217,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
         if _request_user.perm == 60 && _service.user_id == _request_user.id {
             use schema::{
                 tags::dsl::tags,
-                serve::dsl::serve,
                 service_images::dsl::service_images,
                 service_videos::dsl::service_videos,
                 service_categories::dsl::service_categories,

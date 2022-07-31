@@ -217,7 +217,6 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
         if _request_user.perm == 60 && _work.user_id == _request_user.id {
             use schema::{
                 tags::dsl::tags,
-                serve::dsl::serve,
                 work_images::dsl::work_images,
                 work_videos::dsl::work_videos,
                 work_categories::dsl::work_categories,
