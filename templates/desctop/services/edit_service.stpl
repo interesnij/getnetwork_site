@@ -80,7 +80,7 @@
                 <option <% if level == 1 { %>selected=""<% } %> value="1">Начальный</option>
                 <option <% if level == 2 { %>selected=""<% } %> value="2">Продвинутый</option>
                 <option <% if level == 3 { %>selected=""<% } %> value="3">Экспертный</option>
-              </select> 
+              </select>
             </div>
 
             <div class="mb-20 mb-md-10">
@@ -92,6 +92,7 @@
                 </select>
             </div>
 
+            <div class="hidden">
             <hr class="mt-0 mb-0 " />
             <% for tech_category in tech_cats.iter() { %>
               <h4 class="show_next_element pointer"><%= tech_category.name %> (Уровень <%= tech_category.level %>)</h4>
@@ -112,6 +113,7 @@
               </div>
             <% } %>
             <hr class="mt-0 mb-0 " />
+            </div>
 
             <div class="mb-20 mb-md-10">
               <% for img in images.iter() { %>
