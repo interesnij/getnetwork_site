@@ -384,8 +384,10 @@ on('#ajax', 'click', '.select_close_tech_cat', function() {
         }
       }
       cat.classList.add("hidden");
+      this.selected = false;
     }
     else {
+      this.selected = true;
       next.querySelector('[data-pk=' + '"' + this.value + '"' + ']').classList.remove("hidden");
     }
   }
