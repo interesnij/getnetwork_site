@@ -159,14 +159,14 @@ pub async fn create_work_page(session: Session, req: HttpRequest) -> actix_web::
                 struct Template {
                     request_user: User,
                     work_cats:    Vec<WorkCategories>,
-                    tech_cats:    Vec<TechCategories>,
+                    //tech_cats:    Vec<TechCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     work_cats:    _work_cats,
-                    tech_cats:    _tech_cats,
+                    //tech_cats:    _tech_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
@@ -180,14 +180,14 @@ pub async fn create_work_page(session: Session, req: HttpRequest) -> actix_web::
                 struct Template {
                     request_user: User,
                     work_cats:    Vec<WorkCategories>,
-                    tech_cats:    Vec<TechCategories>,
+                    //tech_cats:    Vec<TechCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     work_cats:    _work_cats,
-                    tech_cats:    _tech_cats,
+                    //tech_cats:    _tech_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }

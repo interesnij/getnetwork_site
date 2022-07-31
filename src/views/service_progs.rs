@@ -159,14 +159,14 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
                 struct Template {
                     request_user: User,
                     service_cats: Vec<ServiceCategories>,
-                    tech_cats:    Vec<TechCategories>,
+                    //tech_cats:    Vec<TechCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     service_cats: _service_cats,
-                    tech_cats:    _tech_categories,
+                    //tech_cats:    _tech_categories,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
@@ -180,14 +180,14 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
                 struct Template {
                     request_user: User,
                     service_cats: Vec<ServiceCategories>,
-                    tech_cats:    Vec<TechCategories>,
+                    //tech_cats:    Vec<TechCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      bool,
                 }
                 let body = Template {
                     request_user: _request_user,
                     service_cats: _service_cats,
-                    tech_cats:    _tech_categories,
+                    //tech_cats:    _tech_categories,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
                 }
