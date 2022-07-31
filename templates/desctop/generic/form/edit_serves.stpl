@@ -11,7 +11,7 @@
       <span><%= id %></span>
     <% } %>
   </p>
-<div>
+</div>
 
 <div class="mb-20 mb-md-10">
   <label>Уровень сложности</label>
@@ -61,5 +61,4 @@
 </div>
 
 <hr class="mt-0 mb-0 " />
-</div>
 </div>
