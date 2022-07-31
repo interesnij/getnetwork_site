@@ -375,7 +375,7 @@ on('#ajax', 'click', '.select_close_tech_cat', function() {
     cats[i].classList.remove("hidden");
   }
   for (var i = 0; i < options.length; i++) {
-    if (options[i].getAttribute("selected")) {
+    if (options[i].classList.contains("selected")) {
       cat = next.querySelector('[data-pk=' + '"' + options[i].value + '"' + ']');
       if (cat) {
         cat_options = cat.querySelectorAll("option");
