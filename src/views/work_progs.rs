@@ -1059,7 +1059,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:      bool,
             }
             let body = Template {
-                title:        String,
+                title:        "Работа ".to_string() + &_work.title,
                 request_user: _request_user,
                 object:       _work,
                 images:       _images,
@@ -1078,7 +1078,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/works/work.stpl")]
             struct Template {
-                title:        "Работа ".to_string() + &_store.title,
+                title:        String,
                 request_user: User,
                 object:       Work,
                 images:       Vec<WorkImage>,
@@ -1091,7 +1091,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:      bool,
             }
             let body = Template {
-                title:        "Работа ".to_string() + &_store.title,
+                title:        "Работа ".to_string() + &_work.title,
                 request_user: _request_user,
                 object:       _work,
                 images:       _images,

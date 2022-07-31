@@ -855,7 +855,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:      bool,
             }
             let body = Template {
-                title:        "Статья ".to_string() + &_store.title,
+                title:        "Статья ".to_string() + &_wiki.title,
                 request_user: _request_user,
                 object:       _wiki,
                 images:       _images,
@@ -888,7 +888,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:      bool,
             }
             let body = Template {
-                title:        "Статья ".to_string() + &_store.title,
+                title:        "Статья ".to_string() + &_wiki.title,
                 request_user: _request_user,
                 object:       _wiki,
                 images:       _images,
@@ -922,7 +922,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:    bool,
             }
             let body = Template {
-                title:      "Статья ".to_string() + &_store.title,
+                title:      "Статья ".to_string() + &_wiki.title,
                 object:     _wiki,
                 images:     _images,
                 videos:     _videos,
@@ -953,7 +953,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 is_ajax:    bool,
             }
             let body = Template {
-                title:      "Статья ".to_string() + &_store.title,
+                title:      "Статья ".to_string() + &_wiki.title,
                 object:     _wiki,
                 images:     _images,
                 videos:     _videos,
