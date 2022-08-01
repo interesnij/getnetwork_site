@@ -28,7 +28,7 @@ use crate::diesel::{
 };
 use actix_session::Session;
 use crate::errors::AuthError;
-
+use sailfish::TemplateOnce;
 
 //lazy_static! {
     pub fn establish_connection() -> PgConnection {
@@ -175,5 +175,69 @@ pub fn get_request_user_data(session: &Session) -> User {
             .into_iter()
             .nth(0)
             .unwrap()
+    }
+}
+
+pub async fn get_first_load_page(session: &Session, is_desctop: bool, title: String) -> actix_web::Result<HttpResponse> {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/generic/first_load.stpl")]
+            struct Template {
+                request_user: User,
+                title:        String,
+            }
+            let body = Template {
+                request_user: _request_user,
+                title:        title,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/generic/first_load.stpl")]
+            struct Template {
+                request_user: User,
+                title:        String,
+            }
+            let body = Template {
+                request_user: _request_user,
+                title:        title,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/generic/anon_first_load.stpl")]
+            struct Template {
+                title: String,
+            }
+            let body = Template {
+                title: title,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/generic/anon_first_load.stpl")]
+            struct Template {
+                title: String,
+            }
+            let body = Template {
+                title: title,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
     }
 }
