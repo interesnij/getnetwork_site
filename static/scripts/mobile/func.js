@@ -5,6 +5,11 @@ function mob_menu_hide() {
   document.querySelector(".window_fullscreen").style.display = "none";
   document.querySelector(".mob_menu").style.display = "block";
 };
+function check_first_load() {
+  if document.body.classList.contains("first_load") {
+    ajax_get_reload(window.location.href);
+  }
+}
 
 function ajax_get_reload(url) {
   var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );

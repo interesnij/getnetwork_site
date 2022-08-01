@@ -18,7 +18,7 @@
     <link class="color" type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css">
 </head>
 
-<body>
+<body class="first_load">
 
     <div class="page" id="top">
       <nav class="main-nav small-height stick-fixed">

@@ -1,5 +1,6 @@
 ajax = document.body.querySelector("#ajax");
 get_active_button();
+check_first_load();
 
 on('#ajax', 'click', '.a_1', function() {
   is = this;

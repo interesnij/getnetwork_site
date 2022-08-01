@@ -13,6 +13,11 @@ on('body', 'mouseout', '.mn-sub', function(event) {
   this.style.display = "none"
 });
 
+function check_first_load() {
+  if document.body.classList.contains("first_load") {
+    ajax_get_reload(window.location.href);
+  }
+}
 function ajax_get_reload(url) {
   var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url + "?ajax=1", true );
@@ -31,3 +36,5 @@ function ajax_get_reload(url) {
     }
     ajax_link.send();
 };
+
+check_first_load();
