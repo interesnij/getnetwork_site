@@ -17,9 +17,9 @@
   </head>
   <body class="first_load">
     <span class="span"></span>
-    <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
     <script defer type="text/javascript" src="/static/scripts/mobile/func.js"></script>
     <script defer type="text/javascript" src="/static/scripts/mobile/main.js"></script>
     <script defer type="text/javascript" src="/static/scripts/main.js"></script>
+    <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
   </body>
 </html>
