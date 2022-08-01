@@ -71,61 +71,59 @@ pub fn blog_routes(config: &mut web::ServiceConfig) {
 }
 
 pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::utils::get_device_and_ajax;
+            use schema::blog_categories::dsl::blog_categories;
 
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-            if is_ajax == 0 {
-                get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
+            let _connection = establish_connection();
+            let _blog_cats:Vec<BlogCategories> = blog_categories
+                .load(&_connection)
+                .expect("Error");
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/blogs/create_categories.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    blog_cats:    Vec<BlogCategories>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    title:        "Создание категории блога".to_string(),
+                    request_user: _request_user,
+                    blog_cats:    _blog_cats,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
             else {
-                use schema::blog_categories::dsl::blog_categories;
-
-                let _connection = establish_connection();
-                let _blog_cats:Vec<BlogCategories> = blog_categories
-                    .load(&_connection)
-                    .expect("Error");
-
-                if is_desctop {
-                    #[derive(TemplateOnce)]
-                    #[template(path = "desctop/blogs/create_categories.stpl")]
-                    struct Template {
-                        title:        String,
-                        request_user: User,
-                        blog_cats:    Vec<BlogCategories>,
-                        is_ajax:      i32,
-                    }
-                    let body = Template {
-                        title:        "Создание категории блога".to_string(),
-                        request_user: _request_user,
-                        blog_cats:    _blog_cats,
-                        is_ajax:      is_ajax,
-                    }
-                    .render_once()
-                    .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                    Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/blogs/create_categories.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    blog_cats:    Vec<BlogCategories>,
+                    is_ajax:      i32,
                 }
-                else {
-                    #[derive(TemplateOnce)]
-                    #[template(path = "mobile/blogs/create_categories.stpl")]
-                    struct Template {
-                        title:        String,
-                        request_user: User,
-                        blog_cats:    Vec<BlogCategories>,
-                        is_ajax:      i32,
-                    }
-                    let body = Template {
-                        title:        "Создание категории блога".to_string(),
-                        request_user: _request_user,
-                        blog_cats:    _blog_cats,
-                        is_ajax:      is_ajax,
-                    }
-                    .render_once()
-                    .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                    Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+                let body = Template {
+                    title:        "Создание категории блога".to_string(),
+                    request_user: _request_user,
+                    blog_cats:    _blog_cats,
+                    is_ajax:      is_ajax,
                 }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
         }
         else {
@@ -138,70 +136,68 @@ pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> 
 }
 
 pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание статьи блога".to_string()).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::utils::get_device_and_ajax;
+            use schema::tags::dsl::tags;
+            use schema::blog_categories::dsl::blog_categories;
 
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-            if is_ajax == 0 {
-                get_first_load_page(&session, is_desctop, "Создание статьи блога".to_string()).await
+            let _connection = establish_connection();
+            let _blog_cats:Vec<BlogCategories> = blog_categories
+                .load(&_connection)
+                .expect("Error");
+
+            let all_tags: Vec<Tag> = tags
+                .load(&_connection)
+                .expect("Error.");
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/blogs/create_blog.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    blog_cats:    Vec<BlogCategories>,
+                    all_tags:     Vec<Tag>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    title:        "Создание статьи блога".to_string(),
+                    request_user: _request_user,
+                    blog_cats:    _blog_cats,
+                    all_tags:     all_tags,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
             else {
-                use schema::tags::dsl::tags;
-                use schema::blog_categories::dsl::blog_categories;
-
-                let _connection = establish_connection();
-                let _blog_cats:Vec<BlogCategories> = blog_categories
-                    .load(&_connection)
-                    .expect("Error");
-
-                let all_tags: Vec<Tag> = tags
-                    .load(&_connection)
-                    .expect("Error.");
-
-                if is_desctop {
-                    #[derive(TemplateOnce)]
-                    #[template(path = "desctop/blogs/create_blog.stpl")]
-                    struct Template {
-                        title:        String,
-                        request_user: User,
-                        blog_cats:    Vec<BlogCategories>,
-                        all_tags:     Vec<Tag>,
-                        is_ajax:      i32,
-                    }
-                    let body = Template {
-                        title:        "Создание статьи блога".to_string(),
-                        request_user: _request_user,
-                        blog_cats:    _blog_cats,
-                        all_tags:     all_tags,
-                        is_ajax:      is_ajax,
-                    }
-                    .render_once()
-                    .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                    Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/blogs/create_blog.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    blog_cats:    Vec<BlogCategories>,
+                    all_tags:     Vec<Tag>,
+                    is_ajax:      i32,
                 }
-                else {
-                    #[derive(TemplateOnce)]
-                    #[template(path = "mobile/blogs/create_blog.stpl")]
-                    struct Template {
-                        title:        String,
-                        request_user: User,
-                        blog_cats:    Vec<BlogCategories>,
-                        all_tags:     Vec<Tag>,
-                        is_ajax:      i32,
-                    }
-                    let body = Template {
-                        title:        "Создание статьи блога".to_string(),
-                        request_user: _request_user,
-                        blog_cats:    _blog_cats,
-                        all_tags:     all_tags,
-                        is_ajax:      is_ajax,
-                    }
-                    .render_once()
-                    .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                    Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+                let body = Template {
+                    title:        "Создание статьи блога".to_string(),
+                    request_user: _request_user,
+                    blog_cats:    _blog_cats,
+                    all_tags:     all_tags,
+                    is_ajax:      is_ajax,
                 }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
         }
         else {
@@ -321,7 +317,8 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
 }
 
 pub async fn edit_content_blog_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use crate::schema::blogs::dsl::blogs;
+    use crate::utils::get_device_and_ajax;
+    use schema::blogs::dsl::blogs;
 
     let _blog_id: i32 = *_id;
     let _connection = establish_connection();
@@ -332,13 +329,16 @@ pub async fn edit_content_blog_page(session: Session, req: HttpRequest, _id: web
 
     let _blog = _blogs.into_iter().nth(0).unwrap();
 
-    if is_signed_in(&session) {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение текста статьи блога ".to_string() + &_blog.title).await
+    }
+
+    else if is_signed_in(&session) {
+        use crate::schema::blogs::dsl::blogs;
+
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _request_user.id == _blog.user_id {
-            use crate::utils::get_device_and_ajax;
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/edit_content_blog.stpl")]
@@ -414,22 +414,24 @@ pub async fn edit_content_blog(session: Session, mut payload: Multipart, _id: we
 }
 
 pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+    use schema::blog_categories::dsl::blog_categories;
+
+    let _cat_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _categorys = blog_categories
+        .filter(schema::blog_categories::id.eq(&_cat_id))
+        .load::<BlogCategories>(&_connection)
+        .expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение категории блога ".to_string() + &_category.name).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use schema::blog_categories::dsl::blog_categories;
-            use crate::utils::get_device_and_ajax;
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-            let _cat_id: i32 = *_id;
-            let _connection = establish_connection();
-            let _categorys = blog_categories
-                .filter(schema::blog_categories::id.eq(&_cat_id))
-                .load::<BlogCategories>(&_connection)
-                .expect("E");
-
-            let _category = _categorys.into_iter().nth(0).unwrap();
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/edit_category.stpl")]
