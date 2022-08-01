@@ -1,5 +1,3 @@
-$mobile_nav = document.body.querySelector(".mobile_nav");
-console.log($mobile_nav);
 function on(elSelector, eventName, selector, fn) {var element = document.querySelector(elSelector);element.addEventListener(eventName, function(event) {var possibleTargets = element.querySelectorAll(selector);var target = event.target;for (var i = 0, l = possibleTargets.length; i < l; i++) {var el = target;var p = possibleTargets[i];while (el && el !== element) {if (el === p) {return fn.call(p, event);}el = el.parentNode;}}});};
 
 function mob_menu_hide() {
@@ -55,12 +53,14 @@ function ajax_get_reload(url) {
     ajax_link.send();
 };
 
-function deactivate_nav_buttons(){
+function deactivate_nav_buttons() {
+  $mobile_nav = document.body.querySelector(".mobile_nav");
   buttons = $mobile_nav.querySelectorAll(".mobile_icon");
   for (var i = 0; i < buttons.length; i++){buttons[i].classList.remove("mobile_icon_active")};
 };
 
-function show_nav_first_span(){
+function show_nav_first_span() {
+  $mobile_nav = document.body.querySelector(".mobile_nav");
   first_span = $mobile_nav.previousElementSibling.previousElementSibling;
   first_span.style.display = "flex"; first_span.classList.add("btn_active");
   hide_nav_second_span();
@@ -69,6 +69,7 @@ function show_nav_first_span(){
 };
 function hide_nav_first_span(){
   try {
+    $mobile_nav = document.body.querySelector(".mobile_nav");
     first_span = $mobile_nav.previousElementSibling.previousElementSibling;
     first_span.style.display = "none"; first_span.classList.remove("btn_active");
     deactivate_nav_buttons();
@@ -77,13 +78,17 @@ function hide_nav_first_span(){
 };
 function toggle_nav_first_span(){
   try {
+    $mobile_nav = document.body.querySelector(".mobile_nav");
     first_span = $mobile_nav.previousElementSibling.previousElementSibling;
-    first_span.classList.contains("btn_active") ? (hide_nav_first_span(), first_span.classList.remove("btn_active")) : (show_nav_first_span(), first_span.classList.add("btn_active"))
+    first_span.classList.contains("btn_active")
+      ? (hide_nav_first_span(), first_span.classList.remove("btn_active"))
+      : (show_nav_first_span(), first_span.classList.add("btn_active"))
   } catch { null }
 };
 
 function show_nav_second_span(){
   try {
+    $mobile_nav = document.body.querySelector(".mobile_nav");
     second_span = $mobile_nav.previousElementSibling;
     second_span.style.display = "flex"; second_span.classList.add("btn_active");
     hide_nav_first_span();
@@ -93,6 +98,7 @@ function show_nav_second_span(){
 };
 function hide_nav_second_span(){
   try {
+    $mobile_nav = document.body.querySelector(".mobile_nav");
     second_span = $mobile_nav.previousElementSibling;
     second_span.style.display = "none"; second_span.classList.remove("btn_active");
     deactivate_nav_buttons();
@@ -101,6 +107,7 @@ function hide_nav_second_span(){
 };
 function toggle_nav_second_span(){
   try {
+    $mobile_nav = document.body.querySelector(".mobile_nav");
     second_span = $mobile_nav.previousElementSibling;
     second_span.classList.contains("btn_active") ? (hide_nav_second_span(), second_span.classList.remove("btn_active")) : (show_nav_second_span(), second_span.classList.add("btn_active"))
   } catch { null }
@@ -108,6 +115,7 @@ function toggle_nav_second_span(){
 
 function get_active_button() {
   try {
+    $mobile_nav = document.body.querySelector(".mobile_nav");
     buttons = $mobile_nav.parentElement.querySelectorAll(".mobile_icon");
     path = document.location.pathname;
     for (var i = 0; i < buttons.length; i++){buttons[i].classList.remove("mobile_icon_current")};
