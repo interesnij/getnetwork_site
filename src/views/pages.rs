@@ -38,48 +38,71 @@ pub struct SParams {
 }
 
 pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
-    use crate::models::{Work, Service, Wiki, Blog, Store};
-
-    let _connection = establish_connection();
-    let _last_works = Work::get_3_works();
-    let _last_services = Service::get_6_services();
-    let _last_wikis = Wiki::get_3_wikis();
-    let _last_blogs = Blog::get_3_blogs();
-    let _last_stores = Store::get_3_stores();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         _request_user.create_superuser();
         if is_desctop {
+            if is_ajax == false {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/generic/first_load.stpl")]
+                struct Template {
+                    request_user:  User,
+                    title:         String,
+                }
+                let body = Template {
+                    request_user:  _request_user,
+                    title:         "Главная страница".to_string(),
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                use crate::models::{Work, Service, Wiki, Blog, Store};
 
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/main/mainpage.stpl")]
-            struct Template {
-                request_user:  User,
-                last_works:    Vec<Work>,
-                last_services: Vec<Service>,
-                last_wikis:    Vec<Wiki>,
-                last_blogs:    Vec<Blog>,
-                last_stores:   Vec<Store>,
-                is_ajax:       bool,
-                title:         String,
+                let _last_works = Work::get_3_works();
+                let _last_services = Service::get_6_services();
+                let _last_wikis = Wiki::get_3_wikis();
+                let _last_blogs = Blog::get_3_blogs();
+                let _last_stores = Store::get_3_stores();
+
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/main/mainpage.stpl")]
+                struct Template {
+                    request_user:  User,
+                    last_works:    Vec<Work>,
+                    last_services: Vec<Service>,
+                    last_wikis:    Vec<Wiki>,
+                    last_blogs:    Vec<Blog>,
+                    last_stores:   Vec<Store>,
+                    is_ajax:       bool,
+                    title:         String,
+                }
+                let body = Template {
+                    request_user:  _request_user,
+                    last_works:    _last_works,
+                    last_services: _last_services,
+                    last_wikis:    _last_wikis,
+                    last_blogs:    _last_blogs,
+                    last_stores:   _last_stores,
+                    is_ajax:       is_ajax,
+                    title:         "Главная страница".to_string(),
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                request_user:  _request_user,
-                last_works:    _last_works,
-                last_services: _last_services,
-                last_wikis:    _last_wikis,
-                last_blogs:    _last_blogs,
-                last_stores:   _last_stores,
-                is_ajax:       is_ajax,
-                title:         "Главная страница".to_string(),
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
         else {
+            use crate::models::{Work, Service, Wiki, Blog, Store};
+
+            let _last_works = Work::get_3_works();
+            let _last_services = Service::get_6_services();
+            let _last_wikis = Wiki::get_3_wikis();
+            let _last_blogs = Blog::get_3_blogs();
+            let _last_stores = Store::get_3_stores();
             #[derive(TemplateOnce)]
             #[template(path = "mobile/main/mainpage.stpl")]
             struct Template {
@@ -108,6 +131,13 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
         }
     }
     else {
+        use crate::models::{Work, Service, Wiki, Blog, Store};
+
+        let _last_works = Work::get_3_works();
+        let _last_services = Service::get_6_services();
+        let _last_wikis = Wiki::get_3_wikis();
+        let _last_blogs = Blog::get_3_blogs();
+        let _last_stores = Store::get_3_stores();
         if is_desctop {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/main/anon_mainpage.stpl")]
