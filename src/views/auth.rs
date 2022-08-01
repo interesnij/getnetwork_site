@@ -134,7 +134,7 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
             title:   String,
         }
         let body = Template {
-            is_ajax: 1,
+            is_ajax: 0,
             title:   "Выход из аккаунта".to_string(),
         }
         .render_once()
@@ -149,7 +149,7 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
             title:   String,
         }
         let body = Template {
-            is_ajax: 1,
+            is_ajax: 0,
             title:   "Выход из аккаунта".to_string(),
         }
         .render_once()
