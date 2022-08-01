@@ -41,7 +41,7 @@ pub struct SParams {
 pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == false {
-        get_first_load_page(&session, is_desctop, "Главная страница".to_string())
+        get_first_load_page(&session, is_desctop, "Главная страница".to_string()).await
     }
     else {
         use crate::models::{Work, Service, Wiki, Blog, Store};
