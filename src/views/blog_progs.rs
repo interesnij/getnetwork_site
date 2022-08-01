@@ -310,13 +310,13 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
                 }
             }
+            else {
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+            }
         }
         else {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
         }
-    }
-    else {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
     }
 }
 
