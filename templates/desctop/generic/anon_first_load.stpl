@@ -1,198 +1,24 @@
 <!doctype html>
 <html>
-
-<head>
+  <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="amphtml" href="">
     <meta property="og:type" content="website" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="canonical" href="" />
     <title><%= title %></title>
-
     <link type="text/css" media="all" rel="stylesheet" href="/static/styles/grid.css">
     <link type="text/css" media="all" rel="stylesheet" href="/static/styles/style.css">
-
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/fonts.css">
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/load.css">
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/vertical-rhythm.min.css">
     <link class="color" type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css">
-</head>
+  </head>
 
-<body class="first_load">
-
-    <div class="page" id="top">
-      <nav class="main-nav small-height stick-fixed">
-          <div class="full-wrapper relative clearfix">
-              <div class="nav-logo-wrap local-scroll">
-                  <a href="/" class="logo ajax">
-                      getnetwork
-                  </a>
-              </div>
-              <div class="inner-nav desktop-nav">
-                  <ul class="clearlist">
-                      <li>
-                          <a href="/" class="ajax">Главная</a>
-                      </li>
-                      <%
-                        use crate::utils::get_categories;
-                        let (service_cats, store_cats, blog_cats, wiki_cats, work_cats) = get_categories();
-                      %>
-                      <li>
-                          <a href="/service_categories/" class="mn-has-sub ajax">Услуги</a>
-                          <ul class="mn-sub wow fadeIn" data-wow-duration="0.8s">
-                              <% for object in service_cats.iter() { %>
-                              <li>
-                                  <a class="mn-group-title ajax" href="/services/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
-                              </li>
-                              <% } %>
-                          </ul>
-                      </li>
-                      <li>
-                          <a href="/work_categories/" class="mn-has-sub ajax">Портфолио</a>
-                          <ul class="mn-sub wow fadeIn">
-                              <% for object in work_cats.iter() { %>
-                              <li>
-                                  <a class="mn-group-title ajax" href="/works/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
-                              </li>
-                              <% } %>
-                          </ul>
-                      </li>
-                      <li>
-                          <a href="/store_categories/" class="mn-has-sub ajax">Товары</a>
-                          <ul class="mn-sub wow fadeIn">
-                              <% for object in store_cats.iter() { %>
-                              <li>
-                                  <a class="mn-group-title ajax" href="/stores/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
-                              </li>
-                              <% } %>
-                          </ul>
-                      </li>
-
-                      <li>
-                          <a href="/wiki_categories/" class="mn-has-sub ajax">База знаний</a>
-                          <ul class="mn-sub wow fadeIn">
-                              <% for object in wiki_cats.iter() { %>
-                              <li>
-                                  <a class="mn-group-title ajax" href="/wikis/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
-                              </li>
-                              <% } %>
-                          </ul>
-                      </li>
-                      <li>
-                          <a href="/blog_categories/" class="mn-has-sub ajax">Блог</a>
-                          <ul class="mn-sub wow fadeIn">
-                              <% for object in blog_cats.iter() { %>
-                              <li>
-                                  <a class="mn-group-title ajax" href="/blogs/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
-                              </li>
-                              <% } %>
-                          </ul>
-                      </li>
-                      <li>
-                          <a href="/tags/" class="ajax">Теги</a>
-                      </li>
-                      <li>
-                          <a href="#" class="mn-has-sub">Инфо</a>
-                          <ul class="mn-sub wow fadeIn">
-                              <li>
-                                  <a class="ajax" href="">Команда</a>
-                              </li>
-                              <li>
-                                  <a class="ajax" href="/about/">Сайт</a>
-                              </li>
-                              <li>
-                                  <a class="ajax" href="">Сотрудничество</a>
-                              </li>
-                              <li>
-                                  <a class="ajax" href="/contacts/">Контакты</a>
-                              </li>
-                          </ul>
-                      </li>
-                      <li><a>&nbsp;</a></li>
-                      <li>
-                          <a class="mn-has-sub" data-color="white">
-                              Поиск
-                          </a>
-                          <ul class="mn-sub to-left" style="right: -70px;">
-                              <li>
-                                  <div class="mn-wrap">
-                                      <form method="post" class="form">
-                                          <div class="search-wrap">
-                                              <button class="search-button animate" type="submit" title="Поиск"></button>
-                                              <input type="text" class="general_search form-control search-field" placeholder="Поиск...">
-                                          </div>
-                                      </form>
-                                  </div>
-                              </li>
-                          </ul>
-                      </li>
-                      <!--
-                      <li>
-                          <a href="#" class="mn-has-sub">Ru</a>
-                          <ul class="mn-sub">
-                              <li><a href="" class="active">Ru</a></li>
-                              <li><a href="">En</a></li>
-                          </ul>
-                      </li>
-                      -->
-                      <li>
-                          <a class="pointer anon_color_change" data-color="white">
-                              Фон
-                          </a>
-                      </li>
-                      <li>
-                          <a href="/login/" class="ajax">
-                              Вход
-                          </a>
-                      </li>
-                  </ul>
-              </div>
-          </div>
-      </nav>
-
-        <span id="ajax">
-            <span id="reload_block">
-            <div class="js-height-full" style="height: 100vh">
-                <div class="home-content container">
-                    <div class="home-text">
-                      <span class="banner_block">
-                        <h2 class="hs-line-8 no-transp font-alt mb-50 mb-xs-30">
-                            Комплексное, экспертное создание и развитие высоконагруженных сайтов
-                        </h2>
-                        <h1 class="hs-line-14 font-alt mb-50 mb-xs-30">
-                            getnetwork!
-                        </h1>
-                      </span>
-                    </div>
-                </div>
-            </div>
-            </span>
-            </span>
-
-            <footer class="page-section bg-gray-lighter footer pb-60">
-                <div class="container">
-                    <div class="footer-social-links mb-110 mb-xs-60">
-                        <a href="#" title="VK" target="_blank">VK</a>
-                        <a href="#" title="Youtube" target="_blank">YT</a>
-                        <a href="#" title="Dzen" target="_blank">DZ</a>
-                    </div>
-
-                    <div class="footer-text" style="margin-top: 10px">
-                        <div class="footer-copy font-alt">
-                            <a href="/" class="ajax">&copy; Вселенная.рус 2022</a>.
-                        </div>
-                        <div class="footer-made">
-                            Наша мета-вселенная.
-                        </div>
-                    </div>
-                 </div>
-            </footer>
-
-            </div>
-            <div class="body_overlay pointer"></div>
-            <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
-            <script defer type="text/javascript" src="/static/scripts/desctop/main.js"></script>
-            <script defer type="text/javascript" src="/static/scripts/main.js"></script>
-            </body>
-
-            </html>
+  <body class="first_load">
+    <span class="span"></span>
+    <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
+    <script defer type="text/javascript" src="/static/scripts/desctop/main.js"></script>
+    <script defer type="text/javascript" src="/static/scripts/main.js"></script>
+  </body>
+</html>

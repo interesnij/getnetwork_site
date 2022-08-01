@@ -7,13 +7,27 @@ function mob_menu_hide() {
 };
 function check_first_load() {
   if (document.body.classList.contains("first_load")) {
-    ajax_get_reload(window.location.href);
+    url = window.location.href;
+    ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+    ajax_link.open( 'GET', url + "?ajax=1", true );
+    ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    ajax_link.onreadystatechange = function () {
+      if ( this.readyState == 4 && this.status == 200 ) {
+        elem_ = document.createElement('span');
+        elem_.innerHTML = ajax_link.responseText;
+        rtr = document.body;
+        rtr.innerHTML = elem_.innerHTML;
+        window.scrollTo(0,0);
+        window.history.pushState({route: url}, "network", url);
+      }
+    }
+    ajax_link.send();
   }
 }
 
 function ajax_get_reload(url) {
   var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-    ajax_link.open( 'GET', url + "?ajax=1", true );
+    ajax_link.open( 'GET', url + "?ajax=2", true );
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
       if ( this.readyState == 4 && this.status == 200 ) {

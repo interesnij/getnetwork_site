@@ -141,7 +141,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 wikis_count:    usize,
                 blogs_count:    usize,
                 stores_count:   usize,
-                is_ajax:        bool,
+                is_ajax:        i32,
                 q:              String,
             }
             let body = Template {
@@ -182,7 +182,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 wikis_count:    usize,
                 blogs_count:    usize,
                 stores_count:   usize,
-                is_ajax:        bool,
+                is_ajax:        i32,
                 q:              String,
             }
             let body = Template {
@@ -224,7 +224,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 wikis_count:    usize,
                 blogs_count:    usize,
                 stores_count:   usize,
-                is_ajax:        bool,
+                is_ajax:        i32,
                 q:              String,
             }
             let body = Template {
@@ -263,7 +263,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 wikis_count:    usize,
                 blogs_count:    usize,
                 stores_count:   usize,
-                is_ajax:        bool,
+                is_ajax:        i32,
                 q:              String,
             }
             let body = Template {
@@ -348,7 +348,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 request_user:     User,
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -373,7 +373,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 request_user:     User,
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -399,7 +399,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 title:            String,
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -422,7 +422,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 title:            String,
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -501,7 +501,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 request_user:     User,
                 services_list:    Vec<Service>,
                 services_count:   usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -526,7 +526,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 request_user:     User,
                 services_list:    Vec<Service>,
                 services_count:   usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -552,7 +552,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 title:            String,
                 services_list:    Vec<Service>,
                 services_count:   usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -575,7 +575,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 title:            String,
                 services_list:    Vec<Service>,
                 services_count:   usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -654,7 +654,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 request_user:     User,
                 stores_list:      Vec<Store>,
                 stores_count:     usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -679,7 +679,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 request_user:     User,
                 stores_list:      Vec<Store>,
                 stores_count:     usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -705,7 +705,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 title:            String,
                 stores_list:      Vec<Store>,
                 stores_count:     usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -728,7 +728,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 title:            String,
                 stores_list:      Vec<Store>,
                 stores_count:     usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -807,7 +807,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 request_user:     User,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -832,7 +832,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 request_user:     User,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -858,7 +858,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 title:            String,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -881,7 +881,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 title:            String,
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -960,7 +960,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 request_user:     User,
                 works_list:       Vec<Work>,
                 works_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -985,7 +985,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 request_user:     User,
                 works_list:       Vec<Work>,
                 works_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -1011,7 +1011,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 title:            String,
                 works_list:       Vec<Work>,
                 works_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }
@@ -1034,7 +1034,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 title:            String,
                 works_list:       Vec<Work>,
                 works_count:      usize,
-                is_ajax:          bool,
+                is_ajax:          i32,
                 q:                String,
                 next_page_number: i32,
             }

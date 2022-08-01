@@ -89,7 +89,7 @@ pub async fn create_store_categories_page(session: Session, req: HttpRequest) ->
                     title:        String,
                     request_user: User,
                     store_cats:   Vec<StoreCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории товаров".to_string(),
@@ -108,7 +108,7 @@ pub async fn create_store_categories_page(session: Session, req: HttpRequest) ->
                     title:        String,
                     request_user: User,
                     store_cats:   Vec<StoreCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории товаров".to_string(),
@@ -165,7 +165,7 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
                     request_user: User,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание товара".to_string(),
@@ -186,7 +186,7 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
                     request_user: User,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание товара".to_string(),
@@ -261,7 +261,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     request_user: User,
                     object:       Store,
                     store_cats:   Vec<StoreCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                     images:       Vec<StoreImage>,
                     videos:       Vec<StoreVideo>,
                     all_tags:     Vec<Tag>,
@@ -294,7 +294,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     request_user: User,
                     object:       Store,
                     store_cats:   Vec<StoreCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                     images:       Vec<StoreImage>,
                     videos:       Vec<StoreVideo>,
                     all_tags:     Vec<Tag>,
@@ -355,7 +355,7 @@ pub async fn edit_content_store_page(session: Session, req: HttpRequest, _id: we
                     title:        String,
                     request_user: User,
                     store:        Store,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение текста товара ".to_string() + &_store.title,
@@ -374,7 +374,7 @@ pub async fn edit_content_store_page(session: Session, req: HttpRequest, _id: we
                     title:        String,
                     request_user: User,
                     store:        Store,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение текста товара ".to_string() + &_store.title,
@@ -446,7 +446,7 @@ pub async fn edit_store_category_page(session: Session, req: HttpRequest, _id: w
                     title:        String,
                     request_user: User,
                     category:     StoreCategories,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение категории товаров ".to_string() + &_category.name,
@@ -465,7 +465,7 @@ pub async fn edit_store_category_page(session: Session, req: HttpRequest, _id: w
                     title:        String,
                     request_user: User,
                     category:     StoreCategories,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение категории товаров ".to_string() + &_category.name,
@@ -1051,7 +1051,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 category:     StoreCategories,
                 prev:         Option<Store>,
                 next:         Option<Store>,
-                is_ajax:      bool,
+                is_ajax:      i32,
             }
             let body = Template {
                 title:        "Товар ".to_string() + &_store.title,
@@ -1082,7 +1082,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 all_tags:     Vec<Tag>,
                 prev:         Option<Store>,
                 next:         Option<Store>,
-                is_ajax:      bool,
+                is_ajax:      i32,
             }
             let body = Template {
                 title:        "Товар ".to_string() + &_store.title,
@@ -1114,7 +1114,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 category:   StoreCategories,
                 prev:       Option<Store>,
                 next:       Option<Store>,
-                is_ajax:    bool,
+                is_ajax:    i32,
             }
             let body = Template {
                 title:      "Товар ".to_string() + &_store.title,
@@ -1143,7 +1143,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 all_tags:   Vec<Tag>,
                 prev:       Option<Store>,
                 next:       Option<Store>,
-                is_ajax:    bool,
+                is_ajax:    i32,
             }
             let body = Template {
                 title:      "Товар ".to_string() + &_store.title,
@@ -1211,7 +1211,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 store_cats:       Vec<StoreCategories>,
                 object_list:      Vec<Store>,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Категория товаров ".to_string() + &_category.name,
@@ -1238,7 +1238,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 store_cats:       Vec<StoreCategories>,
                 object_list:      Vec<Store>,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Категория товаров ".to_string() + &_category.name,
@@ -1266,7 +1266,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 store_cats:       Vec<StoreCategories>,
                 object_list:      Vec<Store>,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Категория товаров ".to_string() + &_category.name,
@@ -1291,7 +1291,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 store_cats:       Vec<StoreCategories>,
                 object_list:      Vec<Store>,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Категория товаров ".to_string() + &_category.name,
@@ -1348,7 +1348,7 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
             struct Template {
                 title:        String,
                 request_user: User,
-                is_ajax:      bool,
+                is_ajax:      i32,
                 store_cats:   Vec<StoreCategories>,
                 all_tags:     Vec<Tag>,
             }
@@ -1369,7 +1369,7 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
             struct Template {
                 title:        String,
                 request_user: User,
-                is_ajax:      bool,
+                is_ajax:      i32,
                 store_cats:   Vec<StoreCategories>,
                 all_tags:     Vec<Tag>,
             }
@@ -1391,7 +1391,7 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
             #[template(path = "desctop/stores/anon_categories.stpl")]
             struct Template {
                 title:        String,
-                is_ajax:      bool,
+                is_ajax:      i32,
                 store_cats:   Vec<StoreCategories>,
                 all_tags:     Vec<Tag>,
             }
@@ -1410,7 +1410,7 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
             #[template(path = "mobile/stores/anon_categories.stpl")]
             struct Template {
                 title:        String,
-                is_ajax:      bool,
+                is_ajax:      i32,
                 store_cats:   Vec<StoreCategories>,
                 all_tags:     Vec<Tag>,
             }

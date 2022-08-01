@@ -53,7 +53,7 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
             #[derive(TemplateOnce)]
             #[template(path = "desctop/auth/signup.stpl")]
             struct Template {
-                is_ajax: bool,
+                is_ajax: i32,
                 title:   String,
             }
             let body = Template {
@@ -68,7 +68,7 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
             #[derive(TemplateOnce)]
             #[template(path = "mobile/auth/signup.stpl")]
             struct Template {
-                is_ajax: bool,
+                is_ajax: i32,
                 title:   String,
             }
             let body = Template {
@@ -93,7 +93,7 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
             #[derive(TemplateOnce)]
             #[template(path = "desctop/auth/login.stpl")]
             struct Template {
-                is_ajax: bool,
+                is_ajax: i32,
                 title:   String,
             }
             let body = Template {
@@ -108,7 +108,7 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
             #[derive(TemplateOnce)]
             #[template(path = "mobile/auth/login.stpl")]
             struct Template {
-                is_ajax: bool,
+                is_ajax: i32,
                 title:   String,
             }
             let body = Template {
@@ -130,11 +130,11 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
         #[derive(TemplateOnce)]
         #[template(path = "desctop/auth/logout.stpl")]
         struct Template {
-            is_ajax: bool,
+            is_ajax: i32,
             title:   String,
         }
         let body = Template {
-            is_ajax: false,
+            is_ajax: is_ajax,
             title:   "Выход из аккаунта".to_string(),
         }
         .render_once()
@@ -145,7 +145,7 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
         #[derive(TemplateOnce)]
         #[template(path = "mobile/auth/logout.stpl")]
         struct Template {
-            is_ajax: bool,
+            is_ajax: i32,
             title:   String,
         }
         let body = Template {

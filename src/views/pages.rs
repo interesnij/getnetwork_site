@@ -13,7 +13,7 @@ use crate::utils::{
     get_device_and_ajax,
     get_request_user_data,
     is_signed_in,
-    //get_first_load_page,
+    get_first_load_page,
 };
 use crate::diesel::{
     RunQueryDsl,
@@ -40,10 +40,12 @@ pub struct SParams {
 
 pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    //if is_ajax == false {
-    //    get_first_load_page(&session, is_desctop, "Главная страница".to_string()).await
-    //}
-    //else {
+
+    // первая отрисовка страницы - организуем скрытие информации
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Главная страница".to_string()).await
+    }
+    else {
         use crate::models::{Work, Service, Wiki, Blog, Store};
 
         let _last_works = Work::get_3_works();
@@ -65,7 +67,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                     last_wikis:    Vec<Wiki>,
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
-                    is_ajax:       bool,
+                    is_ajax:       i32,
                     title:         String,
                 }
                 let body = Template {
@@ -92,7 +94,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                     last_wikis:    Vec<Wiki>,
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
-                    is_ajax:       bool,
+                    is_ajax:       i32,
                     title:         String,
                 }
                 let body = Template {
@@ -120,7 +122,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                     last_wikis:    Vec<Wiki>,
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
-                    is_ajax:       bool,
+                    is_ajax:       i32,
                     title:         String,
                 }
                 let body = Template {
@@ -145,7 +147,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                     last_wikis:    Vec<Wiki>,
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
-                    is_ajax:       bool,
+                    is_ajax:       i32,
                     title:         String,
                 }
                 let body = Template {
@@ -162,7 +164,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
         }
-    //}
+    }
 }
 
 pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
@@ -175,7 +177,7 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[template(path = "desctop/pages/about.stpl")]
             struct Template {
                 request_user: User,
-                is_ajax:      bool,
+                is_ajax:      i32,
                 title:        String,
             }
             let body = Template {
@@ -192,7 +194,7 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[template(path = "mobile/pages/about.stpl")]
             struct Template {
                 request_user: User,
-                is_ajax:      bool,
+                is_ajax:      i32,
                 title:        String,
             }
             let body = Template {
@@ -210,7 +212,7 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[derive(TemplateOnce)]
             #[template(path = "desctop/pages/anon_about.stpl")]
             struct Template {
-                is_ajax: bool,
+                is_ajax: i32,
                 title:   String,
             }
             let body = Template {
@@ -225,7 +227,7 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[derive(TemplateOnce)]
             #[template(path = "mobile/pages/anon_about.stpl")]
             struct Template {
-                is_ajax: bool,
+                is_ajax: i32,
                 title:   String,
             }
             let body = Template {
@@ -283,7 +285,7 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
                 struct Template {
                     title:         String,
                     request_user:  User,
-                    is_ajax:       bool,
+                    is_ajax:       i32,
                     feedback_list: Vec<Feedback>,
                 }
                 let body = Template {
@@ -302,7 +304,7 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
                 struct Template {
                     title:         String,
                     request_user:  User,
-                    is_ajax:       bool,
+                    is_ajax:       i32,
                     feedback_list: Vec<Feedback>,
                 }
                 let body = Template {
@@ -338,7 +340,7 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             struct Template {
                 title:        String,
                 request_user: User,
-                is_ajax:      bool,
+                is_ajax:      i32,
                 tech_cats:    Vec<TechCategories>,
             }
             let body = Template {
@@ -357,7 +359,7 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             struct Template {
                 title:        String,
                 request_user: User,
-                is_ajax:      bool,
+                is_ajax:      i32,
                 tech_cats:    Vec<TechCategories>,
             }
             let body = Template {
@@ -377,7 +379,7 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             #[template(path = "desctop/main/anon_serve_list.stpl")]
             struct Template {
                 title:     String,
-                is_ajax:   bool,
+                is_ajax:   i32,
                 tech_cats: Vec<TechCategories>,
             }
             let body = Template {
@@ -394,7 +396,7 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             #[template(path = "mobile/main/anon_serve_list.stpl")]
             struct Template {
                 title:     String,
-                is_ajax:   bool,
+                is_ajax:   i32,
                 tech_cats: Vec<TechCategories>,
             }
             let body = Template {

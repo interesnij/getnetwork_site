@@ -14,7 +14,7 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     get_request_user_data,
-    //get_first_load_page,
+    get_first_load_page,
 };
 use actix_session::Session;
 use crate::schema;
@@ -91,7 +91,7 @@ pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> 
                     title:        String,
                     request_user: User,
                     blog_cats:    Vec<BlogCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории блога".to_string(),
@@ -110,7 +110,7 @@ pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> 
                     title:        String,
                     request_user: User,
                     blog_cats:    Vec<BlogCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории блога".to_string(),
@@ -159,7 +159,7 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
                     request_user: User,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание статьи блога".to_string(),
@@ -180,7 +180,7 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
                     request_user: User,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание статьи блога".to_string(),
@@ -240,7 +240,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     request_user: User,
                     object:       Blog,
                     categories:   Vec<BlogCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                     images:       Vec<BlogImage>,
                     videos:       Vec<BlogVideo>,
                     all_tags:     Vec<Tag>,
@@ -271,7 +271,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     request_user: User,
                     object:       Blog,
                     categories:   Vec<BlogCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                     images:       Vec<BlogImage>,
                     videos:       Vec<BlogVideo>,
                     all_tags:     Vec<Tag>,
@@ -330,7 +330,7 @@ pub async fn edit_content_blog_page(session: Session, req: HttpRequest, _id: web
                     title:        String,
                     request_user: User,
                     blog:         Blog,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение текста статьи блога ".to_string() + &_blog.title,
@@ -349,7 +349,7 @@ pub async fn edit_content_blog_page(session: Session, req: HttpRequest, _id: web
                     title:        String,
                     request_user: User,
                     blog:         Blog,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение текста статьи блога ".to_string() + &_blog.title,
@@ -421,7 +421,7 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
                     title:        String,
                     request_user: User,
                     category:     BlogCategories,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение категории блога ".to_string() + &_category.name,
@@ -440,7 +440,7 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
                     title:        String,
                     request_user: User,
                     category:     BlogCategories,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение категории блога ".to_string() + &_category.name,
@@ -852,7 +852,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 all_tags:     Vec<Tag>,
                 prev:         Option<Blog>,
                 next:         Option<Blog>,
-                is_ajax:      bool,
+                is_ajax:      i32,
             }
             let body = Template {
                 title:        "Статья блога ".to_string() + &_blog.title,
@@ -885,7 +885,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 all_tags:     Vec<Tag>,
                 prev:         Option<Blog>,
                 next:         Option<Blog>,
-                is_ajax:      bool,
+                is_ajax:      i32,
             }
             let body = Template {
                 title:        "Статья блога ".to_string() + &_blog.title,
@@ -919,7 +919,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 all_tags:   Vec<Tag>,
                 prev:       Option<Blog>,
                 next:       Option<Blog>,
-                is_ajax:    bool,
+                is_ajax:    i32,
             }
             let body = Template {
                 title:      "Статья блога ".to_string() + &_blog.title,
@@ -950,7 +950,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 all_tags:   Vec<Tag>,
                 prev:       Option<Blog>,
                 next:       Option<Blog>,
-                is_ajax:    bool,
+                is_ajax:    i32,
             }
             let body = Template {
                 title:      "Статья блога ".to_string() + &_blog.title,
@@ -1022,7 +1022,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Категория блога ".to_string() + &_category.name,
@@ -1049,7 +1049,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Категория блога ".to_string() + &_category.name,
@@ -1077,7 +1077,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Категория блога ".to_string() + &_category.name,
@@ -1102,7 +1102,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 blog_cats:        Vec<BlogCategories>,
                 object_list:      Vec<Blog>,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:           "Категория блога ".to_string() + &_category.name,
@@ -1163,7 +1163,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 struct Template {
                     title:        String,
                     request_user: User,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                 }
@@ -1184,7 +1184,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 struct Template {
                     title:        String,
                     request_user: User,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                 }
@@ -1206,7 +1206,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[template(path = "desctop/blogs/anon_categories.stpl")]
                 struct Template {
                     title:        String,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                 }
@@ -1225,7 +1225,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[template(path = "mobile/blogs/anon_categories.stpl")]
                 struct Template {
                     title:        String,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                 }

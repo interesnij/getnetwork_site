@@ -1,6 +1,6 @@
 <div id="fullscreens_container"></div>
 
-<% if is_ajax == false { %>
+<% if is_ajax == 1 { %>
 </span>
 </span>
 
@@ -25,15 +25,4 @@
 
 </div>
 <div class="body_overlay pointer"></div>
-
-<script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
-<script defer type="text/javascript" src="/static/scripts/desctop/main.js"></script>
-<script defer type="text/javascript" src="/static/scripts/main.js"></script>
-
-<% if request_user.is_superuser() { %>
-  <script defer type="text/javascript" src="/static/scripts/admin.js"></script>
-<% } %>
-</body>
-
-</html>
 <% } %>

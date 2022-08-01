@@ -1,6 +1,6 @@
 <div id="fullscreens_container"></div>
 
-<% if is_ajax == false { %>
+<% if is_ajax == 1 { %>
 </span>
 </span>
 <svg fill="currentColor" class="mob_menu" height="33" viewBox="0 0 24 24" width="33">
@@ -102,14 +102,4 @@
 </div>
 <div class="body_overlay pointer"></div>
 
-<script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
-<script defer type="text/javascript" src="/static/scripts/mobile/func.js"></script>
-<script defer type="text/javascript" src="/static/scripts/mobile/main.js"></script>
-<script defer type="text/javascript" src="/static/scripts/main.js"></script>
-<% if request_user.is_superuser() { %>
-<script defer type="text/javascript" src="/static/scripts/admin.js"></script>
-<% } %>
-</body>
-
-</html>
 <% } %>

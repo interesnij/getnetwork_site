@@ -60,7 +60,7 @@ use sailfish::TemplateOnce;
         desctop
     }
 
-    pub fn get_device_and_ajax(req: &HttpRequest) -> (bool, bool) {
+    pub fn get_device_and_ajax(req: &HttpRequest) -> (bool, i32) {
         #[derive(Debug, Deserialize)]
         struct Params {
             pub ajax: Option<i32>,
@@ -72,7 +72,10 @@ use sailfish::TemplateOnce;
         if params_some.is_ok() {
             let params = params_some.unwrap();
             if params.ajax.is_some() {
-                is_ajax = true;
+                is_ajax = params.ajax.unwrap();
+            }
+            else {
+                is_ajax = 0;
             }
         }
 

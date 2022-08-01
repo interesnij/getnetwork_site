@@ -99,7 +99,7 @@ pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_
                 struct Template {
                     request_user: User,
                     serve_cats:   Vec<ServeCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                     title:        String,
                 }
                 let body = Template {
@@ -118,7 +118,7 @@ pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_
                 struct Template {
                     request_user: User,
                     serve_cats:   Vec<ServeCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                     title:        String,
                 }
                 let body = Template {
@@ -174,7 +174,7 @@ pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i
                     request_user: User,
                     category:     ServeCategories,
                     object:       Serve,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Опция услуг ".to_string() + &_serve.name,
@@ -195,7 +195,7 @@ pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i
                     request_user: User,
                     category:     ServeCategories,
                     object:       Serve,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Опция услуг ".to_string() + &_serve.name,
@@ -237,7 +237,7 @@ pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> 
                     title:        String,
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории услуг".to_string(),
@@ -256,7 +256,7 @@ pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> 
                     title:        String,
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории услуг".to_string(),
@@ -299,7 +299,7 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     serve_cats:   Vec<ServeCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание технологии услуг".to_string(),
@@ -320,7 +320,7 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     serve_cats:   Vec<ServeCategories>,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание технологии услуг".to_string(),
@@ -421,7 +421,7 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
                 struct Template {
                     title:        String,
                     request_user: User,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание опции услуг".to_string(),
@@ -438,7 +438,7 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
                 struct Template {
                     title:        String,
                     request_user: User,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание опции услуг".to_string(),
@@ -483,7 +483,7 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     category:     TechCategories,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение категории услуг ".to_string() + &_category.name,
@@ -504,7 +504,7 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     category:     TechCategories,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение категории услуг ".to_string() + &_category.name,
@@ -553,7 +553,7 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
                     tech_cats:    Vec<TechCategories>,
                     serve_cats:   Vec<ServeCategories>,
                     category:     ServeCategories,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение технологии услуг ".to_string() + &_category.name,
@@ -576,7 +576,7 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
                     tech_cats:    Vec<TechCategories>,
                     serve_cats:   Vec<ServeCategories>,
                     category:     ServeCategories,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение технологии услуг ".to_string() + &_category.name,
@@ -645,7 +645,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                     level:        i16,
                     serve_cats:   Vec<ServeCategories>,
                     object:       Serve,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение опции услуг ".to_string() + &_serve.name,
@@ -668,7 +668,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                     level:        i16,
                     serve_cats:   Vec<ServeCategories>,
                     object:       Serve,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение опции услуг ".to_string() + &_serve.name,

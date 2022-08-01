@@ -69,7 +69,7 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
                 title:        String,
                 request_user: User,
                 all_tags:     Vec<Tag>,
-                is_ajax:      bool,
+                is_ajax:      i32,
             }
             let body = Template {
                 title:        "Создание тега".to_string(),
@@ -88,7 +88,7 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
                 title:        String,
                 request_user: User,
                 all_tags:     Vec<Tag>,
-                is_ajax:      bool,
+                is_ajax:      i32,
             }
             let body = Template {
                 title:        "Создание тега".to_string(),
@@ -200,7 +200,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 wikis_count:   usize,
                 blogs_count:   usize,
                 stores_count:  usize,
-                is_ajax:       bool,
+                is_ajax:       i32,
             }
             let body = Template {
                 title:         "Общий поиск по ключевому слову ".to_string() + &_tag.name,
@@ -241,7 +241,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 wikis_count:   usize,
                 blogs_count:   usize,
                 stores_count:  usize,
-                is_ajax:       bool,
+                is_ajax:       i32,
             }
             let body = Template {
                 title:         "Общий поиск по ключевому слову ".to_string() + &_tag.name,
@@ -283,7 +283,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 wikis_count:   usize,
                 blogs_count:   usize,
                 stores_count:  usize,
-                is_ajax:       bool,
+                is_ajax:       i32,
             }
             let body = Template {
                 title:         "Общий поиск по ключевому слову ".to_string() + &_tag.name,
@@ -322,7 +322,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
                 wikis_count:   usize,
                 blogs_count:   usize,
                 stores_count:  usize,
-                is_ajax:       bool,
+                is_ajax:       i32,
             }
             let body = Template {
                 title:         "Общий поиск по ключевому слову ".to_string() + &_tag.name,
@@ -384,7 +384,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск статей по ключевому слову ".to_string() + &_tag.name,
@@ -409,7 +409,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск статей по ключевому слову ".to_string() + &_tag.name,
@@ -435,7 +435,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск статей по ключевому слову ".to_string() + &_tag.name,
@@ -458,7 +458,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
                 blogs_list:       Vec<Blog>,
                 blogs_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск статей по ключевому слову ".to_string() + &_tag.name,
@@ -512,7 +512,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                 services_list:    Vec<Service>,
                 services_count:   usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск услуг по ключевому слову ".to_string() + &_tag.name,
@@ -537,7 +537,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                 services_list:    Vec<Service>,
                 services_count:   usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск услуг по ключевому слову ".to_string() + &_tag.name,
@@ -563,7 +563,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                 services_list:    Vec<Service>,
                 services_count:   usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск услуг по ключевому слову ".to_string() + &_tag.name,
@@ -586,7 +586,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                 services_list:    Vec<Service>,
                 services_count:   usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск услуг по ключевому слову ".to_string() + &_tag.name,
@@ -640,7 +640,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                 stores_list:      Vec<Store>,
                 stores_count:     usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск товаров по ключевому слову ".to_string() + &_tag.name,
@@ -665,7 +665,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                 stores_list:      Vec<Store>,
                 stores_count:     usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск товаров по ключевому слову ".to_string() + &_tag.name,
@@ -691,7 +691,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                 stores_list:      Vec<Store>,
                 stores_count:     usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск товаров по ключевому слову ".to_string() + &_tag.name,
@@ -714,7 +714,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                 stores_list:      Vec<Store>,
                 stores_count:     usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск товаров по ключевому слову ".to_string() + &_tag.name,
@@ -768,7 +768,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск обучающих статей по ключевому слову ".to_string() + &_tag.name,
@@ -793,7 +793,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск обучающих статей по ключевому слову ".to_string() + &_tag.name,
@@ -819,7 +819,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск обучающих статей по ключевому слову ".to_string() + &_tag.name,
@@ -842,7 +842,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
                 wikis_list:       Vec<Wiki>,
                 wikis_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск обучающих статей по ключевому слову ".to_string() + &_tag.name,
@@ -896,7 +896,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
                 works_list:       Vec<Work>,
                 works_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск работ по ключевому слову ".to_string() + &_tag.name,
@@ -921,7 +921,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
                 works_list:       Vec<Work>,
                 works_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск работ по ключевому слову ".to_string() + &_tag.name,
@@ -947,7 +947,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
                 works_list:       Vec<Work>,
                 works_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск работ по ключевому слову ".to_string() + &_tag.name,
@@ -970,7 +970,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
                 works_list:       Vec<Work>,
                 works_count:      usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Поиск работ по ключевому слову ".to_string() + &_tag.name,
@@ -1008,7 +1008,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Ключевые слова".to_string(),
@@ -1031,7 +1031,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Ключевые слова".to_string(),
@@ -1055,7 +1055,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Ключевые слова".to_string(),
@@ -1076,7 +1076,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 all_tags:         Vec<Tag>,
                 tags_count:       usize,
                 next_page_number: i32,
-                is_ajax:          bool,
+                is_ajax:          i32,
             }
             let body = Template {
                 title:            "Ключевые слова".to_string(),
@@ -1117,7 +1117,7 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
                     title:        String,
                     request_user: User,
                     tag:          Tag,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение тега ".to_string() + &_tag.name,
@@ -1136,7 +1136,7 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
                     title:        String,
                     request_user: User,
                     tag:          Tag,
-                    is_ajax:      bool,
+                    is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение тега ".to_string() + &_tag.name,
