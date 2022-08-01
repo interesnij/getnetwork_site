@@ -793,6 +793,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     use schema::blogs::dsl::blogs;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let _connection = establish_connection();
     let _blog_id: i32 = param.1;
     let _blogs = blogs
         .filter(schema::blogs::id.eq(&_blog_id))
@@ -807,8 +808,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
         use schema::blog_categories::dsl::blog_categories;
         use schema::blog_images::dsl::blog_images;
         use schema::blog_videos::dsl::blog_videos;
-
-        let _connection = establish_connection();
 
         let _cat_id: i32 = param.0;
 
@@ -1152,7 +1151,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    if is_ajax == false {
+    if is_ajax == 0 {
         get_first_load_page(&session, is_desctop, "Категории блога".to_string()).await
     }
     else {
