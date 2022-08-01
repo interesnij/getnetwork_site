@@ -75,13 +75,17 @@ pub fn serve_routes(config: &mut web::ServiceConfig) {
 }
 
 pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if !is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Технологии услуг и опций".to_string()).await
+    }
+    else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        use crate::utils::get_device_and_ajax;
-
-        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
         let _request_user = get_request_user_data(&session);
         if _request_user.perm != 60 {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -137,29 +141,33 @@ pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_
 }
 
 pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    if !is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+    use schema::serve::dsl::serve;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    let _connection = establish_connection();
+    let _serve_id: i32 = *_id;
+
+    let _serves = serve
+        .filter(schema::serve::id.eq(&_serve_id))
+        .load::<Serve>(&_connection)
+        .expect("E");
+    let _serve = _serves.into_iter().nth(0).unwrap();
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Опция услуг ".to_string() + &_serve.name).await
+    }
+    else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        use crate::utils::get_device_and_ajax;
-
-        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
         let _request_user = get_request_user_data(&session);
         if _request_user.perm != 60 {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
         }
         else {
-            use schema::serve::dsl::serve;
             use schema::serve_categories::dsl::serve_categories;
-
-            let _connection = establish_connection();
-            let _serve_id: i32 = *_id;
-
-            let _serves = serve
-                .filter(schema::serve::id.eq(&_serve_id))
-                .load::<Serve>(&_connection)
-                .expect("E");
-            let _serve = _serves.into_iter().nth(0).unwrap();
 
             let _s_categorys = serve_categories
                 .filter(schema::serve_categories::id.eq(&_serve.serve_categories))
@@ -214,13 +222,16 @@ pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i
 }
 
 pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if !is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание категории услуг".to_string()).await
+    }
+    else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        use crate::utils::get_device_and_ajax;
-
-        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
         let _request_user = get_request_user_data(&session);
         if _request_user.perm != 60 {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -273,13 +284,17 @@ pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> 
     }
 }
 pub async fn create_serve_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if !is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание технологии услуг".to_string()).await
+    }
+    else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        use crate::utils::get_device_and_ajax;
-
-        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
         let _request_user = get_request_user_data(&session);
         if _request_user.perm != 60 {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -395,13 +410,17 @@ pub async fn load_form_from_level(session: Session, level: web::Path<i16>) -> ac
 }
 
 pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if !is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание опции услуг".to_string()).await
+    }
+    else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        use crate::utils::get_device_and_ajax;
-
-        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
         let _request_user = get_request_user_data(&session);
         if _request_user.perm != 60 {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -455,25 +474,27 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
 }
 
 pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    if !is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+    use crate::schema::tech_categories::dsl::tech_categories;
+
+    let _cat_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _categorys = tech_categories.filter(schema::tech_categories::id.eq(&_cat_id)).load::<TechCategories>(&_connection).expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение категории услуг ".to_string() + &_category.name).await
+    }
+    else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        use crate::utils::get_device_and_ajax;
-        use crate::schema::tech_categories::dsl::tech_categories;
-
-        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
         let _request_user = get_request_user_data(&session);
-        let _cat_id: i32 = *_id;
-        let _connection = establish_connection();
-        let _categorys = tech_categories.filter(schema::tech_categories::id.eq(&_cat_id)).load::<TechCategories>(&_connection).expect("E");
-        let _category = _categorys.into_iter().nth(0).unwrap();
-
         if _category.user_id != _request_user.id {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
         }
         else {
-            let _connection = establish_connection();
             let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
 
             if is_desctop {
@@ -523,21 +544,25 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
 }
 
 pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    if !is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+    use crate::schema::serve_categories::dsl::serve_categories;
+
+    let _cat_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _categorys = serve_categories.filter(schema::serve_categories::id.eq(&_cat_id)).load::<ServeCategories>(&_connection).expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение технологии услуг ".to_string() + &_category.name).await
+    }
+    else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        use crate::utils::get_device_and_ajax;
-        use crate::schema::serve_categories::dsl::serve_categories;
         use crate::schema::tech_categories::dsl::tech_categories;
 
-        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
         let _request_user = get_request_user_data(&session);
-        let _cat_id: i32 = *_id;
-        let _connection = establish_connection();
-
-        let _categorys = serve_categories.filter(schema::serve_categories::id.eq(&_cat_id)).load::<ServeCategories>(&_connection).expect("E");
-        let _category = _categorys.into_iter().nth(0).unwrap();
         let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
         let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
 
@@ -596,24 +621,28 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
 }
 
 pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    if !is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+    use crate::schema::serve::dsl::serve;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let _connection = establish_connection();
+    let _serve_id: i32 = *_id;
+    let _serves = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
+    let _serve = _serves.into_iter().nth(0).unwrap();
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение опции услуг ".to_string() + &_serve.name).await
+    }
+    else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        use crate::utils::get_device_and_ajax;
         use crate::schema::{
-            serve::dsl::serve,
             serve_categories::dsl::serve_categories,
             tech_categories::dsl::tech_categories,
         };
 
-        let _connection = establish_connection();
-        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
         let _request_user = get_request_user_data(&session);
-        let _serve_id: i32 = *_id;
-        let _serves = serve.filter(schema::serve::id.eq(&_serve_id)).load::<Serve>(&_connection).expect("E");
-        let _serve = _serves.into_iter().nth(0).unwrap();
 
         let _serve_cat = serve_categories
             .filter(schema::serve_categories::id.eq(&_serve.serve_categories))
