@@ -149,7 +149,7 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
             title:   String,
         }
         let body = Template {
-            is_ajax: false,
+            is_ajax: is_ajax,
             title:   "Выход из аккаунта".to_string(),
         }
         .render_once()
