@@ -23,6 +23,9 @@ function check_first_load() {
     }
     ajax_link.send();
   }
+  else {
+    get_active_button();
+  }
 }
 
 function ajax_get_reload(url) {
@@ -92,7 +95,7 @@ function toggle_nav_second_span(){
   second_span.classList.contains("btn_active") ? (hide_nav_second_span(), second_span.classList.remove("btn_active")) : (show_nav_second_span(), second_span.classList.add("btn_active"))
 };
 
-function get_active_button(){
+function get_active_button() {
   buttons = $mobile_nav.parentElement.querySelectorAll(".mobile_icon");
   path = document.location.pathname;
   for (var i = 0; i < buttons.length; i++){buttons[i].classList.remove("mobile_icon_current")};

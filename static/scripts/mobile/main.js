@@ -1,4 +1,3 @@
-get_active_button();
 check_first_load();
 
 on('body', 'click', '.a_1', function() {
