@@ -14,7 +14,7 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     get_request_user_data,
-    get_first_load_page,
+    //get_first_load_page,
 };
 use actix_session::Session;
 use crate::schema;
@@ -1122,12 +1122,12 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
 pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_ajax;
-    
+
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    if is_ajax == false {
-        get_first_load_page(&session, is_desctop, "Категории блога".to_string()).await
-    }
-    else {
+    //if is_ajax == false {
+    //    get_first_load_page(&session, is_desctop, "Категории блога".to_string()).await
+    //}
+    //else {
         use crate::schema::tags_items::dsl::tags_items;
         use crate::schema::tags::dsl::tags;
         use crate::schema::blog_categories::dsl::blog_categories;
@@ -1240,5 +1240,5 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
         }
-    }
+    //}
 }

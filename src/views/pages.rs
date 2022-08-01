@@ -13,7 +13,7 @@ use crate::utils::{
     get_device_and_ajax,
     get_request_user_data,
     is_signed_in,
-    get_first_load_page,
+    //get_first_load_page,
 };
 use crate::diesel::{
     RunQueryDsl,
@@ -40,10 +40,10 @@ pub struct SParams {
 
 pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    if is_ajax == false {
-        get_first_load_page(&session, is_desctop, "Главная страница".to_string()).await
-    }
-    else {
+    //if is_ajax == false {
+    //    get_first_load_page(&session, is_desctop, "Главная страница".to_string()).await
+    //}
+    //else {
         use crate::models::{Work, Service, Wiki, Blog, Store};
 
         let _last_works = Work::get_3_works();
@@ -162,7 +162,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
         }
-    }
+    //}
 }
 
 pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
