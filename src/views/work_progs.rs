@@ -13,6 +13,7 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     get_request_user_data,
+    get_first_load_page,
 };
 use actix_session::Session;
 use crate::schema;

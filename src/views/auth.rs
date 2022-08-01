@@ -11,6 +11,7 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     verify,
+    get_first_load_page,
 };
 use crate::diesel::{
     RunQueryDsl,
@@ -49,35 +50,40 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
         use crate::utils::get_device_and_ajax;
 
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/auth/signup.stpl")]
-            struct Template {
-                is_ajax: i32,
-                title:   String,
-            }
-            let body = Template {
-                is_ajax: is_ajax,
-                title:   "Регистрация".to_string(),
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        if is_ajax == 0 {
+            get_first_load_page(&session, is_desctop, "Регистрация".to_string()).await
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/auth/signup.stpl")]
-            struct Template {
-                is_ajax: i32,
-                title:   String,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/auth/signup.stpl")]
+                struct Template {
+                    is_ajax: i32,
+                    title:   String,
+                }
+                let body = Template {
+                    is_ajax: is_ajax,
+                    title:   "Регистрация".to_string(),
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                is_ajax: is_ajax,
-                title:   "Регистрация".to_string(),
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/auth/signup.stpl")]
+                struct Template {
+                    is_ajax: i32,
+                    title:   String,
+                }
+                let body = Template {
+                    is_ajax: is_ajax,
+                    title:   "Регистрация".to_string(),
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
@@ -89,35 +95,40 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
         use crate::utils::get_device_and_ajax;
 
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/auth/login.stpl")]
-            struct Template {
-                is_ajax: i32,
-                title:   String,
-            }
-            let body = Template {
-                is_ajax: is_ajax,
-                title:   "Вход".to_string(),
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        if is_ajax == 0 {
+            get_first_load_page(&session, is_desctop, "Вход".to_string()).await
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/auth/login.stpl")]
-            struct Template {
-                is_ajax: i32,
-                title:   String,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/auth/login.stpl")]
+                struct Template {
+                    is_ajax: i32,
+                    title:   String,
+                }
+                let body = Template {
+                    is_ajax: is_ajax,
+                    title:   "Вход".to_string(),
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                is_ajax: is_ajax,
-                title:   "Регистрация".to_string(),
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/auth/login.stpl")]
+                struct Template {
+                    is_ajax: i32,
+                    title:   String,
+                }
+                let body = Template {
+                    is_ajax: is_ajax,
+                    title:   "Регистрация".to_string(),
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
