@@ -80,7 +80,7 @@ function format_text(text) {
   return text
 };
 
-on('#ajax', 'input', '.smile_supported', function() {
+on('body', 'input', '.smile_supported', function() {
     this.previousElementSibling.innerHTML = this.innerHTML.length
 });
 
@@ -323,7 +323,7 @@ on('body', 'click', '.remove_tag', function() {
   this.parentElement.remove();
 });
 
-on('#ajax', 'change', '.load_tech_categories_from_level', function() {
+on('body', 'change', '.load_tech_categories_from_level', function() {
   val = this.value;
   next = this.parentElement.nextElementSibling;
   block = next.querySelector(".form-control");
@@ -350,7 +350,7 @@ on('#ajax', 'change', '.load_tech_categories_from_level', function() {
   link.send( null );
 });
 
-on('#ajax', 'change', '.load_serve_from_level', function() {
+on('body', 'change', '.load_serve_from_level', function() {
   val = this.value;
   next = this.parentElement.nextElementSibling;
   var link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
@@ -367,7 +367,7 @@ on('#ajax', 'change', '.load_serve_from_level', function() {
   link.send( null );
 });
 
-on('#ajax', 'change', '.close_tech_categories', function() {
+on('body', 'change', '.close_tech_categories', function() {
   options = this.querySelectorAll("option");
   next = this.parentElement.nextElementSibling;
   cats = next.querySelectorAll(".open_tech_category");

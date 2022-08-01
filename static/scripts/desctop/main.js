@@ -23,7 +23,7 @@ function check_first_load() {
       if ( this.readyState == 4 && this.status == 200 ) {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
-        rtr = document.body.querySelector(".span"); 
+        rtr = document.body.querySelector(".span");
         rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
         window.history.pushState({route: url}, "network", url);

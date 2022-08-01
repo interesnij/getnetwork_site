@@ -202,7 +202,7 @@ class ToastManager {
             'INFO': '',
             'WARNING': '',
         };
-        var body = document.querySelector('#ajax');
+        var body = document.querySelector('body');
         this.toastsContainer = document.createElement('div');
         this.toastsContainer.classList.add('toasts', 'border-0');
         body.appendChild(this.toastsContainer)
@@ -278,7 +278,7 @@ function toast_warning(text) {
     toasts.showWarning(text)
 }
 
-on('#ajax', 'click', '.select_serve', function(event) {
+on('body', 'click', '.select_serve', function(event) {
   _this = this;
   if (event.target.classList.contains("get_object_info")) {
     return
@@ -345,7 +345,7 @@ on('#ajax', 'click', '.select_serve', function(event) {
 function service_tab_action(_this, tab_class) {
   is_price_mode = false;
   if (_this.parentElement.classList.contains("price_mode")) {
-      is_price_mode = true; 
+      is_price_mode = true;
   }
   counter = document.body.querySelector(".total_price_counter");
   if (!_this.classList.contains("active")){
@@ -448,25 +448,25 @@ on('body', 'click', '.ajax', function(event) {
 });
 
 
-on('#ajax', 'click', '.s_1', function() {
+on('body', 'click', '.s_1', function() {
   service_tab_action(this, ".tab_1")
 });
-on('#ajax', 'click', '.s_2', function() {
+on('body', 'click', '.s_2', function() {
   service_tab_action(this, ".tab_2")
 });
-on('#ajax', 'click', '.s_3', function() {
+on('body', 'click', '.s_3', function() {
   service_tab_action(this, ".tab_3")
 });
-on('#ajax', 'click', '.s_4', function() {
+on('body', 'click', '.s_4', function() {
   service_tab_action(this, ".tab_4")
 });
-on('#ajax', 'click', '.s_5', function() {
+on('body', 'click', '.s_5', function() {
   service_tab_action(this, ".tab_5")
 });
-on('#ajax', 'click', '.s_6', function() {
+on('body', 'click', '.s_6', function() {
   service_tab_action(this, ".tab_6")
 });
-on('#ajax', 'click', '.s_7', function() {
+on('body', 'click', '.s_7', function() {
   service_tab_action(this, ".tab_7")
 });
 
@@ -504,7 +504,7 @@ on('body', 'click', '.body_overlay', function() {
   close_fullscreen()
 });
 
-on('#ajax', 'click', '.get_object_info', function() {
+on('body', 'click', '.get_object_info', function() {
   create_fullscreen("/load_item/?_object_type=" + this.getAttribute("data-type") + "&_owner_type=" + this.getAttribute("owner-type") + "&_object_pk=" + this.getAttribute("data-pk") + "&_owner_pk=" + this.getAttribute("owner-pk"), "worker_fullscreen");
 });
 
@@ -555,7 +555,7 @@ on('body', 'input', '.general_search', function() {
   }
 });
 
-on('#ajax', 'click', '.show_tech_category', function() {
+on('body', 'click', '.show_tech_category', function() {
   next_div = this.nextElementSibling;
   counter = document.body.querySelector(".total_price_counter")
   if (next_div.classList.contains("hidden")) {
@@ -645,6 +645,6 @@ on('body', 'click', '#signup', function() {
   link.send(form_data);
 });
 
-on('#ajax', 'click', '.show_next_element', function() {
+on('body', 'click', '.show_next_element', function() {
   this.nextElementSibling.classList.toggle("hidden")
 });

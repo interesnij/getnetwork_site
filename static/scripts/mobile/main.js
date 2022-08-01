@@ -1,8 +1,7 @@
-ajax = document.body.querySelector("#ajax");
 get_active_button();
 check_first_load();
 
-on('#ajax', 'click', '.a_1', function() {
+on('body', 'click', '.a_1', function() {
   is = this;
   if (!is.classList.contains("active")){
     is.nextElementSibling.classList.remove("active");is.nextElementSibling.classList.add("pointer")
@@ -16,7 +15,7 @@ on('#ajax', 'click', '.a_1', function() {
 }
 });
 
-on('#ajax', 'click', '.a_2', function() {
+on('body', 'click', '.a_2', function() {
   is = this;
   if (!is.classList.contains("active")){
     is.previousElementSibling.classList.remove("active");is.previousElementSibling.classList.add("pointer")
