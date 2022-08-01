@@ -14,6 +14,7 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     get_request_user_data,
+    get_first_load_page,
 };
 use actix_session::Session;
 use crate::schema;
@@ -1120,119 +1121,123 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
 }
 
 pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::blog_categories::dsl::blog_categories;
-    use crate::utils::get_device_and_ajax;
-
-    let _connection = establish_connection();
-    let mut stack = Vec::new();
-
-    let _tag_items = tags_items
-        .filter(schema::tags_items::blog_id.ne(0))
-        .select(schema::tags_items::tag_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-
-    for _tag_item in _tag_items.iter() {
-        if !stack.iter().any(|&i| i==_tag_item) {
-            stack.push(_tag_item);
-        }
-    };
-    let _tags = tags
-        .filter(schema::tags::id.eq_any(stack))
-        .load::<Tag>(&_connection)
-        .expect("could not load tags");
-
-    let _blog_cats :Vec<BlogCategories> = blog_categories
-        .load(&_connection)
-        .expect("Error");
-
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/blogs/categories.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                is_ajax:      bool,
-                blog_cats:    Vec<BlogCategories>,
-                all_tags:     Vec<Tag>,
-            }
-            let body = Template {
-                title:        "Категории блога".to_string(),
-                request_user: _request_user,
-                is_ajax:      is_ajax,
-                blog_cats:    _blog_cats,
-                all_tags:     _tags,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/blogs/categories.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                is_ajax:      bool,
-                blog_cats:    Vec<BlogCategories>,
-                all_tags:     Vec<Tag>,
-            }
-            let body = Template {
-                title:        "Категории блога".to_string(),
-                request_user: _request_user,
-                is_ajax:      is_ajax,
-                blog_cats:    _blog_cats,
-                all_tags:     _tags,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
+    if is_ajax == false {
+        get_first_load_page(&session, is_desctop, "Категории блога".to_string()).await
     }
     else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/blogs/anon_categories.stpl")]
-            struct Template {
-                title:        String,
-                is_ajax:      bool,
-                blog_cats:    Vec<BlogCategories>,
-                all_tags:     Vec<Tag>,
+        use crate::schema::tags_items::dsl::tags_items;
+        use crate::schema::tags::dsl::tags;
+        use crate::schema::blog_categories::dsl::blog_categories;
+        use crate::utils::get_device_and_ajax;
+
+        let _connection = establish_connection();
+        let mut stack = Vec::new();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::blog_id.ne(0))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        for _tag_item in _tag_items.iter() {
+            if !stack.iter().any(|&i| i==_tag_item) {
+                stack.push(_tag_item);
             }
-            let body = Template {
-                title:        "Категории блога".to_string(),
-                is_ajax:      is_ajax,
-                blog_cats:    _blog_cats,
-                all_tags:     _tags,
+        };
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(stack))
+            .load::<Tag>(&_connection)
+            .expect("could not load tags");
+
+        let _blog_cats :Vec<BlogCategories> = blog_categories
+            .load(&_connection)
+            .expect("Error");
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/blogs/categories.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    is_ajax:      bool,
+                    blog_cats:    Vec<BlogCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории блога".to_string(),
+                    request_user: _request_user,
+                    is_ajax:      is_ajax,
+                    blog_cats:    _blog_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/blogs/categories.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    is_ajax:      bool,
+                    blog_cats:    Vec<BlogCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории блога".to_string(),
+                    request_user: _request_user,
+                    is_ajax:      is_ajax,
+                    blog_cats:    _blog_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/blogs/anon_categories.stpl")]
-            struct Template {
-                title:        String,
-                is_ajax:      bool,
-                blog_cats:    Vec<BlogCategories>,
-                all_tags:     Vec<Tag>,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/blogs/anon_categories.stpl")]
+                struct Template {
+                    title:        String,
+                    is_ajax:      bool,
+                    blog_cats:    Vec<BlogCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории блога".to_string(),
+                    is_ajax:      is_ajax,
+                    blog_cats:    _blog_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                title:        "Категории блога".to_string(),
-                is_ajax:      is_ajax,
-                blog_cats:    _blog_cats,
-                all_tags:     _tags,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/blogs/anon_categories.stpl")]
+                struct Template {
+                    title:        String,
+                    is_ajax:      bool,
+                    blog_cats:    Vec<BlogCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории блога".to_string(),
+                    is_ajax:      is_ajax,
+                    blog_cats:    _blog_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
