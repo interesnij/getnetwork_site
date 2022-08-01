@@ -66,7 +66,7 @@ use sailfish::TemplateOnce;
             pub ajax: Option<i32>,
         }
         let params_some = web::Query::<Params>::from_query(&req.query_string());
-        let mut is_ajax = false;
+        let mut is_ajax = 0;
         let mut _type = true;
 
         if params_some.is_ok() {
