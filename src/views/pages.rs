@@ -61,7 +61,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/main/mainpage.stpl")]
                 struct Template {
-                    //request_user:  User,
+                    request_user:  User,
                     last_works:    Vec<Work>,
                     last_services: Vec<Service>,
                     last_wikis:    Vec<Wiki>,
@@ -71,7 +71,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                     title:         String,
                 }
                 let body = Template {
-                    //request_user:  _request_user,
+                    request_user:  _request_user,
                     last_works:    _last_works,
                     last_services: _last_services,
                     last_wikis:    _last_wikis,
@@ -88,7 +88,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/main/mainpage.stpl")]
                 struct Template {
-                    //request_user:  User,
+                    request_user:  User,
                     last_works:    Vec<Work>,
                     last_services: Vec<Service>,
                     last_wikis:    Vec<Wiki>,
@@ -98,7 +98,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                     title:         String,
                 }
                 let body = Template {
-                    //request_user:  _request_user,
+                    request_user:  _request_user,
                     last_works:    _last_works,
                     last_services: _last_services,
                     last_wikis:    _last_wikis,
@@ -176,12 +176,12 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[derive(TemplateOnce)]
             #[template(path = "desctop/pages/about.stpl")]
             struct Template {
-                //request_user: User,
+                request_user: User,
                 is_ajax:      i32,
                 title:        String,
             }
             let body = Template {
-                //request_user: _request_user,
+                request_user: _request_user,
                 is_ajax:      is_ajax,
                 title:        "О нас".to_string(),
             }
@@ -193,12 +193,12 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[derive(TemplateOnce)]
             #[template(path = "mobile/pages/about.stpl")]
             struct Template {
-                //request_user: User,
+                request_user: User,
                 is_ajax:      i32,
                 title:        String,
             }
             let body = Template {
-                //request_user: _request_user,
+                request_user: _request_user,
                 is_ajax:      is_ajax,
                 title:        "О нас".to_string(),
             }
