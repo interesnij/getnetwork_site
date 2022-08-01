@@ -1121,6 +1121,8 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
 }
 
 pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    use crate::utils::get_device_and_ajax;
+    
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == false {
         get_first_load_page(&session, is_desctop, "Категории блога".to_string()).await
@@ -1129,7 +1131,6 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
         use crate::schema::tags_items::dsl::tags_items;
         use crate::schema::tags::dsl::tags;
         use crate::schema::blog_categories::dsl::blog_categories;
-        use crate::utils::get_device_and_ajax;
 
         let _connection = establish_connection();
         let mut stack = Vec::new();
