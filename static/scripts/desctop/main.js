@@ -14,7 +14,7 @@ on('body', 'mouseout', '.mn-sub', function(event) {
 });
 
 function check_first_load() {
-  if document.body.classList.contains("first_load") {
+  if (document.body.classList.contains("first_load")) {
     ajax_get_reload(window.location.href);
   }
 }

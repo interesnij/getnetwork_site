@@ -6,7 +6,7 @@ function mob_menu_hide() {
   document.querySelector(".mob_menu").style.display = "block";
 };
 function check_first_load() {
-  if document.body.classList.contains("first_load") {
+  if (document.body.classList.contains("first_load")) {
     ajax_get_reload(window.location.href);
   }
 }
