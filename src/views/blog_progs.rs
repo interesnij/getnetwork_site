@@ -335,8 +335,6 @@ pub async fn edit_content_blog_page(session: Session, req: HttpRequest, _id: web
     }
 
     else if is_signed_in(&session) {
-        use crate::schema::blogs::dsl::blogs;
-
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _request_user.id == _blog.user_id {
             if is_desctop {
