@@ -71,18 +71,22 @@ pub fn wiki_routes(config: &mut web::ServiceConfig) {
 }
 
 pub async fn create_wiki_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание категории статей".to_string()).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use schema::wiki_categories::dsl::wiki_categories;
-            use crate::utils::get_device_and_ajax;
 
             let _connection = establish_connection();
             let _wiki_cats:Vec<WikiCategories> = wiki_categories
                 .load(&_connection)
                 .expect("Error");
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -133,12 +137,17 @@ pub async fn create_wiki_categories_page(session: Session, req: HttpRequest) -> 
 }
 
 pub async fn create_wiki_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание статьи".to_string()).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use schema::tags::dsl::tags;
             use schema::wiki_categories::dsl::wiki_categories;
-            use crate::utils::get_device_and_ajax;
 
             let _connection = establish_connection();
             let _wiki_cats:Vec<WikiCategories> = wiki_categories
@@ -148,8 +157,6 @@ pub async fn create_wiki_page(session: Session, req: HttpRequest) -> actix_web::
             let all_tags: Vec<Tag> = tags
                 .load(&_connection)
                 .expect("Error.");
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -204,13 +211,18 @@ pub async fn create_wiki_page(session: Session, req: HttpRequest) -> actix_web::
 }
 pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::wikis::dsl::wikis;
+    use crate::utils::get_device_and_ajax;
 
     let _wiki_id: i32 = *_id;
     let _connection = establish_connection();
     let _wikis = wikis.filter(schema::wikis::id.eq(&_wiki_id)).load::<Wiki>(&_connection).expect("E");
     let _wiki = _wikis.into_iter().nth(0).unwrap();
 
-    if is_signed_in(&session) {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение статьи ".to_string() + &_wiki.title).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _wiki.user_id == _request_user.id {
             use schema::{
@@ -219,9 +231,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 wiki_videos::dsl::wiki_videos,
                 wiki_categories::dsl::wiki_categories,
             };
-            use crate::utils::get_device_and_ajax;
 
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
             let _categories = _wiki.get_categories();
             let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
             let _wiki_tags = _wiki.get_tags();
@@ -308,23 +318,23 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
 
 pub async fn edit_content_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::wikis::dsl::wikis;
+    use crate::utils::get_device_and_ajax;
 
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _wiki_id: i32 = *_id;
     let _connection = establish_connection();
     let _wikis = wikis
         .filter(schema::wikis::id.eq(&_wiki_id))
         .load::<Wiki>(&_connection)
         .expect("E");
-
     let _wiki = _wikis.into_iter().nth(0).unwrap();
 
-    if is_signed_in(&session) {
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение текста статьи ".to_string() + &_wiki.title).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _request_user.id == _wiki.user_id {
-            use crate::utils::get_device_and_ajax;
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/edit_content_wiki.stpl")]
@@ -400,22 +410,24 @@ pub async fn edit_content_wiki(session: Session, mut payload: Multipart, _id: we
 }
 
 pub async fn edit_wiki_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+    use crate::schema::wiki_categories::dsl::wiki_categories;
+
+    let _cat_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _categorys = wiki_categories
+        .filter(schema::wiki_categories::id.eq(&_cat_id))
+        .load::<WikiCategories>(&_connection)
+        .expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение категории обучающих статей ".to_string() + &_category.name).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use schema::wiki_categories::dsl::wiki_categories;
-            use crate::utils::get_device_and_ajax;
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-            let _cat_id: i32 = *_id;
-            let _connection = establish_connection();
-            let _categorys = wiki_categories
-                .filter(schema::wiki_categories::id.eq(&_cat_id))
-                .load::<WikiCategories>(&_connection)
-                .expect("E");
-
-            let _category = _categorys.into_iter().nth(0).unwrap();
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/edit_category.stpl")]
