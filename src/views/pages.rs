@@ -170,7 +170,11 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
 pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-    if is_signed_in(&session) {
+    // первая отрисовка страницы - организуем скрытие информации
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "О нас".to_string()).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
             #[derive(TemplateOnce)]
