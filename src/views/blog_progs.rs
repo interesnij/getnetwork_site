@@ -169,7 +169,7 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
                 }
                 let body = Template {
                     title:        "Создание статьи блога".to_string(),
-                    //request_user: _request_user,
+                    request_user: _request_user,
                     blog_cats:    _blog_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
@@ -190,7 +190,7 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
                 }
                 let body = Template {
                     title:        "Создание статьи блога".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     blog_cats:    _blog_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
@@ -441,7 +441,7 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
                 }
                 let body = Template {
                     title:        "Изменение категории блога ".to_string() + &_category.name,
-                    //request_user: _request_user,
+                    request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
@@ -460,7 +460,7 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
                 }
                 let body = Template {
                     title:        "Изменение категории блога ".to_string() + &_category.name,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
