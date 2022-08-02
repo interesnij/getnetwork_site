@@ -984,38 +984,33 @@ pub async fn delete_service_category(session: Session, _id: web::Path<i32>) -> i
 
 pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_ajax;
+    use schema::services::dsl::services;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let _connection = establish_connection();
+    let _service_id: i32 = param.1;
+
+    let _services = services
+        .filter(schema::services::id.eq(&_service_id))
+        .load::<Service>(&_connection)
+        .expect("E");
+    let _service = _services.into_iter().nth(0).unwrap();
     if is_ajax == 0 {
         get_first_load_page(&session, is_desctop, "Услуга ".to_string() + &_service.title).await
     }
     else {
         use schema::{
-            services::dsl::services,
             service_categories::dsl::service_categories,
             service_images::dsl::service_images,
             service_videos::dsl::service_videos,
             tech_categories::dsl::tech_categories,
         };
-        use crate::utils::get_device_and_ajax;
         use crate::models::TechCategories;
-
-        let _connection = establish_connection();
-        let _service_id: i32 = param.1;
         let _cat_id: i32 = param.0;
-
-        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-        let _services = services
-            .filter(schema::services::id.eq(&_service_id))
-            .load::<Service>(&_connection)
-            .expect("E");
 
         let _tech_categories = tech_categories
             .load::<TechCategories>(&_connection)
             .expect("E");
-
-        let _service = _services.into_iter().nth(0).unwrap();
 
         let _categorys = service_categories
             .filter(schema::service_categories::id.eq(&_cat_id))
@@ -1214,6 +1209,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
     }
     else {
         use crate::utils::get_page;
+        use crate::schema::tags_items::dsl::tags_items;
 
         let page = get_page(&req);
         let service_cats = service_categories
