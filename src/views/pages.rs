@@ -197,12 +197,12 @@ pub async fn about(req: HttpRequest, session: Session) -> actix_web::Result<Http
             #[derive(TemplateOnce)]
             #[template(path = "mobile/pages/about.stpl")]
             struct Template {
-                request_user: User,
+                //request_user: User,
                 is_ajax:      i32,
                 title:        String,
             }
             let body = Template {
-                request_user: _request_user,
+                //request_user: _request_user,
                 is_ajax:      is_ajax,
                 title:        "О нас".to_string(),
             }

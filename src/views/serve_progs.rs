@@ -179,14 +179,14 @@ pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/serve/serve.stpl")]
                 struct Template {
-                    title:        String,
+                    //title:        String,
                     request_user: User,
                     category:     ServeCategories,
                     object:       Serve,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Опция услуг ".to_string() + &_serve.name,
+                    //title:        "Опция услуг ".to_string() + &_serve.name,
                     request_user: _request_user,
                     category:     _s_category,
                     object:       _serve,
@@ -200,14 +200,14 @@ pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/serve/serve.stpl")]
                 struct Template {
-                    title:        String,
+                    //title:        String,
                     //request_user: User,
                     category:     ServeCategories,
                     object:       Serve,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Опция услуг ".to_string() + &_serve.name,
+                    //title:        "Опция услуг ".to_string() + &_serve.name,
                     //request_user: _request_user,
                     category:     _s_category,
                     object:       _serve,
