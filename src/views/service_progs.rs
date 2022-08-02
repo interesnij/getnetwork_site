@@ -70,18 +70,21 @@ pub fn service_routes(config: &mut web::ServiceConfig) {
 }
 
 pub async fn create_service_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание категории услуг".to_string()).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use schema::service_categories::dsl::service_categories;
-            use crate::utils::get_device_and_ajax;
 
             let _connection = establish_connection();
             let _service_cats:Vec<ServiceCategories> = service_categories
                 .load(&_connection)
                 .expect("Error");
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -132,7 +135,13 @@ pub async fn create_service_categories_page(session: Session, req: HttpRequest) 
 }
 
 pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание услуги".to_string()).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use schema::{
@@ -140,7 +149,6 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
                 tech_categories::dsl::tech_categories,
                 service_categories::dsl::service_categories,
             };
-            use crate::utils::get_device_and_ajax;
             use crate::models::TechCategories;
 
             let _connection = establish_connection();
@@ -155,8 +163,6 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
             let _tech_categories = tech_categories
                 .load::<TechCategories>(&_connection)
                 .expect("E");
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -211,13 +217,18 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
 }
 pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::services::dsl::services;
+    use crate::utils::get_device_and_ajax;
 
     let _service_id: i32 = *_id;
     let _connection = establish_connection();
     let _services = services.filter(schema::services::id.eq(&_service_id)).load::<Service>(&_connection).expect("E");
     let _service = _services.into_iter().nth(0).unwrap();
 
-    if is_signed_in(&session) {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение услуги ".to_string() + &_service.title).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _service.user_id == _request_user.id {
             use schema::{
@@ -227,10 +238,8 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 service_categories::dsl::service_categories,
                 tech_categories::dsl::tech_categories,
             };
-            use crate::utils::get_device_and_ajax;
             use crate::models:: TechCategories;
 
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
             let _categories = _service.get_categories();
             let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
             let _service_tags = _service.get_tags();
@@ -337,6 +346,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
 
 pub async fn edit_content_service_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::services::dsl::services;
+    use crate::utils::get_device_and_ajax;
 
     let _service_id: i32 = *_id;
     let _connection = establish_connection();
@@ -347,13 +357,13 @@ pub async fn edit_content_service_page(session: Session, req: HttpRequest, _id: 
 
     let _service = _services.into_iter().nth(0).unwrap();
 
-    if is_signed_in(&session) {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение текста услуги ".to_string() + &_service.title).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _request_user.id == _service.user_id {
-            use crate::utils::get_device_and_ajax;
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/edit_content_service.stpl")]
@@ -412,7 +422,6 @@ pub async fn edit_content_service(session: Session, mut payload: Multipart, _id:
         .expect("E");
 
     let _service = _services.into_iter().nth(0).unwrap();
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _request_user.id == _service.user_id {
@@ -429,22 +438,25 @@ pub async fn edit_content_service(session: Session, mut payload: Multipart, _id:
 }
 
 pub async fn edit_service_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use schema::service_categories::dsl::service_categories;
+    use crate::utils::get_device_and_ajax;
+
+    let _cat_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _categorys = service_categories
+        .filter(schema::service_categories::id.eq(&_cat_id))
+        .load::<ServiceCategories>(&_connection)
+        .expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение категории услуги ".to_string() + &_category.name).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use schema::service_categories::dsl::service_categories;
-            use crate::utils::get_device_and_ajax;
 
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-            let _cat_id: i32 = *_id;
-            let _connection = establish_connection();
-            let _categorys = service_categories
-                .filter(schema::service_categories::id.eq(&_cat_id))
-                .load::<ServiceCategories>(&_connection)
-                .expect("E");
-
-            let _category = _categorys.into_iter().nth(0).unwrap();
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/edit_category.stpl")]
@@ -971,473 +983,491 @@ pub async fn delete_service_category(session: Session, _id: web::Path<i32>) -> i
 }
 
 pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
-    use schema::{
-        services::dsl::services,
-        service_categories::dsl::service_categories,
-        service_images::dsl::service_images,
-        service_videos::dsl::service_videos,
-        tech_categories::dsl::tech_categories,
-    };
     use crate::utils::get_device_and_ajax;
-    use crate::models::TechCategories;
-
-    let _connection = establish_connection();
-    let _service_id: i32 = param.1;
-    let _cat_id: i32 = param.0;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-    let _services = services
-        .filter(schema::services::id.eq(&_service_id))
-        .load::<Service>(&_connection)
-        .expect("E");
-
-    let _tech_categories = tech_categories
-        .load::<TechCategories>(&_connection)
-        .expect("E");
-
-    let _service = _services.into_iter().nth(0).unwrap();
-
-    let _categorys = service_categories
-        .filter(schema::service_categories::id.eq(&_cat_id))
-        .load::<ServiceCategories>(&_connection)
-        .expect("E");
-    let _category = _categorys.into_iter().nth(0).unwrap();
-    let service_cats = service_categories
-        .load::<ServiceCategories>(&_connection)
-        .expect("E");
-
-    let _images: Vec<ServiceImage> = service_images.filter(schema::service_images::service.eq(&_service_id)).load(&_connection).expect("E");
-    let _videos: Vec<ServiceVideo> = service_videos.filter(schema::service_videos::service.eq(&_service_id)).load(&_connection).expect("E");
-    let _tags = _service.get_tags();
-
-    let mut prev: Option<Service> = None;
-    let mut next: Option<Service> = None;
-
-    let _category_services = _category.get_services_ids();
-    let _category_services_len = _category_services.len();
-
-    for (i, item) in _category_services.iter().enumerate().rev() {
-        if item == &_service_id {
-            if (i + 1) != _category_services_len {
-                let _next = Some(&_category_services[i + 1]);
-                next = services
-                    .filter(schema::services::id.eq(_next.unwrap()))
-                    .filter(schema::services::is_active.eq(true))
-                    .load::<Service>(&_connection)
-                    .expect("E")
-                    .into_iter()
-                    .nth(0);
-            };
-            if i != 0 {
-                let _prev = Some(&_category_services[i - 1]);
-                prev = services
-                    .filter(schema::services::id.eq(_prev.unwrap()))
-                    .filter(schema::services::is_active.eq(true))
-                    .load::<Service>(&_connection)
-                    .expect("E")
-                    .into_iter()
-                    .nth(0);
-            };
-            break;
-        }
-    };
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/services/service.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                object:       Service,
-                images:       Vec<ServiceImage>,
-                videos:       Vec<ServiceVideo>,
-                category:     ServiceCategories,
-                service_cats: Vec<ServiceCategories>,
-                all_tags:     Vec<Tag>,
-                prev:         Option<Service>,
-                next:         Option<Service>,
-                is_ajax:      i32,
-            }
-            let body = Template {
-                title:        "Услуга ".to_string() + &_service.title,
-                request_user: _request_user,
-                object:       _service,
-                images:       _images,
-                videos:       _videos,
-                category:     _category,
-                service_cats: service_cats,
-                all_tags:     _tags,
-                prev:         prev,
-                next:         next,
-                is_ajax:      is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/services/service.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                object:       Service,
-                images:       Vec<ServiceImage>,
-                videos:       Vec<ServiceVideo>,
-                category:     ServiceCategories,
-                service_cats: Vec<ServiceCategories>,
-                all_tags:     Vec<Tag>,
-                prev:         Option<Service>,
-                next:         Option<Service>,
-                is_ajax:      i32,
-            }
-            let body = Template {
-                title:        "Услуга ".to_string() + &_service.title,
-                request_user: _request_user,
-                object:       _service,
-                images:       _images,
-                videos:       _videos,
-                category:     _category,
-                service_cats: service_cats,
-                all_tags:     _tags,
-                prev:         prev,
-                next:         next,
-                is_ajax:      is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Услуга ".to_string() + &_service.title).await
     }
     else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/services/anon_service.stpl")]
-            struct Template {
-                title:        String,
-                object:       Service,
-                images:       Vec<ServiceImage>,
-                videos:       Vec<ServiceVideo>,
-                category:     ServiceCategories,
-                service_cats: Vec<ServiceCategories>,
-                all_tags:     Vec<Tag>,
-                prev:         Option<Service>,
-                next:         Option<Service>,
-                is_ajax:      i32,
+        use schema::{
+            services::dsl::services,
+            service_categories::dsl::service_categories,
+            service_images::dsl::service_images,
+            service_videos::dsl::service_videos,
+            tech_categories::dsl::tech_categories,
+        };
+        use crate::utils::get_device_and_ajax;
+        use crate::models::TechCategories;
+
+        let _connection = establish_connection();
+        let _service_id: i32 = param.1;
+        let _cat_id: i32 = param.0;
+
+        let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+        let _services = services
+            .filter(schema::services::id.eq(&_service_id))
+            .load::<Service>(&_connection)
+            .expect("E");
+
+        let _tech_categories = tech_categories
+            .load::<TechCategories>(&_connection)
+            .expect("E");
+
+        let _service = _services.into_iter().nth(0).unwrap();
+
+        let _categorys = service_categories
+            .filter(schema::service_categories::id.eq(&_cat_id))
+            .load::<ServiceCategories>(&_connection)
+            .expect("E");
+        let _category = _categorys.into_iter().nth(0).unwrap();
+        let service_cats = service_categories
+            .load::<ServiceCategories>(&_connection)
+            .expect("E");
+
+        let _images: Vec<ServiceImage> = service_images.filter(schema::service_images::service.eq(&_service_id)).load(&_connection).expect("E");
+        let _videos: Vec<ServiceVideo> = service_videos.filter(schema::service_videos::service.eq(&_service_id)).load(&_connection).expect("E");
+        let _tags = _service.get_tags();
+
+        let mut prev: Option<Service> = None;
+        let mut next: Option<Service> = None;
+
+        let _category_services = _category.get_services_ids();
+        let _category_services_len = _category_services.len();
+
+        for (i, item) in _category_services.iter().enumerate().rev() {
+            if item == &_service_id {
+                if (i + 1) != _category_services_len {
+                    let _next = Some(&_category_services[i + 1]);
+                    next = services
+                        .filter(schema::services::id.eq(_next.unwrap()))
+                        .filter(schema::services::is_active.eq(true))
+                        .load::<Service>(&_connection)
+                        .expect("E")
+                        .into_iter()
+                        .nth(0);
+                };
+                if i != 0 {
+                    let _prev = Some(&_category_services[i - 1]);
+                    prev = services
+                        .filter(schema::services::id.eq(_prev.unwrap()))
+                        .filter(schema::services::is_active.eq(true))
+                        .load::<Service>(&_connection)
+                        .expect("E")
+                        .into_iter()
+                        .nth(0);
+                };
+                break;
             }
-            let body = Template {
-                title:        "Услуга ".to_string() + &_service.title,
-                object:       _service,
-                images:       _images,
-                videos:       _videos,
-                category:     _category,
-                service_cats: service_cats,
-                all_tags:     _tags,
-                prev:         prev,
-                next:         next,
-                is_ajax:      is_ajax,
+        };
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/service.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    object:       Service,
+                    images:       Vec<ServiceImage>,
+                    videos:       Vec<ServiceVideo>,
+                    category:     ServiceCategories,
+                    service_cats: Vec<ServiceCategories>,
+                    all_tags:     Vec<Tag>,
+                    prev:         Option<Service>,
+                    next:         Option<Service>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    title:        "Услуга ".to_string() + &_service.title,
+                    request_user: _request_user,
+                    object:       _service,
+                    images:       _images,
+                    videos:       _videos,
+                    category:     _category,
+                    service_cats: service_cats,
+                    all_tags:     _tags,
+                    prev:         prev,
+                    next:         next,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/services/service.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    object:       Service,
+                    images:       Vec<ServiceImage>,
+                    videos:       Vec<ServiceVideo>,
+                    category:     ServiceCategories,
+                    service_cats: Vec<ServiceCategories>,
+                    all_tags:     Vec<Tag>,
+                    prev:         Option<Service>,
+                    next:         Option<Service>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    title:        "Услуга ".to_string() + &_service.title,
+                    request_user: _request_user,
+                    object:       _service,
+                    images:       _images,
+                    videos:       _videos,
+                    category:     _category,
+                    service_cats: service_cats,
+                    all_tags:     _tags,
+                    prev:         prev,
+                    next:         next,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/services/anon_service.stpl")]
-            struct Template {
-                title:        String,
-                object:       Service,
-                images:       Vec<ServiceImage>,
-                videos:       Vec<ServiceVideo>,
-                category:     ServiceCategories,
-                service_cats: Vec<ServiceCategories>,
-                all_tags:     Vec<Tag>,
-                prev:         Option<Service>,
-                next:         Option<Service>,
-                is_ajax:      i32,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/anon_service.stpl")]
+                struct Template {
+                    title:        String,
+                    object:       Service,
+                    images:       Vec<ServiceImage>,
+                    videos:       Vec<ServiceVideo>,
+                    category:     ServiceCategories,
+                    service_cats: Vec<ServiceCategories>,
+                    all_tags:     Vec<Tag>,
+                    prev:         Option<Service>,
+                    next:         Option<Service>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    title:        "Услуга ".to_string() + &_service.title,
+                    object:       _service,
+                    images:       _images,
+                    videos:       _videos,
+                    category:     _category,
+                    service_cats: service_cats,
+                    all_tags:     _tags,
+                    prev:         prev,
+                    next:         next,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                title:        "Услуга ".to_string() + &_service.title,
-                object:       _service,
-                images:       _images,
-                videos:       _videos,
-                category:     _category,
-                service_cats: service_cats,
-                all_tags:     _tags,
-                prev:         prev,
-                next:         next,
-                is_ajax:      is_ajax,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/services/anon_service.stpl")]
+                struct Template {
+                    title:        String,
+                    object:       Service,
+                    images:       Vec<ServiceImage>,
+                    videos:       Vec<ServiceVideo>,
+                    category:     ServiceCategories,
+                    service_cats: Vec<ServiceCategories>,
+                    all_tags:     Vec<Tag>,
+                    prev:         Option<Service>,
+                    next:         Option<Service>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    title:        "Услуга ".to_string() + &_service.title,
+                    object:       _service,
+                    images:       _images,
+                    videos:       _videos,
+                    category:     _category,
+                    service_cats: service_cats,
+                    all_tags:     _tags,
+                    prev:         prev,
+                    next:         next,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
 
 pub async fn service_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::service_categories::dsl::service_categories;
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::utils::{get_device_and_ajax, get_page};
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let page = get_page(&req);
+    use crate::utils::get_device_and_ajax;
 
     let _cat_id: i32 = *_id;
     let _connection = establish_connection();
 
     let _categorys = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
-    let service_cats = service_categories
-        .load::<ServiceCategories>(&_connection)
-        .expect("E");
 
-    let (object_list, next_page_number) = _category.get_services_list(page, 20);
-
-    let mut stack = Vec::new();
-    let _tag_items = tags_items
-        .filter(schema::tags_items::service_id.ne(0))
-        .select(schema::tags_items::tag_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-    for _tag_item in _tag_items.iter() {
-        if !stack.iter().any(|&i| i==_tag_item) {
-            stack.push(_tag_item);
-        }
-    };
-    let _tags = schema::tags::table
-        .filter(schema::tags::id.eq_any(stack))
-        .load::<Tag>(&_connection)
-        .expect("E");
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/services/category.stpl")]
-            struct Template {
-                title:            String,
-                request_user:     User,
-                //all_tags:         Vec<Tag>,
-                category:         ServiceCategories,
-                //service_cats:     Vec<ServiceCategories>,
-                object_list:      Vec<Service>,
-                next_page_number: i32,
-                is_ajax:          i32,
-            }
-            let body = Template {
-                title:            "Категория услуг ".to_string() + &_category.name,
-                request_user:     _request_user,
-                //all_tags:         _tags,
-                category:         _category,
-                //service_cats:     service_cats,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/services/category.stpl")]
-            struct Template {
-                title:            String,
-                request_user:     User,
-                all_tags:         Vec<Tag>,
-                category:         ServiceCategories,
-                service_cats:     Vec<ServiceCategories>,
-                object_list:      Vec<Service>,
-                next_page_number: i32,
-                is_ajax:          i32,
-            }
-            let body = Template {
-                title:            "Категория услуг ".to_string() + &_category.name,
-                request_user:     _request_user,
-                all_tags:         _tags,
-                category:         _category,
-                service_cats:     service_cats,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Категория услуг ".to_string() + &_category.name).await
     }
     else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/services/anon_category.stpl")]
-            struct Template {
-                title:            String,
-                //all_tags:         Vec<Tag>,
-                category:         ServiceCategories,
-                //service_cats:     Vec<ServiceCategories>,
-                object_list:      Vec<Service>,
-                next_page_number: i32,
-                is_ajax:          i32,
+        use crate::utils::get_page;
+
+        let page = get_page(&req);
+        let service_cats = service_categories
+            .load::<ServiceCategories>(&_connection)
+            .expect("E");
+
+        let (object_list, next_page_number) = _category.get_services_list(page, 20);
+        let mut stack = Vec::new();
+        let _tag_items = tags_items
+            .filter(schema::tags_items::service_id.ne(0))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        for _tag_item in _tag_items.iter() {
+            if !stack.iter().any(|&i| i==_tag_item) {
+                stack.push(_tag_item);
             }
-            let body = Template {
-                title:            "Категория услуг ".to_string() + &_category.name,
-                //all_tags:         _tags,
-                category:         _category,
-                //service_cats:     service_cats,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
+        };
+        let _tags = schema::tags::table
+            .filter(schema::tags::id.eq_any(stack))
+            .load::<Tag>(&_connection)
+            .expect("E");
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/category.stpl")]
+                struct Template {
+                    title:            String,
+                    request_user:     User,
+                    //all_tags:         Vec<Tag>,
+                    category:         ServiceCategories,
+                    //service_cats:     Vec<ServiceCategories>,
+                    object_list:      Vec<Service>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория услуг ".to_string() + &_category.name,
+                    request_user:     _request_user,
+                    //all_tags:         _tags,
+                    category:         _category,
+                    //service_cats:     service_cats,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/services/category.stpl")]
+                struct Template {
+                    title:            String,
+                    request_user:     User,
+                    all_tags:         Vec<Tag>,
+                    category:         ServiceCategories,
+                    service_cats:     Vec<ServiceCategories>,
+                    object_list:      Vec<Service>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория услуг ".to_string() + &_category.name,
+                    request_user:     _request_user,
+                    all_tags:         _tags,
+                    category:         _category,
+                    service_cats:     service_cats,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/services/anon_category.stpl")]
-            struct Template {
-                title:            String,
-                all_tags:         Vec<Tag>,
-                category:         ServiceCategories,
-                service_cats:     Vec<ServiceCategories>,
-                object_list:      Vec<Service>,
-                next_page_number: i32,
-                is_ajax:          i32,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/anon_category.stpl")]
+                struct Template {
+                    title:            String,
+                    //all_tags:         Vec<Tag>,
+                    category:         ServiceCategories,
+                    //service_cats:     Vec<ServiceCategories>,
+                    object_list:      Vec<Service>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория услуг ".to_string() + &_category.name,
+                    //all_tags:         _tags,
+                    category:         _category,
+                    //service_cats:     service_cats,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                title:            "Категория услуг ".to_string() + &_category.name,
-                all_tags:         _tags,
-                category:         _category,
-                service_cats:     service_cats,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/services/anon_category.stpl")]
+                struct Template {
+                    title:            String,
+                    all_tags:         Vec<Tag>,
+                    category:         ServiceCategories,
+                    service_cats:     Vec<ServiceCategories>,
+                    object_list:      Vec<Service>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория услуг ".to_string() + &_category.name,
+                    all_tags:         _tags,
+                    category:         _category,
+                    service_cats:     service_cats,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
 
 pub async fn service_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::service_categories::dsl::service_categories;
     use crate::utils::get_device_and_ajax;
 
-    let _connection = establish_connection();
-    let mut stack = Vec::new();
-
-    let _tag_items = tags_items
-        .filter(schema::tags_items::service_id.ne(0))
-        .select(schema::tags_items::tag_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-
-    for _tag_item in _tag_items.iter() {
-        if !stack.iter().any(|&i| i==_tag_item) {
-            stack.push(_tag_item);
-        }
-    };
-    let _tags = tags
-        .filter(schema::tags::id.eq_any(stack))
-        .load::<Tag>(&_connection)
-        .expect("could not load tags");
-
-    let _service_cats :Vec<ServiceCategories> = service_categories
-        .load(&_connection)
-        .expect("Error");
-
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/services/categories.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                is_ajax:      i32,
-                service_cats: Vec<ServiceCategories>,
-                //all_tags:     Vec<Tag>,
-            }
-            let body = Template {
-                title:        "Категории услуг".to_string(),
-                request_user: _request_user,
-                is_ajax:      is_ajax,
-                service_cats: _service_cats,
-                //all_tags:     _tags,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/services/categories.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                is_ajax:      i32,
-                service_cats: Vec<ServiceCategories>,
-                all_tags:     Vec<Tag>,
-            }
-            let body = Template {
-                title:        "Категории услуг".to_string(),
-                request_user: _request_user,
-                is_ajax:      is_ajax,
-                service_cats: _service_cats,
-                all_tags:     _tags,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Категории услуг".to_string()).await
     }
     else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/services/anon_categories.stpl")]
-            struct Template {
-                title:        String,
-                is_ajax:      i32,
-                service_cats: Vec<ServiceCategories>,
-                //all_tags:     Vec<Tag>,
+        use crate::schema::tags_items::dsl::tags_items;
+        use crate::schema::tags::dsl::tags;
+        use crate::schema::service_categories::dsl::service_categories;
+
+        let _connection = establish_connection();
+        let mut stack = Vec::new();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::service_id.ne(0))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        for _tag_item in _tag_items.iter() {
+            if !stack.iter().any(|&i| i==_tag_item) {
+                stack.push(_tag_item);
             }
-            let body = Template {
-                title:        "Категории услуг".to_string(),
-                is_ajax:      is_ajax,
-                service_cats: _service_cats,
-                //all_tags:     _tags,
+        };
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(stack))
+            .load::<Tag>(&_connection)
+            .expect("could not load tags");
+
+        let _service_cats :Vec<ServiceCategories> = service_categories
+            .load(&_connection)
+            .expect("Error");
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/categories.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    is_ajax:      i32,
+                    service_cats: Vec<ServiceCategories>,
+                    //all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории услуг".to_string(),
+                    request_user: _request_user,
+                    is_ajax:      is_ajax,
+                    service_cats: _service_cats,
+                    //all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/services/categories.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    is_ajax:      i32,
+                    service_cats: Vec<ServiceCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории услуг".to_string(),
+                    request_user: _request_user,
+                    is_ajax:      is_ajax,
+                    service_cats: _service_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/services/anon_categories.stpl")]
-            struct Template {
-                title:        String,
-                is_ajax:      i32,
-                service_cats: Vec<ServiceCategories>,
-                all_tags:     Vec<Tag>,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/services/anon_categories.stpl")]
+                struct Template {
+                    title:        String,
+                    is_ajax:      i32,
+                    service_cats: Vec<ServiceCategories>,
+                    //all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории услуг".to_string(),
+                    is_ajax:      is_ajax,
+                    service_cats: _service_cats,
+                    //all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                title:        "Категории услуг".to_string(),
-                is_ajax:      is_ajax,
-                service_cats: _service_cats,
-                all_tags:     _tags,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/services/anon_categories.stpl")]
+                struct Template {
+                    title:        String,
+                    is_ajax:      i32,
+                    service_cats: Vec<ServiceCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории услуг".to_string(),
+                    is_ajax:      is_ajax,
+                    service_cats: _service_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }

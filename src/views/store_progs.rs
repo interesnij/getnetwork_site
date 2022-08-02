@@ -70,18 +70,21 @@ pub fn store_routes(config: &mut web::ServiceConfig) {
 }
 
 pub async fn create_store_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание категории товаров".to_string()).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use schema::store_categories::dsl::store_categories;
-            use crate::utils::get_device_and_ajax;
 
             let _connection = establish_connection();
             let _store_cats:Vec<StoreCategories> = store_categories
                 .load(&_connection)
                 .expect("Error");
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -132,7 +135,13 @@ pub async fn create_store_categories_page(session: Session, req: HttpRequest) ->
 }
 
 pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание товара".to_string()).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use schema::{
@@ -141,8 +150,6 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
                 store_categories::dsl::store_categories,
             };
             use crate::models::TechCategories;
-
-            use crate::utils::get_device_and_ajax;
 
             let _connection = establish_connection();
             let _store_cats:Vec<StoreCategories> = store_categories
@@ -155,8 +162,6 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
             let _tech_categories = tech_categories
                 .load::<TechCategories>(&_connection)
                 .expect("E");
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -211,13 +216,18 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
 }
 pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::stores::dsl::stores;
+    use crate::utils::get_device_and_ajax;
 
     let _store_id: i32 = *_id;
     let _connection = establish_connection();
     let _stores = stores.filter(schema::stores::id.eq(&_store_id)).load::<Store>(&_connection).expect("E");
     let _store = _stores.into_iter().nth(0).unwrap();
 
-    if is_signed_in(&session) {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение товара ".to_string() + &_store.title).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _store.user_id == _request_user.id {
             use schema::{
@@ -227,10 +237,8 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 store_categories::dsl::store_categories,
                 tech_categories::dsl::tech_categories,
             };
-            use crate::utils::get_device_and_ajax;
             use crate::models::TechCategories;
 
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
             let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
             let _store_tags = _store.get_tags();
 
@@ -332,6 +340,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
 
 pub async fn edit_content_store_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::stores::dsl::stores;
+    use crate::utils::get_device_and_ajax;
 
     let _store_id: i32 = *_id;
     let _connection = establish_connection();
@@ -339,16 +348,15 @@ pub async fn edit_content_store_page(session: Session, req: HttpRequest, _id: we
         .filter(schema::stores::id.eq(&_store_id))
         .load::<Store>(&_connection)
         .expect("E");
-
     let _store = _stores.into_iter().nth(0).unwrap();
 
-    if is_signed_in(&session) {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение текста товара ".to_string() + &_store.title).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _request_user.id == _store.user_id {
-            use crate::utils::get_device_and_ajax;
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/edit_content_store.stpl")]
@@ -424,22 +432,24 @@ pub async fn edit_content_store(session: Session, mut payload: Multipart, _id: w
 }
 
 pub async fn edit_store_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    if is_signed_in(&session) {
+    use crate::utils::get_device_and_ajax;
+    use schema::store_categories::dsl::store_categories;
+
+    let _cat_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _categorys = store_categories
+        .filter(schema::store_categories::id.eq(&_cat_id))
+        .load::<StoreCategories>(&_connection)
+        .expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Изменение категории товаров ".to_string() + &_category.name).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use schema::store_categories::dsl::store_categories;
-            use crate::utils::get_device_and_ajax;
-
-            let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-            let _cat_id: i32 = *_id;
-            let _connection = establish_connection();
-            let _categorys = store_categories
-                .filter(schema::store_categories::id.eq(&_cat_id))
-                .load::<StoreCategories>(&_connection)
-                .expect("E");
-
-            let _category = _categorys.into_iter().nth(0).unwrap();
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/edit_category.stpl")]
@@ -966,464 +976,481 @@ pub async fn delete_store_category(session: Session, _id: web::Path<i32>) -> imp
 }
 
 pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
-    use schema::{
-        stores::dsl::stores,
-        store_categories::dsl::store_categories,
-        tech_categories::dsl::tech_categories,
-        store_videos::dsl::store_videos,
-        store_images::dsl::store_images,
-    };
+    use schema::stores::dsl::stores;
     use crate::utils::get_device_and_ajax;
-    use crate::models::TechCategories;
 
     let _connection = establish_connection();
     let _store_id: i32 = param.1;
-    let _cat_id: i32 = param.0;
-
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     let _stores = stores
         .filter(schema::stores::id.eq(&_store_id))
         .load::<Store>(&_connection)
         .expect("E");
-
     let _store = _stores.into_iter().nth(0).unwrap();
 
-    let _categorys = store_categories
-        .filter(schema::store_categories::id.eq(&_cat_id))
-        .load::<StoreCategories>(&_connection)
-        .expect("E");
-    let _category = _categorys.into_iter().nth(0).unwrap();
-    let _store_categories = store_categories
-        .load::<StoreCategories>(&_connection)
-        .expect("E");
-
-    let _tech_categories = tech_categories
-        .load::<TechCategories>(&_connection)
-        .expect("E");
-
-    let _images: Vec<StoreImage> = store_images.filter(schema::store_images::store.eq(&_store_id)).load(&_connection).expect("E");
-    let _videos: Vec<StoreVideo> = store_videos.filter(schema::store_videos::store.eq(&_store_id)).load(&_connection).expect("E");
-    let _tags = _store.get_tags();
-
-    let mut prev: Option<Store> = None;
-    let mut next: Option<Store> = None;
-
-    let _category_stores = _category.get_stores_ids();
-    let _category_stores_len = _category_stores.len();
-
-    for (i, item) in _category_stores.iter().enumerate().rev() {
-        if item == &_store_id {
-            if (i + 1) != _category_stores_len {
-                let _next = Some(&_category_stores[i + 1]);
-                next = stores
-                    .filter(schema::stores::id.eq(_next.unwrap()))
-                    .filter(schema::stores::is_active.eq(true))
-                    .load::<Store>(&_connection)
-                    .expect("E")
-                    .into_iter()
-                    .nth(0);
-            };
-            if i != 0 {
-                let _prev = Some(&_category_stores[i - 1]);
-                prev = stores
-                    .filter(schema::stores::id.eq(_prev.unwrap()))
-                    .filter(schema::stores::is_active.eq(true))
-                    .load::<Store>(&_connection)
-                    .expect("E")
-                    .into_iter()
-                    .nth(0);
-            };
-            break;
-        }
-    };
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/stores/store.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                object:       Store,
-                images:       Vec<StoreImage>,
-                videos:       Vec<StoreVideo>,
-                category:     StoreCategories,
-                prev:         Option<Store>,
-                next:         Option<Store>,
-                is_ajax:      i32,
-            }
-            let body = Template {
-                title:        "Товар ".to_string() + &_store.title,
-                request_user: _request_user,
-                object:       _store,
-                images:       _images,
-                videos:       _videos,
-                category:     _category,
-                prev:         prev,
-                next:         next,
-                is_ajax:      is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/stores/store.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                object:       Store,
-                images:       Vec<StoreImage>,
-                videos:       Vec<StoreVideo>,
-                category:     StoreCategories,
-                store_cats:   Vec<StoreCategories>,
-                all_tags:     Vec<Tag>,
-                prev:         Option<Store>,
-                next:         Option<Store>,
-                is_ajax:      i32,
-            }
-            let body = Template {
-                title:        "Товар ".to_string() + &_store.title,
-                request_user: _request_user,
-                object:       _store,
-                images:       _images,
-                videos:       _videos,
-                category:     _category,
-                store_cats:   _store_categories,
-                all_tags:     _tags,
-                prev:         prev,
-                next:         next,
-                is_ajax:     is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
     }
     else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/stores/anon_store.stpl")]
-            struct Template {
-                title:      String,
-                object:     Store,
-                images:     Vec<StoreImage>,
-                videos:     Vec<StoreVideo>,
-                category:   StoreCategories,
-                prev:       Option<Store>,
-                next:       Option<Store>,
-                is_ajax:    i32,
+        use schema::{
+            store_categories::dsl::store_categories,
+            tech_categories::dsl::tech_categories,
+            store_videos::dsl::store_videos,
+            store_images::dsl::store_images,
+        };
+        use crate::models::TechCategories;
+
+        let _cat_id: i32 = param.0;
+        let _categorys = store_categories
+            .filter(schema::store_categories::id.eq(&_cat_id))
+            .load::<StoreCategories>(&_connection)
+            .expect("E");
+        let _category = _categorys.into_iter().nth(0).unwrap();
+        let _store_categories = store_categories
+            .load::<StoreCategories>(&_connection)
+            .expect("E");
+
+        let _tech_categories = tech_categories
+            .load::<TechCategories>(&_connection)
+            .expect("E");
+
+        let _images: Vec<StoreImage> = store_images.filter(schema::store_images::store.eq(&_store_id)).load(&_connection).expect("E");
+        let _videos: Vec<StoreVideo> = store_videos.filter(schema::store_videos::store.eq(&_store_id)).load(&_connection).expect("E");
+        let _tags = _store.get_tags();
+
+        let mut prev: Option<Store> = None;
+        let mut next: Option<Store> = None;
+
+        let _category_stores = _category.get_stores_ids();
+        let _category_stores_len = _category_stores.len();
+
+        for (i, item) in _category_stores.iter().enumerate().rev() {
+            if item == &_store_id {
+                if (i + 1) != _category_stores_len {
+                    let _next = Some(&_category_stores[i + 1]);
+                    next = stores
+                        .filter(schema::stores::id.eq(_next.unwrap()))
+                        .filter(schema::stores::is_active.eq(true))
+                        .load::<Store>(&_connection)
+                        .expect("E")
+                        .into_iter()
+                        .nth(0);
+                };
+                if i != 0 {
+                    let _prev = Some(&_category_stores[i - 1]);
+                    prev = stores
+                        .filter(schema::stores::id.eq(_prev.unwrap()))
+                        .filter(schema::stores::is_active.eq(true))
+                        .load::<Store>(&_connection)
+                        .expect("E")
+                        .into_iter()
+                        .nth(0);
+                };
+                break;
             }
-            let body = Template {
-                title:      "Товар ".to_string() + &_store.title,
-                object:     _store,
-                images:     _images,
-                videos:     _videos,
-                category:   _category,
-                prev:       prev,
-                next:       next,
-                is_ajax:    is_ajax,
+        };
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/stores/store.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    object:       Store,
+                    images:       Vec<StoreImage>,
+                    videos:       Vec<StoreVideo>,
+                    category:     StoreCategories,
+                    prev:         Option<Store>,
+                    next:         Option<Store>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    title:        "Товар ".to_string() + &_store.title,
+                    request_user: _request_user,
+                    object:       _store,
+                    images:       _images,
+                    videos:       _videos,
+                    category:     _category,
+                    prev:         prev,
+                    next:         next,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/stores/store.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    object:       Store,
+                    images:       Vec<StoreImage>,
+                    videos:       Vec<StoreVideo>,
+                    category:     StoreCategories,
+                    store_cats:   Vec<StoreCategories>,
+                    all_tags:     Vec<Tag>,
+                    prev:         Option<Store>,
+                    next:         Option<Store>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    title:        "Товар ".to_string() + &_store.title,
+                    request_user: _request_user,
+                    object:       _store,
+                    images:       _images,
+                    videos:       _videos,
+                    category:     _category,
+                    store_cats:   _store_categories,
+                    all_tags:     _tags,
+                    prev:         prev,
+                    next:         next,
+                    is_ajax:     is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/stores/anon_store.stpl")]
-            struct Template {
-                title:      String,
-                object:     Store,
-                images:     Vec<StoreImage>,
-                videos:     Vec<StoreVideo>,
-                category:   StoreCategories,
-                store_cats: Vec<StoreCategories>,
-                all_tags:   Vec<Tag>,
-                prev:       Option<Store>,
-                next:       Option<Store>,
-                is_ajax:    i32,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/stores/anon_store.stpl")]
+                struct Template {
+                    title:      String,
+                    object:     Store,
+                    images:     Vec<StoreImage>,
+                    videos:     Vec<StoreVideo>,
+                    category:   StoreCategories,
+                    prev:       Option<Store>,
+                    next:       Option<Store>,
+                    is_ajax:    i32,
+                }
+                let body = Template {
+                    title:      "Товар ".to_string() + &_store.title,
+                    object:     _store,
+                    images:     _images,
+                    videos:     _videos,
+                    category:   _category,
+                    prev:       prev,
+                    next:       next,
+                    is_ajax:    is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                title:      "Товар ".to_string() + &_store.title,
-                object:     _store,
-                images:     _images,
-                videos:     _videos,
-                category:   _category,
-                store_cats: _store_categories,
-                all_tags:   _tags,
-                prev:       prev,
-                next:       next,
-                is_ajax:    is_ajax,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/stores/anon_store.stpl")]
+                struct Template {
+                    title:      String,
+                    object:     Store,
+                    images:     Vec<StoreImage>,
+                    videos:     Vec<StoreVideo>,
+                    category:   StoreCategories,
+                    store_cats: Vec<StoreCategories>,
+                    all_tags:   Vec<Tag>,
+                    prev:       Option<Store>,
+                    next:       Option<Store>,
+                    is_ajax:    i32,
+                }
+                let body = Template {
+                    title:      "Товар ".to_string() + &_store.title,
+                    object:     _store,
+                    images:     _images,
+                    videos:     _videos,
+                    category:   _category,
+                    store_cats: _store_categories,
+                    all_tags:   _tags,
+                    prev:       prev,
+                    next:       next,
+                    is_ajax:    is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
 
 pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::utils::get_device_and_ajax;
     use crate::schema::store_categories::dsl::store_categories;
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::utils::{get_device_and_ajax, get_page};
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let page = get_page(&req);
-
     let _cat_id: i32 = *_id;
     let _connection = establish_connection();
 
     let _categorys = store_categories.filter(schema::store_categories::id.eq(_cat_id)).load::<StoreCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
-    let (object_list, next_page_number) = _category.get_stores_list(page, 20);
-    let _wiki_store_categories = store_categories
-        .load::<StoreCategories>(&_connection)
-        .expect("E");
 
-    let mut stack = Vec::new();
-    let _tag_items = tags_items
-        .filter(schema::tags_items::store_id.ne(0))
-        .select(schema::tags_items::tag_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-    for _tag_item in _tag_items.iter() {
-        if !stack.iter().any(|&i| i==_tag_item) {
-            stack.push(_tag_item);
-        }
-    };
-    let _tags = schema::tags::table
-        .filter(schema::tags::id.eq_any(stack))
-        .load::<Tag>(&_connection)
-        .expect("E");
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/stores/category.stpl")]
-            struct Template {
-                title:            String,
-                request_user:     User,
-                all_tags:         Vec<Tag>,
-                category:         StoreCategories,
-                store_cats:       Vec<StoreCategories>,
-                object_list:      Vec<Store>,
-                next_page_number: i32,
-                is_ajax:          i32,
-            }
-            let body = Template {
-                title:            "Категория товаров ".to_string() + &_category.name,
-                request_user:     _request_user,
-                all_tags:         _tags,
-                category:         _category,
-                store_cats:       _wiki_store_categories,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/stores/category.stpl")]
-            struct Template {
-                title:            String,
-                request_user:     User,
-                all_tags:         Vec<Tag>,
-                category:         StoreCategories,
-                store_cats:       Vec<StoreCategories>,
-                object_list:      Vec<Store>,
-                next_page_number: i32,
-                is_ajax:          i32,
-            }
-            let body = Template {
-                title:            "Категория товаров ".to_string() + &_category.name,
-                request_user:     _request_user,
-                all_tags:         _tags,
-                category:         _category,
-                store_cats:       _wiki_store_categories,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Категория товаров ".to_string() + &_category.name).await
     }
     else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/stores/anon_category.stpl")]
-            struct Template {
-                title:            String,
-                all_tags:         Vec<Tag>,
-                category:         StoreCategories,
-                store_cats:       Vec<StoreCategories>,
-                object_list:      Vec<Store>,
-                next_page_number: i32,
-                is_ajax:          i32,
+        use crate::schema::tags_items::dsl::tags_items;
+        use crate::utils::get_page;
+
+        let page = get_page(&req);
+        let (object_list, next_page_number) = _category.get_stores_list(page, 20);
+        let _wiki_store_categories = store_categories
+            .load::<StoreCategories>(&_connection)
+            .expect("E");
+
+        let mut stack = Vec::new();
+        let _tag_items = tags_items
+            .filter(schema::tags_items::store_id.ne(0))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        for _tag_item in _tag_items.iter() {
+            if !stack.iter().any(|&i| i==_tag_item) {
+                stack.push(_tag_item);
             }
-            let body = Template {
-                title:            "Категория товаров ".to_string() + &_category.name,
-                all_tags:         _tags,
-                category:         _category,
-                store_cats:       _wiki_store_categories,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
+        };
+        let _tags = schema::tags::table
+            .filter(schema::tags::id.eq_any(stack))
+            .load::<Tag>(&_connection)
+            .expect("E");
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/stores/category.stpl")]
+                struct Template {
+                    title:            String,
+                    request_user:     User,
+                    all_tags:         Vec<Tag>,
+                    category:         StoreCategories,
+                    store_cats:       Vec<StoreCategories>,
+                    object_list:      Vec<Store>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория товаров ".to_string() + &_category.name,
+                    request_user:     _request_user,
+                    all_tags:         _tags,
+                    category:         _category,
+                    store_cats:       _wiki_store_categories,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/stores/category.stpl")]
+                struct Template {
+                    title:            String,
+                    request_user:     User,
+                    all_tags:         Vec<Tag>,
+                    category:         StoreCategories,
+                    store_cats:       Vec<StoreCategories>,
+                    object_list:      Vec<Store>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория товаров ".to_string() + &_category.name,
+                    request_user:     _request_user,
+                    all_tags:         _tags,
+                    category:         _category,
+                    store_cats:       _wiki_store_categories,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/stores/anon_category.stpl")]
-            struct Template {
-                title:            String,
-                all_tags:         Vec<Tag>,
-                category:         StoreCategories,
-                store_cats:       Vec<StoreCategories>,
-                object_list:      Vec<Store>,
-                next_page_number: i32,
-                is_ajax:          i32,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/stores/anon_category.stpl")]
+                struct Template {
+                    title:            String,
+                    all_tags:         Vec<Tag>,
+                    category:         StoreCategories,
+                    store_cats:       Vec<StoreCategories>,
+                    object_list:      Vec<Store>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория товаров ".to_string() + &_category.name,
+                    all_tags:         _tags,
+                    category:         _category,
+                    store_cats:       _wiki_store_categories,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                title:            "Категория товаров ".to_string() + &_category.name,
-                all_tags:         _tags,
-                category:         _category,
-                store_cats:       _wiki_store_categories,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/stores/anon_category.stpl")]
+                struct Template {
+                    title:            String,
+                    all_tags:         Vec<Tag>,
+                    category:         StoreCategories,
+                    store_cats:       Vec<StoreCategories>,
+                    object_list:      Vec<Store>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория товаров ".to_string() + &_category.name,
+                    all_tags:         _tags,
+                    category:         _category,
+                    store_cats:       _wiki_store_categories,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
 
 pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::store_categories::dsl::store_categories;
     use crate::utils::get_device_and_ajax;
 
-    let _connection = establish_connection();
-    let mut stack = Vec::new();
-
-    let _tag_items = tags_items
-        .filter(schema::tags_items::store_id.ne(0))
-        .select(schema::tags_items::tag_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-
-    for _tag_item in _tag_items.iter() {
-        if !stack.iter().any(|&i| i==_tag_item) {
-            stack.push(_tag_item);
-        }
-    };
-    let _tags = tags
-        .filter(schema::tags::id.eq_any(stack))
-        .load::<Tag>(&_connection)
-        .expect("could not load tags");
-
-    let _store_cats: Vec<StoreCategories> = store_categories
-        .load(&_connection)
-        .expect("Error");
-
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/stores/categories.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                is_ajax:      i32,
-                store_cats:   Vec<StoreCategories>,
-                all_tags:     Vec<Tag>,
-            }
-            let body = Template {
-                title:        "Категории товаров".to_string(),
-                request_user: _request_user,
-                is_ajax:      is_ajax,
-                store_cats:   _store_cats,
-                all_tags:     _tags,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/stores/categories.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                is_ajax:      i32,
-                store_cats:   Vec<StoreCategories>,
-                all_tags:     Vec<Tag>,
-            }
-            let body = Template {
-                title:        "Категории товаров".to_string(),
-                request_user: _request_user,
-                is_ajax:      is_ajax,
-                store_cats:   _store_cats,
-                all_tags:     _tags,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Категории услуг".to_string()).await
     }
     else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/stores/anon_categories.stpl")]
-            struct Template {
-                title:        String,
-                is_ajax:      i32,
-                store_cats:   Vec<StoreCategories>,
-                all_tags:     Vec<Tag>,
+        use crate::schema::tags_items::dsl::tags_items;
+        use crate::schema::tags::dsl::tags;
+        use crate::schema::store_categories::dsl::store_categories;
+
+        let _connection = establish_connection();
+        let mut stack = Vec::new();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::store_id.ne(0))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        for _tag_item in _tag_items.iter() {
+            if !stack.iter().any(|&i| i==_tag_item) {
+                stack.push(_tag_item);
             }
-            let body = Template {
-                title:        "Категории товаров".to_string(),
-                is_ajax:      is_ajax,
-                store_cats:   _store_cats,
-                all_tags:     _tags,
+        };
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(stack))
+            .load::<Tag>(&_connection)
+            .expect("could not load tags");
+
+        let _store_cats: Vec<StoreCategories> = store_categories
+            .load(&_connection)
+            .expect("Error");
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/stores/categories.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    is_ajax:      i32,
+                    store_cats:   Vec<StoreCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории товаров".to_string(),
+                    request_user: _request_user,
+                    is_ajax:      is_ajax,
+                    store_cats:   _store_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/stores/categories.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    is_ajax:      i32,
+                    store_cats:   Vec<StoreCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории товаров".to_string(),
+                    request_user: _request_user,
+                    is_ajax:      is_ajax,
+                    store_cats:   _store_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/stores/anon_categories.stpl")]
-            struct Template {
-                title:        String,
-                is_ajax:      i32,
-                store_cats:   Vec<StoreCategories>,
-                all_tags:     Vec<Tag>,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/stores/anon_categories.stpl")]
+                struct Template {
+                    title:        String,
+                    is_ajax:      i32,
+                    store_cats:   Vec<StoreCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории товаров".to_string(),
+                    is_ajax:      is_ajax,
+                    store_cats:   _store_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                title:        "Категории товаров".to_string(),
-                is_ajax:      is_ajax,
-                store_cats:   _store_cats,
-                all_tags:     _tags,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/stores/anon_categories.stpl")]
+                struct Template {
+                    title:        String,
+                    is_ajax:      i32,
+                    store_cats:   Vec<StoreCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории товаров".to_string(),
+                    is_ajax:      is_ajax,
+                    store_cats:   _store_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
