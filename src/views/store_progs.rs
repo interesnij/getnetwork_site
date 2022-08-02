@@ -110,13 +110,13 @@ pub async fn create_store_categories_page(session: Session, req: HttpRequest) ->
                 #[template(path = "mobile/stores/create_categories.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     store_cats:   Vec<StoreCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории товаров".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     store_cats:   _store_cats,
                     is_ajax:      is_ajax,
                 }
@@ -189,14 +189,14 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
                 #[template(path = "mobile/stores/create_store.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание товара".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     store_cats:   _store_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
@@ -300,7 +300,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[template(path = "mobile/stores/edit_store.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     object:       Store,
                     store_cats:   Vec<StoreCategories>,
                     is_ajax:      i32,
@@ -313,7 +313,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 }
                 let body = Template {
                     title:        "Изменение товара ".to_string() + &_store.title,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     object:       _store,
                     store_cats:   _store_cats,
                     is_ajax:      is_ajax,
@@ -381,13 +381,13 @@ pub async fn edit_content_store_page(session: Session, req: HttpRequest, _id: we
                 #[template(path = "mobile/stores/edit_content_store.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     store:        Store,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение текста товара ".to_string() + &_store.title,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     store:        _store,
                     is_ajax:      is_ajax,
                 }
@@ -474,13 +474,13 @@ pub async fn edit_store_category_page(session: Session, req: HttpRequest, _id: w
                 #[template(path = "mobile/stores/edit_category.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     category:     StoreCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение категории товаров ".to_string() + &_category.name,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
@@ -981,7 +981,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
 
     let _connection = establish_connection();
     let _store_id: i32 = param.1;
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     let _stores = stores
         .filter(schema::stores::id.eq(&_store_id))
@@ -1254,7 +1253,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 #[template(path = "mobile/stores/category.stpl")]
                 struct Template {
                     title:            String,
-                    request_user:     User,
+                    //request_user:     User,
                     all_tags:         Vec<Tag>,
                     category:         StoreCategories,
                     store_cats:       Vec<StoreCategories>,
@@ -1264,7 +1263,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 }
                 let body = Template {
                     title:            "Категория товаров ".to_string() + &_category.name,
-                    request_user:     _request_user,
+                    //request_user:     _request_user,
                     all_tags:         _tags,
                     category:         _category,
                     store_cats:       _wiki_store_categories,
@@ -1395,14 +1394,14 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                 #[template(path = "mobile/stores/categories.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     is_ajax:      i32,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
                 }
                 let body = Template {
                     title:        "Категории товаров".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     store_cats:   _store_cats,
                     all_tags:     _tags,

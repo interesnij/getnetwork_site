@@ -142,11 +142,11 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
         #[template(path = "desctop/auth/logout.stpl")]
         struct Template {
             is_ajax: i32,
-            title:   String,
+            //title:   String,
         }
         let body = Template {
             is_ajax: 0,
-            title:   "Выход из аккаунта".to_string(),
+            //title:   "Выход из аккаунта".to_string(),
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -157,11 +157,11 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
         #[template(path = "mobile/auth/logout.stpl")]
         struct Template {
             is_ajax: i32,
-            title:   String,
+            //title:   String,
         }
         let body = Template {
             is_ajax: 0,
-            title:   "Выход из аккаунта".to_string(),
+            //title:   "Выход из аккаунта".to_string(),
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

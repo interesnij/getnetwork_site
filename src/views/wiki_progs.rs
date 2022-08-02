@@ -112,13 +112,13 @@ pub async fn create_wiki_categories_page(session: Session, req: HttpRequest) -> 
                 #[template(path = "mobile/wikis/create_categories.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     wiki_cats:    Vec<WikiCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории статей".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     wiki_cats:    _wiki_cats,
                     is_ajax:      is_ajax,
                 }
@@ -184,14 +184,14 @@ pub async fn create_wiki_page(session: Session, req: HttpRequest) -> actix_web::
                 #[template(path = "mobile/wikis/create_wiki.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     wiki_cats:    Vec<WikiCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание статьи".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     wiki_cats:    _wiki_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
@@ -279,7 +279,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "mobile/wikis/edit_wiki.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     object:       Wiki,
                     categories:   Vec<WikiCategories>,
                     is_ajax:      i32,
@@ -292,7 +292,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                 }
                 let body = Template {
                     title:        "Изменение статьи ".to_string() + &_wiki.title,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     object:       _wiki,
                     categories:   _categories,
                     is_ajax:      is_ajax,
@@ -359,13 +359,13 @@ pub async fn edit_content_wiki_page(session: Session, req: HttpRequest, _id: web
                 #[template(path = "mobile/wikis/edit_content_wiki.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     wiki:         Wiki,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение текста статьи ".to_string() + &_wiki.title,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     wiki:         _wiki,
                     is_ajax:      is_ajax,
                 }
@@ -452,13 +452,13 @@ pub async fn edit_wiki_category_page(session: Session, req: HttpRequest, _id: we
                 #[template(path = "mobile/wikis/edit_category.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     category:     WikiCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение категории обучающих статей ".to_string() + &_category.name,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
@@ -1062,7 +1062,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 #[template(path = "mobile/wikis/category.stpl")]
                 struct Template {
                     title:            String,
-                    request_user:     User,
+                    //request_user:     User,
                     all_tags:         Vec<Tag>,
                     category:         WikiCategories,
                     wiki_cats:        Vec<WikiCategories>,
@@ -1072,7 +1072,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 }
                 let body = Template {
                     title:            "Категория обучающих статей ".to_string() + &_category.name,
-                    request_user:     _request_user,
+                    //request_user:     _request_user,
                     all_tags:         _tags,
                     category:         _category,
                     wiki_cats:        _wiki_categorys,
@@ -1203,14 +1203,14 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[template(path = "mobile/wikis/categories.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     is_ajax:      i32,
                     wiki_cats:    Vec<WikiCategories>,
                     all_tags:     Vec<Tag>,
                 }
                 let body = Template {
                     title:        "Категории обучающих статей".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     wiki_cats:    _wiki_cats,
                     all_tags:     _tags,

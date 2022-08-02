@@ -111,13 +111,13 @@ pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> 
                 #[template(path = "mobile/blogs/create_categories.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     blog_cats:    Vec<BlogCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории блога".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     blog_cats:    _blog_cats,
                     is_ajax:      is_ajax,
                 }
@@ -169,7 +169,7 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
                 }
                 let body = Template {
                     title:        "Создание статьи блога".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     blog_cats:    _blog_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
@@ -183,7 +183,7 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
                 #[template(path = "mobile/blogs/create_blog.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      i32,
@@ -279,7 +279,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     #[template(path = "mobile/blogs/edit_blog.stpl")]
                     struct Template {
                         title:        String,
-                        request_user: User,
+                        //request_user: User,
                         object:       Blog,
                         categories:   Vec<BlogCategories>,
                         is_ajax:      i32,
@@ -291,7 +291,7 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     }
                     let body = Template {
                         title:        "Изменение статьи блога ".to_string() + &_blog.title,
-                        request_user: _request_user,
+                        //request_user: _request_user,
                         object:       _blog,
                         categories:   _categories,
                         is_ajax:      is_ajax,
@@ -361,13 +361,13 @@ pub async fn edit_content_blog_page(session: Session, req: HttpRequest, _id: web
                 #[template(path = "mobile/blogs/edit_content_blog.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     blog:         Blog,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение текста статьи блога ".to_string() + &_blog.title,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     blog:         _blog,
                     is_ajax:      is_ajax,
                 }
@@ -441,7 +441,7 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
                 }
                 let body = Template {
                     title:        "Изменение категории блога ".to_string() + &_category.name,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
@@ -454,7 +454,7 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
                 #[template(path = "mobile/blogs/edit_category.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     category:     BlogCategories,
                     is_ajax:      i32,
                 }
@@ -1067,7 +1067,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 #[template(path = "mobile/blogs/category.stpl")]
                 struct Template {
                     title:            String,
-                    request_user:     User,
+                    //request_user:     User,
                     all_tags:         Vec<Tag>,
                     category:         BlogCategories,
                     blog_cats:        Vec<BlogCategories>,
@@ -1077,7 +1077,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 }
                 let body = Template {
                     title:            "Категория блога ".to_string() + &_category.name,
-                    request_user:     _request_user,
+                    //request_user:     _request_user,
                     all_tags:         _tags,
                     category:        _category,
                     blog_cats:        all_categories,
@@ -1208,14 +1208,14 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[template(path = "mobile/blogs/categories.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                 }
                 let body = Template {
                     title:        "Категории блога".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,

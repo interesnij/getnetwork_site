@@ -110,13 +110,13 @@ pub async fn create_work_categories_page(session: Session, req: HttpRequest) -> 
                 #[template(path = "mobile/works/create_categories.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     work_cats:    Vec<WorkCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории работ".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     work_cats:    _work_cats,
                     is_ajax:      is_ajax,
                 }
@@ -190,14 +190,14 @@ pub async fn create_work_page(session: Session, req: HttpRequest) -> actix_web::
                 #[template(path = "mobile/works/create_work.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     work_cats:    Vec<WorkCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание работы".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     work_cats:    _work_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
@@ -305,7 +305,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "mobile/works/edit_work.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     object:       Work,
                     categories:   Vec<WorkCategories>,
                     tech_cats:    Vec<TechCategories>,
@@ -319,7 +319,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                 }
                 let body = Template {
                     title:        "Изменение работы ".to_string() + &_work.title,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     object:       _work,
                     categories:   _categories,
                     tech_cats:    _tech_cats,
@@ -389,13 +389,13 @@ pub async fn edit_content_work_page(session: Session, req: HttpRequest, _id: web
                 #[template(path = "mobile/works/edit_content_work.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     work:         Work,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение текста работы ".to_string() + &_work.title,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     work:         _work,
                     is_ajax:      is_ajax,
                 }
@@ -483,13 +483,13 @@ pub async fn edit_work_category_page(session: Session, req: HttpRequest, _id: we
                 #[template(path = "mobile/works/edit_category.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     category:     WorkCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение категории работ ".to_string() + &_category.name,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
@@ -1266,7 +1266,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 #[template(path = "mobile/works/category.stpl")]
                 struct Template {
                     title:            String,
-                    request_user:     User,
+                    //request_user:     User,
                     all_tags:         Vec<Tag>,
                     category:         WorkCategories,
                     work_cats:        Vec<WorkCategories>,
@@ -1276,7 +1276,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 }
                 let body = Template {
                     title:            "Категория работ ".to_string() + &_category.name,
-                    request_user:     _request_user,
+                    //request_user:     _request_user,
                     all_tags:         _tags,
                     category:         _category,
                     work_cats:        _work_categories,
@@ -1407,14 +1407,14 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[template(path = "mobile/works/categories.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     is_ajax:      i32,
                     work_cats:    Vec<WorkCategories>,
                     all_tags:     Vec<Tag>,
                 }
                 let body = Template {
                     title:        "Категории работ".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     work_cats:    _work_cats,
                     all_tags:     _tags,

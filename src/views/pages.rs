@@ -88,7 +88,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/main/mainpage.stpl")]
                 struct Template {
-                    request_user:  User,
+                    //request_user:  User,
                     last_works:    Vec<Work>,
                     last_services: Vec<Service>,
                     last_wikis:    Vec<Wiki>,
@@ -98,7 +98,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                     title:         String,
                 }
                 let body = Template {
-                    request_user:  _request_user,
+                    //request_user:  _request_user,
                     last_works:    _last_works,
                     last_services: _last_services,
                     last_wikis:    _last_wikis,
@@ -303,13 +303,13 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
                 #[template(path = "mobile/main/feedback_list.stpl")]
                 struct Template {
                     title:         String,
-                    request_user:  User,
+                    //request_user:  User,
                     is_ajax:       i32,
                     feedback_list: Vec<Feedback>,
                 }
                 let body = Template {
                     title:         "Сообщения с формы".to_string(),
-                    request_user:  _request_user,
+                    //request_user:  _request_user,
                     is_ajax:       is_ajax,
                     feedback_list: _feedbacks,
                 }

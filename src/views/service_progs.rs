@@ -110,13 +110,13 @@ pub async fn create_service_categories_page(session: Session, req: HttpRequest) 
                 #[template(path = "mobile/services/create_categories.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     service_cats: Vec<ServiceCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание категории услуг".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     service_cats: _service_cats,
                     is_ajax:      is_ajax,
                 }
@@ -190,14 +190,14 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
                 #[template(path = "mobile/services/create_service.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     service_cats: Vec<ServiceCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание услуги".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     service_cats: _service_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
@@ -304,7 +304,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 #[template(path = "mobile/services/edit_service.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     object:       Service,
                     categories:   Vec<ServiceCategories>,
                     is_ajax:      i32,
@@ -318,7 +318,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                 }
                 let body = Template {
                     title:        "Изменение услуги ".to_string() + &_service.title,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     object:       _service,
                     categories:   _categories,
                     is_ajax:      is_ajax,
@@ -388,13 +388,13 @@ pub async fn edit_content_service_page(session: Session, req: HttpRequest, _id: 
                 #[template(path = "mobile/services/edit_content_service.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     service:      Service,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение текста услуги ".to_string() + &_service.title,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     service:      _service,
                     is_ajax:      is_ajax,
                 }
@@ -481,13 +481,13 @@ pub async fn edit_service_category_page(session: Session, req: HttpRequest, _id:
                 #[template(path = "mobile/services/edit_category.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     category:     ServiceCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение категории услуги ".to_string() + &_category.name,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
@@ -1267,7 +1267,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                 #[template(path = "mobile/services/category.stpl")]
                 struct Template {
                     title:            String,
-                    request_user:     User,
+                    //request_user:     User,
                     all_tags:         Vec<Tag>,
                     category:         ServiceCategories,
                     service_cats:     Vec<ServiceCategories>,
@@ -1277,7 +1277,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                 }
                 let body = Template {
                     title:            "Категория услуг ".to_string() + &_category.name,
-                    request_user:     _request_user,
+                    //request_user:     _request_user,
                     all_tags:         _tags,
                     category:         _category,
                     service_cats:     service_cats,
@@ -1408,14 +1408,14 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                 #[template(path = "mobile/services/categories.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     is_ajax:      i32,
                     service_cats: Vec<ServiceCategories>,
                     all_tags:     Vec<Tag>,
                 }
                 let body = Template {
                     title:        "Категории услуг".to_string(),
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     service_cats: _service_cats,
                     all_tags:     _tags,
