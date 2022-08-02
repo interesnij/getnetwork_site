@@ -792,7 +792,10 @@ table.shopping-cart-table tr td{
 .bg-green{ background-color: #58bf44 !important; }
 .bg-blue{ background-color: #43a5de !important; }
 .bg-purple{ background-color: #375acc !important; }
-.bg-red{ background-color: #e13939 !important; }
+.bg-red {
+  background-color: #e13939 !important;
+  color: rgba(127,127,127, 0.7) !important;
+}
 
 .no-transp {
     opacity: 1 !important;
