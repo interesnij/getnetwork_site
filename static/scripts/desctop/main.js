@@ -26,7 +26,7 @@ function check_first_load() {
         rtr = document.body.querySelector(".span");
         rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
-        window.history.pushState({route: url}, "network", url);
+        //window.history.pushState({route: url}, "network", url);
       }
     }
     ajax_link.send();

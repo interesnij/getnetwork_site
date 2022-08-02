@@ -2,7 +2,7 @@
 <h3 data-sum="<%= object.price %>"
     data-pk="<%= object.id %>"
     data-servelist=""
-    class="create_order_form_of_service pointer">
+    class="create_order_form_of_service" style="cursor:pointer;text-align: center;">
     Сумма <span class="total_price_counter"><%= object.price %></span>
      ₽. Перейти к заказу
 </h3>
