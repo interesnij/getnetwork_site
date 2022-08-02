@@ -16,8 +16,8 @@
         <div class="home-text align-center">
           <h1 class="hs-line-4 black font-alt">База знаний программиста</h1>
           <h2 class="hs-line-15 font-alt mb-0">
-            Статьи о программировании на языках python, rust, 
-            javascript (и wasm), c++. Движки, технологии, связи, творчество.
+            Статьи о программировании на python, rust,
+            javascript, c++, C#, java
           </h2>
         </div>
       </div>
