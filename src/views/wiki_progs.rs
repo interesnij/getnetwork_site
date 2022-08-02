@@ -786,464 +786,478 @@ pub async fn delete_wiki_category(session: Session, _id: web::Path<i32>) -> impl
 
 pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
     use schema::wikis::dsl::wikis;
-    use schema::wiki_categories::dsl::wiki_categories;
-    use schema::wiki_images::dsl::wiki_images;
-    use schema::wiki_videos::dsl::wiki_videos;
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
     let _wiki_id: i32 = param.1;
-    let _cat_id: i32 = param.0;
-
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
     let _wikis = wikis
         .filter(schema::wikis::id.eq(&_wiki_id))
         .load::<Wiki>(&_connection)
         .expect("E");
-
     let _wiki = _wikis.into_iter().nth(0).unwrap();
 
-    let _categorys = wiki_categories
-        .filter(schema::wiki_categories::id.eq(&_cat_id))
-        .load::<WikiCategories>(&_connection)
-        .expect("E");
-    let _category = _categorys.into_iter().nth(0).unwrap();
-    let _wiki_categories = wiki_categories
-        .load::<WikiCategories>(&_connection)
-        .expect("E");
-
-    let _images: Vec<WikiImage> = wiki_images.filter(schema::wiki_images::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
-    let _videos: Vec<WikiVideo> = wiki_videos.filter(schema::wiki_videos::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
-    let _tags = _wiki.get_tags();
-
-    let mut prev: Option<Wiki> = None;
-    let mut next: Option<Wiki> = None;
-
-    let _category_wikis = _category.get_wikis_ids();
-    let _category_wikis_len = _category_wikis.len();
-
-    for (i, item) in _category_wikis.iter().enumerate().rev() {
-        if item == &_wiki_id {
-            if (i + 1) != _category_wikis_len {
-                let _next = Some(&_category_wikis[i + 1]);
-                next = wikis
-                    .filter(schema::wikis::id.eq(_next.unwrap()))
-                    .filter(schema::wikis::is_active.eq(true))
-                    .load::<Wiki>(&_connection)
-                    .expect("E")
-                    .into_iter()
-                    .nth(0);
-            };
-            if i != 0 {
-                let _prev = Some(&_category_wikis[i - 1]);
-                prev = wikis
-                    .filter(schema::wikis::id.eq(_prev.unwrap()))
-                    .filter(schema::wikis::is_active.eq(true))
-                    .load::<Wiki>(&_connection)
-                    .expect("E")
-                    .into_iter()
-                    .nth(0);
-            };
-            break;
-        }
-    };
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/wikis/wiki.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                object:       Wiki,
-                images:       Vec<WikiImage>,
-                videos:       Vec<WikiVideo>,
-                category:     WikiCategories,
-                wiki_cats:    Vec<WikiCategories>,
-                all_tags:     Vec<Tag>,
-                prev:         Option<Wiki>,
-                next:         Option<Wiki>,
-                is_ajax:      i32,
-            }
-            let body = Template {
-                title:        "Статья ".to_string() + &_wiki.title,
-                request_user: _request_user,
-                object:       _wiki,
-                images:       _images,
-                videos:       _videos,
-                category:     _category,
-                wiki_cats:    _wiki_categories,
-                all_tags:     _tags,
-                prev:         prev,
-                next:         next,
-                is_ajax:      is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/wikis/wiki.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                object:       Wiki,
-                images:       Vec<WikiImage>,
-                videos:       Vec<WikiVideo>,
-                category:     WikiCategories,
-                wiki_cats:    Vec<WikiCategories>,
-                all_tags:     Vec<Tag>,
-                prev:         Option<Wiki>,
-                next:         Option<Wiki>,
-                is_ajax:      i32,
-            }
-            let body = Template {
-                title:        "Статья ".to_string() + &_wiki.title,
-                request_user: _request_user,
-                object:       _wiki,
-                images:       _images,
-                videos:       _videos,
-                category:     _category,
-                wiki_cats:    _wiki_categories,
-                all_tags:     _tags,
-                prev:         prev,
-                next:         next,
-                is_ajax:      is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Статья ".to_string() + &_wiki.title).await
     }
     else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/wikis/anon_wiki.stpl")]
-            struct Template {
-                title:      String,
-                object:     Wiki,
-                images:     Vec<WikiImage>,
-                videos:     Vec<WikiVideo>,
-                category:   WikiCategories,
-                wiki_cats:  Vec<WikiCategories>,
-                all_tags:   Vec<Tag>,
-                prev:       Option<Wiki>,
-                next:       Option<Wiki>,
-                is_ajax:    i32,
+        use schema::wiki_categories::dsl::wiki_categories;
+        use schema::wiki_images::dsl::wiki_images;
+        use schema::wiki_videos::dsl::wiki_videos;
+
+        let _cat_id: i32 = param.0;
+
+        let _categorys = wiki_categories
+            .filter(schema::wiki_categories::id.eq(&_cat_id))
+            .load::<WikiCategories>(&_connection)
+            .expect("E");
+        let _category = _categorys.into_iter().nth(0).unwrap();
+        let _wiki_categories = wiki_categories
+            .load::<WikiCategories>(&_connection)
+            .expect("E");
+
+        let _images: Vec<WikiImage> = wiki_images.filter(schema::wiki_images::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
+        let _videos: Vec<WikiVideo> = wiki_videos.filter(schema::wiki_videos::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
+        let _tags = _wiki.get_tags();
+
+        let mut prev: Option<Wiki> = None;
+        let mut next: Option<Wiki> = None;
+
+        let _category_wikis = _category.get_wikis_ids();
+        let _category_wikis_len = _category_wikis.len();
+
+        for (i, item) in _category_wikis.iter().enumerate().rev() {
+            if item == &_wiki_id {
+                if (i + 1) != _category_wikis_len {
+                    let _next = Some(&_category_wikis[i + 1]);
+                    next = wikis
+                        .filter(schema::wikis::id.eq(_next.unwrap()))
+                        .filter(schema::wikis::is_active.eq(true))
+                        .load::<Wiki>(&_connection)
+                        .expect("E")
+                        .into_iter()
+                        .nth(0);
+                };
+                if i != 0 {
+                    let _prev = Some(&_category_wikis[i - 1]);
+                    prev = wikis
+                        .filter(schema::wikis::id.eq(_prev.unwrap()))
+                        .filter(schema::wikis::is_active.eq(true))
+                        .load::<Wiki>(&_connection)
+                        .expect("E")
+                        .into_iter()
+                        .nth(0);
+                };
+                break;
             }
-            let body = Template {
-                title:      "Статья ".to_string() + &_wiki.title,
-                object:     _wiki,
-                images:     _images,
-                videos:     _videos,
-                category:   _category,
-                wiki_cats:  _wiki_categories,
-                all_tags:   _tags,
-                prev:       prev,
-                next:       next,
-                is_ajax:    is_ajax,
+        };
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/wikis/wiki.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    object:       Wiki,
+                    images:       Vec<WikiImage>,
+                    videos:       Vec<WikiVideo>,
+                    category:     WikiCategories,
+                    wiki_cats:    Vec<WikiCategories>,
+                    all_tags:     Vec<Tag>,
+                    prev:         Option<Wiki>,
+                    next:         Option<Wiki>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    title:        "Статья ".to_string() + &_wiki.title,
+                    request_user: _request_user,
+                    object:       _wiki,
+                    images:       _images,
+                    videos:       _videos,
+                    category:     _category,
+                    wiki_cats:    _wiki_categories,
+                    all_tags:     _tags,
+                    prev:         prev,
+                    next:         next,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/wikis/wiki.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    object:       Wiki,
+                    images:       Vec<WikiImage>,
+                    videos:       Vec<WikiVideo>,
+                    category:     WikiCategories,
+                    wiki_cats:    Vec<WikiCategories>,
+                    all_tags:     Vec<Tag>,
+                    prev:         Option<Wiki>,
+                    next:         Option<Wiki>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    title:        "Статья ".to_string() + &_wiki.title,
+                    request_user: _request_user,
+                    object:       _wiki,
+                    images:       _images,
+                    videos:       _videos,
+                    category:     _category,
+                    wiki_cats:    _wiki_categories,
+                    all_tags:     _tags,
+                    prev:         prev,
+                    next:         next,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/wikis/anon_wiki.stpl")]
-            struct Template {
-                title:      String,
-                object:     Wiki,
-                images:     Vec<WikiImage>,
-                videos:     Vec<WikiVideo>,
-                category:   WikiCategories,
-                wiki_cats:  Vec<WikiCategories>,
-                all_tags:   Vec<Tag>,
-                prev:       Option<Wiki>,
-                next:       Option<Wiki>,
-                is_ajax:    i32,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/wikis/anon_wiki.stpl")]
+                struct Template {
+                    title:      String,
+                    object:     Wiki,
+                    images:     Vec<WikiImage>,
+                    videos:     Vec<WikiVideo>,
+                    category:   WikiCategories,
+                    wiki_cats:  Vec<WikiCategories>,
+                    all_tags:   Vec<Tag>,
+                    prev:       Option<Wiki>,
+                    next:       Option<Wiki>,
+                    is_ajax:    i32,
+                }
+                let body = Template {
+                    title:      "Статья ".to_string() + &_wiki.title,
+                    object:     _wiki,
+                    images:     _images,
+                    videos:     _videos,
+                    category:   _category,
+                    wiki_cats:  _wiki_categories,
+                    all_tags:   _tags,
+                    prev:       prev,
+                    next:       next,
+                    is_ajax:    is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                title:      "Статья ".to_string() + &_wiki.title,
-                object:     _wiki,
-                images:     _images,
-                videos:     _videos,
-                category:   _category,
-                wiki_cats:  _wiki_categories,
-                all_tags:   _tags,
-                prev:       prev,
-                next:       next,
-                is_ajax:    is_ajax,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/wikis/anon_wiki.stpl")]
+                struct Template {
+                    title:      String,
+                    object:     Wiki,
+                    images:     Vec<WikiImage>,
+                    videos:     Vec<WikiVideo>,
+                    category:   WikiCategories,
+                    wiki_cats:  Vec<WikiCategories>,
+                    all_tags:   Vec<Tag>,
+                    prev:       Option<Wiki>,
+                    next:       Option<Wiki>,
+                    is_ajax:    i32,
+                }
+                let body = Template {
+                    title:      "Статья ".to_string() + &_wiki.title,
+                    object:     _wiki,
+                    images:     _images,
+                    videos:     _videos,
+                    category:   _category,
+                    wiki_cats:  _wiki_categories,
+                    all_tags:   _tags,
+                    prev:       prev,
+                    next:       next,
+                    is_ajax:    is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
 
 pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::utils::get_device_and_ajax;
     use crate::schema::wiki_categories::dsl::wiki_categories;
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::utils::{get_device_and_ajax, get_page};
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let page = get_page(&req);
 
     let _cat_id: i32 = *_id;
     let _connection = establish_connection();
-
     let _categorys = wiki_categories.filter(schema::wiki_categories::id.eq(_cat_id)).load::<WikiCategories>(&_connection).expect("E");
     let _category = _categorys.into_iter().nth(0).unwrap();
-    let (object_list, next_page_number) = _category.get_wikis_list(page, 20);
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-    let mut stack = Vec::new();
-    let _tag_items = tags_items
-        .filter(schema::tags_items::wiki_id.ne(0))
-        .select(schema::tags_items::tag_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-
-    let _wiki_categorys = wiki_categories
-        .load::<WikiCategories>(&_connection)
-        .expect("E");
-    for _tag_item in _tag_items.iter() {
-        if !stack.iter().any(|&i| i==_tag_item) {
-            stack.push(_tag_item);
-        }
-    };
-    let _tags = schema::tags::table
-        .filter(schema::tags::id.eq_any(stack))
-        .load::<Tag>(&_connection)
-        .expect("could not load tags");
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/wikis/category.stpl")]
-            struct Template {
-                title:            String,
-                request_user:     User,
-                all_tags:         Vec<Tag>,
-                category:         WikiCategories,
-                wiki_cats:        Vec<WikiCategories>,
-                object_list:      Vec<Wiki>,
-                next_page_number: i32,
-                is_ajax:          i32,
-            }
-            let body = Template {
-                title:            "Категория обучающих статей ".to_string() + &_category.name,
-                request_user:     _request_user,
-                all_tags:         _tags,
-                category:         _category,
-                wiki_cats:        _wiki_categorys,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/wikis/category.stpl")]
-            struct Template {
-                title:            String,
-                request_user:     User,
-                all_tags:         Vec<Tag>,
-                category:         WikiCategories,
-                wiki_cats:        Vec<WikiCategories>,
-                object_list:      Vec<Wiki>,
-                next_page_number: i32,
-                is_ajax:          i32,
-            }
-            let body = Template {
-                title:            "Категория обучающих статей ".to_string() + &_category.name,
-                request_user:     _request_user,
-                all_tags:         _tags,
-                category:         _category,
-                wiki_cats:        _wiki_categorys,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Категория обучающих статей ".to_string() + &_category.name).await
     }
     else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/wikis/anon_category.stpl")]
-            struct Template {
-                title:            String,
-                all_tags:         Vec<Tag>,
-                category:         WikiCategories,
-                wiki_cats:        Vec<WikiCategories>,
-                object_list:      Vec<Wiki>,
-                next_page_number: i32,
-                is_ajax:          i32,
+        use crate::schema::tags_items::dsl::tags_items;
+
+        let page = get_page(&req);
+        let (object_list, next_page_number) = _category.get_wikis_list(page, 20);
+
+        let mut stack = Vec::new();
+        let _tag_items = tags_items
+            .filter(schema::tags_items::wiki_id.ne(0))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        let _wiki_categorys = wiki_categories
+            .load::<WikiCategories>(&_connection)
+            .expect("E");
+        for _tag_item in _tag_items.iter() {
+            if !stack.iter().any(|&i| i==_tag_item) {
+                stack.push(_tag_item);
             }
-            let body = Template {
-                title:            "Категория обучающих статей ".to_string() + &_category.name,
-                all_tags:         _tags,
-                category:         _category,
-                wiki_cats:        _wiki_categorys,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
+        };
+        let _tags = schema::tags::table
+            .filter(schema::tags::id.eq_any(stack))
+            .load::<Tag>(&_connection)
+            .expect("could not load tags");
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/wikis/category.stpl")]
+                struct Template {
+                    title:            String,
+                    request_user:     User,
+                    all_tags:         Vec<Tag>,
+                    category:         WikiCategories,
+                    wiki_cats:        Vec<WikiCategories>,
+                    object_list:      Vec<Wiki>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория обучающих статей ".to_string() + &_category.name,
+                    request_user:     _request_user,
+                    all_tags:         _tags,
+                    category:         _category,
+                    wiki_cats:        _wiki_categorys,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/wikis/category.stpl")]
+                struct Template {
+                    title:            String,
+                    request_user:     User,
+                    all_tags:         Vec<Tag>,
+                    category:         WikiCategories,
+                    wiki_cats:        Vec<WikiCategories>,
+                    object_list:      Vec<Wiki>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория обучающих статей ".to_string() + &_category.name,
+                    request_user:     _request_user,
+                    all_tags:         _tags,
+                    category:         _category,
+                    wiki_cats:        _wiki_categorys,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/wikis/anon_category.stpl")]
-            struct Template {
-                title:            String,
-                all_tags:         Vec<Tag>,
-                category:         WikiCategories,
-                wiki_cats:        Vec<WikiCategories>,
-                object_list:      Vec<Wiki>,
-                next_page_number: i32,
-                is_ajax:          i32,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/wikis/anon_category.stpl")]
+                struct Template {
+                    title:            String,
+                    all_tags:         Vec<Tag>,
+                    category:         WikiCategories,
+                    wiki_cats:        Vec<WikiCategories>,
+                    object_list:      Vec<Wiki>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория обучающих статей ".to_string() + &_category.name,
+                    all_tags:         _tags,
+                    category:         _category,
+                    wiki_cats:        _wiki_categorys,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                title:            "Категория обучающих статей ".to_string() + &_category.name,
-                all_tags:         _tags,
-                category:         _category,
-                wiki_cats:        _wiki_categorys,
-                object_list:      object_list,
-                next_page_number: next_page_number,
-                is_ajax:          is_ajax,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/wikis/anon_category.stpl")]
+                struct Template {
+                    title:            String,
+                    all_tags:         Vec<Tag>,
+                    category:         WikiCategories,
+                    wiki_cats:        Vec<WikiCategories>,
+                    object_list:      Vec<Wiki>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Категория обучающих статей ".to_string() + &_category.name,
+                    all_tags:         _tags,
+                    category:         _category,
+                    wiki_cats:        _wiki_categorys,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
 
 pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::wiki_categories::dsl::wiki_categories;
     use crate::utils::get_device_and_ajax;
 
-    let _connection = establish_connection();
-    let mut stack = Vec::new();
-
-    let _tag_items = tags_items
-        .filter(schema::tags_items::wiki_id.ne(0))
-        .select(schema::tags_items::tag_id)
-        .load::<i32>(&_connection)
-        .expect("E");
-
-    for _tag_item in _tag_items.iter() {
-        if !stack.iter().any(|&i| i==_tag_item) {
-            stack.push(_tag_item);
-        }
-    };
-    let _tags = tags
-        .filter(schema::tags::id.eq_any(stack))
-        .load::<Tag>(&_connection)
-        .expect("could not load tags");
-
-    let _wiki_cats :Vec<WikiCategories> = wiki_categories
-        .load(&_connection)
-        .expect("Error");
-
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/wikis/categories.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                is_ajax:      i32,
-                wiki_cats:    Vec<WikiCategories>,
-                //all_tags:     Vec<Tag>,
-            }
-            let body = Template {
-                title:        "Категории обучающих статей".to_string(),
-                request_user: _request_user,
-                is_ajax:      is_ajax,
-                wiki_cats:    _wiki_cats,
-                //all_tags:     _tags,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/wikis/categories.stpl")]
-            struct Template {
-                title:        String,
-                request_user: User,
-                is_ajax:      i32,
-                wiki_cats:    Vec<WikiCategories>,
-                all_tags:     Vec<Tag>,
-            }
-            let body = Template {
-                title:        "Категории обучающих статей".to_string(),
-                request_user: _request_user,
-                is_ajax:      is_ajax,
-                wiki_cats:    _wiki_cats,
-                all_tags:     _tags,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
     }
     else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/wikis/anon_categories.stpl")]
-            struct Template {
-                title:        String,
-                is_ajax:      i32,
-                wiki_cats:    Vec<WikiCategories>,
-                //all_tags:     Vec<Tag>,
+        use crate::schema::tags_items::dsl::tags_items;
+        use crate::schema::tags::dsl::tags;
+        use crate::schema::wiki_categories::dsl::wiki_categories;
+
+        let _connection = establish_connection();
+        let mut stack = Vec::new();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::wiki_id.ne(0))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        for _tag_item in _tag_items.iter() {
+            if !stack.iter().any(|&i| i==_tag_item) {
+                stack.push(_tag_item);
             }
-            let body = Template {
-                title:        "Категории обучающих статей".to_string(),
-                is_ajax:      is_ajax,
-                wiki_cats:    _wiki_cats,
-                //all_tags:     _tags,
+        };
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(stack))
+            .load::<Tag>(&_connection)
+            .expect("could not load tags");
+
+        let _wiki_cats :Vec<WikiCategories> = wiki_categories
+            .load(&_connection)
+            .expect("Error");
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/wikis/categories.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    is_ajax:      i32,
+                    wiki_cats:    Vec<WikiCategories>,
+                    //all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории обучающих статей".to_string(),
+                    request_user: _request_user,
+                    is_ajax:      is_ajax,
+                    wiki_cats:    _wiki_cats,
+                    //all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/wikis/categories.stpl")]
+                struct Template {
+                    title:        String,
+                    request_user: User,
+                    is_ajax:      i32,
+                    wiki_cats:    Vec<WikiCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории обучающих статей".to_string(),
+                    request_user: _request_user,
+                    is_ajax:      is_ajax,
+                    wiki_cats:    _wiki_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
         }
         else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/wikis/anon_categories.stpl")]
-            struct Template {
-                title:        String,
-                is_ajax:      i32,
-                wiki_cats:    Vec<WikiCategories>,
-                all_tags:     Vec<Tag>,
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/wikis/anon_categories.stpl")]
+                struct Template {
+                    title:        String,
+                    is_ajax:      i32,
+                    wiki_cats:    Vec<WikiCategories>,
+                    //all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории обучающих статей".to_string(),
+                    is_ajax:      is_ajax,
+                    wiki_cats:    _wiki_cats,
+                    //all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            let body = Template {
-                title:        "Категории обучающих статей".to_string(),
-                is_ajax:      is_ajax,
-                wiki_cats:    _wiki_cats,
-                all_tags:     _tags,
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/wikis/anon_categories.stpl")]
+                struct Template {
+                    title:        String,
+                    is_ajax:      i32,
+                    wiki_cats:    Vec<WikiCategories>,
+                    all_tags:     Vec<Tag>,
+                }
+                let body = Template {
+                    title:        "Категории обучающих статей".to_string(),
+                    is_ajax:      is_ajax,
+                    wiki_cats:    _wiki_cats,
+                    all_tags:     _tags,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
