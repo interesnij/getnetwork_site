@@ -25,7 +25,7 @@
         </ul>
 
         <div class="tab-content tpl-tabs-cont">
-            <div class="tab_1 fade tab-pane in active wow fadeIn" data-wow-duration="0.3s">
+            <div class="tab_1 fade tab-pane in active">
                 <div class="section-text">
                     <div class="row">
                         <div class="mb-sm-50">
@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <div class="tab_2 fade tab-pane in wow fadeIn" data-wow-duration="0.3s">
+            <div class="tab_2 fade tab-pane in">
                 <div class="section-text">
                     <div class="row">
                       <div class="mb-sm-50">
@@ -91,7 +91,7 @@
                 </div>
             </div>
 
-            <div class="tab_3 fade tab-pane in wow fadeIn" data-wow-duration="0.3s">
+            <div class="tab_3 fade tab-pane in">
                 <div class="section-text">
                     <div class="row">
                       <div class="mb-sm-50">
@@ -113,7 +113,7 @@
                 </div>
             </div>
 
-            <div class="tab_4 fade tab-pane in wow fadeIn" data-wow-duration="0.3s">
+            <div class="tab_4 fade tab-pane in">
                 <div class="section-text">
                     <div class="row">
                       <div class="mb-sm-50">
@@ -138,7 +138,7 @@
                 </div>
             </div>
 
-            <div class="tab_5 fade tab-pane in wow fadeIn" data-wow-duration="0.3s">
+            <div class="tab_5 fade tab-pane in">
                 <div class="section-text">
                     <div class="row">
                       <div class="mb-sm-50">
@@ -174,7 +174,7 @@
                 </div>
             </div>
 
-            <div class="tab_6 fade tab-pane in wow fadeIn" data-wow-duration="0.3s">
+            <div class="tab_6 fade tab-pane in">
                 <div class="section-text">
                     <div class="row">
                       <div class="mb-sm-50">
