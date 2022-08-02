@@ -1003,6 +1003,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
+        use crate::utils::get_page;
 
         let page = get_page(&req);
         let (object_list, next_page_number) = _category.get_wikis_list(page, 20);
