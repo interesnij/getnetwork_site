@@ -44,6 +44,10 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
     // первая отрисовка страницы - организуем скрытие информации
     if is_ajax == 0 {
         get_first_load_page(&session, is_desctop, "Главная страница".to_string()).await
+    }
+    else {
+        use crate::models::{Work, Service, Wiki, Blog, Store};
+
         println!(
             "User's Name            whoami::realname():    {}",
             whoami::realname()
@@ -76,10 +80,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
             "Device's Desktop Env.  whoami::desktop_env(): {}",
             whoami::desktop_env()
         );
-    }
-    else {
-        use crate::models::{Work, Service, Wiki, Blog, Store};
-
+        
         let _last_works = Work::get_3_works();
         let _last_services = Service::get_6_services();
         let _last_wikis = Wiki::get_3_wikis();
