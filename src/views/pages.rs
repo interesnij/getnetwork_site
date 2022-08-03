@@ -48,7 +48,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
     else {
         use crate::models::{Work, Service, Wiki, Blog, Store};
 
-        println!("{:?}", req.headers().into_iter().nth(9).unwrap());
+        //println!("{:?}", req.headers().into_iter().nth(9).unwrap());
         for header in req.headers().into_iter() {
             if header.0 == "cookie" {
                 println!("{:?}", header.1);
