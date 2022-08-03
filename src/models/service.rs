@@ -143,6 +143,7 @@ pub struct Service {
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
     pub position:    i16,
+    pub view:        i32,
 }
 
 impl Service {
@@ -364,6 +365,7 @@ pub struct NewService {
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
     pub position:    i16,
+    pub view:        i32,
 }
 
 impl NewService {
@@ -375,18 +377,20 @@ impl NewService {
         is_active:   bool,
         price:       i32,
         user_id:     i32,
-        position:    i16
+        position:    i16,
+        view:        i32,
     ) -> Self {
         NewService {
-            title:         title,
-            description:   Some(description),
-            link:          Some(link),
-            image:         Some(image),
-            is_active:     is_active,
-            price:         price,
-            user_id:       user_id,
-            created:       chrono::Local::now().naive_utc(),
-            position:      position,
+            title:       title,
+            description: Some(description),
+            link:        Some(link),
+            image:       Some(image),
+            is_active:   is_active,
+            price:       price,
+            user_id:     user_id,
+            created:     chrono::Local::now().naive_utc(),
+            position:    position,
+            view:        view,
         }
     }
 }

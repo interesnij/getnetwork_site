@@ -33,13 +33,9 @@
 </span>
 
 <span class="second_span" style="display:none">
-  <button href="/contacts/" class="mobile_icon border ajax">
+  <button href="/info/" class="mobile_icon border ajax">
     <span class="icon-heart"></span>
-    <p>О нас</p>
-  </button>
-  <button href="/about/" class="mobile_icon border ajax">
-    <span class="icon-mobile"></span>
-    <p>О сайте</p>
+    <p>Инфо</p>
   </button>
   <button href="/tags/" class="mobile_icon border ajax">
     <span class="icon-ribbon"></span>
@@ -48,6 +44,10 @@
   <button href="/search/" class="mobile_icon border ajax search_btn">
     <span class="icon-search"></span>
     <p>Поиск</p>
+  </button>
+  <button href="/help/" class="mobile_icon border ajax">
+    <span class="icon-chat"></span>
+    <p>Помощь</p>
   </button>
   <button class="mobile_icon border anon_color_change" data-color="white">
     <span class="icon-pencil"></span>

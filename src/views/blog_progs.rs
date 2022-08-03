@@ -516,6 +516,7 @@ pub async fn create_blog(session: Session, mut payload: Multipart) -> impl Respo
                 form.main_image.clone(),
                 form.is_active.clone(),
                 _request_user.id,
+                0,
             );
 
             let _blog = diesel::insert_into(schema::blogs::table)

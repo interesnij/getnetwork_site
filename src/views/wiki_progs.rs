@@ -514,6 +514,7 @@ pub async fn create_wiki(session: Session, mut payload: Multipart) -> impl Respo
                 form.main_image.clone(),
                 form.is_active.clone(),
                 _request_user.id,
+                0,
             );
 
             let _wiki = diesel::insert_into(schema::wikis::table)

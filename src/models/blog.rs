@@ -144,6 +144,7 @@ pub struct Blog {
     pub is_active:   bool,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+    pub view:        i32,
 }
 
 impl Blog {
@@ -253,6 +254,7 @@ pub struct NewBlog {
     pub is_active:   bool,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+    pub view:        i32,
 }
 
 impl NewBlog {
@@ -262,7 +264,8 @@ impl NewBlog {
         link: String,
         image: String,
         is_active: bool,
-        user_id: i32) -> Self {
+        user_id: i32,
+        view: i32) -> Self {
         NewBlog {
             title:       title,
             description: Some(description),
@@ -271,6 +274,7 @@ impl NewBlog {
             is_active:   is_active,
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
+            view:        0,
         }
     }
 }

@@ -143,6 +143,7 @@ pub struct Wiki {
     pub is_active:   bool,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+    pub view:        i32,
 }
 
 impl Wiki {
@@ -263,6 +264,7 @@ pub struct NewWiki {
     pub is_active:   bool,
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
+    pub view:        i32,
 }
 
 impl NewWiki {
@@ -272,7 +274,8 @@ impl NewWiki {
         link: String,
         image: String,
         is_active: bool,
-        user_id: i32
+        user_id: i32,
+        view:    i32,
     ) -> Self {
         NewWiki {
             title:       title,
@@ -282,6 +285,7 @@ impl NewWiki {
             is_active:   is_active,
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
+            view:        view,
         }
     }
 }

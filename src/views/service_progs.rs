@@ -556,6 +556,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 0,
                 _request_user.id,
                 form.position,
+                0,
             );
 
             let _service = diesel::insert_into(schema::services::table)

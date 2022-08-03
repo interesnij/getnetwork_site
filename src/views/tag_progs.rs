@@ -128,6 +128,7 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
                 wiki_count:    0,
                 work_count:    0,
                 user_id:       _request_user.id,
+                view:          0,
             };
             let _new_tag = diesel::insert_into(schema::tags::table)
                 .values(&new_tag)

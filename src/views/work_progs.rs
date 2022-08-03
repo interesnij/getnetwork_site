@@ -558,6 +558,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                 0,
                 _request_user.id,
                 form.position,
+                0,
             );
 
             let _work = diesel::insert_into(schema::works::table)

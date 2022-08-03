@@ -39,6 +39,7 @@ CREATE TABLE tags (
     wiki_count    SMALLINT NOT NULL,
     work_count    SMALLINT NOT NULL,
     user_id       INT NOT NULL,
+    view          INT NOT NULL,
 
     CONSTRAINT fk_tag_creator
         FOREIGN KEY(user_id)
@@ -82,6 +83,7 @@ CREATE TABLE blogs (
     is_active   BOOLEAN NOT NULL,
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
+    view        INT NOT NULL,  
 
     CONSTRAINT fk_blog_creator_2
         FOREIGN KEY(user_id)

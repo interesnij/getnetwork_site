@@ -145,6 +145,7 @@ pub struct Store {
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
     pub position:    i16,
+    pub view:        i32,
 }
 
 impl Store {
@@ -334,6 +335,7 @@ pub struct NewStore {
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
     pub position:    i16,
+    pub view:        i32,
 }
 
 impl NewStore {
@@ -345,7 +347,8 @@ impl NewStore {
         is_active:   bool,
         price:       i32,
         user_id:     i32,
-        position:    i16
+        position:    i16,
+        view:        i32,
     ) -> Self {
         NewStore {
             title:       title,
@@ -357,6 +360,7 @@ impl NewStore {
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
             position:    position,
+            view:        view,
         }
     }
 }
