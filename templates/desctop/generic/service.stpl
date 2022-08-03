@@ -3,6 +3,9 @@
   <div class="container relative">
     <div class="row">
         <div class="col-md-6 mb-sm-40">
+        <div class="intro-label">
+          <span class="label label-danger bg-red">от <%= object.price %> ₽</span>
+        </div>
           <div class="mt-0 white-shadow" style="visibility: visible; animation-name: fadeIn;">
             <div class="progressive replace" data-href="<%= object.get_image() %>">
               <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
@@ -43,6 +46,9 @@
           </div>
       </div>
         <div class="col-md-6 mb-sm-40">
+          <div class="intro-label">
+            <span class="label label-danger bg-red">от <%= object.price %> ₽</span>
+          </div>
             <div class="mt-0 white-shadow" style="visibility: visible; animation-name: fadeIn;">
                 <img class="image_fit_300" src="<%= object.get_image() %>" alt="img">
             </div>
