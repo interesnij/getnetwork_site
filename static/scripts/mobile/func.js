@@ -18,6 +18,7 @@ function check_first_load() {
         rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
         window.history.pushState({route: url}, "network", url);
+        get_custom_design();
       }
     }
     ajax_link.send();

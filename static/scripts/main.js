@@ -431,14 +431,11 @@ function get_custom_design() {
   }
 
   addStyleSheets("/static/styles/color/" + color + ".css")
-  try {
-    btn = document.body.querySelector(".anon_color_change");
-    btn.setAttribute("data-color", color)
-  } catch { null };
+  //try {
+  btn = document.body.querySelector(".anon_color_change");
+  btn.setAttribute("data-color", color)
+//  } catch { null };
 };
-
-
-get_custom_design();
 
 on('body', 'click', '.ajax', function(event) {
   event.preventDefault();
