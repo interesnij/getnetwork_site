@@ -48,39 +48,10 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
     else {
         use crate::models::{Work, Service, Wiki, Blog, Store};
 
-        println!(
-            "User's Name            whoami::realname():    {}",
-            whoami::realname()
-        );
-        println!(
-            "User's Username        whoami::username():    {}",
-            whoami::username()
-        );
-        println!(
-            "User's Language        whoami::lang():        {:?}",
-            whoami::lang().collect::<Vec<String>>()
-        );
-        println!(
-            "Device's Pretty Name   whoami::devicename():  {}",
-            whoami::devicename()
-        );
-        println!(
-            "Device's Hostname      whoami::hostname():    {}",
-            whoami::hostname()
-        );
-        println!(
-            "Device's Platform      whoami::platform():    {}",
-            whoami::platform()
-        );
-        println!(
-            "Device's OS Distro     whoami::distro():      {}",
-            whoami::distro()
-        );
-        println!(
-            "Device's Desktop Env.  whoami::desktop_env(): {}",
-            whoami::desktop_env()
-        );
-        
+        for header in req.headers().into_iter() {
+            println!("{:?} = {:?}", header.0, header.1);
+        }
+
         let _last_works = Work::get_3_works();
         let _last_services = Service::get_6_services();
         let _last_wikis = Wiki::get_3_wikis();
