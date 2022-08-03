@@ -51,7 +51,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
         //println!("{:?}", req.headers().into_iter().nth(9).unwrap());
         for header in req.headers().into_iter() {
             if header.0 == "cookie" {
-                println!("{:?}", header.1);
+                println!("cookie {:?}", header.1);
             }
         };
         let _last_works = Work::get_3_works();
