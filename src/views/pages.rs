@@ -52,11 +52,11 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
         for header in req.headers().into_iter() {
             if header.0 == "cookie" {
                 let str_cookie = header.1.to_str().unwrap();
-                println!("cookie {:?}", str_cookie);
-                //let parse_cookie: Vec<String> = header.1.to_str().unwrap().split(";").collect();
-                //for c in parse_cookie.iter() {
-                //    println!("cookie {:?}", c);
-                //}
+                let _cookie = str_cookie.split(";").collect();
+                //println!("cookie {:?}", str_cookie);
+                for c in _cookie.iter() {
+                    println!("cookie {:?}", c);
+                }
             }
         };
         let _last_works = Work::get_3_works();
