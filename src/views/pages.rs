@@ -53,7 +53,9 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
                 let str_cookie = header.1.to_str().unwrap();
                 let _cookie: Vec<&str> = str_cookie.split(";").collect();
                 for c in _cookie.iter() {
-                    println!("cookie {:?}", c.trim());
+                    let split_c: Vec<&str> = c.split("=").collect();
+                    println!("name {:?}", split_c[0]);
+                    println!("value {:?}", split_c[1]);
                 }
             }
         };
