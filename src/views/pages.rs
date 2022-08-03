@@ -51,6 +51,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
         for header in req.headers().into_iter() {
             println!("{:?} = {:?}", header.0, header.1);
         }
+        println!("{:?}", req.peer_addr()); 
 
         let _last_works = Work::get_3_works();
         let _last_services = Service::get_6_services();
