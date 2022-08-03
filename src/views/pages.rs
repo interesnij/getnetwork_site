@@ -51,7 +51,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
         //println!("{:?}", req.headers().into_iter().nth(9).unwrap());
         for header in req.headers().into_iter() {
             if header.0 == "cookie" {
-                let parse_cookie = header.1.to_string().split(";");
+                let parse_cookie = header.1.split(";").collect();
                 for c in parse_cookie.iter() {
                     println!("cookie {:?}", c);
                 }
