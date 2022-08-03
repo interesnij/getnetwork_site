@@ -48,7 +48,7 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
     else {
         use crate::models::{Work, Service, Wiki, Blog, Store};
 
-        println!("{:?}", req.headers().into_iter().nth(8).unwrap());
+        println!("{:?}", req.headers().into_iter().nth(9).unwrap());
 
         let _last_works = Work::get_3_works();
         let _last_services = Service::get_6_services();
