@@ -2541,6 +2541,93 @@ hr {
     border-bottom: 0
   }
 }
+.widget-menu {
+    font-size: 13px;
+}
+.widget-menu li {
+    padding: 5px 0;
+
+}
+.widget-menu li a {
+    text-decoration: none;
+    padding-bottom: 2px;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    -webkit-transition: all 0.17s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    -moz-transition: all 0.17s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    -o-transition: all 0.17s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    -ms-transition: all 0.17s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    transition: all 0.17s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+}
+
+.widget-menu li small {
+    font-size: 11px;
+}
+
+.tags a {
+    display: inline-block;
+    margin: 0 2px 5px 0;
+    padding: 5px 7px;
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 1px;
+    -webkit-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    -moz-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    -o-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    -ms-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+}
+.tags a:hover {
+    text-decoration: none;
+}
+
+.widget-posts li {
+    font-size: 12px;
+    padding: 12px 0;
+}
+.widget-posts li a {
+    font-size: 13px;
+    display: block;
+    text-decoration: none;
+    -webkit-transition: all 0.17s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    -moz-transition: all 0.17s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    -o-transition: all 0.17s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    -ms-transition: all 0.17s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+    transition: all 0.17s cubic-bezier(0.000, 0.000, 0.580, 1.000);
+}
+
+.widget-posts-img {
+    float: left;
+    margin: 0 7px 0 0;
+    width: 80px;
+}
+.widget-posts-descr {
+    overflow: hidden;
+}
+.widget {
+    margin-bottom: 60px;
+}
+.widget .img-left {
+    margin: 0 10px 10px 0;
+}
+.widget .img-right {
+    margin: 0 0 10px 10px;
+}
+.widget-title {
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 400;
+}
+.widget-body{
+    font-size: 13px;
+}
+.widget-text{
+    line-height: 1.7;
+}
 
 
 

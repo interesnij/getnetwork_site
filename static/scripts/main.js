@@ -420,7 +420,7 @@ function setCookie(name, value, days) {
         expiry.setDate(expiry.getDate() + days);
         cookie += `; expires=${expiry.toUTCString()}`;
     }
-    document.cookie = cookie;
+    document.cookie = cookie + "; path=/";
 };
 
 function get_custom_design() {
