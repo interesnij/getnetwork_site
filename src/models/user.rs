@@ -157,7 +157,6 @@ pub struct NewCookieUser {
 ////////////////////
 
 #[derive(Debug, Queryable, PartialEq, Serialize, Identifiable)]
-#[belongs_to(CookieUser, foreign_key="user_id")]
 pub struct CookieStat {
     pub id:       i32,
     pub user_id:  i32,

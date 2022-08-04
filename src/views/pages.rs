@@ -612,7 +612,7 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
     let new_request = _geo_request.text().await.unwrap();
     let location200: UserLoc = serde_json::from_str(&new_request).unwrap();
     let _user = NewCookieUser {
-        ip:         ip,
+        ip:         ip.to_string(),
         device:     device,
         city_ru:    Some(location200.city.name_ru),
         city_en:    Some(location200.city.name_en),
