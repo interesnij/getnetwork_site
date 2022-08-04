@@ -283,7 +283,7 @@ pub struct StatStoreCategorie {
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_service_categories"]
+#[table_name="stat_store_categories"]
 pub struct NewStatStoreCategorie {
     pub view: i32,
 }

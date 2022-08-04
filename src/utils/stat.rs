@@ -290,35 +290,6 @@ pub fn plus_contact_views() -> () {
     }
 }
 
-pub fn plus_contact_views() -> () {
-    use schema::stat_contacts::dsl::stat_contacts;
-    use crate::models::StatContact;
-
-    let _connection = establish_connection();
-    let items = stat_contacts
-        .filter(schema::stat_contacts::id.eq(1))
-        .load::<StatContact>(&_connection)
-        .expect("E");
-
-    if items.len() > 0 {
-        let item = items.into_iter().nth(0).unwrap();
-        diesel::update(&item)
-            .set(schema::stat_contacts::view.eq(item.view + 1))
-            .get_result::<StatContact>(&_connection)
-            .expect("Error.");
-    }
-    else {
-        use crate::models::NewStatContact;
-        let _new_item = NewStatContact {
-            view: 1,
-        };
-        diesel::insert_into(schema::stat_contacts::table)
-            .values(&_new_item)
-            .get_result::<StatContact>(&_connection)
-            .expect("Error.");
-    }
-}
-
 pub fn plus_team_views() -> () {
     use schema::stat_teams::dsl::stat_teams;
     use crate::models::StatTeam;
