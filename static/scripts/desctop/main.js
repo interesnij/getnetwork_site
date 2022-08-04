@@ -29,7 +29,7 @@ function get_or_create_cookie_user() {
   ajax_link.onreadystatechange = function () {
     if ( this.readyState == 4 && this.status == 200 ) {
       data = JSON.parse(ajax_link.responseText);
-      console.log(data.id);
+      console.log(data);
       setCookie("user", data.id, 120);
     }
   }
