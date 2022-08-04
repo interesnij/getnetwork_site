@@ -270,14 +270,13 @@ pub struct NewWiki {
 }
 
 impl NewWiki {
-    pub fn from_wiki_form(
+    pub fn create (
         title: String,
         description: String,
         link: String,
         image: String,
         is_active: bool,
         user_id: i32,
-        view:    i32,
     ) -> Self {
         NewWiki {
             title:       title,
@@ -287,7 +286,7 @@ impl NewWiki {
             is_active:   is_active,
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
-            view:        view,
+            view:        0,
         }
     }
 }
@@ -308,7 +307,7 @@ pub struct NewWikiImage {
 }
 
 impl NewWikiImage {
-    pub fn from_wiki_images_form(
+    pub fn create (
         wiki_id: i32, src: String) -> Self {
         NewWikiImage {
             wiki: wiki_id,
@@ -333,7 +332,7 @@ pub struct NewWikiVideo {
 }
 
 impl NewWikiVideo {
-    pub fn from_wiki_videos_form(
+    pub fn create (
         wiki_id: i32, src: String) -> Self {
         NewWikiVideo {
             wiki: wiki_id,

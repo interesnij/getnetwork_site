@@ -508,14 +508,13 @@ pub async fn create_wiki(session: Session, mut payload: Multipart) -> impl Respo
             let _connection = establish_connection();
 
             let form = item_form(payload.borrow_mut(), _request_user.id).await;
-            let new_wiki = NewWiki::from_wiki_form (
+            let new_wiki = NewWiki::create (
                 form.title.clone(),
                 form.description.clone(),
                 form.link.clone(),
                 form.main_image.clone(),
                 form.is_active.clone(),
                 _request_user.id,
-                0,
             );
 
             let _wiki = diesel::insert_into(schema::wikis::table)
@@ -524,7 +523,7 @@ pub async fn create_wiki(session: Session, mut payload: Multipart) -> impl Respo
                 .expect("E.");
 
             for image in form.images.iter() {
-                let new_image = NewWikiImage::from_wiki_images_form (
+                let new_image = NewWikiImage::create (
                     _wiki.id,
                     image.to_string()
                 );
@@ -534,7 +533,7 @@ pub async fn create_wiki(session: Session, mut payload: Multipart) -> impl Respo
                     .expect("E.");
                 };
             for video in form.videos.iter() {
-                let new_video = NewWikiVideo::from_wiki_videos_form (
+                let new_video = NewWikiVideo::create (
                     _wiki.id,
                     video.to_string()
                 );
@@ -642,7 +641,7 @@ pub async fn edit_wiki(session: Session, mut payload: Multipart, _id: web::Path<
             .expect("E");
 
             for _image in form.images.iter() {
-                let new_edit_image = NewWikiImage::from_wiki_images_form (
+                let new_edit_image = NewWikiImage::create (
                     _wiki_id,
                     _image.to_string()
                 );
@@ -652,7 +651,7 @@ pub async fn edit_wiki(session: Session, mut payload: Multipart, _id: web::Path<
                 .expect("E.");
             };
             for _video in form.videos.iter() {
-                let new_video = NewWikiVideo::from_wiki_videos_form (
+                let new_video = NewWikiVideo::create (
                     _wiki_id,
                     _video.to_string()
                 );

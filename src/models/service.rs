@@ -370,7 +370,7 @@ pub struct NewService {
 }
 
 impl NewService {
-    pub fn from_service_form (
+    pub fn create (
         title:       String,
         description: String,
         link:        String,
@@ -379,7 +379,6 @@ impl NewService {
         price:       i32,
         user_id:     i32,
         position:    i16,
-        view:        i32,
     ) -> Self {
         NewService {
             title:       title,
@@ -391,7 +390,7 @@ impl NewService {
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
             position:    position,
-            view:        view,
+            view:        0,
         }
     }
 }
@@ -412,7 +411,7 @@ pub struct NewServiceImage {
 }
 
 impl NewServiceImage {
-    pub fn from_service_images_form (
+    pub fn create (
         service_id: i32, src: String) -> Self {
         NewServiceImage {
             service: service_id,
@@ -437,7 +436,7 @@ pub struct NewServiceVideo {
 }
 
 impl NewServiceVideo {
-    pub fn from_service_videos_form(
+    pub fn create (
         service_id: i32, src: String) -> Self {
         NewServiceVideo {
             service: service_id,

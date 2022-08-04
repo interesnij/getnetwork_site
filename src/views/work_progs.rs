@@ -550,7 +550,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
             let _connection = establish_connection();
 
             let form = store_form(payload.borrow_mut(), _request_user.id).await;
-            let new_work = NewWork::from_work_form (
+            let new_work = NewWork::create (
                 form.title.clone(),
                 form.description.clone(),
                 form.link.clone(),
@@ -559,7 +559,6 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                 0,
                 _request_user.id,
                 form.position,
-                0,
             );
 
             let _work = diesel::insert_into(schema::works::table)
@@ -568,7 +567,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                 .expect("E.");
 
             for image in form.images.iter() {
-                let new_image = NewWorkImage::from_work_images_form (
+                let new_image = NewWorkImage::create (
                     _work.id,
                     image.to_string()
                 );
@@ -578,7 +577,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                     .expect("E.");
                 };
             for video in form.videos.iter() {
-                let new_video = NewWorkVideo::from_work_videos_form (
+                let new_video = NewWorkVideo::create (
                     _work.id,
                     video.to_string()
                 );
@@ -771,7 +770,7 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
             .expect("E");
 
             for _image in form.images.iter() {
-                let new_edit_image = NewWorkImage::from_work_images_form (
+                let new_edit_image = NewWorkImage::create (
                     _work_id,
                     _image.to_string()
                 );
@@ -781,7 +780,7 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
                 .expect("E.");
             };
             for _video in form.videos.iter() {
-                let new_video = NewWorkVideo::from_work_videos_form (
+                let new_video = NewWorkVideo::create (
                     _work_id,
                     _video.to_string()
                 );

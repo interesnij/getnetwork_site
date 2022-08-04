@@ -340,7 +340,7 @@ pub struct NewWork {
 }
 
 impl NewWork {
-    pub fn from_work_form (
+    pub fn create (
         title:       String,
         description: String,
         link:        String,
@@ -349,7 +349,6 @@ impl NewWork {
         price:       i32,
         user_id:     i32,
         position:    i16,
-        view:        i32,
     ) -> Self {
         NewWork {
             title:       title,
@@ -361,7 +360,7 @@ impl NewWork {
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
             position:    position,
-            view:        view,
+            view:        0,
         }
     }
 }
@@ -398,7 +397,7 @@ pub struct NewWorkImage {
     pub src:  String,
 }
 impl NewWorkImage {
-    pub fn from_work_images_form (
+    pub fn create (
         work_id: i32, src: String) -> Self {
         NewWorkImage {
             work: work_id,
@@ -422,7 +421,7 @@ pub struct NewWorkVideo {
     pub src:  String,
 }
 impl NewWorkVideo {
-    pub fn from_work_videos_form (
+    pub fn create (
         work_id: i32, src: String) -> Self {
         NewWorkVideo {
             work: work_id,

@@ -341,7 +341,7 @@ pub struct NewStore {
 }
 
 impl NewStore {
-    pub fn from_store_form (
+    pub fn create (
         title:       String,
         description: String,
         link:        String,
@@ -350,7 +350,6 @@ impl NewStore {
         price:       i32,
         user_id:     i32,
         position:    i16,
-        view:        i32,
     ) -> Self {
         NewStore {
             title:       title,
@@ -362,7 +361,7 @@ impl NewStore {
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
             position:    position,
-            view:        view,
+            view:        0,
         }
     }
 }
@@ -401,7 +400,7 @@ pub struct NewStoreImage {
 }
 
 impl NewStoreImage {
-    pub fn from_store_images_form(
+    pub fn create (
         store_id: i32, src: String) -> Self {
         NewStoreImage {
             store: store_id,
@@ -426,7 +425,7 @@ pub struct NewStoreVideo {
 }
 
 impl NewStoreVideo {
-    pub fn from_store_videos_form (
+    pub fn create (
         store_id: i32, src: String) -> Self {
         NewStoreVideo {
             store: store_id,

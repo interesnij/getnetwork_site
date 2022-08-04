@@ -510,14 +510,13 @@ pub async fn create_blog(session: Session, mut payload: Multipart) -> impl Respo
             let _connection = establish_connection();
 
             let form = item_form(payload.borrow_mut(), _request_user.id).await;
-            let new_blog = NewBlog::from_blog_form (
+            let new_blog = NewBlog::create (
                 form.title.clone(),
                 form.description.clone(),
                 form.link.clone(),
                 form.main_image.clone(),
                 form.is_active.clone(),
                 _request_user.id,
-                0,
             );
 
             let _blog = diesel::insert_into(schema::blogs::table)
@@ -526,7 +525,7 @@ pub async fn create_blog(session: Session, mut payload: Multipart) -> impl Respo
                 .expect("Error saving blog.");
 
             for image in form.images.iter() {
-                let new_image = NewBlogImage::from_blog_images_form (
+                let new_image = NewBlogImage::create (
                     _blog.id,
                     image.to_string()
                 );
@@ -536,7 +535,7 @@ pub async fn create_blog(session: Session, mut payload: Multipart) -> impl Respo
                     .expect("Error saving blog.");
                 };
             for video in form.videos.iter() {
-                let new_video = NewBlogVideo::from_blog_videos_form (
+                let new_video = NewBlogVideo::create (
                     _blog.id,
                     video.to_string()
                 );
@@ -644,7 +643,7 @@ pub async fn edit_blog(session: Session, mut payload: Multipart, _id: web::Path<
             .expect("E");
 
             for _image in form.images.iter() {
-                let new_edit_image = NewBlogImage::from_blog_images_form (
+                let new_edit_image = NewBlogImage::create (
                     _blog_id,
                     _image.to_string()
                 );
@@ -654,7 +653,7 @@ pub async fn edit_blog(session: Session, mut payload: Multipart, _id: web::Path<
                 .expect("E.");
             };
             for _video in form.videos.iter() {
-                let new_video = NewBlogVideo::from_blog_videos_form (
+                let new_video = NewBlogVideo::create (
                     _blog_id,
                     _video.to_string()
                 );

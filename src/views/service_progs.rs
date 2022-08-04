@@ -548,7 +548,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
             let _connection = establish_connection();
 
             let form = store_form(payload.borrow_mut(), _request_user.id).await;
-            let new_service = NewService::from_service_form (
+            let new_service = NewService::create (
                 form.title.clone(),
                 form.description.clone(),
                 form.link.clone(),
@@ -557,7 +557,6 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 0,
                 _request_user.id,
                 form.position,
-                0,
             );
 
             let _service = diesel::insert_into(schema::services::table)
@@ -566,7 +565,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 .expect("E.");
 
             for image in form.images.iter() {
-                let new_image = NewServiceImage::from_service_images_form (
+                let new_image = NewServiceImage::create (
                     _service.id,
                     image.to_string()
                 );
@@ -576,7 +575,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                     .expect("E.");
                 };
             for video in form.videos.iter() {
-                let new_video = NewServiceVideo::from_service_videos_form (
+                let new_video = NewServiceVideo::create (
                     _service.id,
                     video.to_string()
                 );
@@ -770,7 +769,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             .expect("E");
 
             for _image in form.images.iter() {
-                let new_edit_image = NewServiceImage::from_service_images_form (
+                let new_edit_image = NewServiceImage::create (
                     _service_id,
                     _image.to_string()
                 );
@@ -780,7 +779,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 .expect("E.");
             };
             for _video in form.videos.iter() {
-                let new_video = NewServiceVideo::from_service_videos_form (
+                let new_video = NewServiceVideo::create (
                     _service_id,
                     _video.to_string()
                 );

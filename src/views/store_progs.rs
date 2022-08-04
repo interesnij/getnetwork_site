@@ -541,7 +541,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
             let _connection = establish_connection();
 
             let form = store_form(payload.borrow_mut(), _request_user.id).await;
-            let new_store = NewStore::from_store_form (
+            let new_store = NewStore::create (
                 form.title.clone(),
                 form.description.clone(),
                 form.link.clone(),
@@ -550,7 +550,6 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                 0,
                 _request_user.id,
                 form.position,
-                0,
             );
 
             let _store = diesel::insert_into(schema::stores::table)
@@ -559,7 +558,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                 .expect("E.");
 
             for image in form.images.iter() {
-                let new_image = NewStoreImage::from_store_images_form (
+                let new_image = NewStoreImage::create (
                     _store.id,
                     image.to_string()
                 );
@@ -569,7 +568,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                     .expect("E.");
                 };
             for video in form.videos.iter() {
-                let new_video = NewStoreVideo::from_store_videos_form (
+                let new_video = NewStoreVideo::create (
                     _store.id,
                     video.to_string()
                 );
@@ -763,7 +762,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
             .expect("E");
 
             for _image in form.images.iter() {
-                let new_edit_image = NewStoreImage::from_store_images_form (
+                let new_edit_image = NewStoreImage::create (
                     _store_id,
                     _image.to_string()
                 );
@@ -773,7 +772,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 .expect("E.");
             };
             for _video in form.videos.iter() {
-                let new_video = NewStoreVideo::from_store_videos_form (
+                let new_video = NewStoreVideo::create (
                     _store_id,
                     _video.to_string()
                 );

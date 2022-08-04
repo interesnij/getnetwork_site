@@ -259,14 +259,13 @@ pub struct NewBlog {
 }
 
 impl NewBlog {
-    pub fn from_blog_form(
+    pub fn create (
         title: String,
         description: String,
         link: String,
         image: String,
         is_active: bool,
-        user_id: i32,
-        view: i32) -> Self {
+        user_id: i32) -> Self {
         NewBlog {
             title:       title,
             description: Some(description),
@@ -323,7 +322,7 @@ pub struct NewBlogImage {
 }
 
 impl NewBlogImage {
-    pub fn from_blog_images_form (
+    pub fn create (
         blog_id: i32, src: String) -> Self {
         NewBlogImage {
             blog: blog_id,
@@ -348,7 +347,7 @@ pub struct NewBlogVideo {
 }
 
 impl NewBlogVideo {
-    pub fn from_blog_videos_form (
+    pub fn create (
         blog_id: i32, src: String) -> Self {
         NewBlogVideo {
             blog: blog_id,
