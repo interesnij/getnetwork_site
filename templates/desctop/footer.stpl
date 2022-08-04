@@ -19,8 +19,10 @@
             <div class="footer-made">
                 Наша мета-вселенная.
             </div>
-            <p class="device"></p>
-            <p class="city"></p>  
+            <p>
+              <span class="device"></span><br />
+              <span class="city"></span>
+            </p>
         </div>
      </div>
 </footer>
