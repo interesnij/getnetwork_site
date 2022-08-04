@@ -28,7 +28,7 @@ function get_or_create_cookie_user() {
       else {
         _device = "Телефон";
       }
-      sidebar = document.body.querySelector(".fixed_nav_block");
+      sidebar = document.body.querySelector("#fixed_nav_block");
       sidebar.querySelector(".device").innerHTML = data.ip + " (" + _device + ") ";
       sidebar.querySelector(".city").innerHTML = data.city_ru + " (" + data.city_en + ") ";
 
