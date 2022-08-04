@@ -7,7 +7,7 @@ use actix_web::{
     http::StatusCode,
 };
 
-use crate::models::{User, HistoryResponse};
+use crate::models::User;
 use serde::Deserialize;
 use crate::utils::{
     establish_connection,
