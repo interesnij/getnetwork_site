@@ -7,7 +7,7 @@ use actix_web::{
     http::StatusCode,
 };
 
-use crate::models::User;
+use crate::models::{User, CookieUser};
 use serde::Deserialize;
 use crate::utils::{
     establish_connection,
@@ -567,8 +567,8 @@ pub struct HistoryParams {
     pub speed:  i16,
 }
 
-pub async fn create_c_user(req: HttpRequest) -> {
-    use crate::models::{NewCookieUser, CookieUser};
+pub async fn create_c_user(req: HttpRequest) -> CookieUser {
+    use crate::models::NewCookieUser;
 
     #[derive(Debug, Deserialize)]
     pub struct UserLoc {
