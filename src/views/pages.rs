@@ -567,7 +567,7 @@ pub struct HistoryParams {
     pub speed:  i16,
 }
 
-pub async fn create_c_user(req: HttpRequest) -> CookieUser {
+pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
     use crate::models::NewCookieUser;
 
     #[derive(Debug, Deserialize)]
@@ -605,8 +605,8 @@ pub async fn create_c_user(req: HttpRequest) -> CookieUser {
 
     let ip = req.peer_addr().unwrap().ip().to_string();
     let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_owned() + &ip;
-    let _geo_request = reqwest::get(_geo_url).expect("E.");
-    let new_request = _geo_request.text().unwrap();
+    let _geo_request = reqwest::get(_geo_url).await.expect("E.");
+    let new_request = _geo_request.text().await.unwrap();
     let location200: UserLoc = serde_json::from_str(&new_request).unwrap();
     let _user = NewCookieUser {
         ip:         ip,
@@ -626,7 +626,7 @@ pub async fn create_c_user(req: HttpRequest) -> CookieUser {
     return _new_user;
 }
 
-pub async fn get_c_user(id: i32, req: HttpRequest) -> CookieUser {
+pub async fn get_c_user(id: i32, req: &HttpRequest) -> CookieUser {
     if id > 0 {
         let _connection = establish_connection();
         let _users = cookie_users
@@ -653,7 +653,7 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     let params = web::Query::<HistoryParams>::from_query(&req.query_string());
     let params_2 = params.unwrap();
     let p_id = params_2.id;
-    let current_id = get_c_user(p_id, &req).id;
+    let current_id = get_c_user(p_id, &req).await.id;
 
     let p_page = params_2.page;
     let p_link = params_2.link.clone();
