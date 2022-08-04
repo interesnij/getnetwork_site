@@ -593,8 +593,11 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
         pub name_en: String,
     }
 
+    let _connection = establish_connection();
+    let ip = &req.peer_addr().unwrap().ip().to_string();
+
     let mut device: i16 = 1;
-    for header in &req.headers().into_iter() {
+    for header in req.headers().into_iter() {
         if header.0 == "user-agent" {
             let str_agent = header.1.to_str().unwrap();
             if str_agent.contains("Mobile") {
@@ -604,8 +607,6 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
         }
     };
 
-    let _connection = establish_connection();
-    let ip = req.peer_addr().unwrap().ip().to_string();
     let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_owned() + &ip;
     let _geo_request = reqwest::get(_geo_url).await.expect("E.");
     let new_request = _geo_request.text().await.unwrap();
