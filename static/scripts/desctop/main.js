@@ -29,9 +29,8 @@ function get_or_create_cookie_user() {
   ajax_link.onreadystatechange = function () {
     if ( this.readyState == 4 && this.status == 200 ) {
       data = JSON.parse(ajax_link.responseText);
-      console.log(data);
       console.log(data.id);
-      //setCookie("user", new_color, 90);
+      setCookie("user", data.id, 120);
     }
   }
   ajax_link.send();
