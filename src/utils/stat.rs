@@ -62,7 +62,7 @@ pub fn plus_blog_category_views() -> () {
 }
 pub fn plus_service_category_views() -> () {
     use schema::stat_service_categories::dsl::stat_service_categories;
-    use crate::models::StatServicegCategorie;
+    use crate::models::StatServiceCategorie;
 
     let _connection = establish_connection();
     let items = stat_service_categories
@@ -435,7 +435,7 @@ pub fn plus_logout_views() -> () {
     }
 }
 
-pub fn plus_logout_views() -> () {
+pub fn plus_signup_views() -> () {
     use schema::stat_signups::dsl::stat_signups;
     use crate::models::StatSignup;
 
