@@ -8,7 +8,7 @@ use actix_web::{
 };
 
 use crate::models::{User, CookieUser, HistoryResponse};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use crate::utils::{
     establish_connection,
     get_device_and_ajax,
@@ -643,11 +643,11 @@ pub async fn get_c_user(id: i32, req: &HttpRequest) -> CookieUser {
             return _users.into_iter().nth(0).unwrap();
         }
         else {
-            return create_c_user(&req);
+            return create_c_user(&req).await;
         }
     }
     else {
-        return create_c_user(&req);
+        return create_c_user(&req).await;
     }
 }
 
