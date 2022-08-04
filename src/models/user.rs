@@ -71,28 +71,6 @@ pub struct SessionUser {
     pub username: String,
 }
 
-#[derive(Debug, Deserialize)]
-pub struct UserLoc {
-    pub city:    CityLoc,
-    pub region:  RegionLoc,
-    pub country: CountryLoc,
-}
-#[derive(Debug, Deserialize)]
-pub struct CityLoc {
-    pub name_ru: String,
-    pub name_en: String,
-}
-#[derive(Debug, Deserialize)]
-pub struct RegionLoc {
-    pub name_ru: String,
-    pub name_en: String,
-}
-#[derive(Debug, Deserialize)]
-pub struct CountryLoc {
-    pub name_ru: String,
-    pub name_en: String,
-}
-
 #[derive(Debug, Queryable, PartialEq, Serialize, Identifiable)]
 pub struct CookieUser {
     pub id:         i32,
@@ -105,74 +83,6 @@ pub struct CookieUser {
     pub country_ru: Option<String>,
     pub country_en: Option<String>,
     pub created:    chrono::NaiveDateTime,
-}
-
-impl CookieUser {
-    pub fn create_user(req: &HttpRequest, device: i16) -> CookieUser {
-        let ip = req.peer_addr().unwrap().ip().to_string();
-        let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_owned() + &ip;
-        let _geo_request = reqwest::get(_geo_url).expect("E.");
-        let new_request = _geo_request.text().unwrap();
-        let location200: UserLoc = serde_json::from_str(&new_request).unwrap();
-        let _user = NewCookieUser {
-            ip:         ip,
-            device:     device,
-            city_ru:    Some(location200.city.name_ru),
-            city_en:    Some(location200.city.name_en),
-            region_ru:  Some(location200.region.name_ru),
-            region_en:  Some(location200.region.name_en),
-            country_ru: Some(location200.country.name_ru),
-            country_en: Some(location200.country.name_en),
-            created:    chrono::Local::now().naive_utc(),
-        };
-        let _new_user = diesel::insert_into(schema::cookie_users::table)
-            .values(&_user)
-            .get_result::<CookieUser>(&_connection)
-            .expect("Error.");
-
-        return _new_user;
-    }
-    pub fn get_user(id: i32, req: &HttpRequest) -> CookieUser {
-        use crate::schema::cookie_users::dsl::cookie_users;
-
-        if id > 0 {
-            let _connection = establish_connection();
-            let _users = cookie_users
-                .filter(schema::cookie_users::id.eq(id))
-                .load::<CookieUser>(&_connection)
-                .expect("E");
-
-            if _users.len() > 0 {
-                return _users.into_iter().nth(0).unwrap();
-            }
-            else {
-                let mut device: i16 = 1;
-                for header in req.headers().into_iter() {
-                    if header.0 == "user-agent" {
-                        let str_agent = header.1.to_str().unwrap();
-                        if _val.contains("Mobile") {
-                            device = 2;
-                        };
-                        break;
-                    }
-                };
-                return CookieUser::create_user(req, device);
-            }
-        }
-        else {
-            let mut device: i16 = 1;
-            for header in req.headers().into_iter() {
-                if header.0 == "user-agent" {
-                    let str_agent = header.1.to_str().unwrap();
-                    if str_agent.contains("Mobile") {
-                        device = 2;
-                    };
-                    break;
-                }
-            };
-            return CookieUser::create_user(req, device);
-        }
-    }
 }
 
 #[derive(Debug, Deserialize, Insertable)]

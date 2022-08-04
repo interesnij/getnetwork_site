@@ -567,14 +567,92 @@ pub struct HistoryParams {
     pub speed:  i16,
 }
 
+pub async fn create_c_user(req: HttpRequest) -> {
+    use crate::models::{NewCookieUser, CookieUser};
+
+    #[derive(Debug, Deserialize)]
+    pub struct UserLoc {
+        pub city:    CityLoc,
+        pub region:  RegionLoc,
+        pub country: CountryLoc,
+    }
+    #[derive(Debug, Deserialize)]
+    pub struct CityLoc {
+        pub name_ru: String,
+        pub name_en: String,
+    }
+    #[derive(Debug, Deserialize)]
+    pub struct RegionLoc {
+        pub name_ru: String,
+        pub name_en: String,
+    }
+    #[derive(Debug, Deserialize)]
+    pub struct CountryLoc {
+        pub name_ru: String,
+        pub name_en: String,
+    }
+    
+    let mut device: i16 = 1;
+    for header in &req.headers().into_iter() {
+        if header.0 == "user-agent" {
+            let str_agent = header.1.to_str().unwrap();
+            if str_agent.contains("Mobile") {
+                device = 2;
+            };
+            break;
+        }
+    };
+
+    let ip = req.peer_addr().unwrap().ip().to_string();
+    let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_owned() + &ip;
+    let _geo_request = reqwest::get(_geo_url).expect("E.");
+    let new_request = _geo_request.text().unwrap();
+    let location200: UserLoc = serde_json::from_str(&new_request).unwrap();
+    let _user = NewCookieUser {
+        ip:         ip,
+        device:     device,
+        city_ru:    Some(location200.city.name_ru),
+        city_en:    Some(location200.city.name_en),
+        region_ru:  Some(location200.region.name_ru),
+        region_en:  Some(location200.region.name_en),
+        country_ru: Some(location200.country.name_ru),
+        country_en: Some(location200.country.name_en),
+        created:    chrono::Local::now().naive_utc(),
+    };
+    let _new_user = diesel::insert_into(schema::cookie_users::table)
+        .values(&_user)
+        .get_result::<CookieUser>(&_connection)
+        .expect("Error.");
+    return _new_user.id;
+}
+
 pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::models::{CookieUser, CookieStat};
+    use crate::schema::cookie_users::dsl::cookie_users;
 
     let params = web::Query::<HistoryParams>::from_query(&req.query_string());
     let params_2 = params.unwrap();
     let p_id = params_2.id;
+    let current_id: i32;
 
-    let current_id = CookieUser::get_user(p_id, &req).id;
+    if p_id > 0 {
+        let _connection = establish_connection();
+        let _users = cookie_users
+            .filter(schema::cookie_users::id.eq(p_id))
+            .load::<CookieUser>(&_connection)
+            .expect("E");
+
+        if _users.len() > 0 {
+            current_id = _users.into_iter().nth(0).unwrap().id;
+        }
+        else {
+            current_id = create_c_user(&req);
+        }
+    }
+    else {
+        current_id = create_c_user(&req);
+    }
+
     let p_page = params_2.page;
     let p_link = params_2.link.clone();
     let p_title = params_2.title.clone();
