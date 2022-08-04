@@ -685,7 +685,7 @@ pub struct ObjectResponse {
 pub async fn object_history(req: HttpRequest, id: web::Path<i32>) -> web::Json<ObjectResponse> {
     use crate::models::CookieUser;
 
-    let _user = get_c_user(*id, &req);
+    let _user = get_c_user(*id, &req).await;
     return web::Json( ObjectResponse {
         id:         _user.id,
         ip:         _user.ip,
