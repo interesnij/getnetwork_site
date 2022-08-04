@@ -2,7 +2,7 @@ use crate::schema;
 use crate::schema::{
     users,
     cookie_users,
-    cookie_stat,
+    cookie_stats,
 };
 use diesel::{
     Queryable,
