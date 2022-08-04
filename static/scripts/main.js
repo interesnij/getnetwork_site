@@ -435,7 +435,6 @@ function get_json_data(url) {
   }
   ajax_link.send();
 }
-}
 
 function get_custom_design() {
   color = "white";
