@@ -7,7 +7,7 @@ use actix_web::{
     http::StatusCode,
 };
 
-use crate::models::{User, CookieUser};
+use crate::models::{User, CookieUser, HistoryResponse};
 use serde::Deserialize;
 use crate::utils::{
     establish_connection,
@@ -635,14 +635,14 @@ pub async fn get_c_user(id: i32, req: &HttpRequest) -> CookieUser {
             .expect("E");
 
         if _users.len() > 0 {
-            current_id = _users.into_iter().nth(0).unwrap();
+            return _users.into_iter().nth(0).unwrap();
         }
         else {
-            current_id = create_c_user(&req);
+            return create_c_user(&req);
         }
     }
     else {
-        current_id = create_c_user(&req);
+        return create_c_user(&req);
     }
 }
 
@@ -685,7 +685,7 @@ pub struct ObjectResponse {
 pub async fn object_history(req: HttpRequest, id: web::Path<i32>) -> web::Json<ObjectResponse> {
     use crate::models::CookieUser;
 
-    let _user = get_user(*id, &req);
+    let _user = get_c_user(*id, &req);
     return web::Json( ObjectResponse {
         id:         _user.id,
         ip:         _user.ip,
