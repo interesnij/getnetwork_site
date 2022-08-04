@@ -28,7 +28,9 @@ pub struct WikiCategories {
     pub position:    i16,
     pub image:       Option<String>,
     pub count:       i16,
+    pub view:        i32,
 }
+
 impl WikiCategories {
     pub fn get_image(&self) -> String {
         if self.image.is_some() {
@@ -119,6 +121,7 @@ pub struct NewWikiCategories {
     pub position:    i16,
     pub image:       Option<String>,
     pub count:       i16,
+    pub view:        i32,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -128,7 +131,6 @@ pub struct EditWikiCategories {
     pub description: Option<String>,
     pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i16,
 }
 
 #[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]

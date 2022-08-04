@@ -28,6 +28,7 @@ pub struct ServiceCategories {
     pub position:    i16,
     pub image:       Option<String>,
     pub count:       i16,
+    pub view:        i32,
 }
 impl ServiceCategories {
     pub fn get_image(&self) -> String {
@@ -117,6 +118,7 @@ pub struct NewServiceCategories {
     pub position:    i16,
     pub image:       Option<String>,
     pub count:       i16,
+    pub view:        i32,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -126,7 +128,6 @@ pub struct EditServiceCategories {
     pub description: Option<String>,
     pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i16,
 }
 
 #[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]

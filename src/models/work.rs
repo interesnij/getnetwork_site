@@ -29,7 +29,9 @@ pub struct WorkCategories {
     pub position:    i16,
     pub image:       Option<String>,
     pub count:       i16,
+    pub view:        i32,
 }
+
 impl WorkCategories {
     pub fn get_image(&self) -> String {
         if self.image.is_some() {
@@ -119,7 +121,9 @@ pub struct NewWorkCategories {
     pub position:    i16,
     pub image:       Option<String>,
     pub count:       i16,
+    pub view:        i32,
 }
+
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="work_categories"]
 pub struct EditWorkCategories {
@@ -127,7 +131,6 @@ pub struct EditWorkCategories {
     pub description: Option<String>,
     pub position:    i16,
     pub image:       Option<String>,
-    pub count:       i16,
 }
 
 /////// Work //////

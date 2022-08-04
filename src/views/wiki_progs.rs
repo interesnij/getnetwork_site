@@ -486,7 +486,8 @@ pub async fn create_wiki_categories(session: Session, mut payload: Multipart) ->
                 description: Some(form.description.clone()),
                 position:    form.position,
                 image:       Some(form.image.clone()),
-                count:       0
+                count:       0,
+                view:        0,
             };
             let _new_wiki = diesel::insert_into(schema::wiki_categories::table)
                 .values(&new_cat)
@@ -718,7 +719,6 @@ pub async fn edit_wiki_category(session: Session, mut payload: Multipart, _id: w
                 description: Some(form.description.clone()),
                 position:    form.position,
                 image:       Some(form.image.clone()),
-                count:       _category[0].count,
             };
 
             diesel::update(&_category[0])

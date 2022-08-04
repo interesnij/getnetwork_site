@@ -97,7 +97,8 @@ CREATE TABLE blog_categories (
     description VARCHAR(500),
     position    SMALLINT NOT NULL,
     image       VARCHAR(500),
-    count       SMALLINT NOT NULL
+    count       SMALLINT NOT NULL,
+    view        INT NOT NULL,
 );
 
 CREATE TABLE blogs (
@@ -264,7 +265,8 @@ CREATE TABLE service_categories (
     description VARCHAR(500),
     position    SMALLINT NOT NULL,
     image       VARCHAR(500),
-    count       SMALLINT NOT NULL
+    count       SMALLINT NOT NULL,
+    view        INT NOT NULL,
 );
 
 CREATE TABLE services (
@@ -332,7 +334,8 @@ CREATE TABLE store_categories (
     description VARCHAR(1000),
     position    SMALLINT NOT NULL,
     image       VARCHAR(500),
-    count       SMALLINT NOT NULL
+    count       SMALLINT NOT NULL,
+    view        INT NOT NULL,
 );
 
 CREATE TABLE stores (
@@ -400,7 +403,8 @@ CREATE TABLE wiki_categories (
     description VARCHAR(1000),
     position    SMALLINT NOT NULL,
     image       VARCHAR(500),
-    count       SMALLINT NOT NULL
+    count       SMALLINT NOT NULL,
+    view        INT NOT NULL,
 );
 
 CREATE TABLE wikis (
@@ -467,7 +471,8 @@ CREATE TABLE work_categories (
     description VARCHAR(500),
     position    SMALLINT NOT NULL,
     image       VARCHAR(500),
-    count       SMALLINT NOT NULL
+    count       SMALLINT NOT NULL,
+    view        INT NOT NULL,
 );
 
 CREATE TABLE works (
