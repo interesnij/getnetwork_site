@@ -70,15 +70,3 @@ CREATE TABLE stat_profils (
     id   SERIAL PRIMARY KEY,
     view INT NOT NULL
 );
-
-
-ALTER TABLE blog_categories ADD COLUMN view
-INT NOT NULL;
-ALTER TABLE service_categories ADD COLUMN view
-INT NOT NULL;
-ALTER TABLE store_categories ADD COLUMN view
-INT NOT NULL;
-ALTER TABLE wiki_categories ADD COLUMN view
-INT NOT NULL;
-ALTER TABLE work_categories ADD COLUMN view
-INT NOT NULL;
