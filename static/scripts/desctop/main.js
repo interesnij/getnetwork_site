@@ -15,14 +15,25 @@ on('body', 'mouseout', '.mn-sub', function(event) {
 
 function get_or_create_cookie_user() {
   user = getCookie("user");
+  var id;
   if (user != "") {
-    data = get_json_data("/object_history/" + user + "/");
+    id = user;
   }
   else {
-    data = get_json_data("/object_history/0/");
+    id = 0;
   }
-  console.log(data);
-  //setCookie("user", new_color, 90);
+  ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  ajax_link.overrideMimeType("application/json");
+  ajax_link.open( 'GET', "/object_history/" + id + "/", true );
+  ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  ajax_link.onreadystatechange = function () {
+    if ( this.readyState == 4 && this.status == 200 ) {
+      data = JSON.parse(ajax_link.responseText);
+      console.log(data);
+      //setCookie("user", new_color, 90);
+    }
+  }
+  ajax_link.send();
 }
 
 function check_first_load() {
