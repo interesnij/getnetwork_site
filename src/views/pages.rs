@@ -569,6 +569,7 @@ pub struct HistoryParams {
 
 pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
     use crate::models::NewCookieUser;
+    use crate::schema;
 
     #[derive(Debug, Deserialize)]
     pub struct UserLoc {
@@ -603,6 +604,7 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
         }
     };
 
+    let _connection = establish_connection();
     let ip = req.peer_addr().unwrap().ip().to_string();
     let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_owned() + &ip;
     let _geo_request = reqwest::get(_geo_url).await.expect("E.");
@@ -628,6 +630,9 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
 
 pub async fn get_c_user(id: i32, req: &HttpRequest) -> CookieUser {
     if id > 0 {
+        use crate::schema;
+        use crate::schema::cookie_users::dsl::cookie_users;
+
         let _connection = establish_connection();
         let _users = cookie_users
             .filter(schema::cookie_users::id.eq(id))
