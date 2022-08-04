@@ -279,6 +279,7 @@ CREATE TABLE services (
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
     position    SMALLINT NOT NULL,
+    view        INT NOT NULL,
 
     CONSTRAINT fk_service_creator
         FOREIGN KEY(user_id)
@@ -346,6 +347,7 @@ CREATE TABLE stores (
     user_id      INT NOT NULL,
     created      TIMESTAMP NOT NULL,
     position     SMALLINT NOT NULL,
+    view         INT NOT NULL,
 
     CONSTRAINT fk_store_creator
         FOREIGN KEY(user_id)
@@ -411,6 +413,7 @@ CREATE TABLE wikis (
     is_active   BOOLEAN NOT NULL,
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
+    view        INT NOT NULL,
 
     CONSTRAINT fk_wiki_creator
         FOREIGN KEY(user_id)
@@ -479,6 +482,7 @@ CREATE TABLE works (
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
     position    SMALLINT NOT NULL,
+    view        INT NOT NULL,
 
     CONSTRAINT fk_work_creator
         FOREIGN KEY(user_id)
