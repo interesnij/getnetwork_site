@@ -30,6 +30,16 @@ function get_or_create_cookie_user() {
     if ( this.readyState == 4 && this.status == 200 ) {
       data = JSON.parse(ajax_link.responseText);
       console.log(data);
+      if (data.device == 1) {
+        _device = "Комп";
+      }
+      else {
+        _device = "Телефон";
+      }
+      footer = document.body.querySelector(".footer");
+      footer.querySelector(".device").innerHTML = data.ip + " (" + _device + ") ";
+      footer.querySelector(".city").innerHTML = data.city_ru + " (" + data.city_en + ") ";
+
       setCookie("user", data.id, 120);
     }
   }
