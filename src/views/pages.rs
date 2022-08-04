@@ -591,7 +591,7 @@ pub async fn create_c_user(req: HttpRequest) -> {
         pub name_ru: String,
         pub name_en: String,
     }
-    
+
     let mut device: i16 = 1;
     for header in &req.headers().into_iter() {
         if header.0 == "user-agent" {
@@ -623,7 +623,27 @@ pub async fn create_c_user(req: HttpRequest) -> {
         .values(&_user)
         .get_result::<CookieUser>(&_connection)
         .expect("Error.");
-    return _new_user.id;
+    return _new_user;
+}
+
+pub async fn get_c_user(id: i32, req: HttpRequest) -> CookieUser {
+    if id > 0 {
+        let _connection = establish_connection();
+        let _users = cookie_users
+            .filter(schema::cookie_users::id.eq(id))
+            .load::<CookieUser>(&_connection)
+            .expect("E");
+
+        if _users.len() > 0 {
+            current_id = _users.into_iter().nth(0).unwrap();
+        }
+        else {
+            current_id = create_c_user(&req);
+        }
+    }
+    else {
+        current_id = create_c_user(&req);
+    }
 }
 
 pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
@@ -633,25 +653,7 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     let params = web::Query::<HistoryParams>::from_query(&req.query_string());
     let params_2 = params.unwrap();
     let p_id = params_2.id;
-    let current_id: i32;
-
-    if p_id > 0 {
-        let _connection = establish_connection();
-        let _users = cookie_users
-            .filter(schema::cookie_users::id.eq(p_id))
-            .load::<CookieUser>(&_connection)
-            .expect("E");
-
-        if _users.len() > 0 {
-            current_id = _users.into_iter().nth(0).unwrap().id;
-        }
-        else {
-            current_id = create_c_user(&req);
-        }
-    }
-    else {
-        current_id = create_c_user(&req);
-    }
+    let current_id = get_c_user(p_id, &req).id;
 
     let p_page = params_2.page;
     let p_link = params_2.link.clone();
@@ -683,7 +685,7 @@ pub struct ObjectResponse {
 pub async fn object_history(req: HttpRequest, id: web::Path<i32>) -> web::Json<ObjectResponse> {
     use crate::models::CookieUser;
 
-    let _user = CookieUser::get_user(*id, &req);
+    let _user = get_user(*id, &req);
     return web::Json( ObjectResponse {
         id:         _user.id,
         ip:         _user.ip,
