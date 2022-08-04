@@ -15,7 +15,7 @@ pub fn plus_mainpage_views(password: &str) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
-        diesel::update(item)
+        diesel::update(&item)
             .set(schema::stat_mainpages::view.eq(item.view + 1))
             .get_result::<StatMainpage>(&_connection)
             .expect("Error.");
