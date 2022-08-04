@@ -1,6 +1,6 @@
 use crate::schema;
 use crate::utils::establish_connection;
-use crate::diesel::{ExpressionMethods, RunQueryDsl};
+use crate::diesel::{ExpressionMethods, RunQueryDsl, QueryDsl};
 
 
 pub fn plus_mainpage_views(password: &str) -> () {
