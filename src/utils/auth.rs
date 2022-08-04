@@ -1,4 +1,3 @@
-
 use argonautica::{Hasher, Verifier};
 use actix_session::Session;
 use actix_web::{

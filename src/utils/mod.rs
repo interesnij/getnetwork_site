@@ -1,9 +1,11 @@
 mod payload_handler;
 mod auth;
+mod stat;
 
 pub use self::{
     payload_handler::*,
     auth::*,
+    stat::*,
 };
 use actix_web::{
     HttpRequest,

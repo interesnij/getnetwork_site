@@ -653,7 +653,7 @@ pub async fn get_c_user(id: i32, req: &HttpRequest) -> CookieUser {
 }
 
 pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
-    use crate::models::{CookieUser, CookieStat};
+    use crate::models::CookieStat;
     use crate::schema::cookie_users::dsl::cookie_users;
 
     let params = web::Query::<HistoryParams>::from_query(&req.query_string());
@@ -689,8 +689,6 @@ pub struct ObjectResponse {
     pub country_en: Option<String>,
 }
 pub async fn object_history(req: HttpRequest, id: web::Path<i32>) -> web::Json<ObjectResponse> {
-    use crate::models::CookieUser;
-
     let _user = get_c_user(*id, &req).await;
     return web::Json( ObjectResponse {
         id:         _user.id,

@@ -27,8 +27,8 @@ use diesel::{
 };
 use serde::{Serialize, Deserialize};
 use crate::utils::establish_connection;
-use crate::diesel::{ExpressionMethods, RunQueryDsl, QueryDsl};
-use actix_web::{HttpRequest, web::Json};
+use crate::diesel::{ExpressionMethods, RunQueryDsl};
+use actix_web::web::Json;
 
 
 #[derive(Debug, Queryable, PartialEq, Serialize, Identifiable)]
