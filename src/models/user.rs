@@ -111,8 +111,8 @@ impl CookieUser {
     pub fn create_user(req: &HttpRequest, device: i16) -> CookieUser {
         let ip = req.peer_addr().unwrap().ip().to_string();
         let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_owned() + &ip;
-        let _geo_request = reqwest::get(_geo_url).await.expect("E.");
-        let new_request = _geo_request.text().await.unwrap();
+        let _geo_request = reqwest::get(_geo_url).expect("E.");
+        let new_request = _geo_request.text().unwrap();
         let location200: UserLoc = serde_json::from_str(&new_request).unwrap();
         let _user = NewCookieUser {
             ip:         ip,
