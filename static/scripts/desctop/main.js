@@ -13,6 +13,18 @@ on('body', 'mouseout', '.mn-sub', function(event) {
   this.style.display = "none"
 });
 
+function get_or_create_cookie_user() {
+  user = getCookie("user");
+  if (user != "") {
+    data = get_json_data("/object_history/" + user + "/");
+  }
+  else {
+    data = get_json_data("/object_history/0/");
+  }
+  console.log(data);
+  //setCookie("user", new_color, 90);
+}
+
 function check_first_load() {
   if (document.body.classList.contains("first_load")) {
     url = window.location.href;
@@ -27,6 +39,7 @@ function check_first_load() {
         rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
         get_custom_design();
+        get_or_create_cookie_user();
         //window.history.pushState({route: url}, "network", url);
       }
     }
