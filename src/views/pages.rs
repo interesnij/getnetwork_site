@@ -51,17 +51,17 @@ pub async fn index(req: HttpRequest, session: Session) -> actix_web::Result<Http
     else {
         use crate::models::{Work, Service, Wiki, Blog, Store};
 
-        for header in req.headers().into_iter() {
-            if header.0 == "cookie" {
-                let str_cookie = header.1.to_str().unwrap();
-                let _cookie: Vec<&str> = str_cookie.split(";").collect();
-                for c in _cookie.iter() {
-                    let split_c: Vec<&str> = c.split("=").collect();
-                    println!("name {:?}", split_c[0].trim());
-                    println!("value {:?}", split_c[1]);
-                }
-            }
-        };
+        //for header in req.headers().into_iter() {
+        //    if header.0 == "cookie" {
+        //        let str_cookie = header.1.to_str().unwrap();
+        //        let _cookie: Vec<&str> = str_cookie.split(";").collect();
+        //        for c in _cookie.iter() {
+        //            let split_c: Vec<&str> = c.split("=").collect();
+        //            println!("name {:?}", split_c[0].trim());
+        //            println!("value {:?}", split_c[1]);
+        //        }
+        //    }
+        //};
         let _last_works = Work::get_3_works();
         let _last_services = Service::get_6_services();
         let _last_wikis = Wiki::get_3_wikis();
