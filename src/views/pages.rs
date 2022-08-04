@@ -564,7 +564,7 @@ pub struct HistoryParams {
     pub link:   String,
     pub title:  String,
     pub height: f64,
-    pub speed:  i32,
+    pub speed:  i16,
 }
 
 pub async fn create_history(req: HttpRequest) -> web::Json<HistoryParams> {
@@ -602,10 +602,10 @@ pub struct ObjectResponse {
     pub country_ru: Option<String>,
     pub country_en: Option<String>,
 }
-pub async fn object_history(req: HttpRequest, id: web::Path<i32>) -> web::Json<EditDoc> {
+pub async fn object_history(req: HttpRequest, id: web::Path<i32>) -> web::Json<ObjectResponse> {
     use crate::models::CookieUser;
 
-    let _user = CookieUser::get_user(id, &req);
+    let _user = CookieUser::get_user(*id, &req);
     return web::Json( ObjectResponse {
         id:         _user.id,
         ip:         _user.ip,

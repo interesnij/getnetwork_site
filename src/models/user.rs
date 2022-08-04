@@ -110,7 +110,7 @@ pub struct CookieUser {
 impl CookieUser {
     pub fn create_user(req: &HttpRequest, device: i16) -> CookieUser {
         let ip = req.peer_addr().unwrap().ip().to_string();
-        let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_owned() + &ipaddr;
+        let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_owned() + &ip;
         let _geo_request = reqwest::get(_geo_url).await.expect("E.");
         let new_request = _geo_request.text().await.unwrap();
         let location200: UserLoc = serde_json::from_str(&new_request).unwrap();
@@ -133,7 +133,9 @@ impl CookieUser {
         return _new_user;
     }
     pub fn get_user(id: i32, req: &HttpRequest) -> i32 {
-        if user_id > 0 {
+        use crate::schema::cookie_users::dsl::cookie_users;
+
+        if id > 0 {
             let _connection = establish_connection();
             let _users = cookie_users
                 .filter(schema::cookie_users::id.eq(id))
@@ -154,7 +156,7 @@ impl CookieUser {
                         break;
                     }
                 };
-                return CookieUser::create_user(device);
+                return CookieUser::create_user(req, device);
             }
         }
         else {
@@ -162,13 +164,13 @@ impl CookieUser {
             for header in req.headers().into_iter() {
                 if header.0 == "user-agent" {
                     let str_agent = header.1.to_str().unwrap();
-                    if _val.contains("Mobile") {
+                    if str_agent.contains("Mobile") {
                         device = 2;
                     };
                     break;
                 }
             };
-            return CookieUser::create_user(device);
+            return CookieUser::create_user(req, device);
         }
     }
 }
@@ -269,6 +271,8 @@ pub struct HistoryResponse {
 impl CookieStat {
     pub fn create(user_id: i32, page: i16, link: String,
         title: String, height: f64, speed: i16) -> Json<HistoryResponse> {
+
+        let _connection = establish_connection();
         let _h = NewCookieStat {
             user_id: user_id,
             page:    page,
