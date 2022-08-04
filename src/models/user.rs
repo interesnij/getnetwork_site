@@ -296,7 +296,7 @@ pub struct StatWikiCategorie {
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_service_categories"]
+#[table_name="stat_wiki_categories"]
 pub struct NewStatWikiCategorie {
     pub view: i32,
 }
@@ -309,7 +309,7 @@ pub struct StatWorkCategorie {
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_service_categories"]
+#[table_name="stat_work_categories"]
 pub struct NewStatWorkCategorie {
     pub view: i32,
 }
