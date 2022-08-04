@@ -27,7 +27,7 @@ CREATE TABLE users (
 CREATE TABLE cookie_users (
     id         SERIAL PRIMARY KEY,
     ip         VARCHAR(100) NOT NULL, -- ip адрес пользователя
-    client     VARCHAR(1000) NOT NULL,-- сведения о оборудовании
+    device     SMALLINT NOT NULL,     -- комп - смартфон - планшет
     city_ru    VARCHAR(150),          -- город по русски
     city_en    VARCHAR(150),          -- город по английски
     region_ru  VARCHAR(150),          -- регион по русски

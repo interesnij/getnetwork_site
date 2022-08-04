@@ -25,6 +25,33 @@ CREATE TABLE users (
     UNIQUE(email)
 );
 
+CREATE TABLE cookie_users (
+    id         SERIAL PRIMARY KEY,
+    ip         VARCHAR(100) NOT NULL, -- ip адрес пользователя
+    device     SMALLINT NOT NULL,     -- комп - смартфон - планшет
+    city_ru    VARCHAR(150),          -- город по русски
+    city_en    VARCHAR(150),          -- город по английски
+    region_ru  VARCHAR(150),          -- регион по русски
+    region_en  VARCHAR(150),          -- регион по английски
+    country_ru VARCHAR(150),          -- страна по русски
+    country_en VARCHAR(150),          -- страна по английски
+    created    TIMESTAMP NOT NULL     -- когда создан пользователь
+);
+CREATE TABLE cookie_stats (
+    id         SERIAL PRIMARY KEY,
+    user_id    INT NOT NULL,          -- связь с пользователем куки
+    page       SMALLINT NOT NULL,     -- номер страницы, которая просматривается
+    link       VARCHAR(200) NOT NULL, -- ссылка страницы
+    title      VARCHAR(200) NOT NULL, -- название страницы
+    height     FLOAT NOT NULL,        -- высота просмотра страницы
+    speed      SMALLINT NOT NULL,     -- секунды нахождения страницы
+    created    TIMESTAMP NOT NULL,    -- когда создана запись
+
+    CONSTRAINT fk_cookie_stat_user
+        FOREIGN KEY(user_id)
+            REFERENCES cookie_users(id)
+);
+
 -- tags -------
 ---------------
 ---------------
@@ -83,7 +110,7 @@ CREATE TABLE blogs (
     is_active   BOOLEAN NOT NULL,
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
-    view        INT NOT NULL,  
+    view        INT NOT NULL,
 
     CONSTRAINT fk_blog_creator_2
         FOREIGN KEY(user_id)

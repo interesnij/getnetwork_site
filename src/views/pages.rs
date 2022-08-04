@@ -6,7 +6,8 @@ use actix_web::{
     error::InternalError,
     http::StatusCode,
 };
-use crate::models::User;
+
+use crate::models::{User, HistoryResponse};
 use serde::Deserialize;
 use crate::utils::{
     establish_connection,
@@ -31,6 +32,8 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/feedback_list/", web::get().to(feedback_list_page));
     config.route("/serve_list/", web::get().to(serve_list_page));
     config.route("/load_item/", web::get().to(get_load_page));
+    config.route("/create_history/", web::get().to(create_history));
+    config.route("/object_history/{id}/", web::get().to(object_history));
 }
 
 #[derive(Debug, Deserialize)]
@@ -552,4 +555,66 @@ pub async fn get_load_page(req: HttpRequest) -> actix_web::Result<HttpResponse> 
     else {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
+}
+
+#[derive(Debug, Deserialize)]
+pub struct HistoryParams {
+    pub id:     i32,
+    pub page:   i16,
+    pub link:   String,
+    pub title:  String,
+    pub height: f64,
+    pub speed:  i32,
+}
+
+pub async fn create_history(req: HttpRequest) -> web::Json<HistoryParams> {
+    use crate::models::{CookieUser, CookieStat};
+
+    let params = web::Query::<HistoryParams>::from_query(&req.query_string());
+    let params_2 = params.unwrap();
+    let p_id = params_2.id;
+
+    let current_id = CookieUser::get_user(p_id, &req).id;
+    let p_page = params_2.page;
+    let p_link = params_2.link.clone();
+    let p_title = params_2.title.clone();
+    let p_height = params_2.height;
+    let p_speed = params_2.speed;
+    return CookieStat::create (
+        current_id,
+        p_page,
+        p_link,
+        p_title,
+        p_height,
+        p_speed
+    )
+}
+
+#[derive(Debug, Serialize)]
+pub struct ObjectResponse {
+    pub id:         i32,
+    pub ip:         String,
+    pub device:     i16,
+    pub city_ru:    Option<String>,
+    pub city_en:    Option<String>,
+    pub region_ru:  Option<String>,
+    pub region_en:  Option<String>,
+    pub country_ru: Option<String>,
+    pub country_en: Option<String>,
+}
+pub async fn object_history(req: HttpRequest, id: web::Path<i32>) -> web::Json<EditDoc> {
+    use crate::models::CookieUser;
+
+    let _user = CookieUser::get_user(id, &req);
+    return web::Json( ObjectResponse {
+        id:         _user.id,
+        ip:         _user.ip,
+        device:     _user.device,
+        city_ru:    _user.city_ru,
+        city_en:    _user.city_en,
+        region_ru:  _user.region_ru,
+        region_en:  _user.region_en,
+        country_ru: _user.country_ru,
+        country_en: _user.country_en,
+    })
 }

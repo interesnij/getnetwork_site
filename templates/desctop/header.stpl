@@ -9,7 +9,7 @@
                   </a>
               </div>
               <div class="inner-nav desktop-nav">
-                  <ul class="clearlist">
+                      <ul class="clearlist">
                       <li>
                           <a href="/" class="ajax">Главная</a>
                       </li>
@@ -72,24 +72,24 @@
                           <a href="/tags/" class="ajax">Теги</a>
                       </li>
                       <li>
-                          <a href="/info/" class="mn-has-sub">Инфо</a>
-                          <ul class="mn-sub">
-                              <li>
-                                <a class="ajax" href="/help/">Помощь</a>
-                              </li>
-                              <li>
-                                  <a class="ajax" href="/team/">Команда</a>
-                              </li>
-                              <li>
-                                  <a class="ajax" href="/about/">Сайт</a>
-                              </li>
-                              <li>
-                                  <a class="ajax" href="/partnership/">Сотрудничество</a>
-                              </li>
-                              <li>
-                                  <a class="ajax" href="/contacts/">Контакты</a>
-                              </li>
-                          </ul>
+                        <a href="/info/" class="mn-has-sub">Инфо</a>
+                        <ul class="mn-sub">
+                          <li>
+                            <a class="ajax" href="/help/">Помощь</a>
+                          </li>
+                          <li>
+                              <a class="ajax" href="/team/">Команда</a>
+                          </li>
+                          <li>
+                              <a class="ajax" href="/about/">Сайт</a>
+                          </li>
+                          <li>
+                              <a class="ajax" href="/partnership/">Сотрудничество</a>
+                          </li>
+                          <li>
+                              <a class="ajax" href="/contacts/">Контакты</a>
+                          </li>
+                        </ul>
                       </li>
                       <li><a>&nbsp;</a></li>
                       <li>
