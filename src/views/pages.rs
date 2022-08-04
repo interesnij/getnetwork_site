@@ -557,7 +557,7 @@ pub async fn get_load_page(req: HttpRequest) -> actix_web::Result<HttpResponse> 
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct HistoryParams {
     pub id:     i32,
     pub page:   i16,

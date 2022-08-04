@@ -259,16 +259,16 @@ pub struct CookieStat {
 
 #[derive(Debug, Deserialize)]
 pub struct HistoryResponse {
-    pub id:     String,
+    pub id:     i32,
     pub link:   String,
     pub title:  String,
     pub height: f64,
-    pub speed:  i32,
+    pub speed:  i16,
 }
 
 impl CookieStat {
     pub fn create(user_id: i32, page: i16, link: String,
-        title: String, height: f64, speed: i32) -> Json<HistoryResponse> {
+        title: String, height: f64, speed: i16) -> Json<HistoryResponse> {
         let _h = NewCookieStat {
             user_id: user_id,
             page:    page,
