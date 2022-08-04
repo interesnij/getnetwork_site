@@ -567,7 +567,7 @@ pub struct HistoryParams {
     pub speed:  i16,
 }
 
-pub async fn create_history(req: HttpRequest) -> web::Json<HistoryParams> {
+pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::models::{CookieUser, CookieStat};
 
     let params = web::Query::<HistoryParams>::from_query(&req.query_string());
@@ -590,7 +590,7 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryParams> {
     )
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ObjectResponse {
     pub id:         i32,
     pub ip:         String,

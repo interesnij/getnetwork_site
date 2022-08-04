@@ -10,7 +10,7 @@ use diesel::{
 };
 use serde::{Serialize, Deserialize};
 use crate::utils::establish_connection;
-use crate::diesel::{ExpressionMethods, RunQueryDsl};
+use crate::diesel::{ExpressionMethods, RunQueryDsl, QueryDsl};
 use actix_web::{HttpRequest, web::Json};
 
 
@@ -132,7 +132,7 @@ impl CookieUser {
 
         return _new_user;
     }
-    pub fn get_user(id: i32, req: &HttpRequest) -> i32 {
+    pub fn get_user(id: i32, req: &HttpRequest) -> CookieUser {
         use crate::schema::cookie_users::dsl::cookie_users;
 
         if id > 0 {
@@ -259,7 +259,7 @@ pub struct CookieStat {
     pub created:  chrono::NaiveDateTime,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct HistoryResponse {
     pub id:     i32,
     pub link:   String,
