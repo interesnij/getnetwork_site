@@ -30,6 +30,7 @@ function get_or_create_cookie_user() {
     if ( this.readyState == 4 && this.status == 200 ) {
       data = JSON.parse(ajax_link.responseText);
       console.log(data);
+      console.log(data.id);
       //setCookie("user", new_color, 90);
     }
   }
