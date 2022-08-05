@@ -185,17 +185,17 @@ pub struct CookieStat {
     pub link:     String,
     pub title:    String,
     pub height:   f64,
-    pub speed:    i16,
+    pub seconds:  i32,
     pub created:  chrono::NaiveDateTime,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct HistoryResponse {
-    pub id:     i32,
-    pub link:   String,
-    pub title:  String,
-    pub height: f64,
-    pub seconds:  i32,
+    pub id:      i32,
+    pub link:    String,
+    pub title:   String,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 impl CookieStat {
