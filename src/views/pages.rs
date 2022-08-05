@@ -773,6 +773,34 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
                 use crate::utils::plus_profil_stat;
                 plus_profil_stat(p_height, p_seconds)
             },
+            31 => {
+                use crate::utils::plus_tags_stat;
+                plus_tags_stat(p_height, p_seconds)
+            },
+            31 => {
+                use crate::utils::plus_tags_stat;
+                plus_tags_stat(p_height, p_seconds)
+            },
+            41 => {
+                use crate::utils::plus_blog_categories_stat;
+                plus_blog_categories_stat(p_height, p_seconds)
+            },
+            61 => {
+                use crate::utils::plus_service_categories_stat;
+                plus_service_categories_stat(p_height, p_seconds)
+            },
+            71 => {
+                use crate::utils::plus_store_categories_stat;
+                plus_store_categories_stat(p_height, p_seconds)
+            },
+            81 => {
+                use crate::utils::plus_wiki_categories_stat;
+                plus_wiki_categories_stat(p_height, p_seconds)
+            },
+            91 => {
+                use crate::utils::plus_work_categories_stat;
+                plus_work_categories_stat(p_height, p_seconds)
+            },
             _ => println!("no value"),
         }
     }

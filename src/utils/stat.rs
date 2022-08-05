@@ -2,7 +2,7 @@ use crate::schema;
 use crate::utils::establish_connection;
 use crate::diesel::{ExpressionMethods, RunQueryDsl, QueryDsl};
 
-
+ 
 pub fn plus_mainpage_stat(height: f64, seconds: i32) -> () {
     // статистика страницы главной
     use schema::stat_mainpages::dsl::stat_mainpages;
