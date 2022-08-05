@@ -657,8 +657,6 @@ pub struct HistoryParams {
 pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::schema;
     use crate::models::CookieStat;
-    use crate::schema::cookie_users::dsl::cookie_users;
-
 
     let params = web::Query::<HistoryParams>::from_query(&req.query_string());
     let params_2 = params.unwrap();

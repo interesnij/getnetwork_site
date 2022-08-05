@@ -183,6 +183,11 @@ function change_this_fullscreen(_this, type_class) {
   link.send();
 };
 
+window.onbeforeunload = function(e) {
+  e.preventDefault();
+  console.log("reload!");
+}
+
 function addStyleSheets(href) {
     $head = document.head, $link = document.createElement('link');
     $link.rel = 'stylesheet';
