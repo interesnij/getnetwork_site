@@ -655,5 +655,5 @@ allow_tables_to_appear_in_same_query!(
     work_category,
     work_images,
     work_videos,
-    works,
+    works
 );
