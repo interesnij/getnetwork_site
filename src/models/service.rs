@@ -19,7 +19,7 @@ use crate::schema::{
 use crate::utils::establish_connection;
 
 
-#[derive(Debug, Serialize, PartialEq, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
 #[table_name="service_categories"]
 pub struct ServiceCategories {
     pub id:          i32,
@@ -134,7 +134,7 @@ pub struct EditServiceCategories {
     pub image:       Option<String>,
 }
 
-#[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Service {
     pub id:          i32,
@@ -343,7 +343,7 @@ pub struct EditService {
     pub position:    i16,
 }
 
-#[derive(Identifiable, PartialEq, Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations)]
 #[belongs_to(ServiceCategories)]
 #[belongs_to(Service)]
 #[table_name="service_category"]
@@ -405,7 +405,7 @@ impl NewService {
     }
 }
 
-#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(Service, foreign_key="service")]
 pub struct ServiceImage {
     pub id:      i32,
@@ -430,7 +430,7 @@ impl NewServiceImage {
     }
 }
 
-#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(Service, foreign_key="service")]
 pub struct ServiceVideo {
     pub id:      i32,

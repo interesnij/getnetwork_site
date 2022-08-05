@@ -20,7 +20,7 @@ use crate::schema::{
 use crate::utils::establish_connection;
 
 
-#[derive(Debug, Serialize, Identifiable, PartialEq, Queryable, Associations)]
+#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
 #[table_name="blog_categories"]
 pub struct BlogCategories {
     pub id:          i32,
@@ -137,7 +137,7 @@ pub struct EditBlogCategories {
     pub image:       Option<String>,
 }
 
-#[derive(Debug, Serialize, PartialEq, Clone, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
 pub struct Blog {
     pub id:          i32,
@@ -299,7 +299,7 @@ pub struct EditBlog {
     pub is_active:   bool,
 }
 
-#[derive(Identifiable, PartialEq, Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations)]
 #[belongs_to(BlogCategories)]
 #[belongs_to(Blog)]
 #[table_name="blog_category"]
@@ -316,7 +316,7 @@ pub struct NewBlogCategory {
     pub blog_id:            i32,
 }
 
-#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(Blog, foreign_key="blog")]
 pub struct BlogImage {
     pub id:   i32,
@@ -341,7 +341,7 @@ impl NewBlogImage {
     }
 }
 
-#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(Blog, foreign_key="blog")]
 pub struct BlogVideo {
     pub id:   i32,
@@ -366,7 +366,7 @@ impl NewBlogVideo {
     }
 }
 
-#[derive(Debug, Serialize, PartialEq, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(Blog)]
 #[belongs_to(User)]
 pub struct BlogComment {

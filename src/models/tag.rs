@@ -14,7 +14,7 @@ use crate::schema::{
 use crate::utils::establish_connection;
 
 
-#[derive(Debug, Serialize, PartialEq, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
 #[table_name="tags"]
 pub struct Tag {
     pub id:            i32,
@@ -88,7 +88,7 @@ pub struct EditTag {
     pub position: i16,
 }
 
-#[derive(Identifiable, Serialize, PartialEq, Queryable, Associations)]
+#[derive(Identifiable, Serialize, Queryable, Associations)]
 #[table_name="tags_items"]
 pub struct TagItems {
     pub id:         i32,

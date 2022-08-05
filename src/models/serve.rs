@@ -19,7 +19,7 @@ use crate::utils::establish_connection;
 
 
 /////// TechCategories //////
-#[derive(Debug, Serialize, PartialEq, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
 #[table_name="tech_categories"]
 pub struct TechCategories {
     pub id:          i32,
@@ -60,7 +60,7 @@ pub struct NewTechCategories {
 }
 
 /////// ServeCategories //////
-#[derive(Debug, Serialize, PartialEq, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
 #[table_name="serve_categories"]
 pub struct ServeCategories {
     pub id:              i32,
@@ -124,7 +124,7 @@ pub struct NewServeCategories {
 }
 
 /////// Serve //////
-#[derive(Debug, Serialize, PartialEq, Clone, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, Clone, Identifiable, Queryable, Associations)]
 #[belongs_to(ServeCategories, foreign_key="serve_categories")]
 #[table_name="serve"]
 pub struct Serve {
@@ -195,7 +195,7 @@ pub struct EditServe {
 }
 
 /////// ServeItems //////
-#[derive(Identifiable, PartialEq, Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations)]
 #[table_name="serve_items"]
 pub struct ServeItems {
     pub id:         i32,
@@ -214,7 +214,7 @@ pub struct NewServeItems {
 }
 
 /////// ServeItems //////
-#[derive(Identifiable, PartialEq, Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations)]
 #[table_name="tech_categories_items"]
 pub struct TechCategoriesItem {
     pub id:          i32,

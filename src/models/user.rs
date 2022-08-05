@@ -31,7 +31,7 @@ use crate::diesel::{ExpressionMethods, RunQueryDsl};
 use actix_web::web::Json;
 
 
-#[derive(Debug, Queryable, PartialEq, Serialize, Identifiable)]
+#[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct User {
     pub id:       i32,
     pub username: String,
@@ -82,13 +82,13 @@ pub struct UserChange {
     pub image:    String,
 }
 
-#[derive(Debug, Serialize, PartialEq, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SessionUser {
     pub id:       i32,
     pub username: String,
 }
 
-#[derive(Debug, Queryable, PartialEq, Serialize, Identifiable)]
+#[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct CookieUser {
     pub id:         i32,
     pub ip:         String,
@@ -177,7 +177,7 @@ pub struct NewCookieUser {
 // 93 - работа
 ////////////////////
 
-#[derive(Debug, Queryable, PartialEq, Serialize, Identifiable)]
+#[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct CookieStat {
     pub id:       i32,
     pub user_id:  i32,
