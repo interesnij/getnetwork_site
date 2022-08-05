@@ -844,8 +844,8 @@ pub fn plus_profil_stat(height: f64, seconds: i32, need_plus: bool) -> () {
         .expect("E");
 
     if items.len() > 0 {
+        let item = items.into_iter().nth(0).unwrap();
         if need_plus {
-            let item = items.into_iter().nth(0).unwrap();
             diesel::update(&item)
                 .set ((
                     schema::stat_profils::view.eq(item.view + 1),
