@@ -183,13 +183,9 @@ function change_this_fullscreen(_this, type_class) {
   link.send();
 };
 
-window.onbeforeunload = function(e) {
-  console.log("reload!");
-  e.preventDefault();
-  //e.returnValue = '';
-  //return false;
-  window.onbeforeunload = null;
-}
+//window.addEventListener("unload", function() {
+//  navigator.sendBeacon("/analytics", JSON.stringify(analyticsData));
+//});
 
 function addStyleSheets(href) {
     $head = document.head, $link = document.createElement('link');
@@ -438,14 +434,15 @@ function get_custom_design() {
   if (backgroud != "") {
     color = backgroud;
   }
-
   addStyleSheets("/static/styles/color/" + color + ".css")
-  //try {
   btn = document.body.querySelector(".anon_color_change");
   btn.setAttribute("data-color", color)
-//  } catch { null };
 };
 
+//window.addEventListener("unload", function() {
+//  analyticsData = data;
+//  navigator.sendBeacon("/analytics", JSON.stringify(analyticsData));
+//});
 on('body', 'click', '.ajax', function(event) {
   event.preventDefault();
   if (this.getAttribute("href") == window.location.pathname){
