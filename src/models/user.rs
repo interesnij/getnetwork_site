@@ -99,6 +99,8 @@ pub struct CookieUser {
     pub region_en:  Option<String>,
     pub country_ru: Option<String>,
     pub country_en: Option<String>,
+    pub height:     f64,
+    pub seconds:    i32,
     pub created:    chrono::NaiveDateTime,
 }
 
@@ -113,6 +115,8 @@ pub struct NewCookieUser {
     pub region_en:  Option<String>,
     pub country_ru: Option<String>,
     pub country_en: Option<String>,
+    pub height:     f64,
+    pub seconds:    i32,
     pub created:    chrono::NaiveDateTime,
 }
 
@@ -191,12 +195,12 @@ pub struct HistoryResponse {
     pub link:   String,
     pub title:  String,
     pub height: f64,
-    pub speed:  i16,
+    pub seconds:  i32,
 }
 
 impl CookieStat {
     pub fn create(user_id: i32, page: i16, link: String,
-        title: String, height: f64, speed: i16) -> Json<HistoryResponse> {
+        title: String, height: f64, seconds: i32) -> Json<HistoryResponse> {
 
         let _connection = establish_connection();
         let _h = NewCookieStat {
@@ -205,7 +209,7 @@ impl CookieStat {
             link:    link.clone(),
             title:   title.clone(),
             height:  height,
-            speed:   speed,
+            seconds: seconds,
             created: chrono::Local::now().naive_utc(),
         };
         diesel::insert_into(schema::cookie_stats::table)
@@ -214,11 +218,11 @@ impl CookieStat {
             .expect("Error.");
 
         return Json(HistoryResponse {
-            id:     user_id,
-            link:   link,
-            title:  title,
-            height: height,
-            speed:  speed,
+            id:      user_id,
+            link:    link,
+            title:   title,
+            height:  height,
+            seconds: seconds,
         });
     }
 }
@@ -231,7 +235,7 @@ pub struct NewCookieStat {
     pub link:     String,
     pub title:    String,
     pub height:   f64,
-    pub speed:    i16,
+    pub seconds:  i32,
     pub created:  chrono::NaiveDateTime,
 }
 
@@ -239,220 +243,288 @@ pub struct NewCookieStat {
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatMainpage {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_mainpages"]
 pub struct NewStatMainpage {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatBlogCategorie {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_blog_categories"]
 pub struct NewStatBlogCategorie {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatServiceCategorie {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_service_categories"]
 pub struct NewStatServiceCategorie {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatStoreCategorie {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_store_categories"]
 pub struct NewStatStoreCategorie {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatWikiCategorie {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_wiki_categories"]
 pub struct NewStatWikiCategorie {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatWorkCategorie {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_work_categories"]
 pub struct NewStatWorkCategorie {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatTag {
-    pub id:   i32,
-    pub view: i32,
+    pub id:       i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_tags"]
 pub struct NewStatTag {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatAbout {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_abouts"]
 pub struct NewStatAbout {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatInfo {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_infos"]
 pub struct NewStatInfo {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatContact {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_contacts"]
 pub struct NewStatContact {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatTeam {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_teams"]
 pub struct NewStatTeam {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatPartnership {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_partnerships"]
 pub struct NewStatPartnership {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatLogin {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_logins"]
 pub struct NewStatLogin {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatLogout {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_logouts"]
 pub struct NewStatLogout {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatSignup {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_signups"]
 pub struct NewStatSignup {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatHelp {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_helps"]
 pub struct NewStatHelp {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatProfil {
-    pub id:   i32,
-    pub view: i32,
+    pub id:      i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_profils"]
 pub struct NewStatProfil {
-    pub view: i32,
+    pub view:    i32,
+    pub height:  f64,
+    pub seconds: i32,
 }

@@ -510,6 +510,8 @@ pub async fn create_store_categories(session: Session, mut payload: Multipart) -
                 image:       Some(form.image.clone()),
                 count:       0,
                 view:        0,
+                height:      0.0,
+                seconds:     0,
             };
             let _new_store = diesel::insert_into(schema::store_categories::table)
                 .values(&new_cat)

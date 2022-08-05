@@ -29,6 +29,9 @@ pub struct TechCategories {
     pub count:       i16,
     pub level:       i16,
     pub user_id:     i32,
+    pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl TechCategories {
@@ -51,6 +54,9 @@ pub struct NewTechCategories {
     pub count:       i16,
     pub level:       i16,
     pub user_id:     i32,
+    pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 /////// ServeCategories //////
@@ -66,6 +72,9 @@ pub struct ServeCategories {
     pub count:           i16,
     pub default_price:   i32,
     pub user_id:         i32,
+    pub view:            i32,
+    pub height:          f64,
+    pub seconds:         i32,
 }
 impl ServeCategories {
     pub fn get_categories_from_level(level: &i16) -> Vec<ServeCategories> {
@@ -109,6 +118,9 @@ pub struct NewServeCategories {
     pub count:           i16,
     pub default_price:   i32,
     pub user_id:         i32,
+    pub view:            i32,
+    pub height:          f64,
+    pub seconds:         i32,
 }
 
 /////// Serve //////
@@ -128,6 +140,9 @@ pub struct Serve {
     pub user_id:          i32,
     pub tech_cat_id:      i32,
     pub types:            Option<String>,
+    pub view:             i32,
+    pub height:           f64,
+    pub seconds:          i32,
 }
 
 impl Serve {
@@ -161,6 +176,9 @@ pub struct NewServe {
     pub user_id:          i32,
     pub tech_cat_id:      i32,
     pub types:            Option<String>,
+    pub view:             i32,
+    pub height:           f64,
+    pub seconds:          i32,
 }
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="serve"]

@@ -29,6 +29,8 @@ pub struct ServiceCategories {
     pub image:       Option<String>,
     pub count:       i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 impl ServiceCategories {
     pub fn get_image(&self) -> String {
@@ -119,6 +121,8 @@ pub struct NewServiceCategories {
     pub image:       Option<String>,
     pub count:       i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -145,6 +149,8 @@ pub struct Service {
     pub created:     chrono::NaiveDateTime,
     pub position:    i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl Service {
@@ -367,6 +373,8 @@ pub struct NewService {
     pub created:     chrono::NaiveDateTime,
     pub position:    i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl NewService {
@@ -391,6 +399,8 @@ impl NewService {
             created:     chrono::Local::now().naive_utc(),
             position:    position,
             view:        0,
+            height:      0.0,
+            seconds:     0,
         }
     }
 }

@@ -35,6 +35,8 @@ CREATE TABLE cookie_users (
     region_en  VARCHAR(150),          -- регион по английски
     country_ru VARCHAR(150),          -- страна по русски
     country_en VARCHAR(150),          -- страна по английски
+    height     FLOAT NOT NULL,
+    seconds    INT NOT NULL,
     created    TIMESTAMP NOT NULL     -- когда создан пользователь
 );
 CREATE TABLE cookie_stats (
@@ -44,7 +46,7 @@ CREATE TABLE cookie_stats (
     link       VARCHAR(200) NOT NULL, -- ссылка страницы
     title      VARCHAR(200) NOT NULL, -- название страницы
     height     FLOAT NOT NULL,        -- высота просмотра страницы
-    speed      SMALLINT NOT NULL,     -- секунды нахождения страницы
+    seconds    INT NOT NULL,     -- секунды нахождения страницы
     created    TIMESTAMP NOT NULL,    -- когда создана запись
 
     CONSTRAINT fk_cookie_stat_user
@@ -67,6 +69,8 @@ CREATE TABLE tags (
     work_count    SMALLINT NOT NULL,
     user_id       INT NOT NULL,
     view          INT NOT NULL,
+    height        FLOAT NOT NULL,
+    seconds       INT NOT NULL,
 
     CONSTRAINT fk_tag_creator
         FOREIGN KEY(user_id)
@@ -99,6 +103,8 @@ CREATE TABLE blog_categories (
     image       VARCHAR(500),
     count       SMALLINT NOT NULL,
     view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL,
 );
 
 CREATE TABLE blogs (
@@ -112,6 +118,8 @@ CREATE TABLE blogs (
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
     view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL,
 
     CONSTRAINT fk_blog_creator_2
         FOREIGN KEY(user_id)
@@ -191,7 +199,10 @@ CREATE TABLE tech_categories (
     position    SMALLINT NOT NULL,
     count       SMALLINT NOT NULL,
     level       SMALLINT NOT NULL,
-    user_id     INT NOT NULL
+    user_id     INT NOT NULL,
+    view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL
 );
 
 -- это категория опции (например, rust, python, react native)
@@ -205,6 +216,9 @@ CREATE TABLE serve_categories (
     count           SMALLINT NOT NULL,
     default_price   INT NOT NULL, -- сумма всех опуий по умолчанию.
     user_id         INT NOT NULL,
+    view            INT NOT NULL,
+    height          FLOAT NOT NULL,
+    seconds         INT NOT NULL,
 
     CONSTRAINT fk_tech_category
         FOREIGN KEY(tech_categories)
@@ -225,6 +239,9 @@ CREATE TABLE serve (
     user_id          INT NOT NULL,
     tech_cat_id      INT NOT NULL,
     types            VARCHAR(100),     -- класс опции для организации выбора между несколькими опциями
+    view             INT NOT NULL,
+    height           FLOAT NOT NULL,
+    seconds          INT NOT NULL,
 
     CONSTRAINT fk_serve_category
         FOREIGN KEY(serve_categories)
@@ -267,6 +284,8 @@ CREATE TABLE service_categories (
     image       VARCHAR(500),
     count       SMALLINT NOT NULL,
     view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL,
 );
 
 CREATE TABLE services (
@@ -282,6 +301,8 @@ CREATE TABLE services (
     created     TIMESTAMP NOT NULL,
     position    SMALLINT NOT NULL,
     view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL,
 
     CONSTRAINT fk_service_creator
         FOREIGN KEY(user_id)
@@ -336,6 +357,8 @@ CREATE TABLE store_categories (
     image       VARCHAR(500),
     count       SMALLINT NOT NULL,
     view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL,
 );
 
 CREATE TABLE stores (
@@ -351,6 +374,8 @@ CREATE TABLE stores (
     created      TIMESTAMP NOT NULL,
     position     SMALLINT NOT NULL,
     view         INT NOT NULL,
+    height       FLOAT NOT NULL,
+    seconds      INT NOT NULL,
 
     CONSTRAINT fk_store_creator
         FOREIGN KEY(user_id)
@@ -405,6 +430,8 @@ CREATE TABLE wiki_categories (
     image       VARCHAR(500),
     count       SMALLINT NOT NULL,
     view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL,
 );
 
 CREATE TABLE wikis (
@@ -418,6 +445,8 @@ CREATE TABLE wikis (
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
     view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL,
 
     CONSTRAINT fk_wiki_creator
         FOREIGN KEY(user_id)
@@ -473,6 +502,8 @@ CREATE TABLE work_categories (
     image       VARCHAR(500),
     count       SMALLINT NOT NULL,
     view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL,
 );
 
 CREATE TABLE works (
@@ -488,6 +519,8 @@ CREATE TABLE works (
     created     TIMESTAMP NOT NULL,
     position    SMALLINT NOT NULL,
     view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL,
 
     CONSTRAINT fk_work_creator
         FOREIGN KEY(user_id)

@@ -29,6 +29,8 @@ pub struct WikiCategories {
     pub image:       Option<String>,
     pub count:       i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl WikiCategories {
@@ -122,6 +124,8 @@ pub struct NewWikiCategories {
     pub image:       Option<String>,
     pub count:       i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -146,6 +150,8 @@ pub struct Wiki {
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl Wiki {
@@ -267,6 +273,8 @@ pub struct NewWiki {
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl NewWiki {
@@ -287,6 +295,8 @@ impl NewWiki {
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
             view:        0,
+            height:      0.0,
+            seconds:     0,
         }
     }
 }

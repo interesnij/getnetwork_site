@@ -517,6 +517,8 @@ pub async fn create_service_categories(session: Session, mut payload: Multipart)
                 image:       Some(form.image.clone()),
                 count:       0,
                 view:        0,
+                height:      0.0,
+                seconds:     0,
             };
             let _new_service = diesel::insert_into(schema::service_categories::table)
                 .values(&new_cat)

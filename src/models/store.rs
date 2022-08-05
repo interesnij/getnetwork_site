@@ -29,6 +29,8 @@ pub struct StoreCategories {
     pub image:       Option<String>,
     pub count:       i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl StoreCategories {
@@ -122,6 +124,8 @@ pub struct NewStoreCategories {
     pub image:       Option<String>,
     pub count:       i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -148,6 +152,8 @@ pub struct Store {
     pub created:     chrono::NaiveDateTime,
     pub position:    i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl Store {
@@ -338,6 +344,8 @@ pub struct NewStore {
     pub created:     chrono::NaiveDateTime,
     pub position:    i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl NewStore {
@@ -362,6 +370,8 @@ impl NewStore {
             created:     chrono::Local::now().naive_utc(),
             position:    position,
             view:        0,
+            height:      0.0,
+            seconds:     0,
         }
     }
 }

@@ -30,6 +30,8 @@ pub struct WorkCategories {
     pub image:       Option<String>,
     pub count:       i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl WorkCategories {
@@ -122,6 +124,8 @@ pub struct NewWorkCategories {
     pub image:       Option<String>,
     pub count:       i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -149,6 +153,8 @@ pub struct Work {
     pub created:     chrono::NaiveDateTime,
     pub position:    i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 impl Work {
     pub fn get_image(&self) -> String {
@@ -337,6 +343,8 @@ pub struct NewWork {
     pub created:     chrono::NaiveDateTime,
     pub position:    i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl NewWork {
@@ -361,6 +369,8 @@ impl NewWork {
             created:     chrono::Local::now().naive_utc(),
             position:    position,
             view:        0,
+            height:      0.0,
+            seconds:     0,
         }
     }
 }

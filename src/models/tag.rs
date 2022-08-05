@@ -28,6 +28,8 @@ pub struct Tag {
     pub work_count:    i16,
     pub user_id:       i32,
     pub view:          i32,
+    pub height:        f64,
+    pub seconds:       i32,
 }
 impl Tag {
     pub fn get_tags_list(page: i32, limit: i32) -> (Vec<Tag>, i32) {
@@ -74,7 +76,9 @@ pub struct NewTag {
     pub wiki_count:    i16,
     pub work_count:    i16,
     pub user_id:       i32,
-    pub view:          i32, 
+    pub view:          i32,
+    pub height:        f64,
+    pub seconds:       i32,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]

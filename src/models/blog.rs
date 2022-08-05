@@ -30,6 +30,8 @@ pub struct BlogCategories {
     pub image:       Option<String>,
     pub count:       i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl BlogCategories {
@@ -122,6 +124,8 @@ pub struct NewBlogCategories {
     pub image:       Option<String>,
     pub count:       i16,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -146,6 +150,8 @@ pub struct Blog {
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl Blog {
@@ -256,6 +262,8 @@ pub struct NewBlog {
     pub user_id:     i32,
     pub created:     chrono::NaiveDateTime,
     pub view:        i32,
+    pub height:      f64,
+    pub seconds:     i32,
 }
 
 impl NewBlog {
@@ -275,6 +283,8 @@ impl NewBlog {
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
             view:        0,
+            height:      0.0,
+            seconds:     0,
         }
     }
 }

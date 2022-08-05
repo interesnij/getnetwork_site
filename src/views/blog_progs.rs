@@ -490,6 +490,8 @@ pub async fn create_blog_categories(session: Session, mut payload: Multipart) ->
                 image:       Some(form.image.clone()),
                 count:       0,
                 view:        0,
+                height:      0.0,
+                seconds:     0,
             };
             let _new_blog = diesel::insert_into(schema::blog_categories::table)
                 .values(&new_cat)

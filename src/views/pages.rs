@@ -620,6 +620,8 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
         region_en:  Some(location200.region.name_en),
         country_ru: Some(location200.country.name_ru),
         country_en: Some(location200.country.name_en),
+        height:     0.0,
+        seconds:    0,
         created:    chrono::Local::now().naive_utc(),
     };
     let _new_user = diesel::insert_into(schema::cookie_users::table)
@@ -652,27 +654,147 @@ pub async fn get_c_user(id: i32, req: &HttpRequest) -> CookieUser {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct HistoryParams {
+    pub user_id:   i32,
+    pub object_id: Option<i32>,
+    pub page_id:   i16,
+    pub link:      String,
+    pub title:     String,
+    pub height:    f64,
+    pub seconds:   i32,
+}
 pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::models::CookieStat;
     use crate::schema::cookie_users::dsl::cookie_users;
 
     let params = web::Query::<HistoryParams>::from_query(&req.query_string());
     let params_2 = params.unwrap();
-    let p_id = params_2.id;
-    let current_id = get_c_user(p_id, &req).await.id;
+    let p_id = params_2.user_id;
+    let user = get_c_user(p_id, &req).await;
 
-    let p_page = params_2.page;
+    let p_object_id = params_2.object_id;
+    let p_page_id = params_2.page_id;
+    let p_height = params_2.height;
+    let p_seconds = params_2.seconds;
+
+    diesel::update(&user)
+        .set (
+            schema::cookie_users::view.eq(item.view + 1),
+            schema::cookie_users::height.eq(item.height + height),
+            schema::cookie_users::seconds.eq(item.seconds + seconds),
+        )
+        .get_result::<CookieUser>(&_connection)
+        .expect("Error.");
+    if p_object_id.is_some() {
+        match user_types {
+            42 => {
+                use crate::utils::plus_blog_category_stat;
+                plus_blog_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            43 => {
+                use crate::utils::plus_blog_stat;
+                plus_blog_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            62 => {
+                use crate::utils::plus_service_category_stat;
+                plus_service_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            63 => {
+                use crate::utils::plus_service_stat;
+                plus_service_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            72 => {
+                use crate::utils::plus_store_category_stat;
+                plus_store_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            73 => {
+                use crate::utils::plus_store_stat;
+                plus_store_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            82 => {
+                use crate::utils::plus_wiki_category_stat;
+                plus_wiki_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            83 => {
+                use crate::utils::plus_wiki_stat;
+                plus_wiki_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            92 => {
+                use crate::utils::plus_work_category_stat;
+                plus_work_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            93 => {
+                use crate::utils::plus_work_stat;
+                plus_work_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            32 => {
+                use crate::utils::plus_tag_stat;
+                plus_tag_stat(p_object_id.unwrap(), p_height, p_seconds)
+            },
+            _ => println!("no value"),
+        };
+    }
+    else {
+        match user_types {
+            1 => {
+                use crate::utils::plus_mainpage_stat;
+                plus_mainpage_stat(p_height, p_seconds)
+            },
+            2 => {
+                use crate::utils::plus_about_stat;
+                plus_about_stat(p_height, p_seconds)
+            },
+            3 => {
+                use crate::utils::plus_contact_stat;
+                plus_contact_stat(p_height, p_seconds)
+            },
+            4 => {
+                use crate::utils::plus_team_stat;
+                plus_team_stat(p_height, p_seconds)
+            },
+            5 => {
+                use crate::utils::plus_partnership_stat;
+                plus_partnership_stat(p_height, p_seconds)
+            },
+            6 => {
+                use crate::utils::plus_login_stat;
+                plus_login_stat(p_height, p_seconds)
+            },
+            7 => {
+                use crate::utils::plus_signup_stat;
+                plus_signup_stat(p_height, p_seconds)
+            },
+            8 => {
+                use crate::utils::plus_logout_stat;
+                plus_logout_stat(p_height, p_seconds)
+            },
+            9 => {
+                use crate::utils::plus_help_stat;
+                plus_help_stat(p_height, p_seconds)
+            },
+            10 => {
+                use crate::utils::plus_info_stat;
+                plus_info_stat(p_height, p_seconds)
+            },
+            11 => {
+                use crate::utils::plus_profil_stat;
+                plus_profil_stat(p_height, p_seconds)
+            },
+            _ => println!("no value"),
+        }
+    }
+
     let p_link = params_2.link.clone();
     let p_title = params_2.title.clone();
-    let p_height = params_2.height;
-    let p_speed = params_2.speed;
+
     return CookieStat::create (
-        current_id,
-        p_page,
+        user.id,
+        p_page_id,
         p_link,
         p_title,
         p_height,
-        p_speed
+        p_seconds,
     )
 }
 

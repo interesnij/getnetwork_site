@@ -47,7 +47,7 @@ function get_or_create_cookie_user() {
 }
 
 function check_first_load() {
-  if (document.body.classList.contains("first_load")) {
+  if (!document.body.querySelector(".span").firstChild) {
     url = window.location.href;
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url + "?ajax=1", true );

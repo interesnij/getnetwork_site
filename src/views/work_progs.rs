@@ -519,6 +519,8 @@ pub async fn create_work_categories(session: Session, mut payload: Multipart) ->
                 image:       Some(form.image.clone()),
                 count:       0,
                 view:        0,
+                height:      0.0,
+                seconds:     0,
             };
             let _new_work = diesel::insert_into(schema::work_categories::table)
                 .values(&new_cat)

@@ -732,6 +732,9 @@ pub async fn create_tech_categories(session: Session, mut payload: Multipart) ->
                 count:       0,
                 level:       form.level,
                 user_id:     _request_user.id,
+                view:        0,
+                height:      0.0,
+                seconds:     0,
             };
             let _new_tech = diesel::insert_into(tech_categories::table)
                 .values(&new_cat)
@@ -763,6 +766,9 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
                 count: 0,
                 default_price: 0,
                 user_id: _request_user.id,
+                view:        0,
+                height:      0.0,
+                seconds:     0,
             };
             let _new_serve = diesel::insert_into(schema::serve_categories::table)
                 .values(&new_cat)
@@ -796,6 +802,9 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
                 count:       0,
                 level:       form.level,
                 user_id:     _request_user.id,
+                view:        0,
+                height:      0.0,
+                seconds:     0,
             };
             diesel::update(&_category)
                 .set(new_cat)
@@ -852,6 +861,9 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
                 count: s_category.count,
                 default_price: form.default_price,
                 user_id: _request_user.id,
+                view:        0,
+                height:      0.0,
+                seconds:     0,
             };
             diesel::update(&s_category)
                 .set(new_cat)
@@ -999,6 +1011,9 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
                 user_id:          _request_user.id,
                 tech_cat_id:      _category[0].tech_categories,
                 types:            form.types,
+                view:             0,
+                height:           0.0,
+                seconds:          0,
             };
 
             let _serve = diesel::insert_into(schema::serve::table)
@@ -1076,6 +1091,9 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 user_id:          _request_user.id,
                 tech_cat_id:      _category[0].tech_categories,
                 types:            form.types,
+                view:             0,
+                height:           0.0,
+                seconds:          0,
             };
 
             diesel::update(&_serve)
