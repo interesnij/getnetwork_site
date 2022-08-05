@@ -673,7 +673,6 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
 
     diesel::update(&user)
         .set ((
-            schema::cookie_users::view.eq(user.view + 1),
             schema::cookie_users::height.eq(user.height + p_height),
             schema::cookie_users::seconds.eq(user.seconds + p_seconds),
         ))
