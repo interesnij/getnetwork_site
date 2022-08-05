@@ -186,7 +186,8 @@ function change_this_fullscreen(_this, type_class) {
 window.onbeforeunload = function(e) {
   console.log("reload!");
   e.preventDefault();
-  e.returnValue = '';
+  //e.returnValue = '';
+  return false;
 }
 
 function addStyleSheets(href) {
