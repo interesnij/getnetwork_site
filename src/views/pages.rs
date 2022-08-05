@@ -557,16 +557,6 @@ pub async fn get_load_page(req: HttpRequest) -> actix_web::Result<HttpResponse> 
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct HistoryParams {
-    pub id:     i32,
-    pub page:   i16,
-    pub link:   String,
-    pub title:  String,
-    pub height: f64,
-    pub speed:  i16,
-}
-
 pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
     use crate::models::NewCookieUser;
     use crate::schema;
@@ -677,17 +667,18 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     let p_page_id = params_2.page_id;
     let p_height = params_2.height;
     let p_seconds = params_2.seconds;
+    let _connection = establish_connection();
 
     diesel::update(&user)
         .set (
-            schema::cookie_users::view.eq(item.view + 1),
-            schema::cookie_users::height.eq(item.height + height),
-            schema::cookie_users::seconds.eq(item.seconds + seconds),
+            schema::cookie_users::view.eq(user.view + 1),
+            schema::cookie_users::height.eq(user.height + p_height),
+            schema::cookie_users::seconds.eq(user.seconds + p_seconds),
         )
         .get_result::<CookieUser>(&_connection)
         .expect("Error.");
     if p_object_id.is_some() {
-        match user_types {
+        match p_page_id {
             42 => {
                 use crate::utils::plus_blog_category_stat;
                 plus_blog_category_stat(p_object_id.unwrap(), p_height, p_seconds)
@@ -736,7 +727,7 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
         };
     }
     else {
-        match user_types {
+        match p_page_id {
             1 => {
                 use crate::utils::plus_mainpage_stat;
                 plus_mainpage_stat(p_height, p_seconds)

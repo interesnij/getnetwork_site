@@ -77,12 +77,12 @@ pub fn plus_blog_categories_stat(height: f64, seconds: i32) -> () {
 pub fn plus_blog_category_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы категории блога
     use schema::blog_categories::dsl::blog_categories;
-    use crate::models::BlogCategorie;
+    use crate::models::BlogCategories;
 
     let _connection = establish_connection();
     let items = blog_categories
         .filter(schema::blog_categories::id.eq(id))
-        .load::<BlogCategorie>(&_connection)
+        .load::<BlogCategories>(&_connection)
         .expect("E");
 
     if items.len() > 0 {
@@ -93,7 +93,7 @@ pub fn plus_blog_category_stat(id: i32, height: f64, seconds: i32) -> () {
                 schema::blog_categories::height.eq(item.height + height),
                 schema::blog_categories::seconds.eq(item.seconds + seconds),
             )
-            .get_result::<BlogCategorie>(&_connection)
+            .get_result::<BlogCategories>(&_connection)
             .expect("Error.");
     }
 }
@@ -159,12 +159,12 @@ pub fn plus_service_categories_stat(height: f64, seconds: i32) -> () {
 pub fn plus_service_category_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы категории услуг
     use schema::service_categories::dsl::service_categories;
-    use crate::models::ServiceCategorie;
+    use crate::models::ServiceCategories;
 
     let _connection = establish_connection();
     let items = service_categories
         .filter(schema::service_categories::id.eq(id))
-        .load::<ServiceCategorie>(&_connection)
+        .load::<ServiceCategories>(&_connection)
         .expect("E");
 
     if items.len() > 0 {
@@ -175,7 +175,7 @@ pub fn plus_service_category_stat(id: i32, height: f64, seconds: i32) -> () {
                 schema::service_categories::height.eq(item.height + height),
                 schema::service_categories::seconds.eq(item.seconds + seconds),
             )
-            .get_result::<ServiceCategorie>(&_connection)
+            .get_result::<ServiceCategories>(&_connection)
             .expect("Error.");
     }
 }
@@ -241,12 +241,12 @@ pub fn plus_store_categories_stat(height: f64, seconds: i32) -> () {
 pub fn plus_store_category_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы категории товаров
     use schema::store_categories::dsl::store_categories;
-    use crate::models::StoreCategorie;
+    use crate::models::StoreCategories;
 
     let _connection = establish_connection();
     let items = store_categories
         .filter(schema::store_categories::id.eq(id))
-        .load::<StoreCategorie>(&_connection)
+        .load::<StoreCategories>(&_connection)
         .expect("E");
 
     if items.len() > 0 {
@@ -257,7 +257,7 @@ pub fn plus_store_category_stat(id: i32, height: f64, seconds: i32) -> () {
                 schema::store_categories::height.eq(item.height + height),
                 schema::store_categories::seconds.eq(item.seconds + seconds),
             )
-            .get_result::<StoreCategorie>(&_connection)
+            .get_result::<StoreCategories>(&_connection)
             .expect("Error.");
     }
 }
@@ -323,12 +323,12 @@ pub fn plus_wiki_categories_stat(height: f64, seconds: i32) -> () {
 pub fn plus_wiki_category_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы категории товаров
     use schema::wiki_categories::dsl::wiki_categories;
-    use crate::models::WikiCategorie;
+    use crate::models::WikiCategories;
 
     let _connection = establish_connection();
     let items = wiki_categories
         .filter(schema::wiki_categories::id.eq(id))
-        .load::<WikiCategorie>(&_connection)
+        .load::<WikiCategories>(&_connection)
         .expect("E");
 
     if items.len() > 0 {
@@ -339,7 +339,7 @@ pub fn plus_wiki_category_stat(id: i32, height: f64, seconds: i32) -> () {
                 schema::wiki_categories::height.eq(item.height + height),
                 schema::wiki_categories::seconds.eq(item.seconds + seconds),
             )
-            .get_result::<WikiCategorie>(&_connection)
+            .get_result::<WikiCategories>(&_connection)
             .expect("Error.");
     }
 }
@@ -405,12 +405,12 @@ pub fn plus_work_categories_stat(height: f64, seconds: i32) -> () {
 pub fn plus_work_category_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы категории работ
     use schema::work_categories::dsl::work_categories;
-    use crate::models::WorkCategorie;
+    use crate::models::WorkCategories;
 
     let _connection = establish_connection();
     let items = work_categories
         .filter(schema::work_categories::id.eq(id))
-        .load::<WorkCategorie>(&_connection)
+        .load::<WorkCategories>(&_connection)
         .expect("E");
 
     if items.len() > 0 {
@@ -421,7 +421,7 @@ pub fn plus_work_category_stat(id: i32, height: f64, seconds: i32) -> () {
                 schema::work_categories::height.eq(item.height + height),
                 schema::work_categories::seconds.eq(item.seconds + seconds),
             )
-            .get_result::<WorkCategorie>(&_connection)
+            .get_result::<WorkCategories>(&_connection)
             .expect("Error.");
     }
 }

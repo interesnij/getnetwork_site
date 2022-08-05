@@ -104,7 +104,7 @@ CREATE TABLE blog_categories (
     count       SMALLINT NOT NULL,
     view        INT NOT NULL,
     height      FLOAT NOT NULL,
-    seconds     INT NOT NULL,
+    seconds     INT NOT NULL
 );
 
 CREATE TABLE blogs (
@@ -285,7 +285,7 @@ CREATE TABLE service_categories (
     count       SMALLINT NOT NULL,
     view        INT NOT NULL,
     height      FLOAT NOT NULL,
-    seconds     INT NOT NULL,
+    seconds     INT NOT NULL
 );
 
 CREATE TABLE services (
@@ -358,7 +358,7 @@ CREATE TABLE store_categories (
     count       SMALLINT NOT NULL,
     view        INT NOT NULL,
     height      FLOAT NOT NULL,
-    seconds     INT NOT NULL,
+    seconds     INT NOT NULL
 );
 
 CREATE TABLE stores (
@@ -431,7 +431,7 @@ CREATE TABLE wiki_categories (
     count       SMALLINT NOT NULL,
     view        INT NOT NULL,
     height      FLOAT NOT NULL,
-    seconds     INT NOT NULL,
+    seconds     INT NOT NULL
 );
 
 CREATE TABLE wikis (
@@ -503,7 +503,7 @@ CREATE TABLE work_categories (
     count       SMALLINT NOT NULL,
     view        INT NOT NULL,
     height      FLOAT NOT NULL,
-    seconds     INT NOT NULL,
+    seconds     INT NOT NULL
 );
 
 CREATE TABLE works (
