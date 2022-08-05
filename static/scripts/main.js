@@ -184,9 +184,9 @@ function change_this_fullscreen(_this, type_class) {
 };
 
 window.onbeforeunload = function(e) {
-  e.preventDefault();
-  window.stop();
   console.log("reload!");
+  e.preventDefault();
+  e.returnValue = '';
 }
 
 function addStyleSheets(href) {
