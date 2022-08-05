@@ -670,11 +670,11 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     let _connection = establish_connection();
 
     diesel::update(&user)
-        .set (
+        .set ((
             schema::cookie_users::view.eq(user.view + 1),
             schema::cookie_users::height.eq(user.height + p_height),
             schema::cookie_users::seconds.eq(user.seconds + p_seconds),
-        )
+        ))
         .get_result::<CookieUser>(&_connection)
         .expect("Error.");
     if p_object_id.is_some() {

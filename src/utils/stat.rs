@@ -17,11 +17,11 @@ pub fn plus_mainpage_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set(
+            .set ((
                 schema::stat_mainpages::view.eq(item.view + 1),
                 schema::stat_mainpages::height.eq(item.height + height),
                 schema::stat_mainpages::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatMainpage>(&_connection)
             .expect("Error.");
     }
@@ -53,11 +53,11 @@ pub fn plus_blog_categories_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_blog_categories::view.eq(item.view + 1),
                 schema::stat_blog_categories::height.eq(item.height + height),
                 schema::stat_blog_categories::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatBlogCategorie>(&_connection)
             .expect("Error.");
     }
@@ -88,11 +88,11 @@ pub fn plus_blog_category_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::blog_categories::view.eq(item.view + 1),
                 schema::blog_categories::height.eq(item.height + height),
                 schema::blog_categories::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<BlogCategories>(&_connection)
             .expect("Error.");
     }
@@ -111,11 +111,11 @@ pub fn plus_blog_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::blogs::view.eq(item.view + 1),
                 schema::blogs::height.eq(item.height + height),
                 schema::blogs::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<Blog>(&_connection)
             .expect("Error.");
     }
@@ -135,11 +135,11 @@ pub fn plus_service_categories_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_service_categories::view.eq(item.view + 1),
                 schema::stat_service_categories::height.eq(item.height + height),
                 schema::stat_service_categories::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatServiceCategorie>(&_connection)
             .expect("Error.");
     }
@@ -170,11 +170,11 @@ pub fn plus_service_category_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::service_categories::view.eq(item.view + 1),
                 schema::service_categories::height.eq(item.height + height),
                 schema::service_categories::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<ServiceCategories>(&_connection)
             .expect("Error.");
     }
@@ -193,11 +193,11 @@ pub fn plus_service_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::services::view.eq(item.view + 1),
                 schema::services::height.eq(item.height + height),
                 schema::services::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<Service>(&_connection)
             .expect("Error.");
     }
@@ -217,11 +217,11 @@ pub fn plus_store_categories_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set(
+            .set ((
                 schema::stat_store_categories::view.eq(item.view + 1),
                 schema::stat_store_categories::height.eq(item.height + height),
                 schema::stat_store_categories::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatStoreCategorie>(&_connection)
             .expect("Error.");
     }
@@ -252,11 +252,11 @@ pub fn plus_store_category_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::store_categories::view.eq(item.view + 1),
                 schema::store_categories::height.eq(item.height + height),
                 schema::store_categories::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StoreCategories>(&_connection)
             .expect("Error.");
     }
@@ -275,11 +275,11 @@ pub fn plus_store_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stores::view.eq(item.view + 1),
                 schema::stores::height.eq(item.height + height),
                 schema::stores::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<Store>(&_connection)
             .expect("Error.");
     }
@@ -299,11 +299,11 @@ pub fn plus_wiki_categories_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set(
+            .set ((
                 schema::stat_wiki_categories::view.eq(item.view + 1),
                 schema::stat_wiki_categories::height.eq(item.height + height),
                 schema::stat_wiki_categories::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatWikiCategorie>(&_connection)
             .expect("Error.");
     }
@@ -334,11 +334,11 @@ pub fn plus_wiki_category_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::wiki_categories::view.eq(item.view + 1),
                 schema::wiki_categories::height.eq(item.height + height),
                 schema::wiki_categories::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<WikiCategories>(&_connection)
             .expect("Error.");
     }
@@ -357,11 +357,11 @@ pub fn plus_wiki_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::wikis::view.eq(item.view + 1),
                 schema::wikis::height.eq(item.height + height),
                 schema::wikis::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<Wiki>(&_connection)
             .expect("Error.");
     }
@@ -381,11 +381,11 @@ pub fn plus_work_categories_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set(
+            .set ((
                 schema::stat_work_categories::view.eq(item.view + 1),
                 schema::stat_work_categories::height.eq(item.height + height),
                 schema::stat_work_categories::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatWorkCategorie>(&_connection)
             .expect("Error.");
     }
@@ -416,11 +416,11 @@ pub fn plus_work_category_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::work_categories::view.eq(item.view + 1),
                 schema::work_categories::height.eq(item.height + height),
                 schema::work_categories::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<WorkCategories>(&_connection)
             .expect("Error.");
     }
@@ -439,11 +439,11 @@ pub fn plus_work_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::works::view.eq(item.view + 1),
                 schema::works::height.eq(item.height + height),
                 schema::works::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<Work>(&_connection)
             .expect("Error.");
     }
@@ -463,11 +463,11 @@ pub fn plus_tags_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set(
+            .set ((
                 schema::stat_tags::view.eq(item.view + 1),
                 schema::stat_tags::height.eq(item.height + height),
                 schema::stat_tags::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatTag>(&_connection)
             .expect("Error.");
     }
@@ -498,11 +498,11 @@ pub fn plus_tag_stat(id: i32, height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::tags::view.eq(item.view + 1),
                 schema::tags::height.eq(item.height + height),
                 schema::tags::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<Tag>(&_connection)
             .expect("Error.");
     }
@@ -522,11 +522,11 @@ pub fn plus_about_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_abouts::view.eq(item.view + 1),
                 schema::stat_abouts::height.eq(item.height + height),
                 schema::stat_abouts::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatAbout>(&_connection)
             .expect("Error.");
     }
@@ -558,11 +558,11 @@ pub fn plus_info_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_infos::view.eq(item.view + 1),
                 schema::stat_infos::height.eq(item.height + height),
                 schema::stat_infos::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatInfo>(&_connection)
             .expect("Error.");
     }
@@ -594,11 +594,11 @@ pub fn plus_contact_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_contacts::view.eq(item.view + 1),
                 schema::stat_contacts::height.eq(item.height + height),
                 schema::stat_contacts::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatContact>(&_connection)
             .expect("Error.");
     }
@@ -630,11 +630,11 @@ pub fn plus_team_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_teams::view.eq(item.view + 1),
                 schema::stat_teams::height.eq(item.height + height),
                 schema::stat_teams::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatTeam>(&_connection)
             .expect("Error.");
     }
@@ -666,11 +666,11 @@ pub fn plus_partnership_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_partnerships::view.eq(item.view + 1),
                 schema::stat_partnerships::height.eq(item.height + height),
                 schema::stat_partnerships::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatPartnership>(&_connection)
             .expect("Error.");
     }
@@ -702,11 +702,11 @@ pub fn plus_login_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_logins::view.eq(item.view + 1),
                 schema::stat_logins::height.eq(item.height + height),
                 schema::stat_logins::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatLogin>(&_connection)
             .expect("Error.");
     }
@@ -738,11 +738,11 @@ pub fn plus_logout_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_logouts::view.eq(item.view + 1),
                 schema::stat_logouts::height.eq(item.height + height),
                 schema::stat_logouts::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatLogout>(&_connection)
             .expect("Error.");
     }
@@ -774,11 +774,11 @@ pub fn plus_signup_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_signups::view.eq(item.view + 1),
                 schema::stat_signups::height.eq(item.height + height),
                 schema::stat_signups::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatSignup>(&_connection)
             .expect("Error.");
     }
@@ -810,11 +810,11 @@ pub fn plus_help_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_helps::view.eq(item.view + 1),
                 schema::stat_helps::height.eq(item.height + height),
                 schema::stat_helps::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatHelp>(&_connection)
             .expect("Error.");
     }
@@ -846,11 +846,11 @@ pub fn plus_profil_stat(height: f64, seconds: i32) -> () {
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set (
+            .set ((
                 schema::stat_profils::view.eq(item.view + 1),
                 schema::stat_profils::height.eq(item.height + height),
                 schema::stat_profils::seconds.eq(item.seconds + seconds),
-            )
+            ))
             .get_result::<StatProfil>(&_connection)
             .expect("Error.");
     }
