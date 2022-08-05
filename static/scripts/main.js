@@ -187,7 +187,8 @@ window.onbeforeunload = function(e) {
   console.log("reload!");
   e.preventDefault();
   //e.returnValue = '';
-  return false;
+  //return false;
+  window.onbeforeunload = null;
 }
 
 function addStyleSheets(href) {
