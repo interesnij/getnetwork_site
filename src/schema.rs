@@ -1,3 +1,5 @@
+
+
 table! {
     blog_categories (id) {
         id -> Int4,
