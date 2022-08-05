@@ -777,10 +777,6 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
                 use crate::utils::plus_tags_stat;
                 plus_tags_stat(p_height, p_seconds)
             },
-            31 => {
-                use crate::utils::plus_tags_stat;
-                plus_tags_stat(p_height, p_seconds)
-            },
             41 => {
                 use crate::utils::plus_blog_categories_stat;
                 plus_blog_categories_stat(p_height, p_seconds)
