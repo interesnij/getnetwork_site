@@ -602,7 +602,6 @@ table! {
 
 joinable!(blog_category -> blog_categories (blog_categories_id));
 joinable!(blog_category -> blogs (blog_id));
-joinable!(blog_comments -> blogs (blog_id));
 joinable!(blog_images -> blogs (blog));
 joinable!(blog_videos -> blogs (blog));
 joinable!(serve -> serve_categories (serve_categories));
