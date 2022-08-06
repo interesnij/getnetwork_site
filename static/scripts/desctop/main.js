@@ -71,12 +71,12 @@ function get_active_button() {
       $nav.querySelector(".wiki").classList.add("active");
     }
     else if (path == "/info/") {
-      $nav.querySelector(".info").classList.add("active");
+      $nav.querySelector(".infos").classList.add("active");
     }
     else if (path == "/tags/") {
       $nav.querySelector(".tags").classList.add("active");
     }
-    else if (path == "/search/") {
+    else if (path.includes("/search/") {
       $nav.querySelector(".search").classList.add("active");
     }
     else if (path == "/login/") {

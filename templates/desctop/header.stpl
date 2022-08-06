@@ -72,7 +72,7 @@
                           <a href="/tags/" class="ajax folder tags">Теги</a>
                       </li>
                       <li>
-                        <a href="/info/" class="mn-has-sub folder info">Инфо</a>
+                        <a href="/info/" class="mn-has-sub folder infos">Инфо</a>
                         <ul class="border mn-sub">
                           <li>
                             <a class="ajax" href="/help/">Помощь</a>
