@@ -74,7 +74,8 @@ function check_cookie_need_plus(value) {
 
 $height = document.documentElement.clientHeight;
 $seconds = 0;
-function get_stat_meta($user_id) {
+$user_id = 0;
+function get_stat_meta() {
   // сначала активизируется функция отрисовки первого контента,
   // затем получается пользователь из куки,
   // потом мы получаем данные для отсылки статистики со всеми
@@ -137,7 +138,8 @@ function get_or_create_cookie_user() {
       footer.querySelector(".city").innerHTML = data.city_ru + " (" + data.city_en + ") ";
 
       setCookie("user", data.id, 120, "/");
-      get_stat_meta(data.id);
+      $user_id = data.id;
+      get_stat_meta();
     }
   }
   ajax_link.send();
