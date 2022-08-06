@@ -47,7 +47,11 @@ function get_or_create_cookie_user() {
 }
 
 function check_first_load() {
-  if (!document.body.querySelector(".span").firstChild) {
+  span = document.body.querySelector(".span");
+  if (window.location.search.replace( '?', '').split('&')) {
+    span.innerHTML = "Permission Denied";
+  }
+  else if (!span.firstChild) {
     url = window.location.href;
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url + "?ajax=1", true );
@@ -56,8 +60,7 @@ function check_first_load() {
       if ( this.readyState == 4 && this.status == 200 ) {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
-        rtr = document.body.querySelector(".span");
-        rtr.innerHTML = elem_.innerHTML;
+        span.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
         get_custom_design();
         get_or_create_cookie_user();
