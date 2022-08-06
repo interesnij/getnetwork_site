@@ -5,6 +5,9 @@
 .js-height-full, .small-section, .mob_menu, .mn-sub {
   background: #e6e3df !important;
 }
+a :hover {
+    color: rgba(0, 0, 0, 1) !important;
+}
 .mobile_icon span {
   color: rgb(0, 0, 0, 0.7) !important;
 }
@@ -250,9 +253,6 @@ a.btn-mod:focus{
     -webkit-box-shadow: 0 0 3px rgba(0,0,0, .3) !important;
     -moz-box-shadow: 0 0 3px rgba(0,0,0, .3) !important;
     box-shadow: 0 0 3px rgba(0,0,0, .3) !important;
-}
-a :hover {
-    color: rgba(0, 0, 0, 1) !important;
 }
 a.active {
     color: rgba(0, 0, 0, 1) !important;
