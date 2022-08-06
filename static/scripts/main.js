@@ -67,7 +67,7 @@ function check_cookie_need_plus(value) {
     return false;
   }
   else {
-    setCookie("urls", url, 120, url);
+    setCookie("urls", value, 120, value);
     return true;
   }
 };
