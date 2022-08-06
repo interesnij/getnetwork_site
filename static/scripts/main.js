@@ -99,13 +99,10 @@ function get_page_view_time(count) {
   }
   console.log("Общее время страницы работает");
   i = 0;
-  if (i < count) {
+  if (i <= count) {
     setInterval(() => $seconds += 1, 1000);
     i += 1;
-    if (i % 5 == 0) {
-      console.log(i);
-    }
-  } else {$page_time = false};
+  } else {$page_time = true};
 };
 
 function get_stat_meta() {
