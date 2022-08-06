@@ -19,7 +19,7 @@
         </div>
     </div>
 </section>
-<section class="page-section align-center">
+<section class="page-section">
   <div class="container relative">
     <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
       <% if category.count > 0 { %>

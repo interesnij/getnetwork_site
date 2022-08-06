@@ -11,7 +11,7 @@
         </div>
     </div>
 </section>
-<section class="page-section align-center">
+<section class="page-section"> 
     <div class="container relative">
                   <% if category.count > 0 { %>
                     <% for object in object_list.iter() { %>
