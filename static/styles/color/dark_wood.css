@@ -338,34 +338,6 @@ a.logo:hover{
     color: #FFFFFF !important;
 }
 
-.mn-sub{
-    background: rgba(30,30,30, .97) !important;
-}
-
-.inner-nav ul li .mn-sub li a{
-    color: #b0b0b0 !important;
-}
-
-.mn-sub li a:hover,
-.inner-nav ul li .mn-sub li a:hover,
-.mn-sub li a.active{
-    background: rgba(0,0,0, .09) !important;
-    color: #f5f5f5 !important;
-}
-
-.mn-sub li ul{
-    border-left: 1px solid rgba(0,0,0, .07) !important;
-}
-
-.inner-nav li:last-child .mn-sub li ul,
-.inner-nav li .mn-sub li ul.to-left{
-    border-right: 1px solid rgba(0,0,0, .07) !important;
-}
-
-.mn-group-title{
-    color: #000000 !important;
-}
-
 .mn-soc-link{
     border: 1px solid rgba(255,255,255, .1) !important;
 }
