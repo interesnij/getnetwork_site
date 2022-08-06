@@ -18,7 +18,7 @@
                       %>
                       <li>
                           <a href="/service_categories/" class="mn-has-sub ajax">Услуги</a>
-                          <ul class="mn-sub">
+                          <ul class="border mn-sub">
                               <% for object in service_cats.iter() { %>
                               <li>
                                   <a class="mn-group-title ajax" href="/services/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
@@ -28,7 +28,7 @@
                       </li>
                       <li>
                           <a href="/work_categories/" class="mn-has-sub ajax">Портфолио</a>
-                          <ul class="mn-sub">
+                          <ul class="border mn-sub">
                               <% for object in work_cats.iter() { %>
                               <li>
                                   <a class="mn-group-title ajax" href="/works/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
@@ -38,7 +38,7 @@
                       </li>
                       <li>
                           <a href="/store_categories/" class="mn-has-sub ajax">Товары</a>
-                          <ul class="mn-sub">
+                          <ul class="border mn-sub">
                               <% for object in store_cats.iter() { %>
                               <li>
                                   <a class="mn-group-title ajax" href="/stores/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
@@ -49,7 +49,7 @@
 
                       <li>
                           <a href="/wiki_categories/" class="mn-has-sub ajax">База знаний</a>
-                          <ul class="mn-sub">
+                          <ul class="border mn-sub">
                               <% for object in wiki_cats.iter() { %>
                               <li>
                                   <a class="mn-group-title ajax" href="/wikis/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
@@ -59,7 +59,7 @@
                       </li>
                       <li>
                           <a href="/blog_categories/" class="mn-has-sub ajax">Блог</a>
-                          <ul class="mn-sub">
+                          <ul class="border mn-sub">
                               <% for object in blog_cats.iter() { %>
                               <li>
                                   <a class="mn-group-title ajax" href="/blogs/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
@@ -72,7 +72,7 @@
                       </li>
                       <li>
                         <a href="/info/" class="mn-has-sub">Инфо</a>
-                        <ul class="mn-sub">
+                        <ul class="border mn-sub">
                           <li>
                             <a class="ajax" href="/help/">Помощь</a>
                           </li>
@@ -111,7 +111,7 @@
                       <!--
                       <li>
                           <a href="#" class="mn-has-sub">Ru</a>
-                          <ul class="mn-sub">
+                          <ul class="border mn-sub">
                               <li><a href="" class="active">Ru</a></li>
                               <li><a href="">En</a></li>
                           </ul>

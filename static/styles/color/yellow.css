@@ -2,7 +2,7 @@
 ::-webkit-selection{ color: #fff !important; background:#000 !important; }
 ::selection{ color: #fff !important; background:#000 !important; }
 
-.js-height-full, .small-section, .mob_menu {
+.js-height-full, .small-section, .mob_menu, .mn-sub {
   background: #F4E0E3 !important;
 }
 .hs-line-14 {
@@ -248,7 +248,13 @@ a.btn-mod:focus{
     -moz-box-shadow: 0 0 3px rgba(0,0,0, .3) !important;
     box-shadow: 0 0 3px rgba(0,0,0, .3) !important;
 }
-
+a.active {
+    color: rgba(0, 0, 0, 1) !important;
+    font-weight: bold;
+}
+a :hover {
+    color: rgba(0, 0, 0, 1) !important;
+}
 .form textarea{
     color: #777 !important;
     border-color: rgba(0,0,0, .1) !important;

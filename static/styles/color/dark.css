@@ -19,7 +19,7 @@
 .mob_menu {
   box-shadow: 0 14px 28px rgb(255 255 255 / 50%), 0 10px 10px rgb(255 255 255 / 25%) !important;
 }
-.js-height-full, .small-section, .mob_menu {
+.js-height-full, .small-section, .mob_menu, .mn-sub {
   background: #2f4f4f !important;
 }
 .custom_btn{
@@ -100,7 +100,10 @@ a{
 a:hover{
     color: rgba(255,255,255, 1) !important;
 }
-
+a.active {
+    color: rgba(255,255,255, 1) !important;
+    font-weight: bold;
+}
 hr{
     background: rgba(255,255,255, .7) !important;
     border-top: 1px solid rgba(255,255,255, .7);
