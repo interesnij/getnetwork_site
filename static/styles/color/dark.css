@@ -1,7 +1,8 @@
 ::-moz-selection{ color: #000000 !important; background:#FFFFFF !important; }
 ::-webkit-selection{ color: #000000 !important; background:#FFFFFF !important; }
 ::selection{ color: #000000 !important; background:#FFFFFF !important; }
-a :hover{
+
+a:hover {
     color: rgba(255,255,255, 1) !important;
 }
 .small-section, .mob_menu, .banner_block {
@@ -96,7 +97,7 @@ body{
   background-color: #2f4f4f !important
 }
 
-a{
+a {
     color: rgba(255,255,255, 0.8) !important;
 }
 a.active {
