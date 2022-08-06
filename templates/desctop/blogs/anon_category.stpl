@@ -11,10 +11,10 @@
         </div>
     </div>
 </section>
-<section class="page-section align-center">
+<section class="page-section">
     <div class="container relative">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 align-center">
                 <div class="row multi-columns-row">
                   <% if category.count > 0 { %>
                     <% for object in object_list.iter() { %>
