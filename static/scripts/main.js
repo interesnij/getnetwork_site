@@ -58,7 +58,7 @@ function close_fullscreen() {
 };
 
 /////////
-function get_or_create_cookie_user(value) {
+function check_cookie_need_plus(value) {
   url = getCookie("urls");
   console.log("url" , url);
   console.log("value" , value);
