@@ -71,7 +71,17 @@ function get_or_create_cookie_user(value) {
   }
 };
 
+$height = document.documentElement.clientHeight,
+$seconds = 0,
 function get_stat_meta($user_id) {
+  // сначала активизируется функция отрисовки первого контента,
+  // затем получается пользователь из куки,
+  // потом мы получаем данные для отсылки статистики со всеми
+  // примочками - таймеры и так далее.
+  // при смене страницы повторяем только эту функцию
+  $height = document.documentElement.clientHeight,
+  $seconds = 0,
+  
   var meta_block = document.querySelector(".doc_title");
   if (meta_block.getAttribute("data-id")) {
     $object_id = meta_block.getAttribute("data-id");
@@ -82,8 +92,6 @@ function get_stat_meta($user_id) {
   var $page_id = meta_block.getAttribute("page-id"),
       $link = document.location.href,
       $title = meta_block.getAttribute("data-title"),
-      $height = 0,
-      $seconds = 0,
       $need_plus = check_cookie_need_plus($link)
       ;
   $data = [
