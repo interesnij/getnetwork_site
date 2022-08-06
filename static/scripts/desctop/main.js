@@ -46,6 +46,48 @@ function get_or_create_cookie_user() {
   ajax_link.send();
 }
 
+function get_active_button() {
+  try {
+    $nav = document.body.querySelector(".desktop-nav");
+    links = $nav.querySelectorAll(".folder");
+    path = document.location.pathname;
+    for (var i = 0; i < links.length; i++){links[i].classList.remove("active")};
+    if (path == "/") {
+        $nav.querySelector(".main").classList.add("active");
+    }
+    else if (path.includes('service')) {
+      $nav.querySelector(".service").classList.add("active");
+    }
+    else if (path.includes('work')) {
+      $nav.querySelector(".work").classList.add("active");
+    }
+    else if (path.includes('store')) {
+      $nav.querySelector(".store").classList.add("active");
+    }
+    else if (path.includes('blog')) {
+      $nav.querySelector(".blog").classList.add("active");
+    }
+    else if (path.includes('wiki')) {
+      $nav.querySelector(".wiki").classList.add("active");
+    }
+    else if (path == "/info/") {
+      $nav.querySelector(".info").classList.add("active");
+    }
+    else if (path == "/tags/") {
+      $nav.querySelector(".tags").classList.add("active");
+    }
+    else if (path == "/search/") {
+      $nav.querySelector(".search").classList.add("active");
+    }
+    else if (path == "/login/") {
+      $nav.querySelector(".login").classList.add("active");
+    }
+    else if (path == "/auth/") {
+      $nav.querySelector(".auth").classList.add("active");
+    }
+  } catch { null }
+};
+
 function check_first_load() {
   span = document.body.querySelector(".span");
   if (window.location.search.split('?').length > 1) {
@@ -64,6 +106,7 @@ function check_first_load() {
         window.scrollTo(0,0);
         get_custom_design();
         get_or_create_cookie_user();
+        get_active_button();
         //window.history.pushState({route: url}, "network", url);
       }
     }
@@ -85,6 +128,7 @@ function ajax_get_reload(url) {
         document.title = rtr.querySelector(".doc_title").getAttribute("data-title");
         window.scrollTo(0,0);
         window.history.replaceState(null, null, url);
+        get_active_button();
       }
     }
     ajax_link.send();

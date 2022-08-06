@@ -10,14 +10,14 @@
               <div class="inner-nav desktop-nav">
                   <ul class="clearlist">
                       <li>
-                          <a href="/" class="ajax">Главная</a>
+                          <a href="/" class="ajax folder main">Главная</a>
                       </li>
                       <%
                         use crate::utils::get_categories;
                         let (service_cats, store_cats, blog_cats, wiki_cats, work_cats) = get_categories();
                       %>
                       <li>
-                          <a href="/service_categories/" class="mn-has-sub ajax">Услуги</a>
+                          <a href="/service_categories/" class="mn-has-sub service ajax folder">Услуги</a>
                           <ul class="border mn-sub">
                               <% for object in service_cats.iter() { %>
                               <li>
@@ -27,7 +27,7 @@
                           </ul>
                       </li>
                       <li>
-                          <a href="/work_categories/" class="mn-has-sub ajax">Портфолио</a>
+                          <a href="/work_categories/" class="mn-has-sub ajax folder work">Портфолио</a>
                           <ul class="border mn-sub">
                               <% for object in work_cats.iter() { %>
                               <li>
@@ -37,7 +37,7 @@
                           </ul>
                       </li>
                       <li>
-                          <a href="/store_categories/" class="mn-has-sub ajax">Товары</a>
+                          <a href="/store_categories/" class="mn-has-sub store ajax folder">Товары</a>
                           <ul class="border mn-sub">
                               <% for object in store_cats.iter() { %>
                               <li>
@@ -48,7 +48,7 @@
                       </li>
 
                       <li>
-                          <a href="/wiki_categories/" class="mn-has-sub ajax">База знаний</a>
+                          <a href="/wiki_categories/" class="mn-has-sub wiki ajax folder">База знаний</a>
                           <ul class="border mn-sub">
                               <% for object in wiki_cats.iter() { %>
                               <li>
@@ -58,7 +58,7 @@
                           </ul>
                       </li>
                       <li>
-                          <a href="/blog_categories/" class="mn-has-sub ajax">Блог</a>
+                          <a href="/blog_categories/" class="mn-has-sub blog ajax folder">Блог</a>
                           <ul class="border mn-sub">
                               <% for object in blog_cats.iter() { %>
                               <li>
@@ -68,10 +68,10 @@
                           </ul>
                       </li>
                       <li>
-                          <a href="/tags/" class="ajax">Теги</a>
+                          <a href="/tags/" class="ajax folder tags">Теги</a>
                       </li>
                       <li>
-                        <a href="/info/" class="mn-has-sub">Инфо</a>
+                        <a href="/info/" class="mn-has-sub info folder">Инфо</a>
                         <ul class="border mn-sub">
                           <li>
                             <a class="ajax" href="/help/">Помощь</a>
@@ -92,7 +92,7 @@
                       </li>
                       <li><a>&nbsp;</a></li>
                       <li>
-                          <a class="mn-has-sub" data-color="white">
+                          <a class="mn-has-sub seacrh folder" data-color="white">
                               Поиск
                           </a>
                           <ul class="mn-sub to-left" style="right: -70px;">
@@ -123,7 +123,7 @@
                           </a>
                       </li>
                       <li>
-                          <a href="/login/" class="ajax">
+                          <a href="/login/" class="login ajax folder">
                               Вход
                           </a>
                       </li>
