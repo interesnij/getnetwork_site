@@ -76,7 +76,7 @@ function get_active_button() {
     else if (path == "/tags/") {
       $nav.querySelector(".tags").classList.add("active");
     }
-    else if (path.includes("/search/") {
+    else if (path.includes("/search/")) {
       $nav.querySelector(".search").classList.add("active");
     }
     else if (path == "/login/") {
