@@ -91,7 +91,7 @@ function get_stat_meta($user_id) {
     $object_id = ""
   }
   $page_id = meta_block.getAttribute("page-id");
-  $link = document.location.href;
+  $link = window.location.pathname;
   $title = meta_block.getAttribute("data-title");
   $need_plus = check_cookie_need_plus($link);
 
