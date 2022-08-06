@@ -49,7 +49,7 @@ function ajax_get_reload(url) {
         hide_nav_second_span();
         get_active_button();
         mob_menu_hide();
-        get_page_view_time(count);
+        get_page_view_time(120);
         scrolled(rtr);
         try {
           document.body.querySelector("#reload_nav_block").innerHTML = sidebar.innerHTML

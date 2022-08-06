@@ -74,7 +74,7 @@ function check_first_load() {
         get_custom_design();
         get_or_create_cookie_user();
         get_active_button();
-        get_page_view_time(count);
+        get_page_view_time(120);
         scrolled(document.body.querySelector(".span"));
         //window.history.pushState({route: url}, "network", url);
       }
@@ -99,7 +99,7 @@ function ajax_get_reload(url) {
         window.scrollTo(0,0);
         window.history.replaceState(null, null, url);
         get_active_button();
-        get_page_view_time(count);
+        get_page_view_time(120);
         scrolled(rtr);
       }
     }
