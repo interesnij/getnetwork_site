@@ -27,7 +27,7 @@
                     <% } %>
 
                   <% } else { %>
-                  <div class="text-center">
+                  <div style="margin-top: 40px;">
                     <span class="widget-title font-alt">Список пока пустой...</span>
                   </div>
                   <% } %>

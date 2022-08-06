@@ -12,7 +12,7 @@
     </div>
 </section>
 
-<section>
+<section class="align-center">
 <% if category.count > 0 { %>
   <% for (i, object) in object_list.iter().enumerate() { %>
     <% include!("../generic/default_service.stpl"); %>
@@ -23,9 +23,10 @@
     </div>
   <% } %>
 <% } else { %>
-  <div class="text-center">
+  <div style="margin-top: 40px;">
     <span class="widget-title font-alt">Список пока пустой...</span>
   </div>
 <% } %>
 </section>
+
 <% include!("../footer.stpl"); %>

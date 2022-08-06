@@ -11,7 +11,7 @@
         </div>
     </div>
 </section>
-<section class="page-section">
+<section class="page-section align-center">
     <div class="container relative">
         <div class="row">
             <div class="col-sm-8">
@@ -27,7 +27,7 @@
                     <% } %>
 
                   <% } else { %>
-                  <div class="text-center">
+                  <div style="margin-top: 40px;">
                     <span class="widget-title font-alt">Список пока пустой...</span>
                   </div>
                   <% } %>
