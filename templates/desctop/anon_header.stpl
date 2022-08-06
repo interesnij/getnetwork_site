@@ -92,7 +92,7 @@
                       </li>
                       <li><a>&nbsp;</a></li>
                       <li>
-                          <a class="mn-has-sub seacrh folder" data-color="white">
+                          <a class="mn-has-sub search folder">
                               Поиск
                           </a>
                           <ul class="mn-sub to-left" style="right: -70px;">
