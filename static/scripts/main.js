@@ -101,8 +101,10 @@ function get_page_view_time(count) {
   i = 0;
   if (i < count) {
     setInterval(() => $seconds += 1, 1000);
-    console.log(i);
     i += 1;
+    if (i % 5 == 0) {
+      console.log(i);
+    }
   } else {$page_time = false};
 };
 
