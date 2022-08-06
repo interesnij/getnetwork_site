@@ -65,10 +65,7 @@
 .inner-nav ul li a.active{
     text-decoration: none;
 }
-.mn-group-title {
-    font-weight: 700;
-    text-transform: uppercase;
-}
+
 .inner-nav li.js-opened .mn-sub {
     opacity: 1;
 }
