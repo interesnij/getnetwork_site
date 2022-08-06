@@ -48,7 +48,7 @@ function get_or_create_cookie_user() {
 
 function check_first_load() {
   span = document.body.querySelector(".span");
-  if (window.location.search.split('?').length == 1) {
+  if (window.location.search.split('?').length > 1) {
     span.innerHTML = "Permission Denied";
   }
   else if (!span.firstChild) {
