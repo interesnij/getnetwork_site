@@ -97,7 +97,7 @@ body{
 a{
     color: rgba(255,255,255, 0.8) !important;
 }
-a:hover{
+a :hover{
     color: rgba(255,255,255, 1) !important;
 }
 a.active {
