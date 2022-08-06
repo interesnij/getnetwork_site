@@ -72,17 +72,45 @@ function check_cookie_need_plus(value) {
   }
 };
 
-$height = document.documentElement.clientHeight;
+$height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
 $seconds = 0;
 $user_id = 0;
+$page_time = false;
+
+$window_height = 0;
+$window_seconds = 0;
+$window_time = false;
+
+function view_timer(count) {
+    var i = 0;
+    setInterval(() => {
+      if (i == count && document.body.querySelector(".card_fullscreen")) {
+        document.body.querySelector(".card_fullscreen").classList.add("count_done");
+        return;
+      };
+    $window_seconds += 1;
+    }, 1000);
+};
+
+function get_page_view_time(count) {
+  // считаем время нахождения на странице, до 2х минут. При скролле перезапускаем.
+  if ($page_time) {
+    return
+  }
+  console.log("Общее время страницы работает");
+  i = 0;
+  if (i < count) {
+    setInterval(() => $seconds += 1, 1000);
+    i += 1
+  } else {$page_time = false};
+};
+
 function get_stat_meta() {
   // сначала активизируется функция отрисовки первого контента,
   // затем получается пользователь из куки,
   // потом мы получаем данные для отсылки статистики со всеми
   // примочками - таймеры и так далее.
   // при смене страницы повторяем только эту функцию
-  $height = document.documentElement.clientHeight;
-  $seconds = 0;
 
   meta_block = document.querySelector(".doc_title");
   if (meta_block.getAttribute("data-id")) {
@@ -107,6 +135,8 @@ function get_stat_meta() {
     $need_plus
   ]
   console.log($data);
+  $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
+  $seconds = 0;
 }
 
 ///////////////
@@ -139,11 +169,73 @@ function get_or_create_cookie_user() {
 
       setCookie("user", data.id, 120, "/");
       $user_id = data.id;
-      get_stat_meta();
     }
   }
   ajax_link.send();
 }
+
+var delayedExec = function(after, fn) {
+    var timer;
+    return function() {
+        timer && clearTimeout(timer);
+        timer = setTimeout(fn, after);
+    };
+};
+
+function scrolled(_block) {
+    offset = 0;
+    window.onscroll = function() {
+      console.log("paginate");
+      // программа отслеживает окончание прокрутки
+      //scrollStopper();
+      // программа считает секунды для внесения в стат страницы и списка, если он есть.
+      if (!$page_time) {
+        get_page_view_time(120);
+        $page_time = true;
+      };
+
+      // программа останавливает отчет времени просмотра элементов, на которых остановился
+      // пользователь, записывает его всем новым элементам pag, затем их добавляет в основной
+      // список стата, обнуляет счетчик и очищает список новых элементов.
+      if ((window.innerHeight + window.pageYOffset) > offset) {
+        offset = window.innerHeight + window.pageYOffset;
+        $height = parseFloat(offset * 0.000264).toFixed(2);
+      };
+
+      try {
+          box = _block.querySelector('.next_page_list');
+          if (box && box.classList.contains("next_page_list")) {
+              inViewport = elementInViewport(box);
+              if (inViewport) {
+                  box.classList.remove("next_page_list");
+                  paginate(box);
+              }
+          };
+      } catch {return}
+    }
+};
+function paginate(block) {
+        var link_3 = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+        link_3.open('GET', location.protocol + "//" + location.host + block.getAttribute("data-link"), true);
+        link_3.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        link_3.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var elem = document.createElement('span');
+                elem.innerHTML = link_3.responseText;
+                block.parentElement.insertAdjacentHTML('beforeend', elem.querySelector(".is_paginate").innerHTML)
+                block.remove()
+            }
+        }
+        link_3.send();
+};
+
+function create_pagination(block) {
+  if (block.querySelector('.is_paginate')) {
+    scrolled(block.querySelector('.is_paginate'));
+    console.log("Работает пагинация для списка не постов")
+  }
+};
 
 function create_fullscreen(url, type_class) {
   container = document.body.querySelector("#fullscreens_container");

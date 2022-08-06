@@ -36,6 +36,7 @@ function ajax_get_reload(url) {
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
       if ( this.readyState == 4 && this.status == 200 ) {
+        get_stat_meta();
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
         sidebar = elem_.querySelector(".sidebar");
@@ -48,6 +49,8 @@ function ajax_get_reload(url) {
         hide_nav_second_span();
         get_active_button();
         mob_menu_hide();
+        get_page_view_time(count);
+        scrolled(rtr);
         try {
           document.body.querySelector("#reload_nav_block").innerHTML = sidebar.innerHTML
         }catch{ null };
