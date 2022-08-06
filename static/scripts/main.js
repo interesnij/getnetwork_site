@@ -526,7 +526,6 @@ on('body', 'click', '.prev_item', function(event) {
 
 on('body', 'input', '.general_search', function() {
     _this = this;
-    _href = window.location.href;
 
     if (_this.classList.contains("search-field") && !document.body.querySelector(".search_section")) {
       ajax_get_reload("/search/" + _this.value + "/");
@@ -551,6 +550,8 @@ on('body', 'input', '.general_search', function() {
           search = elem_.querySelector(".search_section");
           div = document.body.querySelector(".search_section");
           div.innerHTML = '';
+          console.log("search_block", search);
+          console.log("target_block", div);
           div.innerHTML = search.innerHTML;
           //document.title = elem_.querySelector("title").innerHTML;
           window.history.replaceState(null, null, url);
