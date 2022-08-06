@@ -99,10 +99,14 @@ function get_page_view_time(count) {
   }
   console.log("Общее время страницы работает");
   i = 0;
-  if (i <= count) {
-    setInterval(() => $seconds += 1, 1000);
+  setInterval(() => {
+    $seconds += 1;
     i += 1;
-  } else {$page_time = true};
+    if (i <= count) {
+      $page_time = true;
+      return;
+    }
+  }, 1000);
 };
 
 function get_stat_meta() {
@@ -134,7 +138,7 @@ function get_stat_meta() {
     $seconds,
     $need_plus
   ]
-  console.log($data);
+  console.log("данные для отсылки ", $data);
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
   $seconds = 0;
 }
