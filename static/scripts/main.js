@@ -71,28 +71,35 @@ function get_or_create_cookie_user(value) {
   }
 };
 
-
-var meta_block = document.querySelector(".doc_title");
-var $user_id = "",
-    $object_id = meta_block.getAttribute("data-id") ? meta_block.getAttribute("data-id") : "",
-    $page_id = meta_block.getAttribute("page-id"),
-    $link = document.location.href,
-    $title = meta_block.getAttribute("data-title"),
-    $height = 0,
-    $seconds = 0,
-    $need_plus = check_cookie_need_plus($link)
-    ;
-$data = [
-  $user_id,
-  $object_id,
-  $page_id,
-  $link,
-  $title,
-  $height,
-  $seconds,
-  $need_plus
-]
-console.log($data);
+function get_stat_meta() {
+  var meta_block = document.querySelector(".doc_title");
+  if (meta_block.getAttribute("data-id")) {
+    $object_id = meta_block.getAttribute("data-id");
+  }
+  else {
+    $object_id = ""
+  }
+  var $user_id = "",
+      $page_id = meta_block.getAttribute("page-id"),
+      $link = document.location.href,
+      $title = meta_block.getAttribute("data-title"),
+      $height = 0,
+      $seconds = 0,
+      $need_plus = check_cookie_need_plus($link)
+      ;
+  $data = [
+    $user_id,
+    $object_id,
+    $page_id,
+    $link,
+    $title,
+    $height,
+    $seconds,
+    $need_plus
+  ]
+  console.log($data);
+}
+get_stat_meta();
 
 ///////////////
 function get_or_create_cookie_user() {
