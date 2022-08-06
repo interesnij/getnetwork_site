@@ -5,39 +5,6 @@ function mob_menu_hide() {
   document.querySelector(".mob_menu").style.display = "block";
 };
 
-function get_or_create_cookie_user() {
-  user = getCookie("user");
-  var id;
-  if (user != "") {
-    id = user;
-  }
-  else {
-    id = 0;
-  }
-  ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  ajax_link.overrideMimeType("application/json");
-  ajax_link.open( 'GET', "/object_history/" + id + "/", true );
-  ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-  ajax_link.onreadystatechange = function () {
-    if ( this.readyState == 4 && this.status == 200 ) {
-      data = JSON.parse(ajax_link.responseText);
-      console.log(data);
-      if (data.device == 1) {
-        _device = "Комп";
-      }
-      else {
-        _device = "Телефон";
-      }
-      sidebar = document.body.querySelector("#fixed_nav_block");
-      sidebar.querySelector(".device").innerHTML = data.ip + " (" + _device + ") ";
-      sidebar.querySelector(".city").innerHTML = data.city_ru + " (" + data.city_en + ") ";
-
-      setCookie("user", data.id, 120);
-    }
-  }
-  ajax_link.send();
-}
-
 function check_first_load() {
   if (!document.body.querySelector(".span").firstChild) {
     url = window.location.href;

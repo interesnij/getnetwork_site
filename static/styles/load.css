@@ -1333,7 +1333,7 @@ blockquote footer{
 .this_fullscreen_hide svg {
   color: rgba(255, 255, 255, 0.8) !important;
 }
-.this_fullscreen_hide svg :hover {
+.this_fullscreen_hide svg:hover {
   color: rgba(255, 255, 255, 1) !important;
 }
 

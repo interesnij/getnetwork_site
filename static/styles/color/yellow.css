@@ -252,7 +252,7 @@ a.active {
     color: rgba(0, 0, 0, 1) !important;
     font-weight: bold;
 }
-a :hover {
+a:hover {
     color: rgba(0, 0, 0, 1) !important;
 }
 .form textarea{

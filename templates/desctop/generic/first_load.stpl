@@ -16,7 +16,7 @@
     <link class="color" type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css">
   </head>
 
-  <body class="desctop">
+  <body data-device="1">
     <span class="span"></span>
     <script defer type="text/javascript" src="/static/scripts/desctop/main.js"></script>
     <script defer type="text/javascript" src="/static/scripts/main.js"></script>

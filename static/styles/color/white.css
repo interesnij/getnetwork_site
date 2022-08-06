@@ -5,7 +5,7 @@
 .js-height-full, .small-section, .mob_menu, .mn-sub {
   background: #e6e3df !important;
 }
-a :hover {
+a:hover {
     color: rgba(0, 0, 0, 1) !important;
 }
 .mobile_icon span {
