@@ -71,7 +71,7 @@ function get_or_create_cookie_user(value) {
   }
 };
 
-function get_stat_meta() {
+function get_stat_meta($user_id) {
   var meta_block = document.querySelector(".doc_title");
   if (meta_block.getAttribute("data-id")) {
     $object_id = meta_block.getAttribute("data-id");
@@ -79,8 +79,7 @@ function get_stat_meta() {
   else {
     $object_id = ""
   }
-  var $user_id = "",
-      $page_id = meta_block.getAttribute("page-id"),
+  var $page_id = meta_block.getAttribute("page-id"),
       $link = document.location.href,
       $title = meta_block.getAttribute("data-title"),
       $height = 0,
@@ -99,7 +98,6 @@ function get_stat_meta() {
   ]
   console.log($data);
 }
-get_stat_meta();
 
 ///////////////
 function get_or_create_cookie_user() {
@@ -130,7 +128,7 @@ function get_or_create_cookie_user() {
       footer.querySelector(".city").innerHTML = data.city_ru + " (" + data.city_en + ") ";
 
       setCookie("user", data.id, 120, "/");
-      $user_id = data.id;
+      get_stat_meta(data.id);
     }
   }
   ajax_link.send();
