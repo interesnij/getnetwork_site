@@ -3,7 +3,7 @@ use crate::utils::establish_connection;
 use crate::diesel::{ExpressionMethods, RunQueryDsl, QueryDsl};
 
 
-pub fn plus_mainpage_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_mainpage_stat(height: f64, seconds: i32) -> () {
     // статистика страницы главной
     use schema::stat_mainpages::dsl::stat_mainpages;
     use crate::models::StatMainpage;
@@ -39,7 +39,7 @@ pub fn plus_mainpage_stat(height: f64, seconds: i32, need_plus: bool) -> () {
     }
 }
 
-pub fn plus_blog_categories_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_blog_categories_stat(height: f64, seconds: i32) -> () {
     // статистика страницы всех категорий блога
     use schema::stat_blog_categories::dsl::stat_blog_categories;
     use crate::models::StatBlogCategorie;
@@ -74,7 +74,7 @@ pub fn plus_blog_categories_stat(height: f64, seconds: i32, need_plus: bool) -> 
             .expect("Error.");
     }
 }
-pub fn plus_blog_category_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_blog_category_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы категории блога
     use schema::blog_categories::dsl::blog_categories;
     use crate::models::BlogCategories;
@@ -88,16 +88,16 @@ pub fn plus_blog_category_stat(id: i32, height: f64, seconds: i32, need_plus: bo
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
         diesel::update(&item)
-            .set ((
-                schema::blog_categories::view.eq(item.view + 1),
-                schema::blog_categories::height.eq(item.height + height),
-                schema::blog_categories::seconds.eq(item.seconds + seconds),
-            ))
-            .get_result::<BlogCategories>(&_connection)
-            .expect("Error.");
+        .set ((
+            schema::blog_categories::view.eq(item.view + 1),
+            schema::blog_categories::height.eq(item.height + height),
+            schema::blog_categories::seconds.eq(item.seconds + seconds),
+        ))
+        .get_result::<BlogCategories>(&_connection)
+        .expect("Error.");
     }
 }
-pub fn plus_blog_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_blog_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы блога
     use schema::blogs::dsl::blogs;
     use crate::models::Blog;
@@ -121,7 +121,7 @@ pub fn plus_blog_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> ()
     }
 }
 
-pub fn plus_service_categories_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_service_categories_stat(height: f64, seconds: i32) -> () {
     // статистика страницы всех категорий услуг
     use schema::stat_service_categories::dsl::stat_service_categories;
     use crate::models::StatServiceCategorie;
@@ -156,7 +156,7 @@ pub fn plus_service_categories_stat(height: f64, seconds: i32, need_plus: bool) 
             .expect("Error.");
     }
 }
-pub fn plus_service_category_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_service_category_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы категории услуг
     use schema::service_categories::dsl::service_categories;
     use crate::models::ServiceCategories;
@@ -179,7 +179,7 @@ pub fn plus_service_category_stat(id: i32, height: f64, seconds: i32, need_plus:
             .expect("Error.");
     }
 }
-pub fn plus_service_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_service_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы услуги
     use schema::services::dsl::services;
     use crate::models::Service;
@@ -203,7 +203,7 @@ pub fn plus_service_stat(id: i32, height: f64, seconds: i32, need_plus: bool) ->
     }
 }
 
-pub fn plus_store_categories_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_store_categories_stat(height: f64, seconds: i32) -> () {
     // статистика страницы всех категорий товаров
     use schema::stat_store_categories::dsl::stat_store_categories;
     use crate::models::StatStoreCategorie;
@@ -238,7 +238,7 @@ pub fn plus_store_categories_stat(height: f64, seconds: i32, need_plus: bool) ->
             .expect("Error.");
     }
 }
-pub fn plus_store_category_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_store_category_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы категории товаров
     use schema::store_categories::dsl::store_categories;
     use crate::models::StoreCategories;
@@ -261,7 +261,7 @@ pub fn plus_store_category_stat(id: i32, height: f64, seconds: i32, need_plus: b
             .expect("Error.");
     }
 }
-pub fn plus_store_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_store_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы товара
     use schema::stores::dsl::stores;
     use crate::models::Store;
@@ -285,7 +285,7 @@ pub fn plus_store_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> (
     }
 }
 
-pub fn plus_wiki_categories_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_wiki_categories_stat(height: f64, seconds: i32) -> () {
     // статистика страницы всех категорий обучающих статей
     use schema::stat_wiki_categories::dsl::stat_wiki_categories;
     use crate::models::StatWikiCategorie;
@@ -320,7 +320,7 @@ pub fn plus_wiki_categories_stat(height: f64, seconds: i32, need_plus: bool) -> 
             .expect("Error.");
     }
 }
-pub fn plus_wiki_category_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_wiki_category_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы категории товаров
     use schema::wiki_categories::dsl::wiki_categories;
     use crate::models::WikiCategories;
@@ -343,7 +343,7 @@ pub fn plus_wiki_category_stat(id: i32, height: f64, seconds: i32, need_plus: bo
             .expect("Error.");
     }
 }
-pub fn plus_wiki_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_wiki_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы товара
     use schema::wikis::dsl::wikis;
     use crate::models::Wiki;
@@ -367,7 +367,7 @@ pub fn plus_wiki_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> ()
     }
 }
 
-pub fn plus_work_categories_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_work_categories_stat(height: f64, seconds: i32) -> () {
     // статистика страницы всех категорий работ
     use schema::stat_work_categories::dsl::stat_work_categories;
     use crate::models::StatWorkCategorie;
@@ -402,7 +402,7 @@ pub fn plus_work_categories_stat(height: f64, seconds: i32, need_plus: bool) -> 
             .expect("Error.");
     }
 }
-pub fn plus_work_category_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_work_category_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы категории работ
     use schema::work_categories::dsl::work_categories;
     use crate::models::WorkCategories;
@@ -425,7 +425,7 @@ pub fn plus_work_category_stat(id: i32, height: f64, seconds: i32, need_plus: bo
             .expect("Error.");
     }
 }
-pub fn plus_work_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_work_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы работы
     use schema::works::dsl::works;
     use crate::models::Work;
@@ -449,7 +449,7 @@ pub fn plus_work_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> ()
     }
 }
 
-pub fn plus_tags_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_tags_stat(height: f64, seconds: i32) -> () {
     // статистика страницы всех тегов
     use schema::stat_tags::dsl::stat_tags;
     use crate::models::StatTag;
@@ -484,7 +484,7 @@ pub fn plus_tags_stat(height: f64, seconds: i32, need_plus: bool) -> () {
             .expect("Error.");
     }
 }
-pub fn plus_tag_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_tag_stat(id: i32, height: f64, seconds: i32) -> () {
     // статистика страницы работы
     use schema::tags::dsl::tags;
     use crate::models::Tag;
@@ -508,7 +508,7 @@ pub fn plus_tag_stat(id: i32, height: f64, seconds: i32, need_plus: bool) -> () 
     }
 }
 
-pub fn plus_about_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_about_stat(height: f64, seconds: i32) -> () {
     // статистика страницы "о нас"
     use schema::stat_abouts::dsl::stat_abouts;
     use crate::models::StatAbout;
@@ -544,7 +544,7 @@ pub fn plus_about_stat(height: f64, seconds: i32, need_plus: bool) -> () {
     }
 }
 
-pub fn plus_info_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_info_stat(height: f64, seconds: i32) -> () {
     // статистика страницы общей информации
     use schema::stat_infos::dsl::stat_infos;
     use crate::models::StatInfo;
@@ -580,7 +580,7 @@ pub fn plus_info_stat(height: f64, seconds: i32, need_plus: bool) -> () {
     }
 }
 
-pub fn plus_contact_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_contact_stat(height: f64, seconds: i32) -> () {
     // статистика страницы контактов
     use schema::stat_contacts::dsl::stat_contacts;
     use crate::models::StatContact;
@@ -616,7 +616,7 @@ pub fn plus_contact_stat(height: f64, seconds: i32, need_plus: bool) -> () {
     }
 }
 
-pub fn plus_team_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_team_stat(height: f64, seconds: i32) -> () {
     // статистика страницы команды
     use schema::stat_teams::dsl::stat_teams;
     use crate::models::StatTeam;
@@ -652,7 +652,7 @@ pub fn plus_team_stat(height: f64, seconds: i32, need_plus: bool) -> () {
     }
 }
 
-pub fn plus_partnership_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_partnership_stat(height: f64, seconds: i32) -> () {
     // статистика страницы сотрудничества
     use schema::stat_partnerships::dsl::stat_partnerships;
     use crate::models::StatPartnership;
@@ -688,7 +688,7 @@ pub fn plus_partnership_stat(height: f64, seconds: i32, need_plus: bool) -> () {
     }
 }
 
-pub fn plus_login_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_login_stat(height: f64, seconds: i32) -> () {
     // статистика страницы входа
     use schema::stat_logins::dsl::stat_logins;
     use crate::models::StatLogin;
@@ -724,7 +724,7 @@ pub fn plus_login_stat(height: f64, seconds: i32, need_plus: bool) -> () {
     }
 }
 
-pub fn plus_logout_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_logout_stat(height: f64, seconds: i32) -> () {
     // статистика страницы выхода
     use schema::stat_logouts::dsl::stat_logouts;
     use crate::models::StatLogout;
@@ -760,7 +760,7 @@ pub fn plus_logout_stat(height: f64, seconds: i32, need_plus: bool) -> () {
     }
 }
 
-pub fn plus_signup_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_signup_stat(height: f64, seconds: i32) -> () {
     // статистика страницы регистрации
     use schema::stat_signups::dsl::stat_signups;
     use crate::models::StatSignup;
@@ -796,7 +796,7 @@ pub fn plus_signup_stat(height: f64, seconds: i32, need_plus: bool) -> () {
     }
 }
 
-pub fn plus_help_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_help_stat(height: f64, seconds: i32) -> () {
     // статистика страницы помощи
     use schema::stat_helps::dsl::stat_helps;
     use crate::models::StatHelp;
@@ -832,7 +832,7 @@ pub fn plus_help_stat(height: f64, seconds: i32, need_plus: bool) -> () {
     }
 }
 
-pub fn plus_profil_stat(height: f64, seconds: i32, need_plus: bool) -> () {
+pub fn plus_profil_stat(height: f64, seconds: i32) -> () {
     // статистика страницы профиля
     use schema::stat_profils::dsl::stat_profils;
     use crate::models::StatProfil;
@@ -845,24 +845,14 @@ pub fn plus_profil_stat(height: f64, seconds: i32, need_plus: bool) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
-        if need_plus {
-            diesel::update(&item)
-                .set ((
-                    schema::stat_profils::view.eq(item.view + 1),
-                    schema::stat_profils::height.eq(item.height + height),
-                    schema::stat_profils::seconds.eq(item.seconds + seconds),
-                ))
-                .get_result::<StatProfil>(&_connection)
-                .expect("Error.");
-        } else {
-            diesel::update(&item)
-                .set ((
-                    schema::stat_profils::height.eq(item.height + height),
-                    schema::stat_profils::seconds.eq(item.seconds + seconds),
-                ))
-                .get_result::<StatProfil>(&_connection)
-                .expect("Error.");
-        }
+        diesel::update(&item)
+            .set ((
+                schema::stat_profils::view.eq(item.view + 1),
+                schema::stat_profils::height.eq(item.height + height),
+                schema::stat_profils::seconds.eq(item.seconds + seconds),
+            ))
+            .get_result::<StatProfil>(&_connection)
+            .expect("Error.");
     }
     else {
         use crate::models::NewStatProfil;
