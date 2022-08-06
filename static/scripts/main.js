@@ -74,7 +74,7 @@ function get_or_create_cookie_user(value) {
 
 var meta_block = document.querySelector(".doc_title");
 var $user_id = "",
-    $object_id = meta_block.getAttribute("data-id"),
+    $object_id = meta_block.getAttribute("data-id") ? meta_block.getAttribute("data-id") : "",
     $page_id = meta_block.getAttribute("page-id"),
     $link = document.location.href,
     $title = meta_block.getAttribute("data-title"),
