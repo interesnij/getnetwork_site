@@ -69,9 +69,6 @@
     font-weight: 700;
     text-transform: uppercase;
 }
-.mn-group-title:hover {
-    background: none !important;
-}
 .inner-nav li.js-opened .mn-sub {
     opacity: 1;
 }
