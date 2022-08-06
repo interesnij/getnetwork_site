@@ -540,7 +540,7 @@ on('body', 'input', '.general_search', function() {
       url = "/search" + folder + "/" + _this.value + "/";
 
       var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-      ajax_link.open( 'GET', url, true );
+      ajax_link.open( 'GET', url + "?ajax=1", true );
       ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
