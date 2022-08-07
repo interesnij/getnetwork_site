@@ -21,16 +21,15 @@ use crate::schema::{
     stat_infos,
     stat_profils,
 };
-use diesel::{
+use crate::diesel::{
     Queryable,
     Insertable,
     QueryDsl,
-    RunQueryDsl,
     ExpressionMethods,
+    RunQueryDsl
 };
 use serde::{Serialize, Deserialize};
 use crate::utils::establish_connection;
-use crate::diesel::{ExpressionMethods, RunQueryDsl};
 use actix_web::web::Json;
 
 
