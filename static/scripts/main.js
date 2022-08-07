@@ -117,18 +117,16 @@ function get_stat_meta($title, $object_id, $page_id) {
   // при смене страницы повторяем только эту функцию
   $link = window.location.pathname;
   $need_plus = check_cookie_need_plus($link);
-
-  $data = [
-    $user_id,
-    $object_id,
-    $page_id,
-    $link,
-    $title,
-    $height,
-    $seconds,
-    $need_plus
-  ]
-  console.log("данные для отсылки ", $data);
+  console.log("======================");
+  console.log("id пользователя",   $user_id);
+  console.log("id объекта",        $object_id);
+  console.log("id страницы",       $page_id);
+  console.log("ссылка",            $link);
+  console.log("название страницы", $title);
+  console.log("накручено метров",  $height);
+  console.log("затрачено секунд",  $seconds);
+  console.log("обновлять статистику объекта?",$need_plus);
+  console.log("======================");
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
   $seconds = 0;
 }
