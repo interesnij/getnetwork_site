@@ -106,7 +106,6 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   // потом мы получаем данные для отсылки статистики со всеми
   // примочками - таймеры и так далее.
   // при смене страницы повторяем только эту функцию
-  $need_plus = check_cookie_need_plus($link);
   console.log("======================");
   console.log("id пользователя",   $user_id);
   console.log("id объекта",        $object_id);
@@ -122,7 +121,6 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
 }
 
 function get_window_stat_meta($link, $title, $object_id, $page_id) {
-  $need_plus = check_cookie_need_plus($link);
   console.log("======================");
   console.log("id пользователя",   $user_id);
   console.log("id объекта",        $object_id);
