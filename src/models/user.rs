@@ -208,7 +208,7 @@ pub struct CookieStatCard {
 }
 
 impl CookieStat {
-    pub fn get_stat_items(user_id: i32, limit: i64, offset: i64) -> Vec<CookieStatCard> {
+    pub fn get_stat_items(user_id: i32, limit: i64, offset: i64) -> Vec<CookieStat> {
         use crate::schema::cookie_stats::dsl::cookie_stats;
 
         let _connection = establish_connection();
@@ -217,7 +217,7 @@ impl CookieStat {
             .order(schema::cookie_stats::created.desc())
             .limit(limit)
             .offset(offset)
-            .load::<CookieStatCard>(&_connection)
+            .load::<CookieStat>(&_connection)
             .expect("E.");
     }
     pub fn create(user_id: i32, page: i16, link: String,
