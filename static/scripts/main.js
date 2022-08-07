@@ -107,6 +107,7 @@ function get_page_view_time(count) {
     }
     else {
       $page_time_end = true;
+      return
     }
     i += 1;
   }, 1000);
