@@ -89,8 +89,8 @@ p {
   line-height: 16px;
 }
 
-.mobile_icon p{
-  margin: 0;
+.mobile_icon p {
+  margin: 0 !important;
   font-size: 11px;
 }
 

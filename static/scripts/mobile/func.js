@@ -21,6 +21,8 @@ function check_first_load() {
         window.history.pushState({route: url}, "network", url);
         get_custom_design();
         get_or_create_cookie_user();
+        get_page_view_time(120);
+        scrolled(document.body.querySelector(".span"));
       }
     }
     ajax_link.send();
