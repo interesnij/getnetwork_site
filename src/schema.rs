@@ -602,26 +602,16 @@ table! {
 
 joinable!(blog_category -> blog_categories (blog_categories_id));
 joinable!(blog_category -> blogs (blog_id));
-joinable!(blog_images -> blogs (blog));
-joinable!(blog_videos -> blogs (blog));
 joinable!(serve -> serve_categories (serve_categories));
 joinable!(serve_categories -> tech_categories (tech_categories));
 joinable!(service_category -> service_categories (service_categories_id));
 joinable!(service_category -> services (service_id));
-joinable!(service_images -> services (service));
-joinable!(service_videos -> services (service));
 joinable!(store_category -> store_categories (store_categories_id));
 joinable!(store_category -> stores (store_id));
-joinable!(store_images -> stores (store));
-joinable!(store_videos -> stores (store));
 joinable!(wiki_category -> wiki_categories (wiki_categories_id));
 joinable!(wiki_category -> wikis (wiki_id));
-joinable!(wiki_images -> wikis (wiki));
-joinable!(wiki_videos -> wikis (wiki));
 joinable!(work_category -> work_categories (work_categories_id));
 joinable!(work_category -> works (work_id));
-joinable!(work_images -> works (work));
-joinable!(work_videos -> works (work));
 
 allow_tables_to_appear_in_same_query!(
     blog_categories,
