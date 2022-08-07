@@ -69,8 +69,9 @@ impl StoreCategories {
         let object_list: Vec<Store>;
 
         if page > 1 {
+            let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = self.get_stores(limit.into(), have_next.into());
+            object_list = self.get_stores(limit.into(), step.into());
         }
         else {
             have_next = limit + 1;
@@ -292,8 +293,9 @@ impl Store {
         let object_list: Vec<Store>;
 
         if page > 1 {
+            let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Store::get_stores_for_ids(limit.into(), have_next.into(), &ids);
+            object_list = Store::get_stores_for_ids(limit.into(), step.into(), &ids);
         }
         else {
             have_next = limit + 1;

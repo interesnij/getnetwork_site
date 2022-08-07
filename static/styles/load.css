@@ -2049,7 +2049,7 @@ a.blog-item-more{
 }
 
 .first_span {
-  bottom: 42px;
+  bottom: 48px;
   left: 0;
   right: 0;
   display: -webkit-box;
@@ -2059,10 +2059,9 @@ a.blog-item-more{
   z-index:3000;
   position: fixed;
   width: 100%;
-  padding-bottom: 5px;
 }
 .second_span {
-  bottom: 42px;
+  bottom: 48px;
   left: 0;
   right: 0;
   display: -webkit-box;
@@ -2072,7 +2071,6 @@ a.blog-item-more{
   z-index:3000;
   position: fixed;
   width: 100%;
-  padding-bottom: 5px;
 }
 
 .container-fluid {

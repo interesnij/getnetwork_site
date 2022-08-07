@@ -305,8 +305,9 @@ impl Service {
         let object_list: Vec<Service>;
 
         if page > 1 {
+            let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Service::get_services_for_ids(limit.into(), have_next.into(), &ids);
+            object_list = Service::get_services_for_ids(limit.into(), step.into(), &ids);
         }
         else {
             have_next = limit + 1;

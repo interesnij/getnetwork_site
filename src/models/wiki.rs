@@ -69,8 +69,9 @@ impl WikiCategories {
         let object_list: Vec<Wiki>;
 
         if page > 1 {
+            let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = self.get_wikis(limit.into(), have_next.into());
+            object_list = self.get_wikis(limit.into(), step.into());
         }
         else {
             have_next = limit + 1;
@@ -207,8 +208,9 @@ impl Wiki {
         let object_list: Vec<Wiki>;
 
         if page > 1 {
+            let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Wiki::get_wikis_for_ids(limit.into(), have_next.into(), &ids);
+            object_list = Wiki::get_wikis_for_ids(limit.into(), step.into(), &ids);
         }
         else {
             have_next = limit + 1;

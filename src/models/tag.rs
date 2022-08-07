@@ -38,8 +38,9 @@ impl Tag {
         let object_list: Vec<Tag>;
 
         if page > 1 {
+            let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Tag::get_tags(limit.into(), have_next.into());
+            object_list = Tag::get_tags(limit.into(), step.into());
         }
         else {
             have_next = limit + 1;
