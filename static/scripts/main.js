@@ -109,13 +109,12 @@ function get_page_view_time(count) {
   }, 1000);
 };
 
-function get_stat_meta($title, $object_id, $page_id) {
+function get_stat_meta($link, $title, $object_id, $page_id) {
   // сначала активизируется функция отрисовки первого контента,
   // затем получается пользователь из куки,
   // потом мы получаем данные для отсылки статистики со всеми
   // примочками - таймеры и так далее.
   // при смене страницы повторяем только эту функцию
-  $link = window.location.pathname;
   $need_plus = check_cookie_need_plus($link);
   console.log("======================");
   console.log("id пользователя",   $user_id);

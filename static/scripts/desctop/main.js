@@ -91,6 +91,7 @@ function ajax_get_reload(url) {
       if ( this.readyState == 4 && this.status == 200 ) {
         rtr = document.getElementById('ajax');
         // статистика
+        $link = document.location.pathname;
         meta_block = rtr.querySelector(".doc_title");
         if (meta_block.getAttribute("data-id")) {
           $object_id = meta_block.getAttribute("data-id");
@@ -112,7 +113,7 @@ function ajax_get_reload(url) {
         get_active_button();
         get_page_view_time(120);
         scrolled(rtr);
-        get_stat_meta($title, $object_id, $page_id);
+        get_stat_meta($link, $title, $object_id, $page_id);
       }
     }
     ajax_link.send();
