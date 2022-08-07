@@ -68,7 +68,8 @@ impl ServiceCategories {
 
         if page > 1 {
             have_next = page * limit + 1;
-            object_list = self.get_services(limit.into(), have_next.into());
+            let step = (page - 1) * 20;
+            object_list = self.get_services(limit.into(), step.into());
         }
         else {
             have_next = limit + 1;
