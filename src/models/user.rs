@@ -24,6 +24,9 @@ use crate::schema::{
 use diesel::{
     Queryable,
     Insertable,
+    QueryDsl,
+    RunQueryDsl,
+    ExpressionMethods,
 };
 use serde::{Serialize, Deserialize};
 use crate::utils::establish_connection;
@@ -207,7 +210,7 @@ pub struct CookieStatCard {
 }
 
 impl CookieStat {
-    pub fn get_stat_items(user_id: i32, limit: i64, offset: i64) -> Vec<Blog> {
+    pub fn get_stat_items(user_id: i32, limit: i64, offset: i64) -> Vec<CookieStatCard> {
         use crate::schema::cookie_stats::dsl::cookie_stats;
 
         let _connection = establish_connection();
