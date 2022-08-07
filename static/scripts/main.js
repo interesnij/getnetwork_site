@@ -94,9 +94,6 @@ function view_timer(count) {
 
 function get_page_view_time(count) {
   // считаем время нахождения на странице, до 2х минут. При скролле перезапускаем.
-  if ($page_time_end) {
-    return
-  }
   console.log("Общее время страницы работает");
   i = 1;
   intervalListener = setInterval(() => {
@@ -107,7 +104,7 @@ function get_page_view_time(count) {
     }
     else {
       $page_time_end = true;
-      return
+      window.clearInterval(intervalListener);
     }
     i += 1;
   }, 1000);
@@ -187,6 +184,7 @@ function scrolled(_block) {
       if ($page_time_end) {
         console.log("перезапускаем счетчик");
         get_page_view_time(120);
+        $page_time_end = false;
       };
 
       // программа останавливает отчет времени просмотра элементов, на которых остановился
