@@ -81,12 +81,12 @@ function check_cookie_need_plus(value) {
 };
 
 $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
-$seconds = 0;
+$seconds = 1;
 $user_id = 0;
 $page_time_end = false;
 
 $window_height = 0;
-$window_seconds = 0;
+$window_seconds = 1;
 $window_time_end = false;
 
 function get_window_view_timer(count) {
@@ -141,7 +141,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("обновлять статистику объекта?",$need_plus);
   console.log("======================");
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
-  $seconds = 0;
+  $seconds = 1;
   window.clearInterval(intervalListener);
 }
 
@@ -159,7 +159,7 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   console.log("======================");
   $window_time_end = false;
   $window_height = 0;
-  $window_seconds = 0;
+  $window_seconds = 1;
 }
 
 ///////////////
