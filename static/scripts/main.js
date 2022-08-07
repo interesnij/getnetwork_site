@@ -98,9 +98,8 @@ function get_page_view_time(count) {
   i = 0;
   intervalListener = setInterval(() => {
     if (i <= count) {
-      console.log($seconds);
       $seconds += 1;
-      //window.clearInterval(intervalListener);
+      console.log($seconds);
     }
     else {
       $page_time_end = true;
