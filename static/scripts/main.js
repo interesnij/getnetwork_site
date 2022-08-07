@@ -75,7 +75,7 @@ function check_cookie_need_plus(value) {
 $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
 $seconds = 0;
 $user_id = 0;
-$page_time = false;
+$page_time_end = false;
 
 $window_height = 0;
 $window_seconds = 0;
@@ -94,7 +94,7 @@ function view_timer(count) {
 
 function get_page_view_time(count) {
   // считаем время нахождения на странице, до 2х минут. При скролле перезапускаем.
-  if ($page_time) {
+  if ($page_time_end) {
     return
   }
   console.log("Общее время страницы работает");
@@ -103,8 +103,10 @@ function get_page_view_time(count) {
     if (i != count) {
       console.log($seconds);
       $seconds += 1;
-      $page_time = true;
       //window.clearInterval(intervalListener);
+    }
+    else {
+      $page_time_end = true;
     }
     i += 1;
   }, 1000);
@@ -181,7 +183,7 @@ function scrolled(_block) {
       // программа отслеживает окончание прокрутки
       //scrollStopper();
       // программа считает секунды для внесения в стат страницы и списка, если он есть.
-      if (!$page_time) {
+      if ($page_time_end) {
         console.log("перезапускаем счетчик");
         get_page_view_time(120);
       };
