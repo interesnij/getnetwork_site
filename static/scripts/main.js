@@ -78,6 +78,7 @@ function get_window_view_timer(count) {
       console.log("window_seconds ", $window_seconds);
     }
     else {
+      $window_time_end = true;
       window.clearInterval(intervalListener2);
     }
     i += 1;
@@ -94,6 +95,7 @@ function get_page_view_time(count) {
       $seconds += 1;
     }
     else {
+      $page_time_end = true;
       window.clearInterval(intervalListener);
     }
     i += 1;
