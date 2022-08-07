@@ -103,6 +103,9 @@ function get_page_view_time(count) {
 };
 
 function get_stat_meta($link, $title, $object_id, $page_id) {
+  if (!$page_id) {
+    return
+  }
   // сначала активизируется функция отрисовки первого контента,
   // затем получается пользователь из куки,
   // потом мы получаем данные для отсылки статистики со всеми

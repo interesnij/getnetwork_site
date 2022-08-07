@@ -197,8 +197,28 @@ pub struct HistoryResponse {
     pub height:  f64,
     pub seconds: i32,
 }
+#[derive(Debug, Queryable, Serialize)]
+#[table_name="cookie_stats"]
+pub struct CookieStatCard {
+    pub link:     String,
+    pub title:    String,
+    pub height:   f64,
+    pub seconds:  i32,
+}
 
 impl CookieStat {
+    pub fn get_stat_items(user_id: i32, limit: i64, offset: i64) -> Vec<Blog> {
+        use crate::schema::cookie_stats::dsl::cookie_stats;
+
+        let _connection = establish_connection();
+        return cookie_stats
+            .filter(schema::blogs::user_id.eq(user_id))
+            .order(schema::cookie_stats::created.desc())
+            .limit(limit)
+            .offset(offset)
+            .load::<CookieStatCard>(&_connection)
+            .expect("E.");
+    }
     pub fn create(user_id: i32, page: i16, link: String,
         title: String, height: f64, seconds: i32) -> Json<HistoryResponse> {
 
