@@ -208,6 +208,26 @@ pub struct CookieStatCard {
 }
 
 impl CookieStat {
+    pub fn get_stat_list(user_id: i32, page: i32, limit: i32) -> (Vec<CookieStat>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<CookieStat>;
+
+        if page > 1 {
+            let step = (page - 1) * 20;
+            have_next = page * limit + 1;
+            object_list = self.get_stat_items(limit.into(), step.into());
+        }
+        else {
+            have_next = limit + 1;
+            object_list = self.get_stat_items(limit.into(), 0);
+        }
+        if self.get_stat_items(1, have_next.into()).len() > 0 {
+            next_page_number = page + 1;
+        }
+
+        return (object_list, next_page_number);
+    }
     pub fn get_stat_items(user_id: i32, limit: i64, offset: i64) -> Vec<CookieStat> {
         use crate::schema::cookie_stats::dsl::cookie_stats;
 
