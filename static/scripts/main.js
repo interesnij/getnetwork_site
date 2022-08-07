@@ -47,6 +47,14 @@ function close_fullscreen() {
   };
   container = document.body.querySelector("#fullscreens_container");
   _window = container.querySelector(".card_fullscreen");
+
+  meta_block = _window.querySelector(".doc_title");
+  $link = meta_block.getAttribute("data-link");
+  $title = meta_block.getAttribute("data-title");
+  $object_id = meta_block.getAttribute("object-id");
+  $page_id = meta_block.getAttribute("page-id");
+  get_window_stat_meta($link, $title, $object_id, $page_id);
+
   _window.remove();
 
   if (!container.innerHTML) {
@@ -79,17 +87,23 @@ $page_time_end = false;
 
 $window_height = 0;
 $window_seconds = 0;
-$window_time = false;
+$window_time_end = false;
 
-function view_timer(count) {
-    var i = 0;
-    setInterval(() => {
-      if (i == count && document.body.querySelector(".card_fullscreen")) {
-        document.body.querySelector(".card_fullscreen").classList.add("count_done");
-        return;
-      };
-    $window_seconds += 1;
-    }, 1000);
+function get_window_view_timer(count) {
+  // считаем время нахождения на странице, до 2х минут. При скролле перезапускаем.
+  console.log("Время окна работает");
+  i = 0;
+  intervalListener2 = setInterval(() => {
+    if (i < count) {
+      $window_seconds += 1;
+      console.log("window_seconds ", $window_seconds);
+    }
+    else {
+      $page_time_end = true;
+      window.clearInterval(intervalListener2);
+    }
+    i += 1;
+  }, 1000);
 };
 
 function get_page_view_time(count) {
@@ -99,7 +113,6 @@ function get_page_view_time(count) {
   intervalListener = setInterval(() => {
     if (i < count) {
       $seconds += 1;
-      console.log($seconds);
     }
     else {
       $page_time_end = true;
@@ -128,6 +141,22 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("======================");
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
   $seconds = 0;
+}
+
+function get_window_stat_meta($link, $title, $object_id, $page_id) {
+  $need_plus = check_cookie_need_plus($link);
+  console.log("======================");
+  console.log("id пользователя",   $user_id);
+  console.log("id объекта",        $object_id);
+  console.log("id страницы",       $page_id);
+  console.log("ссылка",            $link);
+  console.log("название страницы", $title);
+  console.log("накручено метров",  $window_height);
+  console.log("затрачено секунд",  $window_seconds);
+  console.log("обновлять статистику объекта?",$need_plus);
+  console.log("======================");
+  $window_height = 0;
+  $window_seconds = 0;
 }
 
 ///////////////
@@ -181,9 +210,14 @@ function scrolled(_block) {
       //scrollStopper();
       // программа считает секунды для внесения в стат страницы и списка, если он есть.
       if ($page_time_end) {
-        console.log("перезапускаем счетчик");
+        console.log("перезапускаем счетчик страницы");
         get_page_view_time(120);
         $page_time_end = false;
+      };
+      if ($window_time_end) {
+        console.log("перезапускаем счетчик окна");
+        get_window_view_time(120);
+        $window_time_end = false;
       };
 
       // программа останавливает отчет времени просмотра элементов, на которых остановился
@@ -238,6 +272,8 @@ function create_fullscreen(url, type_class) {
   $parent_div.classList.add("card_fullscreen", "mb-30", "border", type_class);
   $parent_div.style.zIndex = 100 + count_items;
   $parent_div.style.opacity = "0";
+  window_time_end = false;
+  $window_height = 0;
 
   if (document.body.querySelector(".desctop_nav")) {
     hide_svg = '<svg class="svg_default" style="position:fixed;" width="30" height="30" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
@@ -281,7 +317,18 @@ function create_fullscreen(url, type_class) {
 
           get_document_opacity_0();
 
+          if ($window_time_end) {
+            console.log("перезапускаем счетчик");
+            get_window_view_timer(120);
+            $window_time_end = false;
+          };
+          offset = 0;
+
           $loader.onscroll = function() {
+            if ($loader.scrollHeight > offset) {
+              offset = $loader.scrollHeight;
+              $window_height = parseFloat(offset * 0.000264).toFixed(2);
+            }
             if ($loader.querySelector(".next_page_list")) {
               box = $loader.querySelector('.next_page_list');
               if (box && box.classList.contains("next_page_list")) {
@@ -344,8 +391,19 @@ function change_this_fullscreen(_this, type_class) {
           };
 
           get_document_opacity_0();
+          window_time_end = false;
+          if ($window_time_end) {
+            console.log("перезапускаем счетчик");
+            get_window_view_timer(120);
+            $window_time_end = false;
+          };
+          offset = 0;
 
           $loader.onscroll = function() {
+            if ($loader.scrollHeight > offset) {
+                offset = $loader.scrollHeight;
+                $window_height = parseFloat(offset * 0.000264).toFixed(2);
+              }
             if ($loader.querySelector(".next_page_list")) {
               box = $loader.querySelector('.next_page_list');
               if (box && box.classList.contains("next_page_list")) {
