@@ -112,12 +112,12 @@ function get_page_view_time(count) {
   i = 0;
   intervalListener = setInterval(() => {
     console.log($seconds);
-    if ($page_time_end || i == count) {
-      $page_time_end = true;
-      window.clearInterval(intervalListener);
+    if (i < count) {
+      $seconds += 1;
     }
     else {
-      $seconds += 1;
+      $page_time_end = true;
+      window.clearInterval(intervalListener);
     }
     i += 1;
   }, 1000);
@@ -140,9 +140,9 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("затрачено секунд",  $seconds);
   console.log("обновлять статистику объекта?",$need_plus);
   console.log("======================");
-  $page_time_end = false;
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
   $seconds = 0;
+  window.clearInterval(intervalListener);
 }
 
 function get_window_stat_meta($link, $title, $object_id, $page_id) {
