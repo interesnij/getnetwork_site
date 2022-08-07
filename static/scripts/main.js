@@ -105,7 +105,7 @@ function get_page_view_time(count) {
     i += 1;
     if (i <= count) {
       $page_time = true;
-      return;
+      return
     }
   }, 1000);
 };
