@@ -653,11 +653,11 @@ pub struct HistoryParams {
     pub title:     String,
     pub height:    f64,
     pub seconds:   i32,
-    pub need_plus: bool,
 }
 pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::schema;
     use crate::models::CookieStat;
+    use crate::schema::cookie_stats::dsl::cookie_stats;
 
     let params = web::Query::<HistoryParams>::from_query(&req.query_string());
     let params_2 = params.unwrap();
@@ -669,9 +669,18 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     let p_height = params_2.height;
     let p_seconds = params_2.seconds;
     let p_need_plus = params_2.need_plus;
+    let p_link = params_2.link.clone();
+    let p_title = params_2.title.clone();
+    
     let _connection = establish_connection();
 
-    if p_need_plus {
+    if cookie_stats
+        .filter(schema::cookie_stats::user_id.eq(p_id))
+        .filter(schema::cookie_stats::link.eq(link))
+        .select(schema::cookie_stats::id)
+        .load::<i32>(&_connection)
+        .expect("E.")
+        .len() > 0 {
         diesel::update(&user)
             .set ((
                 schema::cookie_users::height.eq(user.height + p_height),
@@ -802,9 +811,6 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
             }
         }
     }
-
-    let p_link = params_2.link.clone();
-    let p_title = params_2.title.clone();
 
     return CookieStat::create (
         user.id,

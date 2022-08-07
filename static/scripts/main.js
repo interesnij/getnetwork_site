@@ -8,20 +8,14 @@ function getCookie(name) {
     }
     return "";
 }
-function setCookie(name, value, days, path) {
+function setCookie(name, value, days) {
     let cookie = `${name}=${encodeURIComponent(value)}`;
-    if (path) {
-      _path = path;
-    }
-    else {
-      _path = "/";
-    }
     if (days) {
         const expiry = new Date();
         expiry.setDate(expiry.getDate() + days);
         cookie += `; expires=${expiry.toUTCString()}`;
     }
-    document.cookie = cookie + "; path=" + _path;
+    document.cookie = cookie + "; path=/";
 };
 
 function get_document_opacity_0() {
@@ -63,22 +57,6 @@ function close_fullscreen() {
     prev_window = container.querySelector(".card_fullscreen");
     prev_window.querySelector(".this_fullscreen_hide").style.display = "unset";
   };
-};
-
-/////////
-function check_cookie_need_plus(value) {
-
-  formatted_value = value.replaceAll(":", "%3A").replaceAll("/", "%2F");
-  url = getCookie("url");
-  console.log("url" , url);
-  console.log("value" , formatted_value);
-  if (url != "" && url == formatted_value) {
-    return false;
-  }
-  else {
-    setCookie("url", value, 120, value);
-    return true;
-  }
 };
 
 $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
@@ -137,7 +115,6 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("название страницы", $title);
   console.log("накручено метров",  $height);
   console.log("затрачено секунд",  $seconds);
-  console.log("обновлять статистику объекта?",$need_plus);
   console.log("======================");
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
   $seconds = 1;
@@ -154,7 +131,6 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   console.log("название страницы", $title);
   console.log("накручено метров",  $window_height);
   console.log("затрачено секунд",  $window_seconds);
-  console.log("обновлять статистику объекта?",$need_plus);
   console.log("======================");
   $window_height = 0;
   $window_seconds = 1;
@@ -189,7 +165,7 @@ function get_or_create_cookie_user() {
       stat_meta.querySelector(".device").innerHTML = data.ip + " (" + _device + ") ";
       stat_meta.querySelector(".city").innerHTML = data.city_ru + " (" + data.city_en + ") ";
 
-      setCookie("user", data.id, 120, "/");
+      setCookie("user", data.id, 120);
       $user_id = data.id;
     }
   }
@@ -727,7 +703,7 @@ on('body', 'click', '.anon_color_change', function() {
     new_color = "white"
   };
   if (new_color != color) {
-    setCookie("backgroud", new_color, 90, "/");
+    setCookie("backgroud", new_color, 90);
   }
 });
 on('body', 'click', '.this_fullscreen_hide', function() {
