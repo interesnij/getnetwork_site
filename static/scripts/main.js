@@ -102,11 +102,11 @@ function get_page_view_time(count) {
   intervalListener = setInterval(() => {
     console.log(i);
     $seconds += 1;
-    i += 1;
     if (i == count) {
       $page_time = true;
       window.clearInterval(intervalListener);
     }
+    i += 1;
   }, 1000);
 };
 
