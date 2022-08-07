@@ -212,7 +212,7 @@ impl CookieStat {
 
         let _connection = establish_connection();
         return cookie_stats
-            .filter(schema::blogs::user_id.eq(user_id))
+            .filter(schema::cookie_stats::user_id.eq(user_id))
             .order(schema::cookie_stats::created.desc())
             .limit(limit)
             .offset(offset)
