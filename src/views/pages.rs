@@ -675,7 +675,7 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
 
     if cookie_stats
         .filter(schema::cookie_stats::user_id.eq(p_id))
-        .filter(schema::cookie_stats::link.eq(p_link))
+        .filter(schema::cookie_stats::link.eq(p_link.clone()))
         .select(schema::cookie_stats::id)
         .load::<i32>(&_connection)
         .expect("E.")
