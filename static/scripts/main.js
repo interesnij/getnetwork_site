@@ -107,10 +107,11 @@ function get_window_view_timer(count) {
 };
 
 function get_page_view_time(count) {
-  // считаем время нахождения на странице, до 2х минут. При скролле перезапускаем.
+  // считаем время нахождения на странице, до count секунд. При скролле перезапускаем.
   console.log("Общее время страницы работает");
   i = 0;
   intervalListener = setInterval(() => {
+    console.log($seconds);
     if ($page_time_end || i == count) {
       $page_time_end = true;
       window.clearInterval(intervalListener);
