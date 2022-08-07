@@ -668,15 +668,14 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
     let p_page_id = params_2.page_id;
     let p_height = params_2.height;
     let p_seconds = params_2.seconds;
-    let p_need_plus = params_2.need_plus;
     let p_link = params_2.link.clone();
     let p_title = params_2.title.clone();
-    
+
     let _connection = establish_connection();
 
     if cookie_stats
         .filter(schema::cookie_stats::user_id.eq(p_id))
-        .filter(schema::cookie_stats::link.eq(link))
+        .filter(schema::cookie_stats::link.eq(p_link))
         .select(schema::cookie_stats::id)
         .load::<i32>(&_connection)
         .expect("E.")
