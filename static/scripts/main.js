@@ -103,9 +103,9 @@ function get_page_view_time(count) {
     console.log(i);
     $seconds += 1;
     i += 1;
-    if (i <= count) {
+    if (i == count) {
       $page_time = true;
-      window.clearInterval(intervalListener);
+      //window.clearInterval(intervalListener);
     }
   }, 1000);
 };
