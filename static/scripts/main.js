@@ -98,13 +98,13 @@ function get_page_view_time(count) {
     return
   }
   console.log("Общее время страницы работает");
-  i = 0;
-  intervalListener = new setInterval(() => {
-    console.log(i);
-    $seconds += 1;
-    if (i == count) {
+  i = 1;
+  intervalListener = setInterval(() => {
+    if (i != count) {
+      console.log($seconds);
+      $seconds += 1;
       $page_time = true;
-      window.clearInterval(intervalListener);
+      //window.clearInterval(intervalListener);
     }
     i += 1;
   }, 1000);
