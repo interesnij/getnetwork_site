@@ -89,18 +89,30 @@ function ajax_get_reload(url) {
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
       if ( this.readyState == 4 && this.status == 200 ) {
-        get_stat_meta();
+        rtr = document.getElementById('ajax');
+        // статистика
+        meta_block = rtr.querySelector(".doc_title");
+        if (meta_block.getAttribute("data-id")) {
+          $object_id = meta_block.getAttribute("data-id");
+        }
+        else {
+          $object_id = ""
+        }
+        $page_id = meta_block.getAttribute("page-id");
+        $title = meta_block.getAttribute("data-title");
+        //
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
         sidebar = elem_.querySelector(".sidebar");
-        rtr = document.getElementById('ajax');
+
         rtr.innerHTML = elem_.innerHTML;
-        document.title = rtr.querySelector(".doc_title").getAttribute("data-title");
+        document.title = $title;
         window.scrollTo(0,0);
         window.history.replaceState(null, null, url);
         get_active_button();
         get_page_view_time(120);
         scrolled(rtr);
+        get_stat_meta($title, $object_id, $page_id);
       }
     }
     ajax_link.send();

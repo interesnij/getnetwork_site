@@ -109,23 +109,13 @@ function get_page_view_time(count) {
   }, 1000);
 };
 
-function get_stat_meta() {
+function get_stat_meta($title, $object_id, $page_id) {
   // сначала активизируется функция отрисовки первого контента,
   // затем получается пользователь из куки,
   // потом мы получаем данные для отсылки статистики со всеми
   // примочками - таймеры и так далее.
   // при смене страницы повторяем только эту функцию
-
-  meta_block = document.querySelector(".doc_title");
-  if (meta_block.getAttribute("data-id")) {
-    $object_id = meta_block.getAttribute("data-id");
-  }
-  else {
-    $object_id = ""
-  }
-  $page_id = meta_block.getAttribute("page-id");
   $link = window.location.pathname;
-  $title = meta_block.getAttribute("data-title");
   $need_plus = check_cookie_need_plus($link);
 
   $data = [
@@ -232,13 +222,6 @@ function paginate(block) {
             }
         }
         link_3.send();
-};
-
-function create_pagination(block) {
-  if (block.querySelector('.is_paginate')) {
-    scrolled(block.querySelector('.is_paginate'));
-    console.log("Работает пагинация для списка не постов")
-  }
 };
 
 function create_fullscreen(url, type_class) {

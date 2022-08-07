@@ -36,14 +36,24 @@ function ajax_get_reload(url) {
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
       if ( this.readyState == 4 && this.status == 200 ) {
-        get_stat_meta();
+        rtr = document.getElementById('ajax');
+        // статистика
+        meta_block = rtr.querySelector(".doc_title");
+        if (meta_block.getAttribute("data-id")) {
+          $object_id = meta_block.getAttribute("data-id");
+        }
+        else {
+          $object_id = ""
+        }
+        $page_id = meta_block.getAttribute("page-id");
+        $title = meta_block.getAttribute("data-title");
+        //
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
         sidebar = elem_.querySelector(".sidebar");
-        rtr = document.getElementById('ajax');
         rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
-        document.title = rtr.querySelector(".doc_title").getAttribute("data-title");
+        document.title = $title;
         window.history.pushState({route: url}, "network", url);
         hide_nav_first_span();
         hide_nav_second_span();
@@ -53,7 +63,8 @@ function ajax_get_reload(url) {
         scrolled(rtr);
         try {
           document.body.querySelector("#reload_nav_block").innerHTML = sidebar.innerHTML
-        }catch{ null };
+        } catch { null };
+        get_stat_meta($title, $object_id, $page_id);
       }
     }
     ajax_link.send();
