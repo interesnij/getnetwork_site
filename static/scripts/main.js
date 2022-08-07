@@ -111,12 +111,12 @@ function get_page_view_time(count) {
   console.log("Общее время страницы работает");
   i = 0;
   intervalListener = setInterval(() => {
-    if (i < count) {
-      $seconds += 1;
-    }
-    else {
+    if ($page_time_end || i == count) {
       $page_time_end = true;
       window.clearInterval(intervalListener);
+    }
+    else {
+      $seconds += 1;
     }
     i += 1;
   }, 1000);
