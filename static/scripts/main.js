@@ -99,7 +99,7 @@ function get_page_view_time(count) {
   }
   console.log("Общее время страницы работает");
   i = 0;
-  intervalListener = setInterval(() => {
+  intervalListener = new setInterval(() => {
     console.log(i);
     $seconds += 1;
     if (i == count) {
