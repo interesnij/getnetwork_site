@@ -67,15 +67,16 @@ function close_fullscreen() {
 
 /////////
 function check_cookie_need_plus(value) {
+
   formatted_value = value.replaceAll(":", "%3A").replaceAll("/", "%2F");
-  url = getCookie("urls");
+  url = getCookie("url");
   console.log("url" , url);
   console.log("value" , formatted_value);
   if (url != "" && url == formatted_value) {
     return false;
   }
   else {
-    setCookie("urls", value, 120, value);
+    setCookie("url", value, 120, value);
     return true;
   }
 };
