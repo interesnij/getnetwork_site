@@ -139,6 +139,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("затрачено секунд",  $seconds);
   console.log("обновлять статистику объекта?",$need_plus);
   console.log("======================");
+  $page_time_end = false;
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
   $seconds = 0;
 }
@@ -155,6 +156,7 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   console.log("затрачено секунд",  $window_seconds);
   console.log("обновлять статистику объекта?",$need_plus);
   console.log("======================");
+  $window_time_end = false;
   $window_height = 0;
   $window_seconds = 0;
 }
