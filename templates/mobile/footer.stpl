@@ -96,10 +96,10 @@
   </a>
 </h2>
 </span>
-<p>
+<p class="stat_meta">
   <span class="device"></span><br />
   <span class="city"></span>
-</p> 
+</p>
 </div>
 </div>
 <div id="reload_nav_block" class="container" style="margin-top:20px;position:relative;"></div>

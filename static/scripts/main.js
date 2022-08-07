@@ -99,7 +99,6 @@ function get_window_view_timer(count) {
       console.log("window_seconds ", $window_seconds);
     }
     else {
-      //$page_time_end = true;
       window.clearInterval(intervalListener2);
     }
     i += 1;
@@ -116,7 +115,6 @@ function get_page_view_time(count) {
       $seconds += 1;
     }
     else {
-      $page_time_end = true;
       window.clearInterval(intervalListener);
     }
     i += 1;
@@ -157,9 +155,9 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   console.log("затрачено секунд",  $window_seconds);
   console.log("обновлять статистику объекта?",$need_plus);
   console.log("======================");
-  $window_time_end = false;
   $window_height = 0;
   $window_seconds = 1;
+  window.clearInterval(intervalListener2);
 }
 
 ///////////////
@@ -186,9 +184,9 @@ function get_or_create_cookie_user() {
       else {
         _device = "Телефон";
       }
-      footer = document.body.querySelector(".footer");
-      footer.querySelector(".device").innerHTML = data.ip + " (" + _device + ") ";
-      footer.querySelector(".city").innerHTML = data.city_ru + " (" + data.city_en + ") ";
+      stat_meta = document.body.querySelector(".stat_meta");
+      stat_meta.querySelector(".device").innerHTML = data.ip + " (" + _device + ") ";
+      stat_meta.querySelector(".city").innerHTML = data.city_ru + " (" + data.city_en + ") ";
 
       setCookie("user", data.id, 120, "/");
       $user_id = data.id;

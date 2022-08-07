@@ -96,7 +96,7 @@
   </a>
 </h2>
 </span>
-<p>
+<p class="stat_meta">
   <span class="device"></span><br />
   <span class="city"></span>
 </p>
