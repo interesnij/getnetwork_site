@@ -679,7 +679,7 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
         .select(schema::cookie_stats::id)
         .load::<i32>(&_connection)
         .expect("E.")
-        .len() > 0 {
+        .len() == 0 {
         diesel::update(&user)
             .set ((
                 schema::cookie_users::height.eq(user.height + p_height),
