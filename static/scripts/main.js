@@ -99,7 +99,7 @@ function get_window_view_timer(count) {
       console.log("window_seconds ", $window_seconds);
     }
     else {
-      $page_time_end = true;
+      //$page_time_end = true;
       window.clearInterval(intervalListener2);
     }
     i += 1;
