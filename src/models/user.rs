@@ -200,7 +200,6 @@ pub struct HistoryResponse {
     pub seconds: i32,
 }
 #[derive(Debug, Queryable, Serialize)]
-#[table_name="cookie_stats"]
 pub struct CookieStatCard {
     pub link:     String,
     pub title:    String,
