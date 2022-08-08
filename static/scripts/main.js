@@ -18,6 +18,14 @@ function setCookie(name, value, days) {
     document.cookie = cookie + "; path=/";
 };
 
+function addStyleSheets(href) {
+    $head = document.head, $link = document.createElement('link');
+    $link.rel = 'stylesheet';
+    $link.classList.add("color");
+    $link.href = href;
+    $head.appendChild($link)
+};
+
 function get_document_opacity_0() {
   document.body.style.overflowY = "hidden";
   document.body.style.marginRight = "20px";
@@ -415,14 +423,6 @@ function change_this_fullscreen(_this, type_class) {
 //window.addEventListener("unload", function() {
 //  navigator.sendBeacon("/analytics", JSON.stringify(analyticsData));
 //});
-
-function addStyleSheets(href) {
-    $head = document.head, $link = document.createElement('link');
-    $link.rel = 'stylesheet';
-    $link.classList.add("color");
-    $link.href = href;
-    $head.appendChild($link)
-};
 
 
 class ToastManager {

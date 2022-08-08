@@ -336,8 +336,8 @@ a.logo:hover{
     color: rgba(255,255,255, .9) !important;
 }
 
-.main-nav{
-    background: inherit !important;
+.main-nav {
+    background-color: black !important;
     box-shadow: 0 1px 0 rgb(255 255 255 / 25%) !important;
 }
 
