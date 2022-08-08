@@ -180,10 +180,14 @@ impl Blog {
     }
 
     pub fn get_categories(&self) -> Vec<BlogCategories> {
-        let _connection = establish_connection();
+        use crate::schema::blog_category::dsl::blog_category;
 
-        let ids = BlogCategory::belonging_to(self)
-            .select(schema::blog_category::blog_categories_id);
+        let _connection = establish_connection();
+        let ids = blog_category
+            .filter(schema::blog_category::blog_id.eq_any(self.id))
+            .select(schema::blog_category::blog_categories_id)
+            .load::<i32>(&_connection)
+            .expect("E");
 
         return schema::blog_categories::table
             .filter(schema::blog_categories::id.eq_any(ids))
