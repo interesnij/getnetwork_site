@@ -55,6 +55,16 @@ function get_active_button() {
   } catch { null }
 };
 
+function get_custom_design() {
+  color = "white";
+  backgroud = getCookie("backgroud");
+  if (backgroud != "") {
+    color = backgroud;
+  }
+  addStyleSheets("/static/styles/color/" + color + ".css")
+  btn = document.body.querySelector(".anon_color_change");
+  btn.setAttribute("data-color", color)
+};
 function check_first_load() {
   span = document.body.querySelector(".span");
   if (window.location.search.split('?').length > 1) {

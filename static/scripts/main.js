@@ -635,17 +635,6 @@ function service_tab_action(_this, tab_class) {
 
 function on(elSelector, eventName, selector, fn) {var element = document.querySelector(elSelector);element.addEventListener(eventName, function(event) {var possibleTargets = element.querySelectorAll(selector);var target = event.target;for (var i = 0, l = possibleTargets.length; i < l; i++) {var el = target;var p = possibleTargets[i];while (el && el !== element) {if (el === p) {return fn.call(p, event);}el = el.parentNode;}}});}
 
-function get_custom_design() {
-  color = "white";
-  backgroud = getCookie("backgroud");
-  if (backgroud != "") {
-    color = backgroud;
-  }
-  addStyleSheets("/static/styles/color/" + color + ".css")
-  btn = document.body.querySelector(".anon_color_change");
-  btn.setAttribute("data-color", color)
-};
-
 //window.addEventListener("unload", function() {
 //  analyticsData = data;
 //  navigator.sendBeacon("/analytics", JSON.stringify(analyticsData));
