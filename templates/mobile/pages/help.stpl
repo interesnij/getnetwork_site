@@ -1,0 +1,7 @@
+<% include!("../header.stpl"); %>
+
+
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>
+<% include!("../footer.stpl"); %>

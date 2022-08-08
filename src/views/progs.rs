@@ -23,6 +23,7 @@ use crate::diesel::{
 pub fn progs_routes(config: &mut web::ServiceConfig) {
     config.route("/create_history/", web::get().to(create_history));
     config.route("/object_history/{id}/", web::get().to(object_history));
+    config.route("/feedback/", web::post().to(create_feedback));
 }
 
 
@@ -315,4 +316,24 @@ pub async fn object_history(req: HttpRequest, id: web::Path<i32>) -> web::Json<O
         country_ru: _user.country_ru,
         country_en: _user.country_en,
     })
+}
+
+pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Responder {
+    use crate::schema::feedbacks;
+    use std::borrow::BorrowMut;
+    use crate::models::{Feedback, NewFeedback};
+    use crate::utils::feedback_form;
+
+    let _connection = establish_connection();
+    let form = feedback_form(payload.borrow_mut()).await;
+    let new_feedback = NewFeedback {
+        username: form.username.clone(),
+        email:    form.email.clone(),
+        message:  form.message.clone()
+    };
+    let _new_feedback = diesel::insert_into(feedbacks::table)
+        .values(&new_feedback)
+        .get_result::<Feedback>(&_connection)
+        .expect("E.");
+    return HttpResponse::Ok();
 }
