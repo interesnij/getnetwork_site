@@ -626,8 +626,6 @@ allow_tables_to_appear_in_same_query!(
     store_categories,
     store_category,
     stores,
-    tags,
-    tags_items,
     tech_categories,
     tech_categories_items,
     wiki_categories,
