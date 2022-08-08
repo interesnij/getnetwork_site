@@ -38,10 +38,9 @@ function get_custom_design() {
     color = backgroud;
   }
   addStyleSheets("/static/styles/color/" + color + ".css")
-  btn = document.body.querySelector(".anon_color_change");
-  btn.setAttribute("data-color", color)
 };
 function check_first_load() {
+  get_custom_design();
   span = document.body.querySelector(".span");
   if (window.location.search.split('?').length > 1) {
     span.innerHTML = "Permission Denied";
@@ -56,8 +55,6 @@ function check_first_load() {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
         span.innerHTML = elem_.innerHTML;
-        get_custom_design();
-        window.scrollTo(0,0);
         window.history.pushState({route: url}, "network", url);
         get_or_create_cookie_user();
         get_page_view_time(120);

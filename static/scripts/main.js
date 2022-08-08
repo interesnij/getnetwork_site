@@ -645,7 +645,11 @@ on('body', 'click', '.s_7', function() {
 });
 
 on('body', 'click', '.anon_color_change', function() {
-  color = this.getAttribute("data-color");
+  color = "white";
+  backgroud = getCookie("backgroud");
+  if (backgroud != "") {
+    color = backgroud;
+  }
   if (color == "white") {
     addStyleSheets("/static/styles/color/dark.css");
     this.setAttribute("data-color", "dark");
