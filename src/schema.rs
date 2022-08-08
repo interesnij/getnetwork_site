@@ -600,8 +600,6 @@ table! {
     }
 }
 
-joinable!(blog_category -> blog_categories (blog_categories_id));
-joinable!(blog_category -> blogs (blog_id));
 joinable!(serve -> serve_categories (serve_categories));
 joinable!(serve_categories -> tech_categories (tech_categories));
 joinable!(service_category -> service_categories (service_categories_id));
@@ -614,9 +612,6 @@ joinable!(work_category -> work_categories (work_categories_id));
 joinable!(work_category -> works (work_id));
 
 allow_tables_to_appear_in_same_query!(
-    blog_categories,
-    blog_category,
-    blogs,
     serve,
     serve_categories,
     serve_items,
