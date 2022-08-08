@@ -1,30 +1,3 @@
-function getCookie(name) {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        let c = cookies[i].trim().split('=');
-        if (c[0] === name) {
-            return c[1];
-        }
-    }
-    return "";
-}
-function setCookie(name, value, days) {
-    let cookie = `${name}=${encodeURIComponent(value)}`;
-    if (days) {
-        const expiry = new Date();
-        expiry.setDate(expiry.getDate() + days);
-        cookie += `; expires=${expiry.toUTCString()}`;
-    }
-    document.cookie = cookie + "; path=/";
-};
-
-function addStyleSheets(href) {
-    $head = document.head, $link = document.createElement('link');
-    $link.rel = 'stylesheet';
-    $link.classList.add("color");
-    $link.href = href;
-    $head.appendChild($link)
-};
 
 function get_document_opacity_0() {
   document.body.style.overflowY = "hidden";
