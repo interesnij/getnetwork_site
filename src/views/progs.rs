@@ -1,10 +1,10 @@
 use actix_web::{
     HttpRequest,
-    HttpResponse,
-    Responder,
+    //HttpResponse,
+    //Responder,
     web,
-    error::InternalError,
-    http::StatusCode,
+    //error::InternalError,
+    //http::StatusCode,
 };
 
 use crate::models::{CookieUser, HistoryResponse};
@@ -17,7 +17,7 @@ use crate::diesel::{
     ExpressionMethods,
     QueryDsl,
 };
-use sailfish::TemplateOnce;
+//use sailfish::TemplateOnce;
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {
