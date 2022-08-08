@@ -1,5 +1,16 @@
 <% include!("../header.stpl"); %>
 
+<section page-id="9" data-title="Помощь" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>Помощь</span>
+        </div>
+    </div>
+</section>
 
+<section class="page-section">
+</section>
 
 <% include!("../footer.stpl"); %>

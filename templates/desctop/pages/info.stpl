@@ -1,11 +1,11 @@
-<% include!("../anon_header.stpl"); %>
+<% include!("../header.stpl"); %>
 
-<section page-id="2" data-title="О нас" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section page-id="10" data-title="Информация" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <span>О нас</span>
+            <span>Информация</span>
         </div>
     </div>
 </section>
@@ -13,4 +13,4 @@
 <section class="page-section">
 </section>
 
-<% include!("../anon_footer.stpl"); %>
+<% include!("../footer.stpl"); %>
