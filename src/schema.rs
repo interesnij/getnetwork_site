@@ -599,34 +599,3 @@ table! {
         seconds -> Int4,
     }
 }
-
-joinable!(serve -> serve_categories (serve_categories));
-joinable!(serve_categories -> tech_categories (tech_categories));
-joinable!(service_category -> service_categories (service_categories_id));
-joinable!(service_category -> services (service_id));
-joinable!(store_category -> store_categories (store_categories_id));
-joinable!(store_category -> stores (store_id));
-joinable!(wiki_category -> wiki_categories (wiki_categories_id));
-joinable!(wiki_category -> wikis (wiki_id));
-joinable!(work_category -> work_categories (work_categories_id));
-joinable!(work_category -> works (work_id));
-
-allow_tables_to_appear_in_same_query!(
-    serve,
-    serve_categories,
-    serve_items,
-    service_categories,
-    service_category,
-    services,
-    store_categories,
-    store_category,
-    stores,
-    tech_categories,
-    tech_categories_items,
-    wiki_categories,
-    wiki_category,
-    wikis,
-    work_categories,
-    work_category,
-    works
-);
