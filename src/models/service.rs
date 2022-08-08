@@ -83,11 +83,17 @@ impl ServiceCategories {
     }
 
     pub fn get_services(&self, limit: i64, offset: i64) -> Vec<Service> {
-        use crate::schema::services::dsl::services;
+        use crate::schema::{
+            services::dsl::services,
+            service_category::dsl::service_category,
+        };
 
         let _connection = establish_connection();
-        let ids = ServiceCategory::belonging_to(self)
-            .select(schema::service_category::service_id);
+        let ids = service_category
+            .filter(schema::service_category::service_categories_id.eq(self.id))
+            .select(schema::service_category::service_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return services
             .filter(schema::services::id.eq_any(ids))
             .filter(schema::services::is_active.eq(true))
@@ -98,11 +104,17 @@ impl ServiceCategories {
             .expect("E.");
     }
     pub fn get_6_services(&self) -> Vec<Service> {
-        use crate::schema::services::dsl::services;
+        use crate::schema::{
+            services::dsl::services,
+            service_category::dsl::service_category,
+        };
 
         let _connection = establish_connection();
-        let ids = ServiceCategory::belonging_to(self)
-            .select(schema::service_category::service_id);
+        let ids = service_category
+            .filter(schema::service_category::service_categories_id.eq(self.id))
+            .select(schema::service_category::service_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return services
             .filter(schema::services::id.eq_any(ids))
             .filter(schema::services::is_active.eq(true))
@@ -179,11 +191,17 @@ impl Service {
     }
 
     pub fn get_categories(&self) -> Vec<ServiceCategories> {
-        use crate::schema::service_categories::dsl::service_categories;
+        use crate::schema::{
+            service_category::dsl::service_category,
+            service_categories::dsl::service_categories,
+        };
 
         let _connection = establish_connection();
-        let ids = ServiceCategory::belonging_to(self)
-            .select(schema::service_category::service_categories_id);
+        let ids = service_category
+            .filter(schema::service_category::service_id.eq(self.id))
+            .select(schema::service_category::service_categories_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return service_categories
             .filter(schema::service_categories::id.eq_any(ids))
             .load::<ServiceCategories>(&_connection)

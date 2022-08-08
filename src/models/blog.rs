@@ -56,11 +56,17 @@ impl BlogCategories {
         return (object_list, next_page_number);
     }
     pub fn get_blogs(&self, limit: i64, offset: i64) -> Vec<Blog> {
-        use crate::schema::blogs::dsl::blogs;
+        use crate::schema::{
+            blogs::dsl::blogs,
+            blog_category::dsl::blog_category,
+        };
 
         let _connection = establish_connection();
-        let ids = BlogCategory::belonging_to(self)
-            .select(schema::blog_category::blog_id);
+        let ids = blog_category
+            .filter(schema::blog_category::blog_categories_id.eq(self.id))
+            .select(schema::blog_category::blog_id)
+            .load::<i32>(&_connection)
+            .expect("E"); 
         return blogs
             .filter(schema::blogs::id.eq_any(ids))
             .filter(schema::blogs::is_active.eq(true))
@@ -71,11 +77,17 @@ impl BlogCategories {
             .expect("E.");
     }
     pub fn get_6_blogs(&self) -> Vec<Blog> {
-        use crate::schema::blogs::dsl::blogs;
+        use crate::schema::{
+            blogs::dsl::blogs,
+            blog_category::dsl::blog_category,
+        };
 
         let _connection = establish_connection();
-        let ids = BlogCategory::belonging_to(self)
-            .select(schema::blog_category::blog_id);
+        let ids = blog_category
+            .filter(schema::blog_category::blog_categories_id.eq(self.id))
+            .select(schema::blog_category::blog_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return blogs
             .filter(schema::blogs::id.eq_any(ids))
             .filter(schema::blogs::is_active.eq(true))
@@ -180,7 +192,10 @@ impl Blog {
     }
 
     pub fn get_categories(&self) -> Vec<BlogCategories> {
-        use crate::schema::blog_category::dsl::blog_category;
+        use crate::schema::{
+            blog_category::dsl::blog_category,
+            blog_categories::dsl::blog_categories,
+        };
 
         let _connection = establish_connection();
         let ids = blog_category
@@ -189,7 +204,7 @@ impl Blog {
             .load::<i32>(&_connection)
             .expect("E");
 
-        return schema::blog_categories::table
+        return blog_categories::table
             .filter(schema::blog_categories::id.eq_any(ids))
             .load::<BlogCategories>(&_connection)
             .expect("E");

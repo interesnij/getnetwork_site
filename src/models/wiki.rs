@@ -85,11 +85,17 @@ impl WikiCategories {
     }
 
     pub fn get_wikis(&self, limit: i64, offset: i64) -> Vec<Wiki> {
-        use crate::schema::wikis::dsl::wikis;
+        use crate::schema::{
+            wikis::dsl::wikis,
+            wiki_category::dsl::wiki_category,
+        };
 
         let _connection = establish_connection();
-        let ids = WikiCategory::belonging_to(self)
-            .select(schema::wiki_category::wiki_id);
+        let ids = wiki_category
+            .filter(schema::wiki_category::wiki_categories_id.eq(self.id))
+            .select(schema::wiki_category::wiki_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return wikis
             .filter(schema::wikis::id.eq_any(ids))
             .filter(schema::wikis::is_active.eq(true))
@@ -101,11 +107,17 @@ impl WikiCategories {
     }
 
     pub fn get_6_wikis(&self) -> Vec<Wiki> {
-        use crate::schema::wikis::dsl::wikis;
+        use crate::schema::{
+            wikis::dsl::wikis,
+            wiki_category::dsl::wiki_category,
+        };
 
         let _connection = establish_connection();
-        let ids = WikiCategory::belonging_to(self)
-            .select(schema::wiki_category::wiki_id);
+        let ids = wiki_category
+            .filter(schema::wiki_category::wiki_categories_id.eq(self.id))
+            .select(schema::wiki_category::wiki_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return wikis
             .filter(schema::wikis::id.eq_any(ids))
             .filter(schema::wikis::is_active.eq(true))
@@ -165,10 +177,17 @@ impl Wiki {
         }
     }
     pub fn get_categories(&self) -> Vec<WikiCategories> {
-        use crate::schema::wiki_categories::dsl::wiki_categories;
+        use crate::schema::{
+            wiki_category::dsl::wiki_category,
+            wiki_categories::dsl::wiki_categories,
+        };
 
         let _connection = establish_connection();
-        let ids = WikiCategory::belonging_to(self).select(schema::wiki_category::wiki_categories_id);
+        let ids = wiki_category
+            .filter(schema::wiki_category::wiki_id.eq(self.id))
+            .select(schema::wiki_category::wiki_categories_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return wiki_categories
             .filter(schema::wiki_categories::id.eq_any(ids))
             .load::<WikiCategories>(&_connection)

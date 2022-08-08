@@ -86,11 +86,17 @@ impl WorkCategories {
     }
 
     pub fn get_works(&self, limit: i64, offset: i64) -> Vec<Work> {
-        use crate::schema::works::dsl::works;
+        use crate::schema::{
+            works::dsl::works,
+            work_category::dsl::work_category,
+        };
 
         let _connection = establish_connection();
-        let ids = WorkCategory::belonging_to(self)
-            .select(schema::work_category::work_id);
+        let ids = work_category
+            .filter(schema::work_category::work_categories_id.eq(self.id))
+            .select(schema::work_category::work_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return works
             .filter(schema::works::id.eq_any(ids))
             .filter(schema::works::is_active.eq(true))
@@ -101,11 +107,17 @@ impl WorkCategories {
             .expect("E.");
     }
     pub fn get_6_works(&self) -> Vec<Work> {
-        use crate::schema::works::dsl::works;
+        use crate::schema::{
+            works::dsl::works,
+            work_category::dsl::work_category,
+        };
 
         let _connection = establish_connection();
-        let ids = WorkCategory::belonging_to(self)
-            .select(schema::work_category::work_id);
+        let ids = work_category
+            .filter(schema::work_category::work_categories_id.eq(self.id))
+            .select(schema::work_category::work_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return works
             .filter(schema::works::id.eq_any(ids))
             .filter(schema::works::is_active.eq(true))
@@ -167,10 +179,17 @@ impl Work {
         }
     }
     pub fn get_categories(&self) -> Vec<WorkCategories> {
-        use crate::schema::work_categories::dsl::work_categories;
+        use crate::schema::{
+            work_category::dsl::work_category,
+            work_categories::dsl::work_categories,
+        };
 
         let _connection = establish_connection();
-        let ids = WorkCategory::belonging_to(self).select(schema::work_category::work_categories_id);
+        let ids = work_category
+            .filter(schema::work_category::work_id.eq(self.id))
+            .select(schema::work_category::work_categories_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return work_categories
             .filter(schema::work_categories::id.eq_any(ids))
             .load::<WorkCategories>(&_connection)

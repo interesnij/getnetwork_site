@@ -85,11 +85,17 @@ impl StoreCategories {
     }
 
     pub fn get_stores(&self, limit: i64, offset: i64) -> Vec<Store> {
-        use crate::schema::stores::dsl::stores;
+        use crate::schema::{
+            stores::dsl::stores,
+            store_category::dsl::store_category,
+        };
 
         let _connection = establish_connection();
-        let ids = StoreCategory::belonging_to(self)
-            .select(schema::store_category::store_id);
+        let ids = store_category
+            .filter(schema::store_category::store_categories_id.eq(self.id))
+            .select(schema::store_category::store_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return stores
             .filter(schema::stores::id.eq_any(ids))
             .filter(schema::stores::is_active.eq(true))
@@ -101,11 +107,17 @@ impl StoreCategories {
     }
 
     pub fn get_6_stores(&self) -> Vec<Store> {
-        use crate::schema::stores::dsl::stores;
+        use crate::schema::{
+            stores::dsl::stores,
+            store_category::dsl::store_category,
+        };
 
         let _connection = establish_connection();
-        let ids = StoreCategory::belonging_to(self)
-            .select(schema::store_category::store_id);
+        let ids = store_category
+            .filter(schema::store_category::store_categories_id.eq(self.id))
+            .select(schema::store_category::store_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return stores
             .filter(schema::stores::id.eq_any(ids))
             .filter(schema::stores::is_active.eq(true))
@@ -183,11 +195,17 @@ impl Store {
     }
 
     pub fn get_categories(&self) -> Vec<StoreCategories> {
-        use crate::schema::store_categories::dsl::store_categories;
+        use crate::schema::{
+            store_category::dsl::store_category,
+            store_categories::dsl::store_categories,
+        };
 
         let _connection = establish_connection();
-        let ids = StoreCategory::belonging_to(self)
-            .select(schema::store_category::store_categories_id);
+        let ids = store_category
+            .filter(schema::store_category::store_id.eq(self.id))
+            .select(schema::store_category::store_categories_id)
+            .load::<i32>(&_connection)
+            .expect("E");
         return store_categories
             .filter(schema::store_categories::id.eq_any(ids))
             .load::<StoreCategories>(&_connection)
