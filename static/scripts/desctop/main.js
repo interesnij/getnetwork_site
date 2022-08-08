@@ -97,7 +97,6 @@ function check_first_load() {
     span.innerHTML = "Permission Denied";
   }
   else if (!span.firstChild) {
-    get_custom_design();
     url = window.location.href;
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url + "?ajax=1", true );
@@ -107,6 +106,7 @@ function check_first_load() {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
         span.innerHTML = elem_.innerHTML;
+        get_custom_design();
         window.scrollTo(0,0);
         get_or_create_cookie_user();
         get_active_button();
