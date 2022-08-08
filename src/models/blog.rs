@@ -184,7 +184,7 @@ impl Blog {
 
         let _connection = establish_connection();
         let ids = blog_category
-            .filter(schema::blog_category::blog_id.eq_any(self.id))
+            .filter(schema::blog_category::blog_id.eq(self.id))
             .select(schema::blog_category::blog_categories_id)
             .load::<i32>(&_connection)
             .expect("E");
