@@ -115,14 +115,6 @@ p {
     left: 0;
 }
 
-.animate, .animate *{
-    -webkit-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
-    -moz-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
-    -o-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
-    -ms-transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
-    transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
-}
-
 .clearlist, .clearlist li {
     list-style: none;
     padding: 0;

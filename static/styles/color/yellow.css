@@ -424,34 +424,6 @@ a.logo:hover{
     color: #111 !important;
 }
 
-.form input.newsletter-field::-webkit-input-placeholder{
-    color: #777 !important;
-}
-.form input.newsletter-field:focus::-webkit-input-placeholder{
-    color: #111 !important;
-}
-
-.form input.newsletter-field:-moz-placeholder{
-    color: #777 !important;
-}
-.form input.newsletter-field:focus:-moz-placeholder{
-    color: #111 !important;
-}
-
-.form input.newsletter-field::-moz-placeholder{
-    color: #777 !important;
-}
-.form input.newsletter-field:focus::-moz-placeholder{
-    color: #111 !important;
-}
-
-.form input.newsletter-field:-ms-input-placeholder{
-    color: #777 !important;
-}
-.form input.newsletter-field:focus:-ms-input-placeholder{
-    color: #111 !important;
-}
-
 .contact-item{
     color: #444 !important;
 }
@@ -480,18 +452,10 @@ a.logo:hover{
     border: 1px solid #111 !important;
 }
 
-
-a.link-to-top{
-    color: rgba(0,0,0, .2) !important;
-}
-
 .blog-item-date{
     color: #999 !important;
     border-right: 1px solid #eee !important;
 
-}
-.date-num{
-    color: #555 !important;
 }
 
 .blog-item-title a{
@@ -550,17 +514,6 @@ a.blog-item-more:hover{
     color: #111 !important;
 }
 
-.pricing-item-inner{
-    border: 1px solid #eaeaea !important;
-}
-
-.pricing-item-inner:hover{
-    border-color: #aaa !important;
-}
-.main .pricing-item-inner{
-    border-color: #aaa !important;
-}
-
 .tpl-tabs{
     border-color: #e5e5e5 !important;
 }
@@ -604,19 +557,4 @@ a.blog-item-more:hover{
 .blog-post-prev-small{
     color: #aaa !important;
     border-top: 1px dotted #eaeaea !important;
-}
-
-.play-video-link{
-    color: #111 !important;
-}
-.play-video-link:hover,
-.play-video-link:focus{
-    color: #777 !important;
-}
-.download-button{
-    border: 2px solid #111 !important;
-}
-.download-button:hover,
-.download-button:focus{
-    color: #111 !important;
 }
