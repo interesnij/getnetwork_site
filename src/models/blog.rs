@@ -2,7 +2,6 @@ use crate::schema;
 use crate::diesel::{
     Queryable,
     Insertable,
-    BelongingToDsl,
     QueryDsl,
     RunQueryDsl,
     ExpressionMethods,
@@ -66,7 +65,7 @@ impl BlogCategories {
             .filter(schema::blog_category::blog_categories_id.eq(self.id))
             .select(schema::blog_category::blog_id)
             .load::<i32>(&_connection)
-            .expect("E"); 
+            .expect("E");
         return blogs
             .filter(schema::blogs::id.eq_any(ids))
             .filter(schema::blogs::is_active.eq(true))
@@ -204,7 +203,7 @@ impl Blog {
             .load::<i32>(&_connection)
             .expect("E");
 
-        return blog_categories::table
+        return blog_categories
             .filter(schema::blog_categories::id.eq_any(ids))
             .load::<BlogCategories>(&_connection)
             .expect("E");

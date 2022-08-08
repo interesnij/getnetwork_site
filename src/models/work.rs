@@ -2,7 +2,6 @@ use crate::schema;
 use crate::diesel::{
     Queryable,
     Insertable,
-    BelongingToDsl,
     QueryDsl,
     RunQueryDsl,
     ExpressionMethods,
