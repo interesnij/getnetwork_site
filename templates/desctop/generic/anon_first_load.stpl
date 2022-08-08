@@ -12,7 +12,6 @@
 
   <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/fonts.css">
   <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/load.css">
-  <link class="color" type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css">
 </head>
 
   <body data-device="1">

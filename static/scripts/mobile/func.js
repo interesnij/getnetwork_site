@@ -6,7 +6,12 @@ function mob_menu_hide() {
 };
 
 function check_first_load() {
-  if (!document.body.querySelector(".span").firstChild) {
+  span = document.body.querySelector(".span");
+  if (window.location.search.split('?').length > 1) {
+    span.innerHTML = "Permission Denied";
+  }
+  else if (!span.firstChild) {
+    get_custom_design();
     url = window.location.href;
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url + "?ajax=1", true );
@@ -19,7 +24,6 @@ function check_first_load() {
         rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
         window.history.pushState({route: url}, "network", url);
-        get_custom_design();
         get_or_create_cookie_user();
         get_page_view_time(120);
         scrolled(document.body.querySelector(".span"));
