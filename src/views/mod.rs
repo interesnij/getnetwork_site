@@ -5,6 +5,7 @@ pub mod serve_progs;
 pub mod store_progs;
 pub mod wiki_progs;
 pub mod pages;
+pub mod progs;
 pub mod auth;
 pub mod tag_progs;
 pub mod search_progs;
@@ -17,6 +18,7 @@ pub use self::{
     store_progs::*,
     wiki_progs::*,
     pages::*,
+    progs::*,
     tag_progs::*,
     search_progs::*,
     auth::*,

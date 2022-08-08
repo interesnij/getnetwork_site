@@ -10,12 +10,14 @@ use crate::views::{
     serve_progs,
     search_progs,
     pages,
+    progs,
     auth,
 };
 
 pub fn routes(cfg: &mut web::ServiceConfig) {
     cfg
     .configure(pages::pages_routes)
+    .configure(progs::progs_routes)
     .configure(blog_progs::blog_routes)
     .configure(service_progs::service_routes)
     .configure(store_progs::store_routes)
