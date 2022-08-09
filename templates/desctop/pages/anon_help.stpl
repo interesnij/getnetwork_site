@@ -14,7 +14,7 @@
   <div class="section-text align-center">
     <form class="form-inline form mb-20" role="form">
       <div class="search-wrap">
-        <input type="text" class="form-control search-field" placeholder="Найти...">
+        <input type="text" class="form-control search-field" placeholder="Search...">
       </div>
     </form>
 

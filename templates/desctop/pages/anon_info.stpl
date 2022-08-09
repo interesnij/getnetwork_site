@@ -11,6 +11,100 @@
 </section>
 
 <section class="page-section">
+    <div class="container relative">
+        <h5 class="section-title font-alt">
+            Информация
+        </h5>
+        <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
+            <li class="yy s_1 active">
+              <a>
+                <div class="alt-tabs-icon">
+                  <span class="icon-heart"></span>
+                </div>
+                О нас
+              </a>
+            </li>
+            <li class="yy s_2 pointer">
+              <a>
+                <div class="alt-tabs-icon">
+                  <span class="icon-envelope"></span>
+                </div>
+                Контакты
+              </a>
+            </li>
+            <li class="yy s_3 pointer">
+              <a>
+                <div class="alt-tabs-icon">
+                  <span class="icon-global"></span>
+                </div>
+                Сотрудничество
+              </a>
+            </li>
+            <li class="">
+              <a href="/help/" class="ajax">
+                <div class="alt-tabs-icon">
+                  <span class="icon-lifesaver"></span>
+                </div>
+                Помощь
+              </a>
+            </li>
+            <li class="yy s_4 active">
+              <a>
+                <div class="alt-tabs-icon">
+                  <span class="icon-lightbulb"></span>
+                </div>
+                О сайте
+              </a>
+            </li>
+        </ul>
+
+        <div class="tab-content tpl-tabs-cont">
+            <div class="tab_1 fade tab-pane in active">
+                <div class="section-text">
+                    <div class="row">
+                        <div class="mb-sm-50">
+                          <blockquote style="margin-bottom: 10px">
+                            О нас
+                          </blockquote>
+                          <p>
+
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab_2 fade tab-pane in">
+                <div class="section-text">
+                    <div class="row">
+                      <div class="mb-sm-50">
+                        <blockquote style="margin-bottom: 10px">
+                          Контакты
+                        </blockquote>
+                        <p>
+
+                        </p>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab_3 fade tab-pane in">
+                <div class="section-text">
+                    <div class="row">
+                      <div class="mb-sm-50">
+                        <blockquote style="margin-bottom: 10px">
+                          Сотрудничество
+                        </blockquote>
+                        <p>
+
+                        </p>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <% include!("../anon_footer.stpl"); %>
