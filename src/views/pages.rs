@@ -31,6 +31,7 @@ use sailfish::TemplateOnce;
 pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/", web::get().to(index_page));
     config.route("/info/", web::get().to(info_page));
+    config.route("/help/", web::get().to(help_page));
     config.route("/feedback_list/", web::get().to(feedback_list_page));
     config.route("/serve_list/", web::get().to(serve_list_page));
     config.route("/load_item/", web::get().to(get_load_page));
