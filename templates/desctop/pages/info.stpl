@@ -40,20 +40,21 @@
                 Сотрудничество
               </a>
             </li>
+
+            <li class="yy s_4 pointer">
+              <a>
+                <div class="alt-tabs-icon">
+                  <span class="icon-happy"></span>
+                </div>
+                О сайте
+              </a>
+            </li>
             <li class="">
               <a href="/help/" class="ajax">
                 <div class="alt-tabs-icon">
                   <span class="icon-lifesaver"></span>
                 </div>
                 Помощь
-              </a>
-            </li>
-            <li class="yy s_4 active">
-              <a>
-                <div class="alt-tabs-icon">
-                  <span class="icon-happy"></span>
-                </div>
-                О сайте
               </a>
             </li>
         </ul>
