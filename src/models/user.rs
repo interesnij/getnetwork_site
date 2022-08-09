@@ -428,6 +428,17 @@ pub struct HelpItemCategorie {
     pub id:    i32,
     pub title: String,
 }
+impl HelpItemCategorie {
+    pub fn get_list(&self) -> Vec<HelpItem> {
+        use crate::schema::help_items::dsl::help_items;
+
+        let _connection = establish_connection();
+        return help_items
+            .filter(schema::help_items::category_id.eq(self.id))
+            .load::<HelpItem>(&_connection)
+            .expect("E");
+    }
+}
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="help_item_categories"]
