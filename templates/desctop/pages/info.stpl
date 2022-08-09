@@ -104,6 +104,21 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tab_4 fade tab-pane in">
+                <div class="section-text">
+                    <div class="row">
+                      <div class="mb-sm-50">
+                        <blockquote style="margin-bottom: 10px">
+                          О сайте
+                        </blockquote>
+                        <p>
+
+                        </p>
+                      </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
