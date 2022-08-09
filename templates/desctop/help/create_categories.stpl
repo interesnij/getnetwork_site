@@ -1,0 +1,37 @@
+<% include!("../header.stpl"); %>
+
+<section data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a class="ajax" href="/help/1/">Помощь</a>
+            &nbsp;/&nbsp;
+            <span>Создание категории помощи</span>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+        <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="text" name="name" placeholder="Название" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <p>0</p>
+              <div style="display:inline-block" contenteditable="true" placeholder="Описание" class="input-md form-control content_1 smile_supported"></div>
+            </div>
+            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_help_category_btn">Создать</button>
+        </form>
+        <div class="container">
+            <% for category in help_cats.iter() { %>
+            <p><%= category.name %>
+                | <a class="ajax" href="/help/edit_help_category/<%= category.id %>/">~</a>
+                | <a class="pointer remove_help_category" data-pk="<%= category.id %>">x</a>
+            </p>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<% include!("../footer.stpl"); %>

@@ -1,0 +1,57 @@
+<% include!("../header.stpl"); %>
+
+<section data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <a class="ajax" href="/help/1/">Помощь</a>
+                    &nbsp;/&nbsp;
+                    <span>Изменение элемента помощи</span>
+                </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="row container relative">
+        <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
+            <div class="mb-20 mb-md-10">
+                <input value="<%= object.title %>" class="input-md form-control" type="text" name="title" placeholder="Название" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <p>0</p>
+              <div style="display:inline-block" contenteditable="true" placeholder="Описание" class="input-md form-control content_1 smile_supported">
+                <%= object.content %>
+              </div>
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Категории</label>
+                <select class="form-control" name="position">
+                  <% for category in help_cats.iter() { %>
+                    <option <% if object.category_id == category.id { %>selected=""<% } %> value="<%= category.id %>"><%= category.title %></option>
+                  <% } %>
+                </select>
+            </div>
+            <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_help_btn">Изменить</button>
+        </form>
+        <div class="col-md-4">
+            <% for category in help_cats.iter() { %>
+            <div class="margin-bottom:15px">
+              <h6><%= category.name %>
+                | <a class="ajax" href="/help/edit_help_category/<%= category.id %>/">~</a>
+                | <a class="pointer remove_help_category" data-pk="<%= category.id %>">x</a>
+              </h6>
+              <% for object in category.get_list().iter() { %>
+                <p><%= object.title %>
+                  | <a class="ajax" href="/help/edit_blog/<%= object.id %>/">~</a>
+                  | <a class="pointer remove_help" data-pk="<%= object.id %>">x</a>
+                </p>
+              <% } %>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+
+<% include!("../footer.stpl"); %>
