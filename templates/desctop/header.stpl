@@ -73,25 +73,6 @@
                       </li>
                       <li>
                         <a href="/info/" class="ajax mn-has-sub folder infos">Инфо</a>
-                        <ul class="border mn-sub">
-                          <li>
-                            <a class="ajax" href="/help/">Помощь</a>
-                          </li>
-                          <!--
-                          <li>
-                              <a class="ajax" href="/team/">Команда</a>
-                          </li>
-                          -->
-                          <li>
-                              <a class="ajax" href="/about/">Сайт</a>
-                          </li>
-                          <li>
-                              <a class="ajax" href="/partnership/">Сотрудничество</a>
-                          </li>
-                          <li>
-                              <a class="ajax" href="/contact/">Контакты</a>
-                          </li>
-                        </ul>
                       </li>
                       <li><a>&nbsp;</a></li>
                       <li>
