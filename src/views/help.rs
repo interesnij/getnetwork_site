@@ -290,7 +290,7 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:      i32,
             }
             let body = Template {
-                title:        "Изменение элемента помощи ".to_string() + &_serve.name,
+                title:        "Изменение элемента помощи ".to_string() + &_item.title,
                 request_user: _request_user,
                 help_cats:    _help_cats,
                 category:     _help_cat,
@@ -312,7 +312,7 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
                 is_ajax:   i32,
             }
             let body = Template {
-                title:     "Изменение элемента помощи ".to_string() + &_serve.name,
+                title:     "Изменение элемента помощи ".to_string() + &_item.title,
                 help_cats: _help_cats,
                 category:  _help_cat,
                 object:    _item,
@@ -458,4 +458,131 @@ pub async fn delete_category(session: Session, _id: web::Path<i32>) -> impl Resp
         }
     }
     HttpResponse::Ok()
+}
+
+pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::schema::help_item_categories::dsl::help_item_categories;
+    use crate::utils::{get_device_and_ajax, get_page};
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let _cat_id: i32 = *_id;
+    let _connection = establish_connection();
+
+    let all_categories = help_item_categories
+        .load::<HelpItemCategorie>(&_connection)
+        .expect("E");
+
+    let _categorys = help_item_categories
+        .filter(schema::help_item_categories::id.eq(_cat_id))
+        .load::<HelpItemCategorie>(&_connection)
+        .expect("E");
+    let _category = _categorys.into_iter().nth(0).unwrap();
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Помощь - ".to_string() + &_category.title).await
+    }
+    else {
+        let page = get_page(&req);
+        let (object_list, next_page_number) = _category.get_blogs_list(page, 20);
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/help/category.stpl")]
+                struct Template {
+                    title:            String,
+                    request_user:     User,
+                    category:         HelpItemCategorie,
+                    help_cats:        Vec<HelpItemCategorie>,
+                    object_list:      Vec<HelpItem>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Помощь - ".to_string() + &_category.title,
+                    request_user:     _request_user,
+                    category:         _category,
+                    help_cats:        all_categories,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/help/category.stpl")]
+                struct Template {
+                    title:            String,
+                    category:         HelpItemCategorie,
+                    help_cats:        Vec<HelpItemCategorie>,
+                    object_list:      Vec<HelpItem>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Помощь - ".to_string() + &_category.title,
+                    category:         _category,
+                    help_cats:        all_categories,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/help/anon_category.stpl")]
+                struct Template {
+                    title:            String,
+                    category:         HelpItemCategorie,
+                    help_cats:        Vec<HelpItemCategorie>,
+                    object_list:      Vec<HelpItem>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Помощь - ".to_string() + &_category.name,
+                    category:         _category,
+                    help_cats:        all_categories,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/help/anon_category.stpl")]
+                struct Template {
+                    title:            String,
+                    category:         HelpItemCategorie,
+                    help_cats:        Vec<HelpItemCategorie>,
+                    object_list:      Vec<HelpItem>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    title:            "Помощь - ".to_string() + &_category.name,
+                    category:         _category,
+                    help_cats:        all_categories,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
 }
