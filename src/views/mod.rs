@@ -9,6 +9,7 @@ pub mod progs;
 pub mod auth;
 pub mod tag_progs;
 pub mod search_progs;
+pub mod help_progs;
 
 pub use self::{
     work_progs::*,
@@ -21,5 +22,6 @@ pub use self::{
     progs::*,
     tag_progs::*,
     search_progs::*,
+    help_progs::*,
     auth::*,
 };
