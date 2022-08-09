@@ -28,6 +28,6 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     .configure(serve_progs::serve_routes)
     .configure(tag_progs::tag_routes)
     .configure(auth::auth_routes)
-    .configure(help::help_routes)
+    .configure(help_progs::help_routes)
     ;
 }
