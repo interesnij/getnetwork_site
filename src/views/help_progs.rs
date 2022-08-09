@@ -378,8 +378,9 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
             let _connection = establish_connection();
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
 
+            let cat_id: i32 = form.position.parse().unwrap();
             let _new_item = NewHelpItem {
-                category_id: form.position,
+                category_id: cat_id,
                 title:       form.name.clone(),
                 content:     form.description.clone(),
             };
@@ -411,9 +412,9 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
-
+            let cat_id: i32 = form.position.parse().unwrap();
             let _new_item = NewHelpItem {
-                category_id: form.position,
+                category_id: cat_id,
                 title:       form.name.clone(),
                 content:     form.description.clone(),
             };
