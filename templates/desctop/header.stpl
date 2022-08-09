@@ -135,6 +135,9 @@
                                       <li>
                                           <a href="/create_serve_categories/" class="ajax">+ категория опций</a>
                                       </li>
+                                      <li>
+                                          <a href="/help/create_categories/" class="ajax">+ категория помощи</a>
+                                      </li>
                                   </ul>
                               </li>
 
@@ -161,6 +164,9 @@
                                       </li>
                                       <li>
                                           <a href="/create_serve/" class="ajax">+ опция</a>
+                                      </li>
+                                      <li>
+                                          <a href="/help/create_item/" class="ajax">+ помощь</a>
                                       </li>
                                   </ul>
                               </li>

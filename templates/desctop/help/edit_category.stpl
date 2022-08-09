@@ -28,7 +28,7 @@
         </form>
         <div class="container">
             <% for category in help_cats.iter() { %>
-            <p><%= category.name %>
+            <p><%= category.title %>
                 | <a class="ajax" href="/help/edit_help_category/<%= category.id %>/">~</a>
                 | <a class="pointer remove_help_category" data-pk="<%= category.id %>">x</a>
             </p>

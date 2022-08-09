@@ -36,7 +36,7 @@
         <div class="col-md-4">
             <% for category in help_cats.iter() { %>
             <div class="margin-bottom:15px">
-              <h6><%= category.name %>
+              <h6><%= category.title %>
                 | <a class="ajax" href="/help/edit_help_category/<%= category.id %>/">~</a>
                 | <a class="pointer remove_help_category" data-pk="<%= category.id %>">x</a>
               </h6>
