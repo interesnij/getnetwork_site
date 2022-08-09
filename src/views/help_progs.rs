@@ -483,7 +483,7 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
     }
     else {
         let page = get_page(&req);
-        let (object_list, next_page_number) = _category.get_list(page, 20);
+        let object_list = _category.get_list();
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -496,7 +496,6 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     category:         HelpItemCategorie,
                     help_cats:        Vec<HelpItemCategorie>,
                     object_list:      Vec<HelpItem>,
-                    next_page_number: i32,
                     is_ajax:          i32,
                 }
                 let body = Template {
@@ -505,7 +504,6 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     category:         _category,
                     help_cats:        all_categories,
                     object_list:      object_list,
-                    next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                 }
                 .render_once()
@@ -520,7 +518,6 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     category:         HelpItemCategorie,
                     help_cats:        Vec<HelpItemCategorie>,
                     object_list:      Vec<HelpItem>,
-                    next_page_number: i32,
                     is_ajax:          i32,
                 }
                 let body = Template {
@@ -528,7 +525,6 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     category:         _category,
                     help_cats:        all_categories,
                     object_list:      object_list,
-                    next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                 }
                 .render_once()
@@ -545,7 +541,6 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     category:         HelpItemCategorie,
                     help_cats:        Vec<HelpItemCategorie>,
                     object_list:      Vec<HelpItem>,
-                    next_page_number: i32,
                     is_ajax:          i32,
                 }
                 let body = Template {
@@ -553,7 +548,6 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     category:         _category,
                     help_cats:        all_categories,
                     object_list:      object_list,
-                    next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                 }
                 .render_once()
@@ -568,7 +562,6 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     category:         HelpItemCategorie,
                     help_cats:        Vec<HelpItemCategorie>,
                     object_list:      Vec<HelpItem>,
-                    next_page_number: i32,
                     is_ajax:          i32,
                 }
                 let body = Template {
@@ -576,7 +569,6 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     category:         _category,
                     help_cats:        all_categories,
                     object_list:      object_list,
-                    next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                 }
                 .render_once()
