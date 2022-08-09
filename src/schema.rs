@@ -1,5 +1,3 @@
-
-
 table! {
     blog_categories (id) {
         id -> Int4,
@@ -102,6 +100,22 @@ table! {
         username -> Varchar,
         email -> Varchar,
         message -> Varchar,
+    }
+}
+
+table! {
+    help_item_categories (id) {
+        id -> Int4,
+        title -> Varchar,
+    }
+}
+
+table! {
+    help_items (id) {
+        id -> Int4,
+        category_id -> Int4,
+        title -> Varchar,
+        content -> Varchar,
     }
 }
 
@@ -210,25 +224,7 @@ table! {
 }
 
 table! {
-    stat_abouts (id) {
-        id -> Int4,
-        view -> Int4,
-        height -> Float8,
-        seconds -> Int4,
-    }
-}
-
-table! {
     stat_blog_categories (id) {
-        id -> Int4,
-        view -> Int4,
-        height -> Float8,
-        seconds -> Int4,
-    }
-}
-
-table! {
-    stat_contacts (id) {
         id -> Int4,
         view -> Int4,
         height -> Float8,
@@ -255,24 +251,6 @@ table! {
 }
 
 table! {
-    stat_logins (id) {
-        id -> Int4,
-        view -> Int4,
-        height -> Float8,
-        seconds -> Int4,
-    }
-}
-
-table! {
-    stat_logouts (id) {
-        id -> Int4,
-        view -> Int4,
-        height -> Float8,
-        seconds -> Int4,
-    }
-}
-
-table! {
     stat_mainpages (id) {
         id -> Int4,
         view -> Int4,
@@ -282,34 +260,7 @@ table! {
 }
 
 table! {
-    stat_partnerships (id) {
-        id -> Int4,
-        view -> Int4,
-        height -> Float8,
-        seconds -> Int4,
-    }
-}
-
-table! {
-    stat_profils (id) {
-        id -> Int4,
-        view -> Int4,
-        height -> Float8,
-        seconds -> Int4,
-    }
-}
-
-table! {
     stat_service_categories (id) {
-        id -> Int4,
-        view -> Int4,
-        height -> Float8,
-        seconds -> Int4,
-    }
-}
-
-table! {
-    stat_signups (id) {
         id -> Int4,
         view -> Int4,
         height -> Float8,
@@ -328,15 +279,6 @@ table! {
 
 table! {
     stat_tags (id) {
-        id -> Int4,
-        view -> Int4,
-        height -> Float8,
-        seconds -> Int4,
-    }
-}
-
-table! {
-    stat_teams (id) {
         id -> Int4,
         view -> Int4,
         height -> Float8,
@@ -599,3 +541,87 @@ table! {
         seconds -> Int4,
     }
 }
+
+joinable!(blog_category -> blog_categories (blog_categories_id));
+joinable!(blog_category -> blogs (blog_id));
+joinable!(blog_comments -> blogs (blog_id));
+joinable!(blog_comments -> users (user_id));
+joinable!(blog_images -> blogs (blog));
+joinable!(blog_videos -> blogs (blog));
+joinable!(blogs -> users (user_id));
+joinable!(cookie_stats -> cookie_users (user_id));
+joinable!(serve -> serve_categories (serve_categories));
+joinable!(serve -> users (user_id));
+joinable!(serve_categories -> tech_categories (tech_categories));
+joinable!(service_category -> service_categories (service_categories_id));
+joinable!(service_category -> services (service_id));
+joinable!(service_images -> services (service));
+joinable!(service_videos -> services (service));
+joinable!(services -> users (user_id));
+joinable!(store_category -> store_categories (store_categories_id));
+joinable!(store_category -> stores (store_id));
+joinable!(store_images -> stores (store));
+joinable!(store_videos -> stores (store));
+joinable!(stores -> users (user_id));
+joinable!(tags -> users (user_id));
+joinable!(wiki_category -> wiki_categories (wiki_categories_id));
+joinable!(wiki_category -> wikis (wiki_id));
+joinable!(wiki_images -> wikis (wiki));
+joinable!(wiki_videos -> wikis (wiki));
+joinable!(wikis -> users (user_id));
+joinable!(work_category -> work_categories (work_categories_id));
+joinable!(work_category -> works (work_id));
+joinable!(work_images -> works (work));
+joinable!(work_videos -> works (work));
+joinable!(works -> users (user_id));
+
+allow_tables_to_appear_in_same_query!(
+    blog_categories,
+    blog_category,
+    blog_comments,
+    blog_images,
+    blog_videos,
+    blogs,
+    cookie_stats,
+    cookie_users,
+    feedbacks,
+    help_item_categories,
+    help_items,
+    serve,
+    serve_categories,
+    serve_items,
+    service_categories,
+    service_category,
+    service_images,
+    service_videos,
+    services,
+    stat_blog_categories,
+    stat_helps,
+    stat_infos,
+    stat_mainpages,
+    stat_service_categories,
+    stat_store_categories,
+    stat_tags,
+    stat_wiki_categories,
+    stat_work_categories,
+    store_categories,
+    store_category,
+    store_images,
+    store_videos,
+    stores,
+    tags,
+    tags_items,
+    tech_categories,
+    tech_categories_items,
+    users,
+    wiki_categories,
+    wiki_category,
+    wiki_images,
+    wiki_videos,
+    wikis,
+    work_categories,
+    work_category,
+    work_images,
+    work_videos,
+    works,
+);
