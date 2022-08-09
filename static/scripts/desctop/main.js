@@ -140,7 +140,7 @@ function ajax_get_reload(url) {
         sidebar = elem_.querySelector(".sidebar");
 
         rtr.innerHTML = elem_.innerHTML;
-        document.title = $title;
+        document.title = rtr.getAttribute("data-title");
         window.scrollTo(0,0);
         window.history.replaceState(null, null, url);
         get_active_button();

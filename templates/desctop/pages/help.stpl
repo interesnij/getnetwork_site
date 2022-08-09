@@ -11,7 +11,15 @@
 </section>
 
 <section class="page-section">
+  <div class="section-text align-center">
+    <form class="form-inline form mb-20" role="form">
+      <div class="search-wrap">
+        <input type="text" class="form-control search-field" placeholder="Search...">
+      </div>
+    </form>
 
+    Cras mattis est eget lacus dignissim, non consectetur velit pellentesque. Ut sit amet placerat eros, id&nbsp;gravida arcu. Sed felis purus, tempor ac vestibulum nec, consectetur at purus.
+  </div>
   <h4 class="font-alt">What do you mean by an End Product?</h4>
   <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
