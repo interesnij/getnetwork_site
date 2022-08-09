@@ -35,7 +35,7 @@
             <li class="yy s_3 pointer">
               <a>
                 <div class="alt-tabs-icon">
-                  <span class="icon-global"></span>
+                  <span class="icon-toolbox"></span>
                 </div>
                 Сотрудничество
               </a>
@@ -51,8 +51,8 @@
             <li class="yy s_4 active">
               <a>
                 <div class="alt-tabs-icon">
-                  <span class="icon-lightbulb"></span>
-                </div>
+                  <span class="icon-happy"></span>
+                </div> 
                 О сайте
               </a>
             </li>

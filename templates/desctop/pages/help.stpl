@@ -11,6 +11,9 @@
 </section>
 
 <section class="page-section">
+<div class="container relative">
+    <div class="row">
+        <div class="col-sm-8">
   <div class="section-text align-center">
     <form class="form-inline form mb-20" role="form">
       <div class="search-wrap">
@@ -41,6 +44,13 @@
     consectetur at purus.
   </p>
   <hr class="mb-30">
+  <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">
+    sidebar
+  </div>
+</div>
+</div>
+</div>
 </section>
+
 
 <% include!("../footer.stpl"); %>
