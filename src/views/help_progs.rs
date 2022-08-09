@@ -202,7 +202,7 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
     }
     else {
         let _request_user = get_request_user_data(&session);
-        let _help_categories = help_categories.load::<HelpItemCategorie>(&_connection).expect("E");
+        let _help_categories = help_item_categories.load::<HelpItemCategorie>(&_connection).expect("E");
 
         if is_desctop {
             #[derive(TemplateOnce)]
@@ -336,7 +336,7 @@ pub async fn create_categories(session: Session, mut payload: Multipart) -> impl
             let new_cat = NewHelpItemCategorie {
                 title: form.name.clone(),
             };
-            let _new_help = diesel::insert_into(help_item_categories::table)
+            let _new_help = diesel::insert_into(schema::help_item_categories::table)
                 .values(&new_cat)
                 .get_result::<HelpItemCategorie>(&_connection)
                 .expect("E.");
@@ -355,14 +355,14 @@ pub async fn edit_category(session: Session, mut payload: Multipart, _id: web::P
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && _category.user_id == _request_user.id {
+        if _request_user.perm == 60 {
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
-            let new_cat = NewItemCategorie {
+            let new_cat = NewHelpItemCategorie {
                 title: form.name.clone(),
             };
             diesel::update(&_category)
                 .set(new_cat)
-                .get_result::<ItemCategorie>(&_connection)
+                .get_result::<HelpItemCategorie>(&_connection)
                 .expect("E");
         }
     }
@@ -376,7 +376,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
 
             let _new_item = NewHelpItem {
                 title:   form.name.clone(),
@@ -409,7 +409,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            let form = category_form(payload.borrow_mut()).await;
+            let form = category_form(payload.borrow_mut(), _request_user.id).await;
 
             let _new_item = NewHelpItem {
                 title:   form.name.clone(),

@@ -440,7 +440,7 @@ impl HelpItemCategorie {
     }
 }
 ////////////////////
-#[derive(Debug, Deserialize, Insertable)]
+#[derive(Debug, Deserialize, AsChangeset, Insertable)]
 #[table_name="help_item_categories"]
 pub struct NewHelpItemCategorie {
     pub title: String,
@@ -454,7 +454,7 @@ pub struct HelpItem {
     pub content:     String,
 }
 
-#[derive(Debug, Deserialize, Insertable)]
+#[derive(Debug, Deserialize, AsChangeset, Insertable)]
 #[table_name="help_items"]
 pub struct NewHelpItem {
     pub category_id: i32,
