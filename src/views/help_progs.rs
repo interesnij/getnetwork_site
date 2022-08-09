@@ -463,7 +463,7 @@ pub async fn delete_category(session: Session, _id: web::Path<i32>) -> impl Resp
     HttpResponse::Ok()
 }
 
-pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::help_item_categories::dsl::help_item_categories;
     use crate::utils::{get_device_and_ajax, get_page};
 
