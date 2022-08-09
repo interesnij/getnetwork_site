@@ -379,8 +379,9 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
 
             let _new_item = NewHelpItem {
-                title:   form.name.clone(),
-                content: form.description.clone(),
+                category_id: form.position,
+                title:       form.name.clone(),
+                content:     form.description.clone(),
             };
 
             let _item = diesel::insert_into(schema::help_items::table)
@@ -412,8 +413,9 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
 
             let _new_item = NewHelpItem {
-                title:   form.name.clone(),
-                content: form.description.clone(),
+                category_id: form.position,
+                title:       form.name.clone(),
+                content:     form.description.clone(),
             };
 
             diesel::update(&_item)
