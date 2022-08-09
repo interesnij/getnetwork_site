@@ -195,7 +195,7 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение категории помощи ".to_string() + &_category.name).await
+        get_first_load_page(&session, is_desctop, "Изменение категории помощи ".to_string() + &_category.title).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -215,7 +215,7 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 is_ajax:      i32,
             }
             let body = Template {
-                title:        "Изменение категории помощи ".to_string() + &_category.name,
+                title:        "Изменение категории помощи ".to_string() + &_category.title,
                 request_user: _request_user,
                 help_cats:    _help_categories,
                 category:     _category,
@@ -235,7 +235,7 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 is_ajax:      i32,
             }
             let body = Template {
-                title:        "Изменение категории помощи ".to_string() + &_category.name,
+                title:        "Изменение категории помощи ".to_string() + &_category.title,
                 help_cats:    _help_categories,
                 category:     _category,
                 is_ajax:      is_ajax,
@@ -549,7 +549,7 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Помощь - ".to_string() + &_category.name,
+                    title:            "Помощь - ".to_string() + &_category.title,
                     category:         _category,
                     help_cats:        all_categories,
                     object_list:      object_list,
@@ -572,7 +572,7 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Помощь - ".to_string() + &_category.name,
+                    title:            "Помощь - ".to_string() + &_category.title,
                     category:         _category,
                     help_cats:        all_categories,
                     object_list:      object_list,
