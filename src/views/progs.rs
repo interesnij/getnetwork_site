@@ -212,45 +212,13 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
                     use crate::utils::plus_mainpage_stat;
                     plus_mainpage_stat(p_height, p_seconds)
                 },
-                2 => {
-                    use crate::utils::plus_about_stat;
-                    plus_about_stat(p_height, p_seconds)
-                },
-                3 => {
-                    use crate::utils::plus_contact_stat;
-                    plus_contact_stat(p_height, p_seconds)
-                },
-                4 => {
-                    use crate::utils::plus_team_stat;
-                    plus_team_stat(p_height, p_seconds)
-                },
-                5 => {
-                    use crate::utils::plus_partnership_stat;
-                    plus_partnership_stat(p_height, p_seconds)
-                },
-                6 => {
-                    use crate::utils::plus_login_stat;
-                    plus_login_stat(p_height, p_seconds)
-                },
-                7 => {
-                    use crate::utils::plus_signup_stat;
-                    plus_signup_stat(p_height, p_seconds)
-                },
-                8 => {
-                    use crate::utils::plus_logout_stat;
-                    plus_logout_stat(p_height, p_seconds)
-                },
-                9 => {
+                9 => { 
                     use crate::utils::plus_help_stat;
                     plus_help_stat(p_height, p_seconds)
                 },
                 10 => {
                     use crate::utils::plus_info_stat;
                     plus_info_stat(p_height, p_seconds)
-                },
-                11 => {
-                    use crate::utils::plus_profil_stat;
-                    plus_profil_stat(p_height, p_seconds)
                 },
                 31 => {
                     use crate::utils::plus_tags_stat;

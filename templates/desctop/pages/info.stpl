@@ -8,9 +8,12 @@
             <span>Информация</span>
         </div>
     </div>
-</section>
+</section> 
 
 <section class="page-section">
+<div class="container relative">
+
+</div>
 </section>
 
 <% include!("../footer.stpl"); %>

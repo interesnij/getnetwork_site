@@ -71,14 +71,16 @@
                           <a href="/tags/" class="ajax folder tags">Теги</a>
                       </li>
                       <li>
-                        <a href="/info/" class="mn-has-sub infos folder">Инфо</a>
+                        <a href="/info/" class="ajax mn-has-sub infos folder">Инфо</a>
                         <ul class="border mn-sub">
                           <li>
                             <a class="ajax" href="/help/">Помощь</a>
                           </li>
+                          <!--
                           <li>
                               <a class="ajax" href="/team/">Команда</a>
                           </li>
+                          -->
                           <li>
                               <a class="ajax" href="/about/">Сайт</a>
                           </li>

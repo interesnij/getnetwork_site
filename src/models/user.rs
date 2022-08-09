@@ -10,16 +10,10 @@ use crate::schema::{
     stat_wiki_categories,
     stat_work_categories,
     stat_tags,
-    stat_abouts,
-    stat_contacts,
-    stat_teams,
-    stat_partnerships,
-    stat_logins,
-    stat_logouts,
-    stat_signups,
     stat_helps,
     stat_infos,
-    stat_profils,
+    help_items,
+    help_item_categories,
 };
 use crate::diesel::{
     Queryable,
@@ -395,23 +389,6 @@ pub struct NewStatTag {
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatAbout {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_abouts"]
-pub struct NewStatAbout {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct StatInfo {
     pub id:      i32,
     pub view:    i32,
@@ -427,107 +404,6 @@ pub struct NewStatInfo {
     pub seconds: i32,
 }
 
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatContact {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_contacts"]
-pub struct NewStatContact {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatTeam {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_teams"]
-pub struct NewStatTeam {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatPartnership {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_partnerships"]
-pub struct NewStatPartnership {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatLogin {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_logins"]
-pub struct NewStatLogin {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatLogout {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_logouts"]
-pub struct NewStatLogout {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatSignup {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_signups"]
-pub struct NewStatSignup {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
@@ -548,17 +424,29 @@ pub struct NewStatHelp {
 
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatProfil {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
+pub struct HelpItemCategorie {
+    pub id:    i32,
+    pub title: String,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_profils"]
-pub struct NewStatProfil {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
+#[table_name="help_item_categories"]
+pub struct NewHelpItemCategorie {
+    pub title: String,
+}
+
+#[derive(Debug, Queryable, Serialize, Identifiable)]
+pub struct HelpItem {
+    pub id:          i32,
+    pub category_id: i32,
+    pub title:       String,
+    pub content:     String,
+}
+
+#[derive(Debug, Deserialize, Insertable)]
+#[table_name="help_items"]
+pub struct NewHelpItem {
+    pub category_id: i32,
+    pub title:       String,
+    pub content:     String,
 }
