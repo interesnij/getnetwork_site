@@ -1119,7 +1119,7 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
             .or_filter(schema::help_items::content.ilike(&_q_standalone))
             .limit(20)
             .offset(offset.into())
-            .order(schema::help_items::created.desc())
+            .order(schema::help_items::id.desc())
             .load::<HelpItem>(&_connection)
             .expect("e");
 
