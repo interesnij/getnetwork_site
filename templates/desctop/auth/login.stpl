@@ -17,11 +17,11 @@
         </div>
         <div>
           <label for="username">Логин:</label>
-          <input id="id_username" type="text" name="username">
+          <input class="input-md form-control" id="id_username" type="text" name="username">
         </div>
         <div>
           <label for="password">Пароль:</label>
-          <input id="id_password" type="password" name="password">
+          <input class="input-md form-control" id="id_password" type="password" name="password">
         </div>
         <button type="button" id="logg">Войти</button>
       </form>
