@@ -66,12 +66,18 @@
         <div class="col-md-4">
             <% for category in service_cats.iter() { %>
             <div class="margin-bottom:15px">
-              <h6><%= category.name %>
+              <h6>
+                <a rel="nofollow" target="_blank" href="/services/<%= category.id %>/">
+                  <%= category.name %>
+                </a>
                 | <a class="ajax" href="/edit_service_category/<%= category.id %>/">~</a>
                 | <a class="pointer remove_service_category" data-pk="<%= category.id %>">x</a>
               </h6>
               <% for object in category.get_all_services().iter() { %>
-                <p><%= object.title %>
+                <p>
+                  <a rel="nofollow" target="_blank" href="/service/<%= category.id %>/<%= object.id %>/">
+                    <%= object.title %>
+                  </a>
                   | <a class="ajax" href="/edit_service/<%= object.id %>/">~</a>
                   | <a class="pointer remove_service" data-pk="<%= object.id %>">x</a>
                 </p>
