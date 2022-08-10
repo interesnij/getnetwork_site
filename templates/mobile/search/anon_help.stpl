@@ -1,0 +1,47 @@
+<% include!("../anon_header.stpl"); %>
+
+<section page-id="22" data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a href="/search/<%= q %>/" class="ajax">Общий поиск</a>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+      <form class="form mb-20" role="form">
+          <input data-folder="_blogs" value="<%= q %>" type="text" class="form-control general_search search_page" placeholder="Поиск...">
+      </form>
+    <div class="search_section">
+      <% if items_count > 0 { %>
+      <section class="page-section">
+          <div class="container relative">
+              <div class="row multi-columns-row">
+                <% for object in items_list.iter() { %>
+                  <% include!("../generic/help.stpl"); %>
+                <% } %>
+                <% if next_page_number > 0 { %>
+                  <div class="load centered m-1 next_page_list" data-link="/search_help/<%=q%>/?page=<%= next_page_number %>">
+                    <img src="/static/images/preloader.gif">
+                  </div>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } else { %>
+          <div class="text-center">
+            <span class="widget-title font-alt">
+              По запросу "<%= q %>" ничего не найдено...
+            </span>
+          </div>
+        <% } %>
+    </div>
+  </div>
+</section>
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>
+<% include!("../anon_footer.stpl"); %>
