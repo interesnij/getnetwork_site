@@ -2503,9 +2503,7 @@ hr {
     border-bottom: 0
   }
 }
-.widget-menu {
-    font-size: 13px;
-}
+
 .widget-menu li {
     padding: 5px 0;
 
@@ -2584,9 +2582,7 @@ hr {
     font-size: 14px;
     font-weight: 400;
 }
-.widget-body{
-    font-size: 13px;
-}
+
 .widget-text{
     line-height: 1.7;
 }
