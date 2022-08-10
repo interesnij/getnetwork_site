@@ -92,7 +92,7 @@ function ajax_get_reload(url) {
         sidebar = elem_.querySelector(".sidebar");
         rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
-        document.title = rtr.getAttribute("data-title");
+        document.title = rtr.querySelector(".doc_title").getAttribute("data-title");
         window.history.pushState({route: url}, "network", url);
         hide_nav_first_span();
         hide_nav_second_span();

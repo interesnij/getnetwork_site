@@ -84,6 +84,42 @@ on('body', 'input', '.smile_supported', function() {
     this.previousElementSibling.innerHTML = this.innerHTML.length
 });
 
+// help progs
+on('body', 'click', '#create_help_btn', function() {
+  send_category_data(this.parentElement, "/help/create_item/");
+});
+on('body', 'click', '#edit_help_btn', function() {
+  send_category_data(this.parentElement, "/help/edit_item/" + this.getAttribute("data-pk") + "/");
+});
+on('body', 'click', '#create_help_category_btn', function() {
+  form = this.parentElement;
+  form_data = new FormData(form);
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', "/help/create_categories/", true );
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    ajax_get_reload("/help/create_categories/");
+  } else {
+    alert("not ok");
+  }};
+  link.send(form_data);
+});
+on('body', 'click', '#edit_help_category_btn', function() {
+  form = this.parentElement;
+  form_data = new FormData(form);
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', "/help/edit_category/" + this.getAttribute("data-pk") + "/", true );
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    ajax_get_reload("/help/create_categories/");
+  } else {
+    alert("not ok");
+  }};
+  link.send(form_data);
+});
+
 function send_category_data(form, url) {
   text_val1 = document.body.querySelector(".content_1");
   _val1 = format_text(text_val1);
