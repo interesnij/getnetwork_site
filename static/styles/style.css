@@ -6,6 +6,11 @@
     max-width: none;
     border: 0
 }
+.banner_block {
+  display: inline-block;
+  padding: 17px;
+  border: 1px solid white;
+}
 ::-webkit-scrollbar {
   height: 0px;
   width: 0px;

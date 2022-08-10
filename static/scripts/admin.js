@@ -126,7 +126,6 @@ on('body', 'click', '#edit_help_category_btn', function() {
 });
 
 function send_category_data(form, url) {
-  form = this.parentElement;
   if (!form.querySelector("#id_name")) {
     form.querySelector("#id_name").style.border = "1px #FF0000 solid";
     return
