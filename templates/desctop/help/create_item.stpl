@@ -16,7 +16,7 @@
     <div class="row container relative">
         <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
             <div class="mb-20 mb-md-10">
-                <input class="input-md form-control" type="text" name="title" placeholder="Название" />
+                <input class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
               <p>0</p>
@@ -42,7 +42,7 @@
               </h6>
               <% for object in category.get_list().iter() { %>
                 <p><%= object.title %>
-                  | <a class="ajax" href="/help/edit_blog/<%= object.id %>/">~</a>
+                  | <a class="ajax" href="/help/edit_item/<%= object.id %>/">~</a>
                   | <a class="pointer remove_help" data-pk="<%= object.id %>">x</a>
                 </p>
               <% } %>
