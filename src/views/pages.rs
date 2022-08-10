@@ -31,7 +31,6 @@ use sailfish::TemplateOnce;
 pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/", web::get().to(index_page));
     config.route("/info/", web::get().to(info_page));
-    config.route("/help/", web::get().to(help_page));
     config.route("/feedback_list/", web::get().to(feedback_list_page));
     config.route("/serve_list/", web::get().to(serve_list_page));
     config.route("/load_item/", web::get().to(get_load_page));
@@ -167,82 +166,6 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
                 Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
-        }
-    }
-}
-
-pub async fn help_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-    // первая отрисовка страницы - организуем скрытие информации
-    if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Помощь".to_string()).await
-    }
-    else if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/pages/help.stpl")]
-            struct Template {
-                request_user: User,
-                is_ajax:      i32,
-                title:        String,
-            }
-            let body = Template {
-                request_user: _request_user,
-                is_ajax:      is_ajax,
-                title:        "Помощь".to_string(),
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/pages/help.stpl")]
-            struct Template {
-                is_ajax:      i32,
-                title:        String,
-            }
-            let body = Template {
-                is_ajax:      is_ajax,
-                title:        "Помощь".to_string(),
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-    }
-    else {
-        if is_desctop {
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/pages/anon_help.stpl")]
-            struct Template {
-                is_ajax: i32,
-                title:   String,
-            }
-            let body = Template {
-                is_ajax: is_ajax,
-                title:   "Помощь".to_string(),
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            #[derive(TemplateOnce)]
-            #[template(path = "mobile/pages/anon_help.stpl")]
-            struct Template {
-                is_ajax: i32,
-                title:   String,
-            }
-            let body = Template {
-                is_ajax: is_ajax,
-                title:   "Помощь".to_string(),
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
 }
