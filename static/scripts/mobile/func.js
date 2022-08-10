@@ -58,6 +58,7 @@ function check_first_load() {
         window.history.pushState({route: url}, "network", url);
         get_or_create_cookie_user();
         get_page_view_time(120);
+        get_active_button();
         scrolled(document.body.querySelector(".span"));
       }
     }
