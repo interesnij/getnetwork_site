@@ -2045,7 +2045,7 @@ a.blog-item-more{
 .smile_supported {
   overflow-y: auto;
   overflow-x: hidden;
-  height: 200px;
+  height: 200px !important;
 }
 
 .first_span {

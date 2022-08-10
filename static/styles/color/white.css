@@ -8,6 +8,7 @@
 a:hover {
     color: rgba(0, 0, 0, 1) !important;
 }
+
 .mobile_icon span {
   color: rgb(0, 0, 0, 0.7) !important;
 }
@@ -73,7 +74,7 @@ body{
   background-color: #e6e3df !important;
 }
 
-a {
+a, ::-webkit-scrollbar {
     color: rgba(0,0,0, 0.7) !important;
 }
 

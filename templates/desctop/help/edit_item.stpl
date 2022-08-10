@@ -19,7 +19,7 @@
                 <input value="<%= object.title %>" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
-              <p>0</p>
+              <p><%= object.content.len() %></p> 
               <div style="display:inline-block" contenteditable="true" placeholder="Описание" class="input-md form-control content_1 smile_supported">
                 <%- object.content %>
               </div>

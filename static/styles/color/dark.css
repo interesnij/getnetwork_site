@@ -97,7 +97,7 @@ body{
   background-color: #2f4f4f !important
 }
 
-a {
+a, ::-webkit-scrollbar {
     color: rgba(255,255,255, 0.8) !important;
 }
 a.active {
