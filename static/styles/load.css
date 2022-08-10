@@ -1199,6 +1199,7 @@ a.btn-mod{
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     padding: 4px 13px;
+    cursor: pointer;
     border: 2px solid transparent;
     font-size: 11px;
     font-weight: 400;

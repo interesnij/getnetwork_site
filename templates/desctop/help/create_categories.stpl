@@ -15,7 +15,7 @@
     <div class="container relative">
         <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
             <div class="mb-20 mb-md-10">
-                <input class="input-md form-control" type="text" name="name" placeholder="Название" />
+                <input id="id_name" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_help_category_btn">Создать</button>
         </form>

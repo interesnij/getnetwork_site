@@ -15,7 +15,7 @@
     <div class="container relative">
         <form enctype="multipart/form-data" class="form mb-20">
             <div class="mb-20 mb-md-10">
-                <input class="input-md form-control" type="text" name="name" placeholder="Название" />
+                <input id="id_name" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
               <p>0</p>

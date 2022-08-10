@@ -93,8 +93,11 @@ on('body', 'click', '#edit_help_btn', function() {
 });
 on('body', 'click', '#create_help_category_btn', function() {
   form = this.parentElement;
+  if (!form.querySelector("#id_name")) {
+    form.querySelector("#id_name").style.border = "1px #FF0000 solid";
+    return
+  }
   form_data = new FormData(form);
-
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', "/help/create_categories/", true );
   link.onreadystatechange = function () {
@@ -105,8 +108,12 @@ on('body', 'click', '#create_help_category_btn', function() {
 });
 on('body', 'click', '#edit_help_category_btn', function() {
   form = this.parentElement;
-  form_data = new FormData(form);
+  if (!form.querySelector("#id_name")) {
+    form.querySelector("#id_name").style.border = "1px #FF0000 solid";
+    return
+  }
 
+  form_data = new FormData(form);
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', "/help/edit_category/" + this.getAttribute("data-pk") + "/", true );
   link.onreadystatechange = function () {
@@ -119,7 +126,12 @@ on('body', 'click', '#edit_help_category_btn', function() {
 });
 
 function send_category_data(form, url) {
-  text_val1 = document.body.querySelector(".content_1");
+  form = this.parentElement;
+  if (!form.querySelector("#id_name")) {
+    form.querySelector("#id_name").style.border = "1px #FF0000 solid";
+    return
+  }
+  text_val1 = form.querySelector(".content_1");
   _val1 = format_text(text_val1);
   _text1 = _val1.innerHTML;
 
@@ -142,6 +154,10 @@ function send_category_data(form, url) {
 
 function send_content_data(url) {
   form = this.parentElement;
+  if (!form.querySelector(".smile_supported").innerHTML) {
+    form.querySelector(".smile_supported").style.border = "1px #FF0000 solid";
+    return
+  }
   text_val1 = document.body.querySelector(".smile_supported");
   _val1 = format_text(text_val1);
   form_data = new FormData(form);
@@ -159,6 +175,10 @@ function send_content_data(url) {
 };
 
 function send_post_data(form, url) {
+  if (!form.querySelector("#id_title").innerHTML) {
+    form.querySelector("#id_title").style.border = "1px #FF0000 solid";
+    return
+  }
   form_data = new FormData(form);
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', url, true );
