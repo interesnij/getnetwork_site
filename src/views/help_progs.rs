@@ -267,13 +267,6 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
         let _help_cats = help_item_categories
             .load::<HelpItemCategorie>(&_connection)
             .expect("E");
-        let _help_cat = help_item_categories
-            .filter(schema::help_item_categories::id.eq(_item.category_id))
-            .load::<HelpItemCategorie>(&_connection)
-            .expect("E.")
-            .into_iter()
-            .nth(0)
-            .unwrap();
 
         if is_desctop {
             #[derive(TemplateOnce)]
@@ -282,7 +275,6 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
                 title:        String,
                 request_user: User,
                 help_cats:    Vec<HelpItemCategorie>,
-                category:     HelpItemCategorie,
                 object:       HelpItem,
                 is_ajax:      i32,
             }
@@ -290,7 +282,6 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
                 title:        "Изменение элемента помощи ".to_string() + &_item.title,
                 request_user: _request_user,
                 help_cats:    _help_cats,
-                category:     _help_cat,
                 object:       _item,
                 is_ajax:      is_ajax,
             }
@@ -304,14 +295,12 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
             struct Template {
                 title:     String,
                 help_cats: Vec<HelpItemCategorie>,
-                category:  HelpItemCategorie,
                 object:    HelpItem,
                 is_ajax:   i32,
             }
             let body = Template {
                 title:     "Изменение элемента помощи ".to_string() + &_item.title,
                 help_cats: _help_cats,
-                category:  _help_cat,
                 object:    _item,
                 is_ajax:   is_ajax,
             }
@@ -455,7 +444,7 @@ pub async fn delete_category(session: Session, _id: web::Path<i32>) -> impl Resp
 
 pub async fn category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::help_item_categories::dsl::help_item_categories;
-    use crate::utils::{get_device_and_ajax, get_page};
+    use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _cat_id: i32 = *_id;
@@ -529,14 +518,12 @@ pub async fn category_page(session: Session, req: HttpRequest, _id: web::Path<i3
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/help/anon_category.stpl")]
                 struct Template {
-                    title:            String,
                     category:         HelpItemCategorie,
                     help_cats:        Vec<HelpItemCategorie>,
                     object_list:      Vec<HelpItem>,
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Помощь - ".to_string() + &_category.title,
                     category:         _category,
                     help_cats:        all_categories,
                     object_list:      object_list,
@@ -550,14 +537,12 @@ pub async fn category_page(session: Session, req: HttpRequest, _id: web::Path<i3
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/help/anon_category.stpl")]
                 struct Template {
-                    title:            String,
                     category:         HelpItemCategorie,
                     help_cats:        Vec<HelpItemCategorie>,
                     object_list:      Vec<HelpItem>,
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Помощь - ".to_string() + &_category.title,
                     category:         _category,
                     help_cats:        all_categories,
                     object_list:      object_list,

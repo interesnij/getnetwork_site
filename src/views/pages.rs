@@ -185,12 +185,12 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             struct Template {
                 request_user: User,
                 is_ajax:      i32,
-                title:        String,
+                //title:        String,
             }
             let body = Template {
                 request_user: _request_user,
                 is_ajax:      is_ajax,
-                title:        "Информация".to_string(),
+                //title:        "Информация".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -201,11 +201,11 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             #[template(path = "mobile/pages/info.stpl")]
             struct Template {
                 is_ajax:      i32,
-                title:        String,
+                //title:        String,
             }
             let body = Template {
                 is_ajax:      is_ajax,
-                title:        "Информация".to_string(),
+                //title:        "Информация".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
