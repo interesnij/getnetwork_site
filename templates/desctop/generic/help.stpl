@@ -1,0 +1,5 @@
+<h4 class="font-alt"><%= object.title %></h4>
+<p>
+  <%- object.content %>
+</p>
+<hr class="mb-30">

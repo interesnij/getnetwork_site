@@ -30,6 +30,7 @@ pub fn search_routes(config: &mut web::ServiceConfig) {
     config.route("/search_stores/{q}/", web::get().to(search_stores_page));
     config.route("/search_wikis/{q}/", web::get().to(search_wikis_page));
     config.route("/search_works/{q}/", web::get().to(search_works_page));
+    config.route("/search_help/{q}/", web::get().to(search_help_page));
 }
 
 pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
@@ -1072,6 +1073,160 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     title:            "Поиск работ по фрагменту ".to_string() + &q,
                     works_list:       _works,
                     works_count:      works_count,
+                    is_ajax:          is_ajax,
+                    q:                _q,
+                    next_page_number: next_page_number,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
+}
+
+pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
+    use crate::utils::{get_device_and_ajax, get_page};
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let _q = q.clone();
+
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Поиск по фрагменту ".to_string() + &q).await
+    }
+    else {
+        use crate::schema::help_items::dsl::help_items;
+        use crate::models::HelpItem;
+
+        let page = get_page(&req);
+        let _connection = establish_connection();
+        let _q_standalone = "%".to_owned() + &_q + "%";
+
+        let mut next_page_number = 0;
+        let offset: i32;
+        let next_item: i32;
+        if page > 1 {
+            offset = (page - 1) * 20;
+            next_item = page * 20 + 1;
+        }
+        else {
+            offset = 0;
+            next_item = 21;
+        }
+
+        let _items = help_items
+            .filter(schema::help_items::title.ilike(&_q_standalone))
+            .or_filter(schema::help_items::content.ilike(&_q_standalone))
+            .limit(20)
+            .offset(offset.into())
+            .order(schema::help_items::created.desc())
+            .load::<HelpItem>(&_connection)
+            .expect("e");
+
+        let items_count = _items.len();
+
+        if help_items
+            .filter(schema::help_items::title.ilike(&_q_standalone))
+            .or_filter(schema::help_items::content.ilike(&_q_standalone))
+            .limit(1)
+            .offset(next_item.into())
+            .select(schema::help_items::id)
+            .load::<i32>(&_connection)
+            .expect("e")
+            .len() > 0 {
+                next_page_number = page + 1;
+            }
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/search/help.stpl")]
+                struct Template {
+                    title:            String,
+                    request_user:     User,
+                    items_list:       Vec<HelpItem>,
+                    items_count:      usize,
+                    is_ajax:          i32,
+                    q:                String,
+                    next_page_number: i32,
+                }
+                let body = Template {
+                    title:            "Поиск по фрагменту ".to_string() + &q,
+                    request_user:     _request_user,
+                    items_list:       _items,
+                    items_count:      items_count,
+                    is_ajax:          is_ajax,
+                    q:                _q,
+                    next_page_number: next_page_number,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/search/help.stpl")]
+                struct Template {
+                    title:            String,
+                    items_list:       Vec<HelpItem>,
+                    items_count:      usize,
+                    is_ajax:          i32,
+                    q:                String,
+                    next_page_number: i32,
+                }
+                let body = Template {
+                    title:            "Поиск по фрагменту ".to_string() + &q,
+                    items_list:       _items,
+                    items_count:      items_count,
+                    is_ajax:          is_ajax,
+                    q:                _q,
+                    next_page_number: next_page_number,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/search/anon_help.stpl")]
+                struct Template {
+                    title:            String,
+                    items_list:       Vec<HelpItem>,
+                    items_count:      usize,
+                    is_ajax:          i32,
+                    q:                String,
+                    next_page_number: i32,
+                }
+                let body = Template {
+                    title:            "Поиск по фрагменту ".to_string() + &q,
+                    items_list:       _items,
+                    items_count:      items_count,
+                    is_ajax:          is_ajax,
+                    q:                _q,
+                    next_page_number: next_page_number,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/search/anon_help.stpl")]
+                struct Template {
+                    title:            String,
+                    items_list:       Vec<HelpItem>,
+                    items_count:      usize,
+                    is_ajax:          i32,
+                    q:                String,
+                    next_page_number: i32,
+                }
+                let body = Template {
+                    title:            "Поиск по фрагменту ".to_string() + &q,
+                    items_list:       _items,
+                    items_count:      items_count,
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,

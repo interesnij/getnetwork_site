@@ -11,23 +11,23 @@
 </section>
 <section class="page-section">
     <div class="container relative">
-      <form class="form mb-20 col-md-offset-2">
+      <form class="col-md-8 col-md-offset-2 form mb-20">
         <div>
           <p class="api_response"></p>
         </div>
-        <div>
+        <div class="mb-20 mb-md-10">
           <label for="username">Логин:</label>
-          <input id="id_username" type="text" name="username">
+          <input class="input-md form-control" id="id_username" type="text" name="username">
         </div>
-        <div>
+        <div class="mb-20 mb-md-10">
           <label for="email">Почта:</label>
-          <input id="id_email" type="email" name="email">
+          <input class="input-md form-control" id="id_email" type="email" name="email">
         </div>
-        <div>
+        <div class="mb-20 mb-md-10">
           <label for="password">Пароль:</label>
-          <input id="id_password" type="password" name="password">
+          <input class="input-md form-control" id="id_password" type="password" name="password">
         </div>
-        <button type="button" id="signup">Регистрация</button>
+        <button class="btn btn-mod btn-border btn-medium" type="button" id="signup">Регистрация</button>
       </form>
     </div>
 </section>
