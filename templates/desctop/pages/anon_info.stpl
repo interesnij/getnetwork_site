@@ -12,9 +12,6 @@
 
 <section class="page-section">
     <div class="container relative">
-        <h5 class="section-title font-alt">
-            Информация
-        </h5>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
             <li class="yy s_1 active">
               <a>

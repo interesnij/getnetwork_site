@@ -218,11 +218,9 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             #[template(path = "desctop/pages/anon_info.stpl")]
             struct Template {
                 is_ajax: i32,
-                title:   String,
             }
             let body = Template {
                 is_ajax: is_ajax,
-                title:   "Информация".to_string(),
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
