@@ -14,7 +14,7 @@
 
 <section class="page-section">
     <div class="row container relative">
-        <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
+        <form class="col-md-8 form" enctype="multipart/form-data">
             <div class="mb-20 mb-md-10">
                 <input class="input-md form-control" type="text" name="title" placeholder="Название" />
             </div>

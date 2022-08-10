@@ -12,8 +12,8 @@
     </div>
 </section>
 <section class="page-section">
-    <div class="container relative">
-        <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
+    <div class="row container relative">
+        <form enctype="multipart/form-data" class="form mb-20 col-md-8">
             <div class="mb-20 mb-md-10">
                 <input value="<%= object.name %>" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>

@@ -12,8 +12,8 @@
     </div>
 </section>
 <section class="page-section">
-    <div class="container relative">
-        <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
+    <div class="row container relative">
+        <form enctype="multipart/form-data" class="form mb-20 col-md-8">
             <div class="mb-20 mb-md-10">
                 <input class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
@@ -29,7 +29,7 @@
             </div>
             <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_tech_category_btn">Создать</button>
         </form>
-        <section class="border small-section bg-dark">
+        <section class="col-md-4">
           <% for category in tech_cats.iter() { %>
             <p><%= category.name %>
               | <a class="ajax" href="/edit_tech_category/<%= category.id %>/">~</a>
