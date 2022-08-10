@@ -28,10 +28,7 @@ use crate::models::{
     NewHelpItem,
 };
 use actix_session::Session;
-use actix_multipart::{Field, Multipart};
-use futures::StreamExt;
-use serde::{Deserialize, Serialize};
-use std::str;
+use actix_multipart::Multipart;
 use sailfish::TemplateOnce;
 
 
@@ -329,8 +326,6 @@ pub async fn create_categories(session: Session, mut payload: Multipart) -> impl
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::schema::help_item_categories::dsl::help_item_categories;
-
             let _connection = establish_connection();
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewHelpItemCategorie {
@@ -370,8 +365,6 @@ pub async fn edit_category(session: Session, mut payload: Multipart, _id: web::P
 }
 
 pub async fn create_item(session: Session, mut payload: Multipart) -> impl Responder {
-    use crate::schema::help_items::dsl::help_items;
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
@@ -395,10 +388,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
 }
 
 pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::{
-        help_item_categories::dsl::help_item_categories,
-        help_items::dsl::help_items,
-    };
+    use crate::schema::help_items::dsl::help_items;
 
     let _item_id: i32 = *_id;
     let _connection = establish_connection();
@@ -485,7 +475,6 @@ pub async fn category_page(session: Session, req: HttpRequest, _id: web::Path<i3
         get_first_load_page(&session, is_desctop, "Помощь - ".to_string() + &_category.title).await
     }
     else {
-        let page = get_page(&req);
         let object_list = _category.get_list();
 
         if is_signed_in(&session) {
