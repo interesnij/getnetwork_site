@@ -472,7 +472,6 @@ pub async fn category_page(session: Session, req: HttpRequest, _id: web::Path<i3
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/help/category.stpl")]
                 struct Template {
-                    title:            String,
                     request_user:     User,
                     category:         HelpItemCategorie,
                     help_cats:        Vec<HelpItemCategorie>,
@@ -480,7 +479,6 @@ pub async fn category_page(session: Session, req: HttpRequest, _id: web::Path<i3
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Помощь - ".to_string() + &_category.title,
                     request_user:     _request_user,
                     category:         _category,
                     help_cats:        all_categories,
@@ -495,14 +493,12 @@ pub async fn category_page(session: Session, req: HttpRequest, _id: web::Path<i3
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/help/category.stpl")]
                 struct Template {
-                    title:            String,
                     category:         HelpItemCategorie,
                     help_cats:        Vec<HelpItemCategorie>,
                     object_list:      Vec<HelpItem>,
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Помощь - ".to_string() + &_category.title,
                     category:         _category,
                     help_cats:        all_categories,
                     object_list:      object_list,
