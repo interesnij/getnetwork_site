@@ -1,0 +1,57 @@
+<% include!("../header.stpl"); %>
+
+
+<section data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+                <div class="hs-line-4 font-alt black">
+                    <a class="ajax" href="/">Главная</a>
+                    &nbsp;/&nbsp;
+                    <a class="ajax" href="/help/1/">Помощь</a>
+                    &nbsp;/&nbsp;
+                    <span>Создание элемента помощи</span>
+                </div>
+    </div>
+</section>
+
+<section class="page-section">
+  <div class="container relative">
+    <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
+        <div class="mb-20 mb-md-10">
+            <input class="input-md form-control" type="text" name="name" placeholder="Название" />
+        </div>
+        <div class="mb-20 mb-md-10">
+          <p>0</p>
+          <div style="display:inline-block" contenteditable="true" placeholder="Описание" class="input-md form-control content_1 smile_supported">
+          </div>
+        </div>
+        <div class="mb-20 mb-md-10">
+            <label>Категории</label>
+            <select class="form-control input-md" name="position">
+              <% for category in help_cats.iter() { %>
+                <option value="<%= category.id %>"><%= category.title %></option>
+              <% } %>
+            </select>
+        </div>
+        <button style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_help_btn">Отправить</button>
+    </form>
+  </div>
+</section>
+
+<div class="sidebar hidden">
+<% for category in help_cats.iter() { %>
+<div class="margin-bottom:15px">
+  <h6><%= category.title %>
+    | <a class="ajax" href="/help/edit_help_category/<%= category.id %>/">~</a>
+    | <a class="pointer remove_help_category" data-pk="<%= category.id %>">x</a>
+  </h6>
+  <% for object in category.get_list().iter() { %>
+    <p><%= object.title %>
+      | <a class="ajax" href="/help/edit_item/<%= object.id %>/">~</a>
+      | <a class="pointer remove_help" data-pk="<%= object.id %>">x</a>
+    </p>
+  <% } %>
+</div>
+<% } %>
+</div>
+
+<% include!("../footer.stpl"); %>
