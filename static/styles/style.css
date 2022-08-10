@@ -7,9 +7,8 @@
     border: 0
 }
 ::-webkit-scrollbar {
-  height: 4px;
-  width: 4px;
-  border: 1px solid #d5d5d5;
+  height: 0px;
+  width: 0px;
 }
 .progressive img.preview {
     transform: scale(1)
