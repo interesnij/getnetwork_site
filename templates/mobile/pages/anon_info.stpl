@@ -29,14 +29,6 @@
                 Контакты
               </a>
             </li>
-            <li class="yy s_3 pointer">
-              <a>
-                <div class="alt-tabs-icon">
-                  <span class="icon-toolbox"></span>
-                </div>
-                Сотрудничество
-              </a>
-            </li>
 
             <li class="yy s_4 pointer">
               <a>
@@ -78,21 +70,6 @@
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
                           Контакты
-                        </blockquote>
-                        <p>
-
-                        </p>
-                      </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab_3 fade tab-pane in">
-                <div class="section-text">
-                    <div class="row">
-                      <div class="mb-sm-50">
-                        <blockquote style="margin-bottom: 10px">
-                          Сотрудничество
                         </blockquote>
                         <p>
 
