@@ -10,8 +10,8 @@
     </div>
 </section>
 <section class="page-section">
-    <div class="container relative">
-      <form class="form mb-20 col-md-offset-2">
+    <div class="row container relative">
+      <form class="col-md-8 col-md-offset-2 form mb-20">
         <div>
           <p class="api_response"></p>
         </div>
