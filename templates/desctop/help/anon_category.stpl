@@ -1,0 +1,49 @@
+<% include!("../anon_header.stpl"); %>
+
+<section page-id="9" data-title="<%= category.title %> - помощь" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span><%= category.title %></span>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+        <div class="row">
+            <div class="col-sm-8">
+                <% for object in object_list.iter() { %>
+                  <h4 class="font-alt"><%= object.title %></h4>
+                  <p>
+                    <%- object.content %>
+                  </p>
+                  <hr class="mb-30">
+                <% } %>
+            </div>
+            <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">
+            <div class="widget">
+                <form class="form-inline form" role="form">
+                    <div class="search-wrap">
+                        <input type="text" class="form-control search-field" placeholder="Поиск...">
+                    </div>
+                </form>
+            </div>
+            <div class="widget">
+                <h5 class="widget-title font-alt">Категории</h5>
+                <div class="widget-body">
+                    <ul class="clearlist widget-menu">
+                      <% for category in help_cats.iter() { %>
+                        <li>
+                          <a class="ajax" href="/help/<%= category.id %>/"><%= category.title %></a>
+                        </li>
+                      <% } %>
+                    </ul>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+<% include!("../anon_footer.stpl"); %>

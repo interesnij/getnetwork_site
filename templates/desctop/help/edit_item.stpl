@@ -26,7 +26,7 @@
             </div>
             <div class="mb-20 mb-md-10">
                 <label>Категории</label>
-                <select class="form-control" name="position">
+                <select class="form-control input-md" name="position">
                   <% for category in help_cats.iter() { %>
                     <option <% if object.category_id == category.id { %>selected=""<% } %> value="<%= category.id %>"><%= category.title %></option>
                   <% } %>
