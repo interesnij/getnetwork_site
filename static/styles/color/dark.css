@@ -353,23 +353,11 @@ a.blog-item-more:hover{
     border-bottom: 1px solid #ccc !important;
 }
 
-.search-button{
-    color: #999 !important;
-}
-
-.search-button:hover{
-    color: #FFFFFF !important;
-}
-.search-button:hover + .search-field{
-    border-color: #ccc !important;
-}
-
 .tags a{
     border: 1px solid #e9e9e9 !important;
 }
 .tags a:hover{
     border-color: #333 !important;
-    color: #FFFFFF !important;
 }
 
 .tpl-alt-tabs li.active a,

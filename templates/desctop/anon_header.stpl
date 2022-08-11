@@ -81,9 +81,8 @@
                           <ul class="mn-sub to-left" style="right: -70px;">
                               <li>
                                   <div class="mn-wrap">
-                                      <form method="post" class="form">
+                                      <form class="form">
                                           <div class="search-wrap">
-                                              <button class="search-button animate" type="submit" title="Поиск"></button>
                                               <input type="text" class="general_search form-control search-field" placeholder="Поиск...">
                                           </div>
                                       </form>
