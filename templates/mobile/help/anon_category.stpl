@@ -26,7 +26,7 @@
 <div class="widget">
     <form class="form-inline form" role="form">
         <div class="search-wrap">
-            <input type="text" class="form-control search-field" placeholder="Поиск...">
+            <input data-folder="_help" type="text" class="form-control search-field mobile" placeholder="Поиск помощи">
         </div>
     </form>
 </div>
