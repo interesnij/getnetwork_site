@@ -541,4 +541,3 @@ table! {
         seconds -> Int4,
     }
 }
-
