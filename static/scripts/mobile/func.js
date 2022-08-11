@@ -94,7 +94,7 @@ function ajax_get_reload(url) {
         rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
         document.title = rtr.querySelector(".doc_title").getAttribute("data-title");
-        window.history.pushState({route: url}, "network", url);
+        window.history.pushState(null, "ajax_reload", url);
         hide_nav_first_span();
         hide_nav_second_span();
         get_active_button();

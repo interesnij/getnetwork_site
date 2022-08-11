@@ -142,7 +142,7 @@ function ajax_get_reload(url) {
         rtr.innerHTML = elem_.innerHTML;
         document.title = rtr.querySelector(".doc_title").getAttribute("data-title");
         window.scrollTo(0,0);
-        window.history.replaceState(null, null, url);
+        window.history.pushState(null, "ajax_reload", url);
         get_active_button();
         get_page_view_time(120);
         scrolled(rtr);

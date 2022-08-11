@@ -726,7 +726,7 @@ on('body', 'input', '.general_search', function() {
           console.log("search_block", search);
           console.log("target_block", div);
           div.innerHTML = search.innerHTML;
-          //document.title = elem_.querySelector("title").innerHTML;
+          document.title = elem_.querySelector(".doc_title").getAttribute("data-title");
           window.history.replaceState(null, null, url);
         }
       }
