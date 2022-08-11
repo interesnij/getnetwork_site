@@ -40,7 +40,6 @@ function get_custom_design() {
   addStyleSheets("/static/styles/color/" + color + ".css")
 };
 function check_first_load() {
-  get_custom_design();
   span = document.body.querySelector(".span");
   if (window.location.search.split('?').length > 1) {
     span.innerHTML = "Permission Denied";
@@ -56,6 +55,7 @@ function check_first_load() {
         elem_.innerHTML = ajax_link.responseText;
         span.innerHTML = elem_.innerHTML;
         window.history.pushState({route: url}, "network", url);
+        get_custom_design();
         get_or_create_cookie_user();
         get_page_view_time(120);
         get_active_button();
