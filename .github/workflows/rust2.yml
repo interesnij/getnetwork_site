@@ -1,0 +1,29 @@
+on:
+  push:
+    branches:
+    - main
+
+name: Test 5
+
+jobs:
+  build_and_deploy:
+    name: Test 5
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features
+      - uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: ./my/meta/target/release/meta_auto
+          remote_path: ${{ secrets.SERVER_DEPLOY_PATH }}
+          remote_host: ${{ secrets.SERVER_HOST }}
+          remote_user: ${{ secrets.SERVER_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
