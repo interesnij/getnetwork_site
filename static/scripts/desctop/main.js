@@ -89,8 +89,8 @@ function get_custom_design() {
   }
   addStyleSheets("/static/styles/color/" + color + ".css")
 };
+
 function check_first_load() {
-  get_custom_design();
   span = document.body.querySelector(".span");
   if (window.location.search.split('?').length > 1) {
     span.innerHTML = "Permission Denied";
@@ -102,6 +102,7 @@ function check_first_load() {
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
       if ( this.readyState == 4 && this.status == 200 ) {
+        get_custom_design();
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
         span.innerHTML = elem_.innerHTML;
