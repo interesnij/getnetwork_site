@@ -35,7 +35,7 @@ async fn main() -> std::io::Result<()> {
             .service(_files2)
             .configure(routes)
     })
-    .bind("127.0.0.1:8080")?
+    .bind("127.0.0.1:9080")?
     //.bind("http://вселенная.рус:8000")?
     .run()
     .await
