@@ -3,7 +3,7 @@
 <% if is_ajax == 1 { %>
 </span>
 </span>
-
+ 
 <footer class="page-section bg-gray-lighter footer pb-60">
     <div class="container">
         <div class="footer-social-links mb-110 mb-xs-60">
