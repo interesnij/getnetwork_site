@@ -652,7 +652,7 @@ on('body', 'click', '.anon_color_change', function() {
   }
   if (color == "white") {
     addStyleSheets("/static/styles/color/daark.css");
-    this.setAttribute("data-color", "dark");
+    this.setAttribute("data-color", "daark");
     new_color = "dark"
   } else if (color == "dark") {
     addStyleSheets("/static/styles/color/yellow.css");
