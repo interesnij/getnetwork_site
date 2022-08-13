@@ -651,7 +651,7 @@ on('body', 'click', '.anon_color_change', function() {
     color = backgroud;
   }
   if (color == "white") {
-    addStyleSheets("/static/styles/color/dark.css");
+    addStyleSheets("/static/styles/color/daark.css");
     this.setAttribute("data-color", "dark");
     new_color = "dark"
   } else if (color == "dark") {

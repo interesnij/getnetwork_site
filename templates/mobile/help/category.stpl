@@ -22,25 +22,7 @@
 </section>
 
 <div class="sidebar hidden">
-<div class="widget">
-    <form class="form-inline form" role="form">
-        <div class="search-wrap">
-            <input data-folder="_help" type="text" class="form-control search-field mobile" placeholder="Поиск помощи">
-        </div>
-    </form>
-</div>
-<div class="widget">
-    <h5 class="widget-title font-alt">Категории</h5>
-    <div class="widget-body">
-        <ul class="clearlist widget-menu">
-          <% for category in help_cats.iter() { %>
-            <li>
-              <a class="ajax" href="/help/<%= category.id %>/"><%= category.title %></a>
-            </li>
-          <% } %>
-        </ul>
-    </div>
-</div>
+  <% include!("sidebar.stpl"); %>
 </div>
 
 <% include!("../footer.stpl"); %>

@@ -1,0 +1,19 @@
+<div class="widget">
+    <form class="form-inline form" role="form">
+        <div class="search-wrap">
+            <input data-folder="_help" type="text" class="form-control search-field desctop_folder_search" placeholder="Поиск...">
+        </div>
+    </form>
+</div>
+<div class="widget">
+    <h5 class="widget-title font-alt">Категории</h5>
+    <div class="widget-body">
+        <ul class="clearlist widget-menu">
+          <% for category in help_cats.iter() { %>
+            <li>
+              <a class="ajax" href="/help/<%= category.id %>/"><%= category.title %></a>
+            </li>
+          <% } %>
+        </ul>
+    </div>
+</div>
