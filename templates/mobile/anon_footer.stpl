@@ -86,7 +86,7 @@
 <div id="fixed_nav_block" style="margin-top:30px;position:relative;">
 
 <div class="container">
-<span class="banner_block" style="width:100%;text-align:center;">
+<span class="banner_block border" style="width:100%;text-align:center;">
 <h3 class="hs-line-8 font-alt mb-xs-10">
     Разработка соцсетей
 </h3>

@@ -30,9 +30,11 @@
                       <% include!("../generic/store.stpl"); %>
                     <% } %>
                   <% } else { %>
-                    <div class="text-center">
-                      <span class="widget-title font-alt">Список пока пустой...</span>
-                    </div>
+                  <div class="container relative" style="margin-top: 40px;">
+                      <div class="align-center">
+                          <span class="border" style="padding: 5px 12px;">Список пока пустой.</span>
+                      </div>
+                  </div>
                   <% } %>
                 </div>
                 <% } %>

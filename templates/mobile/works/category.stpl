@@ -32,8 +32,10 @@
           </div>
         <% } %>
       <% } else { %>
-      <div style="margin-top: 40px;">
-        <span class="widget-title font-alt">Список пока пустой...</span>
+      <div class="container relative" style="margin-top: 40px;">
+          <div class="align-center">
+              <span class="border" style="padding: 5px 12px;">Список пока пустой.</span>
+          </div>
       </div>
       <% } %>
     <ul>
