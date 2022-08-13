@@ -6,7 +6,7 @@ a:hover {
     color: rgba(255,255,255, 1) !important;
 }
 .small-section, .mob_menu, .banner_block {
-  background: rgba(51,51,51, 0.8) !important;
+  background: rgba(51,51,51, 1) !important;
 }
 .mobile_icon span {
   color: rgb(255, 255, 255, 0.7) !important;
