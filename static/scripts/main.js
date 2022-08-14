@@ -652,9 +652,9 @@ on('body', 'click', '.anon_color_change', function() {
   }
   if (color == "white") {
     addStyleSheets("/static/styles/color/daark.css");
-    this.setAttribute("data-color", "daark");
-    new_color = "daark"
-  } else if (color == "daark") {
+    this.setAttribute("data-color", "dark");
+    new_color = "dark"
+  } else if (color == "dark") {
     addStyleSheets("/static/styles/color/yellow.css");
     this.setAttribute("data-color", "yellow");
     new_color = "yellow"
