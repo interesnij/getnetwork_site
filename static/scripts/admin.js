@@ -258,6 +258,7 @@ on('body', 'click', '.remove_work_category', function() {
   this.parentElement.remove();
 });
 
+
 ////////////////////////////////////
 
 on('body', 'click', '#create_blog_btn', function() {
