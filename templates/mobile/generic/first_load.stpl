@@ -16,9 +16,9 @@
   </head>
   <body data-device="1">
     <span class="span"></span>
-    <script defer type="text/javascript" src="/static/scripts/mobile/func.js?ver2"></script>
-    <script defer type="text/javascript" src="/static/scripts/mobile/main.js?ver2"></script>
-    <script defer type="text/javascript" src="/static/scripts/main.js?ver2"></script>
+    <script defer type="text/javascript" src="/static/scripts/mobile/func.js?ver3"></script>
+    <script defer type="text/javascript" src="/static/scripts/mobile/main.js?ver3"></script>
+    <script defer type="text/javascript" src="/static/scripts/main.js?ver3"></script>
     <% if request_user.is_superuser() { %>
       <script defer type="text/javascript" src="/static/scripts/admin.js"></script>
     <% } %>
