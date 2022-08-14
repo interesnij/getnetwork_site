@@ -18,7 +18,7 @@
   <body data-device="1" data-test="true!">
     <span class="span"></span>
     <script defer type="text/javascript" src="/static/scripts/desctop/main.js?ver3"></script>
-    <script defer type="text/javascript" src="/static/scripts/main.js?ver3"></script>
+    <script defer type="text/javascript" src="/static/scripts/main.js?ver4"></script>
     <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
   </body>
 </html>
