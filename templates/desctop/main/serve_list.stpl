@@ -1,5 +1,6 @@
 <% include!("../header.stpl"); %>
 
+<%= is_ajax %>
 <section data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
@@ -47,14 +48,16 @@
                     <% if object.is_default { %>(*) <% } %>
                     <%= category.name %> => <%= object.name %> (<%= object.id %>)
                   </a>
+                  <% let items = object.get_variables(); %>
+                  <% for (i, child) in items.iter().enumerate() { %>
+                    <%= child.name %> (<%= child.id %>) <% if (i + 1) != items.len() { %>, <% } %>
+                  <% } %>
                 </td>
                 <td style="width:14%"><%= object.price %> ₽</td>
                 <td style="width:12%"><%= object.man_hours %> ⌛</td>
 
-                <% if request_user.is_superuser() { %>
                   <td style="width:5%"><a class="ajax" href="/edit_serve/<%= object.id %>/">~</a></td>
                   <td style="width:5%"><a class="pointer remove_serve" data-pk="<%= object.id %>">x</a></td>
-                <% } %>
               </tr>
             <% } %>
           </tbody>

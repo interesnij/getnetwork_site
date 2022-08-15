@@ -40,6 +40,7 @@ impl TechCategories {
         let _connection = establish_connection();
         return serve_categories
             .filter(schema::serve_categories::tech_categories.eq(self.id))
+            .order(schema::serve_categories::position)
             .load::<ServeCategories>(&_connection)
             .expect("E");
     }
@@ -101,6 +102,8 @@ impl ServeCategories {
         let _connection = establish_connection();
         return serve
             .filter(schema::serve::serve_categories.eq(self.id))
+            .filter(schema::serve::serve_id.is_null())
+            .order(schema::serve::position)
             .load::<Serve>(&_connection)
             .expect("E");
     }
@@ -154,6 +157,7 @@ impl Serve {
         let _connection = establish_connection();
         return serve
             .filter(schema::serve::serve_id.eq(self.id))
+            .order(schema::serve::position)
             .load::<Serve>(&_connection)
             .expect("E");
     }
