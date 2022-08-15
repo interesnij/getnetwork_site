@@ -38,15 +38,15 @@ use sailfish::TemplateOnce;
 
 
 pub fn get_price_acc_values(price: &i32) -> Option<i32> {
-    if price > 3_000_000 {
+    if price > &3_000_000 {
         let acc = (price * 10) / 100; // 10% скидка
         return Some(acc);
     }
-    else if price > 2_000_000 && price < 3_000_000 {
+    else if price > &2_000_000 && price < &3_000_000 {
         let acc = (price * 7) / 100; // 10% скидка
         return Some(acc);
     }
-    else if price > 1_000_000 && price < 2_000_000 {
+    else if price > &1_000_000 && price < &2_000_000 {
         let acc = (price * 5) / 100; // 5% скидка
         return Some(acc);
     }
