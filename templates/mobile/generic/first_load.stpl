@@ -10,14 +10,14 @@
     <link type="text/css" media="all" rel="stylesheet" href="/static/styles/grid.css">
     <link type="text/css" media="all" rel="stylesheet" href="/static/styles/style.css">
 
-    <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css">
+    <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css?ver5">
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/load.css">
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/fonts.css">
   </head>
   <body data-device="1">
     <span class="span"></span>
     <script defer type="text/javascript" src="/static/scripts/mobile/func.js?ver3"></script>
-    <script defer type="text/javascript" src="/static/scripts/mobile/main.js?ver3"></script>
+    <script defer type="text/javascript" src="/static/scripts/mobile/main.js?ver5"></script>
     <script defer type="text/javascript" src="/static/scripts/main.js?ver4"></script>
     <% if request_user.is_superuser() { %>
       <script defer type="text/javascript" src="/static/scripts/admin.js"></script>
