@@ -135,7 +135,7 @@ table! {
         view -> Int4,
         height -> Float8,
         seconds -> Int4,
-        serve_id -> Int4,
+        serve_id -> Nullable<Int4>,
     }
 }
 
