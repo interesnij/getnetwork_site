@@ -1,4 +1,4 @@
-
+// main scripts
 function get_document_opacity_0() {
   document.body.style.overflowY = "hidden";
   document.body.style.marginRight = "20px";
