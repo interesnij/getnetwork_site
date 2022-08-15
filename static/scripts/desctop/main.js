@@ -92,6 +92,7 @@ function get_custom_design() {
 
 function check_first_load() {
   span = document.body.querySelector(".span");
+  console.log(window.location.search.split('?').length);
   if (window.location.search.split('?').length > 1) {
     span.innerHTML = "Permission Denied";
   }
