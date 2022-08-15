@@ -55,6 +55,7 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
 
     let _connection = establish_connection();
     let ip = &req.peer_addr().unwrap().ip().to_string();
+    println!("ip{:?}", ip);
 
     let mut device: i16 = 1;
     for header in req.headers().into_iter() {
@@ -68,6 +69,7 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
     };
 
     let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_owned() + &ip;
+    println!("geo_url{:?}", _geo_url);
     let _geo_request = reqwest::get(_geo_url).await.expect("E.");
     let new_request = _geo_request.text().await.unwrap();
     let location200: UserLoc = serde_json::from_str(&new_request).unwrap();
@@ -88,6 +90,7 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
         .values(&_user)
         .get_result::<CookieUser>(&_connection)
         .expect("Error.");
+    println!("_new_user_id{:?}", _new_user.id);
     return _new_user;
 }
 
@@ -212,7 +215,7 @@ pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
                     use crate::utils::plus_mainpage_stat;
                     plus_mainpage_stat(p_height, p_seconds)
                 },
-                9 => { 
+                9 => {
                     use crate::utils::plus_help_stat;
                     plus_help_stat(p_height, p_seconds)
                 },

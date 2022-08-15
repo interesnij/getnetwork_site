@@ -145,6 +145,18 @@ pub struct Serve {
 }
 
 impl Serve {
+    pub fn is_parent(&self) -> bool {
+        return self.serve_id.is_none();
+    }
+    pub fn get_variables(&self) -> Vec<Serve> {
+        use crate::schema::serve::dsl::serve;
+
+        let _connection = establish_connection();
+        return serve
+            .filter(schema::serve::serve_id.eq(self.id))
+            .load::<Serve>(&_connection)
+            .expect("E");
+    }
     pub fn get_100_description(&self) -> String {
         if self.description.is_some() {
             let _content = self.description.as_deref().unwrap();
