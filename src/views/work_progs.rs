@@ -696,7 +696,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
             diesel::update(&_work)
                 .set((
                     schema::works::price.eq(work_price),
-                    schema::works::price_acc.eq(work_price),
+                    schema::works::price_acc.eq(price_acc),
                 ))
                 .get_result::<Work>(&_connection)
                 .expect("Error.");
@@ -906,7 +906,7 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
             diesel::update(&_work)
                 .set((
                     schema::works::price.eq(work_price),
-                    schema::works::price_acc.eq(work_price),
+                    schema::works::price_acc.eq(price_acc),
                 ))
                 .get_result::<Work>(&_connection)
                 .expect("Error.");
