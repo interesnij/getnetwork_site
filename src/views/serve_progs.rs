@@ -895,7 +895,7 @@ pub struct ServeForm {
     pub price:            i32,
     pub man_hours:        i16,
     pub is_default:       bool,
-    pub types:            Option<String>,
+    pub serve_id:         Option<i32>,
 }
 
 pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
@@ -908,7 +908,7 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
         price:            0,
         man_hours:        0,
         is_default:       true,
-        types:            None,
+        serve_id:         None,
     };
 
     let mut is_default = false;
@@ -931,6 +931,15 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                 if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.serve_categories = _int;
+                }
+            }
+        }
+        else if name == "serve_id" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.serve_id = Some(_int);
                 }
             }
         }
@@ -973,8 +982,6 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                         form.name = data_string
                     } else if field.name() == "description" {
                         form.description = data_string
-                    } else if field.name() == "types" {
-                        form.types = Some(data_string)
                     };
                 }
             }
@@ -1010,10 +1017,10 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
                 is_default:       is_default,
                 user_id:          _request_user.id,
                 tech_cat_id:      _category[0].tech_categories,
-                types:            form.types,
                 view:             0,
                 height:           0.0,
                 seconds:          0,
+                serve_id:         form.serve_id,
             };
 
             let _serve = diesel::insert_into(schema::serve::table)
@@ -1090,10 +1097,10 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 is_default:       is_default,
                 user_id:          _request_user.id,
                 tech_cat_id:      _category[0].tech_categories,
-                types:            form.types,
                 view:             0,
                 height:           0.0,
                 seconds:          0,
+                serve_id:         form.serve_id,
             };
 
             diesel::update(&_serve)

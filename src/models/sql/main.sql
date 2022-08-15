@@ -256,7 +256,7 @@ CREATE TABLE serve (
     types            VARCHAR(100),     -- класс опции для организации выбора между несколькими опциями
     height           FLOAT NOT NULL,
     seconds          INT NOT NULL,
-    serve_id         INT NOT NULL,
+    serve_id         INT,
 
     CONSTRAINT fk_serve_category
         FOREIGN KEY(serve_categories)

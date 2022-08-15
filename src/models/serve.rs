@@ -138,11 +138,10 @@ pub struct Serve {
     pub is_default:       bool,
     pub user_id:          i32,
     pub tech_cat_id:      i32,
-    pub types:            Option<String>,
     pub view:             i32,
     pub height:           f64,
     pub seconds:          i32,
-    pub serve_id:         i32,
+    pub serve_id:         Option<i32>,
 }
 
 impl Serve {
@@ -178,7 +177,7 @@ pub struct NewServe {
     pub view:             i32,
     pub height:           f64,
     pub seconds:          i32,
-    pub serve_id:         i32,
+    pub serve_id:         Option<i32>,
 }
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="serve"]
