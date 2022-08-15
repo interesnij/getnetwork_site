@@ -534,7 +534,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
             use crate::utils::{
                 store_form,
                 get_price_acc_values,
-            }; 
+            };
             use crate::models::{
                 TechCategoriesItem,
                 NewTechCategoriesItem,
@@ -688,7 +688,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
             diesel::update(&_store)
                 .set((
                     schema::stores::price.eq(store_price),
-                    schema::stores::price_acc.eq(Some(price_acc)),
+                    schema::stores::price_acc.eq(price_acc),
                 ))
                 .get_result::<Store>(&_connection)
                 .expect("Error.");
@@ -898,7 +898,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
             diesel::update(&_store)
                 .set((
                     schema::stores::price.eq(store_price),
-                    schema::stores::price_acc.eq(Some(price_acc)),
+                    schema::stores::price_acc.eq(price_acc),
                 ))
                 .get_result::<Store>(&_connection)
                 .expect("Error.");

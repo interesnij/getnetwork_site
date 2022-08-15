@@ -695,7 +695,7 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
             diesel::update(&_service)
                 .set((
                     schema::services::price.eq(service_price),
-                    schema::services::price_acc.eq(Some(price_acc)),
+                    schema::services::price_acc.eq(price_acc),
                 ))
                 .get_result::<Service>(&_connection)
                 .expect("Error.");
@@ -905,7 +905,7 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             diesel::update(&_service)
                 .set((
                     schema::services::price.eq(service_price),
-                    schema::services::price_acc.eq(Some(price_acc)),
+                    schema::services::price_acc.eq(price_acc),
                 ))
                 .get_result::<Service>(&_connection)
                 .expect("Error.");
