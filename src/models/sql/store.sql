@@ -11,17 +11,18 @@ CREATE TABLE store_categories (
 );
 
 CREATE TABLE stores (
-    id           SERIAL PRIMARY KEY,
-    title        VARCHAR(100) NOT NULL,
-    description  VARCHAR,
-    content      VARCHAR(30000),
-    link         VARCHAR(500),
-    image        VARCHAR(500),
-    is_active    boolean NOT NULL,
-    price        INT NOT NULL,
-    user_id      INT NOT NULL,
-    created      TIMESTAMP NOT NULL,
-    position     SMALLINT NOT NULL,
+    id          SERIAL PRIMARY KEY,
+    title       VARCHAR(100) NOT NULL,
+    description VARCHAR,
+    content     VARCHAR(30000),
+    link        VARCHAR(500),
+    image       VARCHAR(500),
+    is_active   boolean NOT NULL,
+    price       INT NOT NULL,
+    user_id     INT NOT NULL,
+    created     TIMESTAMP NOT NULL,
+    position    SMALLINT NOT NULL,
+    price_acc   INT,
 
     CONSTRAINT fk_store_creator
         FOREIGN KEY(user_id)

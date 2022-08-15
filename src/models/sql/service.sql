@@ -23,6 +23,7 @@ CREATE TABLE services (
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
     position    SMALLINT NOT NULL,
+    price_acc   INT,
 
     CONSTRAINT fk_service_creator
         FOREIGN KEY(user_id)

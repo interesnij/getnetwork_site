@@ -42,7 +42,7 @@ CREATE TABLE serve (
     is_default       BOOLEAN NOT NULL, -- опция по умолчанию, т.е. без которой работа невозможна (например, админка)
     user_id          INT NOT NULL,
     tech_cat_id      INT NOT NULL,
-    types            VARCHAR(100),     -- класс опции для организации выбора между несколькими опциями
+    serve_id         INT NOT NULL,
 
     CONSTRAINT fk_serve_category
         FOREIGN KEY(serve_categories)

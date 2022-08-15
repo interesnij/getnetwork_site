@@ -22,6 +22,7 @@ CREATE TABLE works (
     user_id     INT NOT NULL,
     created     TIMESTAMP NOT NULL,
     position    SMALLINT NOT NULL,
+    price_acc   INT,
 
     CONSTRAINT fk_work_creator
         FOREIGN KEY(user_id)

@@ -167,6 +167,7 @@ pub struct Work {
     pub view:        i32,
     pub height:      f64,
     pub seconds:     i32,
+    pub price_acc:   Option<i32>,
 }
 impl Work {
     pub fn get_image(&self) -> String {
@@ -349,6 +350,7 @@ pub struct EditWork {
     pub image:       Option<String>,
     pub is_active:   bool,
     pub position:    i16,
+    pub price_acc:   Option<i32>,
 }
 #[derive(Serialize, Insertable)]
 #[table_name="works"]
@@ -365,19 +367,23 @@ pub struct NewWork {
     pub view:        i32,
     pub height:      f64,
     pub seconds:     i32,
+    pub price_acc:   Option<i32>,
 }
 
 impl NewWork {
     pub fn create (
-        title:       String,
-        description: String,
-        link:        String,
-        image:       String,
-        is_active:   bool,
-        price:       i32,
-        user_id:     i32,
-        position:    i16,
+        title:         String,
+        description:   String,
+        link:          String,
+        image:         String,
+        is_active:     bool,
+        price:         i32,
+        user_id:       i32,
+        position:      i16,
     ) -> Self {
+        use crate::utils::get_price_acc_values;
+
+        let price_acc = get_price_acc_values(&price);
         NewWork {
             title:       title,
             description: Some(description),
@@ -391,6 +397,7 @@ impl NewWork {
             view:        0,
             height:      0.0,
             seconds:     0,
+            price_acc:   price_acc,
         }
     }
 }

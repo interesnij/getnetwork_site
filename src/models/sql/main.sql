@@ -254,9 +254,9 @@ CREATE TABLE serve (
     user_id          INT NOT NULL,
     tech_cat_id      INT NOT NULL,
     types            VARCHAR(100),     -- класс опции для организации выбора между несколькими опциями
-    view             INT NOT NULL,
     height           FLOAT NOT NULL,
     seconds          INT NOT NULL,
+    serve_id         INT NOT NULL,
 
     CONSTRAINT fk_serve_category
         FOREIGN KEY(serve_categories)
@@ -318,6 +318,7 @@ CREATE TABLE services (
     view        INT NOT NULL,
     height      FLOAT NOT NULL,
     seconds     INT NOT NULL,
+    price_acc   INT,
 
     CONSTRAINT fk_service_creator
         FOREIGN KEY(user_id)
@@ -377,20 +378,21 @@ CREATE TABLE store_categories (
 );
 
 CREATE TABLE stores (
-    id           SERIAL PRIMARY KEY,
-    title        VARCHAR(100) NOT NULL,
-    description  VARCHAR,
-    content      VARCHAR(30000),
-    link         VARCHAR(500),
-    image        VARCHAR(500),
-    is_active    boolean NOT NULL,
-    price        INT NOT NULL,
-    user_id      INT NOT NULL,
-    created      TIMESTAMP NOT NULL,
-    position     SMALLINT NOT NULL,
-    view         INT NOT NULL,
-    height       FLOAT NOT NULL,
-    seconds      INT NOT NULL,
+    id          SERIAL PRIMARY KEY,
+    title       VARCHAR(100) NOT NULL,
+    description VARCHAR,
+    content     VARCHAR(30000),
+    link        VARCHAR(500),
+    image       VARCHAR(500),
+    is_active   boolean NOT NULL,
+    price       INT NOT NULL,
+    user_id     INT NOT NULL,
+    created     TIMESTAMP NOT NULL,
+    position    SMALLINT NOT NULL,
+    view        INT NOT NULL,
+    height      FLOAT NOT NULL,
+    seconds     INT NOT NULL,
+    price_acc   INT,
 
     CONSTRAINT fk_store_creator
         FOREIGN KEY(user_id)
@@ -536,6 +538,7 @@ CREATE TABLE works (
     view        INT NOT NULL,
     height      FLOAT NOT NULL,
     seconds     INT NOT NULL,
+    price_acc   INT,
 
     CONSTRAINT fk_work_creator
         FOREIGN KEY(user_id)
