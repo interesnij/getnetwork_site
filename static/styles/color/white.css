@@ -1,3 +1,5 @@
+/* white */
+
 ::-moz-selection{ color: #fff !important; background:#000 !important; }
 ::-webkit-selection{ color: #fff !important; background:#000 !important; }
 ::selection{ color: #fff !important; background:#000 !important; }
