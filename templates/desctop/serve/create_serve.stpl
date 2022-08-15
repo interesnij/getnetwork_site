@@ -18,9 +18,6 @@
                 <input id="id_name" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
-                <input class="input-md form-control" type="text" name="types" placeholder="Класс для переключения" />
-            </div>
-            <div class="mb-20 mb-md-10">
                 <input class="input-md form-control" type="text" name="description" placeholder="Описание" />
             </div>
             <div class="mb-20 mb-md-10">

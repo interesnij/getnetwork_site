@@ -18,13 +18,6 @@
                 <input id="id_name" value="<%= object.name %>" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
-              <% if object.types.is_some() { %>
-                <input class="input-md form-control" value="<%= object.types.as_deref().unwrap() %>" type="text" name="types" placeholder="Класс для переключения" />
-              <% } else { %>
-                <input class="input-md form-control" type="text" name="types" placeholder="Класс для переключения" />
-              <% } %>
-            </div>
-            <div class="mb-20 mb-md-10">
               <% if object.description.is_some() { %>
                 <% let unwrap = object.description.as_deref().unwrap(); %>
                 <p><%- unwrap.len() %></p>
