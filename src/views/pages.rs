@@ -313,7 +313,10 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
         .expect("E.");
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    if is_signed_in(&session) {
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Список опций и услуг".to_string()).await
+    }
+    else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             if is_desctop {

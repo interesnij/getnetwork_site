@@ -18,6 +18,13 @@
                 <input id="id_name" value="<%= object.name %>" class="input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
+              <% if object.serve_id.is_some() { %>
+                <input id="id_serve_id" value="<%= object.serve_id.unwrap() %>" class="input-md form-control" type="number" name="serve_id" placeholder="Опция-родитель" />
+              <% } else { %>
+                <input id="id_serve_id" class="input-md form-control" type="number" name="serve_id" placeholder="Опция-родитель" />
+              <% } %>
+            </div>
+            <div class="mb-20 mb-md-10">
               <% if object.description.is_some() { %>
                 <% let unwrap = object.description.as_deref().unwrap(); %>
                 <p><%- unwrap.len() %></p>
