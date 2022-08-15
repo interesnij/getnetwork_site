@@ -28,3 +28,11 @@ jobs:
           remote_user: ${{ secrets.SERVER_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
           remote_key_pass: ${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
+      - name: Commit report
+        run: |
+          git config --global user.name 'interesnij'
+          git config --global user.email 'ochkarik1983@mail.ru'
+          git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/getnetwork
+          git add -A
+          git commit -am "Automated report"
+          git push
