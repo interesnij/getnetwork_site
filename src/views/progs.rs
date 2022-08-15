@@ -33,6 +33,7 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
 
     #[derive(Debug, Deserialize)]
     pub struct UserLoc {
+        pub ip:      String,
         pub city:    CityLoc,
         pub region:  RegionLoc,
         pub country: CountryLoc,
@@ -54,8 +55,6 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
     }
 
     let _connection = establish_connection();
-    let ip = &req.peer_addr().unwrap().ip().to_string();
-    println!("ip{:?}", ip);
 
     let mut device: i16 = 1;
     for header in req.headers().into_iter() {
@@ -68,13 +67,13 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
         }
     };
 
-    let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_owned() + &ip;
+    let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_string();
     println!("geo_url{:?}", _geo_url);
     let _geo_request = reqwest::get(_geo_url).await.expect("E.");
     let new_request = _geo_request.text().await.unwrap();
     let location200: UserLoc = serde_json::from_str(&new_request).unwrap();
     let _user = NewCookieUser {
-        ip:         ip.to_string(),
+        ip:         location200.ip.to_string(),
         device:     device,
         city_ru:    Some(location200.city.name_ru),
         city_en:    Some(location200.city.name_en),
