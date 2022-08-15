@@ -545,7 +545,10 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 ServeItems,
                 NewServeItems,
             };
-            use crate::utils::store_form;
+            use crate::utils::{
+                store_form,
+                get_price_acc_values,
+            };
 
             let _connection = establish_connection();
 
@@ -556,7 +559,6 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 form.link.clone(),
                 form.main_image.clone(),
                 form.is_active.clone(),
-                0,
                 _request_user.id,
                 form.position,
             );
@@ -689,8 +691,12 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
             // фух. Связи созданы все, но надо еще посчитать цену
             // услуги для калькулятора. Как? А  это будет сумма всех
             // цен выбранных опций.
+            let price_acc = get_price_acc_values(&service_price);
             diesel::update(&_service)
-                .set(schema::services::price.eq(service_price))
+                .set((
+                    schema::services::price.eq(service_price),
+                    schema::services::price_acc.eq(Some(price_acc)),
+                ))
                 .get_result::<Service>(&_connection)
                 .expect("Error.");
         }
@@ -722,7 +728,10 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 NewServeItems,
                 EditService,
             };
-            use crate::utils::store_form;
+            use crate::utils::{
+                store_form,
+                get_price_acc_values,
+            };
 
             let _connection = establish_connection();
             let _service_id: i32 = *_id;
@@ -890,10 +899,14 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             }
 
             // фух. Связи созданы все, но надо еще посчитать цену
-            // услуги для калькулятора. Как? А  это будет сумма всех
+            // услуги для калькулятора, а также скидку. Как? А  это будет сумма всех
             // цен выбранных опций.
+            let price_acc = get_price_acc_values(&service_price);
             diesel::update(&_service)
-                .set(schema::services::price.eq(service_price))
+                .set((
+                    schema::services::price.eq(service_price),
+                    schema::services::price_acc.eq(Some(price_acc)),
+                ))
                 .get_result::<Service>(&_connection)
                 .expect("Error.");
         }

@@ -349,7 +349,6 @@ pub struct EditStore {
     pub image:       Option<String>,
     pub is_active:   bool,
     pub position:    i16,
-    pub price_acc:   Option<i32>,
 }
 
 #[derive(Serialize, Insertable)]
@@ -367,7 +366,6 @@ pub struct NewStore {
     pub view:        i32,
     pub height:      f64,
     pub seconds:     i32,
-    pub price_acc:   Option<i32>,
 }
 
 impl NewStore {
@@ -377,27 +375,22 @@ impl NewStore {
         link:        String,
         image:       String,
         is_active:   bool,
-        price:       i32,
         user_id:     i32,
         position:    i16,
     ) -> Self {
-        use crate::utils::get_price_acc_values;
-
-        let price_acc = get_price_acc_values(&price);
         NewStore {
             title:       title,
             description: Some(description),
             link:        Some(link),
             image:       Some(image),
             is_active:   is_active,
-            price:       price,
+            price:       0,
             user_id:     user_id,
             created:     chrono::Local::now().naive_utc(),
             position:    position,
             view:        0,
             height:      0.0,
             seconds:     0,
-            price_acc:   price_acc,
         }
     }
 }

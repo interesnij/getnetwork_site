@@ -540,7 +540,10 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                 work_categories::dsl::work_categories,
                 serve::dsl::serve,
             };
-            use crate::utils::store_form;
+            use crate::utils::{
+                store_form,
+                get_price_acc_values,
+            };
             use crate::models::{
                 TechCategoriesItem,
                 NewTechCategoriesItem,
@@ -558,7 +561,6 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                 form.link.clone(),
                 form.main_image.clone(),
                 form.is_active.clone(),
-                0,
                 _request_user.id,
                 form.position,
             );
@@ -690,8 +692,12 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
             // фух. Связи созданы все, но надо еще посчитать цену
             // услуги для калькулятора. Как? А  это будет сумма всех
             // цен выбранных опций.
+            let price_acc = get_price_acc_values(&work_price);
             diesel::update(&_work)
-                .set(schema::works::price.eq(work_price))
+                .set((
+                    schema::works::price.eq(work_price),
+                    schema::works::price_acc.eq(Some(work_price)),
+                ))
                 .get_result::<Work>(&_connection)
                 .expect("Error.");
         }
@@ -723,7 +729,10 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
                 NewServeItems,
                 EditWork,
             };
-            use crate::utils::store_form;
+            use crate::utils::{
+                store_form,
+                get_price_acc_values,
+            };
 
             let _connection = establish_connection();
             let _work_id: i32 = *_id;
@@ -893,8 +902,12 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
             // фух. Связи созданы все, но надо еще посчитать цену
             // услуги для калькулятора. Как? А  это будет сумма всех
             // цен выбранных опций.
+            let price_acc = get_price_acc_values(&work_price);
             diesel::update(&_work)
-                .set(schema::works::price.eq(work_price))
+                .set((
+                    schema::works::price.eq(work_price),
+                    schema::works::price_acc.eq(Some(work_price)),
+                ))
                 .get_result::<Work>(&_connection)
                 .expect("Error.");
         }
