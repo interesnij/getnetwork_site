@@ -54,9 +54,6 @@
                     <br />
                   <% } %>
                 </td>
-                 <%= object.price %> ₽
-                 <%= object.man_hours %> ⌛
-
                 | <a class="ajax" href="/edit_serve/<%= object.id %>/">~</a</td>
                 <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
             <% } else { %>
