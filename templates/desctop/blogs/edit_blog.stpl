@@ -16,7 +16,7 @@
     <div class="row container relative">
         <form class="form mb-20 col-md-8 col-md-offset-2" enctype="multipart/form-data">
             <div class="mb-20 mb-md-10">
-                <input id="id_title" value="<%= object.title %>" class="input-md form-control" type="text" name="title" placeholder="Название" />
+                <input value="<%= object.title %>" class="form_title input-md form-control" type="text" name="title" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
               <% if object.description.is_some() { %>

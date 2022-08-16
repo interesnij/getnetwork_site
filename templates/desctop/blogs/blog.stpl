@@ -16,7 +16,8 @@
     <div class="container relative">
         <div class="row">
             <div class="col-sm-8">
-                <div class="blog-item mb-80 mb-xs-40">
+              <div class="search_result"></div>
+              <div class="blog-item mb-80 content mb-xs-40">
                     <div class="blog-item-body">
                       <%= object.user_id %>
                         <h1 class="mt-0 font-alt"><%= object.title %></h1>

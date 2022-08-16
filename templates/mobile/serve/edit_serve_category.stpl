@@ -15,7 +15,7 @@
     <div class="container relative">
         <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
             <div class="mb-20 mb-md-10">
-                <input id="id_name" value="<%= category.name %>" class="input-md form-control" type="text" name="name" placeholder="Название" />
+                <input value="<%= category.name %>" class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
               <% if category.description.is_some() { %>

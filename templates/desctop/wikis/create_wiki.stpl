@@ -16,7 +16,7 @@
     <div class="row container relative">
         <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
             <div class="mb-20 mb-md-10">
-                <input id="id_title" class="input-md form-control" type="text" name="title" placeholder="Название" />
+                <input class="form_title input-md form-control" type="text" name="title" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
                 <input class="input-md form-control" type="text" name="description" placeholder="Описание" />

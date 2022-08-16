@@ -17,6 +17,8 @@
     <div class="container relative">
         <div class="row">
             <div class="col-sm-8">
+              <div class="search_result"></div>
+              <div class="content">
                 <div class="blog-item mb-80 mb-xs-40">
                     <div class="blog-item-body">
                         <h1 class="mt-0 font-alt"><%= object.title %></h1>
@@ -51,6 +53,7 @@
                     <a href="/wiki/<%= category.id %>/<%= _prev.id %>/" class="ajax blog-item-more right"><%= _prev.title %>&nbsp;&nbsp;⇢</a>
                   <% } %>
                 </div>
+              </div>
             </div>
 
             <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">

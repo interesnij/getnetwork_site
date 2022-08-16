@@ -4,6 +4,7 @@
             <input data-folder="_help" type="text" class="form-control search-field mobile_folder_search" placeholder="Поиск...">
         </div>
     </form>
+  <div class="search_result"></div>
 </div>
 <div class="widget">
     <h5 class="widget-title font-alt">Категории</h5>

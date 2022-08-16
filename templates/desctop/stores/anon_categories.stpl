@@ -16,6 +16,8 @@
     <div class="container relative">
         <div class="row">
             <div class="col-sm-8">
+              <div class="search_result"></div>
+              <div class="content">
                 <% for category in store_cats.iter() { %>
 
                 <h3 class="blog-item-title font-alt mb-10">
@@ -38,6 +40,7 @@
                   <% } %>
                 </div>
                 <% } %>
+              </div>
             </div>
             <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">
                 <% include!("sidebar.stpl"); %>

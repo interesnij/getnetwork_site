@@ -15,7 +15,7 @@
     <div class="row container relative">
         <form enctype="multipart/form-data" class="form mb-20 col-md-8">
             <div class="mb-20 mb-md-10">
-                <input id="id_name" class="input-md form-control" type="text" name="name" placeholder="Название" />
+                <input class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
                 <input id="id_serve_id" class="input-md form-control" type="number" name="serve_id" placeholder="Опция-родитель" />

@@ -16,6 +16,8 @@
     <div class="container relative">
       <div class="row">
           <div class="col-sm-8">
+            <div class="search_result"></div>
+            <div class="content">
             <% if category.count > 0 { %>
               <% for object in object_list.iter() { %>
                 <% include!("../generic/wiki.stpl"); %>
@@ -32,6 +34,7 @@
                 </div>
             </div>
             <% } %>
+            </div>
           </div>
           <div class="col-sm-4">
             <% include!("sidebar.stpl"); %>

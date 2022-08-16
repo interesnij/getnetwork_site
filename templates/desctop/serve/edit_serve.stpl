@@ -15,7 +15,7 @@
     <div class="row container relative">
         <form enctype="multipart/form-data" class="form mb-20 col-md-8">
             <div class="mb-20 mb-md-10">
-                <input id="id_name" value="<%= object.name %>" class="input-md form-control" type="text" name="name" placeholder="Название" />
+                <input value="<%= object.name %>" class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
             <div class="mb-20 mb-md-10">
               <% if object.serve_id.is_some() { %>

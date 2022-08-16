@@ -19,6 +19,8 @@
     <div class="container relative">
         <div class="row">
             <div class="col-sm-8">
+              <div class="search_result"></div>
+              <div class="content">
                 <% for category in blog_cats.iter() { %>
 
                 <% let get_6_blogs = category.get_6_blogs(); %>
@@ -59,6 +61,7 @@
                 </div>
 
                 <% } %>
+                </div>
             </div>
             <div class="col-sm-4">
               <% include!("sidebar.stpl"); %>
