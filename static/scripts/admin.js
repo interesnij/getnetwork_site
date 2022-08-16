@@ -93,7 +93,7 @@ on('body', 'click', '#edit_help_btn', function() {
 });
 on('body', 'click', '#create_help_category_btn', function() {
   form = this.parentElement;
-  if (!form.querySelector(".form_title")) {
+  if (!form.querySelector(".form_title").value) {
     form.querySelector(".form_title").style.border = "1px #FF0000 solid";
     return
   }
@@ -108,7 +108,7 @@ on('body', 'click', '#create_help_category_btn', function() {
 });
 on('body', 'click', '#edit_help_category_btn', function() {
   form = this.parentElement;
-  if (!form.querySelector(".form_title")) {
+  if (!form.querySelector(".form_title").value) {
     form.querySelector(".form_title").style.border = "1px #FF0000 solid";
     return
   }
@@ -126,7 +126,7 @@ on('body', 'click', '#edit_help_category_btn', function() {
 });
 
 function send_category_data(form, url) {
-  if (!form.querySelector(".form_title")) {
+  if (!form.querySelector(".form_title").value) {
     form.querySelector(".form_title").style.border = "1px #FF0000 solid";
     return
   }
@@ -153,7 +153,7 @@ function send_category_data(form, url) {
 
 function send_content_data(url) {
   form = this.parentElement;
-  if (!form.querySelector(".smile_supported").innerHTML) {
+  if (!form.querySelector(".smile_supported").firstChild) {
     form.querySelector(".smile_supported").style.border = "1px #FF0000 solid";
     return
   }
@@ -174,7 +174,7 @@ function send_content_data(url) {
 };
 
 function send_post_data(form, url) {
-  if (!form.querySelector(".form_title").value || !form.querySelector(".form_title").firstChild) {
+  if (!form.querySelector(".form_title").value && !form.querySelector(".form_title").firstChild) {
     form.querySelector(".form_title").style.border = "1px #FF0000 solid";
     return
   }
