@@ -49,12 +49,19 @@
             <button data-pk="<%= category.id %>" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_serve_category_btn">Изменить</button>
         </form>
         <section class="border small-section bg-dark">
-          <% for category in serve_cats.iter() { %>
-            <p><%= category.cat_name %> => <%= category.name %>
-              | <a class="ajax" href="/edit_serve_category/<%= category.id %>/">~</a>
-              | <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
+        <% for category in tech_cats.iter() { %>
+          <h6><%= category.name %> (<%= category.level %>)
+            | <a class="ajax" href="/edit_tech_category/<%= category.id %>/">~</a>
+            | <a class="pointer remove_tech_category" data-pk="<%= category.id %>">x</a>
+          </h6>
+          <% for object in category.get_serve_categories().iter() { %>
+            <p>
+              <%= object.name %>
+              | <a class="ajax" href="/edit_serve_category/<%= object.id %>/">~</a>
+              | <a class="pointer remove_serve_category" data-pk="<%= object.id %>">x</a>
             </p>
           <% } %>
+        <% } %>
         </section>
     </div>
 </section>
