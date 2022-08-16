@@ -49,9 +49,8 @@
                     <%= category.name %> => <%= object.name %> (<%= object.id %>)
                   </a>
                   <hr class="mt-0 mb-0 " />
-                  <% let items = object.get_variables(); %>
-                  <% for child in items.iter() { %>
-                    <%= child.name %> (<%= child.id %>): <%= object.price %> ₽, <%= object.man_hours %> ⌛ | 
+                  <% for child in object.get_variables().iter() { %>
+                    <%= child.name %> (<%= child.id %>): <%= child.price %> ₽, <%= child.man_hours %> ⌛ |
                     <a class="ajax" href="/edit_serve/<%= child.id %>/">~</a>
                     <a class="pointer remove_serve" data-pk="<%= child.id %>">x</a>
                     <br />
@@ -77,6 +76,7 @@
                 <td style="width:5%"><a class="ajax" href="/edit_serve/<%= object.id %>/">~</a></td>
                 <td style="width:5%"><a class="pointer remove_serve" data-pk="<%= object.id %>">x</a></td>
               </tr>
+          <% } %>
             <% } %>
           </tbody>
         </table>
