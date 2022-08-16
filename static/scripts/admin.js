@@ -174,7 +174,7 @@ function send_content_data(url) {
 };
 
 function send_post_data(form, url) {
-  if (!form.querySelector(".form_title").innerHTML) {
+  if (!form.querySelector(".form_title").value || !form.querySelector(".form_title").firstChild) {
     form.querySelector(".form_title").style.border = "1px #FF0000 solid";
     return
   }
