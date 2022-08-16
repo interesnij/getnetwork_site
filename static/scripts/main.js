@@ -653,7 +653,7 @@ on('body', 'click', '.anon_color_change', function() {
     color = backgroud;
   }
   if (color == "white") {
-    addStyleSheets("/static/styles/color/daark.css");
+    addStyleSheets("/static/styles/color/dark.css");
     this.setAttribute("data-color", "dark");
     new_color = "dark"
   } else if (color == "dark") {

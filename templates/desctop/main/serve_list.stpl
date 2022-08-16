@@ -42,26 +42,23 @@
           <tbody>
             <% for object in category.get_serves().iter() { %>
               <% if object.is_parent() { %>
-              <tr>
-                <td style="width:40%">
                   <a class="pointer underline get_object_info" data-pk="<%= object.id %>" data-type="serve" owner-pk="<%= category.id %>" owner-type="settings">
                     <% if object.is_default { %>(*) <% } %>
                     <%= category.name %> => <%= object.name %> (<%= object.id %>)
                   </a>
                   <hr class="mt-0 mb-0 " />
                   <% for child in object.get_variables().iter() { %>
-                    <%= child.name %> (<%= child.id %>): <%= child.price %> ₽, <%= child.man_hours %> ⌛ |
+                    <% if object.is_default { %>(*) <% } %> <%= child.name %> (<%= child.id %>): <%= child.price %> ₽, <%= child.man_hours %> ⌛ |
                     <a class="ajax" href="/edit_serve/<%= child.id %>/">~</a>
                     <a class="pointer remove_serve" data-pk="<%= child.id %>">x</a>
                     <br />
                   <% } %>
                 </td>
-                <td style="width:14%"><%= object.price %> ₽</td>
-                <td style="width:12%"><%= object.man_hours %> ⌛</td>
+                 <%= object.price %> ₽
+                 <%= object.man_hours %> ⌛
 
-                  <td style="width:5%"><a class="ajax" href="/edit_serve/<%= object.id %>/">~</a></td>
-                  <td style="width:5%"><a class="pointer remove_serve" data-pk="<%= object.id %>">x</a></td>
-              </tr>
+                | <a class="ajax" href="/edit_serve/<%= object.id %>/">~</a</td>
+                <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
             <% } else { %>
               <tr>
                 <td style="width:40%">
