@@ -278,15 +278,16 @@ function create_fullscreen(url, type_class) {
           }
 
           get_document_opacity_0();
-
-          if ($window_time_end) {
-            console.log("перезапускаем счетчик");
-            get_window_view_timer(120);
-            $window_time_end = false;
-          };
+          get_window_view_timer(120);
           offset = 0;
+          $window_seconds = 1;
 
           $loader.onscroll = function() {
+            if ($window_time_end) {
+              console.log("перезапускаем счетчик окна");
+              get_window_view_timer(120);
+              $window_time_end = false;
+            };
             if ($loader.scrollHeight > offset) {
               offset = $loader.scrollHeight;
               $window_height = parseFloat(offset * 0.000264).toFixed(2);
@@ -351,17 +352,18 @@ function change_this_fullscreen(_this, type_class) {
           if ($loader.querySelector(".data_display")) {
             $loader.style.overflowY = "unset";
           };
-
+          $window_seconds = 1;
           get_document_opacity_0();
           window_time_end = false;
-          if ($window_time_end) {
-            console.log("перезапускаем счетчик");
-            get_window_view_timer(120);
-            $window_time_end = false;
-          };
           offset = 0;
+          get_window_view_timer(120);
 
           $loader.onscroll = function() {
+            if ($window_time_end) {
+              console.log("перезапускаем счетчик");
+              get_window_view_timer(120);
+              $window_time_end = false;
+            };
             if ($loader.scrollHeight > offset) {
                 offset = $loader.scrollHeight;
                 $window_height = parseFloat(offset * 0.000264).toFixed(2);
