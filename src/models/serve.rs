@@ -161,6 +161,17 @@ impl Serve {
             .load::<Serve>(&_connection)
             .expect("E");
     }
+    pub fn is_parent(&self) -> bool {
+        use crate::schema::serve::dsl::serve;
+
+        let _connection = establish_connection();
+        return serve
+            .filter(schema::serve::serve_id.eq(self.id))
+            .select(schema::serve::id)
+            .load::<i32>(&_connection)
+            .expect("E")
+            .len() > 0;
+    }
     pub fn get_100_description(&self) -> String {
         if self.description.is_some() {
             let _content = self.description.as_deref().unwrap();
