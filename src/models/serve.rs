@@ -148,9 +148,6 @@ pub struct Serve {
 }
 
 impl Serve {
-    pub fn is_parent(&self) -> bool {
-        return self.serve_id.is_none();
-    }
     pub fn get_variables(&self) -> Vec<Serve> {
         use crate::schema::serve::dsl::serve;
 
