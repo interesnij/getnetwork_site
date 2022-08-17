@@ -19,15 +19,15 @@ impl UploadedFiles {
 
         let now = chrono::Local::now().naive_utc();
         let format_folder = format!(
-            "/my/media/{}/{}/{}/{}/",
+            "./media/{}/{}/{}/{}/",
             owner_id.to_string(),
             now.year().to_string(),
             now.month().to_string(),
             now.day().to_string(),
         );
         let format_path = format_folder.clone() + &filename.to_string();
-        //let create_path = format_folder.replace("./", "/my/");
-        create_dir_all(format_path.clone()).unwrap();
+        let create_path = format_folder.replace("./", "/my/");
+        create_dir_all(create_path).unwrap();
 
         UploadedFiles {
             name: filename.to_string(),
