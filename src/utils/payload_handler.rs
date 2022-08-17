@@ -27,7 +27,7 @@ impl UploadedFiles {
         );
         let format_path = format_folder.clone() + &filename.to_string();
         //let create_path = format_folder.replace("./", "/my/");
-        create_dir_all(format_path).unwrap();
+        create_dir_all(format_path.clone()).unwrap();
 
         UploadedFiles {
             name: filename.to_string(),
