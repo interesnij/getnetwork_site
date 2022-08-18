@@ -11,7 +11,8 @@
                     Getnetwork!
                 </h1>
                 <div class="local-scroll">
-                    <a href="/about/" class="btn btn-mod btn-border btn-medium btn-round ajax">Подробнее</a>
+                    <a href="/help/1/" class="btn btn-mod btn-border btn-medium btn-round ajax">Помощь</a>
+                    <a href="/" class="btn btn-mod btn-border btn-medium btn-round ajax">Быстрый старт</a>
                 </div>
               </span>
             </div>
