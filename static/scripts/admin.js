@@ -152,8 +152,8 @@ function send_category_data(form, url) {
 };
 
 function send_content_data(url) {
-  form = document.body.querySelector(".form");
-  text_field = form.querySelector(".smile_supported");
+  text_field = document.body.querySelector(".smile_supported");
+  form = text_field.parentElement;
   if (!text_field.innerHTML) {
     text_field.style.setProperty('border', '1px #FF0000 solid', 'important');
     return
