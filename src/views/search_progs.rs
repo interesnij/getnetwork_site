@@ -36,6 +36,8 @@ pub fn search_routes(config: &mut web::ServiceConfig) {
 
 
 pub async fn empty_search_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
+    use crate::utils::get_device_and_ajax;
+    
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     // первая отрисовка страницы - организуем скрытие информации
