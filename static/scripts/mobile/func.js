@@ -200,7 +200,7 @@ function get_active_button() {
       $mobile_nav.querySelector(".apps_btn").classList.add("mobile_icon_current");
     }
     else if (path == "/info/") {
-      $mobile_nav.querySelector(".info").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".infos").classList.add("mobile_icon_current");
       $mobile_nav.querySelector(".pages_btn").classList.add("mobile_icon_current");
     }
     else if (path == "/help/") {

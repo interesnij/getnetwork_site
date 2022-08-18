@@ -33,7 +33,7 @@
 </span>
 
 <span class="second_span" style="display:none">
-  <button href="/info/" class="mobile_icon info border ajax">
+  <button href="/info/" class="mobile_icon infos border ajax">
     <span class="icon-heart"></span>
     <p>Инфо</p>
   </button>
