@@ -1,4 +1,4 @@
-<div class="col-md-6 mb-md-50">
+<div class="col-lg-4 col-md-6 mb-md-50">
     <div class="post-prev-img">
       <a href="/blog/<%= category.id %>/<%= object.id %>/" class="ajax">
         <div class="progressive replace" data-href="<%= object.get_image() %>">

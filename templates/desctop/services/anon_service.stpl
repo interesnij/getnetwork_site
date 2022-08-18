@@ -16,7 +16,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
-              <div class="search_result"></div>
+              <div class="row search_result"></div>
               <div class="content">
                 <div class="blog-item-body">
                     <h1 class="mt-0 font-alt"><%= object.title %></h1>

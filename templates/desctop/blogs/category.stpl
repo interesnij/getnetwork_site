@@ -15,7 +15,7 @@
     <div class="container relative">
         <div class="row">
             <div class="col-sm-8">
-                <div class="search_result"></div>
+                <div class="row search_result"></div>
                 <div class="row multi-columns-row content">
                   <% if category.count > 0 { %>
                     <% for object in object_list.iter() { %>
