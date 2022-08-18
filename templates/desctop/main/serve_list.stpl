@@ -16,7 +16,7 @@
       <h1 class="font-alt">Список опций</h1>
     </div>
     <div class="container relative">
-      <% for (i, tech_category) in tech_cats.iter().enumerate() { %>
+      <% for tech_category in tech_cats.iter() { %>
 
       <h4>
         <a style="padding:5px" class="ajax underline" href="/tech_categories/<%= tech_category.id %>/">

@@ -314,14 +314,12 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
                     title:        String,
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
-                    serve_cats:   Vec<ServeCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание технологии услуг".to_string(),
                     request_user: _request_user,
                     tech_cats:    _tech_categories,
-                    serve_cats:   _categories,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
@@ -333,16 +331,12 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
                 #[template(path = "mobile/serve/create_serve_categories.stpl")]
                 struct Template {
                     title:        String,
-                    //request_user: User,
                     tech_cats:    Vec<TechCategories>,
-                    serve_cats:   Vec<ServeCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Создание технологии услуг".to_string(),
-                    //request_user: _request_user,
                     tech_cats:    _tech_categories,
-                    serve_cats:   _categories,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
@@ -577,7 +571,6 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
                     title:        String,
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
-                    serve_cats:   Vec<ServeCategories>,
                     category:     ServeCategories,
                     is_ajax:      i32,
                 }
@@ -585,7 +578,6 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
                     title:        "Изменение технологии услуг ".to_string() + &_category.name,
                     request_user: _request_user,
                     tech_cats:    _tech_categories,
-                    serve_cats:   _categories,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
@@ -598,17 +590,13 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
                 #[template(path = "mobile/serve/edit_serve_category.stpl")]
                 struct Template {
                     title:        String,
-                    //request_user: User,
                     tech_cats:    Vec<TechCategories>,
-                    serve_cats:   Vec<ServeCategories>,
                     category:     ServeCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Изменение технологии услуг ".to_string() + &_category.name,
-                    //request_user: _request_user,
                     tech_cats:    _tech_categories,
-                    serve_cats:   _categories,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
