@@ -30,7 +30,7 @@
               </a>
             </li>
 
-            <li class="yy s_4 pointer">
+            <li class="yy s_3 pointer">
               <a>
                 <div class="alt-tabs-icon">
                   <span class="icon-happy"></span>
@@ -38,13 +38,11 @@
                 О сайте
               </a>
             </li>
-            <li class="">
-              <a href="/help/1/" class="ajax">
+            <li class="yy s_4 pointer">
                 <div class="alt-tabs-icon">
                   <span class="icon-lifesaver"></span>
                 </div>
                 Помощь
-              </a>
             </li>
         </ul>
 
@@ -79,7 +77,7 @@
                 </div>
             </div>
 
-            <div class="tab_4 fade tab-pane in">
+            <div class="tab_3 fade tab-pane in">
                 <div class="section-text">
                     <div class="row">
                       <div class="mb-sm-50">
@@ -88,6 +86,34 @@
                         </blockquote>
                         <p>
 
+                        </p>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab_4 fade tab-pane in">
+                <div class="section-text">
+                    <div class="row">
+                      <div class="mb-sm-50">
+                        <blockquote style="margin-bottom: 10px">
+                          Помощь
+                        </blockquote>
+                        <p>
+                        <strong>Раздел</strong> посвящён краткому описанию <strong>наших услуг и опций</strong>
+                        для потенциальных заказчиков. Информация призвана дать ответы на самые главные вопросы,
+                        которые могут возникнуть при планировании заказа веб-ресурсов.
+                        <br><br>
+                        <strong>Категории</strong>:
+                        <ul class="my_ul">
+                          <% for object in help_cats.iter() { %>
+                            <li>
+                              <a href="/help/<%= object.id %>/" class="ajax">
+                                <%= object.name %>
+                              </a>
+                            </li>
+                          <% } %>
+                        </ul>
                         </p>
                       </div>
                     </div>

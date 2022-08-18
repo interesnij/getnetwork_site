@@ -178,6 +178,14 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         get_first_load_page(&session, is_desctop, "Информация".to_string()).await
     }
     else if is_signed_in(&session) {
+        use schema::help_item_categories::dsl::help_item_categories;
+        use crate::models::HelpItemCategorie;
+
+        let _connection = establish_connection();
+        let _help_cats = help_item_categories
+            .load::<HelpItemCategorie>(&_connection)
+            .expect("Error");
+
         let _request_user = get_request_user_data(&session);
         if is_desctop {
             #[derive(TemplateOnce)]
@@ -185,12 +193,12 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             struct Template {
                 request_user: User,
                 is_ajax:      i32,
-                //title:        String,
+                help_cats:    Vec<HelpItemCategorie>,
             }
             let body = Template {
                 request_user: _request_user,
                 is_ajax:      is_ajax,
-                //title:        "Информация".to_string(),
+                help_cats:    _help_cats,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -200,12 +208,12 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/pages/info.stpl")]
             struct Template {
-                is_ajax:      i32,
-                //title:        String,
+                is_ajax:   i32,
+                help_cats: Vec<HelpItemCategorie>,
             }
             let body = Template {
-                is_ajax:      is_ajax,
-                //title:        "Информация".to_string(),
+                is_ajax:   is_ajax,
+                help_cats: _help_cats,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -217,10 +225,12 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             #[derive(TemplateOnce)]
             #[template(path = "desctop/pages/anon_info.stpl")]
             struct Template {
-                is_ajax: i32,
+                is_ajax:   i32,
+                help_cats: Vec<HelpItemCategorie>,
             }
             let body = Template {
-                is_ajax: is_ajax,
+                is_ajax:   is_ajax,
+                help_cats: _help_cats,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -230,10 +240,12 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/pages/anon_info.stpl")]
             struct Template {
-                is_ajax: i32,
+                help_cats: Vec<HelpItemCategorie>,
+                is_ajax:   i32,
             }
             let body = Template {
-                is_ajax: is_ajax,
+                is_ajax:   is_ajax,
+                help_cats: _help_cats,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
