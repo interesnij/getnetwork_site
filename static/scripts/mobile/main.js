@@ -42,3 +42,32 @@ on('body', 'click', '.mob_menu', function() {
   this.style.display = "none";
   document.querySelector(".window_fullscreen").style.display = "block";
 });
+
+on('body', 'input', '.mobile_folder_search', function() {
+    _this = this;
+    value = _this.value;
+    parent = _this.parentElement.parentElement.parentElement;
+    search_block = parent.querySelector(".search_result");
+    if (value == "") {
+      search_block.innerHTML= "";
+      return;
+    }
+    if (_this.getAttribute("data-folder")) {
+      folder = _this.getAttribute("data-folder")
+    } else {
+      folder = ""
+    };
+    url = "/search" + folder + "/" + _this.value + "/";
+
+    var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+    ajax_link.open( 'GET', url + "?ajax=1", true );
+    ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    ajax_link.onreadystatechange = function () {
+      if ( this.readyState == 4 && this.status == 200 ) {
+        elem_ = document.createElement('span');
+        elem_.innerHTML = ajax_link.responseText;
+        search_block.innerHTML = elem_.querySelector(".search_section").innerHTML;
+      }
+    }
+    ajax_link.send();
+});
