@@ -10,42 +10,42 @@
 
 <span>
 <span class="first_span" style="display:none">
-  <button href="/service_categories/" class="mobile_icon border ajax">
+  <button href="/service_categories/" class="mobile_icon service border ajax">
     <span class="icon-lightbulb"></span>
     <p>Услуги</p>
   </button>
-  <button href="/work_categories/" class="mobile_icon border ajax">
+  <button href="/work_categories/" class="mobile_icon work border ajax">
     <span class="icon-briefcase"></span>
     <p>Работы</p>
   </button>
-  <button href="/store_categories/" class="mobile_icon border ajax">
+  <button href="/store_categories/" class="mobile_icon store border ajax">
     <span class="icon-basket"></span>
-    <p>Продукты</p>
+    <p>Товары</p>
   </button>
-  <button href="/blog_categories/" class="mobile_icon border ajax">
+  <button href="/blog_categories/" class="mobile_icon blog border ajax">
     <span class="icon-newspaper"></span>
     <p>Блог</p>
   </button>
-  <button href="/wiki_categories/" class="mobile_icon border ajax">
+  <button href="/wiki_categories/" class="mobile_icon wiki border ajax">
     <span class="icon-book-open"></span>
     <p>Обучалка</p>
   </button>
 </span>
 
 <span class="second_span" style="display:none">
-  <button href="/info/" class="mobile_icon border ajax">
+  <button href="/info/" class="mobile_icon info border ajax">
     <span class="icon-heart"></span>
     <p>Инфо</p>
   </button>
-  <button href="/tags/" class="mobile_icon border ajax">
+  <button href="/tags/" class="mobile_icon tags border ajax">
     <span class="icon-ribbon"></span>
     <p>Теги</p>
   </button>
-  <button href="/search/" class="mobile_icon border ajax search_btn">
+  <button href="/search/" class="mobile_icon border search ajax search_btn">
     <span class="icon-search"></span>
     <p>Поиск</p>
   </button>
-  <button href="/help/" class="mobile_icon border ajax">
+  <button href="/help/1/" class="mobile_icon help border ajax">
     <span class="icon-lifesaver"></span>
     <p>Помощь</p>
   </button>
@@ -56,7 +56,7 @@
 </span>
 
   <nav class="mobile_nav">
-    <button href="/" class="mobile_icon ajax border home_btn">
+    <button href="/" class="mobile_icon ajax border main main_btn">
       <span class="icon-flag"></span>
       <p>Главная</p>
     </button>
@@ -68,7 +68,7 @@
       <span class="icon-documents"></span>
       <p>Страницы</p>
     </button>
-    <button href="/login/" class="mobile_icon border ajax user_btn">
+    <button href="/login/" class="mobile_icon border ajax auth_btn">
       <span class="icon-profile-male"></span>
       <p>Вход</p>
     </button>

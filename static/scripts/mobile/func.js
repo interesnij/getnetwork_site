@@ -173,50 +173,49 @@ function toggle_nav_second_span(){
 function get_active_button() {
   try {
     $mobile_nav = document.body.querySelector(".mobile_nav");
-    buttons = $mobile_nav.parentElement.querySelectorAll(".mobile_icon");
     path = document.location.pathname;
     for (var i = 0; i < buttons.length; i++){buttons[i].classList.remove("mobile_icon_current")};
     if (path == "/") {
-        buttons[10].classList.add("mobile_icon_current");
+        $mobile_nav.querySelector(".main").classList.add("mobile_icon_current");
     }
     else if (path.includes('service')) {
-      buttons[0].classList.add("mobile_icon_current");
-      buttons[11].classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".service").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".apps_btn").classList.add("mobile_icon_current");
     }
     else if (path.includes('work')) {
-      buttons[1].classList.add("mobile_icon_current");
-      buttons[11].classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".work").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".apps_btn").classList.add("mobile_icon_current");
     }
     else if (path.includes('store')) {
-      buttons[2].classList.add("mobile_icon_current");
-      buttons[11].classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".store").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".apps_btn").classList.add("mobile_icon_current");
     }
     else if (path.includes('blog')) {
-      buttons[3].classList.add("mobile_icon_current");
-      buttons[11].classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".blog").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".apps_btn").classList.add("mobile_icon_current");
     }
     else if (path.includes('wiki')) {
-      buttons[4].classList.add("mobile_icon_current");
-      buttons[11].classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".wiki").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".apps_btn").classList.add("mobile_icon_current");
     }
-    else if (path == "/contacts/") {
-      buttons[5].classList.add("mobile_icon_current");
-      buttons[12].classList.add("mobile_icon_current");
+    else if (path == "/info/") {
+      $mobile_nav.querySelector(".info").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".pages_btn").classList.add("mobile_icon_current");
     }
-    else if (path == "/about/") {
-      buttons[6].classList.add("mobile_icon_current");
-      buttons[12].classList.add("mobile_icon_current");
+    else if (path == "/help/") {
+      $mobile_nav.querySelector(".help").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".pages_btn").classList.add("mobile_icon_current");
     }
     else if (path == "/tags/") {
-      buttons[7].classList.add("mobile_icon_current");
-      buttons[12].classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".tags").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".pages_btn").classList.add("mobile_icon_current");
     }
     else if (path == "/search/") {
-      buttons[8].classList.add("mobile_icon_current");
-      buttons[12].classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".search").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".pages_btn").classList.add("mobile_icon_current");
     }
     else if (path == "/auth/" || path.substr(1, 5) == "users") {
-      buttons[13].classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".auth_btn").classList.add("mobile_icon_current");
     }
   } catch { null }
 };
