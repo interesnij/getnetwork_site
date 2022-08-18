@@ -153,7 +153,7 @@ function send_category_data(form, url) {
 
 function send_content_data(url) {
   text_field = document.body.querySelector(".smile_supported");
-  form = text_field.parentElement;
+  form = text_field.parentElement.parentElement;
   if (!text_field.innerHTML) {
     text_field.style.setProperty('border', '1px #FF0000 solid', 'important');
     return
