@@ -181,10 +181,6 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-a, b, div, ul, li {
-    -webkit-tap-highlight-color: transparent;
-    -moz-outline-: none;
-}
 ul, ol {
     margin: 0 0 1.5em 0;
 }
