@@ -45,7 +45,7 @@
                 <div style="border-left:1px solid black">
                   <a class="pointer underline get_object_info" data-pk="<%= object.id %>" data-type="serve" owner-pk="<%= category.id %>" owner-type="settings">
                     <% if object.is_default { %>(*) <% } %>
-                    <%= object.name %>
+                    <%= object.name %> (<%= object.id %>)
                   </a>
                   |
                   <a class="ajax" href="/edit_serve/<%= object.id %>/">~</a</td>
@@ -63,7 +63,7 @@
                 <td style="width:40%">
                   <a class="pointer underline get_object_info" data-pk="<%= object.id %>" data-type="serve" owner-pk="<%= category.id %>" owner-type="settings">
                     <% if object.is_default { %>(*) <% } %>
-                    <%= object.name %>
+                    <%= object.name %> (<%= object.id %>)
                   </a>
                 </td>
                 <td style="width:14%"><%= object.price %> ₽</td>
