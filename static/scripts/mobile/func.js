@@ -171,7 +171,7 @@ function toggle_nav_second_span(){
 };
 
 function get_active_button() {
-  try {
+  //try {
     $mobile_nav = document.body.querySelector(".mobile_nav");
     buttons = $mobile_nav.querySelectorAll("button")
     path = document.location.pathname;
@@ -218,5 +218,5 @@ function get_active_button() {
     else if (path == "/auth/" || path.substr(1, 5) == "users") {
       $mobile_nav.querySelector(".auth_btn").classList.add("mobile_icon_current");
     }
-  } catch { null }
+  //} catch { null }
 };
