@@ -39,7 +39,7 @@
                                 <p>
                                     <strong>Теги:</strong>
                                     <% for (i, tag) in work_tags.iter().enumerate() { %>
-                                      <a class="ajax" href="/tag/<%= tag.id %>/"><%= tag.name %> (<%= tag.count %>)</a><% if i != work_tags.len() { %>, <% } %>
+                                      <a class="ajax border" href="/tag/<%= tag.id %>/"><%= tag.name %> (<%= tag.count %>)</a><% if i != work_tags.len() { %>, <% } %>
                                     <% } %>
                                 </p>
                                 <% } %>

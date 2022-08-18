@@ -47,7 +47,7 @@ a:hover {
     border: 1px solid rgba(127,127,127, 0.7) !important;
 }
 .border:hover {
-    border: 2px solid rgba(127,127,127, 0.7) !important;
+    border: 2px solid rgba(127,127,127, 0.9) !important;
 }
 
 body{
@@ -193,40 +193,6 @@ a.logo:hover{
     border: 1px solid rgba(0,0,0, .25) !important;
 }
 
-.section-more{
-    color: #999 !important;
-}
-.section-more:hover{
-    color: #000 !important;
-
-}
-
-.section-line{
-    background: #111 !important;
-}
-
-.alt-service-item{
-    color: #999 !important;
-}
-
-.alt-service-icon{
-    color: #111 !important;
-}
-
-.alt-services-title{
-    color: #111 !important;
-}
-
-.features-icon{
-    color: rgba(255,255,255, .9) !important;
-}
-.features-title{
-    color: rgba(255,255,255, .9) !important;
-}
-
-.features-descr{
-    color: rgba(255,255,255, .75) !important;
-}
 .alt-features-icon{
     color: #111 !important;
 }
@@ -316,13 +282,6 @@ a.logo:hover{
 
 .widget-title{
     border-bottom: 1px solid #ccc !important;
-}
-
-.tags a{
-    border: 1px solid rgba(0,0,0, .8) !important;
-}
-.tags a:hover{
-    border-color: #333 !important;
 }
 
 .tpl-alt-tabs li.active a,

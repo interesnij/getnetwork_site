@@ -7,7 +7,7 @@
             &nbsp;/&nbsp;
           <a class="ajax" href="/tags/">Ключевые слова</a>
             &nbsp;/&nbsp;
-          <a class="ajax" href="/tag/<%= tag.id %>/"><%= tag.name %></a>
+          <a class="ajax border" href="/tag/<%= tag.id %>/"><%= tag.name %></a>
         </div>
     </div>
 </section>

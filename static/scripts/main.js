@@ -701,8 +701,13 @@ on('body', 'click', '.prev_item', function(event) {
 
 on('body', 'input', '.general_search', function() {
     _this = this;
+    value = _this.value;
 
-    if (_this.classList.contains("search-field") && !document.body.querySelector(".search_section")) {
+    if (value == "") {
+      ajax_get_reload("/search/");
+      return;
+    }
+    else if (_this.classList.contains("search-field") && !document.body.querySelector(".search_section")) {
       ajax_get_reload("/search/" + _this.value + "/");
       return;
     }
