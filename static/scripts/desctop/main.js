@@ -177,8 +177,9 @@ on('body', 'input', '.desctop_folder_search', function() {
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
       if ( this.readyState == 4 && this.status == 200 ) {
-        search_block.innerHTML = ajax_link.responseText;
-        search = elem_.querySelector(".search_section");
+        elem_ = document.createElement('span');
+        elem_.innerHTML = ajax_link.responseText;
+        search_block.innerHTML = elem_.querySelector(".search_section");
         content_block.classList.add("hidden");
       }
     }
