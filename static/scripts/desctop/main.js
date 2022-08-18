@@ -154,4 +154,35 @@ function ajax_get_reload(url) {
     ajax_link.send();
 };
 
+on('body', 'input', '.desctop_folder_search', function() {
+    _this = this;
+    value = _this.value;
+    parent = _this.parentElement.parentElement.parentElement.parentElement.parentElement;
+    content_block = parent.querySelector(".content");
+    search_block = content_block.previousElementSibling;
+    if (value == "") {
+      search_block.innerHTML= "";
+      content_block.classList.remove("hidden");
+      return;
+    }
+    if (_this.getAttribute("data-folder")) {
+      folder = _this.getAttribute("data-folder")
+    } else {
+      folder = ""
+    };
+    url = "/search" + folder + "/" + _this.value + "/";
+
+    var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+    ajax_link.open( 'GET', url + "?ajax=1", true );
+    ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    ajax_link.onreadystatechange = function () {
+      if ( this.readyState == 4 && this.status == 200 ) {
+        search_block.innerHTML = ajax_link.responseText;
+        search = elem_.querySelector(".search_section");
+        content_block.classList.add("hidden");
+      }
+    }
+    ajax_link.send();
+});
+
 check_first_load();
