@@ -315,17 +315,6 @@ a.logo:hover{
     color: #aaa !important;
 }
 
-.blog-item-more{
-    border: 1px solid #eaeaea !important;
-}
-.blog-item-more:hover{
-    border-color: #FFFFFF !important;
-}
-
-a.blog-item-more:hover{
-    color: #FFFFFF !important;
-}
-
 .blog-page-title{
     border-bottom: 1px solid #eee !important;
 }
