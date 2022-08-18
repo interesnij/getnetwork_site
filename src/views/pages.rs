@@ -171,6 +171,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
 }
 
 pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
+
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     // первая отрисовка страницы - организуем скрытие информации
@@ -221,6 +222,14 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         }
     }
     else {
+        use schema::help_item_categories::dsl::help_item_categories;
+        use crate::models::HelpItemCategorie;
+
+        let _connection = establish_connection();
+        let _help_cats = help_item_categories
+            .load::<HelpItemCategorie>(&_connection)
+            .expect("Error");
+            
         if is_desctop {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/pages/anon_info.stpl")]
