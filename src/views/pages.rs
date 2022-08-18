@@ -179,6 +179,7 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         get_first_load_page(&session, is_desctop, "Информация".to_string()).await
     }
     else if is_signed_in(&session) {
+        use crate::schema;
         use schema::help_item_categories::dsl::help_item_categories;
         use crate::models::HelpItemCategorie;
 
@@ -222,6 +223,7 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         }
     }
     else {
+        use crate::schema;
         use schema::help_item_categories::dsl::help_item_categories;
         use crate::models::HelpItemCategorie;
 
@@ -229,7 +231,7 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         let _help_cats = help_item_categories
             .load::<HelpItemCategorie>(&_connection)
             .expect("Error");
-            
+
         if is_desctop {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/pages/anon_info.stpl")]
