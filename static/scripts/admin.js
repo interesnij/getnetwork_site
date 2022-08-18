@@ -152,13 +152,13 @@ function send_category_data(form, url) {
 };
 
 function send_content_data(url) {
-  form = this.parentElement;
-  if (!form.querySelector(".smile_supported").firstChild) {
-    form.querySelector(".smile_supported").style.setProperty('border', '1px #FF0000 solid', 'important');
+  form = document.body.querySelector(".form");
+  text_field = form.querySelector(".smile_supported");
+  if (!text_field.innerHTML) {
+    text_field.style.setProperty('border', '1px #FF0000 solid', 'important');
     return
   }
-  text_val1 = document.body.querySelector(".smile_supported");
-  _val1 = format_text(text_val1);
+  _val1 = format_text(text_field);
   form_data = new FormData(form);
   form_data.append("content", _val1.innerHTML);
 
