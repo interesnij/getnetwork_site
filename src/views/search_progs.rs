@@ -24,6 +24,7 @@ use crate::models::User;
 
 
 pub fn search_routes(config: &mut web::ServiceConfig) {
+    config.route("/search/", web::get().to(empty_search_page));
     config.route("/search/{q}/", web::get().to(search_page));
     config.route("/search_blogs/{q}/", web::get().to(search_blogs_page));
     config.route("/search_services/{q}/", web::get().to(search_services_page));
@@ -31,6 +32,75 @@ pub fn search_routes(config: &mut web::ServiceConfig) {
     config.route("/search_wikis/{q}/", web::get().to(search_wikis_page));
     config.route("/search_works/{q}/", web::get().to(search_works_page));
     config.route("/search_help/{q}/", web::get().to(search_help_page));
+}
+
+
+pub async fn empty_search_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    // первая отрисовка страницы - организуем скрытие информации
+    if is_ajax == 0 {
+        get_first_load_page(&session, is_desctop, "Общий поиск".to_string()).await
+    }
+    else if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/empty_search.stpl")]
+            struct Template {
+                request_user: User,
+                is_ajax:      i32,
+            }
+            let body = Template {
+                request_user: _request_user,
+                is_ajax:      is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/empty_search.stpl")]
+            struct Template {
+                is_ajax:      i32,
+            }
+            let body = Template {
+                is_ajax:      is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/search/anon_empty_search.stpl")]
+            struct Template {
+                is_ajax: i32,
+            }
+            let body = Template {
+                is_ajax: is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/search/anon_empty_search.stpl")]
+            struct Template {
+                is_ajax: i32,
+            }
+            let body = Template {
+                is_ajax: is_ajax,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
 }
 
 pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
