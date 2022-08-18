@@ -109,7 +109,7 @@
                           <% for object in help_cats.iter() { %>
                             <li>
                               <a href="/help/<%= object.id %>/" class="ajax">
-                                <%= object.name %>
+                                <%= object.title %>
                               </a>
                             </li>
                           <% } %>
