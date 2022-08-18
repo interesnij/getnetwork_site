@@ -8,7 +8,7 @@
 </svg>
 <br><br><br>
 
-<span>
+<span class="menu_buttons">
 <span class="first_span" style="display:none">
   <button href="/service_categories/" class="mobile_icon service border ajax">
     <span class="icon-lightbulb"></span>
