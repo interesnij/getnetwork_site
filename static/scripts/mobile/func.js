@@ -173,6 +173,7 @@ function toggle_nav_second_span(){
 function get_active_button() {
   try {
     $mobile_nav = document.body.querySelector(".mobile_nav");
+    buttons = $mobile_nav.querySelectorAll("button")
     path = document.location.pathname;
     for (var i = 0; i < buttons.length; i++){buttons[i].classList.remove("mobile_icon_current")};
     if (path == "/") {
