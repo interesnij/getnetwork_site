@@ -13,6 +13,8 @@
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css?ver5">
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/load.css">
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/fonts.css">
+    <link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
   </head>
   <body data-device="2">
     <span class="span"></span>
