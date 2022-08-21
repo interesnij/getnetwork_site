@@ -17,23 +17,23 @@
         <h1 class="magazine-logo-text black font-alt">Наш блог</h1>
     </div>
     <div class="container relative">
-                <% for category in blog_cats.iter() { %>
+        <% for category in blog_cats.iter() { %>
 
-                <% let get_6_blogs = category.get_6_blogs(); %>
+        <% let get_6_blogs = category.get_6_blogs(); %>
 
-                <h5 class="font-alt mb-10">
-                    <a class="ajax" href="/blogs/<%= category.id %>/">
-                        <%= category.name %> (<%= category.count %>)
-                    </a>
-                </h5>
-                <div class="row multi-columns-row">
-                    <% for object in get_6_blogs.iter() { %>
-                        <% include!("../generic/blog.stpl"); %>
-                    <% } %>
-                </div>
+        <h5 class="font-alt mb-10">
+            <a class="ajax" href="/blogs/<%= category.id %>/">
+                <%= category.name %> (<%= category.count %>)
+            </a>
+        </h5>
+        <div class="row multi-columns-row">
+            <% for object in get_6_blogs.iter() { %>
+            <% include!("../generic/blog.stpl"); %>
+            <% } %>
+        </div>
 
-                <% } %>
-      </div>
+        <% } %>
+    </div>
 </section>
 
 <div class="sidebar hidden">

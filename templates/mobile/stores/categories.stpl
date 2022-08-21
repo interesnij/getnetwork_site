@@ -14,28 +14,28 @@
 
 <section class="page-section" style="padding-top: 45px;">
     <div class="container relative">
-                <% for category in store_cats.iter() { %>
+        <% for category in store_cats.iter() { %>
 
-                <h3 class="blog-item-title font-alt mb-10">
-                    <a class="ajax" href="/stores/<%= category.id %>/">
-                        <%= category.name %> (<%= category.count %>)
-                    </a>
-                </h3>
-                <div class="row multi-columns-row">
-                <% if category.count > 0 { %>
-                  <% let object_list = category.get_6_stores(); %>
-                    <% for object in object_list.iter() { %>
-                      <% include!("../generic/store.stpl"); %>
-                    <% } %>
-                  <% } else { %>
-                  <div style="margin-top: 40px;">
-                      <div class="align-center">
-                          <span class="border" style="padding: 5px 12px;">Список пока пустой.</span>
-                      </div>
-                  </div>
-                  <% } %>
+        <h3 class="blog-item-title font-alt mb-10">
+            <a class="ajax" href="/stores/<%= category.id %>/">
+                <%= category.name %> (<%= category.count %>)
+            </a>
+        </h3>
+        <div class="row multi-columns-row">
+            <% if category.count > 0 { %>
+            <% let object_list = category.get_6_stores(); %>
+            <% for object in object_list.iter() { %>
+            <% include!("../generic/store.stpl"); %>
+            <% } %>
+            <% } else { %>
+            <div style="margin-top: 40px;">
+                <div class="align-center">
+                    <span class="border" style="padding: 5px 12px;">Список пока пустой.</span>
                 </div>
-                <% } %>
+            </div>
+            <% } %>
+        </div>
+        <% } %>
     </div>
 </section>
 <div class="sidebar hidden">

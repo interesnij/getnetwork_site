@@ -2,13 +2,13 @@
 
 <section data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
-                <div class="hs-line-4 font-alt black">
-                    <a class="ajax" href="/">Главная</a>
-                    &nbsp;/&nbsp;
-                    <a class="ajax" href="/blog_categories/">Блог</a>
-                    &nbsp;/&nbsp;
-                    <span>Создание статьи</span>
-                </div>
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a class="ajax" href="/blog_categories/">Блог</a>
+            &nbsp;/&nbsp;
+            <span>Создание статьи</span>
+        </div>
     </div>
 </section>
 
@@ -31,17 +31,17 @@
             <div class="mb-20 mb-md-10">
                 <label>Категории</label>
                 <select class="form-control" name="category_list[]" multiple="">
-                  <% for category in blog_cats.iter() { %>
+                    <% for category in blog_cats.iter() { %>
                     <option value="<%= category.id %>"><%= category.name %></option>
-                  <% } %>
+                    <% } %>
                 </select>
             </div>
             <div class="mb-20 mb-md-10">
                 <label>Теги</label>
                 <select class="form-control" name="tags_list[]" multiple="">
-                  <% for tag in all_tags.iter() { %>
+                    <% for tag in all_tags.iter() { %>
                     <option value="<%= tag.id %>"><%= tag.name %></option>
-                  <% } %>
+                    <% } %>
                 </select>
             </div>
             <div class="mb-20 mb-md-10">
@@ -53,32 +53,32 @@
                 <input type="file" multiple name="videos[]" />
             </div>
             <div class="mb-20 mb-md-10">
-              <label class="checkbox-inline">
-                <input type="checkbox" name="is_active" checked>
-                  Статья открыта
-              </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="is_active" checked>
+                    Статья открыта
+                </label>
             </div>
             <button style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_blog_btn">Отправить</button>
         </form>
         <div class="col-md-4">
             <% for category in blog_cats.iter() { %>
             <div class="margin-bottom:15px">
-              <h6>
-                <a rel="nofollow" target="_blank" href="/blogs/<%= category.id %>/">
-                  <%= category.name %>
-                </a>
-                | <a class="ajax" href="/edit_blog_category/<%= category.id %>/">~</a>
-                | <a class="pointer remove_blog_category" data-pk="<%= category.id %>">x</a>
-              </h6>
-              <% for object in category.get_all_blogs().iter() { %>
+                <h6>
+                    <a rel="nofollow" target="_blank" href="/blogs/<%= category.id %>/">
+                        <%= category.name %>
+                    </a>
+                    | <a class="ajax" href="/edit_blog_category/<%= category.id %>/">~</a>
+                    | <a class="pointer remove_blog_category" data-pk="<%= category.id %>">x</a>
+                </h6>
+                <% for object in category.get_all_blogs().iter() { %>
                 <p>
-                  <a rel="nofollow" target="_blank" href="/blog/<%= category.id %>/<%= object.id %>/">
-                    <%= object.title %>
-                  </a>
-                  | <a class="ajax" href="/edit_blog/<%= object.id %>/">~</a>
-                  | <a class="pointer remove_blog" data-pk="<%= object.id %>">x</a>
+                    <a rel="nofollow" target="_blank" href="/blog/<%= category.id %>/<%= object.id %>/">
+                        <%= object.title %>
+                    </a>
+                    | <a class="ajax" href="/edit_blog/<%= object.id %>/">~</a>
+                    | <a class="pointer remove_blog" data-pk="<%= object.id %>">x</a>
                 </p>
-              <% } %>
+                <% } %>
             </div>
             <% } %>
         </div>

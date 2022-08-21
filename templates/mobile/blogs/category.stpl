@@ -12,24 +12,24 @@
     </div>
 </section>
 <section class="page-section">
-    <div class="container relative">
-                  <% if category.count > 0 { %>
-                    <% for object in object_list.iter() { %>
-                      <% include!("../generic/blog.stpl"); %>
-                    <% } %>
-                    <% if next_page_number > 0 { %>
-                      <div class="load centered m-1 next_page_list" data-link="/blog/<%= category.id %>/?page=<%= next_page_number %>">
-                        <img src="/static/images/preloader.gif">
-                      </div>
-                    <% } %>
+    <div class="relative">
+        <% if category.count > 0 { %>
+        <% for object in object_list.iter() { %>
+        <% include!("../generic/blog.stpl"); %>
+        <% } %>
+        <% if next_page_number > 0 { %>
+        <div class="load centered m-1 next_page_list" data-link="/blog/<%= category.id %>/?page=<%= next_page_number %>">
+            <img src="/static/images/preloader.gif">
+        </div>
+        <% } %>
 
-                  <% } else { %>
-                  <div style="margin-top: 40px;">
-                      <div class="align-center">
-                          <span class="border" style="padding: 5px 12px;">Список пока пустой.</span>
-                      </div>
-                  </div>
-                  <% } %>
+        <% } else { %>
+        <div style="margin-top: 40px;">
+            <div class="align-center">
+                <span class="border" style="padding: 5px 12px;">Список пока пустой.</span>
+            </div>
+        </div>
+        <% } %>
     </div>
 </section>
 <div class="sidebar hidden">
