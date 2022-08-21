@@ -16,7 +16,6 @@
     <div class="container relative">
                 <div class="blog-item mb-80 mb-xs-40">
                     <div class="blog-item-body">
-                      <%= object.user_id %>
                         <h1 class="mt-0 font-alt"><%= object.title %></h1>
                         <div class="blog-item-data">
                           <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>

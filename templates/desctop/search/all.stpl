@@ -12,7 +12,7 @@
 <section class="page-section">
     <div class="container relative">
       <form class="form mb-20" role="form">
-          <input data-folder="" value="<%= q %>" type="text" class="form-control general_search search_page" placeholder="Поиск...">
+          <input data-folder="" value="<%= q %>" type="text" class="form-control general_search search_page input-md" placeholder="Поиск...">
       </form>
     <div class="search_section">
       <% let mut items_exists = false; %>

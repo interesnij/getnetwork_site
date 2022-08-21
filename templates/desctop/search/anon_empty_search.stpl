@@ -12,7 +12,7 @@
 <section class="page-section">
     <div class="container relative">
       <form class="form mb-20" role="form">
-          <input type="text" class="form-control general_search search_page" placeholder="Начните общий поиск">
+          <input type="text" class="input-md form-control general_search search_page" placeholder="Начните общий поиск">
       </form>
     <div class="search_section">
       <div class="text-center">

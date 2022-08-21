@@ -4,8 +4,8 @@
     <div class="container relative">
         <h5 class="section-title font-alt align-left">
             Обучалки
-            <a href="/wiki_categories/" class="section-more right ajax blog">
-              еще
+            <a href="/wiki_categories/" class="section-more ajax blog">
+              ещё
             </a>
         </h5>
         <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">

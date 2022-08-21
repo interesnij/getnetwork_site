@@ -1,6 +1,6 @@
 <div class="blog-post-prev-small clearfix">
     <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/">
-        <img src="<%= object.get_image() %>" alt="img" class="widget-posts-img">
+        <img src="<%= object.get_image() %>" alt="img" class="image_fit_100 widget-posts-img">
     </a>
     <div class="widget-posts-descr">
         <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/">

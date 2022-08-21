@@ -52,7 +52,7 @@
                   <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
                   <hr class="mt-0 mb-0 " />
                   <% for child in object.get_variables().iter() { %>
-                    <% if child.is_default { %>(*) <% } %> <%= child.name %> (<%= child.id %>): <%= child.price %> ₽, <%= child.man_hours %> ⌛ |
+                    <% if child.is_default { %>(*) <% } %> <%= child.name %>: <%= child.price %> ₽, <%= child.man_hours %> ⌛ |
                     <a class="ajax" href="/edit_serve/<%= child.id %>/">~</a>
                     <a class="pointer remove_serve" data-pk="<%= child.id %>">x</a>
                     <br />

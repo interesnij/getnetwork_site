@@ -5,16 +5,16 @@
         </h5>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
             <li class="yy s_1 active">
-                <a><div class="alt-tabs-icon"><span class="icon-lightbulb"></span></div>Наши услуги</a>
+                <a><div class="alt-tabs-icon"><span class="icon-lightbulb"></span></div>Услуги</a>
             </li>
             <li class="yy s_2 pointer">
-                <a><div class="alt-tabs-icon"><span class="icon-briefcase"></span></div>Портфолио</a>
+                <a><div class="alt-tabs-icon"><span class="icon-briefcase"></span></div>Работы</a>
             </li>
             <li class="yy s_3 pointer">
-                <a><div class="alt-tabs-icon"><span class="icon-newspaper"></span></div>Наш блог</a>
+                <a><div class="alt-tabs-icon"><span class="icon-newspaper"></span></div>Блог</a>
             </li>
             <li class="yy s_4 pointer">
-                <a><div class="alt-tabs-icon"><span class="icon-book-open"></span></div>База знаний</a>
+                <a><div class="alt-tabs-icon"><span class="icon-book-open"></span></div>Обучалка</a>
             </li>
             <li class="yy s_5 pointer">
                 <a><div class="alt-tabs-icon"><span class="icon-documents"></span></div>Страницы</a>

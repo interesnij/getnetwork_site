@@ -4,8 +4,8 @@
     <div class="container relative">
         <h5 class="section-title font-alt align-left">
             Статьи
-            <a href="/blog_categories/" class="section-more right ajax blog">
-              еще
+            <a href="/blog_categories/" class="section-more ajax blog">
+              ещё
             </a>
         </h5>
         <div class="row multi-columns-row">
