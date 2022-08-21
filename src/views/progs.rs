@@ -72,7 +72,7 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
     let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_string() + &ipaddr;
     let _geo_request = reqwest::get(_geo_url).await.expect("E.");
     let new_request = _geo_request.text().await.unwrap();
-    println!("request {:?}", new_request);
+    //println!("request {:?}", new_request);
 
     let location200: UserLoc = serde_json::from_str(&new_request).unwrap();
     let _user = NewCookieUser {

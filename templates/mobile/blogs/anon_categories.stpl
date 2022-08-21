@@ -26,7 +26,6 @@
                         <%= category.name %> (<%= category.count %>)
                     </a>
                 </h4>
-                <hr class="mt-0 mb-30">
                 <div class="row multi-columns-row">
                     <% for object in get_6_blogs.iter() { %>
                         <% include!("../generic/blog.stpl"); %>

@@ -2441,10 +2441,10 @@ a.blog-item-more{
 }
 .blog-post-prev-small {
     font-size: 12px;
-    padding: 12px 0;
+    padding: 12px 5px;
 }
 
-.blog-post-prev-small a{
+.blog-post-prev-small a {
     font-size: 13px;
     display: block;
     text-decoration: none;

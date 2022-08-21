@@ -30,7 +30,7 @@
                     <div class="row">
                         <div class="mb-sm-50">
                           <blockquote style="margin-bottom: 10px">
-                            <a href="/service_categories/" class="ajax" style="text-decoration: underline;">Наши услуги</a>
+                            <a href="/service_categories/" class="ajax" style="text-decoration: underline;"><p>Наши услуги</p></a>
                           </blockquote>
                           <p>
                           <strong>Раздел</strong> посвящён описанию <strong>наших услуг</strong> по разработке веб-ресурсов, принципам сотрудничества,
@@ -150,7 +150,7 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          <p style="text-decoration: underline;">Страницы</p>
+                          <p>Страницы</p>
                         </blockquote>
                         <p>
                           <strong>Сайт имеет много отдельных страниц</strong>:
