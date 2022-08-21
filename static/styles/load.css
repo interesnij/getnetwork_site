@@ -240,6 +240,7 @@ dl dd {
   }
   .yy {
     width: 45% !important;
+    margin-bottom: 9px !important;
   }
 }
 .highlight pre{
