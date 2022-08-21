@@ -215,6 +215,7 @@ a.logo:hover{
     color: black !important;
     font-weight: bold;
 }
-.tpl-alt-tabs li.active span{
-    color: black !important;
+
+.blog-post-prev-small{
+    border-top: 1px dotted #000000 !important;
 }

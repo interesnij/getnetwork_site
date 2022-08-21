@@ -40,7 +40,7 @@ a:hover {
   color: #777 !important;
 }
 .mobile_icon_active p, .mobile_icon_current p{
-  color: black !important;
+  color: #000000 !important;
 }
 
 .border {
@@ -180,7 +180,7 @@ a.logo:hover{
 
 .inner-nav ul li a:hover,
 .inner-nav ul li a.active{
-    color: #000 !important;
+    color: #000000 !important;
 }
 
 .mn-soc-link{
@@ -208,13 +208,13 @@ a.logo:hover{
 .tpl-alt-tabs li.active a,
 .tpl-alt-tabs li.active a:hover,
 .tpl-alt-tabs li.active a:focus{
-    color: black !important;
+    color: #000000 !important;
     font-weight: bold;
 }
 .tpl-alt-tabs li.active span{
-    color: black !important;
+    color: #000000 !important;
 }
 
 .blog-post-prev-small{
-    border-top: 1px dotted #eaeaea !important;
+    border-top: 1px dotted #000000 !important;
 }
