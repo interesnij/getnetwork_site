@@ -238,7 +238,7 @@ dl dd {
   .work-full-title {
       font-size: 20px;
   }
-  .tpl-alt-tabs > li {
+  .tpl-alt-tabs > a {
     width: 45%;
   }
 }
