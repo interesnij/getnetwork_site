@@ -165,9 +165,6 @@ a.active {
 .hs-line-10.highlight{
     background: #e41919 !important;
 }
-.hs-line-10.transparent{
-    color: #aaa !important;
-}
 
 .logo,
 a.logo:hover{
@@ -193,16 +190,8 @@ a.logo:hover{
     border: 1px solid rgba(0,0,0, .25) !important;
 }
 
-.alt-features-icon{
-    color: #111 !important;
-}
-
 .count-wrapper{
     border: 1px solid rgba(0,0,0, .09) !important;
-}
-
-.work-full{
-    background: #fff !important;
 }
 
 .work-full-detail p{
@@ -211,77 +200,9 @@ a.logo:hover{
 .work-full-detail p:last-child{
     border-bottom: 1px solid rgba(0,0,0, .05) !important;
 }
-.work-full-action{
-    border-top: 1px solid #eaeaea !important;
-}
 
 .banner-decription{
     color: rgba(255,255,255, .7) !important;
-}
-
-.post-prev-title a:hover{
-    color: #111 !important;
-}
-.post-prev-info,
-.post-prev-info a{
-    color: #aaa !important;
-}
-.post-prev-info a:hover{
-    color: #111 !important;
-}
-
-.contact-item{
-    color: #444 !important;
-}
-.contact-item a{
-    color: #444 !important;
-}
-
-.contact-item a:hover{
-    color: #000 !important;
-}
-
-.footer a{
-    color: #888 !important;
-}
-.footer a:hover{
-    color: #111 !important;
-}
-.footer-made{
-    color: #999 !important;
-}
-.footer-social-links a{
-    color: #111 !important;
-}
-
-.footer-social-links a:before{
-    border: 1px solid #111 !important;
-}
-
-
-.blog-item-date{
-    color: #999 !important;
-    border-right: 1px solid #eee !important;
-
-}
-
-.blog-item-title a{
-    color: #111 !important;
-}
-
-.blog-item-data a:hover{
-    color: #000 !important;
-}
-.blog-post-data{
-    color: #aaa !important;
-}
-
-.blog-page-title{
-    border-bottom: 1px solid #eee !important;
-}
-
-.widget-title{
-    border-bottom: 1px solid #ccc !important;
 }
 
 .tpl-alt-tabs li.active a,
@@ -295,6 +216,5 @@ a.logo:hover{
 }
 
 .blog-post-prev-small{
-    color: #aaa !important;
     border-top: 1px dotted #eaeaea !important;
 }

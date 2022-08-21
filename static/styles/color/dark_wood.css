@@ -172,9 +172,6 @@ a.btn-mod:focus{
 .hs-line-10.highlight{
     background: #e41919 !important;
 }
-.hs-line-10.transparent{
-    color: #aaa !important;
-}
 
 .logo,
 a.logo:hover{
@@ -227,65 +224,21 @@ a.logo:hover{
 .post-prev-title a:hover{
     color: #FFFFFF !important;
 }
-.post-prev-info,
-.post-prev-info a{
-    color: #aaa !important;
-}
+
 .post-prev-info a:hover{
     color: #FFFFFF !important;
-}
-
-.contact-item{
-    color: #444 !important;
-}
-.contact-item a{
-    color: #444 !important;
 }
 
 .contact-item a:hover{
     color: #FFFFFF !important;
 }
 
-.footer a{
-    color: #888 !important;
-}
-.footer a:hover{
-    color: #FFFFFF !important;
-}
-.footer-made{
-    color: #999 !important;
-}
 .footer-social-links a{
     color: #FFFFFF !important;
 }
 
 .footer-social-links a:before{
     border: 1px solid #FFFFFF !important;
-}
-
-.blog-item-date{
-    color: #999 !important;
-    border-right: 1px solid #000000 !important;
-
-}
-
-.blog-item-title a{
-    color: #FFFFFF !important;
-}
-
-.blog-item-data a:hover{
-    color: #FFFFFF !important;
-}
-.blog-post-data{
-    color: #aaa !important;
-}
-
-.blog-page-title{
-    border-bottom: 1px solid #eee !important;
-}
-
-.widget-title{
-    border-bottom: 1px solid #ccc !important;
 }
 
 .tpl-alt-tabs li.active a,
@@ -296,9 +249,7 @@ a.logo:hover{
 }
 .tpl-alt-tabs li.active span{
     color: #FFFFFF !important;
-
 }
-
 .blog-post-prev-small{
     border-top: 1px dotted #eaeaea !important;
 }
