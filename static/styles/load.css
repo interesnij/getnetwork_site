@@ -238,8 +238,8 @@ dl dd {
   .work-full-title {
       font-size: 20px;
   }
-  .tpl-alt-tabs > a {
-    width: 45%;
+  .yy {
+    width: 45% !important;
   }
 }
 .highlight pre{
