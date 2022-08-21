@@ -14,23 +14,16 @@
     <div class="container relative">
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
             <li class="yy s_1 active">
-              <a>
-                О нас
-              </a>
+              <a>О нас</a>
             </li>
             <li class="yy s_2 pointer">
-              <a>
-                Контакты
-              </a>
+              <a>Контакты</a>
             </li>
-
             <li class="yy s_3 pointer">
-              <a>
-                О сайте
-              </a>
+              <a>О сайте</a>
             </li>
             <li class="yy s_4 pointer">
-                Помощь
+              <a>Помощь</a>
             </li>
         </ul>
 
