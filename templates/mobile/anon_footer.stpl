@@ -92,12 +92,13 @@
 </h3>
 <h2 class="hs-line-14" style="margin-bottom: 0;">
   <a href="/" class="ajax">
-    getnetwork!
+    вебсервисы!
   </a>
 </h2>
 </span>
 <p class="stat_meta">
-  <span class="device"></span><br />
+  <span class="device"></span>
+  &nbsp;-&nbsp;
   <span class="city"></span>
 </p>
 </div>
