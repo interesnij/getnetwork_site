@@ -147,7 +147,7 @@ function get_or_create_cookie_user() {
       }
       stat_meta = document.body.querySelector(".stat_meta");
       stat_meta.querySelector(".device").innerHTML = data.ip + " (" + _device + ") ";
-      stat_meta.querySelector(".city").innerHTML = data.city_ru + " (" + data.city_en + ") ";
+      stat_meta.querySelector(".city").innerHTML = data.city_en + " (" + data.country_en + ") ";
 
       setCookie("user", data.id, 120);
       $user_id = data.id;

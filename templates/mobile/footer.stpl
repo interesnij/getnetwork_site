@@ -96,7 +96,7 @@
   </a>
 </h2>
 </span>
-<p class="stat_meta">
+<p class="stat_meta" style="text-align: center;">
   <span class="device"></span>
   &nbsp;-&nbsp;
   <span class="city"></span>
