@@ -24,7 +24,7 @@
             <label for="tech<%= tech_category.id %>">
               <%= tech_category.name %> (Ур. <%= tech_category.level %>)
             </label>
-            <a class="ajax" href="/edit_tech_category/<%= tech_category.id %>/">~</a>
+            <a target="_blank" rel="nofollow" href="/edit_tech_category/<%= tech_category.id %>/">~</a>
             <a class="pointer remove_tech_category" data-pk="<%= tech_category.id %>">x</a>
             <ul style="margin-left: 2%;">
               <% for category in tech_category.get_serve_categories().iter() { %>
@@ -34,7 +34,7 @@
                     <%= category.name %>
                   </label>
                   <span>
-                    <a class="ajax" href="/edit_serve_category/<%= category.id %>/">~</a>
+                    <a target="_blank" rel="nofollow" href="/edit_serve_category/<%= category.id %>/">~</a>
                     <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
                   </span>
                   <ul style="margin-left: 4%;">
@@ -46,16 +46,16 @@
                         <% if object.is_default { %>(*) <% } %>
                         <%= object.name %> (<%= object.id %>)
                       </label>
-                      <a class="ajax" href="/edit_serve/<%= object.id %>/">~</a>
+                      <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
                       <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
                       <ul>
                         <% for child in object.get_variables().iter() { %>
                         <li>
                           <a>
                             <% if child.is_default { %>(*) <% } %>
-                            <%= child.name %>, цена <%= object.price %>, часы <%= object.man_hours %>
+                            <%= child.name %>, цена <%= child.price %>, часы <%= child.man_hours %>
                           </a>
-                          <a class="ajax" href="/edit_serve/<%= child.id %>/">~</a>
+                          <a target="_blank" rel="nofollow" href="/edit_serve/<%= child.id %>/">~</a>
                           <a class="pointer remove_serve" data-pk="<%= child.id %>">x</a>
                         </li>
                         <% } %>
@@ -65,7 +65,7 @@
                           <% if object.is_default { %>(*) <% } %>
                           <%= object.name %>, цена <%= object.price %>, часы <%= object.man_hours %>
                         </a>
-                        <a class="ajax" href="/edit_serve/<%= object.id %>/">~</a>
+                        <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
                         <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
                       <% } %>
                     </li>
