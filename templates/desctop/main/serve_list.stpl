@@ -37,7 +37,7 @@
                     <a target="_blank" rel="nofollow" href="/edit_serve_category/<%= category.id %>/">~</a>
                     <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
                   </span>
-                  <ul style="margin-left: 4%;">
+                  <ul style="margin-left: 2%;">
                     <% for object in category.get_serves().iter() { %>
                     <li>
                       <% if object.is_parent() { %>
@@ -48,7 +48,7 @@
                       </label>
                       <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
                       <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
-                      <ul style="margin-left: 5%;">
+                      <ul style="margin-left: 2%;">
                         <% for child in object.get_variables().iter() { %>
                         <li>
                           <a>
