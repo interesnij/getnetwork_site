@@ -140,7 +140,7 @@ function get_or_create_cookie_user() {
       data = JSON.parse(ajax_link.responseText);
       console.log(data);
       if (data.device == 1) {
-        _device = "Комп";
+        _device = "Компьютер";
       }
       else {
         _device = "Телефон";
