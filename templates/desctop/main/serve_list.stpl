@@ -44,11 +44,11 @@
                       <input type="checkbox" id="serve<%= object.id %>" />
                       <label for="serve<%= object.id %>">
                         <% if object.is_default { %>(*) <% } %>
-                        <%= object.name %> (<%= object.id %>)
+                        <%= object.name %> (<%= object.id %>) ↓↓
                       </label>
                       <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
                       <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
-                      <ul>
+                      <ul style="margin-left: 6%;">
                         <% for child in object.get_variables().iter() { %>
                         <li>
                           <a>
