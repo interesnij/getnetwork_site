@@ -2,6 +2,7 @@
   <label>Уровень сложности</label>
   <select class="input-md form-control load_serve_from_level" data-live-search="true" tabindex="-1" aria-hidden="true">
     <option value="">Не выбрано</option>
+    <option value="0">Бюджетный</option>
     <option value="1">Начальный</option>
     <option value="2">Продвинутый</option>
     <option value="3">Экспертный</option>
