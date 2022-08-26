@@ -18,9 +18,18 @@
       <label><%= category.name %></label>
       <select class="form-control" name="serve_list[]" multiple="">
         <% for object in category.get_serves().iter() { %>
-          <option value="<%= object.id %>">
-            <%= object.name %><%= object.name %> <% if object.is_default { %>- по умолчанию<% } %>
-          </option>
+          <% if object.is_parent() { %>
+            <option><%= object.name %>: </option>
+            <% for child in object.get_variables().iter() { %>
+              <option value="<%= child.id %>">
+                <%= child.name %> <% if child.is_default { %>- по умолчанию<% } %>
+              </option>
+            <% } %>
+          <% } else { %>
+            <option value="<%= object.id %>">
+              <%= object.name %> <% if object.is_default { %>- по умолчанию<% } %>
+            </option>
+          <% } %>
         <% } %>
       </select>
     </div>
