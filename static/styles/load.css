@@ -2985,7 +2985,6 @@ hr {
         width: 8.33333333%
     }
 }
-
 .css-treeview ul,
 .css-treeview li
 {
@@ -3003,17 +3002,6 @@ hr {
 .css-treeview
 {
     user-select: none;
-}
-
-.css-treeview a
-{
-    color: #35d;
-    text-decoration: none;
-}
-
-.css-treeview a:hover
-{
-    text-decoration: underline;
 }
 
 .css-treeview input + label + ul

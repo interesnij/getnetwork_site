@@ -26,7 +26,7 @@
             </label>
             <a target="_blank" rel="nofollow" href="/edit_tech_category/<%= tech_category.id %>/">~</a>
             <a class="pointer remove_tech_category" data-pk="<%= tech_category.id %>">x</a>
-            <ul style="margin-left: 2%;">
+            <ul style="margin-left: 2%;border-left: 1px orange solid;">
               <% for category in tech_category.get_serve_categories().iter() { %>
                 <li>
                   <input checked type="checkbox" id="cat<%= category.id %>" />
@@ -37,7 +37,7 @@
                     <a target="_blank" rel="nofollow" href="/edit_serve_category/<%= category.id %>/">~</a>
                     <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
                   </span>
-                  <ul style="margin-left: 2%;">
+                  <ul style="margin-left: 2%;border-left: 1px orange solid;">
                     <% for object in category.get_serves().iter() { %>
                     <li>
                       <% if object.is_parent() { %>
@@ -48,7 +48,7 @@
                       </label>
                       <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
                       <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
-                      <ul style="margin-left: 2%;">
+                      <ul style="margin-left: 2%;border-left: 1px orange solid;">
                         <% for child in object.get_variables().iter() { %>
                         <li>
                           <a>
