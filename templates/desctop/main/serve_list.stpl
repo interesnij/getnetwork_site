@@ -14,6 +14,11 @@
     <div class="container relative">
     <div class="container align-center">
       <h1 class="font-alt">Список опций</h1>
+      <a href="/create_tech_categories/" target="_blank" rel="nofollow">+ технология опций</a>
+      &nbsp;
+      <a href="/create_serve_categories/" target="_blank" rel="nofollow">+ категория опций</a>
+      &nbsp;
+      <a href="/create_serve/" target="_blank" rel="nofollow">+ опция</a>
     </div>
     <div class="container relative">
     <div class="css-treeview">
