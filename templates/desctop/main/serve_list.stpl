@@ -29,7 +29,7 @@
             <ul style="margin-left: 2%;">
               <% for category in tech_category.get_serve_categories().iter() { %>
                 <li>
-                  <input type="checkbox" id="cat<%= category.id %>" />
+                  <input checked type="checkbox" id="cat<%= category.id %>" />
                   <label for="cat<%= category.id %>">
                     <%= category.name %>
                   </label>
@@ -41,14 +41,14 @@
                     <% for object in category.get_serves().iter() { %>
                     <li>
                       <% if object.is_parent() { %>
-                      <input type="checkbox" id="serve<%= object.id %>" />
+                      <input checked type="checkbox" id="serve<%= object.id %>" />
                       <label for="serve<%= object.id %>">
                         <% if object.is_default { %>(*) <% } %>
                         <%= object.name %> (<%= object.id %>) ↓↓
                       </label>
                       <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
                       <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
-                      <ul style="margin-left: 6%;">
+                      <ul style="margin-left: 5%;">
                         <% for child in object.get_variables().iter() { %>
                         <li>
                           <a>
