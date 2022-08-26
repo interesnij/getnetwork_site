@@ -162,7 +162,7 @@ impl Serve {
         use crate::schema::serve::dsl::serve;
 
         let _connection = establish_connection();
-        return serve
+        return self.price == 0 || serve
             .filter(schema::serve::serve_id.eq(self.id))
             .select(schema::serve::id)
             .load::<i32>(&_connection)
