@@ -26,18 +26,18 @@
             </label>
             <a class="ajax" href="/edit_tech_category/<%= tech_category.id %>/">~</a>
             <a class="pointer remove_tech_category" data-pk="<%= tech_category.id %>">x</a>
-            <ul>
+            <ul style="margin-left: 2%;">
               <% for category in tech_category.get_serve_categories().iter() { %>
                 <li>
                   <input type="checkbox" id="cat<%= category.id %>" />
                   <label for="cat<%= category.id %>">
                     <%= category.name %>
                   </label>
-                  <span style="font-size:70%">
+                  <span>
                     <a class="ajax" href="/edit_serve_category/<%= category.id %>/">~</a>
                     <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
                   </span>
-                  <ul>
+                  <ul style="margin-left: 4%;">
                     <% for object in category.get_serves().iter() { %>
                     <li>
                       <% if object.is_parent() { %>
