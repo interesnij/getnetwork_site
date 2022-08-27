@@ -1,7 +1,7 @@
 <section class="border card_fullscreen" style="position: fixed;z-index:1000;bottom: 10px;width: 100%;">
 <h3 data-sum="<%= object.price %>"
     data-pk="<%= object.id %>"
-    data-servelist="<% for (i, id) in object_serve_ids.iter().enumerate() { %><%= id %><% if (i+1) != object_serve_ids.len() { %>,<% } %>" 
+    data-servelist="<% for (i, id) in object_serve_ids.iter().enumerate() { %><%= id %><% if (i+1) != object_serve_ids.len() { %>,<% } %><% } %>" 
     class="create_order_form_of_service" style="cursor:pointer;text-align: center;">
     Сумма <span class="total_price_counter"><%= object.price %></span>
      ₽. Перейти к заказу
