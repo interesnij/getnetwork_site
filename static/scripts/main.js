@@ -510,6 +510,7 @@ on('body', 'click', '.select_child_serve', function(event) {
     .replace(']', "")
     .split(',');
 
+
   parent_id = _this.getAttribute("serve-pk");
   this_pk = _this.querySelector(".get_object_info").getAttribute("data-pk");
   parent = _this.parentElement.querySelector('[parent-pk=' + '"' + parent_id + '"' + ']');
@@ -520,6 +521,20 @@ on('body', 'click', '.select_child_serve', function(event) {
   parent_price = parent.querySelector(".price").innerHTML;
   hours = _this.querySelector(".hours").innerHTML;
   parent_hours = parent.querySelector(".hours").innerHTML;
+
+  if (!parent_price) {
+    _parent_price = 0;
+  }
+  else {
+    _parent_price = parent_price*1;
+  }
+  if (!price) {
+    _price = 0;
+  }
+  else {
+    _price = _price*1;
+  }
+  counter.innerHTML = counter.innerHTML*1 - _parent_price + _price;
 
   parent.querySelector(".get_object_info").innerHTML = title;
   if (_this.classList.contains("no_select_parent")) {
@@ -535,15 +550,10 @@ on('body', 'click', '.select_child_serve', function(event) {
     if (parent.classList.contains("no_select_parent")) {
       parent.querySelector(".price").innerHTML = price;
       parent.querySelector(".hours").innerHTML = hours;
-      counter.innerHTML = counter.innerHTML*1 + price*1;
     }
     else {
       parent.querySelector(".price").innerHTML = price;
       parent.querySelector(".hours").innerHTML = hours;
-
-      new_price = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1;
-      new_price += price*1;
-      counter.innerHTML = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1 + _this.querySelector(".price").innerHTML*1;
     }
   }
 
