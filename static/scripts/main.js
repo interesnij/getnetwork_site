@@ -544,8 +544,10 @@ on('body', 'click', '.select_child_serve', function(event) {
   counter.innerHTML = counter.innerHTML*1 - _parent_price + _price;
 
   parent.querySelector(".get_object_info").innerHTML = title;
+  console.log("parent_id", parent_id);
   index = counter_serve_list.indexOf(parent_id);
   if (index > -1) {
+    console.log("parent_id exists");
     counter_serve_list.splice(index, 1);
   }
 
