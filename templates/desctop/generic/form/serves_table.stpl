@@ -13,11 +13,11 @@
               <% for (i, cat) in s_cats.iter().enumerate() { %>
 
                 <% if i == 0 { %>
-                  <li data-sum="<%= cat.default_price %>" class="yy s_<%= i + 1 %> active">
+                  <li data-pk="<%= cat.id %>" data-sum="<%= cat.default_price %>" class="yy s_<%= i + 1 %> active">
                       <a class="pointer"><%= cat.name %></a>
                   </li>
                 <% } else { %>
-                  <li data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i + 1 %>">
+                  <li data-pk="<%= cat.id %>" data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i + 1 %>">
                     <a class="pointer"><%= cat.name %></a>
                   </li>
                 <% } %>

@@ -1,4 +1,4 @@
-<div data-sum="<%= category.default_price %>" class="tab_<%= i + 1 %> fade tab-pane <% if i == 0 { %>in active<% } %>">
+<div data-pk="<%= category.id %>" data-sum="<%= category.default_price %>" class="tab_<%= i + 1 %> fade tab-pane <% if i == 0 { %>in active<% } %>">
   <table class="table">
     <tbody>
       <tr>
