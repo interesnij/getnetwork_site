@@ -11,6 +11,7 @@
         <th>Часы</th>
         <th></th>
       </tr>
+
       <% for serve in category.get_serves().iter() { %>
         <% if serve.is_parent() { %>
           <% let first_child = serve.get_first_variable(); %>
@@ -31,10 +32,11 @@
             </tr>
           <% } %>
 
-          <% for child in serve.get_variables_exclude_id(first_child.id).iter() { %>
+          <% let childs = serve.get_variables_exclude_id(first_child.id); %
+          <% for (i, child) in childs.iter().enumerate() { %>
             <tr class="select_child_serves hide pointer" style="font-size: 12px;" parent-pk="<%= serve.id %>">
             <% include!("child.stpl"); %>
-            <td class="action_text solid_right" style="width:12%">Выбрать</td>
+            <td class="action_text solid_right <% if i == 0 { %>solid_top<% } else if (i + 1) == childs.len() { %>solid_bottom<% } %>" style="width:12%">Выбрать</td>
           </tr>
           <% } %>
           <tr></tr>

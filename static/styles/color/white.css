@@ -16,6 +16,12 @@ a:hover {
 .solid_right {
   border-right: 2px solid #222;
 }
+.solid_bottom {
+  border-bottom: 2px solid #222;
+}
+.solid_top {
+  border-top: 2px solid #222;
+}
 .mobile_icon span {
   color: rgb(0, 0, 0, 0.7) !important;
 }
