@@ -641,10 +641,7 @@ function service_tab_action(_this, tab_class) {
             if (!serve_list[i2].classList.contains("is_default") && serve_list[i2].classList.contains("hover")){
               serve_list[i2].classList.remove("hover");
               old_price += serve_list[i2].querySelector(".price").innerHTML*1;
-              index = serves_ids.indexOf(serve_list[i2].querySelector(".get_object_info").getAttribute("data-pk"));
-              if (index >= 0) {
-                serves_ids.splice(index, 1);
-              }
+              
             }
         };
       };
