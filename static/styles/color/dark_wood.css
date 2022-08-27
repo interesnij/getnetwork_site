@@ -8,11 +8,11 @@
 .mobile_icon span {
   color: rgb(255, 255, 255, 0.7) !important;
 }
-.dashed_left {
-  border-left: 2px dashed rgba(255,255,255, 0.8);
+.solid_left {
+  border-left: 2px solid rgba(255,255,255, 0.8);
 }
-.dashed_right {
-  border-right: 2px dashed rgba(255,255,255, 0.8);
+.solid_right {
+  border-right: 2px solid rgba(255,255,255, 0.8);
 }
 .tpl-minimal-tabs li.active a,
 .tpl-minimal-tabs li.active a:hover {

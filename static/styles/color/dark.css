@@ -8,11 +8,11 @@ a:hover {
 .small-section, .mob_menu, .banner_block {
   background: rgba(51,51,51, 1) !important;
 }
-.dashed_left {
-  border-left: 2px dashed rgba(255,255,255, 0.8);
+.solid_left {
+  border-left: 2px solid rgba(255,255,255, 0.8);
 }
-.dashed_right {
-  border-right: 2px dashed rgba(255,255,255, 0.8);
+.solid_right {
+  border-right: 2px solid rgba(255,255,255, 0.8);
 }
 .blog-post-prev-small{
     border-top: 1px dotted rgba(255,255,255, 0.8) !important;

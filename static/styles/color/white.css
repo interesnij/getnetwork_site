@@ -10,11 +10,11 @@
 a:hover {
     color: rgba(0, 0, 0, 1) !important;
 }
-.dashed_left {
-  border-left: 2px dashed #222;
+.solid_left {
+  border-left: 2px solid #222;
 }
-.dashed_right {
-  border-right: 2px dashed #222;
+.solid_right {
+  border-right: 2px solid #222;
 }
 .mobile_icon span {
   color: rgb(0, 0, 0, 0.7) !important;

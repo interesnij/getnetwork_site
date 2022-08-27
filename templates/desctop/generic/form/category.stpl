@@ -25,7 +25,7 @@
               <td class="action_text" style="width:12%">Выбрано</td>
             </tr>
           <% } else { %>
-            <tr class="open_child_serves dashed_left pointer" serve-pk="<%= serve.id %>">
+            <tr class="open_child_serves pointer" serve-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
               <td class="action_text" style="width:12%">Выбрать</td>
             </tr>
@@ -34,7 +34,7 @@
           <% for child in serve.get_variables_exclude_id(first_child.id).iter() { %>
             <tr class="select_child_serves hide pointer" style="font-size: 12px;" parent-pk="<%= serve.id %>">
             <% include!("child.stpl"); %>
-            <td class="action_text dashed_right" style="width:12%">Выбрать</td>
+            <td class="action_text solid_right" style="width:12%">Выбрать</td>
           </tr>
           <% } %>
           <tr></tr>
