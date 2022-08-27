@@ -6,7 +6,20 @@
       </span>
     </h5>
     <tbody>
-
+      <tr>
+        <th class="hidden-xs">
+          Опция
+        </th>
+        <th>
+          Цена
+        </th>
+        <th>
+          Часы работы
+        </th>
+        <th>
+          Выбрать
+        </th>
+      </tr>
       <% for serve in category.get_serves().iter() { %>
       <% if serve.is_default { %>
       <tr class="is_default hover">
