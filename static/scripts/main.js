@@ -510,7 +510,7 @@ on('body', 'click', '.select_child_serve', function(event) {
     .replace(']', "")
     .split(',');
 
-  parent_id = _this.getAttribute("parent-pk");
+  parent_id = _this.getAttribute("serve-pk");
   this_pk = _this.querySelector(".get_object_info").getAttribute("data-pk");
   parent = _this.parentElement.querySelector('[parent-pk=' + '"' + parent_id + '"' + ']');
 
