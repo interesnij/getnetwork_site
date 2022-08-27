@@ -544,12 +544,13 @@ on('body', 'click', '.select_child_serve', function(event) {
   counter.innerHTML = counter.innerHTML*1 - _parent_price + _price;
 
   parent.querySelector(".get_object_info").innerHTML = title;
+  index = counter_serve_list.indexOf(parent_id);
+  if (index > -1) {
+    counter_serve_list.splice(index, 1);
+  }
+
   if (_this.classList.contains("no_select_parent")) {
     counter.innerHTML = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1;
-    index = counter_serve_list.indexOf(parent_id);
-    if (index > -1) {
-      counter_serve_list.splice(index, 1);
-    }
     parent.querySelector(".price").innerHTML = "";
     parent.querySelector(".hours").innerHTML = "";
   }
@@ -562,6 +563,7 @@ on('body', 'click', '.select_child_serve', function(event) {
       parent.querySelector(".price").innerHTML = price;
       parent.querySelector(".hours").innerHTML = hours;
     }
+    counter_serve_list.push(this_pk);
   }
 
   _this.querySelector(".get_object_info").innerHTML = parent_title;
