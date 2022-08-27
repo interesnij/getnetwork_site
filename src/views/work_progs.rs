@@ -651,6 +651,7 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                     service_id: 0,
                     store_id:   0,
                     work_id:    _work.id,
+                    orders_id:  None,
                 };
                 diesel::insert_into(schema::serve_items::table)
                     .values(&new_serve_form)
@@ -861,6 +862,7 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
                     service_id: 0,
                     store_id:   0,
                     work_id:    _work.id,
+                    orders_id:  None,
                 };
                 diesel::insert_into(schema::serve_items::table)
                     .values(&new_serve_form)

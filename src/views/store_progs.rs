@@ -643,6 +643,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                     service_id: 0,
                     store_id:   _store.id,
                     work_id:    0,
+                    orders_id:  None,
                 };
                 diesel::insert_into(schema::serve_items::table)
                     .values(&new_serve_form)
@@ -853,6 +854,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                     service_id: 0,
                     store_id:   _store.id,
                     work_id:    0,
+                    orders_id:  None,
                 };
                 diesel::insert_into(schema::serve_items::table)
                     .values(&new_serve_form)

@@ -671,10 +671,10 @@ function on(elSelector, eventName, selector, fn) {var element = document.querySe
 //});
 on('body', 'click', '.ajax', function(event) {
   event.preventDefault();
-  if (this.getAttribute("href") == window.location.pathname){
-    toast_info("Вы уже на этой странице");
-    return
-  };
+  //if (this.getAttribute("href") == window.location.pathname){
+  //  toast_info("Вы уже на этой странице");
+  //  return
+  //};
   ajax_get_reload(this.getAttribute("href"))
 });
 
