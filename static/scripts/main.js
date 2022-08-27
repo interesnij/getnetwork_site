@@ -553,8 +553,8 @@ on('body', 'click', '.select_child_serve', function(event) {
       parent.querySelector(".price").innerHTML = price;
       parent.querySelector(".hours").innerHTML = hours;
     }
-    parent.querySelector(".get_object_info").setAttribute("data-pk", serve_pk);
-    _this.querySelector(".get_object_info").setAttribute("data-pk", parent_id);
+    parent.querySelector(".get_object_info").setAttribute("data-pk", this_pk);
+    _this.querySelector(".get_object_info").setAttribute("data-pk", serve_pk);
   }
 
   _this.querySelector(".get_object_info").innerHTML = parent_title;
