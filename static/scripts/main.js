@@ -641,7 +641,7 @@ function service_tab_action(_this, tab_class) {
             if (!serve_list[i2].classList.contains("is_default") && serve_list[i2].classList.contains("hover")){
               serve_list[i2].classList.remove("hover");
               old_price += serve_list[i2].querySelector(".price").innerHTML*1;
-              
+
             }
         };
       };
@@ -654,11 +654,6 @@ function service_tab_action(_this, tab_class) {
     if (is_price_mode) {
     counter.innerHTML = counter.innerHTML*1 - old_price + new_price;
 
-    // после смены таба перезапишем список выбранных опций
-    new_serve_list = cur.querySelectorAll(".is_default");
-    for (var i = 0; i < new_serve_list.length; i++) {
-      serves_ids.push(new_serve_list[i].querySelector(".get_object_info").getAttribute("data-pk"))
-    };
     ///////
     };
   }
