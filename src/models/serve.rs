@@ -173,7 +173,7 @@ impl Serve {
         use crate::schema::serve::dsl::serve;
 
         let _connection = establish_connection();
-        _serves = serve
+        let _serves = serve
             .filter(schema::serve::serve_id.eq(self.id))
             .order(schema::serve::position.asc())
             .limit(1)
