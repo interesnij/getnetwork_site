@@ -532,7 +532,7 @@ on('body', 'click', '.select_child_serve', function(event) {
     _price = 0;
   }
   else {
-    _price = _price*1;
+    _price = price*1;
   }
   counter.innerHTML = counter.innerHTML*1 - _parent_price + _price;
 
