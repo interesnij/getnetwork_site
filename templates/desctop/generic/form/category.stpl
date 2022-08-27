@@ -31,13 +31,14 @@
             </tr>
           <% } %>
 
+          <span class="hidden">
           <% for child in serve.get_variables_exclude_id(first_child.id).iter() { %>
-            <tr class="select_child_serves hide pointer" style="font-size: 12px;" parent-pk="<%= serve.id %>">
+            <tr class="select_child_serves pointer" style="font-size: 12px;" parent-pk="<%= serve.id %>">
             <% include!("child.stpl"); %>
             <td class="action_text" style="width:12%">Выбрать</td>
           </tr>
           <% } %>
-
+          <span>
         <% } else { %>
           <% if serve.is_default { %>
             <tr class="is_default hover">
