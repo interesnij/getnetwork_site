@@ -32,11 +32,12 @@
             </tr>
           <% } %>
 
-          <% let childs = serve.get_variables_exclude_id(first_child.id); %
+          <% let childs = serve.get_variables_exclude_id(first_child.id); %>
+          <% let childs_count = childs.len(); %>
           <% for (i, child) in childs.iter().enumerate() { %>
             <tr class="select_child_serves hide pointer" style="font-size: 12px;" parent-pk="<%= serve.id %>">
             <% include!("child.stpl"); %>
-            <td class="action_text solid_right <% if i == 0 { %>solid_top<% } else if (i + 1) == childs.len() { %>solid_bottom<% } %>" style="width:12%">Выбрать</td>
+            <td class="action_text solid_right <% if i == 0 { %>solid_top<% } else if (i + 1) == childs_count { %>solid_bottom<% } %>" style="width:12%">Выбрать</td>
           </tr>
           <% } %>
           <tr></tr>
