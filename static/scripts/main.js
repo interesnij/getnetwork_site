@@ -515,8 +515,11 @@ on('body', 'click', '.select_child_serve', function(event) {
   parent = _this.parentElement.querySelector('[parent-pk=' + '"' + parent_id + '"' + ']');
 
   title = _this.querySelector(".get_object_info").innerHTML;
+  parent_title = parent.querySelector(".get_object_info").innerHTML;
   price = _this.querySelector(".price").innerHTML;
+  parent_price = parent.querySelector(".price").innerHTML;
   hours = _this.querySelector(".hours").innerHTML;
+  parent_hours = parent.querySelector(".hours").innerHTML;
 
   parent.querySelector(".get_object_info").innerHTML = title;
   if (_this.classList.contains("no_select_parent")) {
@@ -540,9 +543,13 @@ on('body', 'click', '.select_child_serve', function(event) {
 
       new_price = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1;
       new_price += price*1;
-      counter.innerHTML = counter.innerHTML*1 + price;
+      counter.innerHTML = counter.innerHTML*1 + new_price;
     }
   }
+
+  _this.querySelector(".get_object_info").innerHTML = parent_title;
+  _this.querySelector(".price").innerHTML = parent_price;
+  _this.querySelector(".hours").innerHTML = parent_hours;
 
   childs = _this.parentElement.querySelectorAll('[serve-pk=' + '"' + parent_id + '"' + ']');
   for (var i = 0; i < childs.length; i++) {
