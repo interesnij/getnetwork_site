@@ -158,6 +158,34 @@ impl Serve {
             .load::<Serve>(&_connection)
             .expect("E");
     }
+    pub fn get_variables_exclude_id(&self, id: i32) -> Vec<Serve> {
+        use crate::schema::serve::dsl::serve;
+
+        let _connection = establish_connection();
+        return serve
+            .filter(schema::serve::serve_id.eq(self.id))
+            .filter(schema::serve::id.ne(id))
+            .order(schema::serve::position)
+            .load::<Serve>(&_connection)
+            .expect("E");
+    }
+    pub fn get_first_variables(&self) -> Serve {
+        use crate::schema::serve::dsl::serve;
+
+        let _connection = establish_connection();
+        _serves = serve
+            .filter(schema::serve::serve_id.eq(self.id))
+            .order(schema::serve::position.asc())
+            .limit(1)
+            .load::<Serve>(&_connection)
+            .expect("E");
+        if _serves.len() > 0 {
+            return _serves.into_iter().nth(0).unwrap();
+        }
+        else {
+            return self;
+        }
+    }
     pub fn is_parent(&self) -> bool {
         use crate::schema::serve::dsl::serve;
 

@@ -13,7 +13,22 @@
       </tr>
       <% for serve in category.get_serves().iter() { %>
         <% if serve.is_parent() { %>
-          ff
+          <% if serve.is_default { %>
+            <tr class="is_default select_child_serves hover pointer">
+              <% include!("serve.stpl"); %>
+              <td class="action_text" style="width:15%">Выбрано</td>
+            </tr>
+          <% } else if object_serve_ids.iter().any(|i| i==&serve.id) { %>
+            <tr class="select_child_serves hover pointer">
+              <% include!("serve.stpl"); %>
+              <td class="action_text" style="width:12%">Выбрано</td>
+            </tr>
+          <% } else { %>
+            <tr class="select_child_serves pointer">
+              <% include!("serve.stpl"); %>
+              <td class="action_text" style="width:12%">Выбрать</td>
+            </tr>
+          <% } %>
         <% } else { %>
           <% if serve.is_default { %>
             <tr class="is_default hover">
