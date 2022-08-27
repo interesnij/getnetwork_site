@@ -11,10 +11,10 @@
           Цена
         </th>
         <th>
-          Часы работы
+          Часы
         </th>
         <th>
-          Выбрать
+
         </th>
       </tr>
       <% for serve in category.get_serves().iter() { %>
@@ -26,7 +26,7 @@
           </a>
         </td>
         <td class="price_td" style="width:15%"><span class="price"><%= serve.price %></span> ₽</td>
-        <td style="width:15%">Часы: <%= serve.man_hours %></td>
+        <td style="width:15%"><%= serve.man_hours %></td>
         <td class="action_text" style="width:15%">Выбрано</td>
       </tr>
       <% } else if object_serve_ids.iter().any(|i| i==&serve.id) { %>
@@ -37,7 +37,7 @@
           </a>
         </td>
         <td class="price_td" style="width:12%"><span class="price"><%= serve.price %></span> ₽</td>
-        <td style="width:12%">Часы: <%= serve.man_hours %></td>
+        <td style="width:12%"><%= serve.man_hours %></td>
         <td class="action_text" style="width:12%">Выбрано</td>
       </tr>
       <% } else { %>
@@ -48,7 +48,7 @@
           </a>
         </td>
         <td class="price_td" style="width:12%"><span class="price"><%= serve.price %></span> ₽</td>
-        <td style="width:12%">Часы: <%= serve.man_hours %></td>
+        <td style="width:12%"><%= serve.man_hours %></td>
         <td class="action_text" style="width:12%">Выбрать</td>
       </tr>
       <% } %>
