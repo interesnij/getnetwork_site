@@ -564,6 +564,8 @@ on('body', 'click', '.select_child_serve', function(event) {
       parent.querySelector(".hours").innerHTML = hours;
     }
     counter_serve_list.push(this_pk);
+    parent.querySelector(".get_object_info").setAttribute("serve-pk", this_pk);
+    _this.querySelector(".get_object_info").setAttribute("data-pk", parent_id);
   }
 
   _this.querySelector(".get_object_info").innerHTML = parent_title;
