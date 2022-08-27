@@ -4,4 +4,4 @@
   </a>
 </td>
 <td class="price_td <% if i == 0 { %>solid_top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>" style="width:15%"><span class="price"><%= child.price %></span> ₽</td>
-<td style="width:15%" class="<% if i == 0 { %>solid_top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>"><%= child.man_hours %></td>
+<td style="width:15%" class="hours <% if i == 0 { %>solid_top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>"><%= child.man_hours %></td>

@@ -9,16 +9,16 @@ a:hover {
   background: rgba(51,51,51, 1) !important;
 }
 .solid_left {
-  border-left: 2px solid rgba(255,255,255, 0.8);
+  border-left: 1px solid rgba(255,255,255, 0.8);
 }
 .solid_right {
-  border-right: 2px solid rgba(255,255,255, 0.8);
+  border-right: 1px solid rgba(255,255,255, 0.8);
 }
 .solid_bottom {
-  border-bottom: 2px solid rgba(255,255,255, 0.8);
+  border-bottom: 1px solid rgba(255,255,255, 0.8);
 }
 .solid_top {
-  border-top: 2px solid rgba(255,255,255, 0.8);
+  border-top: 1px solid rgba(255,255,255, 0.8);
 }
 .blog-post-prev-small{
     border-top: 1px dotted rgba(255,255,255, 0.8) !important;

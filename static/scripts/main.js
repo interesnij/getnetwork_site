@@ -486,11 +486,76 @@ function toast_warning(text) {
     toasts.showWarning(text)
 }
 
+on('body', 'click', '.open_child_serves', function(event) {
+  if (event.target.classList.contains("get_object_info")) {
+    return
+  };
+  parent_id = this.getAttribute("parent-pk");
+  childs = this.parentElement.querySelectorAll('[serve-pk=' + '"' + parent_id + '"' + ']');
+  for (var i = 0; i < childs.length; i++) {
+    childs[i].classList.toggle("hide");
+  }
+});
+
+on('body', 'click', '.select_child_serve', function(event) {
+  _this = this;
+  if (event.target.classList.contains("get_object_info")) {
+    return
+  };
+  counter = document.body.querySelector(".total_price_counter");
+  counter_serve_price = counter.getAttribute("data-serve")*1;
+  counter_serve_list = counter.parentElement
+    .getAttribute("data-servelist")
+    .replace('[', "")
+    .replace(']', "")
+    .split(',');
+
+  parent_id = _this.getAttribute("parent-pk");
+  this_pk = _this.querySelector(".get_object_info").getAttribute("data-pk");
+  parent = _this.parentElement.querySelector('[parent-pk=' + '"' + parent_id + '"' + ']');
+
+  title = _this.querySelector(".get_object_info").innerHTML;
+  price = _this.querySelector(".price").innerHTML;
+  hours = _this.querySelector(".hours").innerHTML;
+
+  parent.querySelector(".get_object_info").innerHTML = title;
+  if (_this.classList.contains("no_select_parent")) {
+    counter.innerHTML = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1;
+    index = counter_serve_list.indexOf(parent_id);
+    if (index > -1) {
+      counter_serve_list.splice(index, 1);
+    }
+    parent.querySelector(".price").innerHTML = "";
+    parent.querySelector(".hours").innerHTML = "";
+  }
+  else {
+    if (parent.classList.contains("no_select_parent")) {
+      parent.querySelector(".price").innerHTML = price;
+      parent.querySelector(".hours").innerHTML = hours;
+      counter.innerHTML = counter.innerHTML*1 + price*1;
+    }
+    else {
+      parent.querySelector(".price").innerHTML = price;
+      parent.querySelector(".hours").innerHTML = hours;
+
+      new_price = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1;
+      new_price += price*1;
+      counter.innerHTML = counter.innerHTML*1 + price;
+    }
+  }
+
+  childs = _this.parentElement.querySelectorAll('[serve-pk=' + '"' + parent_id + '"' + ']');
+  for (var i = 0; i < childs.length; i++) {
+    childs[i].classList.toggle("hide");
+  }
+});
+
 on('body', 'click', '.select_serve', function(event) {
   _this = this;
   if (event.target.classList.contains("get_object_info")) {
     return
   };
+
   counter = document.body.querySelector(".total_price_counter");
   counter_serve_price = counter.getAttribute("data-serve")*1;
   counter_serve_list = counter.parentElement
@@ -833,15 +898,4 @@ on('body', 'click', '#signup', function() {
 
 on('body', 'click', '.show_next_element', function() {
   this.nextElementSibling.classList.toggle("hidden")
-});
-
-on('body', 'click', '.open_child_serves', function(event) {
-  if (event.target.classList.contains("get_object_info")) {
-    return
-  };
-  parent_id = this.getAttribute("serve-pk");
-  childs = this.parentElement.querySelectorAll('[parent-pk=' + '"' + parent_id + '"' + ']');
-  for (var i = 0; i < childs.length; i++) {
-    childs[i].classList.toggle("hide");
-  }
 });

@@ -1,7 +1,7 @@
 <td style="width:55%">
-  <a class="get_object_info pointer" data-pk="<%= first_child.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
+  <a class="get_object_info pointer" parent-pk="<%= serve.id %>" data-pk="<%= first_child.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
     <%= serve.name %> → <%= first_child.name %>
   </a>
 </td>
 <td class="price_td" style="width:15%"><span class="price"><%= first_child.price %></span> ₽</td>
-<td style="width:15%"><%= first_child.man_hours %></td>
+<td class="hours" style="width:15%"><%= first_child.man_hours %></td>

@@ -4,4 +4,4 @@
   </a>
 </td>
 <td class="price_td" style="width:15%"><span class="price"><%= serve.price %></span> ₽</td>
-<td style="width:15%"><%= serve.man_hours %></td>
+<td class="hours" style="width:15%"><%= serve.man_hours %></td>
