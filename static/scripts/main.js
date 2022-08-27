@@ -835,7 +835,10 @@ on('body', 'click', '.show_next_element', function() {
   this.nextElementSibling.classList.toggle("hidden")
 });
 
-on('body', 'click', '.open_child_serves', function() {
+on('body', 'click', '.open_child_serves', function(event) {
+  if (event.target.classList.contains("get_object_info")) {
+    return
+  };
   parent_id = this.getAttribute("serve-pk");
   childs = this.parentElement.querySelectorAll('[parent-pk=' + '"' + parent_id + '"' + ']');
   for (var i = 0; i < childs.length; i++) {
