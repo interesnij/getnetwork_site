@@ -21,6 +21,7 @@
               <% include!("first_child.stpl"); %>
               <td class="action_text" style="width:15%">Выбрано</td>
             </tr>
+
           <% } else if object_serve_ids.iter().any(|i| i==&first_child.id) { %>
             <tr class="open_child_serves hover pointer" serve-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
@@ -42,16 +43,7 @@
 
           <% let childs = serve.get_variables_exclude_id(first_child.id); %>
           <% let childs_count = childs.len(); %>
-          <tr class="open_child_serves no_select_parent pointer" parent-pk="<%= serve.id %>">
-            <td style="width:55%">
-              <a class="get_object_info pointer" data-pk="" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
-                <%= serve.name %> → Не выбрано
-              </a>
-            </td>
-            <td class="price_td" style="width:15%"><span class="price"></span> ₽</td>
-            <td style="width:15%" class="hours"></td>
-            <td class="action_text" style="width:12%">Выбрать</td>
-          </tr>
+
           <% for (i, child) in childs.iter().enumerate() { %>
             <tr class="select_child_serve hide pointer" style="font-size: 12px;" serve-pk="<%= serve.id %>">
               <% include!("child.stpl"); %>
