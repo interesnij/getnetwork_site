@@ -507,14 +507,6 @@ on('body', 'click', '.select_child_serve', function(event) {
   categories = document.body.querySelector(".price_mode");
   category = categories.querySelector('[data-pk=' + '"' + category_id + '"' + ']');
 
-  counter_serve_price = counter.getAttribute("data-serve")*1;
-  counter_serve_list = counter.parentElement
-    .getAttribute("data-servelist")
-    .replace('[', "")
-    .replace(']', "")
-    .split(',');
-
-
   parent_id = _this.getAttribute("serve-pk");
   this_pk = _this.querySelector(".get_object_info").getAttribute("data-pk");
   parent = _this.parentElement.querySelector('[parent-pk=' + '"' + parent_id + '"' + ']');
@@ -544,16 +536,6 @@ on('body', 'click', '.select_child_serve', function(event) {
   counter.innerHTML = counter.innerHTML*1 - _parent_price + _price;
 
   parent.querySelector(".get_object_info").innerHTML = title;
-  console.log("parent_id", parent_id);
-  parent_id_exists = counter_serve_list.indexOf(parent_id);
-  serve_id_exists = counter_serve_list.indexOf(this_pk);
-  if (parent_id_exists > -1) {
-    counter_serve_list.splice(parent_id_exists, 1);
-  }
-  if (serve_id_exists > -1) {
-    counter_serve_list.splice(serve_id_exists, 1);
-  }
-  console.log("counter_serve_list", counter_serve_list);
 
   if (_this.classList.contains("no_select_parent")) {
     counter.innerHTML = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1;
@@ -569,7 +551,6 @@ on('body', 'click', '.select_child_serve', function(event) {
       parent.querySelector(".price").innerHTML = price;
       parent.querySelector(".hours").innerHTML = hours;
     }
-    counter_serve_list.push(this_pk);
     parent.querySelector(".get_object_info").setAttribute("serve-pk", this_pk);
     _this.querySelector(".get_object_info").setAttribute("data-pk", parent_id);
   }
@@ -582,7 +563,6 @@ on('body', 'click', '.select_child_serve', function(event) {
   for (var i = 0; i < childs.length; i++) {
     childs[i].classList.toggle("hide");
   }
-  counter.parentElement.setAttribute("data-servelist", counter_serve_list)
 });
 
 on('body', 'click', '.select_serve', function(event) {
@@ -592,12 +572,6 @@ on('body', 'click', '.select_serve', function(event) {
   };
 
   counter = document.body.querySelector(".total_price_counter");
-  counter_serve_price = counter.getAttribute("data-serve")*1;
-  counter_serve_list = counter.parentElement
-    .getAttribute("data-servelist")
-    .replace('[', "")
-    .replace(']', "")
-    .split(',');
   serve_pk = _this.querySelector(".get_object_info").getAttribute("data-pk");
 
   // для начала мы уберем выбранные опции во вкладках
@@ -615,16 +589,11 @@ on('body', 'click', '.select_serve', function(event) {
             serve_list[i2].classList.remove("hover");
             _serve_price = serve_list[i2].querySelector(".price").innerHTML*1
             counter.innerHTML = counter.innerHTML*1 - _serve_price;
-            index = counter_serve_list.indexOf(serve_pk);
-            if (index > -1) {
-              counter_serve_list.splice(index, 1);
-            }
           }
       };
     };
   };
 
-  counter.parentElement.setAttribute("data-servelist", counter_serve_list)
   // найдем цену опции и сделаем цену числом
   serve_price = _this.querySelector(".price").innerHTML*1
 
@@ -633,8 +602,6 @@ on('body', 'click', '.select_serve', function(event) {
     counter.innerHTML = counter.innerHTML*1 + serve_price;
     _this.classList.add("hover");
     _this.querySelector(".action_text").innerHTML = 'Выбрано';
-    counter_serve_list.push(serve_pk);
-    counter.parentElement.setAttribute("data-servelist", counter_serve_list)
   }
   else {
     // если опция выбрана, надо снять выделение и счетчик уменьшить на сумму опции.
@@ -642,11 +609,6 @@ on('body', 'click', '.select_serve', function(event) {
     counter.innerHTML = counter.innerHTML*1 - serve_price;
     _this.classList.remove("hover");
     _this.querySelector(".action_text").innerHTML = 'Выбрать';
-    var index = counter_serve_list.indexOf(serve_pk);
-    if (index > -1) {
-      counter_serve_list.splice(index, 1);
-      counter.parentElement.setAttribute("data-servelist", counter_serve_list)
-    }
   }
 });
 
