@@ -259,7 +259,6 @@ pub struct ServeItems {
     pub service_id: i32,
     pub store_id:   i32,
     pub work_id:    i32,
-    pub work_id:    i32,
     pub orders_id:  Option<i32>,
 }
 #[derive(Insertable)]
