@@ -8,6 +8,10 @@
 .hs-line-14 {
   text-shadow: 0px 5px 3px rgb(0 0 0 / 30%);
 }
+.tpl-minimal-tabs li.active a,
+.tpl-minimal-tabs li.active a:hover {
+    border: 1px solid #222 !important;
+}
 .mobile_icon span {
   color: rgb(0, 0, 0, 0.8) !important;
 }

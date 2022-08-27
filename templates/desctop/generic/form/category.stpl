@@ -12,7 +12,7 @@
       <tr class="is_default hover">
         <td style="width:55%">
           <a class="get_object_info pointer" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
-            <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
+            <%= serve.name %>
           </a>
         </td>
         <td class="price_td" style="width:15%"><span class="price"><%= serve.price %></span> ₽</td>
@@ -23,7 +23,7 @@
       <tr class="select_serve hover pointer">
         <td style="width:52%">
           <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
-            <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
+            <%= serve.name %>
           </a>
         </td>
         <td class="price_td" style="width:12%"><span class="price"><%= serve.price %></span> ₽</td>
@@ -34,7 +34,7 @@
       <tr class="select_serve pointer">
         <td style="width:52%">
           <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
-            <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
+            <%= serve.name %>
           </a>
         </td>
         <td class="price_td" style="width:12%"><span class="price"><%= serve.price %></span> ₽</td>
