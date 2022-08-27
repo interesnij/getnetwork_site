@@ -169,7 +169,7 @@ impl Serve {
             .load::<Serve>(&_connection)
             .expect("E");
     }
-    pub fn get_first_variables(&self) -> &Serve {
+    pub fn get_first_variables(&self) -> Serve {
         use crate::schema::serve::dsl::serve;
 
         let _connection = establish_connection();
@@ -183,7 +183,13 @@ impl Serve {
             return _serves.into_iter().nth(0).unwrap();
         }
         else {
-            return self;
+            return serve
+                .limit(1)
+                .load::<Serve>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
         }
     }
     pub fn is_parent(&self) -> bool {
