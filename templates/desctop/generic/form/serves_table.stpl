@@ -4,9 +4,9 @@
   <% let s_cats = t_category.get_serve_categories(); %>
 
 <section class="banner_block mb-20 mt-20 border" style="width:100%;box-shadow: none !important;">
-    <h3 class="section-title font-alt">
+    <h4 class="section-title font-alt">
         <%= t_category.name %>
-    </h3>
+    </h4>
     <div class="">
         <div class="align-center">
             <ul class="nav nav-tabs tpl-minimal-tabs price_mode">
