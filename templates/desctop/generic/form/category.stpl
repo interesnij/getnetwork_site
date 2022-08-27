@@ -15,24 +15,24 @@
         <% if serve.is_parent() { %>
           <% let first_child = serve.get_first_variable(); %>
           <% if first_child.is_default { %>
-            <tr class="is_default open_child_serves hover pointer">
+            <tr class="is_default open_child_serves hover pointer" parent-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
               <td class="action_text" style="width:15%">Выбрано</td>
             </tr>
           <% } else if object_serve_ids.iter().any(|i| i==&first_child.id) { %>
-            <tr class="open_child_serves hover pointer">
+            <tr class="open_child_serves hover pointer" parent-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
               <td class="action_text" style="width:12%">Выбрано</td>
             </tr>
           <% } else { %>
-            <tr class="open_child_serves pointer">
+            <tr class="open_child_serves pointer" parent-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
               <td class="action_text" style="width:12%">Выбрать</td>
             </tr>
           <% } %>
 
           <% for child in serve.get_variables_exclude_id(first_child.id).iter() { %>
-            <tr class="select_child_serves hide pointer">
+            <tr class="select_child_serves hide pointer" style="font-size: 12px;" parent-pk="<%= serve.id %>">
             <% include!("child.stpl"); %>
             <td class="action_text" style="width:12%">Выбрать</td>
           </tr>

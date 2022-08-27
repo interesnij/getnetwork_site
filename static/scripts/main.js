@@ -834,3 +834,11 @@ on('body', 'click', '#signup', function() {
 on('body', 'click', '.show_next_element', function() {
   this.nextElementSibling.classList.toggle("hidden")
 });
+
+on('body', 'click', '.open_child_serves', function() {
+  parent_id = this.getAttribute("parent-pk");
+  childs = this.parentElement.querySelectorAll('[parent-pk=' + '"' + parent_id + '"' + ']');
+  for (var i = 0; i < childs.length; i++) {
+    childs[i].classList.toggle("hide");
+  }
+});
