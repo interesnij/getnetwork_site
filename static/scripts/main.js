@@ -538,7 +538,7 @@ on('body', 'click', '.select_child_serve', function(event) {
   else {
     _price = price*1;
   }
-  old_price = category_price.getAttribute("data-sum");
+  old_price = category.getAttribute("data-sum");
   category.setAttribute("data-sum", old_price - _parent_price + _price);
 
   counter.innerHTML = counter.innerHTML*1 - _parent_price + _price;
