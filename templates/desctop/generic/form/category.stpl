@@ -12,7 +12,7 @@
         <th></th>
       </tr>
       <% for serve in category.get_serves().iter() { %>
-        <% if serve.is_parent { %>
+        <% if serve.is_parent() { %>
           ff
         <% } else { %>
           <% if serve.is_default { %>
