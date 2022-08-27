@@ -574,6 +574,7 @@ on('body', 'click', '.select_child_serve', function(event) {
   for (var i = 0; i < childs.length; i++) {
     childs[i].classList.toggle("hide");
   }
+  counter.parentElement.setAttribute("data-servelist", counter_serve_list)
 });
 
 on('body', 'click', '.select_serve', function(event) {
