@@ -504,8 +504,8 @@ on('body', 'click', '.select_child_serve', function(event) {
   };
   counter = document.body.querySelector(".total_price_counter");
   category_id = _this.parentElement.parentElement.parentElement.getAttribute("data-pk");
-  categories = document.body.querySelector(".price_mode")
-  category = categories.querySelector("'[data-pk=' + '"' + category_id + '"' + ']'");
+  categories = document.body.querySelector(".price_mode");
+  category = categories.querySelector('[data-pk=' + '"' + category_id + '"' + ']');
 
   counter_serve_price = counter.getAttribute("data-serve")*1;
   counter_serve_list = counter.parentElement
