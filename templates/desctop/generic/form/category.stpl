@@ -37,7 +37,7 @@
             <td class="action_text" style="width:12%">Выбрать</td>
           </tr>
           <% } %>
-
+          <tr></tr>
         <% } else { %>
           <% if serve.is_default { %>
             <tr class="is_default hover">
