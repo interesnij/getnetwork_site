@@ -180,7 +180,7 @@ impl Serve {
             .load::<Serve>(&_connection)
             .expect("E");
         if _serves.len() > 0 {
-            return &_serves.into_iter().nth(0).unwrap();
+            return _serves.into_iter().nth(0).unwrap();
         }
         else {
             return self;
