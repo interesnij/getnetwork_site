@@ -543,7 +543,7 @@ on('body', 'click', '.select_child_serve', function(event) {
 
       new_price = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1;
       new_price += price*1;
-      counter.innerHTML = counter.innerHTML*1 + new_price;
+      counter.innerHTML = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1 + _this.querySelector(".price").innerHTML*1;
     }
   }
 
