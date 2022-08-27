@@ -45,7 +45,7 @@
           <% let childs_count = childs.len(); %>
 
           <% for (i, child) in childs.iter().enumerate() { %>
-            <tr class="select_child_serve hide pointer" style="font-size: 12px;" serve-pk="<%= serve.id %>">
+            <tr class="select_child_serve hide pointer" style="font-size: 12px;<% if (i + 1) == childs_count { %>padding-bottom: 30px;<% } %>" serve-pk="<%= serve.id %>">
               <% include!("child.stpl"); %>
               <td class="action_text solid_right <% if i == 0 { %>solid_top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>" style="width:12%">Выбрать</td>
             </tr>
