@@ -561,7 +561,9 @@ on('body', 'click', '.select_child_serve', function(event) {
 
   childs = _this.parentElement.querySelectorAll('[serve-pk=' + '"' + parent_id + '"' + ']');
   for (var i = 0; i < childs.length; i++) {
-    childs[i].classList.toggle("hide");
+    if (childs[i].classList.contains("select_child_serve")) {
+      childs[i].classList.toggle("hide");
+    }
   }
 });
 
