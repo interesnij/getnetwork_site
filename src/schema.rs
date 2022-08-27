@@ -163,6 +163,7 @@ table! {
         service_id -> Int4,
         store_id -> Int4,
         work_id -> Int4,
+        orders_id -> Nullable<Int4>,
     }
 }
 
