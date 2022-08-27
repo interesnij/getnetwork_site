@@ -60,7 +60,7 @@ body{
     background: #f2f2f2 !important;
 }
 
-.window_fullscreen, .card_fullscreen {
+.window_fullscreen, .card_fullscreen, .hover {
   color: rgba(0,0,0, 0.9) !important;
   background-color: #e6e3df !important;
 }

@@ -63,7 +63,7 @@ body{
     background-size: unset !important;
 }
 
-.window_fullscreen, .card_fullscreen {
+.window_fullscreen, .card_fullscreen, .hover {
   color: rgba(255,255,255, 0.8) !important;
   background: rgba(0,0,0, 0.9) !important;
 }

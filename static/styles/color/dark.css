@@ -85,7 +85,7 @@ body{
     background-color: rgba(0,0,0, 0.8) !important;
     background: rgba(0,0,0, 0.8) !important;
 }
-.window_fullscreen, .card_fullscreen {
+.window_fullscreen, .card_fullscreen, .hover {
   color: rgba(255,255,255, 0.8) !important;
   background-color: #2f4f4f !important
 }
