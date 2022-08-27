@@ -270,9 +270,10 @@ CREATE TABLE serve (
 CREATE TABLE serve_items (
     id         SERIAL PRIMARY KEY,
     serve_id   INT NOT NULL,
-    service_id INT NOT NULL, -- нужно для списка id опций в счетчик выбранных опций. Поместим туда опции тех категорий по умолчанию, активных
+    service_id INT NOT NULL,
     store_id   INT NOT NULL,
-    work_id    INT NOT NULL
+    work_id    INT NOT NULL,
+    orders_id  INT, 
 );
 
 -- это те tech_categories, которые привязываются к объеткам.
