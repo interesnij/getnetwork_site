@@ -545,11 +545,15 @@ on('body', 'click', '.select_child_serve', function(event) {
 
   parent.querySelector(".get_object_info").innerHTML = title;
   console.log("parent_id", parent_id);
-  index = counter_serve_list.indexOf(parent_id);
-  if (index > -1) {
-    console.log("parent_id exists");
-    counter_serve_list.splice(index, 1);
+  parent_id_exists = counter_serve_list.indexOf(parent_id);
+  serve_id_exists = counter_serve_list.indexOf(this_pk);
+  if (parent_id_exists > -1) {
+    counter_serve_list.splice(parent_id_exists, 1);
   }
+  if (serve_id_exists > -1) {
+    counter_serve_list.splice(serve_id_exists, 1);
+  }
+  console.log("counter_serve_list", counter_serve_list);
 
   if (_this.classList.contains("no_select_parent")) {
     counter.innerHTML = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1;
