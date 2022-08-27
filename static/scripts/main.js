@@ -503,6 +503,8 @@ on('body', 'click', '.select_child_serve', function(event) {
     return
   };
   counter = document.body.querySelector(".total_price_counter");
+  category_price = _this.parentElement.parentElement.parentElement;
+
   counter_serve_price = counter.getAttribute("data-serve")*1;
   counter_serve_list = counter.parentElement
     .getAttribute("data-servelist")
@@ -534,6 +536,9 @@ on('body', 'click', '.select_child_serve', function(event) {
   else {
     _price = price*1;
   }
+  old_price = category_price.getAttribute("data-sum");
+  category_price.setAttribute("data-sum", old_price - _parent_price + _price);
+
   counter.innerHTML = counter.innerHTML*1 - _parent_price + _price;
 
   parent.querySelector(".get_object_info").innerHTML = title;
