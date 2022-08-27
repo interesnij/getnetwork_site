@@ -13,9 +13,10 @@
       </tr>
 
       <% for serve in category.get_serves().iter() { %>
+
         <% if serve.is_parent() { %>
           <% let first_child = serve.get_first_variable(); %>
-          <% if first_child.is_default { %>
+          <% if serve.is_default { %>
             <tr class="is_default open_child_serves hover pointer" serve-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
               <td class="action_text" style="width:15%">Выбрано</td>
@@ -27,7 +28,13 @@
             </tr>
           <% } else { %>
             <tr class="open_child_serves pointer" serve-pk="<%= serve.id %>">
-              <% include!("first_child.stpl"); %>
+              <td style="width:55%">
+                <a class="get_object_info pointer" data-pk="<%= first_child.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
+                  <%= serve.name %> → Выбрать вариант
+                </a>
+              </td>
+              <td class="price_td" style="width:15%"><span class="price"><%= first_child.price %></span> ₽</td>
+              <td style="width:15%"><%= first_child.man_hours %></td>
               <td class="action_text" style="width:12%">Выбрать</td>
             </tr>
           <% } %>
@@ -41,6 +48,7 @@
           </tr>
           <% } %>
           <tr></tr>
+
         <% } else { %>
           <% if serve.is_default { %>
             <tr class="is_default hover">
