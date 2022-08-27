@@ -169,7 +169,7 @@ impl Serve {
             .load::<Serve>(&_connection)
             .expect("E");
     }
-    pub fn get_first_variables(&self) -> Serve {
+    pub fn get_first_variable(&self) -> Serve {
         use crate::schema::serve::dsl::serve;
 
         let _connection = establish_connection();
