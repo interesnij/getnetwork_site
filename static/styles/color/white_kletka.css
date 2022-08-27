@@ -7,6 +7,12 @@
 	background-size: 20px 20px;
 	background-position: center center;
 }
+.dashed_left {
+  border-left: 2px dashed #222;
+}
+.dashed_right {
+  border-right: 2px dashed #222;
+}
 .tpl-minimal-tabs li.active a,
 .tpl-minimal-tabs li.active a:hover {
     border: 1px solid #222 !important;
