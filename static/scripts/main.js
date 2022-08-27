@@ -622,8 +622,6 @@ function service_tab_action(_this, tab_class) {
     if (is_price_mode) {
       old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
       new_price = _this.getAttribute("data-sum")*1;
-      serves_ids = counter.parentElement.getAttribute("data-servelist").slice(-1).split(",");
-      console.log(serves_ids);
     };
     nav = _this.parentElement.parentElement.parentElement;
     nav_items = nav.querySelectorAll(".yy");
@@ -664,7 +662,6 @@ function service_tab_action(_this, tab_class) {
     for (var i = 0; i < new_serve_list.length; i++) {
       serves_ids.push(new_serve_list[i].querySelector(".get_object_info").getAttribute("data-pk"))
     };
-    counter.parentElement.setAttribute("data-servelist", serves_ids);
     ///////
     };
   }
