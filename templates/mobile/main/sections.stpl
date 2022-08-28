@@ -5,7 +5,8 @@
         </h5>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
             <li class="border yy s_1 active">
-                <a>Услуги</a>
+              <span class="icon-newspaper"></span>
+              <a>Услуги</a>
             </li>
             <li class="border yy s_2 pointer">
                 <a>Работы</a>
@@ -80,7 +81,6 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          <span class="icon-attachment"></span>
                           <a href="/work_categories/" class="ajax" style="text-decoration: underline;"><p>Портфолио</p></a>
                         </blockquote>
                         <p>
@@ -103,7 +103,6 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          <span class="icon-attachment"></span>
                           <a href="/blog_categories/" class="ajax" style="text-decoration: underline;"><p>Блог</p></a>
                         </blockquote>
                         <p>
@@ -125,7 +124,6 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          <span class="icon-attachment"></span>
                           <a href="/wiki_categories/" class="ajax" style="text-decoration: underline;"><p>Обучалка</p></a>
                         </blockquote>
                         <p>
@@ -186,7 +184,6 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          <span class="icon-attachment"></span>
                           <a href="" class="ajax" style="text-decoration: underline;"><p>Профиль</p></a>
                         </blockquote>
                         <p>

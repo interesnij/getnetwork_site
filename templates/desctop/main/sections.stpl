@@ -80,7 +80,6 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          <span class="icon-attachment"></span>
                           <a href="/work_categories/" class="ajax" style="text-decoration: underline;"><p>Портфолио</p></a>
                         </blockquote>
                         <p>
@@ -103,7 +102,6 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          <span class="icon-attachment"></span>
                           <a href="/blog_categories/" class="ajax" style="text-decoration: underline;"><p>Блог</p></a>
                         </blockquote>
                         <p>
@@ -125,7 +123,6 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          <span class="icon-attachment"></span>
                           <a href="/wiki_categories/" class="ajax" style="text-decoration: underline;"><p>Обучалка</p></a>
                         </blockquote>
                         <p>
@@ -186,7 +183,6 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          <span class="icon-attachment"></span>
                           <a href="" class="ajax" style="text-decoration: underline;"><p>Профиль</p></a>
                         </blockquote>
                         <p>
