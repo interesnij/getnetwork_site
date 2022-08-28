@@ -14,20 +14,20 @@
     <div class="container relative">
       <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
         <li class="border yy s_1 active">
-          <span class="mob_icon_2 alt-tabs-icon"></span>
-          <a>О нас</a>
+          <span class="mob_icon_2 heart"></span>
+          <span>О нас</span>
         </li>
         <li class="border yy s_2 pointer">
           <span class="mob_icon_2 icon-envelope"></span>
-          <a>Контакты</a>
+          <span>Контакты</span>
         </li>
         <li class="border yy s_3 pointer">
           <span class="mob_icon_2 icon-happy"></span>
-          <a>О сайте</a>
+          <span>О сайте</span>
         </li>
         <li class="border yy s_4 pointer">
           <span class="mob_icon_2 icon-lifesaver"></span>
-          <a>Помощь</a>
+          <span>Помощь</span>
         </li>
       </ul>
 
