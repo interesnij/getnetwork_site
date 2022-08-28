@@ -6,6 +6,11 @@
 .my_ul li {
   margin-bottom:5px
 }
+.mob_icon_2 {
+  font-size: 20px;
+  padding-top: 5px;
+  vertical-align: sub;
+}
 .footer a {
     text-decoration: none;
     -webkit-transition: all 0.27s cubic-bezier(0.300, 0.100, 0.580, 1.000);

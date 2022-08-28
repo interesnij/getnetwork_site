@@ -12,20 +12,24 @@
 
 <section class="page-section">
     <div class="container relative">
-      <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
-        <li class="border yy s_1 active">
-          <a>О нас</a>
-        </li>
-        <li class="border yy s_2 pointer">
-          <a>Контакты</a>
-        </li>
-        <li class="border yy s_3 pointer">
-          <a>О сайте</a>
-        </li>
-        <li class="border yy s_4 pointer">
-          <a>Помощь</a>
-        </li>
-      </ul>
+    <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
+      <li class="border yy s_1 active">
+        <span class="mob_icon_2 alt-tabs-icon"></span>
+        <a>О нас</a>
+      </li>
+      <li class="border yy s_2 pointer">
+        <span class="mob_icon_2 icon-envelope"></span>
+        <a>Контакты</a>
+      </li>
+      <li class="border yy s_3 pointer">
+        <span class="mob_icon_2 icon-happy"></span>
+        <a>О сайте</a>
+      </li>
+      <li class="border yy s_4 pointer">
+        <span class="mob_icon_2 icon-lifesaver"></span>
+        <a>Помощь</a>
+      </li>
+    </ul>
 
         <div class="tab-content tpl-tabs-cont">
             <div class="tab_1 fade tab-pane in active">
