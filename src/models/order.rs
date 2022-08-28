@@ -77,7 +77,7 @@ pub struct NewOrderFile {
 
 impl NewOrderFile {
     pub fn create (order_id: i32, src: String) -> Self {
-        NewServiceImage {
+        NewOrderFile {
             order_id: order_id,
             src:      src,
         }
