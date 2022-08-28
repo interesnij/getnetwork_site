@@ -4,22 +4,24 @@
   <% let s_cats = t_category.get_serve_categories(); %>
 
 <section class="banner_block mb-20 mt-20 border" style="width:100%;box-shadow: none !important;">
-    <h3 class="section-title font-alt">
+    <h4 class="section-title font-alt">
         <%= t_category.name %>
-    </h3>
+    </h4>
     <div class="">
         <div class="align-center">
             <ul class="nav nav-tabs tpl-minimal-tabs price_mode">
               <% for (i, cat) in s_cats.iter().enumerate() { %>
+
                 <% if i == 0 { %>
-                  <li data-sum="<%= cat.default_price %>" class="yy s_<%= i + 1 %> active">
-                    <a class="pointer"><%= cat.name %></a>
+                  <li data-pk="<%= cat.id %>" data-sum="<%= cat.default_price %>" class="yy s_<%= i + 1 %> active">
+                      <a class="pointer"><%= cat.name %></a>
                   </li>
                 <% } else { %>
-                  <li data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i + 1 %>">
+                  <li data-pk="<%= cat.id %>" data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i + 1 %>">
                     <a class="pointer"><%= cat.name %></a>
                   </li>
                 <% } %>
+
               <% } %>
             </ul>
         </div>

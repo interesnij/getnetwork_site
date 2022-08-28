@@ -1,47 +1,75 @@
-<div data-sum="<%= category.default_price %>" class="tab_<%= i + 1 %> fade tab-pane <% if i == 0 { %>in active<% } %>">
+<div data-pk="<%= category.id %>" data-sum="<%= category.default_price %>" class="tab_<%= i + 1 %> fade tab-pane <% if i == 0 { %>in active<% } %>">
   <table class="table">
-    <h5>
-      <span data-pk="<%= category.id %>" data-type="serve_category" owner-pk="<%= object.id %>" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up">
-        <%= t_category.name %> на <%= category.name %>
-      </span>
-    </h5>
     <tbody>
+      <tr>
+        <th class="hidden-xs">
+          <span data-pk="<%= category.id %>" data-type="serve_category" owner-pk="<%= object.id %>" owner-type="service" class="pointer get_object_info " tooltip="Справка" flow="up">
+            <%= t_category.name %> на <%= category.name %>
+          </span>
+        </th>
+        <th>Цена</th>
+        <th>Часы</th>
+        <th></th>
+      </tr>
 
       <% for serve in category.get_serves().iter() { %>
-      <% if serve.is_default { %>
-      <tr class="is_default hover">
-        <td style="width:55%">
-          <a class="get_object_info pointer" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
-            <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
-          </a>
-        </td>
-        <td class="price_td" style="width:15%"><span class="price"><%= serve.price %></span> ₽</td>
-        <td style="width:15%">Часы: <%= serve.man_hours %></td>
-        <td class="action_text" style="width:15%">Выбрано</td>
-      </tr>
-      <% } else if object_serve_ids.iter().any(|i| i==&serve.id) { %>
-      <tr class="select_serve hover pointer">
-        <td style="width:52%">
-          <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
-            <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
-          </a>
-        </td>
-        <td class="price_td" style="width:12%"><span class="price"><%= serve.price %></span> ₽</td>
-        <td style="width:12%">Часы: <%= serve.man_hours %></td>
-        <td class="action_text" style="width:12%">Выбрано</td>
-      </tr>
-      <% } else { %>
-      <tr class="select_serve pointer">
-        <td style="width:52%">
-          <a class="pointer underline get_object_info" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
-            <%= serve.cat_name %> => <%= serve.name %> (<%= serve.id %>)
-          </a>
-        </td>
-        <td class="price_td" style="width:12%"><span class="price"><%= serve.price %></span> ₽</td>
-        <td style="width:12%">Часы: <%= serve.man_hours %></td>
-        <td class="action_text" style="width:12%">Выбрать</td>
-      </tr>
-      <% } %>
+
+        <% if serve.is_parent() { %>
+          <% let first_child = serve.get_first_variable(); %>
+          <% if serve.is_default { %>
+            <tr class="is_default open_child_serves hover pointer" parent-pk="<%= serve.id %>">
+              <% include!("first_child.stpl"); %>
+              <td class="action_text" style="width:15%">Выбрано</td>
+            </tr>
+
+          <% } else if object_serve_ids.iter().any(|i| i==&first_child.id) { %>
+            <tr class="open_child_serves hover pointer" parent-pk="<%= serve.id %>">
+              <% include!("first_child.stpl"); %>
+              <td class="action_text" style="width:12%">Выбрано</td>
+            </tr>
+
+          <% } else { %>
+            <tr class="open_child_serves no_select_parent pointer" parent-pk="<%= serve.id %>">
+              <td style="width:55%">
+                <a class="get_object_info pointer" owner-pk="<%= object.id %>">
+                  <%= serve.name %> → Не выбрано
+                </a>
+              </td>
+              <td class="price_td" style="width:15%"><span class="price"></span> ₽</td>
+              <td style="width:15%"></td>
+              <td class="action_text" style="width:12%">Выбрать</td>
+            </tr>
+          <% } %>
+
+          <% let childs = serve.get_variables_exclude_id(first_child.id); %>
+          <% let childs_count = childs.len(); %>
+
+          <% for (i, child) in childs.iter().enumerate() { %>
+            <tr class="select_child_serve hide pointer" style="font-size: 12px;<% if (i + 1) == childs_count { %>padding-bottom: 30px;<% } %>" serve-pk="<%= serve.id %>">
+              <% include!("child.stpl"); %>
+              <td class="action_text solid_right <% if i == 0 { %>solid_top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>" style="width:12%">Выбрать</td>
+            </tr>
+          <% } %>
+          <tr></tr>
+
+        <% } else { %>
+          <% if serve.is_default { %>
+            <tr class="is_default hover">
+              <% include!("serve.stpl"); %>
+              <td class="action_text" style="width:15%">Выбрано</td>
+            </tr>
+          <% } else if object_serve_ids.iter().any(|i| i==&serve.id) { %>
+            <tr class="select_serve hover pointer">
+              <% include!("serve.stpl"); %>
+              <td class="action_text" style="width:12%">Выбрано</td>
+            </tr>
+          <% } else { %>
+            <tr class="select_serve pointer">
+              <% include!("serve.stpl"); %>
+              <td class="action_text" style="width:12%">Выбрать</td>
+            </tr>
+          <% } %>
+        <% } %>
       <% } %>
     </tbody>
   </table>
