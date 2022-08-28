@@ -1,4 +1,4 @@
-<section class="border card_fullscreen" style="position: fixed;z-index:1000;top: 10px;width: 100%;">
+<section class="border card_fullscreen" style="position: fixed;z-index:1000;bottom: 50px;width: 100%;">
 <h5 data-sum="<%= object.price %>"
     data-pk="<%= object.id %>"
     class="create_order_form_of_service" style="cursor:pointer;text-align: center;">
