@@ -27,7 +27,7 @@
                 </a>
               </h5>
               <div class="row multi-columns-row">
-                <% for (i, object) in services_list.iter().enumerate() { %>
+                <% for object in services_list.iter() { %>
                   <% include!("../generic/default_service.stpl"); %>
                 <% } %>
               </div>
