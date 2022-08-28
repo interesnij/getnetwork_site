@@ -7,6 +7,7 @@ mod store;
 mod user;
 mod feedback;
 mod tag;
+mod order;
 
 pub use self::{
     blog::*,
@@ -18,10 +19,5 @@ pub use self::{
     feedback::*,
     store::*,
     tag::*,
-    //blog::{BlogCategories,BlogCategory},
-    //work::{WorkCategories,WorkCategory},
-    //service::{ServiceCategories,ServiceCategory},
-    //serve::ServeCategories,
-    //wiki::{WikiCategories,WikiCategory},
-    //store::{StoreCategories,StoreCategory},
+    order::*,
 };
