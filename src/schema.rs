@@ -137,6 +137,7 @@ table! {
         email -> Varchar,
         description -> Nullable<Varchar>,
         created -> Timestamp,
+        user_id -> Int4,
     }
 }
 
