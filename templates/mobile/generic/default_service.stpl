@@ -1,53 +1,15 @@
-<% if i % 2 == 0 { %>
-<section class="page-section">
-  <div class="container relative">
-    <div class="row">
-        <div class="col-md-7 mb-sm-40">
-          <div class="mt-0 white-shadow" style="visibility: visible; animation-name: fadeIn;">
-            <div class="progressive replace" data-href="<%= object.get_image() %>">
-              <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
-            </div>
-          </div>
-        </div>
-        <div class="col-md-5 col-lg-4 col-lg-offset-1">
-            <div class="text">
-              <h3 class="font-alt mb-30 mb-xxs-10"><%= object.title %></h3>
-              <p>
-                <%= object.get_100_description() %>
-              </p>
-              <div class="mt-40">
-                <a class="btn btn-medium btn-mod border btn-round ajax" href="/service/1/<%= object.id %>/">
-                  Подробнее
-                </a>
-              </div>
-            </div>
-        </div>
+<div class="blog-post-prev-small clearfix">
+    <a class="ajax" href="/service/1/<%= object.id %>/">
+        <img src="<%= object.get_image() %>" alt="img" class="image_fit_100 widget-posts-img">
+    </a>
+    <div class="widget-posts-descr">
+        <a class="ajax" href="/service/1/<%= object.id %>/">
+          <%= object.title %>
+        </a>
+        <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+        <p>Цена: <%= object.price %></p>
+        <% if object.price_acc.is_some() { %>
+          <p>Со скидкой: <%= object.price_acc.unwrap() %></p>
+        <% } %>
     </div>
-  </div>
-</section>
-<% } else { %>
-<section class="page-section">
-  <div class="container relative">
-    <div class="row">
-      <div class="col-md-5 col-lg-4 col-lg-offset-1">
-          <div class="text">
-            <h3 class="font-alt mb-30 mb-xxs-10"><%= object.title %></h3>
-            <p>
-              <%= object.get_100_description() %>
-            </p>
-            <div class="mt-40">
-              <a class="btn btn-medium btn-mod border btn-round ajax" href="/service/1/<%= object.id %>/">
-                Подробнее
-              </a>
-            </div>
-          </div>
-      </div>
-        <div class="col-md-7 mb-sm-40">
-            <div class="mt-0 white-shadow" style="visibility: visible; animation-name: fadeIn;">
-                <img class="image_fit_300" src="<%= object.get_image() %>" alt="img">
-            </div>
-        </div>
-    </div>
-  </div>
-</section>
-<% } %>
+</div>

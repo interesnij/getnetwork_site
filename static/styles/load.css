@@ -252,6 +252,7 @@ dl dd {
   .yy {
     width: 45% !important;
     margin-bottom: 9px !important;
+    padding: 5px !important;
   }
 }
 .highlight pre{
