@@ -5,27 +5,21 @@
         </h5>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
             <li class="border yy s_1 active">
-              <span class="mob_icon_2 icon-lightbulb"></span>
               <span>Услуги</span>
             </li>
             <li class="border yy s_2 pointer">
-              <span class="mob_icon_2 icon-briefcase"></span>
               <span>Работы</span>
             </li>
             <li class="border yy s_3 pointer">
-              <span class="mob_icon_2 icon-newspaper"></span>
               <span>Блог</span>
             </li>
             <li class="border yy s_4 pointer">
-              <span class="mob_icon_2 icon-book-open"></span>
               <span>Обучалка</span>
             </li>
             <li class="border yy s_5 pointer">
-              <span class="mob_icon_2 icon-documents"></span>
               <span>Страницы</span>
             </li>
             <li class="border yy s_6 pointer">
-              <span class="mob_icon_2 icon-profile-male"></span>
               <span>Профиль</span>
             </li>
         </ul>
