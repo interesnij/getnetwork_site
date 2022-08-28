@@ -120,6 +120,27 @@ table! {
 }
 
 table! {
+    order_files (id) {
+        id -> Int4,
+        order_id -> Int4,
+        src -> Varchar,
+    }
+}
+
+table! {
+    orders (id) {
+        id -> Int4,
+        title -> Varchar,
+        types -> Int2,
+        object_id -> Int4,
+        username -> Varchar,
+        email -> Varchar,
+        description -> Nullable<Varchar>,
+        created -> Timestamp,
+    }
+}
+
+table! {
     serve (id) {
         id -> Int4,
         name -> Varchar,
@@ -554,6 +575,7 @@ joinable!(blog_images -> blogs (blog));
 joinable!(blog_videos -> blogs (blog));
 joinable!(blogs -> users (user_id));
 joinable!(cookie_stats -> cookie_users (user_id));
+joinable!(order_files -> orders (order_id));
 joinable!(serve -> serve_categories (serve_categories));
 joinable!(serve -> users (user_id));
 joinable!(serve_categories -> tech_categories (tech_categories));
@@ -591,6 +613,8 @@ allow_tables_to_appear_in_same_query!(
     feedbacks,
     help_item_categories,
     help_items,
+    order_files,
+    orders,
     serve,
     serve_categories,
     serve_items,
