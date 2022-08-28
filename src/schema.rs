@@ -440,6 +440,7 @@ table! {
         store_id -> Int4,
         work_id -> Int4,
         types -> Int2,
+        orders_id -> Nullable<Int4>,
     }
 }
 
