@@ -33,7 +33,7 @@
                     <div class="row">
                         <div class="mb-sm-50">
                           <blockquote style="margin-bottom: 10px">
-                            О нас
+                            <p>О нас</p>
                           </blockquote>
                           <p>
 
@@ -48,7 +48,7 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          Контакты
+                          <p>Контакты</p>
                         </blockquote>
                         <p>
 
@@ -63,7 +63,7 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          О сайте
+                          <p>О сайте</p>
                         </blockquote>
                         <p>
 
@@ -78,7 +78,7 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          Помощь
+                          <p>Помощь</p>
                         </blockquote>
                         <p>
                         <strong>Раздел</strong> посвящён краткому описанию <strong>наших услуг и опций</strong>
