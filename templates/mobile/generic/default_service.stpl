@@ -7,9 +7,9 @@
           <%= object.title %>
         </a>
         <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-        <p>Цена: <%= object.price %></p>
+        <p>Цена: от <%= object.price %> ₽</p>
         <% if object.price_acc.is_some() { %>
-          <p>Со скидкой: <%= object.price_acc.unwrap() %></p>
+          <p>Со скидкой: от <%= object.price_acc.unwrap() %> ₽</p>
         <% } %>
     </div>
 </div>
