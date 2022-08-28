@@ -49,9 +49,9 @@
             <a href="/services/<%= category.id %>/<%= _prev.id %>/" class="border ajax blog-item-more right"><%= _prev.title %>&nbsp;&nbsp;⇢</a>
             <% } %>
         </div>
-        <% include!("../generic/form/btn_block.stpl"); %>
-</section>
 
+</section>
+<% include!("../generic/form/btn_block.stpl"); %>
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
