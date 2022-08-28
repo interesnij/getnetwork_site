@@ -81,7 +81,7 @@
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
                           <span class="icon-attachment"></span>
-                          <a href="/work_categories/" class="ajax" style="text-decoration: underline;">Портфолио</a>
+                          <a href="/work_categories/" class="ajax" style="text-decoration: underline;"><p>Портфолио</p></a>
                         </blockquote>
                         <p>
                           В этом разделе мы будем размещать собственные, заказанные, совместные сайты.<br><br>
@@ -104,7 +104,7 @@
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
                           <span class="icon-attachment"></span>
-                          <a href="/blog_categories/" class="ajax" style="text-decoration: underline;">Блог</a>
+                          <a href="/blog_categories/" class="ajax" style="text-decoration: underline;"><p>Блог</p></a>
                         </blockquote>
                         <p>
                           Любой уважающей себя и свой престиж фирме следует давать сведения о разных сторонах своего существования.<br><br>
@@ -126,7 +126,7 @@
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
                           <span class="icon-attachment"></span>
-                          <a href="/wiki_categories/" class="ajax" style="text-decoration: underline;">Обучалка</a>
+                          <a href="/wiki_categories/" class="ajax" style="text-decoration: underline;"><p>Обучалка</p></a>
                         </blockquote>
                         <p>
                           Далеко не все могут позволить себе заказать соцсеть у профессионалов. Нельзя лишать людей шансов
@@ -187,7 +187,7 @@
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
                           <span class="icon-attachment"></span>
-                          <a href="" class="ajax" style="text-decoration: underline;">Профиль</a>
+                          <a href="" class="ajax" style="text-decoration: underline;"><p>Профиль</p></a>
                         </blockquote>
                         <p>
                           Этот <strong>раздел предназначен для пользователя</strong> и содержит разные уровни допуска к информации

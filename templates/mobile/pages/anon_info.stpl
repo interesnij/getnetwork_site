@@ -13,18 +13,18 @@
 <section class="page-section">
     <div class="container relative">
       <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
-      <li class="border yy s_1 active">
-        <a>О нас</a>
-      </li>
-      <li class="border yy s_2 pointer">
-        <a>Контакты</a>
-      </li>
-      <li class="border yy s_3 pointer">
-        <a>О сайте</a>
-      </li>
-      <li class="border yy s_4 pointer">
-        <a>Помощь</a>
-      </li>
+        <li class="border yy s_1 active">
+          <a>О нас</a>
+        </li>
+        <li class="border yy s_2 pointer">
+          <a>Контакты</a>
+        </li>
+        <li class="border yy s_3 pointer">
+          <a>О сайте</a>
+        </li>
+        <li class="border yy s_4 pointer">
+          <a>Помощь</a>
+        </li>
       </ul>
 
         <div class="tab-content tpl-tabs-cont">
@@ -33,7 +33,7 @@
                     <div class="row">
                         <div class="mb-sm-50">
                           <blockquote style="margin-bottom: 10px">
-                            О нас
+                            <p>О нас</p>
                           </blockquote>
                           <p>
 
@@ -48,7 +48,7 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          Контакты
+                          <p>Контакты</p>
                         </blockquote>
                         <p>
 
@@ -63,7 +63,7 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          О сайте
+                          <p>О сайте</p>
                         </blockquote>
                         <p>
 
@@ -78,7 +78,7 @@
                     <div class="row">
                       <div class="mb-sm-50">
                         <blockquote style="margin-bottom: 10px">
-                          Помощь
+                          <p>Помощь</p>
                         </blockquote>
                         <p>
                         <strong>Раздел</strong> посвящён краткому описанию <strong>наших услуг и опций</strong>
