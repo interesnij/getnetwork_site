@@ -178,7 +178,7 @@ function scrolled(_block) {
       };
       if ($window_time_end) {
         console.log("перезапускаем счетчик окна");
-        get_window_view_time(120);
+        get_window_view_timer(120);
         $window_time_end = false;
       };
 
