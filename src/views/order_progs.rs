@@ -113,7 +113,56 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
     }
 }
 
-pub async fn get_user_orders_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn get_cookie_user_id(req: &HttpRequest) -> i32 {
+    let mut user_id = 0;
+    for header in req.headers().into_iter() {
+        if header.0 == "cookie" {
+            let str_cookie = header.1.to_str().unwrap();
+            let _cookie: Vec<&str> = str_cookie.split(";").collect();
+            for c in _cookie.iter() {
+                let split_c: Vec<&str> = c.split("=").collect();
+                if split_c[0] == "user" {
+                    user_id = split_c[1];
+                }
+                println!("name {:?}", split_c[0].trim());
+                println!("value {:?}", split_c[1]);
+            }
+        }
+    };
+    user_id
+}
+pub async fn get_or_create_cookie_user_id(req: &HttpRequest) -> i32 {
+    let mut user_id = 0;
+    for header in req.headers().into_iter() {
+        if header.0 == "cookie" {
+            let str_cookie = header.1.to_str().unwrap();
+            let _cookie: Vec<&str> = str_cookie.split(";").collect();
+            for c in _cookie.iter() {
+                let split_c: Vec<&str> = c.split("=").collect();
+                if split_c[0] == "user" {
+                    user_id = split_c[1];
+                }
+                println!("name {:?}", split_c[0].trim());
+                println!("value {:?}", split_c[1]);
+            }
+        }
+    };
+    if user_id == 0 {
+        use crate::views::create_c_user;
+
+        let user = create_c_user(p_id, &req).await;
+        user_id = user.id;
+    }
+    else {
+        use crate::views::get_c_user;
+
+        let user = get_c_user(p_id, &req).await;
+        user_id = user.id;
+    }
+    user_id
+}
+
+pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use crate::utils::{get_device_and_ajax, get_page};
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -121,10 +170,12 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest, _id: web::
         get_first_load_page(&session, is_desctop, "Ваши заказы".to_string()).await
     }
     else {
-        let _user_id: i32 = _id;
-        let (_orders, next_page_number) = Order::get_user_orders_list(_user_id, get_page(&req), 20);
-
-        if is_signed_in(&session) {
+        let user_id = get_cookie_user_id(&req).await;
+        let (_orders, next_page_number) = Order::get_user_orders_list(user_id, get_page(&req), 20);
+        if user_id == 0 {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Информация о заказчике не найдена"))
+        }
+        else if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -228,6 +279,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
     let _order_id: i32 = _id;
+    let user_id = get_cookie_user_id(&req).await;
 
     let _orders = orders
         .filter(schema::orders::id.eq(&_order_id))
@@ -236,6 +288,9 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
     let _order = _orders.into_iter().nth(0).unwrap();
     if is_ajax == 0 {
         get_first_load_page(&session, is_desctop, "Заказ ".to_string() + &_order.title).await
+    }
+    else if user_id == 0 {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Информация о заказчике не найдена"))
     }
     else {
         use schema::order_files::dsl::order_files;
@@ -359,33 +414,8 @@ pub async fn create_order_page(req: HttpRequest) -> actix_web::Result<HttpRespon
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Важные параметры для заказа отсутствуют..."))
     }
     else {
-        let mut user_id = 0;
-        for header in req.headers().into_iter() {
-            if header.0 == "cookie" {
-                let str_cookie = header.1.to_str().unwrap();
-                let _cookie: Vec<&str> = str_cookie.split(";").collect();
-                for c in _cookie.iter() {
-                    let split_c: Vec<&str> = c.split("=").collect();
-                    if split_c[0] == "user" {
-                        user_id = split_c[1];
-                    }
-                    println!("name {:?}", split_c[0].trim());
-                    println!("value {:?}", split_c[1]);
-                }
-            }
-        };
-        if user_id == 0 {
-            use crate::views::create_c_user;
+        let user_id = get_or_create_cookie_user_id(&req).await;
 
-            let user = create_c_user(p_id, &req).await;
-            user_id = user.id;
-        }
-        else {
-            use crate::views::get_c_user;
-
-            let user = get_c_user(p_id, &req).await;
-            user_id = user.id;
-        }
         if _type == 1 {
             use schema::services::dsl::services;
             use crate::models::Service;
@@ -478,7 +508,6 @@ pub async fn create_order_page(req: HttpRequest) -> actix_web::Result<HttpRespon
     }
 }
 
-
 pub async fn edit_order_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use schema::orders::dsl::orders;
 
@@ -493,21 +522,7 @@ pub async fn edit_order_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
         .nth(0)
         .unwrap();
 
-    let mut user_id = 0;
-    for header in req.headers().into_iter() {
-        if header.0 == "cookie" {
-            let str_cookie = header.1.to_str().unwrap();
-            let _cookie: Vec<&str> = str_cookie.split(";").collect();
-            for c in _cookie.iter() {
-                let split_c: Vec<&str> = c.split("=").collect();
-                if split_c[0] == "user" {
-                    user_id = split_c[1];
-                }
-                println!("name {:?}", split_c[0].trim());
-                println!("value {:?}", split_c[1]);
-            }
-        }
-    };
+    let user_id = get_cookie_user_id(&req).await;
 
     if user_id == _order.user_id {
         use schema::{
@@ -645,4 +660,302 @@ pub async fn edit_order_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
     else {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
     }
+}
+
+pub async fn create_order(session: Session, mut payload: Multipart) -> impl Responder {
+    use crate::schema::serve::dsl::serve;
+    use crate::models::{
+        TechCategoriesItem,
+        NewTechCategoriesItem,
+        Serve,
+        ServeItems,
+        NewServeItems,
+    };
+    use crate::utils::{
+        order_form,
+        get_price_acc_values,
+    };
+
+    let _connection = establish_connection();
+    let user_id = get_or_create_cookie_user_id(&req).await;
+
+    let form = order_form(payload.borrow_mut(), user_id).await;
+    let new_order = NewOrder::create (
+        form.title.clone(),
+        form.types,
+        form.object_id,
+        form.username.clone(),
+        form.description.clone(),
+        form.email.clone(),
+        user_id,
+    );
+
+    let _order = diesel::insert_into(schema::orders::table)
+        .values(&new_order)
+        .get_result::<Order>(&_connection)
+        .expect("E.");
+
+    for file in form.files.iter() {
+        let new_file = NewOrderFile::create (
+            _order.id,
+            file.to_string()
+        );
+        diesel::insert_into(schema::order_files::table)
+            .values(&new_file)
+            .get_result::<OrderFile>(&_connection)
+            .expect("E.");
+    };
+
+    // создаем связь с тех категориями, которые будут
+    // расширять списки опций, предлагая доп возможности и услуги
+    for cat_id in form.close_tech_cats_list.iter() {
+        let new_cat = NewTechCategoriesItem {
+            category_id: *cat_id,
+            service_id:  0,
+            store_id:    0,
+            work_id:     0,
+            types:       2,
+            orders_id:   Some(_order.id),
+        };
+        diesel::insert_into(schema::tech_categories_items::table)
+            .values(&new_cat)
+            .get_result::<TechCategoriesItem>(&_connection)
+            .expect("Error.");
+    }
+
+    // создаем опции услуги и записываем id опций в вектор.
+    let mut serve_ids = Vec::new();
+    for serve_id in form.serve_list.iter() {
+        let new_serve_form = NewServeItems {
+            serve_id:   *serve_id,
+            service_id: 0,
+            store_id:   0,
+            work_id:    0,
+            orders_id:  Some(_order.id),
+        };
+        diesel::insert_into(schema::serve_items::table)
+            .values(&new_serve_form)
+            .get_result::<ServeItems>(&_connection)
+            .expect("Error.");
+        serve_ids.push(*serve_id);
+    }
+
+    // получаем опции, чтобы создать связи с их тех. категорией.
+    // это надо отрисовки тех категорий услуги, которые активны
+    let _serves = serve
+        .filter(schema::serve::id.eq_any(serve_ids))
+        .load::<Serve>(&_connection)
+        .expect("E");
+
+    let mut tech_cat_ids = Vec::new();
+    let mut order_price = 0;
+    for _serve in _serves.iter() {
+        if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
+            tech_cat_ids.push(_serve.tech_cat_id);
+        }
+        order_price += _serve.price;
+    }
+
+    for id in tech_cat_ids.iter() {
+        let new_cat = NewTechCategoriesItem {
+            category_id: *id,
+            service_id:  0,
+            store_id:    0,
+            work_id:     0,
+            types:       1,
+            orders_id:   Some(_order.id),
+        };
+        diesel::insert_into(schema::tech_categories_items::table)
+            .values(&new_cat)
+            .get_result::<TechCategoriesItem>(&_connection)
+            .expect("Error.");
+    }
+
+    // фух. Связи созданы все, но надо еще посчитать цену
+    // услуги для калькулятора. Как? А  это будет сумма всех
+    // цен выбранных опций.
+    let price_acc = get_price_acc_values(&order_price);
+    diesel::update(&_order)
+        .set((
+            schema::orders::price.eq(order_price),
+            schema::orders::price_acc.eq(price_acc),
+        ))
+        .get_result::<Order>(&_connection)
+        .expect("Error.");
+    }
+    HttpResponse::Ok()
+}
+
+
+pub async fn edit_service(req: HttpRequest, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+    use schema::orders::dsl::orders;
+
+    let _order_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _orders = orders
+        .filter(schema::orders::id.eq(&_order_id))
+        .load::<Order>(&_connection)
+        .expect("E");
+    let _order = _orders
+        .into_iter()
+        .nth(0)
+        .unwrap();
+
+    let user_id = get_cookie_user_id(&req).await;
+
+    if user_id == _order.user_id {
+        use crate::schema::{
+            serve::dsl::serve,
+            order_files::dsl::order_files,
+            serve_items::dsl::serve_items,
+            tech_categories_items::dsl::tech_categories_items,
+        };
+        use crate::models::{
+            TechCategoriesItem,
+            NewTechCategoriesItem,
+            Serve,
+            ServeItems,
+            NewServeItems,
+            EditOrder,
+        };
+        use crate::utils::{
+            order_form,
+            get_price_acc_values,
+        };
+
+        diesel::delete(order_files.filter(schema::order_files::order_id.eq(_order_id))).execute(&_connection).expect("E");
+        diesel::delete(serve_items.filter(schema::serve_items::order_id.eq(_order_id))).execute(&_connection).expect("E");
+        diesel::delete(tech_categories_items.filter(schema::tech_categories_items::order_id.eq(_order_id))).execute(&_connection).expect("E");
+
+        let form = order_form(payload.borrow_mut(), user_id).await;
+        let _new_order = EditOrder {
+            username:    form.username.clone(),
+            email:       form.email.clone(),
+            description: form.description.clone(),
+        };
+
+        diesel::update(&_order)
+        .set(_new_order)
+        .get_result::<Order>(&_connection)
+        .expect("E");
+
+        for _file in form.files.iter() {
+            let new_edit_file = NewOrderFile::create (
+                _order_id,
+                _file.to_string()
+            );
+            diesel::insert_into(schema::order_files::table)
+                .values(&new_edit_file)
+                .get_result::<OrderFile>(&_connection)
+                .expect("E.");
+        };
+
+        // создаем связь с тех категориями, которые будут
+        // расширять списки опций, предлагая доп возможности и услуги
+        for cat_id in form.close_tech_cats_list.iter() {
+            let new_cat = NewTechCategoriesItem {
+                category_id: *cat_id,
+                service_id:  0,
+                store_id:    0,
+                work_id:     0,
+                types:       2,
+                orders_id:   Some(_order_id),
+            };
+            diesel::insert_into(schema::tech_categories_items::table)
+                .values(&new_cat)
+                .get_result::<TechCategoriesItem>(&_connection)
+                .expect("Error.");
+        }
+
+        // создаем опции услуги и записываем id опций в вектор.
+        let mut serve_ids = Vec::new();
+        for serve_id in form.serve_list.iter() {
+            let new_serve_form = NewServeItems {
+                serve_id:   *serve_id,
+                service_id: 0,
+                store_id:   0,
+                work_id:    0,
+                orders_id: Some(_order_id)
+            };
+            diesel::insert_into(schema::serve_items::table)
+                .values(&new_serve_form)
+                .get_result::<ServeItems>(&_connection)
+                .expect("Error.");
+            serve_ids.push(*serve_id);
+        }
+
+        // получаем опции, чтобы создать связи с их тех. категорией.
+        // это надо отрисовки тех категорий услуги, которые активны
+        let _serves = serve
+            .filter(schema::serve::id.eq_any(serve_ids))
+            .load::<Serve>(&_connection)
+            .expect("E");
+
+        let mut tech_cat_ids = Vec::new();
+        let mut order_price = 0;
+        for _serve in _serves.iter() {
+            if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
+                tech_cat_ids.push(_serve.tech_cat_id);
+            }
+            order_price += _serve.price;
+        }
+
+        for id in tech_cat_ids.iter() {
+            let new_cat = NewTechCategoriesItem {
+                category_id: *id,
+                service_id:  0,
+                store_id:    0,
+                work_id:     0,
+                types:       1,
+                orders_id:   Some(_order_id),
+            };
+            diesel::insert_into(schema::tech_categories_items::table)
+                .values(&new_cat)
+                .get_result::<TechCategoriesItem>(&_connection)
+                .expect("Error.");
+        }
+
+        // фух. Связи созданы все, но надо еще посчитать цену
+        // услуги для калькулятора, а также скидку. Как? А  это будет сумма всех
+        // цен выбранных опций.
+        let price_acc = get_price_acc_values(&order_price);
+        diesel::update(&_order)
+            .set((
+                schema::orders::price.eq(order_price),
+                schema::orders::price_acc.eq(price_acc),
+            ))
+            .get_result::<Order>(&_connection)
+            .expect("Error.");
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn delete_order(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
+    use schema::orders::dsl::orders;
+
+    let _order_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _orders = orders
+        .filter(schema::orders::id.eq(&_order_id))
+        .load::<Order>(&_connection)
+        .expect("E");
+    let _order = _orders
+        .into_iter()
+        .nth(0)
+        .unwrap();
+
+    let user_id = get_cookie_user_id(&req).await;
+
+    if user_id == _order.user_id {
+        use crate::schema::{
+            order_files::dsl::order_files,
+            serve_items::dsl::serve_items,
+            tech_categories_items::dsl::tech_categories_items,
+        };
+
+        diesel::delete(order_files.filter(schema::order_files::order_id.eq(_order_id))).execute(&_connection).expect("E");
+        diesel::delete(serve_items.filter(schema::serve_items::order_id.eq(_order_id))).execute(&_connection).expect("E");
+        diesel::delete(tech_categories_items.filter(schema::tech_categories_items::order_id.eq(_order_id))).execute(&_connection).expect("E");
+    }
+    HttpResponse::Ok()
 }

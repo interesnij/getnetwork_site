@@ -214,6 +214,14 @@ impl NewOrder {
         }
     }
 }
+#[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
+#[table_name="orders"]
+pub struct EditOrder {
+    pub username:    String,
+    pub email:       String,
+    pub description: Option<String>,
+}
+
 
 #[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[belongs_to(Order, foreign_key="order_id")]
