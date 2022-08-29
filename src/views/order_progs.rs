@@ -252,7 +252,6 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                 let body = Template {
                     title:            "Ваши заказы".to_string(),
                     object_list:      _orders,
-                    files:            _files,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
                 }
@@ -388,8 +387,8 @@ pub async fn create_order_page(req: HttpRequest) -> actix_web::Result<HttpRespon
         pub types:     Option<i16>,
     }
     let params_some = web::Query::<OrderParams>::from_query(&req.query_string());
-    let object_id;
-    let _type;
+    let mut object_id = 0;
+    let mut _type = 0;
     if params_some.is_ok() {
         let params = params_some.unwrap();
         if params.object_id.is_some() {
@@ -783,7 +782,7 @@ pub async fn create_order(req: HttpRequest, mut payload: Multipart) -> impl Resp
     HttpResponse::Ok()
 }
 
-pub async fn edit_service(req: HttpRequest, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+pub async fn edit_order(req: HttpRequest, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use schema::orders::dsl::orders;
 
     let _order_id: i32 = *_id;
