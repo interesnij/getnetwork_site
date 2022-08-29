@@ -679,113 +679,113 @@ pub async fn create_order(session: Session, mut payload: Multipart) -> impl Resp
     let _connection = establish_connection();
     let user_id = get_or_create_cookie_user_id(&req).await;
 
-    let form = order_form(payload.borrow_mut(), user_id).await;
-    let new_order = NewOrder::create (
-        form.title.clone(),
-        form.types,
-        form.object_id,
-        form.username.clone(),
-        form.description.clone(),
-        form.email.clone(),
-        user_id,
-    );
-
-    let _order = diesel::insert_into(schema::orders::table)
-        .values(&new_order)
-        .get_result::<Order>(&_connection)
-        .expect("E.");
-
-    for file in form.files.iter() {
-        let new_file = NewOrderFile::create (
-            _order.id,
-            file.to_string()
+    if user_id == _order.user_id {
+        let form = order_form(payload.borrow_mut(), user_id).await;
+        let new_order = NewOrder::create (
+            form.title.clone(),
+            form.types,
+            form.object_id,
+            form.username.clone(),
+            form.description.clone(),
+            form.email.clone(),
+            user_id,
         );
-        diesel::insert_into(schema::order_files::table)
-            .values(&new_file)
-            .get_result::<OrderFile>(&_connection)
+
+        let _order = diesel::insert_into(schema::orders::table)
+            .values(&new_order)
+            .get_result::<Order>(&_connection)
             .expect("E.");
-    };
 
-    // создаем связь с тех категориями, которые будут
-    // расширять списки опций, предлагая доп возможности и услуги
-    for cat_id in form.close_tech_cats_list.iter() {
-        let new_cat = NewTechCategoriesItem {
-            category_id: *cat_id,
-            service_id:  0,
-            store_id:    0,
-            work_id:     0,
-            types:       2,
-            orders_id:   Some(_order.id),
+        for file in form.files.iter() {
+            let new_file = NewOrderFile::create (
+                _order.id,
+                file.to_string()
+            );
+            diesel::insert_into(schema::order_files::table)
+                .values(&new_file)
+                .get_result::<OrderFile>(&_connection)
+                .expect("E.");
         };
-        diesel::insert_into(schema::tech_categories_items::table)
-            .values(&new_cat)
-            .get_result::<TechCategoriesItem>(&_connection)
-            .expect("Error.");
-    }
 
-    // создаем опции услуги и записываем id опций в вектор.
-    let mut serve_ids = Vec::new();
-    for serve_id in form.serve_list.iter() {
-        let new_serve_form = NewServeItems {
-            serve_id:   *serve_id,
-            service_id: 0,
-            store_id:   0,
-            work_id:    0,
-            orders_id:  Some(_order.id),
-        };
-        diesel::insert_into(schema::serve_items::table)
-            .values(&new_serve_form)
-            .get_result::<ServeItems>(&_connection)
-            .expect("Error.");
-        serve_ids.push(*serve_id);
-    }
-
-    // получаем опции, чтобы создать связи с их тех. категорией.
-    // это надо отрисовки тех категорий услуги, которые активны
-    let _serves = serve
-        .filter(schema::serve::id.eq_any(serve_ids))
-        .load::<Serve>(&_connection)
-        .expect("E");
-
-    let mut tech_cat_ids = Vec::new();
-    let mut order_price = 0;
-    for _serve in _serves.iter() {
-        if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
-            tech_cat_ids.push(_serve.tech_cat_id);
+        // создаем связь с тех категориями, которые будут
+        // расширять списки опций, предлагая доп возможности и услуги
+        for cat_id in form.close_tech_cats_list.iter() {
+            let new_cat = NewTechCategoriesItem {
+                category_id: *cat_id,
+                service_id:  0,
+                store_id:    0,
+                work_id:     0,
+                types:       2,
+                orders_id:   Some(_order.id),
+            };
+            diesel::insert_into(schema::tech_categories_items::table)
+                .values(&new_cat)
+                .get_result::<TechCategoriesItem>(&_connection)
+                .expect("Error.");
         }
-        order_price += _serve.price;
-    }
 
-    for id in tech_cat_ids.iter() {
-        let new_cat = NewTechCategoriesItem {
-            category_id: *id,
-            service_id:  0,
-            store_id:    0,
-            work_id:     0,
-            types:       1,
-            orders_id:   Some(_order.id),
-        };
-        diesel::insert_into(schema::tech_categories_items::table)
-            .values(&new_cat)
-            .get_result::<TechCategoriesItem>(&_connection)
+        // создаем опции услуги и записываем id опций в вектор.
+        let mut serve_ids = Vec::new();
+        for serve_id in form.serve_list.iter() {
+            let new_serve_form = NewServeItems {
+                serve_id:   *serve_id,
+                service_id: 0,
+                store_id:   0,
+                work_id:    0,
+                orders_id:  Some(_order.id),
+            };
+            diesel::insert_into(schema::serve_items::table)
+                .values(&new_serve_form)
+                .get_result::<ServeItems>(&_connection)
+                .expect("Error.");
+            serve_ids.push(*serve_id);
+        }
+
+        // получаем опции, чтобы создать связи с их тех. категорией.
+        // это надо отрисовки тех категорий услуги, которые активны
+        let _serves = serve
+            .filter(schema::serve::id.eq_any(serve_ids))
+            .load::<Serve>(&_connection)
+            .expect("E");
+
+        let mut tech_cat_ids = Vec::new();
+        let mut order_price = 0;
+        for _serve in _serves.iter() {
+            if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
+                tech_cat_ids.push(_serve.tech_cat_id);
+            }
+            order_price += _serve.price;
+        }
+
+        for id in tech_cat_ids.iter() {
+            let new_cat = NewTechCategoriesItem {
+                category_id: *id,
+                service_id:  0,
+                store_id:    0,
+                work_id:     0,
+                types:       1,
+                orders_id:   Some(_order.id),
+            };
+            diesel::insert_into(schema::tech_categories_items::table)
+                .values(&new_cat)
+                .get_result::<TechCategoriesItem>(&_connection)
+                .expect("Error.");
+        }
+
+        // фух. Связи созданы все, но надо еще посчитать цену
+        // услуги для калькулятора. Как? А  это будет сумма всех
+        // цен выбранных опций.
+        let price_acc = get_price_acc_values(&order_price);
+        diesel::update(&_order)
+            .set((
+                schema::orders::price.eq(order_price),
+                schema::orders::price_acc.eq(price_acc),
+            ))
+            .get_result::<Order>(&_connection)
             .expect("Error.");
-    }
-
-    // фух. Связи созданы все, но надо еще посчитать цену
-    // услуги для калькулятора. Как? А  это будет сумма всех
-    // цен выбранных опций.
-    let price_acc = get_price_acc_values(&order_price);
-    diesel::update(&_order)
-        .set((
-            schema::orders::price.eq(order_price),
-            schema::orders::price_acc.eq(price_acc),
-        ))
-        .get_result::<Order>(&_connection)
-        .expect("Error.");
     }
     HttpResponse::Ok()
 }
-
 
 pub async fn edit_service(req: HttpRequest, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use schema::orders::dsl::orders;
