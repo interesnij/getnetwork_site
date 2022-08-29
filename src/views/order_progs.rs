@@ -395,6 +395,8 @@ pub async fn create_order_page(req: HttpRequest) -> actix_web::Result<HttpRespon
         pub types:     Option<i16>,
     }
     let params_some = web::Query::<OrderParams>::from_query(&req.query_string());
+    let object_id;
+    let _type;
     if params_some.is_ok() {
         let params = params_some.unwrap();
         if params.object_id.is_some() {
@@ -553,7 +555,7 @@ pub async fn edit_order_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
             use schema::services::dsl::services;
             use crate::models::Service;
             let _services = services
-                .filter(schema::services::id.eq(object_id))
+                .filter(schema::services::id.eq(_order.object_id))
                 .load::<Service>(&_connection)
                 .expect("E");
             let _service = _services
@@ -588,7 +590,7 @@ pub async fn edit_order_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
             use schema::stores::dsl::stores;
             use crate::models::Store;
             let _stores = stores
-                .filter(schema::stores::id.eq(object_id))
+                .filter(schema::stores::id.eq(_order.object_id))
                 .load::<Store>(&_connection)
                 .expect("E");
             let _store = _stores
@@ -623,7 +625,7 @@ pub async fn edit_order_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
             use schema::works::dsl::works;
             use crate::models::Work;
             let _works = works
-                .filter(schema::works::id.eq(object_id))
+                .filter(schema::works::id.eq(_order.object_id))
                 .load::<Work>(&_connection)
                 .expect("E");
             let _work = _works
@@ -662,7 +664,7 @@ pub async fn edit_order_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web
     }
 }
 
-pub async fn create_order(session: Session, mut payload: Multipart) -> impl Responder {
+pub async fn create_order(req: HttpRequest, mut payload: Multipart) -> impl Responder {
     use crate::schema::serve::dsl::serve;
     use crate::models::{
         TechCategoriesItem,
@@ -679,7 +681,7 @@ pub async fn create_order(session: Session, mut payload: Multipart) -> impl Resp
     let _connection = establish_connection();
     let user_id = get_or_create_cookie_user_id(&req).await;
 
-    if user_id == _order.user_id {
+    if user_id != 0 {
         let form = order_form(payload.borrow_mut(), user_id).await;
         let new_order = NewOrder::create (
             form.title.clone(),
