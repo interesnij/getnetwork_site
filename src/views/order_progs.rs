@@ -150,13 +150,13 @@ pub async fn get_or_create_cookie_user_id(req: &HttpRequest) -> i32 {
     if user_id == 0 {
         use crate::views::create_c_user;
 
-        let user = create_c_user(p_id, &req).await;
+        let user = create_c_user(&req).await;
         user_id = user.id;
     }
     else {
         use crate::views::get_c_user;
 
-        let user = get_c_user(p_id, &req).await;
+        let user = get_c_user(user_id, &req).await;
         user_id = user.id;
     }
     user_id
@@ -278,7 +278,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
-    let _order_id: i32 = _id;
+    let _order_id: i32 = *_id;
     let user_id = get_cookie_user_id(&req).await;
 
     let _orders = orders
@@ -686,8 +686,8 @@ pub async fn create_order(session: Session, mut payload: Multipart) -> impl Resp
             form.types,
             form.object_id,
             form.username.clone(),
-            form.description.clone(),
             form.email.clone(),
+            form.description.clone(),
             user_id,
         );
 

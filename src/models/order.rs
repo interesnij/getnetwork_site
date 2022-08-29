@@ -71,13 +71,13 @@ impl Order {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Order::get_orders(user_id, limit.into(), step.into());
+            object_list = Order::get_user_orders(user_id, limit.into(), step.into());
         }
         else {
             have_next = limit + 1;
-            object_list = Order::get_orders(user_id, limit.into(), 0);
+            object_list = Order::get_user_orders(user_id, limit.into(), 0);
         }
-        if Order::get_orders(user_id, 1, have_next.into()).len() > 0 {
+        if Order::get_user_orders(user_id, 1, have_next.into()).len() > 0 {
             next_page_number = page + 1;
         }
 
