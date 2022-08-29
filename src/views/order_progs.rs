@@ -183,16 +183,14 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                 struct Template {
                     title:            String,
                     request_user:     User,
-                    object:           Order,
-                    files:            Vec<OrderFile>,
+                    object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
                 }
                 let body = Template {
                     title:            "Ваши заказы".to_string(),
                     request_user:     _request_user,
-                    object:           _order,
-                    files:            _files,
+                    object_list:      _orders,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
                 }
@@ -206,16 +204,14 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                 struct Template {
                     title:            String,
                     request_user:     User,
-                    object:           Order,
-                    files:            Vec<OrderFile>,
+                    object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
                 }
                 let body = Template {
                     title:            "Ваши заказы".to_string(),
                     request_user:     _request_user,
-                    object:           _order,
-                    files:            _files,
+                    object_list:      _orders,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
                 }
@@ -230,15 +226,13 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                 #[template(path = "desctop/pages/anon_user_orders.stpl")]
                 struct Template {
                     title:            String,
-                    object:           Order,
-                    files:            Vec<OrderFile>,
+                    object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
                 }
                 let body = Template {
                     title:            "Ваши заказы".to_string(),
-                    object:           _order,
-                    files:            _files,
+                    object_list:      _orders,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
                 }
@@ -251,14 +245,13 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                 #[template(path = "mobile/pages/anon_user_orders.stpl")]
                 struct Template {
                     title:            String,
-                    object:           Order,
-                    files:            Vec<OrderFile>,
+                    object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
                 }
                 let body = Template {
                     title:            "Ваши заказы".to_string(),
-                    object:           _order,
+                    object_list:      _orders,
                     files:            _files,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
@@ -416,6 +409,7 @@ pub async fn create_order_page(req: HttpRequest) -> actix_web::Result<HttpRespon
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Важные параметры для заказа отсутствуют..."))
     }
     else {
+        let _connection = establish_connection();
         let user_id = get_or_create_cookie_user_id(&req).await;
 
         if _type == 1 {
