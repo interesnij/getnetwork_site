@@ -7,7 +7,7 @@ use crate::diesel::{
     ExpressionMethods,
 };
 use serde::{Serialize, Deserialize};
-use crate::models::{User, Serve, TechCategories};
+use crate::models::{Serve, TechCategories};
 use crate::schema::{
     orders,
     order_files,

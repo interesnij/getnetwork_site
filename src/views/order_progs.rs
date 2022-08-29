@@ -30,6 +30,7 @@ use actix_multipart::Multipart;
 use serde::Deserialize;
 use std::str;
 use sailfish::TemplateOnce;
+use crate::models::User;
 
 
 pub fn order_routes(config: &mut web::ServiceConfig) {
