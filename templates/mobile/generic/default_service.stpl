@@ -6,10 +6,12 @@
         <a class="ajax" href="/service/1/<%= object.id %>/">
           <%= object.title %>
         </a>
-        <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-        <p>Цена: от <%= object.price %> ₽</p>
-        <% if object.price_acc.is_some() { %>
-          <p>Со скидкой: от <%= object.price_acc.unwrap() %> ₽</p>
-        <% } %>
+        <span class="solid_top">
+          <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+          <p>Цена: от <%= object.price %> ₽</p>
+          <% if object.price_acc.is_some() { %>
+            <p>Со скидкой: от <%= object.price_acc.unwrap() %> ₽</p>
+          <% } %>
+        </span>
     </div>
 </div>

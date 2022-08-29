@@ -6,7 +6,9 @@
         <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/">
           <%= object.title %>
         </a>
-        <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-        <p><%= object.get_100_description() %></p>
+        <span class="solid_top">
+          <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+          <p><%= object.get_100_description() %></p>
+        </span>
     </div>
 </div>

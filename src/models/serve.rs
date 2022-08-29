@@ -281,6 +281,7 @@ pub struct TechCategoriesItem {
     pub store_id:    i32,
     pub work_id:     i32,
     pub types:       i16, // 1 активно, 2 неактивно
+    pub orders_id:   Option<i32>,
 }
 #[derive(Insertable)]
 #[table_name="tech_categories_items"]
@@ -290,4 +291,5 @@ pub struct NewTechCategoriesItem {
     pub store_id:    i32,
     pub work_id:     i32,
     pub types:       i16,
+    pub orders_id:   Option<i32>,
 }

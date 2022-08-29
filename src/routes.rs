@@ -6,6 +6,7 @@ use crate::views::{
     service_progs,
     store_progs,
     wiki_progs,
+    order_progs,
     tag_progs,
     serve_progs,
     help_progs,
@@ -29,5 +30,6 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     .configure(tag_progs::tag_routes)
     .configure(auth::auth_routes)
     .configure(help_progs::help_routes)
+    .configure(order_progs::order_routes)
     ;
 }

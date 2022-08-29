@@ -83,9 +83,9 @@ function get_active_button() {
 
 function get_custom_design() {
   color = "white";
-  backgroud = getCookie("backgroud");
-  if (backgroud != "") {
-    color = backgroud;
+  background = getCookie("background");
+  if (background != "") {
+    color = background;
   }
   addStyleSheets("/static/styles/color/" + color + ".css")
 };

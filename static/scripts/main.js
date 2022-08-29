@@ -703,9 +703,9 @@ on('body', 'click', '.s_7', function() {
 
 on('body', 'click', '.anon_color_change', function() {
   color = "white";
-  backgroud = getCookie("backgroud");
-  if (backgroud != "") {
-    color = backgroud;
+  background = getCookie("background");
+  if (background != "") {
+    color = background;
   }
   if (color == "white") {
     addStyleSheets("/static/styles/color/dark.css");
@@ -729,7 +729,7 @@ on('body', 'click', '.anon_color_change', function() {
     new_color = "white"
   };
   if (new_color != color) {
-    setCookie("backgroud", new_color, 90);
+    setCookie("background", new_color, 90);
   }
 });
 on('body', 'click', '.this_fullscreen_hide', function() {

@@ -20,7 +20,10 @@ CREATE TABLE orders (
     username    VARCHAR(200) NOT NULL,
     email       VARCHAR(200) NOT NULL,
     description VARCHAR(1000),
-    created     TIMESTAMP NOT NULL
+    created     TIMESTAMP NOT NULL,
+    user_id     INT NOT NULL,
+    price       INT NOT NULL,
+    price_acc   INT,
 );
 
 CREATE TABLE order_files (
@@ -309,6 +312,7 @@ CREATE TABLE tech_categories_items (
     service_id  INT NOT NULL,     -- услуга
     store_id    INT NOT NULL,     -- товар
     work_id     INT NOT NULL,     -- работа
+    orders_id   INT,              -- заказ
     types       SMALLINT NOT NULL -- тип: 1 - активно, 2 - неактивно
 );
 

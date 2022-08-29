@@ -628,6 +628,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                     store_id:    _store.id,
                     work_id:     0,
                     types:       2,
+                    orders_id:   None,
                 };
                 diesel::insert_into(schema::tech_categories_items::table)
                     .values(&new_cat)
@@ -675,6 +676,7 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                     store_id:    _store.id,
                     work_id:     0,
                     types:       1,
+                    orders_id:   None,
                 };
                 diesel::insert_into(schema::tech_categories_items::table)
                     .values(&new_cat)
@@ -839,6 +841,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                     store_id:    _store.id,
                     work_id:     0,
                     types:       2,
+                    orders_id:   None,
                 };
                 diesel::insert_into(schema::tech_categories_items::table)
                     .values(&new_cat)
@@ -886,6 +889,7 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                     store_id:    _store.id,
                     work_id:     0,
                     types:       1,
+                    orders_id:   None,
                 };
                 diesel::insert_into(schema::tech_categories_items::table)
                     .values(&new_cat)

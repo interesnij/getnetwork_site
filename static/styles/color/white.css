@@ -112,8 +112,6 @@ a.btn-mod:focus{
 .form input[type="text"],
 .form input[type="email"],
 .form input[type="number"],
-.form input[type="search"],
-.form input[type="tel"],
 .form input[type="password"],
 .form input[type="date"],
 .form .smile_supported,
@@ -127,8 +125,6 @@ a.btn-mod:focus{
 .form input[type="text"]:hover,
 .form input[type="email"]:hover,
 .form input[type="number"]:hover,
-.form input[type="search"]:hover,
-.form input[type="tel"]:hover,
 .form input[type="password"]:hover,
 .form input[type="date"]:hover,
 .form select:hover{
@@ -138,8 +134,6 @@ a.btn-mod:focus{
 .form input[type="text"]:focus,
 .form input[type="email"]:focus,
 .form input[type="number"]:focus,
-.form input[type="search"]:focus,
-.form input[type="tel"]:focus,
 .form input[type="password"]:focus,
 .form input[type="date"]:focus,
 .form select:focus{
