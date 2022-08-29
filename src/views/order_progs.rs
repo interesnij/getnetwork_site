@@ -140,7 +140,7 @@ pub async fn get_or_create_cookie_user_id(req: &HttpRequest) -> i32 {
             for c in _cookie.iter() {
                 let split_c: Vec<&str> = c.split("=").collect();
                 if split_c[0] == "user" {
-                    user_id = split_c[1];
+                    user_id = split_c[1].parse().unwrap();
                 }
                 println!("name {:?}", split_c[0].trim());
                 println!("value {:?}", split_c[1]);
@@ -824,8 +824,8 @@ pub async fn edit_service(req: HttpRequest, mut payload: Multipart, _id: web::Pa
         };
 
         diesel::delete(order_files.filter(schema::order_files::order_id.eq(_order_id))).execute(&_connection).expect("E");
-        diesel::delete(serve_items.filter(schema::serve_items::order_id.eq(_order_id))).execute(&_connection).expect("E");
-        diesel::delete(tech_categories_items.filter(schema::tech_categories_items::order_id.eq(_order_id))).execute(&_connection).expect("E");
+        diesel::delete(serve_items.filter(schema::serve_items::orders_id.eq(_order_id))).execute(&_connection).expect("E");
+        diesel::delete(tech_categories_items.filter(schema::tech_categories_items::orders_id.eq(_order_id))).execute(&_connection).expect("E");
 
         let form = order_form(payload.borrow_mut(), user_id).await;
         let _new_order = EditOrder {
@@ -954,8 +954,8 @@ pub async fn delete_order(req: HttpRequest, _id: web::Path<i32>) -> impl Respond
         };
 
         diesel::delete(order_files.filter(schema::order_files::order_id.eq(_order_id))).execute(&_connection).expect("E");
-        diesel::delete(serve_items.filter(schema::serve_items::order_id.eq(_order_id))).execute(&_connection).expect("E");
-        diesel::delete(tech_categories_items.filter(schema::tech_categories_items::order_id.eq(_order_id))).execute(&_connection).expect("E");
+        diesel::delete(serve_items.filter(schema::serve_items::orders_id.eq(_order_id))).execute(&_connection).expect("E");
+        diesel::delete(tech_categories_items.filter(schema::tech_categories_items::orders_id.eq(_order_id))).execute(&_connection).expect("E");
     }
     HttpResponse::Ok()
 }
