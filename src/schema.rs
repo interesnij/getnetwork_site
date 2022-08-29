@@ -138,6 +138,8 @@ table! {
         description -> Nullable<Varchar>,
         created -> Timestamp,
         user_id -> Int4,
+        price -> Int4,
+        price_acc -> Nullable<Int4>,
     }
 }
 
