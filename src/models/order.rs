@@ -88,7 +88,7 @@ impl Order {
 
         let _connection = establish_connection();
         return orders
-            .filter(schema::blogs::user_id.eq(user_id))
+            .filter(schema::orders::user_id.eq(user_id))
             .order(schema::orders::created.desc())
             .limit(limit)
             .offset(offset)

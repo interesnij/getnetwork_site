@@ -34,7 +34,7 @@ use std::str;
 use sailfish::TemplateOnce;
 
 
-pub fn serve_routes(config: &mut web::ServiceConfig) {
+pub fn order_routes(config: &mut web::ServiceConfig) {
     config.route("/orders/", web::get().to(get_orders_page));
     config.route("/user_orders/{id}/", web::get().to(get_user_orders_page));
     config.route("/order/{id}/", web::get().to(get_order_page));
