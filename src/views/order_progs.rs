@@ -6,7 +6,6 @@ use actix_web::{
     http::StatusCode,
     Responder,
 };
-use crate::models::User;
 use std::borrow::BorrowMut;
 use crate::diesel::{
     RunQueryDsl,
@@ -27,9 +26,8 @@ use crate::models::{
     NewOrderFile,
 };
 use actix_session::Session;
-use actix_multipart::{Field, Multipart};
-use futures::StreamExt;
-use serde::{Deserialize, Serialize};
+use actix_multipart::Multipart;
+use serde::Deserialize;
 use std::str;
 use sailfish::TemplateOnce;
 
@@ -60,7 +58,6 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
     }
     else {
-        use crate::models::Order;
         use crate::utils::get_page;
 
         let _connection = establish_connection();
