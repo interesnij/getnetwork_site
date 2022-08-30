@@ -129,7 +129,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
 }
 
 function get_window_stat_meta($link, $title, $object_id, $page_id) {
-  return
+  //return
   console.log("======================");
   console.log("id пользователя",   $user_id);
   console.log("id объекта",        $object_id);
@@ -190,7 +190,6 @@ var delayedExec = function(after, fn) {
 function scrolled(_block) {
     offset = 0;
     window.onscroll = function() {
-      console.log("paginate");
       // программа отслеживает окончание прокрутки
       //scrollStopper();
       // программа считает секунды для внесения в стат страницы и списка, если он есть.
