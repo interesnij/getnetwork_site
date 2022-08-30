@@ -84,6 +84,7 @@ function get_page_view_time(count) {
 };
 
 function get_stat_meta($link, $title, $object_id, $page_id) {
+  return
   if (!$page_id) {
     return
   }
@@ -126,6 +127,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
 }
 
 function get_window_stat_meta($link, $title, $object_id, $page_id) {
+  return
   console.log("======================");
   console.log("id пользователя",   $user_id);
   console.log("id объекта",        $object_id);
