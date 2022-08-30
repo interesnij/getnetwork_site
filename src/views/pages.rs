@@ -279,7 +279,7 @@ pub async fn history_page(req: HttpRequest, session: Session) -> actix_web::Resu
             cookie_stats::dsl::cookie_stats,
         };
         use crate::models::{CookieUser, CookieStat};
-        use crate::utils::get_page;
+        use crate::utils::{get_page, get_or_create_cookie_user_id};
 
         let user_id = get_or_create_cookie_user_id(&req).await;
         let _connection = establish_connection();
