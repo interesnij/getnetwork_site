@@ -16,7 +16,7 @@
             <li class="yy active">
               <a>
                 <div class="alt-tabs-icon">
-                  <span class="icon-streetsign"></span>
+                  <span class="icon-map"></span>
                 </div>
                 История
               </a>
@@ -24,7 +24,7 @@
             <li class="yy pointer">
               <a href="/user_orders/" class="ajax">
                 <div class="alt-tabs-icon">
-                  <span class="icon-basket"></span>
+                  <span class="icon-briefcase"></span>
                 </div>
                 Заказы
               </a>
