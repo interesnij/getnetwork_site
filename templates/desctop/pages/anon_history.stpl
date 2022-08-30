@@ -95,15 +95,18 @@
             </p>
         </div>
     </div>
+
+    <hr class="mt-0 mb-0 " />
+    <h5 class="font-alt mb-20">Информация о Вас</h5>
       <% if object_list.len() > 0 { %>
         <% for object in object_list.iter() { %>
-          <h6>
-            <a target="_blank" rel="nofollow" href="<%= object.link %>"><%= object.title %></a>
-          </h6>
           <p>
-            Метров: <%= object.height %>,
-            секунд: <%= object.seconds %>,
-            <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+          <a target="_blank" rel="nofollow" href="<%= object.link %>"><%= object.title %></a>
+            (
+              Метров: <%= object.height %>,
+              секунд: <%= object.seconds %>,
+              <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+            )
           </p>
         <% } %>
         <% if next_page_number > 0 { %>
