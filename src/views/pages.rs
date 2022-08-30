@@ -279,6 +279,7 @@ pub async fn history_page(req: HttpRequest, session: Session) -> actix_web::Resu
             cookie_stats::dsl::cookie_stats,
         };
         use crate::models::{CookieUser, CookieStat};
+        use crate::utils::get_page;
 
         let user_id = get_or_create_cookie_user_id(&req).await;
         let _connection = establish_connection();
@@ -289,7 +290,7 @@ pub async fn history_page(req: HttpRequest, session: Session) -> actix_web::Resu
             .into_iter()
             .nth(0)
             .unwrap();
-        let (object_list, next_page_number) = CookieStat::get_stat_list(user_id);
+        let (object_list, next_page_number) = CookieStat::get_stat_list(user_id, get_page(&req));
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
