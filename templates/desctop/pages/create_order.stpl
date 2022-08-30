@@ -1,0 +1,22 @@
+<div page-id="" data-title="Создание заказа" class="doc_title order_window">
+  <div class="row container relative">
+    <div class="col-md-6 mb-20">
+      <div class="mb-20 mb-md-10">
+        <label for="id_username">Как к Вам обращаться:</label>
+        <input class="input-md form-control" id="id_username" type="text" name="username">
+      </div>
+      <div class="mb-20 mb-md-10">
+        <label for="id_email">Ваша почта:</label>
+        <input class="input-md form-control" id="id_email" type="email" name="email">
+      </div>
+    </div>
+    <div class="col-md-6 mb-20">
+      <div class="mb-20 mb-md-10">
+        <label for="id_description">Добавьте описание, если нужно:</label>
+        <textarea class="input-md form-control" id="id_description" type="text" name="description"></textarea>
+      </div>
+    </div>
+  </div>
+
+  
+</div>

@@ -240,7 +240,7 @@ function paginate(block) {
         link_3.send();
 };
 
-function create_fullscreen(url, type_class) {
+function create_fullscreen(url, type_class, is_order_case) {
   container = document.body.querySelector("#fullscreens_container");
 
   if (container.innerHTML) {
@@ -334,11 +334,27 @@ function create_fullscreen(url, type_class) {
                       link_3.send();
                   }
               };
-            };
+            }
+            else if (is_order_case) {
+              create_order_form();
+            }
           };
       }
   };
   link.send();
+};
+
+function create_order_form() {
+  console.log("create_order_form!");
+  fullscreens_container = document.body.querySelector("#fullscreens_container");
+  order_window = fullscreens_container.querySelector(".order_window");
+
+  open_tech_blocks = document.body.querySelectorAll(".open_tech_block");
+  for (var i = 0; i < open_tech_blocks.length; i++) {
+
+    open_tech_blocks[i].innerHTML = "";
+
+  }
 };
 
 function change_this_fullscreen(_this, type_class) {
@@ -763,6 +779,9 @@ on('body', 'click', '.body_overlay', function() {
 
 on('body', 'click', '.get_object_info', function() {
   create_fullscreen("/load_item/?_object_type=" + this.getAttribute("data-type") + "&_owner_type=" + this.getAttribute("owner-type") + "&_object_pk=" + this.getAttribute("data-pk") + "&_owner_pk=" + this.getAttribute("owner-pk"), "worker_fullscreen");
+});
+on('body', 'click', '.create_order_form', function() {
+  create_fullscreen("/create_order/", "item_fullscreen", true);
 });
 
 on('body', 'click', '.next_item', function(event) {
