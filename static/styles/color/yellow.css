@@ -112,6 +112,7 @@ a.btn-mod:focus{
 .form input[type="password"],
 .form input[type="date"],
 .form .smile_supported,
+.form textarea,
 .form input[type="file"],
 .form select{
     color: #777 !important;
@@ -124,6 +125,7 @@ a.btn-mod:focus{
 .form input[type="number"]:hover,
 .form input[type="password"]:hover,
 .form input[type="date"]:hover,
+.form textarea:hover,
 .form select:hover{
     border-color: rgba(0,0,0, .2) !important;
 }
@@ -133,7 +135,8 @@ a.btn-mod:focus{
 .form input[type="number"]:focus,
 .form input[type="password"]:focus,
 .form input[type="date"]:focus,
-.form .smile_supported,
+.form .smile_supported:focus,
+.form textarea:focus,
 .form input[type="file"],
 .form select:focus{
     color: #111 !important;
@@ -148,20 +151,6 @@ a.active {
 }
 a:hover {
     color: rgba(0, 0, 0, 1) !important;
-}
-.form textarea{
-    color: #777 !important;
-    border-color: rgba(0,0,0, .1) !important;
-}
-.form textarea:hover{
-    border-color: rgba(0,0,0, .2) !important;
-}
-.form textarea:focus{
-    color: #111 !important;
-    border-color: rgba(0,0,0, .7) !important;
-    -webkit-box-shadow: 0 0 3px rgba(21,21,21, .3) !important;
-    -moz-box-shadow: 0 0 3px rgba(21,21,21, .3) !important;
-    box-shadow: 0 0 3px rgba(21,21,21, .3) !important;
 }
 
 .hs-line-4{
