@@ -12,16 +12,8 @@
                 </h1>
 
                 <div class="local-scroll">
-
-                <a tooltip="О нас" flow="up" style="padding-top: 7px;margin-right: 15px;" href="/info/" class="ajax">
-                  <span style="font-size: 20px;" class="icon-heart"></span>
-                </a>
-                <a tooltip="История просмотров" style="padding-top: 7px;margin-right: 15px;" flow="up" href="/history/" class="ajax">
-                  <span style="font-size: 20px;" class="icon-streetsign"></span>
-                </a>
-                <a tooltip="Помощь по сайту" style="padding-top: 7px;margin-right: 15px;" flow="up" href="/help/1/" class="ajax">
-                  <span style="font-size: 20px;" class="icon-lifesaver"></span>
-                </a>
+                  <a style="margin-right: 20px;" href="/info/" class="btn btn-mod btn-border btn-medium btn-round ajax">О нас</a>
+                  <a href="/history/" class="btn btn-mod btn-border btn-medium btn-round ajax">О вас</a>
                 </div>
               </span>
             </div>
