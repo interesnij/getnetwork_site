@@ -116,7 +116,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   link.open( 'POST', "/help/create_categories/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    conslole.log("Данные отправлены!");
+    console.log("Данные отправлены!");
   }};
   link.send(formData);
 
