@@ -16,7 +16,7 @@
     <div class="col-md-6 mb-20">
       <div class="mb-20 mb-md-10">
         <label for="id_description">Добавьте описание, если нужно:</label>
-        <textarea class="input-md form-control" id="id_description" type="text" name="description"></textarea>
+        <textarea style="height: 117px;" class="input-md form-control" id="id_description" type="text" name="description"></textarea>
       </div>
     </div>
   </div>
