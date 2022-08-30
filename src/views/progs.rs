@@ -17,7 +17,7 @@ use crate::diesel::{
     ExpressionMethods,
     QueryDsl,
 };
-use actix_multipart::Multipart;
+
 use std::borrow::BorrowMut;
 use actix_multipart::{Field, Multipart};
 use futures::StreamExt;
