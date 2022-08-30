@@ -1,7 +1,7 @@
 <section class="border card_fullscreen" style="position: fixed;z-index:1000;bottom: 10px;width: 100%;">
 <h3 data-sum="<%= object.price %>"
-    data-pk="<%= object.id %>" 
-    data-type="<%= object.get_order_type %>"
+    data-pk="<%= object.id %>"
+    data-type="<%= object.get_order_type() %>"
     class="create_order_form" style="cursor:pointer;text-align: center;">
     Сумма <span class="total_price_counter"><%= object.price %></span>
      ₽. Перейти к заказу
