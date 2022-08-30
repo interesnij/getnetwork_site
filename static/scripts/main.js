@@ -227,7 +227,7 @@ function scrolled(_block) {
 };
 function paginate(block) {
         var link_3 = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-        link_3.open('GET', location.protocol + "//" + location.host + block.getAttribute("data-link"), true);
+        link_3.open('GET', location.protocol + "//" + location.host + block.getAttribute("data-link") + "?ajax=2", true);
         link_3.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
         link_3.onreadystatechange = function() {
