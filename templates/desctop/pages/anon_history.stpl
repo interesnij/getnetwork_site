@@ -83,7 +83,7 @@
             <% } %>
             <p>
                 <strong>Намотано метров:</strong>
-                <%= user.height.round() %>
+                <%= user.height.round(2) %>
             </p>
             <p>
                 <strong>Затрачено секунд:</strong>
@@ -97,16 +97,17 @@
     </div>
 
     <hr class="mt-0 mb-0 " />
-    <h5 class="font-alt mb-20">Информация о Вас</h5>
+    <h5 class="font-alt mb-20">История просмотров</h5>
       <% if object_list.len() > 0 { %>
         <% for object in object_list.iter() { %>
           <p>
-          <a target="_blank" rel="nofollow" href="<%= object.link %>"><%= object.title %></a>
-            (
-              Метров: <%= object.height %>,
-              секунд: <%= object.seconds %>,
-              <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-            )
+            <a target="_blank" rel="nofollow" href="<%= object.link %>"><%= object.title %>
+              (
+                Метров: <%= object.height %>,
+                секунд: <%= object.seconds %>,
+                <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+              )
+            </a>
           </p>
         <% } %>
         <% if next_page_number > 0 { %>
