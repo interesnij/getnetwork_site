@@ -33,7 +33,33 @@
     </div>
 
     <div class="container relative">
+      <% if object_list.len() > 0 { %>
+        <% for object in object_list.iter() { %>
+          <h6>
+            <a class="pointer show_order_window" data-pk="<%= object.id %>"><%= object.title %></a>
+          </h6>
+        <% } %>
+        <% if next_page_number > 0 { %>
+          <div class="load centered m-1 next_page_list" data-link="/user_orders/?page=<%= next_page_number %>">
+            <img src="/static/images/preloader.gif">
+          </div>
+        <% } %>
 
+      <% } else { %>
+        <div style="margin-top: 40px;">
+          <div class="align-center">
+            <span class="border" style="padding: 5px 12px;">
+              Заказов пока нет. Вы можете заказывать у нас веб-сервисы со
+              страниц
+              <a href="/service_categories/" class="ajax">услуг</a>
+              ,
+              <a href="/store_categories/" class="ajax">товаров</a>
+              и
+              <a href="/work_categories/" class="ajax">работ</a>.
+            </span>
+          </div>
+        </div>
+      <% } %>
     </div>
 </section>
 

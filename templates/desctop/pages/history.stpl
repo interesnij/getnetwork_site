@@ -33,7 +33,30 @@
 
     </div>
     <div class="container relative">
+      <% if object_list.len() > 0 { %>
+        <% for object in object_list.iter() { %>
+          <h6>
+            <a target="_blank" rel="nofollow" href="<%= object.link %>"><%= object.title %></a>
+          </h6>
+          <p>
+            Метров: <%= object.height %>,
+            секунд: <%= object.seconds %>,
+            <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+          </p>
+        <% } %>
+        <% if next_page_number > 0 { %>
+          <div class="load centered m-1 next_page_list" data-link="/history/?page=<%= next_page_number %>">
+            <img src="/static/images/preloader.gif">
+          </div>
+        <% } %>
 
+      <% } else { %>
+        <div style="margin-top: 40px;">
+          <div class="align-center">
+            <span class="border" style="padding: 5px 12px;">История просмотров пока пуста.</span>
+          </div>
+        </div>
+      <% } %>
     </div>
 </section>
 
