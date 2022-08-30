@@ -18,7 +18,6 @@ use crate::diesel::{
     QueryDsl,
 };
 
-use std::borrow::BorrowMut;
 use actix_multipart::{Field, Multipart};
 use futures::StreamExt;
 use std::str;
@@ -210,7 +209,7 @@ pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
     form
 }
 
-pub async fn create_history(payload: &mut Multipart, req: HttpRequest) -> web::Json<HistoryResponse> {
+pub async fn create_history(mut payload: &mut Multipart, req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::schema;
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
