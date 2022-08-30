@@ -83,7 +83,7 @@
             <% } %>
             <p>
                 <strong>Намотано метров:</strong>
-                <%= user.height.round(2) %>
+                <%= user.height.round() %>
             </p>
             <p>
                 <strong>Затрачено секунд:</strong>
