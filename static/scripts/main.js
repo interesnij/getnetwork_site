@@ -103,7 +103,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("затрачено секунд",  $seconds);
   console.log("======================");
 
-  form_data = new FormData();
+  formData = new FormData();
   formData.append('user_id', $user_id);
   formData.append('object_id', $object_id);
   formData.append('page_id', $page_id);
@@ -118,7 +118,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   if ( link.readyState == 4 && link.status == 200 ) {
     conslole.log("Данные отправлены!");
   }};
-  link.send(form_data);
+  link.send(formData);
 
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
   $seconds = 1;
