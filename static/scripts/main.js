@@ -103,7 +103,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("затрачено секунд",  $seconds);
   console.log("======================");
 
-  form_data = new FormData(form);
+  form_data = new FormData();
   formData.append('user_id', $user_id);
   formData.append('object_id', $object_id);
   formData.append('page_id', $page_id);
