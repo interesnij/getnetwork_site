@@ -16,7 +16,7 @@
             <li class="yy pointer">
               <a href="/history/" class="ajax">
                 <div class="alt-tabs-icon">
-                  <span class="icon-map"></span>
+                  <span class="icon-document"></span>
                 </div>
                 История
               </a>
