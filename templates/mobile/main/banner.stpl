@@ -4,14 +4,12 @@
         <div class="home-content container">
             <div class="home-text">
               <span class="banner_block border">
-                <h2 class="hs-line-8 no-transp font-alt mb-50 mb-xs-30">
-                    Комплексное, экспертное создание и развитие высоконагруженных сайтов
-                </h2>
                 <h1 class="hs-line-14 font-alt mb-50 mb-xs-30">
                     Вебсервисы!
                 </h1>
                 <div class="local-scroll">
-                    <a href="/info/" class="btn btn-mod btn-border btn-medium btn-round ajax">Подробнее</a>
+                  <a style="margin-right: 5px;" href="/info/" class="btn btn-mod btn-border btn-medium btn-round ajax">О нас</a>
+                  <a href="/history/" class="btn btn-mod btn-border btn-medium btn-round ajax">О вас</a>
                 </div>
               </span>
             </div>

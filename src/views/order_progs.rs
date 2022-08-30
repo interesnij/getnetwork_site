@@ -17,6 +17,8 @@ use crate::utils::{
     is_signed_in,
     get_request_user_data,
     get_first_load_page,
+    get_or_create_cookie_user_id,
+    get_cookie_user_id,
 };
 use crate::schema;
 use crate::models::{
@@ -109,55 +111,6 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
-}
-
-pub async fn get_cookie_user_id(req: &HttpRequest) -> i32 {
-    let mut user_id = 0;
-    for header in req.headers().into_iter() {
-        if header.0 == "cookie" {
-            let str_cookie = header.1.to_str().unwrap();
-            let _cookie: Vec<&str> = str_cookie.split(";").collect();
-            for c in _cookie.iter() {
-                let split_c: Vec<&str> = c.split("=").collect();
-                if split_c[0] == "user" {
-                    user_id = split_c[1].parse().unwrap();
-                }
-                println!("name {:?}", split_c[0].trim());
-                println!("value {:?}", split_c[1]);
-            }
-        }
-    };
-    user_id
-}
-pub async fn get_or_create_cookie_user_id(req: &HttpRequest) -> i32 {
-    let mut user_id = 0;
-    for header in req.headers().into_iter() {
-        if header.0 == "cookie" {
-            let str_cookie = header.1.to_str().unwrap();
-            let _cookie: Vec<&str> = str_cookie.split(";").collect();
-            for c in _cookie.iter() {
-                let split_c: Vec<&str> = c.split("=").collect();
-                if split_c[0] == "user" {
-                    user_id = split_c[1].parse().unwrap();
-                }
-                println!("name {:?}", split_c[0].trim());
-                println!("value {:?}", split_c[1]);
-            }
-        }
-    };
-    if user_id == 0 {
-        use crate::views::create_c_user;
-
-        let user = create_c_user(&req).await;
-        user_id = user.id;
-    }
-    else {
-        use crate::views::get_c_user;
-
-        let user = get_c_user(user_id, &req).await;
-        user_id = user.id;
-    }
-    user_id
 }
 
 pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {

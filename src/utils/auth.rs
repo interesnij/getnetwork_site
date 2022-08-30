@@ -61,3 +61,53 @@ pub fn get_current_user(session: &Session) -> Result<SessionUser, AuthError> {
           |user| serde_json::from_str(&user).or_else(|_| Err(AuthError::AuthenticationError(String::from(msg))))
         )
 }
+
+
+pub async fn get_cookie_user_id(req: &HttpRequest) -> i32 {
+    let mut user_id = 0;
+    for header in req.headers().into_iter() {
+        if header.0 == "cookie" {
+            let str_cookie = header.1.to_str().unwrap();
+            let _cookie: Vec<&str> = str_cookie.split(";").collect();
+            for c in _cookie.iter() {
+                let split_c: Vec<&str> = c.split("=").collect();
+                if split_c[0] == "user" {
+                    user_id = split_c[1].parse().unwrap();
+                }
+                println!("name {:?}", split_c[0].trim());
+                println!("value {:?}", split_c[1]);
+            }
+        }
+    };
+    user_id
+}
+pub async fn get_or_create_cookie_user_id(req: &HttpRequest) -> i32 {
+    let mut user_id = 0;
+    for header in req.headers().into_iter() {
+        if header.0 == "cookie" {
+            let str_cookie = header.1.to_str().unwrap();
+            let _cookie: Vec<&str> = str_cookie.split(";").collect();
+            for c in _cookie.iter() {
+                let split_c: Vec<&str> = c.split("=").collect();
+                if split_c[0] == "user" {
+                    user_id = split_c[1].parse().unwrap();
+                }
+                println!("name {:?}", split_c[0].trim());
+                println!("value {:?}", split_c[1]);
+            }
+        }
+    };
+    if user_id == 0 {
+        use crate::views::create_c_user;
+
+        let user = create_c_user(&req).await;
+        user_id = user.id;
+    }
+    else {
+        use crate::views::get_c_user;
+
+        let user = get_c_user(user_id, &req).await;
+        user_id = user.id;
+    }
+    user_id
+}
