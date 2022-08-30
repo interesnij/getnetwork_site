@@ -37,7 +37,7 @@ use crate::models::User;
 
 pub fn order_routes(config: &mut web::ServiceConfig) {
     config.route("/orders/", web::get().to(get_orders_page));
-    config.route("/user_orders/{id}/", web::get().to(get_user_orders_page));
+    config.route("/user_orders/", web::get().to(get_user_orders_page));
     config.route("/order/{id}/", web::get().to(get_order_page));
     config.service(web::resource("/create_order/")
         .route(web::get().to(create_order_page))

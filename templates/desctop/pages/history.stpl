@@ -1,0 +1,37 @@
+<% include!("../header.stpl"); %>
+
+<section page-id="10" data-title="История просмотров" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>История просмотров</span>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+        <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
+            <li class="yy active">
+              <a>
+                <div class="alt-tabs-icon">
+                  <span class="icon-streetsign"></span>
+                </div>
+                История
+              </a>
+            </li>
+            <li class="yy pointer">
+              <a href="/user_orders/" class="ajax">
+                <div class="alt-tabs-icon">
+                  <span class="icon-basket"></span>
+                </div>
+                Заказы
+              </a>
+            </li>
+        </ul>
+
+    </div>
+</section>
+
+<% include!("../footer.stpl"); %>
