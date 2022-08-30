@@ -211,7 +211,7 @@ function scrolled(_block) {
         $height = parseFloat(offset * 0.000264).toFixed(2);
       };
 
-      try {
+      //try {
           box = _block.querySelector('.next_page_list');
           if (box && box.classList.contains("next_page_list")) {
               inViewport = elementInViewport(box);
@@ -220,7 +220,7 @@ function scrolled(_block) {
                   paginate(box);
               }
           };
-      } catch {return}
+      //} catch {return}
     }
 };
 function paginate(block) {
