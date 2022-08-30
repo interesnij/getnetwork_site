@@ -290,7 +290,7 @@ pub async fn history_page(req: HttpRequest, session: Session) -> actix_web::Resu
             .into_iter()
             .nth(0)
             .unwrap();
-        let (object_list, next_page_number) = CookieStat::get_stat_list(user_id, get_page(&req));
+        let (object_list, next_page_number) = CookieStat::get_stat_list(user_id, get_page(&req), 20);
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
