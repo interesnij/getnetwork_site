@@ -128,7 +128,7 @@ pub struct HistoryForm {
     pub height:    f64,
     pub seconds:   i32,
 }
-pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
+pub fn history_form(payload: &mut Multipart) -> HistoryForm {
     let mut form: HistoryForm = HistoryForm {
         user_id:   0,
         object_id: None,
@@ -146,7 +146,7 @@ pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
         if name == "user_id" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std::str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.user_id = _int;
                 }
@@ -155,7 +155,7 @@ pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
         else if name == "object_id" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std::str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.object_id = Some(_int);
                 }
@@ -164,7 +164,7 @@ pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
         else if name == "page_id" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std::str::from_utf8(&data) {
                     let _int: i16 = s.parse().unwrap();
                     form.page_id = _int;
                 }
@@ -173,7 +173,7 @@ pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
         else if name == "height" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std::str::from_utf8(&data) {
                     let _int: f64 = s.parse().unwrap();
                     form.height = _int;
                 }
@@ -182,7 +182,7 @@ pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
         else if name == "seconds" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std::str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
                     form.seconds = _int;
                 }
@@ -192,7 +192,7 @@ pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
         else {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
+                if let Ok(s) = std::str::from_utf8(&data) {
                     let data_string = s.to_string();
                     if field.name() == "title" {
                         form.title = data_string
