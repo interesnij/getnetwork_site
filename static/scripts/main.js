@@ -113,7 +113,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   formData.append('seconds', $seconds);
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', "/help/create_categories/", true );
+  link.open( 'POST', "/create_history/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     console.log("Данные отправлены!");
