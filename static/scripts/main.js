@@ -14,6 +14,8 @@ function get_document_opacity_1() {
   overlay.style.opacity = "0";
 };
 
+function elementInViewport(el){var bounds = el.getBoundingClientRect();return ((bounds.top + bounds.height > 0) && (window.innerHeight - bounds.top > 0));}
+
 function close_fullscreen() {
   container = document.body.querySelector("#fullscreens_container");
   if (!container.innerHTML) {
