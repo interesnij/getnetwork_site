@@ -1,11 +1,11 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="10" data-title="История просмотров" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section page-id="10" data-title="Ваши заказы" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <span>История просмотров</span>
+            <span>Ваши заказы</span>
         </div>
     </div>
 </section>
@@ -31,6 +31,32 @@
             </li>
         </ul>
 
+    </div>
+    <div class="container relative">
+      <% if object_list.len() > 0 { %>
+        <% for object in object_list.iter() { %>
+          <h6>
+            <a target="_blank" rel="nofollow" href="<%= object.link %>"><%= object.title %></a>
+          </h6>
+          <p>
+            Метров: <%= object.height %>,
+            секунд: <%= object.seconds %>,
+            <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+          </p>
+        <% } %>
+        <% if next_page_number > 0 { %>
+          <div class="load centered m-1 next_page_list" data-link="/user_orders/?page=<%= next_page_number %>">
+            <img src="/static/images/preloader.gif">
+          </div>
+        <% } %>
+
+      <% } else { %>
+        <div style="margin-top: 40px;">
+          <div class="align-center">
+            <span class="border" style="padding: 5px 12px;">Список пока пустой.</span>
+          </div>
+        </div>
+      <% } %>
     </div>
 </section>
 

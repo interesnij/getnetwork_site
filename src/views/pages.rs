@@ -274,10 +274,7 @@ pub async fn history_page(req: HttpRequest, session: Session) -> actix_web::Resu
     }
     else {
         use crate::schema;
-        use schema::{
-            cookie_users::dsl::cookie_users,
-            cookie_stats::dsl::cookie_stats,
-        };
+        use schema::cookie_users::dsl::cookie_users;
         use crate::models::{CookieUser, CookieStat};
         use crate::utils::{get_page, get_or_create_cookie_user_id};
 
