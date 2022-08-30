@@ -34,6 +34,7 @@
 
     <div class="container relative">
       <% if object_list.len() > 0 { %>
+      <div class="is_paginate">
         <% for object in object_list.iter() { %>
           <h6>
             <a class="pointer show_order_window" data-pk="<%= object.id %>"><%= object.title %></a>
@@ -44,7 +45,7 @@
             <img src="/static/images/preloader.gif">
           </div>
         <% } %>
-
+      </div>
       <% } else { %>
         <div style="margin-top: 40px;">
           <div class="align-center">

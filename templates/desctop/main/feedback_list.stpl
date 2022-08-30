@@ -14,7 +14,7 @@
     <div class="container align-center">
         <h1 class="magazine-logo-text black font-alt">Сообщения с формы</h1>
     </div>
-    <div class="container relative">
+    <div class="container relative is_paginate">
     <% for object in feedback_list.iter() { %>
       <p>
         <%= object.username %> (<%= object.email %>): <%= object.message %>

@@ -18,7 +18,7 @@
       <% if services_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
-              <div class="row multi-columns-row">
+              <div class="row multi-columns-row is_paginate">
                 <% for object in services_list.iter() { %>
                   <% include!("../generic/default_service.stpl"); %>
                 <% } %>

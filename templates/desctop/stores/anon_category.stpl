@@ -19,6 +19,7 @@
             <div class="row search_result"></div>
             <div class="content">
             <% if category.count > 0 { %>
+              <div class="is_paginate">
               <% for object in object_list.iter() { %>
                 <% include!("../generic/store.stpl"); %>
               <% } %>
@@ -27,6 +28,7 @@
                   <img src="/static/images/preloader.gif">
                 </div>
               <% } %>
+              </div>
             <% } else { %>
             <div style="margin-top: 40px;">
                 <div class="align-center">

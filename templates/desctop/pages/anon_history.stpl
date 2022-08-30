@@ -99,6 +99,7 @@
     <hr class="mt-0 mb-0 " />
     <h5 class="font-alt mb-20">История просмотров</h5>
       <% if object_list.len() > 0 { %>
+      <div class="is_paginate">
         <% for object in object_list.iter() { %>
           <p>
             <a target="_blank" rel="nofollow" href="<%= object.link %>"><%= object.title %>
@@ -115,7 +116,7 @@
             <img src="/static/images/preloader.gif">
           </div>
         <% } %>
-
+        </div>
       <% } else { %>
         <div style="margin-top: 40px;">
           <div class="align-center">

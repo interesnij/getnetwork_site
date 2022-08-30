@@ -14,6 +14,7 @@
 <section class="page-section">
     <div class="relative">
         <% if category.count > 0 { %>
+        <div class="is_paginate">
         <% for object in object_list.iter() { %>
         <% include!("../generic/blog.stpl"); %>
         <% } %>
@@ -22,7 +23,7 @@
             <img src="/static/images/preloader.gif">
         </div>
         <% } %>
-
+        </div>
         <% } else { %>
         <div style="margin-top: 40px;">
             <div class="align-center">

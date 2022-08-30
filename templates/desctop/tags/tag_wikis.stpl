@@ -19,7 +19,7 @@
               <h5 class="section-title font-alt align-left">
                 Обучающие статьи (<%= wikis_count %>)
               </h5>
-              <div class="row multi-columns-row">
+              <div class="row multi-columns-row is_paginate">
                 <% for object in wikis_list.iter() { %>
                   <% include!("../generic/default_wiki.stpl"); %>
                 <% } %>
