@@ -43,6 +43,16 @@ pub struct SParams {
 }
 
 pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
+    use mac_address::get_mac_address;
+
+    match get_mac_address() {
+        Ok(Some(ma)) => {
+            println!("MAC addr = {}", ma);
+            println!("bytes = {:?}", ma.bytes());
+        }
+        Ok(None) => println!("No MAC address found."),
+        Err(e) => println!("{:?}", e),
+    }
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     // первая отрисовка страницы - организуем скрытие информации

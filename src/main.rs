@@ -1,5 +1,6 @@
 #[macro_use]
 extern crate diesel;
+extern crate mac_address;
 
 pub mod schema;
 pub mod models;
