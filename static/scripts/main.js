@@ -781,7 +781,7 @@ on('body', 'click', '.get_object_info', function() {
   create_fullscreen("/load_item/?_object_type=" + this.getAttribute("data-type") + "&_owner_type=" + this.getAttribute("owner-type") + "&_object_pk=" + this.getAttribute("data-pk") + "&_owner_pk=" + this.getAttribute("owner-pk"), "worker_fullscreen");
 });
 on('body', 'click', '.create_order_form', function() {
-  create_fullscreen("/create_order/", "item_fullscreen", true);
+  create_fullscreen("/create_order/?object_id=" + this.getAttribute("data-pk") + "&types=" + this.getAttribute("data-type"), "item_fullscreen", true);
 });
 
 on('body', 'click', '.next_item', function(event) {

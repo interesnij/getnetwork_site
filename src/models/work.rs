@@ -170,6 +170,9 @@ pub struct Work {
     pub price_acc:   Option<i32>,
 }
 impl Work {
+    pub fn get_order_type(&self) -> i16 {
+        return 3;
+    }
     pub fn get_image(&self) -> String {
         if self.image.is_some() {
             return self.image.as_deref().unwrap().to_string();

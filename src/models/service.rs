@@ -167,6 +167,9 @@ pub struct Service {
 }
 
 impl Service {
+    pub fn get_order_type(&self) -> i16 {
+        return 1;
+    }
     pub fn get_image(&self) -> String {
         if self.image.is_some() {
             return self.image.as_deref().unwrap().to_string();

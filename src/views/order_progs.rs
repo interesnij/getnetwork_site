@@ -333,7 +333,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
 
 pub async fn create_order_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
     #[derive(Debug, Deserialize)]
-    struct OrderParams {
+    struct OrderParams { 
         pub object_id: Option<i32>,
         pub types:     Option<i16>,
     }
