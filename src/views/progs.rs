@@ -128,7 +128,7 @@ pub struct HistoryForm {
     pub height:    f64,
     pub seconds:   i32,
 }
-pub fn history_form(payload: &mut Multipart) -> HistoryForm {
+pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
     let mut form: HistoryForm = HistoryForm {
         user_id:   0,
         object_id: None,
@@ -211,7 +211,7 @@ pub async fn create_history(payload: &mut Multipart, req: HttpRequest) -> web::J
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
 
-    let form = history_form(payload.borrow_mut());
+    let form = history_form(payload.borrow_mut()).await;
     let p_id = form.user_id;
     let user = get_c_user(p_id, &req).await;
 
