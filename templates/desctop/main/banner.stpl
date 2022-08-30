@@ -13,14 +13,14 @@
 
                 <div class="local-scroll">
 
-                <a tooltip="О нас" flow="up" style="margin-right: 5px;" href="/info/" class="btn btn-mod btn-border btn-medium btn-round ajax">
-                  <span class="icon-heart"></span>
+                <a tooltip="О нас" flow="up" style="margin-right: 5px;" href="/info/" class="btn btn-mod btn-border btn-round ajax">
+                  <span style="font-size: 20px;" class="icon-heart"></span>
                 </a>
-                <a tooltip="История просмотров" style="margin-right: 5px;" flow="up" href="/history/" class="btn btn-mod btn-border btn-medium btn-round ajax">
-                  <span class="icon-streetsign"></span>
+                <a tooltip="История просмотров" style="margin-right: 5px;" flow="up" href="/history/" class="btn btn-mod btn-border btn-round ajax">
+                  <span style="font-size: 20px;" class="icon-streetsign"></span>
                 </a>
-                <a tooltip="Помощь по сайту" style="margin-right: 5px;" flow="up" href="/help/1/" class="btn btn-mod btn-border btn-medium btn-round ajax">
-                  <span class="icon-lifesaver"></span>
+                <a tooltip="Помощь по сайту" style="margin-right: 5px;" flow="up" href="/help/1/" class="btn btn-mod btn-border btn-round ajax">
+                  <span style="font-size: 20px;" class="icon-lifesaver"></span>
                 </a>
                 </div>
               </span>
