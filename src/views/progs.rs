@@ -21,7 +21,7 @@ use crate::diesel::{
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {
-    config.route("/create_history/", web::get().to(create_history));
+    config.route("/create_history/", web::post().to(create_history));
     config.route("/object_history/{id}/", web::get().to(object_history));
     config.route("/feedback/", web::post().to(create_feedback));
 }
@@ -119,7 +119,7 @@ pub async fn get_c_user(id: i32, req: &HttpRequest) -> CookieUser {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct HistoryParams {
+pub struct HistoryForm {
     pub user_id:   i32,
     pub object_id: Option<i32>,
     pub page_id:   i16,
@@ -128,22 +128,99 @@ pub struct HistoryParams {
     pub height:    f64,
     pub seconds:   i32,
 }
-pub async fn create_history(req: HttpRequest) -> web::Json<HistoryResponse> {
+pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
+    let mut form: HistoryForm = HistoryForm {
+        user_id:   0,
+        object_id: None,
+        page_id:   0,
+        link:      "".to_string(),
+        title:     "".to_string(),
+        height:    0.0,
+        seconds:   0,
+    };
+
+    while let Some(item) = payload.next().await {
+        let mut field: Field = item.expect("split_payload err");
+        let name = field.name();
+
+        if name == "user_id" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.user_id = _int;
+                }
+            }
+        }
+        else if name == "object_id" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.object_id = Some(_int);
+                }
+            }
+        }
+        else if name == "page_id" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i16 = s.parse().unwrap();
+                    form.page_id = _int;
+                }
+            }
+        }
+        else if name == "height" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: f64 = s.parse().unwrap();
+                    form.height = _int;
+                }
+            }
+        }
+        else if name == "seconds" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.seconds = _int;
+                }
+            }
+        }
+
+        else {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let data_string = s.to_string();
+                    if field.name() == "title" {
+                        form.title = data_string
+                    } else if field.name() == "link" {
+                        form.link = data_string
+                    }
+                }
+            }
+        }
+    }
+    form
+}
+
+pub async fn create_history(payload: &mut Multipart, req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::schema;
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
 
-    let params = web::Query::<HistoryParams>::from_query(&req.query_string());
-    let params_2 = params.unwrap();
-    let p_id = params_2.user_id;
+    let form = history_form(payload.borrow_mut());
+    let p_id = form.user_id;
     let user = get_c_user(p_id, &req).await;
 
-    let p_object_id = params_2.object_id;
-    let p_page_id = params_2.page_id;
-    let p_height = params_2.height;
-    let p_seconds = params_2.seconds;
-    let p_link = params_2.link.clone();
-    let p_title = params_2.title.clone();
+    let p_object_id = form.object_id;
+    let p_page_id = form.page_id;
+    let p_height = form.height;
+    let p_seconds = form.seconds;
+    let p_link = form.link.clone();
+    let p_title = form.title.clone();
 
     let _connection = establish_connection();
 
