@@ -33,7 +33,7 @@
 
     </div>
     <div class="container relative">
-    <div class="work-detail mt-20 mb-20">
+    <div class="border work-detail mt-20 mb-20" style="padding-left: 10px;">
         <h5 class="font-alt mb-20">Информация о Вас</h5>
         <div class="work-full-detail">
             <p>
@@ -82,8 +82,8 @@
             </p>
             <% } %>
             <p>
-                <strong>Номотано метров:</strong>
-                <%= user.height %>
+                <strong>Намотано метров:</strong>
+                <%= user.height.round() %>
             </p>
             <p>
                 <strong>Затрачено секунд:</strong>
