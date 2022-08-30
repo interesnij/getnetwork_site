@@ -210,7 +210,7 @@ pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
     form
 }
 
-pub async fn create_history(mut payload: &mut Multipart, req: HttpRequest) -> web::Json<HistoryResponse> {
+pub async fn create_history(mut payload: Multipart, req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::schema;
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
