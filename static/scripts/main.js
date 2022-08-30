@@ -92,6 +92,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   // потом мы получаем данные для отсылки статистики со всеми
   // примочками - таймеры и так далее.
   // при смене страницы повторяем только эту функцию
+
   console.log("======================");
   console.log("id пользователя",   $user_id);
   console.log("id объекта",        $object_id);
@@ -101,6 +102,24 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("накручено метров",  $height);
   console.log("затрачено секунд",  $seconds);
   console.log("======================");
+
+  form_data = new FormData(form);
+  formData.append('user_id', $user_id);
+  formData.append('object_id', $object_id);
+  formData.append('page_id', $page_id);
+  formData.append('link', $link);
+  formData.append('title', $title);
+  formData.append('height', $height);
+  formData.append('seconds', $seconds);
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', "/help/create_categories/", true );
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    conslole.log("Данные отправлены!");
+  }};
+  link.send(form_data);
+
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
   $seconds = 1;
   window.clearInterval(intervalListener);
