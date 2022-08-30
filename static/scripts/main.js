@@ -84,7 +84,7 @@ function get_page_view_time(count) {
 };
 
 function get_stat_meta($link, $title, $object_id, $page_id) {
-  //return
+  return
   if (!$page_id) {
     return
   }
