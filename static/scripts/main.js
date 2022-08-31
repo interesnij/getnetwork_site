@@ -38,7 +38,7 @@ function close_fullscreen() {
     get_document_opacity_1();
   } else {
     prev_window = container.querySelector(".card_fullscreen");
-    prev_window.querySelector(".this_fullscreen_hide").style.display = "unset";
+    prev_window.classList.remove("hide");
   };
 };
 
@@ -242,11 +242,6 @@ function paginate(block) {
 function create_fullscreen(url, type_class, is_order_case) {
   container = document.body.querySelector("#fullscreens_container");
 
-  if (container.innerHTML) {
-    prev_window = container.querySelector(".card_fullscreen");
-    prev_window.querySelector(".this_fullscreen_hide").style.display = "none";
-  };
-
   try {
     count_items = container.querySelectorAll(".card_fullscreen").length + 1
   } catch {count_items = 0};
@@ -277,6 +272,10 @@ function create_fullscreen(url, type_class, is_order_case) {
 
   link.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
+        if (container.innerHTML) {
+          prev_window = container.querySelector(".card_fullscreen");
+          prev_window.classList.add("hide");
+        };
           elem = link.responseText;
 
           $loader.innerHTML = elem;
