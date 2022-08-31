@@ -360,9 +360,14 @@ function create_order_form() {
       serves = ""
       section = "<section class='banner_block mb-20 mt-20 border' style='width:100%;'><h4 class='section-title font-alt'>"
       + banner_blocks[i].querySelector(".section-title").innerHTML
-      + "<div><div class='align-center'><div class='tab-content tpl-minimal-tabs-cont section-text'>"
+      + "<div><div class='align-center'><div class='tab-content tpl-minimal-tabs-cont section-text'><div class='tab-pane in active'><table class='table'><tbody><tr><th class='hidden-xs'><span data-pk='"
+      + banner_blocks[i].querySelector(".get_serve_category_info").getAttribute("data-pk")
+      + "' class='pointer get_serve_category_info'>"
+      + banner_blocks[i].querySelector(".get_serve_category_info").innerHTML
+      + "</span></th><th>Цена</th><th>Часы</th><th></th></tr>"
+
       + serves
-      + "</div></div></section>";
+      + "</tbody></table></div></div></div></section>";
 
       serves_container += section;
     }
