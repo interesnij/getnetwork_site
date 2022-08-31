@@ -365,7 +365,7 @@ function create_order_form() {
       tab_pk = tabs.querySelector(".active");
       tab_panes = banner_blocks[i].querySelectorAll(".tab-pane");
       for (var k = 0; k < tab_panes.length; k++) {
-        if (tab_panes[k].getAttribute == tab_pk) {
+        if (tab_panes[k].getAttribute("data-pk") == tab_pk) {
           current_tab = tab_panes[k];
         }
       }
