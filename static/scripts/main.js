@@ -356,7 +356,7 @@ function create_order_form() {
 
   banner_blocks = document.body.querySelectorAll(".banner_block");
   for (var i = 0; i < banner_blocks.length; i++) {
-    if (_this.classList.contains("open_cat")) {
+    if (banner_blocks[i].classList.contains("open_cat")) {
       serves = ""
       section = "<section class='banner_block mb-20 mt-20 border' style='width:100%;'><h4 class='section-title font-alt'>"
       + banner_blocks[i].querySelector(".section-title").innerHTML
