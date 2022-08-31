@@ -87,10 +87,7 @@ a:hover {
     border: 1px solid rgba(255,255,255, 0.9) !important;
 }
 .border-top {
-  border-bottom: 1px solid rgba(255,255,255, 0.7) !important;
-}
-.border-top:hover {
-  border-bottom: 1px solid rgba(255,255,255, 1) !important;
+  border-top: 1px solid rgba(255,255,255, 0.7) !important;
 }
 
 .shadow{
