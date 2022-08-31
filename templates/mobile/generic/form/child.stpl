@@ -1,5 +1,5 @@
 <td style="width:55%" class="solid_left <% if i == 0 { %>solid_top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>">
-  <a class="get_object_info pointer" data-pk="<%= child.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
+  <a class="get_serve_info pointer" data-pk="<%= child.id %>">
     <%= serve.name %> → <%= child.name %>
   </a>
 </td>

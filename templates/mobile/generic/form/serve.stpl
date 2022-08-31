@@ -1,5 +1,5 @@
 <td style="width:55%">
-  <a class="get_object_info pointer" data-pk="<%= serve.id %>" data-type="serve" owner-pk="<%= object.id %>" owner-type="service">
+  <a class="get_serve_info pointer" data-pk="<%= serve.id %>">
     <%= serve.name %>
   </a>
 </td>
