@@ -569,7 +569,7 @@ function toast_warning(text) {
 }
 
 on('body', 'click', '.open_child_serves', function(event) {
-  if (event.target.classList.contains("get_object_info")) {
+  if (event.target.classList.contains("get_serve_info")) {
     return
   };
   parent_id = this.getAttribute("parent-pk");
@@ -583,7 +583,7 @@ on('body', 'click', '.open_child_serves', function(event) {
 
 on('body', 'click', '.select_child_serve', function(event) {
   _this = this;
-  if (event.target.classList.contains("get_object_info")) {
+  if (event.target.classList.contains("get_serve_info")) {
     return
   };
   counter = document.body.querySelector(".total_price_counter");
@@ -592,11 +592,11 @@ on('body', 'click', '.select_child_serve', function(event) {
   category = categories.querySelector('[data-pk=' + '"' + category_id + '"' + ']');
 
   parent_id = _this.getAttribute("serve-pk");
-  this_pk = _this.querySelector(".get_object_info").getAttribute("data-pk");
+  this_pk = _this.querySelector(".get_serve_info").getAttribute("data-pk");
   parent = _this.parentElement.querySelector('[parent-pk=' + '"' + parent_id + '"' + ']');
-  serve_pk = parent.querySelector(".get_object_info").getAttribute("data-pk");
-  title = _this.querySelector(".get_object_info").innerHTML;
-  parent_title = parent.querySelector(".get_object_info").innerHTML;
+  serve_pk = parent.querySelector(".get_serve_info").getAttribute("data-pk");
+  title = _this.querySelector(".get_serve_info").innerHTML;
+  parent_title = parent.querySelector(".get_serve_info").innerHTML;
   price = _this.querySelector(".price").innerHTML;
   parent_price = parent.querySelector(".price").innerHTML;
   hours = _this.querySelector(".hours").innerHTML;
@@ -619,7 +619,7 @@ on('body', 'click', '.select_child_serve', function(event) {
 
   counter.innerHTML = counter.innerHTML*1 - _parent_price + _price;
 
-  parent.querySelector(".get_object_info").innerHTML = title;
+  parent.querySelector(".get_serve_info").innerHTML = title;
 
   if (_this.classList.contains("no_select_parent")) {
     counter.innerHTML = counter.innerHTML*1 - parent.querySelector(".price").innerHTML*1;
@@ -635,11 +635,11 @@ on('body', 'click', '.select_child_serve', function(event) {
       parent.querySelector(".price").innerHTML = price;
       parent.querySelector(".hours").innerHTML = hours;
     }
-    parent.querySelector(".get_object_info").setAttribute("data-pk", this_pk);
-    _this.querySelector(".get_object_info").setAttribute("data-pk", serve_pk);
+    parent.querySelector(".get_serve_info").setAttribute("data-pk", this_pk);
+    _this.querySelector(".get_serve_info").setAttribute("data-pk", serve_pk);
   }
 
-  _this.querySelector(".get_object_info").innerHTML = parent_title;
+  _this.querySelector(".get_serve_info").innerHTML = parent_title;
   _this.querySelector(".price").innerHTML = parent_price;
   _this.querySelector(".hours").innerHTML = parent_hours;
 
@@ -653,12 +653,12 @@ on('body', 'click', '.select_child_serve', function(event) {
 
 on('body', 'click', '.select_serve', function(event) {
   _this = this;
-  if (event.target.classList.contains("get_object_info")) {
+  if (event.target.classList.contains("get_serve_info")) {
     return
   };
 
   counter = document.body.querySelector(".total_price_counter");
-  serve_pk = _this.querySelector(".get_object_info").getAttribute("data-pk");
+  serve_pk = _this.querySelector(".get_serve_info").getAttribute("data-pk");
 
   // для начала мы уберем выбранные опции во вкладках
   // выбранной категории (напр категории "моб. разработка")
@@ -821,9 +821,6 @@ on('body', 'click', '.body_overlay', function() {
   close_fullscreen()
 });
 
-on('body', 'click', '.get_object_info', function() {
-  create_fullscreen("/load_item/?_object_type=" + this.getAttribute("data-type") + "&_owner_type=" + this.getAttribute("owner-type") + "&_object_pk=" + this.getAttribute("data-pk") + "&_owner_pk=" + this.getAttribute("owner-pk"), "worker_fullscreen");
-});
 on('body', 'click', '.create_order_form', function() {
   create_fullscreen("/create_order/", "item_fullscreen", true);
 });
