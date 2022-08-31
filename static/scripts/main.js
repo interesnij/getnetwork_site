@@ -369,7 +369,7 @@ function create_order_form() {
       + serves
       + "</tbody></table></div></div></div></section>";
 
-      serves_container += section;
+      serves_container.innerHTML += section;
     }
   }
 };
