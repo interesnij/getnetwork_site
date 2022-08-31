@@ -357,7 +357,7 @@ function create_order_form() {
   console.log(document.body.querySelectorAll(".banner_block"));
   for (var i = 0; i < banner_blocks.length; i++) {
     if (banner_blocks[i].classList.contains("open_cat")) {
-      console.log(banner_blocks[i]);
+      console.log(banner_blocks[i].querySelector(".section-title"));
       serves_list = banner_blocks[i].querySelectorAll(".hover");
       serves = "";
       for (var i = 0; i < serves_list.length; i++) {
