@@ -24,7 +24,7 @@ a:hover {
     border-top: 1px dotted rgba(255,255,255, 0.8) !important;
 }
 .tpl-minimal-tabs li.active a,
-.tpl-minimal-tabs li:hover a {
+.tpl-minimal-tabs li.not_active:hover a {
     border: 1px solid rgb(255, 255, 255, 0.7) !important;
 }
 .mobile_icon span {

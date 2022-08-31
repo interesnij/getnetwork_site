@@ -17,7 +17,7 @@
                       <a class="pointer"><%= cat.name %></a>
                   </li>
                 <% } else { %>
-                  <li data-pk="<%= cat.id %>" data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i + 1 %>">
+                  <li data-pk="<%= cat.id %>" data-sum="<%= cat.default_price %>" class="yy pointer not_active s_<%= i + 1 %>">
                     <a class="pointer"><%= cat.name %></a>
                   </li>
                 <% } %>
