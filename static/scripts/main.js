@@ -58,7 +58,6 @@ function get_window_view_timer(count) {
   intervalListener2 = setInterval(() => {
     if (i < count) {
       $window_seconds += 1;
-      console.log("window_seconds ", $window_seconds);
     }
     else {
       $window_time_end = true;
@@ -372,7 +371,7 @@ function create_order_form() {
 
         serves += serve;
       }
-
+      console.log(banner_blocks[i]);
       section = "<section class='banner_block mb-20 mt-20 border' style='width:100%;'><h4 class='section-title font-alt'>"
       + banner_blocks[i].querySelector(".section-title").innerHTML
       + "</h4><div><div class='align-center'><div class='tab-content tpl-minimal-tabs-cont section-text'><div class='tab-pane in active'><table class='table'><tbody><tr><th class='hidden-xs'><span data-pk='"
