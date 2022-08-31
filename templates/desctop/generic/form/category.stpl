@@ -25,7 +25,7 @@
           <% } else if object_serve_ids.iter().any(|i| i==&first_child.id) { %>
             <tr class="open_child_serves hover pointer" parent-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
-              <td class="action_text" style="width:12%">Выбрано</td>
+              <td class="action_text border-top" style="width:12%">Выбрано</td>
             </tr>
 
           <% } else { %>
@@ -37,7 +37,7 @@
               </td>
               <td class="price_td" style="width:15%"><span class="price"></span> ₽</td>
               <td style="width:15%"></td>
-              <td class="action_text" style="width:12%">Выбрать</td>
+              <td class="action_text border-top" style="width:12%">Выбрать</td>
             </tr>
           <% } %>
 
@@ -47,7 +47,7 @@
           <% for (i, child) in childs.iter().enumerate() { %>
             <tr class="select_child_serve hide pointer" style="font-size: 12px;<% if (i + 1) == childs_count { %>padding-bottom: 30px;<% } %>" serve-pk="<%= serve.id %>">
               <% include!("child.stpl"); %>
-              <td class="action_text solid_right <% if i == 0 { %>solid_top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>" style="width:12%">Выбрать</td>
+              <td class="action_text solid_right <% if i == 0 { %>border-top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>" style="width:12%">Выбрать</td>
             </tr>
           <% } %>
           <tr></tr>
