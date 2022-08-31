@@ -361,7 +361,15 @@ function create_order_form() {
       cat_title = banner_blocks[i].querySelector(".get_serve_category_info").innerHTML;
       cat_id = banner_blocks[i].querySelector(".get_serve_category_info").getAttribute("data-pk");
 
-      serves_list = banner_blocks[i].querySelectorAll(".hover");
+      tabs = banner_blocks[i].querySelector(".price_mode");
+      tab_pk = tabs.querySelector(".active");
+      tab_panes = banner_blocks[i].querySelectorAll(".tab-pane");
+      for (var k = 0; k < tab_panes.length; k++) {
+        if (tab_panes[k].getAttribute == tab_pk) {
+          current_tab = tab_panes[k];
+        }
+      }
+      serves_list = current_tab.querySelectorAll(".hover");
       serves = "";
       for (var i = 0; i < serves_list.length; i++) {
         serve = "<tr><td style='width:55%'><a class='get_serve_info pointer' data-pk='"
@@ -370,7 +378,7 @@ function create_order_form() {
         + serves_list[i].querySelector(".get_serve_info").innerHTML
         + "</a></td><td class='price_td' style='width:15%'>"
         + serves_list[i].querySelector(".price_td").innerHTML
-        + " ₽</td><td class='hours' style='width:15%'>"
+        + "</td><td class='hours' style='width:15%'>"
         + serves_list[i].querySelector(".hours").innerHTML
         + "</td></tr>";
 
