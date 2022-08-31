@@ -357,7 +357,10 @@ function create_order_form() {
   console.log(document.body.querySelectorAll(".banner_block"));
   for (var i = 0; i < banner_blocks.length; i++) {
     if (banner_blocks[i].classList.contains("open_cat")) {
-      console.log(banner_blocks[i].querySelector(".section-title").innerHTML);
+      banner_block_title = banner_blocks[i].querySelector(".section-title").innerHTML;
+      cat_title = banner_blocks[i].querySelector(".get_serve_category_info").innerHTML;
+      cat_id = banner_blocks[i].querySelector(".get_serve_category_info").getAttribute("data-pk");
+
       serves_list = banner_blocks[i].querySelectorAll(".hover");
       serves = "";
       for (var i = 0; i < serves_list.length; i++) {
@@ -375,11 +378,11 @@ function create_order_form() {
       }
 
       section = "<section class='banner_block mb-20 mt-20 border' style='width:100%;'><h4 class='section-title font-alt'>"
-      + banner_blocks[i].querySelector(".section-title").innerHTML
+      + banner_block_title
       + "</h4><div><div class='align-center'><div class='tab-content tpl-minimal-tabs-cont section-text'><div class='tab-pane in active'><table class='table'><tbody><tr><th class='hidden-xs'><span data-pk='"
-      + banner_blocks[i].querySelector(".get_serve_category_info").getAttribute("data-pk")
+      + cat_title
       + "' class='pointer get_serve_category_info'>"
-      + banner_blocks[i].querySelector(".get_serve_category_info").innerHTML
+      + cat_id
       + "</span></th><th>Цена</th><th>Часы</th><th></th></tr>"
 
       + serves
