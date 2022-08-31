@@ -34,9 +34,9 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/history/", web::get().to(history_page));
     config.route("/feedback_list/", web::get().to(feedback_list_page));
     config.route("/serve_list/", web::get().to(serve_list_page));
-    config.route("/load_tech_category/", web::get().to(get_tech_category_page));
-    config.route("/load_serve_category/", web::get().to(get_serve_category_page));
-    config.route("/load_serve/", web::get().to(get_serve_page));
+    config.route("/load_tech_category/{id}/", web::get().to(get_tech_category_page));
+    config.route("/load_serve_category/{id}/", web::get().to(get_serve_category_page));
+    config.route("/load_serve/{id}/", web::get().to(get_serve_page));
 }
 
 #[derive(Debug, Deserialize)]
