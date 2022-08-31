@@ -370,13 +370,13 @@ function create_order_form() {
           cat_id = tab_panes[k].querySelector(".get_serve_category_info").getAttribute("data-pk");
           serves = "";
           for (var i = 0; i < serves_list.length; i++) {
-            serve = "<tr><td style='width:55%'><a class='get_serve_info pointer' data-pk='"
+            serve = "<tr><td class='border-top' style='width:55%'><a class='get_serve_info pointer' data-pk='"
             + serves_list[i].querySelector(".get_serve_info").getAttribute("data-pk")
             + "'>"
             + serves_list[i].querySelector(".get_serve_info").innerHTML
-            + "</a></td><td class='price_td' style='width:15%'>"
+            + "</a></td><td class='border-top price_td' style='width:15%'>"
             + serves_list[i].querySelector(".price_td").innerHTML
-            + "</td><td class='hours' style='width:15%'>"
+            + "</td><td class='border-top hours' style='width:15%'>"
             + serves_list[i].querySelector(".hours").innerHTML
             + "</td></tr>";
 
