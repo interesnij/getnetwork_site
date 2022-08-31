@@ -332,126 +332,17 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
 }
 
 pub async fn create_order_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    #[derive(Debug, Deserialize)]
-    struct OrderParams { 
-        pub object_id: Option<i32>,
-        pub types:     Option<i16>,
+    #[derive(TemplateOnce)]
+    #[template(path = "desctop/pages/create_order.stpl")]
+    struct Template {
+        title:  String,
     }
-    let params_some = web::Query::<OrderParams>::from_query(&req.query_string());
-    let mut object_id = 0;
-    let mut _type = 0;
-    if params_some.is_ok() {
-        let params = params_some.unwrap();
-        if params.object_id.is_some() {
-            object_id = params.object_id.unwrap();
-        }
-        else {
-            object_id = 0;
-        }
-        if params.types.is_some() {
-            _type = params.types.unwrap();
-        }
-        else {
-            _type = 0;
-        }
+    let body = Template {
+        title:  "Создание заказа".to_string(),
     }
-    if object_id == 0 || _type == 0 {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Важные параметры для заказа отсутствуют..."))
-    }
-    else {
-        let _connection = establish_connection();
-        let user_id = get_or_create_cookie_user_id(&req).await;
-
-        if _type == 1 {
-            use schema::services::dsl::services;
-            use crate::models::Service;
-            let _services = services
-                .filter(schema::services::id.eq(object_id))
-                .load::<Service>(&_connection)
-                .expect("E");
-            let _service = _services
-                .into_iter()
-                .nth(0)
-                .unwrap();
-
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/pages/create_order.stpl")]
-            struct Template {
-                title:  String,
-                types:  i16,
-                object: Service,
-            }
-            let body = Template {
-                title:  "Создание заказа".to_string(),
-                types:  _type,
-                object: _service,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-
-        else if _type == 2 {
-            use schema::stores::dsl::stores;
-            use crate::models::Store;
-            let _stores = stores
-                .filter(schema::stores::id.eq(object_id))
-                .load::<Store>(&_connection)
-                .expect("E");
-            let _store = _stores
-                .into_iter()
-                .nth(0)
-                .unwrap();
-
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/pages/create_order.stpl")]
-            struct Template {
-                title:  String,
-                types:  i16,
-                object: Store,
-            }
-            let body = Template {
-                title:  "Создание заказа".to_string(),
-                types:  _type,
-                object: _store,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-
-        else if _type == 3 {
-            use schema::works::dsl::works;
-            use crate::models::Work;
-            let _works = works
-                .filter(schema::works::id.eq(object_id))
-                .load::<Work>(&_connection)
-                .expect("E");
-            let _work = _works
-                .into_iter()
-                .nth(0)
-                .unwrap();
-
-            #[derive(TemplateOnce)]
-            #[template(path = "desctop/pages/create_order.stpl")]
-            struct Template {
-                title:  String,
-                types:  i16,
-                object: Work,
-            }
-            let body = Template {
-                title:  "Создание заказа".to_string(),
-                types:  _type,
-                object: _work,
-            }
-            .render_once()
-            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-        }
-        else {
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Непонятно, к какому типу относится объект..."))
-        }
-    }
+    .render_once()
+    .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+    Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
 }
 
 pub async fn edit_order_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
