@@ -358,8 +358,6 @@ function create_order_form() {
   for (var i = 0; i < banner_blocks.length; i++) {
     if (banner_blocks[i].classList.contains("open_cat")) {
       banner_block_title = banner_blocks[i].querySelector(".section-title").innerHTML;
-      cat_title = banner_blocks[i].querySelector(".get_serve_category_info").innerHTML;
-      cat_id = banner_blocks[i].querySelector(".get_serve_category_info").getAttribute("data-pk");
 
       tabs = banner_blocks[i].querySelector(".price_mode");
       tab_pk = tabs.querySelector(".active").getAttribute("data-pk");
@@ -367,6 +365,8 @@ function create_order_form() {
       for (var k = 0; k < tab_panes.length; k++) {
         if (tab_panes[k].getAttribute("data-pk") == tab_pk) {
           serves_list = tab_panes[k].querySelectorAll(".hover");
+          cat_title = tab_panes[k].querySelector(".get_serve_category_info").innerHTML;
+          cat_id = tab_panes[k].querySelector(".get_serve_category_info").getAttribute("data-pk");
           serves = "";
           for (var i = 0; i < serves_list.length; i++) {
             serve = "<tr><td style='width:55%'><a class='get_serve_info pointer' data-pk='"
