@@ -20,7 +20,7 @@
   border-top: 1px solid #222;
 }
 .tpl-minimal-tabs li.active a,
-.tpl-minimal-tabs li.active a:hover {
+.tpl-minimal-tabs li.not_active:hover a {
     border: 1px solid #222 !important;
 }
 .mn-sub {

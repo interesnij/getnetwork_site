@@ -26,7 +26,7 @@ a:hover {
   color: rgb(0, 0, 0, 0.7) !important;
 }
 .tpl-minimal-tabs li.active a,
-.tpl-minimal-tabs li.active a:hover {
+.tpl-minimal-tabs li.not_active:hover a {
     border: 1px solid #222 !important;
 }
 .hs-line-14 {

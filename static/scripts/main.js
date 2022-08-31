@@ -714,10 +714,10 @@ function service_tab_action(_this, tab_class) {
     nav_items = nav.querySelectorAll(".yy");
     for (var i = 0; i < nav_items.length; i++) {
       nav_items[i].classList.remove("active", "in");
-      nav_items[i].classList.add("pointer")
+      nav_items[i].classList.add("pointer", "not_active")
     };
     _this.classList.add("active", "in");
-    _this.classList.remove("pointer");
+    _this.classList.remove("pointer", "not_active");
     tabs = nav.querySelector(".tab-content");
 
     tabs_panes = tabs.querySelectorAll(".tab-pane");
