@@ -1,4 +1,4 @@
-<section class="border card_fullscreen" style="position: fixed;z-index:1000;bottom: 50px;width: 100%;">
+<section class="border card_fullscreen" style="position: fixed;z-index:99;bottom: 50px;width: 100%;">
 <h5 data-sum="<%= object.price %>"
     class="create_order_form" style="cursor:pointer;text-align: center;">
     Сумма <span class="total_price_counter"><%= object.price %></span>
