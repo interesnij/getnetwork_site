@@ -826,13 +826,13 @@ on('body', 'click', '.create_order_form', function() {
 });
 
 on('body', 'click', '.get_tech_category_info', function() {
-  create_fullscreen("/load_tech_category/" + this.getAttribute("data-pk") + "/", "worker_fullscreen", true);
+  create_fullscreen("/load_tech_category/" + this.getAttribute("data-pk") + "/", "worker_fullscreen");
 });
 on('body', 'click', '.get_serve_category_info', function() {
-  create_fullscreen("/load_serve_category/" + this.getAttribute("data-pk") + "/", "worker_fullscreen", true);
+  create_fullscreen("/load_serve_category/" + this.getAttribute("data-pk") + "/", "worker_fullscreen");
 });
 on('body', 'click', '.get_serve_info', function() {
-  create_fullscreen("/load_serve/" + this.getAttribute("data-pk") + "/", "worker_fullscreen", true);
+  create_fullscreen("/load_serve/" + this.getAttribute("data-pk") + "/", "worker_fullscreen");
 });
 
 on('body', 'click', '.next_item', function(event) {
