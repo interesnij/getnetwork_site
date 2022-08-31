@@ -59,12 +59,19 @@
   color: black !important;
 }
 
-.border, .border-top {
+.border {
     border: 1px solid rgba(127,127,127, 0.7) !important;
 }
-.border:hover, .border-top:hover {
+.border:hover {
     border: 1px solid rgba(127,127,127, 0.9) !important;
 }
+.border-top {
+  border-top: 1px solid rgba(127,127,127, 0.7) !important;
+}
+.border-top:hover {
+  border-top: 1px solid rgba(127,127,127, 0.9) !important;
+}
+
 .blog-post-prev-small{
     border-top: 1px dotted #eaeaea !important;
 }

@@ -19,7 +19,7 @@
           <% if serve.is_default { %>
             <tr class="is_default open_child_serves hover pointer" parent-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
-              <td class="action_text" style="width:15%">Выбрано</td>
+              <td class="action_text border-top" style="width:15%">Выбрано</td>
             </tr>
 
           <% } else if object_serve_ids.iter().any(|i| i==&first_child.id) { %>
