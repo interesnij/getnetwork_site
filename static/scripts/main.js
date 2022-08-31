@@ -346,14 +346,26 @@ function create_fullscreen(url, type_class, is_order_case) {
 
 function create_order_form() {
   console.log("create_order_form!");
+  data = document.body.querySelector(".object_data");
+  object_id = data.getAttribute("data-pk");
+  object_type = data.getAttribute("data-type");
+  object_title = data.innerHTML;
+
   fullscreens_container = document.body.querySelector("#fullscreens_container");
-  order_window = fullscreens_container.querySelector(".order_window");
+  serves_container = fullscreens_container.querySelector(".serves_container");
 
-  open_tech_blocks = document.body.querySelectorAll(".open_tech_block");
-  for (var i = 0; i < open_tech_blocks.length; i++) {
+  banner_blocks = document.body.querySelectorAll(".banner_block");
+  for (var i = 0; i < banner_blocks.length; i++) {
+    if (_this.classList.contains("open_cat")) {
+      serves = ""
+      section = "<section class='banner_block mb-20 mt-20 border' style='width:100%;'><h4 class='section-title font-alt'>"
+      + banner_blocks[i].querySelector(".section-title").innerHTML
+      + "<div><div class='align-center'><div class='tab-content tpl-minimal-tabs-cont section-text'>"
+      + serves
+      + "</div></div></section>";
 
-    open_tech_blocks[i].innerHTML = "";
-
+      serves_container += section;
+    }
   }
 };
 
@@ -839,6 +851,7 @@ on('body', 'input', '.general_search', function() {
 
 on('body', 'click', '.show_tech_category', function() {
   next_div = this.nextElementSibling;
+  this.parentElement.classList.toggle("open_cat");
   counter = document.body.querySelector(".total_price_counter")
   if (next_div.classList.contains("hidden")) {
     counter.innerHTML = counter.innerHTML*1 + next_div.querySelector(".tab_1").getAttribute("data-sum")*1;
@@ -846,7 +859,7 @@ on('body', 'click', '.show_tech_category', function() {
     counter.innerHTML = counter.innerHTML*1 - next_div.querySelector(".tab_1").getAttribute("data-sum")*1;
   }
   this.querySelector(".cat_description").classList.toggle("hidden");
-  this.querySelector(".cat_name").classList.toggle("hidden")
+  this.querySelector(".cat_name").classList.toggle("hidden");
   next_div.classList.toggle("hidden")
 });
 

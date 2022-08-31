@@ -19,7 +19,7 @@
               <div class="row search_result"></div>
               <div class="content">
                 <div class="blog-item-body">
-                    <h1 class="mt-0 font-alt"><%= object.title %></h1>
+                    <h1 class="mt-0 font-alt object_data" data-type="1" data-pk="<%= object.id %>"><%= object.title %></h1>
                     <div class="blog-item-data">
                       <% if request_user.is_superuser() { %>
                         | <a class="ajax" href="/edit_service/<%= object.id %>/">~</a>

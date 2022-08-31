@@ -1,7 +1,8 @@
 <div page-id="" data-title="Создание заказа" class="doc_title order_window">
-  <input id="id_title" type="hidden" name="title">
-  <input id="id_types" type="hidden" name="types">
-  <input id="id_object_id" type="hidden" name="object_id">
+  <div class="serves_container">
+
+  </div>
+
   <div class="form row relative">
     <div class="col-md-6 mb-20">
       <div class="mb-20 mb-md-10">

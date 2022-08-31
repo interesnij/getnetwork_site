@@ -17,7 +17,7 @@
             <div class="col-md-6">
                 <div class="blog-item mb-80 mb-xs-40">
                     <div class="blog-item-body">
-                        <h1 class="mt-0 font-alt"><%= object.title %></h1>
+                        <h1 class="mt-0 font-alt object_data" data-type="3" data-pk="<%= object.id %>"><%= object.title %></h1>
                         <hr class="mt-0 mb-0 " />
 
                         <div class="work-detail mt-20 mb-20">

@@ -15,7 +15,7 @@
 <section class="page-section">
     <div class="container">
         <div class="blog-item-body">
-            <h1 class="mt-0 font-alt"><%= object.title %></h1>
+            <h1 class="mt-0 font-alt object_data" data-type="1" data-pk="<%= object.id %>"><%= object.title %></h1>
         </div>
 
         <% if object.content.is_some() { %>
