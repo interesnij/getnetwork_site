@@ -281,7 +281,7 @@ function create_fullscreen(url, type_class, is_order_case) {
 
           $loader.innerHTML = elem;
           height = $loader.scrollHeight*1 + 30;
-          if (height < 500 && !$loader.querySelector(".data_display")) {
+          if (!is_order_case && height < 500 && !$loader.querySelector(".data_display")) {
             $parent_div.style.height = height + "px";
             $loader.style.overflowY = "unset";
 
