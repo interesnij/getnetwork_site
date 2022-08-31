@@ -380,9 +380,9 @@ function create_order_form() {
       section = "<section class='banner_block mb-20 mt-20 border' style='width:100%;'><h4 class='section-title font-alt'>"
       + banner_block_title
       + "</h4><div><div class='align-center'><div class='tab-content tpl-minimal-tabs-cont section-text'><div class='tab-pane in active'><table class='table'><tbody><tr><th class='hidden-xs'><span data-pk='"
-      + cat_title
-      + "' class='pointer get_serve_category_info'>"
       + cat_id
+      + "' class='pointer get_serve_category_info'>"
+      + cat_title
       + "</span></th><th>Цена</th><th>Часы</th><th></th></tr>"
 
       + serves
