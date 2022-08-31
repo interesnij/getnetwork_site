@@ -59,10 +59,10 @@
   color: black !important;
 }
 
-.border {
+.border, .border-top {
     border: 1px solid rgba(127,127,127, 0.7) !important;
 }
-.border:hover {
+.border:hover, .border-top:hover {
     border: 1px solid rgba(127,127,127, 0.9) !important;
 }
 .blog-post-prev-small{

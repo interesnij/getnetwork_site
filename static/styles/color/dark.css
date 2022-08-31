@@ -80,10 +80,10 @@ a:hover {
 }
 */
 
-.border {
+.border, .border-top {
     border: 1px solid rgba(255,255,255, 0.7) !important;
 }
-.border:hover {
+.border:hover, .border-top:hover {
     border: 1px solid rgba(255,255,255, 0.9) !important;
 }
 .shadow{
