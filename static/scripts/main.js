@@ -357,7 +357,22 @@ function create_order_form() {
   banner_blocks = document.body.querySelectorAll(".banner_block");
   for (var i = 0; i < banner_blocks.length; i++) {
     if (banner_blocks[i].classList.contains("open_cat")) {
+      serves_list = banner_blocks[i].querySelectorAll(".hover");
       serves = ""
+      for (var i = 0; i < serves_list.length; i++) {
+        serve = "<tr><td style='width:55%'><a class='get_serve_info pointer' data-pk='"
+        + serves_list[i].querySelector(".get_serve_info").getAttribute("data-pk")
+        + "'>"
+        + serves_list[i].querySelector(".get_serve_info").innerHTML
+        + "</a></td><td class='price_td' style='width:15%'>"
+        + serves_list[i].querySelector(".price_td").innerHTML
+        + " ₽</td><td class='hours' style='width:15%'>"
+        + serves_list[i].querySelector(".hours").innerHTML
+        + "</td></tr>";
+
+        serves += serve;
+      }
+
       section = "<section class='banner_block mb-20 mt-20 border' style='width:100%;'><h4 class='section-title font-alt'>"
       + banner_blocks[i].querySelector(".section-title").innerHTML
       + "</h4><div><div class='align-center'><div class='tab-content tpl-minimal-tabs-cont section-text'><div class='tab-pane in active'><table class='table'><tbody><tr><th class='hidden-xs'><span data-pk='"
