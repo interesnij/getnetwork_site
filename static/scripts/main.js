@@ -657,6 +657,7 @@ on('body', 'click', '.select_child_serve', function(event) {
       childs[i].classList.toggle("hide");
     }
   }
+  _this.querySelector(".icon_parent").innerHTML = "▼";
 });
 
 on('body', 'click', '.select_serve', function(event) {
@@ -695,14 +696,18 @@ on('body', 'click', '.select_serve', function(event) {
     // если до нажатия опция не выбрана...
     counter.innerHTML = counter.innerHTML*1 + serve_price;
     _this.classList.add("hover");
-    _this.querySelector(".action_text").innerHTML = 'Выбрано';
+    action_text = _this.querySelector(".action_text");
+    action_text.innerHTML = '&nbsp;✔&nbsp;';
+    action_text.setAttribute("tooltip", "Опция выбрана");
   }
   else {
     // если опция выбрана, надо снять выделение и счетчик уменьшить на сумму опции.
     // а также уменьшить "data-serve" счетчика
     counter.innerHTML = counter.innerHTML*1 - serve_price;
     _this.classList.remove("hover");
-    _this.querySelector(".action_text").innerHTML = 'Выбрать';
+    action_text = _this.querySelector(".action_text");
+    action_text.innerHTML = '&nbsp;+&nbsp;';
+    action_text.setAttribute("tooltip", "Опция не выбрана");
   }
 });
 

@@ -74,7 +74,7 @@
               <% include!("serve.stpl"); %>
               <td class="action_text" style="width:15%">
                 <span flow="up" tooltip="Опция выбрана" class="icon_check">+</span>
-
+                &nbsp;
                 <span flow="up" tooltip="Опция по умолчанию" class="icon_default">*</span>
               </td>
             </tr>
@@ -82,14 +82,14 @@
             <tr class="select_serve hover pointer">
               <% include!("serve.stpl"); %>
               <td class="action_text" style="width:12%">
-                <span flow="up" tooltip="Опция выбрана" class="icon_check">✔</span>
+                <span flow="up" tooltip="Опция выбрана" class="icon_check">&nbsp;✔&nbsp;</span>
               </td>
             </tr>
           <% } else { %>
             <tr class="select_serve pointer">
               <% include!("serve.stpl"); %>
               <td class="action_text border-top" style="width:12%">
-                <span flow="up" tooltip="Опция не выбрана" class="icon_check">+</span>
+                <span flow="up" tooltip="Опция не выбрана" class="icon_check">&nbsp;+&nbsp;</span>
               </td>
             </tr>
           <% } %>
