@@ -579,7 +579,7 @@ pub struct OrderForms {
     pub description: Option<String>,
     pub email:       String,
     pub files:       Vec<String>,
-    pub serve_list:  Vec<String>,
+    pub serve_list:  Vec<i32>,
 }
 
 // форма для заказов
