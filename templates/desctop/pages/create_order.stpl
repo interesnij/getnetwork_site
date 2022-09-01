@@ -19,7 +19,8 @@
   <h3 style="margin-bottom:0">2. Сведения о заказчике</h3>
   <p style="font-size: 80%;">Данные можно будет поменять в будущем.
   </p>
-  <div class="form row relative" style="margin-left: 0;margin-right: 0;">
+  <form class="form">
+  <div class="row relative" style="margin-left: 0;margin-right: 0;">
     <div class="col-md-6 mb-20">
       <div class="mb-20 mb-md-10">
         <label for="id_username">Как к Вам обращаться:</label>
@@ -54,4 +55,5 @@
   <button style="width: 100%;padding: 15px;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_order_btn">
     Создать заказ
   </button>
+  </form>
 </div>

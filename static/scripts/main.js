@@ -354,10 +354,6 @@ function create_order_form(price) {
   try {
     document.body.querySelector(".price_section_block").style.display = "none";
   } catch { null };
-  data = document.body.querySelector(".object_data");
-  object_id = data.getAttribute("data-pk");
-  object_type = data.getAttribute("data-type");
-  object_title = data.innerHTML;
 
   fullscreens_container = document.body.querySelector("#fullscreens_container");
   serves_container = fullscreens_container.querySelector(".serves_container");
@@ -1003,4 +999,46 @@ on('body', 'click', '#signup', function() {
 
 on('body', 'click', '.show_next_element', function() {
   this.nextElementSibling.classList.toggle("hidden")
+});
+
+
+on('body', 'click', '#create_order_btn', function() {
+  form = this.parentElement;
+  if (!form.querySelector("#id_username").value) {
+    form.querySelector("#id_username").style.setProperty('border', '1px #FF0000 solid', 'important');
+    return
+  }
+  else if (!form.querySelector("#id_email").value) {
+    form.querySelector("#id_email").style.setProperty('border', '1px #FF0000 solid', 'important');
+    return
+  }
+
+  this.setAttribute("disable", "true");
+  serves_input = ""
+  serve_list = form.parentElement.querySelectorAll(".get_serve_info");
+  for (var i = 0; i < serve_list.length; i++) {
+    serves_input += serve_list[i].getAttribute("data-pk");
+    if ((i + 1) != serve_list.length) {
+      serves_input += ",";
+    }
+  }
+  form_data = new FormData(form);
+
+  data = document.body.querySelector(".object_data");
+  object_id = data.getAttribute("data-pk");
+  object_type = data.getAttribute("data-type");
+  object_title = data.innerHTML;
+
+  form_data.append("title", object_title);
+  form_data.append("types", object_type);
+  form_data.append("object_id", object_id);
+  form_data.append("serves_list", serves_input);
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', "/create_order/", true );
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    ajax_get_reload("/user_orders/");
+  }};
+  link.send(form_data);
 });

@@ -579,8 +579,7 @@ pub struct OrderForms {
     pub description: Option<String>,
     pub email:       String,
     pub files:       Vec<String>,
-    pub serve_list:  Vec<i32>,
-    pub close_tech_cats_list: Vec<i32>,
+    pub serve_list:  Vec<String>,
 }
 
 // форма для заказов
@@ -596,7 +595,6 @@ pub async fn order_form(payload: &mut Multipart, owner_id: i32) -> OrderForms {
         email:       "".to_string(),
         files:       Vec::new(),
         serve_list:  Vec::new(),
-        close_tech_cats_list: Vec::new(),
     };
 
     while let Some(item) = payload.next().await {
@@ -639,13 +637,16 @@ pub async fn order_form(payload: &mut Multipart, owner_id: i32) -> OrderForms {
                 }
             }
         }
-        else if name == "serve_list[]" {
+        else if name == "serve_list" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
                     let data_string = s.to_string();
-                    let _int: i32 = data_string.parse().unwrap();
-                    form.serve_list.push(_int);
+                    let v: Vec<&str> = data_string.split(",").collect();
+                    for i in v {
+                        let _int: i32 = i.parse().unwrap();
+                        form.serve_list.push(_int);
+                    }
                 }
             }
         }
