@@ -1014,7 +1014,8 @@ on('body', 'click', '#create_order_btn', function() {
   }
 
   this.setAttribute("disable", "true");
-  serves_input = ""
+  this.innerHTML = "Данные отправляются!";
+  serves_input = "";
   serve_list = form.parentElement.querySelectorAll(".get_serve_info");
   for (var i = 0; i < serve_list.length; i++) {
     serves_input += serve_list[i].getAttribute("data-pk");
