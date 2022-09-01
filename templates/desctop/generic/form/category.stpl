@@ -45,8 +45,8 @@
                   <%= serve.name %> → Не выбрано
                 </a>
               </td>
-              <td class="price_td" style="width:15%"><span class="price"></span></td>
-              <td style="width:15%"></td>
+              <td class="price_td" style="width:15%"><span class="price">-</span></td>
+              <td class="hours" style="width:15%">-</td>
               <td class="action_text border-top" style="width:12%">
                 <a flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</a>
                 &nbsp;
