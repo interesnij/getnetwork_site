@@ -41,7 +41,7 @@
           <% } else { %>
             <tr class="open_child_serves no_select_parent pointer" parent-pk="<%= serve.id %>">
               <td style="width:55%">
-                <a class="get_object_info pointer" owner-pk="<%= object.id %>">
+                <a class="get_object_info pointer" data-pk="<%= object.id %>">
                   <%= serve.name %> → Не выбрано
                 </a>
               </td>
