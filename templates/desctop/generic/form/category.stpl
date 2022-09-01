@@ -24,7 +24,7 @@
                 &nbsp;
                 <a flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</a>
                 &nbsp;
-                <a flow="up" tooltip="Опция по умолчанию" class="icon_default">*</a>
+                <a flow="up" tooltip="Опция обязательна" class="icon_default">*</a>
               </td>
             </tr>
 
@@ -75,7 +75,7 @@
               <td class="action_text" style="width:15%">
                 <span flow="up" tooltip="Опция выбрана" class="icon_check">+</span>
                 &nbsp;
-                <span flow="up" tooltip="Опция по умолчанию" class="icon_default">*</span>
+                <span flow="up" tooltip="Опция обязательна" class="icon_default">*</span>
               </td>
             </tr>
           <% } else if object_serve_ids.iter().any(|i| i==&serve.id) { %>
