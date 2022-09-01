@@ -20,11 +20,11 @@
             <tr class="is_default open_child_serves hover pointer" parent-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
               <td class="action_text border-top" style="width:15%">
-                <span flow="up" tooltip="Опция выбрана" class="icon_check">✔</span>
+                <a flow="up" tooltip="Опция выбрана" class="icon_check">✔</a>
                 &nbsp;
-                <span flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</span>
+                <a flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</a>
                 &nbsp;
-                <span flow="up" tooltip="Опция по умолчанию" class="icon_default">*</span>
+                <a flow="up" tooltip="Опция по умолчанию" class="icon_default">*</a>
               </td>
             </tr>
 
@@ -32,9 +32,9 @@
             <tr class="open_child_serves hover pointer" parent-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
               <td class="action_text border-top" style="width:12%">
-                <span flow="up" tooltip="Опция выбрана" class="icon_check">✔</span>
+                <a flow="up" tooltip="Опция выбрана" class="icon_check">✔</a>
                 &nbsp;
-                <span flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</span>
+                <a flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</a>
               </td>
             </tr>
 
@@ -48,9 +48,9 @@
               <td class="price_td" style="width:15%"><span class="price"></span> ₽</td>
               <td style="width:15%"></td>
               <td class="action_text border-top" style="width:12%">
-                <span flow="up" tooltip="Опция не выбрана" class="icon_check">+</span>
+                <a flow="up" tooltip="Опция не выбрана" class="icon_check">+</a>
                 &nbsp;
-                <span flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</span>
+                <a flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</a>
               </td>
             </tr>
           <% } %>
