@@ -20,6 +20,15 @@
               <div class="content">
                 <div class="blog-item-body">
                   <h1 class="mt-0 font-alt object_data" data-type="1" data-pk="<%= object.id %>"><%= object.title %></h1>
+                  <div class="blog-item-data">
+                    <a data-pk="<%= object.id %>" class="pointer remove_order">
+                      Удалить
+                    </a>
+                    |
+                    <a data-pk="<%= object.id %>" class="pointer edit_order">
+                      Изменить данные
+                    </a>
+                  </div>
                 </div>
 
                 <% if object.description.is_some() { %>

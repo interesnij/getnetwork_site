@@ -1044,3 +1044,17 @@ on('body', 'click', '#create_order_btn', function() {
   }};
   link.send(form_data);
 });
+
+on('body', 'click', '.remove_order', function() {
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'GET', "/delete_order/" + this.getAttribute("data-pk") + "/", true );
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    ajax_get_reload("/user_orders/");
+  }};
+  link.send();
+});
+
+on('body', 'click', '.edit_order', function() {
+  create_fullscreen("/edit_order/" + this.getAttribute("data-pk") + "/", "item_fullscreen");
+});
