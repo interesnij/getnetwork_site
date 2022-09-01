@@ -1038,6 +1038,7 @@ on('body', 'click', '#create_order_btn', function() {
   link.open( 'POST', "/create_order/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
+    get_document_opacity_1();
     ajax_get_reload("/user_orders/");
   }};
   link.send(form_data);
