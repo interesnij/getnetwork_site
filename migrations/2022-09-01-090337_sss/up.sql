@@ -1,0 +1,8 @@
+-- Your SQL goes here
+
+ALTER TABLE help_items ALTER COLUMN content SET
+DATA TYPE VARCHAR(10000);
+ALTER TABLE tech_categories ALTER COLUMN description SET
+DATA TYPE VARCHAR(10000);
+ALTER TABLE serve_categories ALTER COLUMN description SET
+DATA TYPE VARCHAR(10000);
