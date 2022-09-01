@@ -239,7 +239,7 @@ function paginate(block) {
         link_3.send();
 };
 
-function create_fullscreen(url, type_class, is_order_case) {
+function create_fullscreen(url, type_class, price) {
   container = document.body.querySelector("#fullscreens_container");
 
   try {
@@ -282,7 +282,7 @@ function create_fullscreen(url, type_class, is_order_case) {
 
           $loader.innerHTML = elem;
           height = $loader.scrollHeight*1 + 30;
-          if (!is_order_case && height < 500 && !$loader.querySelector(".data_display")) {
+          if (!price && height < 500 && !$loader.querySelector(".data_display")) {
             $parent_div.style.height = height + "px";
             $loader.style.overflowY = "unset";
 
@@ -336,15 +336,15 @@ function create_fullscreen(url, type_class, is_order_case) {
               };
             }
           };
-          if (is_order_case) {
-            create_order_form();
+          if (price) {
+            create_order_form(price);
           }
       }
   };
   link.send();
 };
 
-function create_order_form() {
+function create_order_form(price) {
   console.log("create_order_form!");
   data = document.body.querySelector(".object_data");
   object_id = data.getAttribute("data-pk");
@@ -355,7 +355,7 @@ function create_order_form() {
   serves_container = fullscreens_container.querySelector(".serves_container");
 
   banner_blocks = document.body.querySelectorAll(".banner_block");
-  serves_container.querySelector(".total_price").innerHTML = document.body.querySelector(".total_price_counter").innerHTML;
+  serves_container.querySelector(".total_price").innerHTML = price;
   for (var i = 0; i < banner_blocks.length; i++) {
     if (banner_blocks[i].classList.contains("open_cat")) {
       banner_block_title = banner_blocks[i].querySelector(".section-title").innerHTML;
@@ -836,7 +836,7 @@ on('body', 'click', '.body_overlay', function() {
 });
 
 on('body', 'click', '.create_order_form', function() {
-  create_fullscreen("/create_order/", "item_fullscreen", true);
+  create_fullscreen("/create_order/", "item_fullscreen", this.querySelector(".total_price_counter").innerHTML);
 });
 
 on('body', 'click', '.get_tech_category_info', function() {
