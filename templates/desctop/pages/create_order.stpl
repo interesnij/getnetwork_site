@@ -38,6 +38,7 @@
     </div>
     <div class="mb-20 mb-md-10">
         <label>Прикрепите файлы</label>
+        <br />
         <input type="file" multiple name="files[]" />
     </div>
   </div>

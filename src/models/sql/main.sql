@@ -49,7 +49,7 @@ CREATE TABLE help_items (
     id          SERIAL PRIMARY KEY,
     category_id INT NOT NULL,
     title       VARCHAR(200) NOT NULL,
-    content     VARCHAR(1000) NOT NULL
+    content     VARCHAR(10000) NOT NULL
 );
 
 -- users -------
@@ -238,7 +238,7 @@ CREATE INDEX blog_videos_id_idx ON blog_videos (blog);
 CREATE TABLE tech_categories (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100) NOT NULL,
-    description VARCHAR(3000),
+    description VARCHAR(10000),
     position    SMALLINT NOT NULL,
     count       SMALLINT NOT NULL,
     level       SMALLINT NOT NULL,

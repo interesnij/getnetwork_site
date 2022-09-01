@@ -35,7 +35,9 @@
     <div class="container relative">
     <div class="border work-detail mt-20 mb-20" style="padding-left: 10px;">
         <h5 class="font-alt mb-20">Информация о Вас</h5>
-        <div class="work-full-detail">
+        <div class="row" style="margin-left: 0;margin-right: 0;">
+        <div class="col-md-6 mb-20">
+          <div class="work-full-detail">
             <p>
                 <strong>IP адрес:</strong>
                 <%= user.ip %>
@@ -48,39 +50,6 @@
                   Телефон
                 <% } %>
             </p>
-            <% if user.country_ru.is_some() || user.country_en.is_some() { %>
-            <p>
-                <strong>Страна:</strong>
-                <% if user.country_ru.is_some() { %>
-                  <%= user.country_ru.unwrap() %>
-                <% } %>
-                <% if user.country_en.is_some() { %>
-                  <%= user.country_en.unwrap() %>
-                <% } %>
-            </p>
-            <% } %>
-            <% if user.region_ru.is_some() || user.region_en.is_some() { %>
-            <p>
-                <strong>Регион:</strong>
-                <% if user.region_ru.is_some() { %>
-                  <%= user.region_ru.unwrap() %>
-                <% } %>
-                <% if user.region_en.is_some() { %>
-                  <%= user.region_en.unwrap() %>
-                <% } %>
-            </p>
-            <% } %>
-            <% if user.city_ru.is_some() || user.city_en.is_some() { %>
-            <p>
-                <strong>Город:</strong>
-                <% if user.city_ru.is_some() { %>
-                  <%= user.city_ru.unwrap() %>
-                <% } %>
-                <% if user.city_en.is_some() { %>
-                  <%= user.city_en.unwrap() %>
-                <% } %>
-            </p>
-            <% } %>
             <p>
                 <strong>Намотано метров:</strong>
                 <%= user.height.round() %>
@@ -93,7 +62,44 @@
                 <strong>Профиль создан:</strong>
                 <%= user.created.format("%d-%m-%Y в %H:%M").to_string() %>
             </p>
+          </div>
         </div>
+        <div class="col-md-6 mb-20">
+          <% if user.country_ru.is_some() || user.country_en.is_some() { %>
+          <p>
+              <strong>Страна:</strong>
+              <% if user.country_ru.is_some() { %>
+                <%= user.country_ru.unwrap() %>
+              <% } %>
+              <% if user.country_en.is_some() { %>
+                <%= user.country_en.unwrap() %>
+              <% } %>
+          </p>
+          <% } %>
+          <% if user.region_ru.is_some() || user.region_en.is_some() { %>
+          <p>
+              <strong>Регион:</strong>
+              <% if user.region_ru.is_some() { %>
+                <%= user.region_ru.unwrap() %>
+              <% } %>
+              <% if user.region_en.is_some() { %>
+                <%= user.region_en.unwrap() %>
+              <% } %>
+          </p>
+          <% } %>
+          <% if user.city_ru.is_some() || user.city_en.is_some() { %>
+          <p>
+              <strong>Город:</strong>
+              <% if user.city_ru.is_some() { %>
+                <%= user.city_ru.unwrap() %>
+              <% } %>
+              <% if user.city_en.is_some() { %>
+                <%= user.city_en.unwrap() %>
+              <% } %>
+          </p>
+          <% } %>
+        </div>
+      </div>
     </div>
 
     <hr class="mt-0 mb-0 " />
