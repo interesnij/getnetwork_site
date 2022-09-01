@@ -105,30 +105,40 @@
     <hr class="mt-0 mb-0 " />
     <h5 class="font-alt mb-20">История просмотров</h5>
       <% if object_list.len() > 0 { %>
+      <table class="table">
+        <tbody>
+        <tr>
+          <th>Страница</th>
+          <th>Высота</th>
+          <th>Секунды</th>
+          <th>Время</th>
+        </tr>
       <div class="is_paginate">
         <% for object in object_list.iter() { %>
-          <p>
-            <span style="width:55%">
+          <tr>
+            <td class="border-top" style="width:55%">
               <a target="_blank" rel="nofollow" href="<%= object.link %>">
                 <%= object.title %>
               </a>
-            </span>
-            <span style="width:10%">
+            </td>
+            <td class="border-top" style="width:10%">
               <%= object.height %>
-            </span>
-            <span style="width:10%">
+            </td>
+            <td class="border-top" style="width:10%">
               <%= object.seconds %>
-            </span>
-            <span style="width:25%">
+            </td>
+            <td class="border-top" style="width:25%">
               <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-            </span>
-          </p>
+            </td>
+          </tr>
         <% } %>
         <% if next_page_number > 0 { %>
           <div class="load centered m-1 next_page_list" data-link="/history/?page=<%= next_page_number %>">
             <img src="/static/images/preloader.gif">
           </div>
         <% } %>
+        </tbody>
+      </table>
         </div>
       <% } else { %>
         <div style="margin-top: 40px;">
