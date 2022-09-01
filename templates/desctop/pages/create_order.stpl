@@ -48,7 +48,7 @@
   <p style="font-size: 80%;">Нажимая на кнопку "Создать заказ",
   Вы автоматически даете согласие на обработку Ваших персональных данных.
   </p>
-  <button style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_order_btn">
+  <button style="width: 100%;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_order_btn">
     Создать заказ
   </button>
 </div>
