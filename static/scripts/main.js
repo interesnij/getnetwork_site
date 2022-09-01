@@ -619,13 +619,13 @@ on('body', 'click', '.select_child_serve', function(event) {
   hours = _this.querySelector(".hours").innerHTML;
   parent_hours = parent.querySelector(".hours").innerHTML;
 
-  if (!parent_price) {
+  if (!parent_price || parent_price == "-") {
     _parent_price = 0;
   }
   else {
     _parent_price = parent_price*1;
   }
-  if (!price) {
+  if (!price || price == "-") {
     _price = 0;
   }
   else {
