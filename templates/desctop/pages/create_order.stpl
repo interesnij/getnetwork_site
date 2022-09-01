@@ -48,6 +48,8 @@
   <h3 style="margin-bottom:0">3. Отправка заказа</h3>
   <p style="font-size: 80%;">Нажимая на кнопку "Создать заказ",
   Вы автоматически даете согласие на обработку Ваших персональных данных.
+  После создания, заказ будет доступен для просмотра и редактирования
+  <a class="underline" target="_blank" rel="nofollow" href="/user_orders/">вот здесь (открыть в новой вкладке)</a> 
   </p>
   <button style="width: 100%;padding: 15px;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_order_btn">
     Создать заказ
