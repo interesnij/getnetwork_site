@@ -9,7 +9,7 @@
         </th>
         <th>Цена</th>
         <th>Часы</th>
-        <th></th>
+        <th>Инфо</th>
       </tr>
 
       <% for serve in category.get_serves().iter() { %>
