@@ -40,14 +40,14 @@
 
           <% } else { %>
             <tr class="open_child_serves no_select_parent pointer" parent-pk="<%= serve.id %>">
-              <td style="width:55%">
-                <a class="get_object_info pointer" data-pk="<%= object.id %>">
+              <td class="border-top" style="width:55%">
+                <a class="get_serve_info pointer" data-pk="<%= object.id %>">
                   <%= serve.name %> → Не выбрано
                 </a>
               </td>
-              <td class="price_td" style="width:15%"><span class="price">-</span></td>
-              <td class="hours" style="width:15%">-</td>
-              <td class="action_text border-top" style="width:12%">
+              <td class="border-top price_td" style="width:15%"><span class="price">-</span></td>
+              <td class="border-top hours" style="width:15%">-</td>
+              <td class="border-top action_text border-top" style="width:12%">
                 <a flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</a>
                 &nbsp;
                 <a flow="up" tooltip="Опция выбрана" class="icon_check"></a>
