@@ -55,7 +55,7 @@
                 </p>
               </div>
               <div class="blog-item-foot">
-                <a href="/order/<%= object.id %>/" class="btn btn-mod btn-round  btn-small">
+                <a href="/order/<%= object.id %>/" class="btn btn-mod btn-round ajax btn-small border">
                   Открыть
                 </a>
               </div>
