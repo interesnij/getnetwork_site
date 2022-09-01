@@ -12,7 +12,7 @@
     </div>
 </section>
 
-<section class="">
+<section class="page-section"> 
 <% if category.count > 0 { %>
   <div class="is_paginate">
   <% for (i, object) in object_list.iter().enumerate() { %>
