@@ -252,7 +252,7 @@ CREATE TABLE tech_categories (
 CREATE TABLE serve_categories (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(100) NOT NULL,
-    description     VARCHAR(3000),
+    description     VARCHAR(10000),
     cat_name        VARCHAR(100) NOT NULL,
     tech_categories INT NOT NULL,
     position        SMALLINT NOT NULL,

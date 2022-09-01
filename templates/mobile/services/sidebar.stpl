@@ -7,6 +7,13 @@
   <div class="search_result"></div>
 </div>
 <div class="widget">
+  <h5 class="widget-title font-alt">
+    <a target="_blank" rel="nofollow" href="/help/7/">
+      Как заказать?
+    </a>
+  </h5>
+</div>
+<div class="widget">
     <h5 class="widget-title font-alt">Категории</h5>
     <div class="widget-body">
         <ul class="clearlist widget-menu">
