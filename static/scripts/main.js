@@ -398,6 +398,7 @@ function create_order_form() {
       + "</tbody></table></div></div></div></section>";
 
       serves_container.innerHTML += section;
+      serves_container.querySelector(".total_price").innerHTML = document.body.querySelector(".total_price_counter").innerHTML;
     }
   }
 };
