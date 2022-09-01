@@ -759,6 +759,7 @@ pub async fn delete_order(req: HttpRequest, _id: web::Path<i32>) -> impl Respond
         diesel::delete(order_files.filter(schema::order_files::order_id.eq(_order_id))).execute(&_connection).expect("E");
         diesel::delete(serve_items.filter(schema::serve_items::orders_id.eq(_order_id))).execute(&_connection).expect("E");
         diesel::delete(tech_categories_items.filter(schema::tech_categories_items::orders_id.eq(_order_id))).execute(&_connection).expect("E");
+        diesel::delete(&_order).execute(&_connection).expect("E");
     }
     HttpResponse::Ok()
 }
