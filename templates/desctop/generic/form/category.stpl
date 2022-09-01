@@ -23,7 +23,8 @@
                 <span flow="up" tooltip="Опция выбрана" class="icon_check">✔</span>
                 &nbsp;
                 <span flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</span>
-                <span flow="up" tooltip="Опция по умолчанию" class="icon_default"></span>
+                &nbsp;
+                <span flow="up" tooltip="Опция по умолчанию" class="icon_default">*</span>
               </td>
             </tr>
 
