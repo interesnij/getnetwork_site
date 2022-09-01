@@ -574,6 +574,13 @@ on('body', 'click', '.open_child_serves', function(event) {
     return
   };
   parent_id = this.getAttribute("parent-pk");
+  check = this.querySelector(".icon_parent");
+  if (check.innerHTML == "▼") {
+    check.innerHTML = "▲"
+  }
+  else {
+    check.innerHTML = "▼"
+  }
   childs = this.parentElement.querySelectorAll('[serve-pk=' + '"' + parent_id + '"' + ']');
   for (var i = 0; i < childs.length; i++) {
     if (childs[i].classList.contains("select_child_serve")) {

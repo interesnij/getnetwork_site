@@ -19,13 +19,22 @@
           <% if serve.is_default { %>
             <tr class="is_default open_child_serves hover pointer" parent-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
-              <td class="action_text border-top" style="width:15%">✔ ▼</td>
+              <td class="action_text border-top" style="width:15%">
+                <span flow="up" tooltip="Опция выбрана" class="icon_check">✔</span>
+                &nbsp;
+                <span flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</span>
+                <span flow="up" tooltip="Опция по умолчанию" class="icon_default"></span>
+              </td>
             </tr>
 
           <% } else if object_serve_ids.iter().any(|i| i==&first_child.id) { %>
             <tr class="open_child_serves hover pointer" parent-pk="<%= serve.id %>">
               <% include!("first_child.stpl"); %>
-              <td class="action_text border-top" style="width:12%">✔ ▼</td>
+              <td class="action_text border-top" style="width:12%">
+                <span flow="up" tooltip="Опция выбрана" class="icon_check">✔</span>
+                &nbsp;
+                <span flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</span>
+              </td>
             </tr>
 
           <% } else { %>
@@ -37,7 +46,11 @@
               </td>
               <td class="price_td" style="width:15%"><span class="price"></span> ₽</td>
               <td style="width:15%"></td>
-              <td class="action_text border-top" style="width:12%">+ ▼</td>
+              <td class="action_text border-top" style="width:12%">
+                <span flow="up" tooltip="Опция не выбрана" class="icon_check">+</span>
+                &nbsp;
+                <span flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</span>
+              </td>
             </tr>
           <% } %>
 
@@ -47,7 +60,9 @@
           <% for (i, child) in childs.iter().enumerate() { %>
             <tr class="select_child_serve hide pointer" style="font-size: 12px;<% if (i + 1) == childs_count { %>padding-bottom: 30px;<% } %>" serve-pk="<%= serve.id %>">
               <% include!("child.stpl"); %>
-              <td class="action_text solid_right <% if i == 0 { %>border-top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>" style="width:12%">Выбрать</td>
+              <td class="action_text solid_right <% if i == 0 { %>border-top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>" style="width:12%">
+                <span flow="up" tooltip="Опция не выбрана" class="icon_check">+</span>
+              </td>
             </tr>
           <% } %>
           <tr></tr>
