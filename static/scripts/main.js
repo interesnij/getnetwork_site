@@ -657,7 +657,7 @@ on('body', 'click', '.select_child_serve', function(event) {
       childs[i].classList.toggle("hide");
     }
   }
-  _this.querySelector(".icon_parent").innerHTML = "▼";
+  parent.querySelector(".icon_parent").innerHTML = "▼";
 });
 
 on('body', 'click', '.select_serve', function(event) {
