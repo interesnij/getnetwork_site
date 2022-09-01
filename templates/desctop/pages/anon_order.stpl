@@ -28,13 +28,6 @@
                   Описание отсутствует.
                 <% } %>
 
-
-
-                <% let object_serve_ids = object.get_serves_ids(); %>
-                <% for t in object_serve_ids.iter() { %>
-                  <%= t %>,  
-                <% } %>
-
                 <% for t_category in object.get_open_tech_categories().iter() { %>
                   <% let s_cats = t_category.get_serve_categories(); %>
 
@@ -100,6 +93,11 @@
             </div>
         </div>
     </div>
+    <section class="border price_section_block card_fullscreen" style="position: fixed;z-index:99;bottom: 10px;width: 100%;">
+    <h3 style="text-align: center;">
+        Сумма <%= object.price %> ₽.
+    </h3>
+    </section>
 </section>
 
 <% include!("../anon_footer.stpl"); %>
