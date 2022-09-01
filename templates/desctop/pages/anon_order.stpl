@@ -65,8 +65,6 @@
                                           <td class="price_td border-top" style="width:15%"><span class="price"><%= serve.price %></span> ₽</td>
                                           <td class="hours border-top" style="width:15%"><%= serve.man_hours %></td>
                                         </tr>
-                                      <% } %>
-                                    <% } %>
                                   <% } %>
                                 </tbody>
                               </table>
