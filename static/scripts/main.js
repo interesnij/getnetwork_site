@@ -41,6 +41,11 @@ function close_fullscreen() {
     prev_window.classList.remove("hide");
   };
 };
+try {
+  if (!container.querySelector(".order_window")) {
+    document.body.querySelector(".price_section_block").style.display = "unset";
+  }
+} catch { null };
 
 $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
 $seconds = 1;
@@ -346,6 +351,9 @@ function create_fullscreen(url, type_class, price) {
 
 function create_order_form(price) {
   console.log("create_order_form!");
+  try {
+    document.body.querySelector(".price_section_block").style.display = "none";
+  } catch { null };
   data = document.body.querySelector(".object_data");
   object_id = data.getAttribute("data-pk");
   object_type = data.getAttribute("data-type");
