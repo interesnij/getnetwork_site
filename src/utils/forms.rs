@@ -650,16 +650,6 @@ pub async fn order_form(payload: &mut Multipart, owner_id: i32) -> OrderForms {
                 }
             }
         }
-        else if name == "close_tech_cats_list[]" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    let _int: i32 = data_string.parse().unwrap();
-                    form.close_tech_cats_list.push(_int);
-                }
-            }
-        }
         else if name == "files[]" {
             let _new_path = field.content_disposition().get_filename().unwrap();
             if _new_path != "" {
