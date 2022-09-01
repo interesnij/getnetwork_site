@@ -1,5 +1,5 @@
 <div page-id="" data-title="Создание заказа" class="doc_title order_window" style="margin-top:50px">
-  <h3 style="margin:0">Детали заказа</h3>
+  <h3 style="margin:0">1. Детали заказа</h3>
   <p style="font-size: 80%;">Ознакомьтесь с выбранными веб-сервисами,
   технологиями и опциями. Их список в этом заказе поменять будет нельзя.
   При нажатии на каждую из них, Вы можете получить подробную информацию.
@@ -16,7 +16,7 @@
   </p>
   <hr class="mt-0 mb-0 " />
 
-  <h3 style="margin-bottom:0">Сведения о заказчике</h3>
+  <h3 style="margin-bottom:0">2. Сведения о заказчике</h3>
   <p style="font-size: 80%;">Данные можно будет поменять в будущем.
   </p>
   <div class="form row relative" style="margin-left: 0;margin-right: 0;">
@@ -45,7 +45,7 @@
 
   <hr class="mt-0 mb-0 " />
 
-  <h3 style="margin-bottom:0">Отправка заказа</h3>
+  <h3 style="margin-bottom:0">3. Отправка заказа</h3>
   <p style="font-size: 80%;">Нажимая на кнопку "Создать заказ",
   Вы автоматически даете согласие на обработку Ваших персональных данных.
   </p>
