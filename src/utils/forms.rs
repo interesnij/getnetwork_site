@@ -643,7 +643,7 @@ pub async fn order_form(payload: &mut Multipart, owner_id: i32) -> OrderForms {
                 if let Ok(s) = str::from_utf8(&data) {
                     let data_string = s.to_string();
                     let v: Vec<&str> = data_string.split(",").collect();
-                    for i in v {
+                    for i in v.iter() {
                         let _int: i32 = i.parse().unwrap();
                         form.serve_list.push(_int);
                     }

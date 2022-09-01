@@ -670,23 +670,6 @@ pub async fn edit_order(req: HttpRequest, mut payload: Multipart, _id: web::Path
                 .expect("E.");
         };
 
-        // создаем связь с тех категориями, которые будут
-        // расширять списки опций, предлагая доп возможности и услуги
-        for cat_id in form.close_tech_cats_list.iter() {
-            let new_cat = NewTechCategoriesItem {
-                category_id: *cat_id,
-                service_id:  0,
-                store_id:    0,
-                work_id:     0,
-                types:       2,
-                orders_id:   Some(_order_id),
-            };
-            diesel::insert_into(schema::tech_categories_items::table)
-                .values(&new_cat)
-                .get_result::<TechCategoriesItem>(&_connection)
-                .expect("Error.");
-        }
-
         // создаем опции услуги и записываем id опций в вектор.
         let mut serve_ids = Vec::new();
         for serve_id in form.serve_list.iter() {
