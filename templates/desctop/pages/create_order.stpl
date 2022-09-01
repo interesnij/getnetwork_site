@@ -1,8 +1,8 @@
 <div page-id="" data-title="Создание заказа" class="doc_title order_window" style="margin-top:50px">
   <h3 style="margin:0">1. Детали заказа</h3>
   <p style="font-size: 80%;">Ознакомьтесь с выбранными веб-сервисами,
-  технологиями и опциями. Их список в этом заказе поменять будет нельзя.
-  При нажатии на каждую из них, Вы можете получить подробную информацию.
+  технологиями и опциями. При нажатии на каждую из них, Вы можете
+  получить подробную информацию.
   </p>
   <div class="serves_container">
 
@@ -49,7 +49,7 @@
   <p style="font-size: 80%;">Нажимая на кнопку "Создать заказ",
   Вы автоматически даете согласие на обработку Ваших персональных данных.
   После создания, заказ будет доступен для просмотра и редактирования
-  <a class="underline" target="_blank" rel="nofollow" href="/user_orders/">вот здесь (открыть в новой вкладке)</a> 
+  <a class="underline" target="_blank" rel="nofollow" href="/user_orders/">вот здесь (открыть в новой вкладке)</a>
   </p>
   <button style="width: 100%;padding: 15px;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_order_btn">
     Создать заказ
