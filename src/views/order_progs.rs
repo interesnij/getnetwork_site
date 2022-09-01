@@ -232,7 +232,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
     if is_ajax == 0 {
         get_first_load_page(&session, is_desctop, "Заказ ".to_string() + &_order.title).await
     }
-    else if user_id == 0 {
+    else if user_id != _order.user_id {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Информация о заказчике не найдена"))
     }
     else {
