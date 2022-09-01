@@ -355,7 +355,7 @@ function create_order_form() {
   serves_container = fullscreens_container.querySelector(".serves_container");
 
   banner_blocks = document.body.querySelectorAll(".banner_block");
-  console.log(document.body.querySelectorAll(".banner_block"));
+  serves_container.querySelector(".total_price").innerHTML = document.body.querySelector(".total_price_counter").innerHTML;
   for (var i = 0; i < banner_blocks.length; i++) {
     if (banner_blocks[i].classList.contains("open_cat")) {
       banner_block_title = banner_blocks[i].querySelector(".section-title").innerHTML;
@@ -398,7 +398,7 @@ function create_order_form() {
       + "</tbody></table></div></div></div></section>";
 
       serves_container.innerHTML += section;
-      serves_container.querySelector(".total_price").innerHTML = document.body.querySelector(".total_price_counter").innerHTML;
+
     }
   }
 };
