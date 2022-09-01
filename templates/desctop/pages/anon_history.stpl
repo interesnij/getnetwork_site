@@ -108,13 +108,20 @@
       <div class="is_paginate">
         <% for object in object_list.iter() { %>
           <p>
-            <a target="_blank" rel="nofollow" href="<%= object.link %>"><%= object.title %>
-              (
-                Метров: <%= object.height %>,
-                секунд: <%= object.seconds %>,
-                <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-              )
-            </a>
+            <span style="width:55%">
+              <a target="_blank" rel="nofollow" href="<%= object.link %>">
+                <%= object.title %>
+              </a>
+            </span>
+            <span style="width:10%">
+              <%= object.height %>
+            </span>
+            <span style="width:10%">
+              <%= object.seconds %>
+            </span>
+            <span style="width:25%">
+              <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+            </span>
           </p>
         <% } %>
         <% if next_page_number > 0 { %>
