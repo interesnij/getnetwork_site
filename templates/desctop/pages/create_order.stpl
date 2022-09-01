@@ -1,5 +1,9 @@
 <div page-id="" data-title="Создание заказа" class="doc_title order_window">
-  <h3 style="margin:0">Детали заказа</h3>
+  <h3 style="margin:0">Детали заказа *</h3>
+  <p style="font-size: 80%;"> * Ознакомьтесь с выбранными веб-сервисами,
+  технологиями и опциями. Их список в этом заказе поменять будет нельзя.
+  При нажатии на каждую из них, Вы можете получить подробную информацию.
+  </p>
   <div class="serves_container">
 
   </div>
@@ -12,7 +16,9 @@
   </p>
   <hr class="mt-0 mb-0 " />
 
-  <h3>Сведения о заказчике</h3>
+  <h3>Сведения о заказчике *</h3>
+  <p style="font-size: 80%;">* Данные можно будет поменять в будущем.
+  </p>
   <div class="form row relative" style="margin-left: 0;margin-right: 0;">
     <div class="col-md-6 mb-20">
       <div class="mb-20 mb-md-10">
