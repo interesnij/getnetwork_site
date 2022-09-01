@@ -1033,7 +1033,7 @@ on('body', 'click', '#create_order_btn', function() {
   form_data.append("title", object_title);
   form_data.append("types", object_type);
   form_data.append("object_id", object_id);
-  form_data.append("serves_list", serves_input);
+  form_data.append("serve_list", serves_input);
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', "/create_order/", true );
