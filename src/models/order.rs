@@ -122,18 +122,6 @@ impl Order {
             .load::<i32>(&_connection)
             .expect("E");
     }
-
-    pub fn get_close_tech_cats_ids(&self) -> Vec<i32> {
-        use schema::tech_categories_items::dsl::tech_categories_items;
-
-        let _connection = establish_connection();
-        return tech_categories_items
-            .filter(schema::tech_categories_items::orders_id.eq(&self.id))
-            .filter(schema::tech_categories_items::types.eq(2))
-            .select(schema::tech_categories_items::category_id)
-            .load::<i32>(&_connection)
-            .expect("E");
-    }
     pub fn get_open_tech_categories(&self) -> Vec<TechCategories> {
         // получаем открытые тех.категории услуги
         use schema::{
@@ -145,27 +133,6 @@ impl Order {
         let ids = tech_categories_items
             .filter(schema::tech_categories_items::orders_id.eq(&self.id))
             .filter(schema::tech_categories_items::types.eq(1))
-            .select(schema::tech_categories_items::category_id)
-            .load::<i32>(&_connection)
-            .expect("E");
-
-        return tech_categories
-            .filter(schema::tech_categories::id.eq_any(ids))
-            .order(schema::tech_categories::position.desc())
-            .load::<TechCategories>(&_connection)
-            .expect("E");
-    }
-    pub fn get_close_tech_categories(&self) -> Vec<TechCategories> {
-        // получаем закрытые тех.категории услуги
-        use schema::{
-            tech_categories_items::dsl::tech_categories_items,
-            tech_categories::dsl::tech_categories,
-        };
-
-        let _connection = establish_connection();
-        let ids = tech_categories_items
-            .filter(schema::tech_categories_items::orders_id.eq(&self.id))
-            .filter(schema::tech_categories_items::types.eq(2))
             .select(schema::tech_categories_items::category_id)
             .load::<i32>(&_connection)
             .expect("E");
