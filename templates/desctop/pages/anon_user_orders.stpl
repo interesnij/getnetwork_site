@@ -48,7 +48,7 @@
               <div class="blog-item-body">
                 <p>
                   <% if object.description.is_some() { %>
-                    <%= object.description.unwrap() %>
+                    <%= object.description.as_deref().unwrap() %>
                   <% } else { %>
                     Без описания
                   <% } %>
