@@ -40,12 +40,12 @@ function close_fullscreen() {
     prev_window = container.querySelector(".card_fullscreen");
     prev_window.classList.remove("hide");
   };
+  try {
+    if (!container.querySelector(".order_window")) {
+      document.body.querySelector(".price_section_block").style.display = "unset";
+    }
+  } catch { null };
 };
-try {
-  if (!container.querySelector(".order_window")) {
-    document.body.querySelector(".price_section_block").style.display = "unset";
-  }
-} catch { null };
 
 $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
 $seconds = 1;
