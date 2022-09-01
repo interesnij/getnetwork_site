@@ -2,7 +2,7 @@
 <section class="page-section">
   <div class="container relative">
     <div class="row">
-        <div class="col-md-6 mb-sm-40">
+        <div class="col-md-4 mb-sm-40">
         <div class="intro-label">
           <span class="label label-danger bg-red">от <%= object.price %> ₽</span>
         </div>
@@ -12,7 +12,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-lg-5 col-lg-offset-1">
+        <div class="col-md-8">
             <div class="text">
               <h3 class="font-alt mb-30 mb-xxs-10"><%= object.title %></h3>
               <p>
@@ -32,7 +32,7 @@
 <section class="page-section">
   <div class="container relative">
     <div class="row">
-      <div class="col-md-6 col-lg-5 col-lg-offset-1">
+      <div class="col-md-8">
           <div class="text">
             <h3 class="font-alt mb-30 mb-xxs-10"><%= object.title %></h3>
             <p>
@@ -45,7 +45,7 @@
             </div>
           </div>
       </div>
-        <div class="col-md-6 mb-sm-40">
+        <div class="col-md-4 mb-sm-40">
           <div class="intro-label">
             <span class="label label-danger bg-red">от <%= object.price %> ₽</span>
           </div>
