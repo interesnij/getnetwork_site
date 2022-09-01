@@ -2207,9 +2207,8 @@ a.link-to-top{
     font-size: 11px;
     letter-spacing: 1px;
 }
-.blog-item-body{
+.blog-item-body {
   line-height: 1.462;
-  overflow: hidden;
   word-wrap: break-word;
 }
 
