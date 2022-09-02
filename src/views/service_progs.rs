@@ -1383,14 +1383,26 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
         use crate::models::StatServiceCategorie;
 
         let _connection = establish_connection();
-
-        let _stat = stat_service_categories
+        let _stat: StatServiceCategorie;
+        let _stats = stat_service_categories
             .limit(1)
             .load::<StatServiceCategorie>(&_connection)
-            .expect("E")
-            .into_iter()
-            .nth(0)
-            .unwrap();
+            .expect("E");
+        if _stats.len() > 0 {
+            _stat = _stats.into_iter().nth(0).unwrap();
+        }
+        else {
+            use crate::models::NewStatServiceCategorie;
+            let form = NewStatServiceCategorie {
+                view: 0,
+                height: 0.0,
+                seconds: 0,
+            };
+            _stat = diesel::insert_into(schema::stat_service_categories::table)
+                .values(&form)
+                .get_result::<StatServiceCategorie>(&_connection)
+                .expect("Error.");
+        }
 
         let mut stack = Vec::new();
         let _tag_items = tags_items
