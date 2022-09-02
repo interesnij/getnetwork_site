@@ -15,9 +15,30 @@
       <% if object_list.len() > 0 { %>
       <div class="is_paginate">
         <% for object in object_list.iter() { %>
-          <h6>
-            <a class="pointer show_order_window" data-pk="<%= object.id %>"><%= object.title %></a>
-          </h6>
+        <div class="blog-item">
+          <h2 class="blog-item-title font-alt">
+            <a class="ajax" href="/order/<%= object.id %>/">
+              <%= object.title %>
+            </a>
+          </h2>
+          <div class="blog-item-data">
+            <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+          </div>
+          <div class="blog-item-body">
+            <p>
+              <% if object.description.is_some() { %>
+                <%= object.description.as_deref().unwrap() %>
+              <% } else { %>
+                Без описания
+              <% } %>
+            </p>
+          </div>
+          <div class="blog-item-foot">
+            <a href="/order/<%= object.id %>/" class="btn btn-mod btn-round ajax btn-small border">
+              Открыть
+            </a>
+          </div>
+        </div> 
         <% } %>
         <% if next_page_number > 0 { %>
           <div class="load centered m-1 next_page_list" data-link="/orders/?page=<%= next_page_number %>">
