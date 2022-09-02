@@ -3,7 +3,7 @@
 <% for t_category in object.get_open_tech_categories().iter() { %>
   <% let s_cats = t_category.get_serve_categories(); %>
 
-<section class="banner_block mb-20 mt-20 border" style="width:100%;box-shadow: none !important;">
+<section class="banner_block mb-20 mt-20 border open_cat" style="width:100%;">
     <h4 class="section-title font-alt">
         <%= t_category.name %>
     </h4>
@@ -17,7 +17,7 @@
                       <a class="pointer"><%= cat.name %></a>
                   </li>
                 <% } else { %>
-                  <li data-pk="<%= cat.id %>" data-sum="<%= cat.default_price %>" class="yy pointer s_<%= i + 1 %>">
+                  <li data-pk="<%= cat.id %>" data-sum="<%= cat.default_price %>" class="yy pointer not_active s_<%= i + 1 %>">
                     <a class="pointer"><%= cat.name %></a>
                   </li>
                 <% } %>
@@ -39,7 +39,7 @@
 <% for t_category in object.get_close_tech_categories().iter() { %>
   <% let s_cats = t_category.get_serve_categories(); %>
 
-<section class="banner_block mb-20 mt-20 border" style="width:100%;box-shadow: none !important;">
+<section class="banner_block mb-20 mt-20 border" style="width:100%;">
     <h3 class="pointer section-title font-alt show_tech_category">
       <span class="cat_description">
         <%= t_category.name %>
