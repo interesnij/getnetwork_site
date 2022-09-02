@@ -1369,13 +1369,27 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
         use crate::models::StatStoreCategorie;
 
         let _connection = establish_connection();
-        let _stat = stat_store_categories
+
+        let _stat: StatStoreCategorie;
+        let _stats = stat_store_categories
             .limit(1)
             .load::<StatStoreCategorie>(&_connection)
-            .expect("E")
-            .into_iter()
-            .nth(0)
-            .unwrap();
+            .expect("E");
+        if _stats.len() > 0 {
+            _stat = _stats.into_iter().nth(0).unwrap();
+        }
+        else {
+            use crate::models::NewStatStoreCategorie;
+            let form = NewStatStoreCategorie {
+                view: 0,
+                height: 0.0,
+                seconds: 0,
+            };
+            _stat = diesel::insert_into(schema::stat_store_categories::table)
+                .values(&form)
+                .get_result::<StatStoreCategorie>(&_connection)
+                .expect("Error.");
+        }
 
         let mut stack = Vec::new();
         let _tag_items = tags_items

@@ -1382,13 +1382,28 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
         use crate::models::StatWorkCategorie;
 
         let _connection = establish_connection();
-        let _stat = stat_work_categories
+
+        let _stat: StatWorkCategorie;
+        let _stats = stat_work_categories
             .limit(1)
             .load::<StatWorkCategorie>(&_connection)
-            .expect("E")
-            .into_iter()
-            .nth(0)
-            .unwrap();
+        .expect("E");
+
+        if _stats.len() > 0 {
+            _stat = _stats.into_iter().nth(0).unwrap();
+        }
+        else {
+            use crate::models::NewStatWorkCategorie;
+            let form = NewStatWorkCategorie {
+                view: 0,
+                height: 0.0,
+                seconds: 0,
+            };
+            _stat = diesel::insert_into(schema::stat_work_categories::table)
+                .values(&form)
+                .get_result::<StatWorkCategorie>(&_connection)
+                .expect("Error.");
+        }
 
         let mut stack = Vec::new();
         let _tag_items = tags_items

@@ -1159,13 +1159,28 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
         use crate::models::StatWikiCategorie;
 
         let _connection = establish_connection();
-        let _stat = stat_wiki_categories
+
+        let _stat: StatWikiCategorie;
+        let _stats = stat_wiki_categories
             .limit(1)
             .load::<StatWikiCategorie>(&_connection)
-            .expect("E")
-            .into_iter()
-            .nth(0)
-            .unwrap();
+        .expect("E");
+
+        if _stats.len() > 0 {
+            _stat = _stats.into_iter().nth(0).unwrap();
+        }
+        else {
+            use crate::models::NewStatWikiCategorie;
+            let form = NewStatWikiCategorie {
+                view: 0,
+                height: 0.0,
+                seconds: 0,
+            };
+            _stat = diesel::insert_into(schema::stat_wiki_categories::table)
+                .values(&form)
+                .get_result::<StatWikiCategorie>(&_connection)
+                .expect("Error.");
+        }
 
         let mut stack = Vec::new();
         let _tag_items = tags_items

@@ -1016,7 +1016,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
-        
+
         let page = get_page(&req);
         let (object_list, next_page_number) = _category.get_blogs_list(page, 20);
 
@@ -1173,13 +1173,26 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
             .load::<i32>(&_connection)
             .expect("E");
 
-        let _stat = stat_blog_categories
+        let _stat: StatBlogCategorie;
+        let _stats = stat_blog_categories
             .limit(1)
             .load::<StatBlogCategorie>(&_connection)
-            .expect("E")
-            .into_iter()
-            .nth(0)
-            .unwrap();
+            .expect("E");
+        if _stats.len() > 0 {
+            _stat = _stats.into_iter().nth(0).unwrap();
+        }
+        else {
+            use crate::models::NewStatBlogCategorie;
+            let form = NewStatBlogCategorie {
+                view: 0,
+                height: 0.0,
+                seconds: 0,
+            };
+            _stat = diesel::insert_into(schema::stat_blog_categories::table)
+                .values(&form)
+                .get_result::<StatBlogCategorie>(&_connection)
+                .expect("Error.");
+        }
 
         for _tag_item in _tag_items.iter() {
             if !stack.iter().any(|&i| i==_tag_item) {

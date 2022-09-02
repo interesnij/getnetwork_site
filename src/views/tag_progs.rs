@@ -1046,11 +1046,35 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
     }
     else {
         use crate::utils::get_page;
+        use crate::schema::stat_tags::dsl::stat_tags;
+        use crate::models::StatTag;
+
         let page = get_page(&req);
 
         let _connection = establish_connection();
         let (all_tags, next_page_number) = Tag::get_tags_list(page, 20);
         let tags_count = all_tags.len();
+
+        let _stat: StatTag;
+        let _stats = stat_tags
+            .limit(1)
+            .load::<StatTag>(&_connection)
+            .expect("E");
+        if _stats.len() > 0 {
+            _stat = _stats.into_iter().nth(0).unwrap();
+        }
+        else {
+            use crate::models::NewStatTag;
+            let form = NewStatTag {
+                view: 0,
+                height: 0.0,
+                seconds: 0,
+            };
+            _stat = diesel::insert_into(schema::stat_tags::table)
+                .values(&form)
+                .get_result::<StatTag>(&_connection)
+                .expect("Error.");
+        }
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -1064,6 +1088,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     tags_count:       usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    stat:             StatTag,
                 }
                 let body = Template {
                     title:            "Ключевые слова".to_string(),
@@ -1072,6 +1097,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     tags_count:       tags_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    stat:             _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1082,19 +1108,19 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 #[template(path = "mobile/tags/tags.stpl")]
                 struct Template {
                     title:            String,
-                    //request_user:     User,
                     all_tags:         Vec<Tag>,
                     tags_count:       usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    stat:             StatTag,
                 }
                 let body = Template {
                     title:            "Ключевые слова".to_string(),
-                    //request_user:     _request_user,
                     all_tags:         all_tags,
                     tags_count:       tags_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    stat:             _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1111,6 +1137,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     tags_count:       usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    stat:             StatTag,
                 }
                 let body = Template {
                     title:            "Ключевые слова".to_string(),
@@ -1118,6 +1145,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     tags_count:       tags_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    stat:             _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1132,6 +1160,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     tags_count:       usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    stat:             StatTag,
                 }
                 let body = Template {
                     title:            "Ключевые слова".to_string(),
@@ -1139,6 +1168,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     tags_count:       tags_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    stat:             _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
