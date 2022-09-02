@@ -77,14 +77,14 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
                 title:            String,
                 request_user:     User,
                 is_ajax:          i32,
-                order_list:       Vec<Order>,
+                object_list:      Vec<Order>,
                 next_page_number: i32,
             }
             let body = Template {
                 title:            "Заказы".to_string(),
                 request_user:     _request_user,
                 is_ajax:          is_ajax,
-                order_list:       _orders,
+                object_list:      _orders,
                 next_page_number: next_page_number,
             }
             .render_once()
@@ -97,13 +97,13 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
             struct Template {
                 title:            String,
                 is_ajax:          i32,
-                order_list:       Vec<Order>,
+                object_list:      Vec<Order>,
                 next_page_number: i32,
             }
             let body = Template {
                 title:            "Заказы".to_string(),
                 is_ajax:          is_ajax,
-                order_list:       _orders,
+                object_list:      _orders,
                 next_page_number: next_page_number,
             }
             .render_once()
