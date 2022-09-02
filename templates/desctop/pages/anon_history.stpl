@@ -60,7 +60,7 @@
                   </p>
                 </div>
               </div>
-              <div class="col-md-6 solid_right mb-20">
+              <div class="col-md-6 solid_left mb-20">
                 <p style="display: flex;">
                   <strong>IP адрес:</strong>
                   <span style="margin-left: auto;margin-right: 5px"><%= user.ip %></span>
