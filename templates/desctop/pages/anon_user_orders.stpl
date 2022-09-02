@@ -38,7 +38,7 @@
           <% for object in object_list.iter() { %>
             <div class="blog-item">
               <h2 class="blog-item-title font-alt">
-                <a href="/order/<%= object.id %>/">
+                <a class="ajax" href="/order/<%= object.id %>/">
                   <%= object.title %>
                 </a>
               </h2>
