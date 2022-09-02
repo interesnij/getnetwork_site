@@ -2,9 +2,9 @@
   <h3 style="margin-bottom:0">
     <% if object.types == 1 { %>
       <a class="ajax" href="/service/0/<%= object.object_id %>/">Собрать заказ заново</a>
-    <% else if object.types == 2 { %>
+    <% } else if object.types == 2 { %>
       <a class="ajax" href="/store/0/<%= object.object_id %>/">Собрать заказ заново</a>
-    <% else if object.types == 3 { %>
+    <% } else if object.types == 3 { %>
       <a class="ajax" href="/work/0/<%= object.object_id %>/">Собрать заказ заново</a>
     <% } %>
   </h3>
