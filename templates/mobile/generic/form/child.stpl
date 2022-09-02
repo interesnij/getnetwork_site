@@ -2,9 +2,10 @@
   <a class="get_serve_info pointer" data-pk="<%= child.id %>">
     <%= serve.name %> → <%= child.name %>
   </a>
-  <span>
+  <br />
+  <span class="font-size:80%">
     <span class="price_td"><span class="price"><%= child.price %></span> ₽</span>
-    &nbps;&nbps;
+    &nbsp;&nbsp;
     <span class="hours"><%= child.man_hours %></span>
   </span>
 </td>
