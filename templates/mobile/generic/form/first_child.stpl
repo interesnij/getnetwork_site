@@ -3,9 +3,9 @@
     <%= serve.name %> → <%= first_child.name %>
   </a>
   <br />
-  <span class="font-size:80%">
+  <span style="font-size:80%">
     <span class="price_td"><span class="price"><%= first_child.price %></span> ₽</span>
     &nbsp;&nbsp;
-    <span class="hours"><%= first_child.man_hours %></span>
+    <span class="hours"><%= first_child.man_hours %> ч.</span>
   </span>
 </td>

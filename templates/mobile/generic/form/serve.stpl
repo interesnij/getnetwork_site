@@ -3,7 +3,7 @@
     <%= serve.name %>
   </a>
   <br />
-  <span class="font-size:80%">
+  <span style="font-size:80%">
     <span class="price_td"><span class="price"><%= serve.price %></span> ₽</span>
     &nbsp;&nbsp;
     <span class="hours"><%= serve.man_hours %> ч.</span>
