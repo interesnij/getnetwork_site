@@ -43,10 +43,10 @@ pub fn order_routes(config: &mut web::ServiceConfig) {
         .route(web::get().to(create_order_page))
         .route(web::post().to(create_order))
     );
-    config.service(web::resource("/edit_order/{id}/")
-        .route(web::get().to(edit_order_page))
-        .route(web::post().to(edit_order))
-    );
+    //config.service(web::resource("/edit_order/{id}/")
+    //    .route(web::get().to(edit_order_page))
+    //    .route(web::post().to(edit_order))
+    //);
     config.route("/delete_order/{id}/", web::get().to(delete_order));
 }
 

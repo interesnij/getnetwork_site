@@ -20,14 +20,22 @@
               <div class="content">
                 <div class="blog-item-body">
                   <h1 class="mt-0 font-alt object_data" data-type="1" data-pk="<%= object.id %>"><%= object.title %></h1>
+                  <% if object.types == 1 { %>
+                  <% } else if object.types == 2 { %>
+                  <% } else if object.types == 3 { %>
+                  <% } %>
                   <div class="blog-item-data">
                     <a data-pk="<%= object.id %>" class="pointer remove_order">
-                      Удалить
+                      Удалить заказ
                     </a>
                     |
-                    <a data-pk="<%= object.id %>" class="pointer edit_order">
-                      Изменить данные
-                    </a>
+                    <% if object.types == 1 { %>
+                      <a href="/service/0/<%= object.id %>/" class="ajax">Родитель заказа</a>
+                    <% } else if object.types == 2 { %>
+                      <a href="/store/0/<%= object.id %>/" class="ajax">Родитель заказа</a>
+                    <% } else if object.types == 3 { %>
+                      <a href="/work/0/<%= object.id %>/" class="ajax">Родитель заказа</a>
+                    <% } %>
                   </div>
                 </div>
                 <% if object.description.is_some() { %>

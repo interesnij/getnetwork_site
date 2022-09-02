@@ -730,12 +730,9 @@ function service_tab_action(_this, tab_class) {
   if (_this.parentElement.classList.contains("price_mode")) {
       is_price_mode = true;
   }
-  if (_this.parentElement.parentElement.parentElement.parentElement.parentElement.classList.contains("order_window")) {
-    counter = _this.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(".total_price");
-  }
-  else {
-    counter = document.body.querySelector(".total_price_counter");
-  }
+
+  counter = document.body.querySelector(".total_price_counter");
+
   if (!_this.classList.contains("active")){
     if (is_price_mode) {
       old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
