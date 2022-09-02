@@ -3,11 +3,11 @@
         <img src="<%= object.get_image() %>" alt="img" class="image_fit_100 widget-posts-img">
     </a>
     <div class="widget-posts-descr">
-        <a class="ajax" href="/service/1/<%= object.id %>/">
+        <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/service/1/<%= object.id %>/">
           <%= object.title %>
         </a>
-        <span class="solid_top">
-          <p>Цена: от <%= object.price %> ₽</p>
+        <span>
+          <span>Цена: от <%= object.price %> ₽</span>
           <% if object.price_acc.is_some() { %>
             <p>Со скидкой: от <%= object.price_acc.unwrap() %> ₽</p>
           <% } %>
