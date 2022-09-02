@@ -1213,7 +1213,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
-                    stat:         stat,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1234,7 +1234,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
-                    stat:         stat,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1257,7 +1257,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
-                    stat:         stat,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1278,7 +1278,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
-                    stat:         stat,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
