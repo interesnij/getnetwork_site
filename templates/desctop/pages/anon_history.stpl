@@ -41,34 +41,34 @@
                   <p style="display: flex;">
                       <strong>Оборудование:</strong>
                       <% if user.device == 1 { %>
-                        <span style="margin-left: auto;margin-right: 5px">Компьютер</span>
+                        <span style="margin-left: auto;margin-right: 10px">Компьютер</span>
                       <% } else { %>
-                        <span style="margin-left: auto;margin-right: 5px">Телефон</span>
+                        <span style="margin-left: auto;margin-right: 10px">Телефон</span>
                       <% } %>
                   </p>
                   <p style="display: flex;">
                       <strong>Намотано метров:</strong>
-                      <span style="margin-left: auto;margin-right: 5px"><%= user.height.round() %></span>
+                      <span style="margin-left: auto;margin-right: 10px"><%= user.height.round() %></span>
                   </p>
                   <p style="display: flex;">
                       <strong>Затрачено секунд:</strong>
-                      <span style="margin-left: auto;margin-right: 5px"><%= user.seconds %></span>
+                      <span style="margin-left: auto;margin-right: 10px"><%= user.seconds %></span>
                   </p>
                   <p style="display: flex;">
                       <strong>Профиль создан:</strong>
-                      <span style="margin-left: auto;margin-right: 5px"><%= user.created.format("%d-%m-%Y в %H:%M").to_string() %></span>
+                      <span style="margin-left: auto;margin-right: 10px"><%= user.created.format("%d-%m-%Y в %H:%M").to_string() %></span>
                   </p>
                 </div>
               </div>
               <div class="col-md-6 solid_left">
                 <p style="display: flex;">
                   <strong>IP адрес:</strong>
-                  <span style="margin-left: auto;margin-right: 5px"><%= user.ip %></span>
+                  <span style="margin-left: auto;margin-right: 10px"><%= user.ip %></span>
                 </p>
                 <% if user.country_ru.is_some() || user.country_en.is_some() { %>
                 <p style="display: flex;">
                   <strong>Страна:</strong>
-                  <span style="margin-left: auto;margin-right: 5px">
+                  <span style="margin-left: auto;margin-right: 10px">
                     <% if user.country_ru.is_some() { %>
                       <%= user.country_ru.unwrap() %>
                     <% } %>
@@ -81,7 +81,7 @@
                 <% if user.region_ru.is_some() || user.region_en.is_some() { %>
                 <p style="display: flex;">
                   <strong>Регион:</strong>
-                  <span style="margin-left: auto;margin-right: 5px">
+                  <span style="margin-left: auto;margin-right: 10px">
                     <% if user.region_ru.is_some() { %>
                       <%= user.region_ru.unwrap() %>
                     <% } %>
@@ -94,7 +94,7 @@
                 <% if user.city_ru.is_some() || user.city_en.is_some() { %>
                 <p style="display: flex">
                   <strong>Город:</strong>
-                  <span style="margin-left: auto;margin-right: 5px">
+                  <span style="margin-left: auto;margin-right: 10px">
                     <% if user.city_ru.is_some() { %>
                       <%= user.city_ru.unwrap() %>
                     <% } %>
