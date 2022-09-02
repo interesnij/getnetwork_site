@@ -208,7 +208,7 @@ impl Serve {
 
         let _connection = establish_connection();
         return serve
-            .filter(schema::serve::id.eq(self.serve_id))
+            .filter(schema::serve::id.eq(self.serve_id.unwrap()))
             .load::<Serve>(&_connection)
             .expect("E")
             .into_iter()
