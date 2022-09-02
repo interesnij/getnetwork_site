@@ -9,16 +9,16 @@
     </h4>
     <div class="">
         <div class="align-center">
-            <ul class="nav nav-tabs tpl-minimal-tabs price_mode">
+            <ul class="nav nav_mobile nav-tabs tpl-minimal-tabs price_mode">
               <% for (i, cat) in s_cats.iter().enumerate() { %>
 
                 <% if i == 0 { %>
                   <li data-pk="<%= cat.id %>" data-sum="<%= cat.default_price %>" class="yy s_<%= i + 1 %> active">
-                      <a class="pointer"><%= cat.name %></a>
+                      <a class="pointer" style="border: none !important"><%= cat.name %></a>
                   </li>
                 <% } else { %>
                   <li data-pk="<%= cat.id %>" data-sum="<%= cat.default_price %>" class="yy pointer not_active s_<%= i + 1 %>">
-                    <a class="pointer"><%= cat.name %></a>
+                    <a class="pointer" style="border: none !important"><%= cat.name %></a>
                   </li>
                 <% } %>
 

@@ -3203,3 +3203,7 @@ hr {
 [tooltip][flow^="right"]:hover::after {
   animation: tooltips-horz 300ms ease-out forwards;
 }
+
+.nav_mobile .active a {
+  font-weight: bold;
+}
