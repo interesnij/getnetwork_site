@@ -1,0 +1,48 @@
+<div page-id="" data-title="Изменение заказа" class="doc_title order_window" style="margin-top:50px;margin-bottom:70px">
+  <h3 style="margin-bottom:0">
+    <% if object.types == 1 { %>
+      <a class="ajax" href="/service/0/<%= object.object_id %>/">Собрать заказ заново</a>
+    <% else if object.types == 2 { %>
+      <a class="ajax" href="/store/0/<%= object.object_id %>/">Собрать заказ заново</a>
+    <% else if object.types == 3 { %>
+      <a class="ajax" href="/work/0/<%= object.object_id %>/">Собрать заказ заново</a>
+    <% } %>
+  </h3>
+  <hr class="mt-0 mb-0 " />
+
+  <h3 style="margin-bottom:0">Сведения о заказчике</h3>
+  <form class="form">
+  <div class="row relative" style="margin-left: 0;margin-right: 0;">
+    <div class="col-md-6 mb-20">
+      <div class="mb-20 mb-md-10">
+        <label for="id_username">Как к Вам обращаться:</label>
+        <input value="<%= object.username %>" class="input-md form-control" id="id_username" type="text" name="username">
+      </div>
+      <div class="mb-20 mb-md-10">
+        <label for="id_email">Ваша почта:</label>
+        <input value="<%= object.email %>" class="input-md form-control" id="id_email" type="email" name="email">
+      </div>
+    </div>
+    <div class="col-md-6 mb-20">
+      <div class="mb-20 mb-md-10">
+        <label for="id_description">Добавьте описание, если нужно:</label>
+        <% if object.description.is_some() { %>
+          <textarea style="height: 117px;" class="input-md form-control" id="id_description" type="text" name="description">
+            <%= object.description.as_deref().unwrap() %>
+          </textarea>
+        <% } else { %>
+          <textarea style="height: 117px;" class="input-md form-control" id="id_description" type="text" name="description"></textarea>
+        <% } %>
+      </div>
+    </div>
+    <div class="mb-20 mb-md-10">
+        <label>Прикрепите новые файлы</label>
+        <br />
+        <input type="file" multiple name="files[]" />
+    </div>
+  </div>
+  <button style="width: 100%;padding: 15px;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_order_btn">
+    Изменить!
+  </button>
+  </form>
+</div>

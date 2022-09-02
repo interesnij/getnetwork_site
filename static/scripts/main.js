@@ -838,6 +838,9 @@ on('body', 'click', '.body_overlay', function() {
 on('body', 'click', '.create_order_form', function() {
   create_fullscreen("/create_order/", "item_fullscreen", this.querySelector(".total_price_counter").innerHTML);
 });
+on('body', 'click', '.edit_order', function() {
+  create_fullscreen("/edit_order/" + this.getAttribute("data-pk") + "/", "item_fullscreen");
+});
 
 on('body', 'click', '.get_tech_category_info', function() {
   create_fullscreen("/load_tech_category/" + this.getAttribute("data-pk") + "/", "worker_fullscreen");
