@@ -113,7 +113,7 @@
       <% if object_list.len() > 0 { %>
       <div class="is_paginate">
         <% for (i, object) in object_list.iter().enumerate() { %>
-          <div class="row border-top <% if i % 2 == 0 { %>hover<% } %>" style="padding: 5px 0;">
+          <div class="row <% if i % 2 == 0 { %>hover<% } %>" style="padding: 5px 0;">
             <div class="col-md-6">
               <a target="_blank" rel="nofollow" href="<%= object.link %>">
                 <%= object.title %>
