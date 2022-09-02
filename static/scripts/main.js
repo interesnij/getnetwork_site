@@ -597,7 +597,13 @@ on('body', 'click', '.select_child_serve', function(event) {
   if (event.target.classList.contains("get_serve_info")) {
     return
   };
-  counter = document.body.querySelector(".total_price_counter");
+  if (_this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.contains("order_window")) {
+    counter = _this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(".total_price");
+  }
+  else {
+    counter = document.body.querySelector(".total_price_counter");
+  }
+
   category_id = _this.parentElement.parentElement.parentElement.getAttribute("data-pk");
   categories = document.body.querySelector(".price_mode");
   category = categories.querySelector('[data-pk=' + '"' + category_id + '"' + ']');
@@ -724,7 +730,12 @@ function service_tab_action(_this, tab_class) {
   if (_this.parentElement.classList.contains("price_mode")) {
       is_price_mode = true;
   }
-  counter = document.body.querySelector(".total_price_counter");
+  if (_this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.contains("order_window")) {
+    counter = _this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(".total_price");
+  }
+  else {
+    counter = document.body.querySelector(".total_price_counter");
+  }
   if (!_this.classList.contains("active")){
     if (is_price_mode) {
       old_price = _this.parentElement.querySelector(".active").getAttribute("data-sum")*1;
@@ -759,9 +770,8 @@ function service_tab_action(_this, tab_class) {
     cur.classList.add("active", "in");
 
     if (is_price_mode) {
-    counter.innerHTML = counter.innerHTML*1 - old_price + new_price;
+      counter.innerHTML = counter.innerHTML*1 - old_price + new_price;
 
-    ///////
     };
   }
 };
