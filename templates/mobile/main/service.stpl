@@ -8,7 +8,7 @@
               ещё
             </a>
         </h5>
-        <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
+        <ul class="row multi-columns-row"> 
           <% for object in last_services.iter() { %>
             <% include!("../generic/default_service.stpl"); %>
           <% } %>
