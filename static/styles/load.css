@@ -254,6 +254,9 @@ dl dd {
     margin-bottom: 9px !important;
     padding: 5px !important;
   }
+  h1 {
+    font-size: 22px;
+  }
 }
 .highlight pre{
     -webkit-border-radius: 0;

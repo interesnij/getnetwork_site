@@ -41,22 +41,22 @@
             <p>
                 <strong>Оборудование:</strong>
                 <% if user.device == 1 { %>
-                  Компьютер
+                  <span>Компьютер</span>
                 <% } else { %>
-                  Телефон
+                  <span>Телефон</span>
                 <% } %>
             </p>
             <p>
                 <strong>Намотано метров:</strong>
-                <%= user.height.round() %>
+                <span><%= user.height.round() %></span>
             </p>
             <p>
                 <strong>Затрачено секунд:</strong>
-                <%= user.seconds %>
+                <span><%= user.seconds %></span>
             </p>
             <p>
                 <strong>Профиль создан:</strong>
-                <%= user.created.format("%d-%m-%Y в %H:%M").to_string() %>
+                <span><%= user.created.format("%d-%m-%Y в %H:%M").to_string() %></span>
             </p>
           </div>
         </div>
@@ -67,35 +67,41 @@
           </p>
           <% if user.country_ru.is_some() || user.country_en.is_some() { %>
           <p>
-              <strong>Страна:</strong>
+            <strong>Страна:</strong>
+            <span>
               <% if user.country_ru.is_some() { %>
                 <%= user.country_ru.unwrap() %>
               <% } %>
               <% if user.country_en.is_some() { %>
                 <%= user.country_en.unwrap() %>
               <% } %>
+            </span>
           </p>
           <% } %>
           <% if user.region_ru.is_some() || user.region_en.is_some() { %>
           <p>
-              <strong>Регион:</strong>
+            <strong>Регион:</strong>
+            <span>
               <% if user.region_ru.is_some() { %>
                 <%= user.region_ru.unwrap() %>
               <% } %>
               <% if user.region_en.is_some() { %>
                 <%= user.region_en.unwrap() %>
               <% } %>
+            </span>
           </p>
           <% } %>
           <% if user.city_ru.is_some() || user.city_en.is_some() { %>
           <p>
-              <strong>Город:</strong>
+            <strong>Город:</strong>
+            <span>
               <% if user.city_ru.is_some() { %>
                 <%= user.city_ru.unwrap() %>
               <% } %>
               <% if user.city_en.is_some() { %>
                 <%= user.city_en.unwrap() %>
               <% } %>
+            </span>
           </p>
           <% } %>
         </div>
