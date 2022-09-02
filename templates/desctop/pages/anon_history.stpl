@@ -37,7 +37,7 @@
               <h5 class="font-alt mb-20">Информация о Вас</h5>
               <div class="row" style="margin-left: 0;margin-right: 0;">
               <div class="col-md-6 mb-20">
-                <div class="work-full-detail">
+                <div class="">
                   <p style="display: flex;">
                       <strong>Оборудование:</strong>
                       <% if user.device == 1 { %>
@@ -60,7 +60,7 @@
                   </p>
                 </div>
               </div>
-              <div class="col-md-6 solid_left mb-20">
+              <div class="col-md-6 solid_left">
                 <p style="display: flex;">
                   <strong>IP адрес:</strong>
                   <span style="margin-left: auto;margin-right: 5px"><%= user.ip %></span>

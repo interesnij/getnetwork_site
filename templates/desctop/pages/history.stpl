@@ -37,36 +37,36 @@
               <h5 class="font-alt mb-20">Информация о Вас</h5>
               <div class="row" style="margin-left: 0;margin-right: 0;">
               <div class="col-md-6 mb-20">
-                <div class="work-full-detail">
-                  <p style="display: flex;">
+                <div class="">
+                  <span class="solid_bottom" style="display: flex;margin-top:7px">
                       <strong>Оборудование:</strong>
                       <% if user.device == 1 { %>
                         <span style="margin-left: auto;margin-right: 5px">Компьютер</span>
                       <% } else { %>
                         <span style="margin-left: auto;margin-right: 5px">Телефон</span>
                       <% } %>
-                  </p>
-                  <p style="display: flex;">
+                  </span>
+                  <span class="solid_bottom" style="display: flex;margin-top:7px">
                       <strong>Намотано метров:</strong>
                       <span style="margin-left: auto;margin-right: 5px"><%= user.height.round() %></span>
-                  </p>
-                  <p style="display: flex;">
+                  </span>
+                  <span class="solid_bottom" style="display: flex;margin-top:7px">
                       <strong>Затрачено секунд:</strong>
                       <span style="margin-left: auto;margin-right: 5px"><%= user.seconds %></span>
-                  </p>
-                  <p style="display: flex;">
+                  </span>
+                  <span class="solid_bottom" style="display: flex;margin-top:7px">
                       <strong>Профиль создан:</strong>
                       <span style="margin-left: auto;margin-right: 5px"><%= user.created.format("%d-%m-%Y в %H:%M").to_string() %></span>
-                  </p>
+                  </span>
                 </div>
               </div>
-              <div class="col-md-6 solid_left mb-20">
-                <p style="display: flex;">
+              <div class="col-md-6 solid_left">
+                <span class="solid_bottom" style="display: flex;margin-top:7px">
                   <strong>IP адрес:</strong>
                   <span style="margin-left: auto;margin-right: 5px"><%= user.ip %></span>
-                </p>
+                </span>
                 <% if user.country_ru.is_some() || user.country_en.is_some() { %>
-                <p style="display: flex;">
+                <span class="solid_bottom" style="display: flex;margin-top:7px">
                   <strong>Страна:</strong>
                   <span style="margin-left: auto;margin-right: 5px">
                     <% if user.country_ru.is_some() { %>
@@ -76,10 +76,10 @@
                       <%= user.country_en.unwrap() %>
                     <% } %>
                   </span>
-                </p>
+                </span>
                 <% } %>
                 <% if user.region_ru.is_some() || user.region_en.is_some() { %>
-                <p style="display: flex;">
+                <span class="solid_bottom" style="display: flex;margin-top:7px">
                   <strong>Регион:</strong>
                   <span style="margin-left: auto;margin-right: 5px">
                     <% if user.region_ru.is_some() { %>
@@ -89,10 +89,10 @@
                       <%= user.region_en.unwrap() %>
                     <% } %>
                   </span>
-                </p>
+                </span>
                 <% } %>
                 <% if user.city_ru.is_some() || user.city_en.is_some() { %>
-                <p style="display: flex">
+                <span class="solid_bottom" style="display: flex;margin-top:7px">
                   <strong>Город:</strong>
                   <span style="margin-left: auto;margin-right: 5px">
                     <% if user.city_ru.is_some() { %>
@@ -102,7 +102,7 @@
                       <%= user.city_en.unwrap() %>
                     <% } %>
                   </span>
-                </p>
+                </span>
                 <% } %>
               </div>
             </div>
