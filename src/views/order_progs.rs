@@ -29,8 +29,6 @@ use crate::models::{
 };
 use actix_session::Session;
 use actix_multipart::Multipart;
-use serde::Deserialize;
-use std::str;
 use sailfish::TemplateOnce;
 use crate::models::User;
 
@@ -132,14 +130,14 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/pages/user_orders.stpl")]
                 struct Template {
-                    title:            String,
+                    //title:            String,
                     request_user:     User,
                     object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
                 }
                 let body = Template {
-                    title:            "Ваши заказы".to_string(),
+                    //title:            "Ваши заказы".to_string(),
                     request_user:     _request_user,
                     object_list:      _orders,
                     is_ajax:          is_ajax,
@@ -153,15 +151,13 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/pages/user_orders.stpl")]
                 struct Template {
-                    title:            String,
-                    request_user:     User,
+                    //title:            String,
                     object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
                 }
                 let body = Template {
-                    title:            "Ваши заказы".to_string(),
-                    request_user:     _request_user,
+                    //title:            "Ваши заказы".to_string(),
                     object_list:      _orders,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
@@ -176,13 +172,13 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/pages/anon_user_orders.stpl")]
                 struct Template {
-                    title:            String,
+                    //title:            String,
                     object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
                 }
                 let body = Template {
-                    title:            "Ваши заказы".to_string(),
+                    //title:            "Ваши заказы".to_string(),
                     object_list:      _orders,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
@@ -195,13 +191,13 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/pages/anon_user_orders.stpl")]
                 struct Template {
-                    title:            String,
+                    //title:            String,
                     object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
                 }
                 let body = Template {
-                    title:            "Ваши заказы".to_string(),
+                    //title:            "Ваши заказы".to_string(),
                     object_list:      _orders,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
@@ -271,14 +267,14 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[template(path = "mobile/pages/order.stpl")]
                 struct Template {
                     title:        String,
-                    request_user: User,
+                    //request_user: User,
                     object:       Order,
                     files:        Vec<OrderFile>,
                     is_ajax:      i32,
                 }
                 let body = Template {
                     title:        "Заказ ".to_string() + &_order.title,
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     object:       _order,
                     files:        _files,
                     is_ajax:      is_ajax,
@@ -335,10 +331,10 @@ pub async fn create_order_page() -> actix_web::Result<HttpResponse> {
     #[derive(TemplateOnce)]
     #[template(path = "desctop/pages/create_order.stpl")]
     struct Template {
-        title:  String,
+        //title:  String,
     }
     let body = Template {
-        title:  "Создание заказа".to_string(),
+        //title:  "Создание заказа".to_string(),
     }
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

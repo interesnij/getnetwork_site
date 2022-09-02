@@ -319,14 +319,14 @@ pub async fn history_page(req: HttpRequest, session: Session) -> actix_web::Resu
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/pages/history.stpl")]
                 struct Template {
-                    request_user:     User,
+                    //request_user:     User,
                     user:             CookieUser,
                     object_list:      Vec<CookieStat>,
                     is_ajax:          i32,
                     next_page_number: i32,
                 }
                 let body = Template {
-                    request_user:     _request_user,
+                    //request_user:     _request_user,
                     user:             _cookie_user,
                     object_list:      object_list,
                     is_ajax:          is_ajax,

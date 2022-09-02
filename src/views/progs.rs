@@ -373,7 +373,6 @@ pub async fn object_history(req: HttpRequest, id: web::Path<i32>) -> web::Json<O
 
 pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Responder {
     use crate::schema::feedbacks;
-    use std::borrow::BorrowMut;
     use crate::models::{Feedback, NewFeedback};
     use crate::utils::feedback_form;
 
