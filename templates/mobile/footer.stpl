@@ -35,7 +35,11 @@
 <span class="second_span" style="display:none">
   <button href="/info/" class="mobile_icon infos border ajax">
     <span class="icon-heart"></span>
-    <p>Инфо</p>
+    <p>О нас</p>
+  </button>
+  <button href="/history/" class="mobile_icon border ajax auth_btn">
+    <span class="icon-profile-male"></span>
+    <p>О вас</p>
   </button>
   <button href="/tags/" class="mobile_icon tags border ajax">
     <span class="icon-ribbon"></span>
@@ -68,9 +72,9 @@
       <span class="icon-documents"></span>
       <p>Страницы</p>
     </button>
-    <button href="" class="mobile_icon border ajax auth_btn">
-      <span class="icon-profile-male"></span>
-      <p>Профиль</p>
+    <button href="/search/" class="mobile_icon border search ajax search_btn">
+      <span class="icon-search"></span>
+      <p>Поиск</p>
     </button>
   </nav>
 </span>
