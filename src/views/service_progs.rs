@@ -1374,18 +1374,30 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
         get_first_load_page(&session, is_desctop, "Категории услуг".to_string()).await
     }
     else {
-        use crate::schema::tags_items::dsl::tags_items;
-        use crate::schema::tags::dsl::tags;
-        use crate::schema::service_categories::dsl::service_categories;
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+            service_categories::dsl::service_categories,
+            stat_service_categories::dsl::stat_service_categories,
+        };
+        use crate::models::StatServiceCategorie;
 
         let _connection = establish_connection();
-        let mut stack = Vec::new();
 
+        let _stat = stat_service_categories
+            .limit(1)
+            .load::<StatServiceCategorie>(&_connection)
+            .expect("E")
+            .into_iter()
+            .nth(0)
+            .unwrap();
+
+        let mut stack = Vec::new();
         let _tag_items = tags_items
             .filter(schema::tags_items::service_id.ne(0))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
-            .expect("E");
+        .expect("E");
 
         for _tag_item in _tag_items.iter() {
             if !stack.iter().any(|&i| i==_tag_item) {
@@ -1411,14 +1423,14 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                     request_user: User,
                     is_ajax:      i32,
                     service_cats: Vec<ServiceCategories>,
-                    //all_tags:     Vec<Tag>,
+                    stat:         StatServiceCategorie,
                 }
                 let body = Template {
                     title:        "Категории услуг".to_string(),
                     request_user: _request_user,
                     is_ajax:      is_ajax,
                     service_cats: _service_cats,
-                    //all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1429,17 +1441,17 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                 #[template(path = "mobile/services/categories.stpl")]
                 struct Template {
                     title:        String,
-                    //request_user: User,
                     is_ajax:      i32,
                     service_cats: Vec<ServiceCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatServiceCategorie,
                 }
                 let body = Template {
                     title:        "Категории услуг".to_string(),
-                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     service_cats: _service_cats,
                     all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1454,13 +1466,13 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                     title:        String,
                     is_ajax:      i32,
                     service_cats: Vec<ServiceCategories>,
-                    //all_tags:     Vec<Tag>,
+                    stat:         StatServiceCategorie,
                 }
                 let body = Template {
                     title:        "Категории услуг".to_string(),
                     is_ajax:      is_ajax,
                     service_cats: _service_cats,
-                    //all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1474,12 +1486,14 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                     is_ajax:      i32,
                     service_cats: Vec<ServiceCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatServiceCategorie,
                 }
                 let body = Template {
                     title:        "Категории услуг".to_string(),
                     is_ajax:      is_ajax,
                     service_cats: _service_cats,
                     all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

@@ -1360,13 +1360,24 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
         get_first_load_page(&session, is_desctop, "Категории услуг".to_string()).await
     }
     else {
-        use crate::schema::tags_items::dsl::tags_items;
-        use crate::schema::tags::dsl::tags;
-        use crate::schema::store_categories::dsl::store_categories;
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+            store_categories::dsl::store_categories,
+            stat_store_categories::dsl::stat_store_categories,
+        };
+        use crate::models::StatStoreCategorie;
 
         let _connection = establish_connection();
-        let mut stack = Vec::new();
+        let _stat = stat_store_categories
+            .limit(1)
+            .load::<StatStoreCategorie>(&_connection)
+            .expect("E")
+            .into_iter()
+            .nth(0)
+            .unwrap();
 
+        let mut stack = Vec::new();
         let _tag_items = tags_items
             .filter(schema::tags_items::store_id.ne(0))
             .select(schema::tags_items::tag_id)
@@ -1398,6 +1409,7 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     is_ajax:      i32,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatStoreCategorie,
                 }
                 let body = Template {
                     title:        "Категории товаров".to_string(),
@@ -1405,6 +1417,7 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     is_ajax:      is_ajax,
                     store_cats:   _store_cats,
                     all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1415,17 +1428,17 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                 #[template(path = "mobile/stores/categories.stpl")]
                 struct Template {
                     title:        String,
-                    //request_user: User,
                     is_ajax:      i32,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatStoreCategorie,
                 }
                 let body = Template {
                     title:        "Категории товаров".to_string(),
-                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     store_cats:   _store_cats,
                     all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1441,12 +1454,14 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     is_ajax:      i32,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatStoreCategorie,
                 }
                 let body = Template {
                     title:        "Категории товаров".to_string(),
                     is_ajax:      is_ajax,
                     store_cats:   _store_cats,
                     all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1460,12 +1475,14 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     is_ajax:      i32,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatStoreCategorie,
                 }
                 let body = Template {
                     title:        "Категории товаров".to_string(),
                     is_ajax:      is_ajax,
                     store_cats:   _store_cats,
                     all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

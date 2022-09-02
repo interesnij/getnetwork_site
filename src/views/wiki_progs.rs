@@ -1150,13 +1150,24 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
         get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
     }
     else {
-        use crate::schema::tags_items::dsl::tags_items;
-        use crate::schema::tags::dsl::tags;
-        use crate::schema::wiki_categories::dsl::wiki_categories;
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+            wiki_categories::dsl::wiki_categories,
+            stat_wiki_categories::dsl::stat_wiki_categories,
+        };
+        use crate::models::StatWikiCategorie;
 
         let _connection = establish_connection();
-        let mut stack = Vec::new();
+        let _stat = stat_wiki_categories
+            .limit(1)
+            .load::<StatWikiCategorie>(&_connection)
+            .expect("E")
+            .into_iter()
+            .nth(0)
+            .unwrap();
 
+        let mut stack = Vec::new();
         let _tag_items = tags_items
             .filter(schema::tags_items::wiki_id.ne(0))
             .select(schema::tags_items::tag_id)
@@ -1187,14 +1198,14 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                     request_user: User,
                     is_ajax:      i32,
                     wiki_cats:    Vec<WikiCategories>,
-                    //all_tags:     Vec<Tag>,
+                    stat:         StatWikiCategorie,
                 }
                 let body = Template {
                     title:        "Категории обучающих статей".to_string(),
                     request_user: _request_user,
                     is_ajax:      is_ajax,
                     wiki_cats:    _wiki_cats,
-                    //all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1205,17 +1216,17 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[template(path = "mobile/wikis/categories.stpl")]
                 struct Template {
                     title:        String,
-                    //request_user: User,
                     is_ajax:      i32,
                     wiki_cats:    Vec<WikiCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatWikiCategorie,
                 }
                 let body = Template {
                     title:        "Категории обучающих статей".to_string(),
-                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     wiki_cats:    _wiki_cats,
                     all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1230,13 +1241,13 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                     title:        String,
                     is_ajax:      i32,
                     wiki_cats:    Vec<WikiCategories>,
-                    //all_tags:     Vec<Tag>,
+                    stat:         StatWikiCategorie,
                 }
                 let body = Template {
                     title:        "Категории обучающих статей".to_string(),
                     is_ajax:      is_ajax,
                     wiki_cats:    _wiki_cats,
-                    //all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1250,12 +1261,14 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                     is_ajax:      i32,
                     wiki_cats:    Vec<WikiCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatWikiCategorie,
                 }
                 let body = Template {
                     title:        "Категории обучающих статей".to_string(),
                     is_ajax:      is_ajax,
                     wiki_cats:    _wiki_cats,
                     all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

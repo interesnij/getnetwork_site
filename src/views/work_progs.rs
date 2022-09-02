@@ -1373,13 +1373,24 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
         get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
     }
     else {
-        use crate::schema::tags_items::dsl::tags_items;
-        use crate::schema::tags::dsl::tags;
-        use crate::schema::work_categories::dsl::work_categories;
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+            work_categories::dsl::work_categories,
+            stat_work_categories::dsl::stat_work_categories,
+        };
+        use crate::models::StatWorkCategorie;
 
         let _connection = establish_connection();
-        let mut stack = Vec::new();
+        let _stat = stat_work_categories
+            .limit(1)
+            .load::<StatWorkCategorie>(&_connection)
+            .expect("E")
+            .into_iter()
+            .nth(0)
+            .unwrap();
 
+        let mut stack = Vec::new();
         let _tag_items = tags_items
             .filter(schema::tags_items::work_id.ne(0))
             .select(schema::tags_items::tag_id)
@@ -1410,14 +1421,14 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
                     request_user: User,
                     is_ajax:      i32,
                     work_cats:    Vec<WorkCategories>,
-                    //all_tags:     Vec<Tag>,
+                    stat:         StatWorkCategorie,
                 }
                 let body = Template {
                     title:        "Категории работ".to_string(),
                     request_user: _request_user,
                     is_ajax:      is_ajax,
                     work_cats:    _work_cats,
-                    //all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1428,17 +1439,17 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[template(path = "mobile/works/categories.stpl")]
                 struct Template {
                     title:        String,
-                    //request_user: User,
                     is_ajax:      i32,
                     work_cats:    Vec<WorkCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatWorkCategorie,
                 }
                 let body = Template {
                     title:        "Категории работ".to_string(),
-                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     work_cats:    _work_cats,
                     all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1453,13 +1464,13 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
                     title:        String,
                     is_ajax:      i32,
                     work_cats:    Vec<WorkCategories>,
-                    //all_tags:     Vec<Tag>,
+                    stat:         StatWorkCategorie,
                 }
                 let body = Template {
                     title:        "Категории работ".to_string(),
                     is_ajax:      is_ajax,
                     work_cats:    _work_cats,
-                    //all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1473,12 +1484,14 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
                     is_ajax:      i32,
                     work_cats:    Vec<WorkCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatWorkCategorie,
                 }
                 let body = Template {
                     title:        "Категории работ".to_string(),
                     is_ajax:      is_ajax,
                     work_cats:    _work_cats,
                     all_tags:     _tags,
+                    stat:         _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

@@ -995,7 +995,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 
 pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::blog_categories::dsl::blog_categories;
-    use crate::schema::tags_items::dsl::tags_items;
     use crate::utils::{get_device_and_ajax, get_page};
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -1016,6 +1015,8 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         get_first_load_page(&session, is_desctop, "Категория блога ".to_string() + &_category.name).await
     }
     else {
+        use crate::schema::tags_items::dsl::tags_items;
+        
         let page = get_page(&req);
         let (object_list, next_page_number) = _category.get_blogs_list(page, 20);
 
@@ -1190,8 +1191,8 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
             .load::<Tag>(&_connection)
             .expect("could not load tags");
 
-        let _blog_cats :Vec<BlogCategories> = blog_categories
-            .load(&_connection)
+        let _blog_cats = blog_categories
+            .load::<BlogCategories>(&_connection)
             .expect("Error");
 
         if is_signed_in(&session) {
