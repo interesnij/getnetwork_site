@@ -3,8 +3,8 @@
     <%= serve.name %> → <%= child.name %>
   </a>
   <span>
-    <span class="price_td"><span class="price"><%= first_child.price %></span> ₽</span>
+    <span class="price_td"><span class="price"><%= child.price %></span> ₽</span>
     &nbps;&nbps;
-    <span class="hours"><%= first_child.man_hours %></span>
+    <span class="hours"><%= child.man_hours %></span>
   </span>
 </td>
