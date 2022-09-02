@@ -8,11 +8,17 @@
           <%= object.title %>
         </a>
         <span class="solid_top">
-          <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+
           <p>Цена: от <%= object.price %> ₽</p>
           <% if object.price_acc.is_some() { %>
             <p>Со скидкой: от <%= object.price_acc.unwrap() %> ₽</p>
           <% } %>
+
+          <p>Блоки:
+          <% for cat in object.get_open_tech_categories().iter() { %>
+            <%= cat.name %> &nbsp;
+          <% } %>
+          </p>
         </span>
     </div>
 </div>

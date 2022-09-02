@@ -8,11 +8,11 @@
               ещё
             </a>
         </h5>
-        <ul class="row multi-columns-row"> 
+        <div class="row multi-columns-row">
           <% for object in last_services.iter() { %>
             <% include!("../generic/default_service.stpl"); %>
           <% } %>
-        </ul>
+        </div>
     </div>
 </section>
 <% } %>
