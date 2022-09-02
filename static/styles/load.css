@@ -258,7 +258,7 @@ dl dd {
     font-size: 22px;
   }
   .this_fullscreen_hide {
-    right: 30px;
+    right: 30px !important;
   }
 }
 .highlight pre{
