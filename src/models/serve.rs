@@ -203,6 +203,18 @@ impl Serve {
             .expect("E")
             .len() > 0;
     }
+    pub fn get_parent(&self) -> Serve {
+        use crate::schema::serve::dsl::serve;
+
+        let _connection = establish_connection();
+        return serve
+            .filter(schema::serve::id.eq(self.parent_id))
+            .load::<Serve>(&_connection)
+            .expect("E")
+            .into_iter()
+            .nth(0)
+            .unwrap();
+    }
     pub fn get_100_description(&self) -> String {
         if self.description.is_some() {
             let _content = self.description.as_deref().unwrap();
