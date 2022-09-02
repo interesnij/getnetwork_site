@@ -1,14 +1,16 @@
 <div page-id="" object-id="" data-link="" data-title="<%= title %>" class="doc_title">
-<h4><%= object.name %></h4>
-<p style="font-size: 80%;">
-  Это язык программирования или технология Веб-сервисов.
-  Для разных задач можно выбирать из их разнообразия для
-  предельно эффективной реализации Ваших проектов.
-</p>
+  <h4 style="margin-bottom: 0 !important"><%= object.name %></h4>
+  <p style="font-size: 80%;">
+    Это язык программирования или технология Веб-сервисов.
+    Для разных задач можно выбирать из их разнообразия для
+    предельно эффективной реализации Ваших проектов.
+  </p>
 
-<% if object.description.is_some() { %>
-  <%- object.description.as_deref().unwrap() %>
-<% } else { %>
-  Описание отсутствует
-<% } %>
+  <div style="margin-top:10px">
+    <% if object.description.is_some() { %>
+      <%- object.description.as_deref().unwrap() %>
+    <% } else { %>
+      Описание отсутствует
+    <% } %>
+  </div>
 </div>
