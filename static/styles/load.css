@@ -257,6 +257,9 @@ dl dd {
   h1 {
     font-size: 22px;
   }
+  .this_fullscreen_hide {
+    right: 30px;
+  }
 }
 .highlight pre{
     -webkit-border-radius: 0;

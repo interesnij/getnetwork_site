@@ -269,16 +269,12 @@ function create_fullscreen(url, type_class, price) {
         window_time_end = false;
         $window_height = 0;
 
-        if (document.body.querySelector(".desctop_nav")) {
-          hide_svg = '<svg class="svg_default" style="position:fixed;" width="30" height="30" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
-        } else { hide_svg = "" };
-
         $hide_span = document.createElement("span");
         $hide_span.classList.add("this_fullscreen_hide");
         $loader = document.createElement("div");
 
         $loader.setAttribute("id", "fullscreen_loader");
-        $hide_span.innerHTML = hide_svg;
+        $hide_span.innerHTML = '<svg class="svg_default" style="position:fixed;" width="30" height="30" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>';
         $parent_div.append($hide_span);
         $parent_div.append($loader);
         container.prepend($parent_div);
