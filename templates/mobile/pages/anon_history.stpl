@@ -35,8 +35,6 @@
     <div class="container relative">
     <div class="border work-detail mt-20 mb-20" style="padding-left: 10px;">
         <h5 class="font-alt mb-20">Информация о Вас</h5>
-        <div class="row" style="margin-left: 0;margin-right: 0;">
-        <div class="col-md-6 mb-20">
           <div class="work-full-detail">
             <p style="display: flex;">
                 <strong>Оборудование:</strong>
@@ -58,9 +56,6 @@
                 <strong>Профиль создан:</strong>
                 <span style="margin-left: auto;margin-right: 5px"><%= user.created.format("%d-%m-%Y в %H:%M").to_string() %></span>
             </p>
-          </div>
-        </div>
-        <div class="col-md-6 mb-20">
           <p style="display: flex;">
             <strong>IP адрес:</strong>
             <span style="margin-left: auto;margin-right: 5px"><%= user.ip %></span>
@@ -106,7 +101,6 @@
           <% } %>
         </div>
       </div>
-    </div>
 
     <hr class="mt-0 mb-0 " />
     <h5 class="font-alt mb-20">История просмотров</h5>
