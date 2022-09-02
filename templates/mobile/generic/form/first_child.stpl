@@ -1,7 +1,10 @@
-<td class="border-top" style="width:55%">
+<td class="border-top" style="width:70%">
   <a class="get_serve_info pointer" parent-pk="<%= serve.id %>" data-pk="<%= first_child.id %>">
     <%= serve.name %> → <%= first_child.name %>
   </a>
+  <span>
+    <span class="price_td"><span class="price"><%= first_child.price %></span> ₽</span>
+    &nbps;&nbps;
+    <span class="hours"><%= first_child.man_hours %></span>
+  </span>
 </td>
-<td class="price_td border-top" style="width:15%"><span class="price"><%= first_child.price %></span> ₽</td>
-<td class="hours border-top" style="width:15%"><%= first_child.man_hours %></td>

@@ -2,6 +2,9 @@
   <a class="get_serve_info pointer" data-pk="<%= child.id %>">
     <%= serve.name %> → <%= child.name %>
   </a>
+  <span>
+    <span class="price_td"><span class="price"><%= first_child.price %></span> ₽</span>
+    &nbps;&nbps;
+    <span class="hours"><%= first_child.man_hours %></span>
+  </span>
 </td>
-<td class="price_td <% if i == 0 { %>solid_top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>" style="width:15%"><span class="price"><%= child.price %></span> ₽</td>
-<td style="width:15%" class="hours <% if i == 0 { %>solid_top<% } %> <% if (i + 1) == childs_count { %>solid_bottom<% } %>"><%= child.man_hours %></td>

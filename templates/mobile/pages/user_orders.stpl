@@ -1,0 +1,88 @@
+<% include!("../header.stpl"); %>
+
+<section page-id="12" data-title="Ваши заказы" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>Ваши заказы</span>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+        <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
+            <li class="yy pointer">
+              <a href="/history/" class="ajax">
+                <div class="alt-tabs-icon">
+                  <span class="icon-document"></span>
+                </div>
+                История
+              </a>
+            </li>
+            <li class="yy active">
+              <a>
+                <div class="alt-tabs-icon">
+                  <span class="icon-briefcase"></span>
+                </div>
+                Заказы
+              </a>
+            </li>
+        </ul>
+
+    </div>
+    <div class="container relative">
+      <% if object_list.len() > 0 { %>
+        <div class="is_paginate">
+          <% for object in object_list.iter() { %>
+            <div class="blog-item">
+              <h2 class="blog-item-title font-alt">
+                <a class="ajax" href="/order/<%= object.id %>/">
+                  <%= object.title %>
+                </a>
+              </h2>
+              <div class="blog-item-data">
+                <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+              </div>
+              <div class="blog-item-body">
+                <p>
+                  <% if object.description.is_some() { %>
+                    <%= object.description.as_deref().unwrap() %>
+                  <% } else { %>
+                    Без описания
+                  <% } %>
+                </p>
+              </div>
+              <div class="blog-item-foot">
+                <a href="/order/<%= object.id %>/" class="btn btn-mod btn-round ajax btn-small border">
+                  Открыть
+                </a>
+              </div>
+            </div>
+        <% } %>
+        <% if next_page_number > 0 { %>
+          <div class="load centered m-1 next_page_list" data-link="/user_orders/?page=<%= next_page_number %>">
+            <img src="/static/images/preloader.gif">
+          </div>
+        <% } %>
+        </div>
+      <% } else { %>
+        <div style="margin-top: 40px;">
+          <div class="align-center">
+            <span class="border" style="padding: 5px 12px;">
+              Заказов пока нет. Вы можете заказывать у нас веб-сервисы со
+              страниц
+              <a href="/service_categories/" class="ajax underline">услуг</a>
+              ,
+              <a href="/store_categories/" class="ajax underline">товаров</a>
+              и
+              <a href="/work_categories/" class="ajax underline">работ</a>.
+            </span>
+          </div>
+        </div>
+      <% } %>
+    </div>
+</section>
+
+<% include!("../footer.stpl"); %>
