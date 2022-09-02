@@ -1155,9 +1155,13 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
         get_first_load_page(&session, is_desctop, "Категории блога".to_string()).await
     }
     else {
-        use crate::schema::tags_items::dsl::tags_items;
-        use crate::schema::tags::dsl::tags;
-        use crate::schema::blog_categories::dsl::blog_categories;
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+            blog_categories::dsl::blog_categories,
+            stat_blog_categories::dsl::stat_blog_categories,
+        };
+        use crate::models::StatBlogCategorie;
 
         let _connection = establish_connection();
         let mut stack = Vec::new();
@@ -1167,6 +1171,14 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
+
+        let _stat = stat_blog_categories
+            .limit(1)
+            .load::<StatBlogCategorie>(&_connection)
+            .expect("E")
+            .into_iter()
+            .nth(0)
+            .unwrap();
 
         for _tag_item in _tag_items.iter() {
             if !stack.iter().any(|&i| i==_tag_item) {
@@ -1193,6 +1205,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                     is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatBlogCategorie,
                 }
                 let body = Template {
                     title:        "Категории блога".to_string(),
@@ -1200,6 +1213,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
+                    stat:         stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1210,17 +1224,17 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[template(path = "mobile/blogs/categories.stpl")]
                 struct Template {
                     title:        String,
-                    //request_user: User,
                     is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatBlogCategorie,
                 }
                 let body = Template {
                     title:        "Категории блога".to_string(),
-                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
+                    stat:         stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1236,12 +1250,14 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                     is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatBlogCategorie,
                 }
                 let body = Template {
                     title:        "Категории блога".to_string(),
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
+                    stat:         stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1255,12 +1271,14 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                     is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
+                    stat:         StatBlogCategorie,
                 }
                 let body = Template {
                     title:        "Категории блога".to_string(),
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
+                    stat:         stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
