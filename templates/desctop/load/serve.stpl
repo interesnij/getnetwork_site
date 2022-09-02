@@ -1,10 +1,18 @@
 <div page-id="" object-id="" data-link="" data-title="<%= title %>" class="doc_title">
-  <h4 style="margin-bottom: 0 !important"><%= object.name %></h4>
+  <% if serve.is_parent() { %>
+    <% let first_child = serve.get_first_variable(); %>
+    <h4 style="margin-bottom: 0 !important">
+      <%= object.name %> → <%= first_child.name %>
+    </h4>
+  <% } else { %>
+    <h4 style="margin-bottom: 0 !important"><%= object.name %></h4>
+  <% } %>
+
     <p class="solid_bottom" style="font-size: 80%;">
-    Это опция конкретной технологии и веб-ресурса. Опции бывают
-    обязательные, дополнительные, вариативные
-    (имеющие выбор между ними для конкретного случая).
-  </p>
+      Это опция конкретной технологии и веб-ресурса. Опции бывают
+      обязательные, дополнительные, вариативные
+      (имеющие выбор между ними для конкретного случая).
+    </p>
 
   <div style="margin-top:10px">
     <% if object.description.is_some() { %>

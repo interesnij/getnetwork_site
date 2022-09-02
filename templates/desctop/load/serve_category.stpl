@@ -1,6 +1,6 @@
 <div page-id="" object-id="" data-link="" data-title="<%= title %>" class="doc_title">
   <h4 style="margin-bottom: 0 !important"><%= object.name %></h4>
-  <p style="font-size: 80%;">
+  <p class="solid_bottom" style="font-size: 80%;">
     Это язык программирования или технология Веб-сервисов.
     Для разных задач можно выбирать из их разнообразия для
     предельно эффективной реализации Ваших проектов.
