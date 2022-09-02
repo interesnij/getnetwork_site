@@ -60,6 +60,7 @@
                           Информация отсутствует.
                         <% } %>
 
+                        <% let object_serve_ids = object.get_serves_ids(); %>
                         <% include!("../generic/form/serves_table.stpl"); %>
                     </div>
                 </div>
