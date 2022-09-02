@@ -42,9 +42,10 @@
                 <a class="get_serve_info pointer" data-pk="<%= object.id %>">
                   <%= serve.name %> → Не выбрано
                 </a>
-                <span>
+                <br />
+                <span style="font-size:80%">
                   <span class="price_td"><span class="price"><%= first_child.price %></span> ₽</span>
-                  &nbps;&nbps;
+                  &nbsp;&nbsp;
                   <span class="hours"><%= first_child.man_hours %></span>
                 </span>
               </td>
