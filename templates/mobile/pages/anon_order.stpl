@@ -22,9 +22,13 @@
                       Удалить
                     </a>
                     |
-                    <a data-pk="<%= object.id %>" class="pointer edit_order">
-                      Изменить данные
-                    </a>
+                    <% if object.types == 1 { %>
+                      <a href="/service/1/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
+                    <% } else if object.types == 2 { %>
+                      <a href="/store/1/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
+                    <% } else if object.types == 3 { %>
+                      <a href="/work/1/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
+                    <% } %>
                   </div>
                 </div>
                 <%= object.user_id %>

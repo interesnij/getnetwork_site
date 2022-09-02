@@ -26,11 +26,11 @@
                     </a>
                     |
                     <% if object.types == 1 { %>
-                      <a href="/service/0/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
+                      <a href="/service/1/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
                     <% } else if object.types == 2 { %>
-                      <a href="/store/0/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
+                      <a href="/store/1/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
                     <% } else if object.types == 3 { %>
-                      <a href="/work/0/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
+                      <a href="/work/1/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
                     <% } %>
                   </div>
                 </div>
