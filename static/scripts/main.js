@@ -730,8 +730,8 @@ function service_tab_action(_this, tab_class) {
   if (_this.parentElement.classList.contains("price_mode")) {
       is_price_mode = true;
   }
-  if (_this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.contains("order_window")) {
-    counter = _this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(".total_price");
+  if (_this.parentElement.parentElement.parentElement.parentElement.parentElement.classList.contains("order_window")) {
+    counter = _this.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(".total_price");
   }
   else {
     counter = document.body.querySelector(".total_price_counter");
