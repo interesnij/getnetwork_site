@@ -74,14 +74,14 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
             #[derive(TemplateOnce)]
             #[template(path = "desctop/pages/orders_list.stpl")]
             struct Template {
-                title:            String,
+                //title:            String,
                 request_user:     User,
                 is_ajax:          i32,
                 object_list:      Vec<Order>,
                 next_page_number: i32,
             }
             let body = Template {
-                title:            "Заказы".to_string(),
+                //title:            "Заказы".to_string(),
                 request_user:     _request_user,
                 is_ajax:          is_ajax,
                 object_list:      _orders,
@@ -95,13 +95,13 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
             #[derive(TemplateOnce)]
             #[template(path = "mobile/pages/orders_list.stpl")]
             struct Template {
-                title:            String,
+                //title:            String,
                 is_ajax:          i32,
                 object_list:      Vec<Order>,
                 next_page_number: i32,
             }
             let body = Template {
-                title:            "Заказы".to_string(),
+                //title:            "Заказы".to_string(),
                 is_ajax:          is_ajax,
                 object_list:      _orders,
                 next_page_number: next_page_number,
@@ -331,7 +331,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
     }
 }
 
-pub async fn create_order_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
+pub async fn create_order_page() -> actix_web::Result<HttpResponse> {
     #[derive(TemplateOnce)]
     #[template(path = "desctop/pages/create_order.stpl")]
     struct Template {

@@ -173,12 +173,15 @@
                               <li class="mn-sub-multi">
                                   <a class="mn-group-title">Страницы</a>
                                   <ul>
-                                      <li>
-                                          <a href="/feedback_list/" class="ajax">Письма</a>
-                                      </li>
-                                      <li>
-                                          <a href="/serve_list/" class="ajax">Опции</a>
-                                      </li>
+                                    <li>
+                                      <a href="/orders/" class="ajax">Заказы</a>
+                                    </li>
+                                    <li>
+                                      <a href="/feedback_list/" class="ajax">Письма</a>
+                                    </li>
+                                    <li>
+                                      <a href="/serve_list/" class="ajax">Опции</a>
+                                    </li>
                                   </ul>
                               </li>
 
