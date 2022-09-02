@@ -37,17 +37,13 @@
     <span class="icon-heart"></span>
     <p>О нас</p>
   </button>
-  <button href="/history/" class="mobile_icon border ajax auth_btn">
+  <button href="/history/" class="mobile_icon border ajax history">
     <span class="icon-profile-male"></span>
     <p>О вас</p>
   </button>
   <button href="/tags/" class="mobile_icon tags border ajax">
     <span class="icon-ribbon"></span>
     <p>Теги</p>
-  </button>
-  <button href="/search/" class="mobile_icon border search ajax search_btn">
-    <span class="icon-search"></span>
-    <p>Поиск</p>
   </button>
   <button href="/help/1/" class="mobile_icon help border ajax">
     <span class="icon-lifesaver"></span>

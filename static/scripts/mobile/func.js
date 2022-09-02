@@ -203,6 +203,10 @@ function get_active_button() {
       $mobile_nav.querySelector(".infos").classList.add("mobile_icon_current");
       $mobile_nav.querySelector(".pages_btn").classList.add("mobile_icon_current");
     }
+    else if (path == "/history/") {
+      $mobile_nav.querySelector(".history").classList.add("mobile_icon_current");
+      $mobile_nav.querySelector(".pages_btn").classList.add("mobile_icon_current");
+    }
     else if (path == "/help/") {
       $mobile_nav.querySelector(".help").classList.add("mobile_icon_current");
       $mobile_nav.querySelector(".pages_btn").classList.add("mobile_icon_current");
@@ -213,7 +217,6 @@ function get_active_button() {
     }
     else if (path == "/search/") {
       $mobile_nav.querySelector(".search").classList.add("mobile_icon_current");
-      $mobile_nav.querySelector(".pages_btn").classList.add("mobile_icon_current");
     }
     else if (path == "/auth/" || path.substr(1, 5) == "users") {
       $mobile_nav.querySelector(".auth_btn").classList.add("mobile_icon_current");

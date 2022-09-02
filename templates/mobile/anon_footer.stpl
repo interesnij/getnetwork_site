@@ -37,7 +37,7 @@
     <span class="icon-heart"></span>
     <p>О нас</p>
   </button>
-  <button href="/history/" class="mobile_icon border ajax auth_btn">
+  <button href="/history/" class="mobile_icon border ajax history">
     <span class="icon-profile-male"></span>
     <p>О вас</p>
   </button>

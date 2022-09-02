@@ -1,4 +1,4 @@
-<% include!("../header.stpl"); %>
+<% include!("../anon_header.stpl"); %>
 
 <section page-id="13" data-title="История просмотров" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
@@ -140,4 +140,4 @@
     </div>
 </section>
 
-<% include!("../footer.stpl"); %>
+<% include!("../anon_footer.stpl"); %>
