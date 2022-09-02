@@ -35,11 +35,9 @@
     <div class="container relative">
     <div class="border work-detail mt-20 mb-20" style="padding-left: 10px;">
         <h5 class="font-alt mb-20">Информация о Вас</h5>
-        <div class="work-full-detail">
-            <p>
-                <strong>IP адрес:</strong>
-                <%= user.ip %>
-            </p>
+        <div class="row" style="margin-left: 0;margin-right: 0;">
+        <div class="col-md-6 mb-20">
+          <div class="work-full-detail">
             <p>
                 <strong>Оборудование:</strong>
                 <% if user.device == 1 { %>
@@ -48,39 +46,6 @@
                   Телефон
                 <% } %>
             </p>
-            <% if user.country_ru.is_some() || user.country_en.is_some() { %>
-            <p>
-                <strong>Страна:</strong>
-                <% if user.country_ru.is_some() { %>
-                  <%= user.country_ru.unwrap() %>
-                <% } %>
-                <% if user.country_en.is_some() { %>
-                  <%= user.country_en.unwrap() %>
-                <% } %>
-            </p>
-            <% } %>
-            <% if user.region_ru.is_some() || user.region_en.is_some() { %>
-            <p>
-                <strong>Регион:</strong>
-                <% if user.region_ru.is_some() { %>
-                  <%= user.region_ru.unwrap() %>
-                <% } %>
-                <% if user.region_en.is_some() { %>
-                  <%= user.region_en.unwrap() %>
-                <% } %>
-            </p>
-            <% } %>
-            <% if user.city_ru.is_some() || user.city_en.is_some() { %>
-            <p>
-                <strong>Город:</strong>
-                <% if user.city_ru.is_some() { %>
-                  <%= user.city_ru.unwrap() %>
-                <% } %>
-                <% if user.city_en.is_some() { %>
-                  <%= user.city_en.unwrap() %>
-                <% } %>
-            </p>
-            <% } %>
             <p>
                 <strong>Намотано метров:</strong>
                 <%= user.height.round() %>
@@ -93,23 +58,75 @@
                 <strong>Профиль создан:</strong>
                 <%= user.created.format("%d-%m-%Y в %H:%M").to_string() %>
             </p>
+          </div>
         </div>
+        <div class="col-md-6 mb-20">
+          <p>
+            <strong>IP адрес:</strong>
+            <%= user.ip %>
+          </p>
+          <% if user.country_ru.is_some() || user.country_en.is_some() { %>
+          <p>
+              <strong>Страна:</strong>
+              <% if user.country_ru.is_some() { %>
+                <%= user.country_ru.unwrap() %>
+              <% } %>
+              <% if user.country_en.is_some() { %>
+                <%= user.country_en.unwrap() %>
+              <% } %>
+          </p>
+          <% } %>
+          <% if user.region_ru.is_some() || user.region_en.is_some() { %>
+          <p>
+              <strong>Регион:</strong>
+              <% if user.region_ru.is_some() { %>
+                <%= user.region_ru.unwrap() %>
+              <% } %>
+              <% if user.region_en.is_some() { %>
+                <%= user.region_en.unwrap() %>
+              <% } %>
+          </p>
+          <% } %>
+          <% if user.city_ru.is_some() || user.city_en.is_some() { %>
+          <p>
+              <strong>Город:</strong>
+              <% if user.city_ru.is_some() { %>
+                <%= user.city_ru.unwrap() %>
+              <% } %>
+              <% if user.city_en.is_some() { %>
+                <%= user.city_en.unwrap() %>
+              <% } %>
+          </p>
+          <% } %>
+        </div>
+      </div>
     </div>
 
     <hr class="mt-0 mb-0 " />
     <h5 class="font-alt mb-20">История просмотров</h5>
       <% if object_list.len() > 0 { %>
       <div class="is_paginate">
-        <% for object in object_list.iter() { %>
-          <p>
-            <a target="_blank" rel="nofollow" href="<%= object.link %>"><%= object.title %>
-              (
-                Метров: <%= object.height %>,
-                секунд: <%= object.seconds %>,
-                <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-              )
-            </a>
-          </p>
+        <% for (i, object) in object_list.iter().enumerate() { %>
+          <div class="row border-top <% if i % 2 == 0 { %>hover<% } %>" style="padding: 5px 0;">
+            <div class="col-md-6">
+              <a target="_blank" rel="nofollow" href="<%= object.link %>">
+                <%= object.title %>
+              </a>
+            </div>
+            <div class="col-md-1">
+              <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
+                <g><rect fill="none" height="24" width="24"/></g><g><g/><polygon points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/></g>
+              </svg><%= object.height %>
+            </div>
+            <div class="col-md-1">
+              <svg fill="currentColor" style="width:17px;vertical-align: text-bottom;" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"/>
+              </svg> <%= object.seconds %>
+            </div>
+            <div class="col-md-4">
+               <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+            </div>
+          </div>
         <% } %>
         <% if next_page_number > 0 { %>
           <div class="load centered m-1 next_page_list" data-link="/history/?page=<%= next_page_number %>">
