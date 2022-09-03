@@ -1065,6 +1065,10 @@ on('body', 'click', '.remove_order', function() {
   link.send();
 });
 
+on('body', 'click', '.toggle_next_hide', function() {
+  this.nextElementSibling.classList.toggle("hide");
+});
+
 on('body', 'click', '.edit_order', function() {
   create_fullscreen("/edit_order/" + this.getAttribute("data-pk") + "/", "item_fullscreen");
 });
