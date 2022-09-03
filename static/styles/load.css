@@ -3213,3 +3213,8 @@ hr {
 .nav_mobile .active a {
   font-weight: bold;
 }
+
+.big_1::first-letter {
+  font-size: 30px;
+  font-weight: bold;
+}
