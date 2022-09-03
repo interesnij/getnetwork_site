@@ -107,6 +107,16 @@ impl ServeCategories {
             .load::<Serve>(&_connection)
             .expect("E");
     }
+    pub fn get_serves_2(&self) -> Vec<Serve> {
+        use crate::schema::serve::dsl::serve;
+
+        let _connection = establish_connection();
+        return serve
+            .filter(schema::serve::serve_categories.eq(self.id))
+            .order(schema::serve::position)
+            .load::<Serve>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Insertable,AsChangeset)]

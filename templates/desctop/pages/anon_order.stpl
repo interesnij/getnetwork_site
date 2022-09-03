@@ -42,7 +42,7 @@
 
                 <% let object_serve_ids = object.get_serves_ids(); %>
                 <% for i in object_serve_ids.iter() { %>
-                  <%= i %>, 
+                  <%= i %>,
                 <% } %>
 
                 <% for t_category in object.get_open_tech_categories().iter() { %>
@@ -69,7 +69,7 @@
                                     <th>Часы</th>
                                   </tr>
 
-                                  <% for serve in category.get_serves().iter() { %>
+                                  <% for serve in category.get_serves_2().iter() { %>
                                     <% if object_serve_ids.iter().any(|&i| i ==serve.id) { %>
                                         <tr>
                                           <td class="border-top" style="width:55%">
