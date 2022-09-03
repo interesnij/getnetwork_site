@@ -6,7 +6,7 @@
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
             <span>Услуги</span>
-            <span style="margin-left:10px" class="icon-bargraph pointer toggle_next_hide"></span>
+            <span tooltip="Статистика страницы" flow="up" style="margin-left:10px" class="icon-bargraph pointer toggle_next_hide"></span>
             <span style="margin-left:10px" style="" class="hide">
             <span tooltip="Просмотры" flow="up">
             <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
