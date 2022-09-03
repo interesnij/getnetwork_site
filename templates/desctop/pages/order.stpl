@@ -67,7 +67,11 @@
                                         <tr>
                                           <td class="border-top" style="width:55%">
                                             <a class="get_serve_info pointer" data-pk="<%= serve.id %>">
+                                            <% if serve.serve_id.is_some() { %>
+                                              <%= serve.get_parent().name %> → <%= serve.name %>
+                                            <% } else { %>
                                               <%= serve.name %>
+                                            <% } %>
                                             </a>
                                           </td>
                                           <td class="price_td border-top" style="width:15%"><span class="price"><%= serve.price %></span> ₽</td>
