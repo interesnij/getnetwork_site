@@ -151,7 +151,7 @@ function send_category_data(form, url) {
   link.send(form_data);
 };
 
-function send_content_data(url) {
+function send_content_data(url, field) {
   text_field = document.body.querySelector(".smile_supported");
   form = text_field.parentElement.parentElement;
   if (!text_field.innerHTML) {
@@ -160,7 +160,7 @@ function send_content_data(url) {
   }
   _val1 = format_text(text_field);
   form_data = new FormData(form);
-  form_data.append("content", _val1.innerHTML);
+  form_data.append(field, _val1.innerHTML);
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', url, true );
@@ -200,7 +200,7 @@ function delete_item(url) {
 };
 ///////////SERVE //////////////////
 on('body', 'click', '#create_serve_btn', function() {
-  send_post_data(this.parentElement, "/create_serve/");
+  send_content_data(this.parentElement, "/create_serve/", "description");
 });
 on('body', 'click', '#create_tech_category_btn', function() {
   send_category_data(this.parentElement, "/create_tech_categories/");
@@ -209,10 +209,10 @@ on('body', 'click', '#create_serve_category_btn', function() {
   send_category_data(this.parentElement, "/create_serve_categories/");
 });
 on('body', 'click', '#edit_serve_btn', function() {
-  send_post_data(this.parentElement, "/edit_serve/" + this.getAttribute("data-pk") + "/");
+  send_content_data(this.parentElement, "/edit_serve/" + this.getAttribute("data-pk") + "/", "description");
 });
 on('body', 'click', '#edit_text_work_btn', function() {
-  send_content_data("/edit_content_serve/" + this.getAttribute("data-pk") + "/");
+  send_content_data("/edit_content_serve/" + this.getAttribute("data-pk") + "/", "content");
 });
 on('body', 'click', '#edit_serve_category_btn', function() {
   send_category_data(this.parentElement, "/edit_serve_category/" + this.getAttribute("data-pk") + "/");
@@ -244,7 +244,7 @@ on('body', 'click', '#edit_work_btn', function() {
   send_post_data(this.parentElement, "/edit_work/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_text_work_btn', function() {
-  send_content_data("/edit_content_work/" + this.getAttribute("data-pk") + "/");
+  send_content_data("/edit_content_work/" + this.getAttribute("data-pk") + "/", "content");
 });
 on('body', 'click', '#edit_work_category_btn', function() {
   send_category_data(this.parentElement, "/edit_work_category/" + this.getAttribute("data-pk") + "/");
@@ -268,7 +268,7 @@ on('body', 'click', '#edit_blog_btn', function() {
   send_post_data(this.parentElement, "/edit_blog/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_text_blog_btn', function() {
-  send_content_data("/edit_content_blog/" + this.getAttribute("data-pk") + "/");
+  send_content_data("/edit_content_blog/" + this.getAttribute("data-pk") + "/", "content");
 });
 
 on('body', 'click', '#create_blog_category_btn', function() {
@@ -298,7 +298,7 @@ on('body', 'click', '#edit_wiki_btn', function() {
   send_post_data(this.parentElement, "/edit_wiki/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_text_wiki_btn', function() {
-  send_content_data("/edit_content_wiki/" + this.getAttribute("data-pk") + "/");
+  send_content_data("/edit_content_wiki/" + this.getAttribute("data-pk") + "/", "content");
 });
 on('body', 'click', '#edit_wiki_category_btn', function() {
   send_category_data(this.parentElement, "/edit_wiki_category/" + this.getAttribute("data-pk") + "/");
@@ -324,7 +324,7 @@ on('body', 'click', '#edit_store_btn', function() {
   send_post_data(this.parentElement, "/edit_store/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_text_store_btn', function() {
-  send_content_data("/edit_content_store/" + this.getAttribute("data-pk") + "/");
+  send_content_data("/edit_content_store/" + this.getAttribute("data-pk") + "/", "content");
 });
 on('body', 'click', '#edit_store_category_btn', function() {
   send_category_data(this.parentElement, "/edit_store_category/" + this.getAttribute("data-pk") + "/");
@@ -350,7 +350,7 @@ on('body', 'click', '#edit_service_btn', function() {
   send_post_data(this.parentElement, "/edit_service/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_text_service_btn', function() {
-  send_content_data("/edit_content_service/" + this.getAttribute("data-pk") + "/");
+  send_content_data("/edit_content_service/" + this.getAttribute("data-pk") + "/", "content");
 });
 on('body', 'click', '#edit_service_category_btn', function() {
   send_category_data(this.parentElement, "/edit_service_category/" + this.getAttribute("data-pk") + "/");

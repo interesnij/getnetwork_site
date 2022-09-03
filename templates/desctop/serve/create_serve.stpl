@@ -21,8 +21,9 @@
                 <input id="id_serve_id" class="input-md form-control" type="number" name="serve_id" placeholder="Опция-родитель" />
             </div>
             <div class="mb-20 mb-md-10">
-                <input class="input-md form-control" type="text" name="description" placeholder="Описание" />
-            </div>
+              <p>0</p>
+                <div style="display:inline-block" contenteditable="true" placeholder="Описание" class="input-md form-control content_1 smile_supported"></div>
+            </div> 
             <div class="mb-20 mb-md-10">
                 <input class="input-md form-control" type="number" name="serve_position" placeholder="Порядок следования" />
             </div>
