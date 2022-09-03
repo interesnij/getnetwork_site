@@ -1,6 +1,6 @@
 use crate::schema;
 use crate::schema::{
-    users,
+    users,++++``++++
     cookie_users,
     cookie_stats,
     stat_mainpages,
@@ -427,8 +427,13 @@ pub struct NewStatHelp {
 ////////////////////
 #[derive(Debug, Queryable, Serialize, Identifiable)]
 pub struct HelpItemCategorie {
-    pub id:    i32,
-    pub title: String,
+    pub id:       i32,
+    pub title:    String,
+    pub view:     i32,
+    pub height:   f64,
+    pub seconds:  i32,
+    pub position: i32,
+
 }
 impl HelpItemCategorie {
     pub fn get_list(&self) -> Vec<HelpItem> {
@@ -445,7 +450,11 @@ impl HelpItemCategorie {
 #[derive(Debug, Deserialize, AsChangeset, Insertable)]
 #[table_name="help_item_categories"]
 pub struct NewHelpItemCategorie {
-    pub title: String,
+    pub title:    String,
+    pub view:     i32,
+    pub height:   f64,
+    pub seconds:  i32,
+    pub position: i32,
 }
 
 #[derive(Debug, Queryable, Serialize, Identifiable)]

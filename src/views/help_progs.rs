@@ -319,6 +319,10 @@ pub async fn create_categories(session: Session, mut payload: Multipart) -> impl
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewHelpItemCategorie {
                 title: form.name.clone(),
+                view:  0,
+                height:  0.0,
+                seconds:  0,
+                position: form.position as i32,
             };
             let _new_help = diesel::insert_into(schema::help_item_categories::table)
                 .values(&new_cat)
@@ -342,7 +346,11 @@ pub async fn edit_category(session: Session, mut payload: Multipart, _id: web::P
         if _request_user.perm == 60 {
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewHelpItemCategorie {
-                title: form.name.clone(),
+                title:    form.name.clone(),
+                view:     _category.view,
+                height:   _category.height,
+                seconds:  _category.seconds,
+                position: form.position as i32,
             };
             diesel::update(&_category)
                 .set(new_cat)

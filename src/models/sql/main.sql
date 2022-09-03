@@ -41,8 +41,12 @@ CREATE INDEX order_files_id_idx ON order_files (order_id);
 ---------------
 ---------------
 CREATE TABLE help_item_categories (
-    id    SERIAL PRIMARY KEY,
-    title VARCHAR(200) NOT NULL
+    id       SERIAL PRIMARY KEY,
+    title    VARCHAR(200) NOT NULL,
+    view     INT NOT NULL,
+    height   FLOAT NOT NULL,
+    seconds  INT NOT NULL,
+    position INT NOT NULL
 );
 
 CREATE TABLE help_items (
