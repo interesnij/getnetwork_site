@@ -619,6 +619,13 @@ on('body', 'click', '.select_child_serve', function(event) {
   hours = _this.querySelector(".hours").innerHTML;
   parent_hours = parent.querySelector(".hours").innerHTML;
 
+  if (parent_title.includes('Не выбрано')) {
+    parent.classList.add("hover");
+  }
+  else if (title.includes('Не выбрано')){
+    parent.classList.remove("hover");
+  }
+
   if (!parent_price || parent_price == "-") {
     _parent_price = 0;
   }
