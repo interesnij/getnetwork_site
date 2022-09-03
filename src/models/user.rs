@@ -442,6 +442,7 @@ impl HelpItemCategorie {
         let _connection = establish_connection();
         return help_items
             .filter(schema::help_items::category_id.eq(self.id))
+            .order(schema::help_items::id.asc())
             .load::<HelpItem>(&_connection)
             .expect("E");
     }
