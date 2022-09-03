@@ -10,8 +10,11 @@
                 <h1 class="hs-line-14 font-alt mb-50 mb-xs-30">
                     Вебсервисы!
                 </h1>
-                <div class="local-scroll">
-                  <a style="margin-right: 5px;" href="/info/" class="btn btn-mod btn-border btn-medium btn-round ajax">О нас</a>
+                <div class="local-scroll" style="position:relative">
+                  <span style="position:absolute; left:0">
+                    <% include!("../generic/page_stat.stpl"); %>
+                  </span>
+                  <a style="margin-right: 20px;" href="/info/" class="btn btn-mod btn-border btn-medium btn-round ajax">О нас</a>
                   <a href="/history/" class="btn btn-mod btn-border btn-medium btn-round ajax">О вас</a>
                 </div>
               </span>
