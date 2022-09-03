@@ -63,7 +63,9 @@
                                     <th>Цена</th>
                                     <th>Часы</th>
                                   </tr>
-
+                                  <% for i in object_serve_ids.iter() { %>
+                                    <%= i %>
+                                  <% } %>
                                   <% for serve in category.get_serves().iter() { %>
                                     <% if object_serve_ids.iter().any(|&i| i ==serve.id) { %>
                                         <tr>
