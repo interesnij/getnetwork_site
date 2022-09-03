@@ -173,6 +173,27 @@ function send_content_data(url, field) {
   link.send(form_data);
 };
 
+function send_serve_data(form, url) {
+  text_field = form.querySelector(".smile_supported");
+  if (!text_field.innerHTML) {
+    text_field.style.setProperty('border', '1px #FF0000 solid', 'important');
+    return
+  }
+  _val1 = format_text(text_field);
+  form_data = new FormData(form);
+  form_data.append("description", _val1.innerHTML);
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', url, true );
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    alert("ok");
+  } else {
+    alert("not ok");
+  }};
+  link.send(form_data);
+};
+
 function send_post_data(form, url) {
   if (!form.querySelector(".form_title").value && !form.querySelector(".form_title").firstChild) {
     form.querySelector(".form_title").style.setProperty('border', '1px #FF0000 solid', 'important');
@@ -200,7 +221,7 @@ function delete_item(url) {
 };
 ///////////SERVE //////////////////
 on('body', 'click', '#create_serve_btn', function() {
-  send_content_data(this.parentElement, "/create_serve/", "description");
+  send_serve_data(this.parentElement, "/create_serve/");
 });
 on('body', 'click', '#create_tech_category_btn', function() {
   send_category_data(this.parentElement, "/create_tech_categories/");
@@ -209,7 +230,7 @@ on('body', 'click', '#create_serve_category_btn', function() {
   send_category_data(this.parentElement, "/create_serve_categories/");
 });
 on('body', 'click', '#edit_serve_btn', function() {
-  send_content_data(this.parentElement, "/edit_serve/" + this.getAttribute("data-pk") + "/", "description");
+  send_serve_data(this.parentElement, "/edit_serve/" + this.getAttribute("data-pk") + "/");
 });
 on('body', 'click', '#edit_text_work_btn', function() {
   send_content_data("/edit_content_serve/" + this.getAttribute("data-pk") + "/", "content");
