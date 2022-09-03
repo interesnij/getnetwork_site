@@ -1,6 +1,6 @@
 use crate::schema;
 use crate::schema::{
-    users,++++``++++
+    users,
     cookie_users,
     cookie_stats,
     stat_mainpages,
