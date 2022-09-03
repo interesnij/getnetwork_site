@@ -11,7 +11,7 @@
                     Вебсервисы!
                 </h1>
                 <div class="local-scroll" style="position:relative">
-                  <span style="position:absolute; left: -20px;top: 50pxpx;">
+                  <span style="position:absolute; left: -20px;top: 50px;">
                     <% include!("../generic/page_stat.stpl"); %>
                   </span>
                   <a style="margin-right: 20px;" href="/info/" class="btn btn-mod btn-border btn-small btn-round ajax">О нас</a>
