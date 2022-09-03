@@ -52,6 +52,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
         get_first_load_page(&session, is_desctop, "Главная страница".to_string()).await
     }
     else {
+        use crate::schema;
         use crate::models::{Work, Service, Wiki, Blog, Store, StatMainpage};
         use crate::schema::stat_mainpages::dsl::stat_mainpages;
 
