@@ -52,8 +52,30 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
         get_first_load_page(&session, is_desctop, "Главная страница".to_string()).await
     }
     else {
-        use crate::models::{Work, Service, Wiki, Blog, Store};
+        use crate::models::{Work, Service, Wiki, Blog, Store, StatMainpage};
+        use crate::schema::stat_mainpages::dsl::stat_mainpages;
 
+        let _connection = establish_connection();
+        let _stat: StatMainpage;
+        let _stats = stat_mainpages
+            .limit(1)
+            .load::<StatMainpage>(&_connection)
+            .expect("E");
+        if _stats.len() > 0 {
+            _stat = _stats.into_iter().nth(0).unwrap();
+        }
+        else {
+            use crate::models::NewStatMainpage;
+            let form = NewStatMainpage {
+                view: 0,
+                height: 0.0,
+                seconds: 0,
+            };
+            _stat = diesel::insert_into(schema::stat_mainpages::table)
+                .values(&form)
+                .get_result::<StatMainpage>(&_connection)
+                .expect("Error.");
+        }
         let _last_works = Work::get_3_works();
         let _last_services = Service::get_6_services();
         let _last_wikis = Wiki::get_3_wikis();
@@ -74,7 +96,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
                     is_ajax:       i32,
-                    title:         String,
+                    stat:          StatMainpage,
                 }
                 let body = Template {
                     request_user:  _request_user,
@@ -84,7 +106,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     last_blogs:    _last_blogs,
                     last_stores:   _last_stores,
                     is_ajax:       is_ajax,
-                    title:         "Главная страница".to_string(),
+                    stat:          _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -94,24 +116,22 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/main/mainpage.stpl")]
                 struct Template {
-                    //request_user:  User,
                     last_works:    Vec<Work>,
                     last_services: Vec<Service>,
                     last_wikis:    Vec<Wiki>,
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
                     is_ajax:       i32,
-                    title:         String,
+                    stat:          StatMainpage,
                 }
                 let body = Template {
-                    //request_user:  _request_user,
                     last_works:    _last_works,
                     last_services: _last_services,
                     last_wikis:    _last_wikis,
                     last_blogs:    _last_blogs,
                     last_stores:   _last_stores,
                     is_ajax:       is_ajax,
-                    title:         "Главная страница".to_string(),
+                    stat:          _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -129,7 +149,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
                     is_ajax:       i32,
-                    title:         String,
+                    stat:          StatMainpage,
                 }
                 let body = Template {
                     last_works:    _last_works,
@@ -138,7 +158,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     last_blogs:    _last_blogs,
                     last_stores:   _last_stores,
                     is_ajax:       is_ajax,
-                    title:         "Главная страница".to_string(),
+                    stat:          _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -154,7 +174,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
                     is_ajax:       i32,
-                    title:         String,
+                    stat:          StatMainpage,
                 }
                 let body = Template {
                     last_works:    _last_works,
@@ -163,7 +183,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     last_blogs:    _last_blogs,
                     last_stores:   _last_stores,
                     is_ajax:       is_ajax,
-                    title:         "Главная страница".to_string(),
+                    stat:          _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -182,10 +202,34 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
     }
     else if is_signed_in(&session) {
         use crate::schema;
-        use schema::help_item_categories::dsl::help_item_categories;
-        use crate::models::HelpItemCategorie;
+        use schema::{
+            help_item_categories::dsl::help_item_categories,
+            stat_infos::dsl::stat_infos,
+        };
+        use crate::models::{HelpItemCategorie, StatInfo};
 
         let _connection = establish_connection();
+        let _stat: StatInfo;
+        let _stats = stat_infos
+            .limit(1)
+            .load::<StatInfo>(&_connection)
+            .expect("E");
+        if _stats.len() > 0 {
+            _stat = _stats.into_iter().nth(0).unwrap();
+        }
+        else {
+            use crate::models::NewStatInfo;
+            let form = NewStatInfo {
+                view: 0,
+                height: 0.0,
+                seconds: 0,
+            };
+            _stat = diesel::insert_into(schema::stat_infos::table)
+                .values(&form)
+                .get_result::<StatInfo>(&_connection)
+                .expect("Error.");
+        }
+
         let _help_cats = help_item_categories
             .load::<HelpItemCategorie>(&_connection)
             .expect("Error");
@@ -198,11 +242,13 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
                 request_user: User,
                 is_ajax:      i32,
                 help_cats:    Vec<HelpItemCategorie>,
+                stat:         StatInfo,
             }
             let body = Template {
                 request_user: _request_user,
                 is_ajax:      is_ajax,
                 help_cats:    _help_cats,
+                stat:         _stat,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -214,10 +260,12 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             struct Template {
                 is_ajax:   i32,
                 help_cats: Vec<HelpItemCategorie>,
+                stat:      StatInfo,
             }
             let body = Template {
                 is_ajax:   is_ajax,
                 help_cats: _help_cats,
+                stat:      _stat,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -226,10 +274,34 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
     }
     else {
         use crate::schema;
-        use schema::help_item_categories::dsl::help_item_categories;
-        use crate::models::HelpItemCategorie;
+        use schema::{
+            help_item_categories::dsl::help_item_categories,
+            stat_infos::dsl::stat_infos,
+        };
+        use crate::models::{HelpItemCategorie, StatInfo};
 
         let _connection = establish_connection();
+        let _stat: StatInfo;
+        let _stats = stat_infos
+            .limit(1)
+            .load::<StatInfo>(&_connection)
+            .expect("E");
+        if _stats.len() > 0 {
+            _stat = _stats.into_iter().nth(0).unwrap();
+        }
+        else {
+            use crate::models::NewStatInfo;
+            let form = NewStatInfo {
+                view: 0,
+                height: 0.0,
+                seconds: 0,
+            };
+            _stat = diesel::insert_into(schema::stat_infos::table)
+                .values(&form)
+                .get_result::<StatInfo>(&_connection)
+                .expect("Error.");
+        }
+
         let _help_cats = help_item_categories
             .load::<HelpItemCategorie>(&_connection)
             .expect("Error");
@@ -240,10 +312,12 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             struct Template {
                 is_ajax:   i32,
                 help_cats: Vec<HelpItemCategorie>,
+                stat:      StatInfo,
             }
             let body = Template {
                 is_ajax:   is_ajax,
                 help_cats: _help_cats,
+                stat:      _stat,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -255,10 +329,12 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             struct Template {
                 help_cats: Vec<HelpItemCategorie>,
                 is_ajax:   i32,
+                stat:      StatInfo,
             }
             let body = Template {
                 is_ajax:   is_ajax,
                 help_cats: _help_cats,
+                stat:      _stat,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
