@@ -153,6 +153,9 @@ function ajax_get_reload(url) {
     }
     ajax_link.send();
 };
+on('body', 'click', '.toggle_next_hide', function() {
+  this.nextElementSibling.classList.toggle("hide");
+});
 
 on('body', 'input', '.desctop_folder_search', function() {
     _this = this;
