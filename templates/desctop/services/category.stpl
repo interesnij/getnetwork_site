@@ -8,11 +8,12 @@
             <a class="ajax" href="/service_categories/">Услуги</a>
             &nbsp;/&nbsp;
             <span><%= category.name %></span>
+            <% include!("../generic/category_stat.stpl"); %>
         </div>
     </div>
 </section>
 
-<section class="page-section"> 
+<section class="page-section">
 <% if category.count > 0 { %>
   <div class="is_paginate">
   <% for (i, object) in object_list.iter().enumerate() { %>

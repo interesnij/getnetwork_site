@@ -6,6 +6,7 @@
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
             <span><%= category.title %></span>
+            <% include!("../generic/category_stat.stpl"); %>
         </div>
     </div>
 </section>

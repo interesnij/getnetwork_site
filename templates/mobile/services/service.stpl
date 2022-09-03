@@ -3,11 +3,10 @@
 <section page-id="63" data-id="<%= object.id %>" data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
-            <a class="ajax" href="/">Главная</a>
-            &nbsp;/&nbsp;
             <a class="ajax" href="/service_categories/">Услуги</a>
             &nbsp;/&nbsp;
             <a class="ajax" href="/services/<%= category.id %>/"> <%= category.name %></a>
+            <% include!("../generic/object_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -76,28 +75,5 @@
 <% include!("../generic/form/btn_block.stpl"); %>
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
-    <div class="widget">
-    <h5 class="widget-title font-alt">Статистика</h5>
-    <div class="blog-item-data">
-      <span tooltip="Просмотры" flow="up">
-      <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
-        <path d="M0 0h24v24H0V0z" fill="none" />
-        <path d="M12 6c3.79 0 7.17 2.13 8.82 5.5C19.17 14.87 15.79 17 12 17s-7.17-2.13-8.82-5.5C4.83 8.13 8.21 6 12 6m0-2C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 5c1.38 0 2.5 1.12 2.5 2.5S13.38 14 12 14s-2.5-1.12-2.5-2.5S10.62 9 12 9m0-2c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7z" />
-      </svg> <span><%= object.view %></span>
-      </span>
-      &nbsp;
-      <span tooltip="Метры" flow="up">
-      <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
-        <g><rect fill="none" height="24" width="24"/></g><g><g/><polygon points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/></g>
-      </svg><span><%= object.height %></span>
-      </span>
-      &nbsp;
-      <span tooltip="Секунды" flow="up">
-        <svg fill="currentColor" style="width:17px;vertical-align: text-bottom;" viewBox="0 0 24 24">
-          <path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"/>
-        </svg><span><%= object.seconds %></span>
-      </span>
-    </div>
-    </div>
 </div>
 <% include!("../footer.stpl"); %>

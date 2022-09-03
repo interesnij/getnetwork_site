@@ -8,6 +8,7 @@
             <a class="ajax" href="/work_categories/">Портфолио</a>
             &nbsp;/&nbsp;
             <a class="ajax" href="/works/<%= category.id %>/"><%= category.name %></a>
+            <% include!("../generic/object_stat.stpl"); %>
         </div>
     </div>
 </section>

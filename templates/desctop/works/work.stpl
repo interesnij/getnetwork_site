@@ -3,11 +3,10 @@
 <section page-id="93" data-id="<%= object.id %>" data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
-            <a class="ajax" href="/">Главная</a>
-            &nbsp;/&nbsp;
             <a class="ajax" href="/work_categories/">Портфолио</a>
             &nbsp;/&nbsp;
             <a class="ajax" href="/works/<%= category.id %>/"><%= category.name %></a>
+            <% include!("../generic/object_stat.stpl"); %>
         </div>
     </div>
 </section>

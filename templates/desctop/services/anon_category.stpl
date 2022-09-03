@@ -8,6 +8,7 @@
             <a class="ajax" href="/service_categories/">Услуги</a>
             &nbsp;/&nbsp;
             <span><%= category.name %></span>
+            <% include!("../generic/category_stat.stpl"); %>
         </div>
     </div>
 </section>
