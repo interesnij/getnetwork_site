@@ -1,7 +1,7 @@
 <div class="blog-post-prev-small clearfix">
-  <a class="ajax" href="/blog/1/<%= object.id %>/">
-    <img class="image_fit_100" src="<%= object.get_image() %>" alt="img" />
-  </a>
+    <a class="ajax" href="/blog/1/<%= object.id %>/">
+        <img src="<%= object.get_image() %>" alt="img" class="image_fit_100 widget-posts-img">
+    </a>
     <div class="widget-posts-descr">
         <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/blog/1/<%= object.id %>/">
           <%= object.title %>

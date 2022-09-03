@@ -1,22 +1,14 @@
 <div class="blog-post-prev-small clearfix">
     <a class="ajax" href="/service/1/<%= object.id %>/">
-      <img class="image_fit_100" src="<%= object.get_image() %>" alt="img" />
+        <img src="<%= object.get_image() %>" alt="img" class="image_fit_100 widget-posts-img">
     </a>
     <div class="widget-posts-descr">
-        <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/service/1/<%= object.id %>/">
+        <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/service/<%= category.id %>/<%= object.id %>/">
           <%= object.title %>
         </a>
         <span>
-          <span>Цена: от <%= object.price %> ₽</span>
-          <% if object.price_acc.is_some() { %>
-            <p>Со скидкой: от <%= object.price_acc.unwrap() %> ₽</p>
-          <% } %>
-
-          <p>Блоки:
-          <% for cat in object.get_open_tech_categories().iter() { %>
-            <%= cat.name %> &nbsp;
-          <% } %>
-          </p>
+          <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+          <p><%= object.get_100_description() %></p>
         </span>
     </div>
 </div>

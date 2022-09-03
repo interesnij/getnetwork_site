@@ -48,9 +48,9 @@
               <td class="border-top price_td" style="width:15%"><span class="price">-</span></td>
               <td class="border-top hours" style="width:15%">-</td>
               <td class="border-top action_text border-top" style="width:12%">
-                <a flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</a>
-                &nbsp;
                 <a flow="up" tooltip="Опция выбрана" class="icon_check"></a>
+                &nbsp;
+                <a flow="up" tooltip="Опция имеет несколько вариантов" class="icon_parent">▼</a>
               </td>
             </tr>
           <% } %>

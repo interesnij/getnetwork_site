@@ -1566,13 +1566,6 @@ blockquote footer{
   z-index: 400
 }
 
-.this_fullscreen_hide svg {
-  color: rgba(255, 255, 255, 0.8) !important;
-}
-.this_fullscreen_hide svg:hover {
-  color: rgba(255, 255, 255, 1) !important;
-}
-
 #fullscreen_loader {
   position: absolute;
   left: 10px;
