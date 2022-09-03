@@ -17,6 +17,9 @@
             <div class="mb-20 mb-md-10">
                 <input value="<%= category.title %>" class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
             </div>
+            <div class="mb-20 mb-md-10">
+                <input value="<%= category.position %>" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+            </div>
             <button data-pk="<%= category.id %>" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_help_category_btn">Изменить</button>
         </form>
         <div class="container">

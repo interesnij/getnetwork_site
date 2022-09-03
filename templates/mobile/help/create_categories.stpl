@@ -19,6 +19,9 @@
         <div class="mb-20 mb-md-10">
             <input class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
         </div>
+        <div class="mb-20 mb-md-10">
+            <input class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+        </div>
         <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_help_category_btn">Создать</button>
     </form>
   </div>
