@@ -1,4 +1,4 @@
-<span class="pointer toggle_next_hide" tooltip="Статистика страницы" flow="right">
+<span class="pointer toggle_next_hide">
   <span style="margin-left:10px" class="icon-bargraph"></span>
 </span>
 <span style="margin-left:10px;display: block;" class="hide">
