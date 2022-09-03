@@ -16,7 +16,8 @@
 
   <div style="margin-top:10px">
     <% if object.description.is_some() { %>
-      <%- object.description.as_deref().unwrap() %>
+      <% let ee = object.description.as_deref().unwrap(); %>
+      <%- ee %>
     <% } else { %>
       Описание отсутствует
     <% } %>
