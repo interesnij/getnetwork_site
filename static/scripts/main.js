@@ -621,9 +621,11 @@ on('body', 'click', '.select_child_serve', function(event) {
 
   if (parent_title.includes('Не выбрано')) {
     parent.classList.add("hover");
+    parent.querySelector(".icon_check").innerHTML = "✔";
   }
   else if (title.includes('Не выбрано')){
     parent.classList.remove("hover");
+    parent.querySelector(".icon_check").innerHTML = "";
   }
 
   if (!parent_price || parent_price == "-") {
