@@ -1,8 +1,8 @@
 <div page-id="" object-id="" data-link="" data-title="<%= title %>" class="doc_title">
   <h4 style="margin-bottom: 0 !important"><%= object.name %></h4>
-  <p class="solid_bottom" style="font-size: 80%;">Это Веб-сервис - структурная единица,
+  <p class="solid_bottom" style="font-size: 80%;">Это Веб-приложениe - структурная единица,
     которая вместе с другими формирует сложные проекты. В простых проектах
-    иногда достаточно одного веб-сервиса.
+    иногда достаточно одного веб-приложения.
   </p>
 
   <div style="margin-top:10px">
