@@ -48,6 +48,9 @@
                     <h4 class="section-title font-alt">
                         <%= t_category.name %>
                     </h4>
+                    <% for i in object_serve_ids.iter() { %>
+                      <%= i %>
+                    <% } %>
                     <div class="">
                         <div class="tab-content tpl-minimal-tabs-cont section-text">
                           <% for (i, category) in s_cats.iter().enumerate() { %>
@@ -63,9 +66,7 @@
                                     <th>Цена</th>
                                     <th>Часы</th>
                                   </tr>
-                                  <% for i in object_serve_ids.iter() { %>
-                                    <%= i %>
-                                  <% } %>
+
                                   <% for serve in category.get_serves().iter() { %>
                                     <% if object_serve_ids.iter().any(|&i| i ==serve.id) { %>
                                         <tr>
