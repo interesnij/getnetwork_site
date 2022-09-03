@@ -11,11 +11,11 @@
                     Вебсервисы!
                 </h1>
                 <div class="local-scroll" style="position:relative">
-                  <span style="position:absolute; left:0">
+                  <span style="position:absolute; left: -20px;top: 50pxpx;">
                     <% include!("../generic/page_stat.stpl"); %>
                   </span>
-                  <a style="margin-right: 20px;" href="/info/" class="btn btn-mod btn-border btn-medium btn-round ajax">О нас</a>
-                  <a href="/history/" class="btn btn-mod btn-border btn-medium btn-round ajax">О вас</a>
+                  <a style="margin-right: 20px;" href="/info/" class="btn btn-mod btn-border btn-small btn-round ajax">О нас</a>
+                  <a href="/history/" class="btn btn-mod btn-border btn-small btn-round ajax">О вас</a>
                 </div>
               </span>
             </div>
