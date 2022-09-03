@@ -107,6 +107,10 @@ table! {
     help_item_categories (id) {
         id -> Int4,
         title -> Varchar,
+        view -> Int4,
+        height -> Float8,
+        seconds -> Int4,
+        position -> Int4,
     }
 }
 
