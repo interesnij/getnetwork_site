@@ -37,6 +37,7 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/load_tech_category/{id}/", web::get().to(get_tech_category_page));
     config.route("/load_serve_category/{id}/", web::get().to(get_serve_category_page));
     config.route("/load_serve/{id}/", web::get().to(get_serve_page));
+    config.route("/load_feedback/{id}/", web::get().to(get_feedback_page));
 }
 
 #[derive(Debug, Deserialize)]
@@ -664,6 +665,16 @@ pub async fn get_serve_page(_id: web::Path<i32>) -> actix_web::Result<HttpRespon
         title:  "Опция ".to_string() + &_serve.name,
         object: _serve,
     }
+    .render_once()
+    .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+    Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+}
+
+pub async fn get_feedback_page() -> actix_web::Result<HttpResponse> {
+    #[derive(TemplateOnce)]
+    #[template(path = "desctop/load/feedback.stpl")]
+    struct Template {}
+    let body = Template {}
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
     Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))

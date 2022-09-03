@@ -1,6 +1,8 @@
 <div class="blog-post-prev-small clearfix">
-    <a class="ajax" href="/service/1/<%= object.id %>/">
-        <img src="<%= object.get_image() %>" alt="img" class="image_fit_100 widget-posts-img">
+    <a class="ajax" href="/service/<%= category.id %>/<%= object.id %>/">
+      <div class="progressive replace" data-href="<%= object.get_image() %>">
+        <img class="preview image_fit_100" src="/static/images/i.webp" alt="img" />
+      </div>
     </a>
     <div class="widget-posts-descr">
         <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/service/1/<%= object.id %>/">

@@ -1079,3 +1079,32 @@ on('body', 'click', '.toggle_next_hide', function() {
 on('body', 'click', '.edit_order', function() {
   create_fullscreen("/edit_order/" + this.getAttribute("data-pk") + "/", "item_fullscreen");
 });
+
+on('body', 'click', '#create_feedback_btn', function() {
+  form = this.parentElement;
+  if (!form.querySelector("#id_username").value) {
+    form.querySelector("#id_username").style.setProperty('border', '1px #FF0000 solid', 'important');
+    return
+  }
+  else if (!form.querySelector("#id_email").value) {
+    form.querySelector("#id_email").style.setProperty('border', '1px #FF0000 solid', 'important');
+    return
+  }
+  else if (!form.querySelector("#id_message").value) {
+    form.querySelector("#id_message").style.setProperty('border', '1px #FF0000 solid', 'important');
+    return
+  }
+
+  this.setAttribute("disable", "true");
+  this.innerHTML = "Данные отправляются!";
+  form_data = new FormData(form);
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', "/feedback/", true );
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    close_fullscreen();
+    toast_info("Сообщение отправлено!")
+  }};
+  link.send(form_data);
+});
