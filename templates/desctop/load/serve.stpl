@@ -15,7 +15,7 @@
     </p>
 
   <div style="margin-top:10px">
-  bbbb
+
     <% if object.description.is_some() { %>
       <%- object.description.as_deref().unwrap() %>
     <% } else { %>
