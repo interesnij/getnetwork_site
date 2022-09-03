@@ -10,14 +10,14 @@
     </div>
 </section>
 <section class="page-section">
-    <div class="container relative">
+    <div class="">
       <form class="form mb-20" role="form">
           <input data-folder="_help" value="<%= q %>" type="text" class="input-md form-control general_search search_page" placeholder="Поиск...">
       </form>
     <div class="search_section">
       <% if items_count > 0 { %>
       <section class="page-section">
-          <div class="container relative">
+          <div class="">
               <div class="row multi-columns-row is_paginate">
                 <% for object in items_list.iter() { %>
                   <% include!("../generic/help.stpl"); %>
