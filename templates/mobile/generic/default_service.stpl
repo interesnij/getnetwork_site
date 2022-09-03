@@ -3,7 +3,7 @@
         <img src="<%= object.get_image() %>" alt="img" class="image_fit_100 widget-posts-img">
     </a>
     <div class="widget-posts-descr">
-        <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/service/<%= category.id %>/<%= object.id %>/">
+        <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/service/1/<%= object.id %>/">
           <%= object.title %>
         </a>
         <span>
