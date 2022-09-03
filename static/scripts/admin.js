@@ -363,6 +363,10 @@ on('body', 'click', '.remove_service_category', function() {
   delete_item("/delete_service_category/" + this.getAttribute("data-pk") + "/");
   this.parentElement.remove();
 });
+on('body', 'click', '.remove_help_category', function() {
+  delete_item("/help/delete_category/" + this.getAttribute("data-pk") + "/");
+  this.parentElement.remove();
+});
 
 ///////////////////////////
 
