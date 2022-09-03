@@ -67,9 +67,9 @@
                                         <tr>
                                           <td class="border-top" style="width:55%">
                                             <a class="get_serve_info pointer" data-pk="<%= serve.id %>">
-                                            <% if serve.is_parent() { %>
-                                              <% let first_child = serve.get_first_variable(); %>
-                                              <%= serve.name %> → <%= first_child.name %>
+                                            <% if serve.serve_id.is_some() { %>
+                                              <% let parent = serve.get_parent(); %>
+                                              <%= parent.name %> → <%= serve.name %>
                                             <% } else { %>
                                               <%= serve.name %>
                                             <% } %>
