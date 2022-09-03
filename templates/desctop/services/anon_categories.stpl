@@ -6,6 +6,7 @@
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
             <span>Услуги</span>
+            <span tooltip"cccc" flow="up" class="icon-bargraph"></span>
         </div>
     </div>
 </section>
