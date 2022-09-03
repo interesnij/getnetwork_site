@@ -41,9 +41,6 @@
                 <% } %>
 
                 <% let object_serve_ids = object.get_serves_ids(); %>
-                <% for i in object_serve_ids.iter() { %>
-                  <%= i %>,
-                <% } %>
 
                 <% for t_category in object.get_open_tech_categories().iter() { %>
                   <% let s_cats = t_category.get_serve_categories(); %>

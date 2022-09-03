@@ -14,6 +14,9 @@
 
 <section class="page-section">
     <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+              <div class="row search_result"></div>
               <div class="content">
                 <div class="blog-item-body">
                   <h1 class="mt-0 font-alt object_data" data-type="1" data-pk="<%= object.id %>"><%= object.title %></h1>
@@ -31,12 +34,13 @@
                     <% } %>
                   </div>
                 </div>
-                <%= object.user_id %>
                 <% if object.description.is_some() { %>
                   <%- object.description.as_deref().unwrap() %>
                 <% } else { %>
                   Описание отсутствует.
                 <% } %>
+
+                <% let object_serve_ids = object.get_serves_ids(); %>
 
                 <% for t_category in object.get_open_tech_categories().iter() { %>
                   <% let s_cats = t_category.get_serve_categories(); %>
@@ -45,6 +49,7 @@
                     <h4 class="section-title font-alt">
                         <%= t_category.name %>
                     </h4>
+
                     <div class="">
                         <div class="tab-content tpl-minimal-tabs-cont section-text">
                           <% for (i, category) in s_cats.iter().enumerate() { %>
@@ -61,16 +66,23 @@
                                     <th>Часы</th>
                                   </tr>
 
-                                  <% for serve in category.get_serves().iter() { %>
+                                  <% for serve in category.get_serves_2().iter() { %>
+                                    <% if object_serve_ids.iter().any(|&i| i ==serve.id) { %>
                                         <tr>
                                           <td class="border-top" style="width:55%">
                                             <a class="get_serve_info pointer" data-pk="<%= serve.id %>">
+                                            <% if serve.serve_id.is_some() { %>
+                                              <% let parent = serve.get_parent(); %>
+                                              <%= parent.name %> → <%= serve.name %>
+                                            <% } else { %>
                                               <%= serve.name %>
+                                            <% } %>
                                             </a>
                                           </td>
                                           <td class="price_td border-top" style="width:15%"><span class="price"><%= serve.price %></span> ₽</td>
                                           <td class="hours border-top" style="width:15%"><%= serve.man_hours %></td>
                                         </tr>
+                                    <% } %>
                                   <% } %>
                                 </tbody>
                               </table>
@@ -97,6 +109,11 @@
                 </div>
                 <% } %>
               </div>
+            </div>
+            <div class="col-sm-4">
+
+            </div>
+        </div>
     </div>
     <section class="border price_section_block card_fullscreen" style="position: fixed;z-index:99;bottom: 10px;width: 100%;">
     <h3 style="text-align: center;">
@@ -104,5 +121,7 @@
     </h3>
     </section>
 </section>
-
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>
 <% include!("../footer.stpl"); %>

@@ -22,7 +22,7 @@
                   <h1 class="mt-0 font-alt object_data" data-type="1" data-pk="<%= object.id %>"><%= object.title %></h1>
                   <div class="blog-item-data">
                     <a data-pk="<%= object.id %>" class="pointer remove_order">
-                      Удалить заказ
+                      Удалить
                     </a>
                     |
                     <% if object.types == 1 { %>
@@ -40,6 +40,8 @@
                   Описание отсутствует.
                 <% } %>
 
+                <% let object_serve_ids = object.get_serves_ids(); %>
+
                 <% for t_category in object.get_open_tech_categories().iter() { %>
                   <% let s_cats = t_category.get_serve_categories(); %>
 
@@ -47,6 +49,7 @@
                     <h4 class="section-title font-alt">
                         <%= t_category.name %>
                     </h4>
+
                     <div class="">
                         <div class="tab-content tpl-minimal-tabs-cont section-text">
                           <% for (i, category) in s_cats.iter().enumerate() { %>
@@ -63,13 +66,14 @@
                                     <th>Часы</th>
                                   </tr>
 
-                                  <% for serve in category.get_serves().iter() { %>
+                                  <% for serve in category.get_serves_2().iter() { %>
+                                    <% if object_serve_ids.iter().any(|&i| i ==serve.id) { %>
                                         <tr>
                                           <td class="border-top" style="width:55%">
                                             <a class="get_serve_info pointer" data-pk="<%= serve.id %>">
-                                            <% if serve.is_parent() { %>
-                                              <% let first_child = serve.get_first_variable(); %>
-                                              <%= serve.name %> → <%= first_child.name %>
+                                            <% if serve.serve_id.is_some() { %>
+                                              <% let parent = serve.get_parent(); %>
+                                              <%= parent.name %> → <%= serve.name %>
                                             <% } else { %>
                                               <%= serve.name %>
                                             <% } %>
@@ -78,6 +82,7 @@
                                           <td class="price_td border-top" style="width:15%"><span class="price"><%= serve.price %></span> ₽</td>
                                           <td class="hours border-top" style="width:15%"><%= serve.man_hours %></td>
                                         </tr>
+                                    <% } %>
                                   <% } %>
                                 </tbody>
                               </table>
