@@ -185,7 +185,7 @@ impl Serve {
         let _connection = establish_connection();
         let _serves = serve
             .filter(schema::serve::serve_id.eq(self.id))
-            .order(schema::serve::position.asc())
+            .filter(schema::serve::is_default.eq(true))
             .limit(1)
             .load::<Serve>(&_connection)
             .expect("E");
