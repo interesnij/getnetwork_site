@@ -246,7 +246,7 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
             "Изменение услуги ".to_string() + &_service.title,
             "вебсервисы.рф: Изменение услуги ".to_string() + &_service.title,
             "/edit_service/".to_string() + &_service.id.to_string() + &"/".to_string(),
-            _service.get_images(),
+            _service.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -386,7 +386,7 @@ pub async fn edit_content_service_page(session: Session, req: HttpRequest, _id: 
             "Изменение текста услуги ".to_string() + &_service.title,
             "вебсервисы.рф: Изменение текста услуги ".to_string() + &_service.title,
             "/edit_content_service/".to_string() + &_service.id.to_string() + &"/".to_string(),
-            _service.get_images(),
+            _service.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -485,7 +485,7 @@ pub async fn edit_service_category_page(session: Session, req: HttpRequest, _id:
             "Изменение категории услуг ".to_string() + &_category.title,
             "вебсервисы.рф: Изменение категории услуг ".to_string() + &_category.title,
             "/edit_service_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_images(),
+            _category.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -1058,7 +1058,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             "Услуга ".to_string() + &_service.title,
             "вебсервисы.рф: Услуга ".to_string() + &_service.title,
             "/service/".to_string() + &_service.category_id.to_string() + &"/".to_string() + &_service.id.to_string() + &"/".to_string(),
-            _service.get_images(),
+            _service.get_image(),
         ).await
     }
     else {
@@ -1274,7 +1274,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             "Категория услуг ".to_string() + &_category.name,
             "вебсервисы.рф: Категория услуг ".to_string() + &_category.name,
             "/services/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_images(),
+            _category.get_image(),
         ).await
     }
     else {

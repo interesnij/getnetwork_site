@@ -240,7 +240,7 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
             "Изменение статьи ".to_string() + &_wiki.title,
             "вебсервисы.рф: Изменение статьи ".to_string() + &_wiki.title,
             "/edit_store_category/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
-            _wiki.get_images(),
+            _wiki.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -357,7 +357,7 @@ pub async fn edit_content_wiki_page(session: Session, req: HttpRequest, _id: web
             "Изменение текста статьи ".to_string() + &_wiki.title,
             "вебсервисы.рф: Изменение текста статьи ".to_string() + &_wiki.title,
             "/edit_content_service/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
-            _wiki.get_images(),
+            _wiki.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -457,7 +457,7 @@ pub async fn edit_wiki_category_page(session: Session, req: HttpRequest, _id: we
             "Изменение категории обучающих статей ".to_string() + &_category.title,
             "вебсервисы.рф: Изменение категории обучающих статей ".to_string() + &_category.title,
             "/edit_wiki_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_images(),
+            _category.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -841,7 +841,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             "Статья ".to_string() + &_wiki.title,
             "вебсервисы.рф: Статья ".to_string() + &_wiki.title,
             "/wiki/".to_string() + &_wiki.category_id.to_string() + &"/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
-            _wiki.get_images(),
+            _wiki.get_image(),
         ).await
     }
     else {
@@ -1049,7 +1049,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             "Категория обучающих статей ".to_string() + &_category.name,
             "вебсервисы.рф: Категория обучающих статей ".to_string() + &_category.name,
             "/wikis/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_images(),
+            _category.get_image(),
         ).await
     }
     else {

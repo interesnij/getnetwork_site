@@ -246,7 +246,7 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
             "Изменение работы ".to_string() + &_work.title,
             "вебсервисы.рф: Изменение работы ".to_string() + &_work.title,
             "/edit_work/".to_string() + &_work.id.to_string() + &"/".to_string(),
-            _work.get_images(),
+            _work.get_image(),
         ).await
     }
 
@@ -386,7 +386,7 @@ pub async fn edit_content_work_page(session: Session, req: HttpRequest, _id: web
             "Изменение текста работы ".to_string() + &_work.title,
             "вебсервисы.рф: Изменение текста работы ".to_string() + &_work.title,
             "/edit_content_service/".to_string() + &_work.id.to_string() + &"/".to_string(),
-            _work.get_images(),
+            _work.get_image(),
         ).await
     }
 
@@ -488,7 +488,7 @@ pub async fn edit_work_category_page(session: Session, req: HttpRequest, _id: we
             "Изменение категории работ ".to_string() + &_category.title,
             "вебсервисы.рф: Изменение категории работ ".to_string() + &_category.title,
             "/edit_work_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_images(),
+            _category.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -1060,7 +1060,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             "Работа ".to_string() + &_work.title,
             "вебсервисы.рф: Работа ".to_string() + &_work.title,
             "/work/".to_string() + &_work.category_id.to_string() + &"/".to_string() + &_work.id.to_string() + &"/".to_string(),
-            _work.get_images(),
+            _work.get_image(),
         ).await
     }
     else {
@@ -1271,7 +1271,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             "Категория работ ".to_string() + &_category.name,
             "вебсервисы.рф: Категория работ ".to_string() + &_category.name,
             "/works/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_images(),
+            _category.get_image(),
         ).await
     }
     else {

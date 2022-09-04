@@ -358,7 +358,7 @@ pub async fn edit_content_blog_page(session: Session, req: HttpRequest, _id: web
             "Изменение текста статьи блога ".to_string() + &_blog.title,
             "вебсервисы.рф: Изменение текста статьи блога ".to_string() + &_blog.title,
             "/edit_content_blog/".to_string() + &_blog.id.to_string() + &"/".to_string(),
-            _blog.get_images(),
+            _blog.get_image(),
         ).await
     }
 
@@ -459,7 +459,7 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
             "Изменение категории блога ".to_string() + &_category.title,
             "вебсервисы.рф: Изменение категории блога ".to_string() + &_category.title,
             "/edit_blog_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_images(),
+            _category.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -843,7 +843,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             "Статья блога ".to_string() + &_blog.title,
             "вебсервисы.рф: Статья блога ".to_string() + &_blog.title,
             "/blog/".to_string() + &_blog.category_id.to_string() + &"/".to_string() + &_blog.id.to_string() + &"/".to_string(),
-            _blog.get_images(),
+            _blog.get_image(),
         ).await
     }
     else {
@@ -1060,7 +1060,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             "Категория блога ".to_string() + &_category.name,
             "вебсервисы.рф: Категория блога ".to_string() + &_category.name,
             "/blogs/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_images(),
+            _category.get_image(),
         ).await
     }
     else {

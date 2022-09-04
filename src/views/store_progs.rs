@@ -245,7 +245,7 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
             "Изменение товара ".to_string() + &_store.title,
             "вебсервисы.рф: Изменение товара ".to_string() + &_store.title,
             "/edit_service_category/".to_string() + &_store.id.to_string() + &"/".to_string(),
-            _store.get_images(),
+            _store.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -379,7 +379,7 @@ pub async fn edit_content_store_page(session: Session, req: HttpRequest, _id: we
             "Изменение текста товара ".to_string() + &_store.title,
             "вебсервисы.рф: Изменение текста товара ".to_string() + &_store.title,
             "/edit_content_store/".to_string() + &_store.id.to_string() + &"/".to_string(),
-            _store.get_images(),
+            _store.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -479,7 +479,7 @@ pub async fn edit_store_category_page(session: Session, req: HttpRequest, _id: w
             "Изменение категории товаров ".to_string() + &_category.title,
             "вебсервисы.рф: Изменение категории товаров ".to_string() + &_category.title,
             "/edit_store_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_images(),
+            _category.get_image(),
         ).await
     }
     else if is_signed_in(&session) {
@@ -1052,7 +1052,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
             "Товар ".to_string() + &_store.title,
             "вебсервисы.рф: Товар ".to_string() + &_store.title,
             "/store/".to_string() + &_store.category_id.to_string() + &"/".to_string() + &_store.id.to_string() + &"/".to_string(),
-            _store.get_images(),
+            _store.get_image(),
         ).await
     }
     else {
@@ -1260,7 +1260,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             "Категория товаров ".to_string() + &_category.name,
             "вебсервисы.рф: Категория товаров ".to_string() + &_category.name,
             "/stores/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_images(),
+            _category.get_image(),
         ).await
     }
     else {
