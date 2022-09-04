@@ -142,7 +142,17 @@ function ajax_get_reload(url) {
         sidebar = elem_.querySelector(".sidebar");
 
         rtr.innerHTML = elem_.innerHTML;
-        document.title = rtr.querySelector(".doc_title").getAttribute("data-title");
+
+        _meta = rtr.querySelector(".doc_title");
+        _title = _meta.getAttribute("data-title");
+        _uri = "http://вебсервисы.рф" + _meta.getAttribute("data-uri");
+        document.title = _title;
+        document.getElementById("document_url") = _uri;
+        document.getElementById("document_title") = _title;
+        document.getElementById("document_description") = _meta.getAttribute("data-description");
+        document.getElementById("document_image") = "http://вебсервисы.рф" + _meta.getAttribute("data-image");
+        document.getElementById("document_canonical") = _uri;
+
         window.scrollTo(0,0);
         window.history.pushState(null, "ajax_reload", url);
         get_active_button();
