@@ -476,8 +476,8 @@ pub async fn edit_store_category_page(session: Session, req: HttpRequest, _id: w
         get_first_load_page (
             &session,
             is_desctop,
-            "Изменение категории товаров ".to_string() + &_category.title,
-            "вебсервисы.рф: Изменение категории товаров ".to_string() + &_category.title,
+            "Изменение категории товаров ".to_string() + &_category.name,
+            "вебсервисы.рф: Изменение категории товаров ".to_string() + &_category.name,
             "/edit_store_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
             _category.get_image(),
         ).await
@@ -1037,6 +1037,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
 
     let _connection = establish_connection();
     let _store_id: i32 = param.1;
+    let _cat_id: i32 = param.0;
 
     let _stores = stores
         .filter(schema::stores::id.eq(&_store_id))
@@ -1051,7 +1052,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
             is_desctop,
             "Товар ".to_string() + &_store.title,
             "вебсервисы.рф: Товар ".to_string() + &_store.title,
-            "/store/".to_string() + &_store.category_id.to_string() + &"/".to_string() + &_store.id.to_string() + &"/".to_string(),
+            "/store/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_store.id.to_string() + &"/".to_string(),
             _store.get_image(),
         ).await
     }
@@ -1063,8 +1064,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
             store_images::dsl::store_images,
         };
         use crate::models::TechCategories;
-
-        let _cat_id: i32 = param.0;
         let _categorys = store_categories
             .filter(schema::store_categories::id.eq(&_cat_id))
             .load::<StoreCategories>(&_connection)

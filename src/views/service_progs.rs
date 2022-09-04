@@ -482,8 +482,8 @@ pub async fn edit_service_category_page(session: Session, req: HttpRequest, _id:
         get_first_load_page (
             &session,
             is_desctop,
-            "Изменение категории услуг ".to_string() + &_category.title,
-            "вебсервисы.рф: Изменение категории услуг ".to_string() + &_category.title,
+            "Изменение категории услуг ".to_string() + &_category.name,
+            "вебсервисы.рф: Изменение категории услуг ".to_string() + &_category.name,
             "/edit_service_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
             _category.get_image(),
         ).await
@@ -1045,6 +1045,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
     let _service_id: i32 = param.1;
+    let _cat_id: i32 = param.0;
 
     let _services = services
         .filter(schema::services::id.eq(&_service_id))
@@ -1057,7 +1058,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             is_desctop,
             "Услуга ".to_string() + &_service.title,
             "вебсервисы.рф: Услуга ".to_string() + &_service.title,
-            "/service/".to_string() + &_service.category_id.to_string() + &"/".to_string() + &_service.id.to_string() + &"/".to_string(),
+            "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_service.id.to_string() + &"/".to_string(),
             _service.get_image(),
         ).await
     }
@@ -1069,7 +1070,6 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             tech_categories::dsl::tech_categories,
         };
         use crate::models::TechCategories;
-        let _cat_id: i32 = param.0;
 
         let _tech_categories = tech_categories
             .load::<TechCategories>(&_connection)

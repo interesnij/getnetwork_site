@@ -516,8 +516,8 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
         get_first_load_page (
             &session,
             is_desctop,
-            "Изменение веб-сервиса ".to_string() + &_category.title,
-            "вебсервисы.рф: Изменение веб-сервиса ".to_string() + &_category.title,
+            "Изменение веб-сервиса ".to_string() + &_category.name,
+            "вебсервисы.рф: Изменение веб-сервиса ".to_string() + &_category.name,
             "/edit_tech_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
             "".to_string(),
         ).await
@@ -593,8 +593,8 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
         get_first_load_page (
             &session,
             is_desctop,
-            "Изменение категории опций ".to_string() + &_category.title,
-            "вебсервисы.рф: Изменение категории опций ".to_string() + &_category.title,
+            "Изменение категории опций ".to_string() + &_category.name,
+            "вебсервисы.рф: Изменение категории опций ".to_string() + &_category.name,
             "/edit_serve_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
             "".to_string(),
         ).await

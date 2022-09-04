@@ -485,8 +485,8 @@ pub async fn edit_work_category_page(session: Session, req: HttpRequest, _id: we
         get_first_load_page (
             &session,
             is_desctop,
-            "Изменение категории работ ".to_string() + &_category.title,
-            "вебсервисы.рф: Изменение категории работ ".to_string() + &_category.title,
+            "Изменение категории работ ".to_string() + &_category.name,
+            "вебсервисы.рф: Изменение категории работ ".to_string() + &_category.name,
             "/edit_work_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
             _category.get_image(),
         ).await
@@ -1045,6 +1045,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
 
     let _connection = establish_connection();
     let _work_id: i32 = param.1;
+    let _cat_id: i32 = param.0;
+
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     let _works = works
@@ -1059,7 +1061,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             is_desctop,
             "Работа ".to_string() + &_work.title,
             "вебсервисы.рф: Работа ".to_string() + &_work.title,
-            "/work/".to_string() + &_work.category_id.to_string() + &"/".to_string() + &_work.id.to_string() + &"/".to_string(),
+            "/work/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_work.id.to_string() + &"/".to_string(),
             _work.get_image(),
         ).await
     }
@@ -1071,8 +1073,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             tech_categories::dsl::tech_categories,
         };
         use crate::models::TechCategories;
-
-        let _cat_id: i32 = param.0;
 
         let _categorys = work_categories
             .filter(schema::work_categories::id.eq(&_cat_id))

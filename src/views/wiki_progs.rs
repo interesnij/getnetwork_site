@@ -454,8 +454,8 @@ pub async fn edit_wiki_category_page(session: Session, req: HttpRequest, _id: we
         get_first_load_page (
             &session,
             is_desctop,
-            "Изменение категории обучающих статей ".to_string() + &_category.title,
-            "вебсервисы.рф: Изменение категории обучающих статей ".to_string() + &_category.title,
+            "Изменение категории обучающих статей ".to_string() + &_category.name,
+            "вебсервисы.рф: Изменение категории обучающих статей ".to_string() + &_category.name,
             "/edit_wiki_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
             _category.get_image(),
         ).await
@@ -827,6 +827,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
 
     let _connection = establish_connection();
     let _wiki_id: i32 = param.1;
+    let _cat_id: i32 = param.0;
+
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _wikis = wikis
         .filter(schema::wikis::id.eq(&_wiki_id))
@@ -840,7 +842,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             is_desctop,
             "Статья ".to_string() + &_wiki.title,
             "вебсервисы.рф: Статья ".to_string() + &_wiki.title,
-            "/wiki/".to_string() + &_wiki.category_id.to_string() + &"/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
+            "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
             _wiki.get_image(),
         ).await
     }
@@ -848,8 +850,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
         use schema::wiki_categories::dsl::wiki_categories;
         use schema::wiki_images::dsl::wiki_images;
         use schema::wiki_videos::dsl::wiki_videos;
-
-        let _cat_id: i32 = param.0;
 
         let _categorys = wiki_categories
             .filter(schema::wiki_categories::id.eq(&_cat_id))

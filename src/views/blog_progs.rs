@@ -456,8 +456,8 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
         get_first_load_page (
             &session,
             is_desctop,
-            "Изменение категории блога ".to_string() + &_category.title,
-            "вебсервисы.рф: Изменение категории блога ".to_string() + &_category.title,
+            "Изменение категории блога ".to_string() + &_category.name,
+            "вебсервисы.рф: Изменение категории блога ".to_string() + &_category.name,
             "/edit_blog_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
             _category.get_image(),
         ).await
@@ -830,6 +830,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
     let _blog_id: i32 = param.1;
+    let _cat_id: i32 = param.0;
     let _blogs = blogs
         .filter(schema::blogs::id.eq(&_blog_id))
         .load::<Blog>(&_connection)
@@ -842,7 +843,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             is_desctop,
             "Статья блога ".to_string() + &_blog.title,
             "вебсервисы.рф: Статья блога ".to_string() + &_blog.title,
-            "/blog/".to_string() + &_blog.category_id.to_string() + &"/".to_string() + &_blog.id.to_string() + &"/".to_string(),
+            "/blog/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_blog.id.to_string() + &"/".to_string(),
             _blog.get_image(),
         ).await
     }
@@ -850,8 +851,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
         use schema::blog_categories::dsl::blog_categories;
         use schema::blog_images::dsl::blog_images;
         use schema::blog_videos::dsl::blog_videos;
-
-        let _cat_id: i32 = param.0;
 
         let all_categories = blog_categories
             .load::<BlogCategories>(&_connection)
