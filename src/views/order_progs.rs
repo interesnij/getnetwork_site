@@ -243,9 +243,9 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
         get_first_load_page (
             &session,
             is_desctop,
-            "Заказ ".to_string() + &_object.title,
-            "вебсервисы.рф: Заказ ".to_string() + &_object.title,
-            "/order/".to_string() + &_object.id.to_string() + &"/".to_string(),
+            "Заказ ".to_string() + &_order.title,
+            "вебсервисы.рф: Заказ ".to_string() + &_order.title,
+            "/order/".to_string() + &_order.id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
         ).await
     }

@@ -1096,7 +1096,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             is_desctop,
             "Ключевые слова".to_string(),
             "вебсервисы.рф: Ключевые слова".to_string(),
-            "/tags/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            "/tags/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
         ).await
     }

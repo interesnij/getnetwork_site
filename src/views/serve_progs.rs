@@ -671,8 +671,8 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
         get_first_load_page (
             &session,
             is_desctop,
-            "Изменение опции ".to_string() + &_serve.title,
-            "вебсервисы.рф: Изменение опции ".to_string() + &_serve.title,
+            "Изменение опции ".to_string() + &_serve.name,
+            "вебсервисы.рф: Изменение опции ".to_string() + &_serve.name,
             "/edit_serve/".to_string() + &_serve.id.to_string() + &"/".to_string(),
             "".to_string(),
         ).await
