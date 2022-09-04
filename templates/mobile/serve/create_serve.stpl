@@ -1,11 +1,9 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section data-title="Создание опции" data-description="вебсервисы.рф: Создание опции" data-uri="/create_serve/" data-image="/static/images/dark/store.jpg" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
-            <a class="ajax" href="/">Главная</a>
-            &nbsp;/&nbsp;
-              <a class="ajax" href="/serve_categories/">Категории опций</a>
+            <a class="ajax" href="/serve_categories/">Категории опций</a>
             &nbsp;/&nbsp;
             <span>Создание опции</span>
         </div>

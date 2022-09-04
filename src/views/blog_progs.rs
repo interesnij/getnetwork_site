@@ -75,7 +75,14 @@ pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> 
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание категории блога".to_string(),
+            "вебсервисы.рф: Создание категории блога".to_string(),
+            "/create_blog_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -140,7 +147,14 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание статьи блога".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание статьи блога".to_string(),
+            "вебсервисы.рф: Создание статьи блога".to_string(),
+            "/create_blog/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -213,7 +227,14 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание статьи блога".to_string(),
+            "вебсервисы.рф: Создание статьи блога".to_string(),
+            "/create_blog/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use schema::blogs::dsl::blogs;
@@ -331,7 +352,14 @@ pub async fn edit_content_blog_page(session: Session, req: HttpRequest, _id: web
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение текста статьи блога ".to_string() + &_blog.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение текста статьи блога ".to_string() + &_blog.title,
+            "вебсервисы.рф: Изменение текста статьи блога ".to_string() + &_blog.title,
+            "/edit_content_blog/".to_string() + &_blog.id.to_string() + &"/".to_string(),
+            _blog.get_images(),
+        ).await
     }
 
     else if is_signed_in(&session) {
@@ -425,7 +453,14 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение категории блога ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение категории блога ".to_string() + &_category.title,
+            "вебсервисы.рф: Изменение категории блога ".to_string() + &_category.title,
+            "/edit_blog_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            _category.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -802,7 +837,14 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
     let _blog = _blogs.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Статья блога ".to_string() + &_blog.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Статья блога ".to_string() + &_blog.title,
+            "вебсервисы.рф: Статья блога ".to_string() + &_blog.title,
+            "/blog/".to_string() + &_blog.category_id.to_string() + &"/".to_string() + &_blog.id.to_string() + &"/".to_string(),
+            _blog.get_images(),
+        ).await
     }
     else {
         use schema::blog_categories::dsl::blog_categories;
@@ -1012,7 +1054,14 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
     let _category = _categorys.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Категория блога ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категория блога ".to_string() + &_category.name,
+            "вебсервисы.рф: Категория блога ".to_string() + &_category.name,
+            "/blogs/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            _category.get_images(),
+        ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
@@ -1153,7 +1202,14 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Категории блога".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категории блога".to_string(),
+            "вебсервисы.рф: Категории блога".to_string(),
+            "/work_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema::{

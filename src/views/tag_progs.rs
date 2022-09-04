@@ -55,7 +55,14 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание тега".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание тега".to_string(),
+            "вебсервисы.рф: Создание тега".to_string(),
+            "/create_tag/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use schema::tags::dsl::tags;
@@ -155,7 +162,14 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
     let _tag = _tags.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Общий поиск по ключевому слову ".to_string() + &_tag.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Тег ".to_string() + &_tag.name,
+            "вебсервисы.рф: Тег ".to_string() + &_tag.name,
+            "/tag/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use schema::tags_items::dsl::tags_items;
@@ -377,7 +391,14 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
     let _tag = _tags.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Поиск статей по ключевому слову ".to_string() + &_tag.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Статьи тега ".to_string() + &_tag.name,
+            "вебсервисы.рф: Статьи тега ".to_string() + &_tag.name,
+            "/tag_blogs/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
@@ -512,7 +533,14 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Поиск услуг по ключевому слову ".to_string() + &_tag.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Услуги тега ".to_string() + &_tag.name,
+            "вебсервисы.рф: Услуги тега ".to_string() + &_tag.name,
+            "/tag_services/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
@@ -646,7 +674,14 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Поиск товаров по ключевому слову ".to_string() + &_tag.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Товары тега ".to_string() + &_tag.name,
+            "вебсервисы.рф: Товары тега ".to_string() + &_tag.name,
+            "/tag_stores/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
@@ -781,7 +816,14 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Поиск обучающих статей по ключевому слову ".to_string() + &_tag.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Статьи тега ".to_string() + &_tag.name,
+            "вебсервисы.рф: Статьи тега ".to_string() + &_tag.name,
+            "/tag_wikis/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
@@ -916,7 +958,14 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Поиск работ по ключевому слову ".to_string() + &_tag.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Работы тега ".to_string() + &_tag.name,
+            "вебсервисы.рф: Работы тега ".to_string() + &_tag.name,
+            "/tag_works/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
@@ -1042,7 +1091,14 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Ключевые слова".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Ключевые слова".to_string(),
+            "вебсервисы.рф: Ключевые слова".to_string(),
+            "/tags/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::utils::get_page;
@@ -1193,7 +1249,14 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение тега ".to_string() + &_tag.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение тега ".to_string() + &_tag.name,
+            "вебсервисы.рф: Изменение тега ".to_string() + &_tag.name,
+            "/edit_tag/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);

@@ -50,7 +50,14 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
 
     // первая отрисовка страницы - организуем скрытие информации
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Главная страница".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Главная страница".to_string(),
+            "вебсервисы - Комплексное, экспертное создание и развитие высоконагруженных веб-ресурсов".to_string(),
+            "/".to_string(),
+            "/static/images/dark/store.jpg".to_string()
+        ).await
     }
     else {
         use crate::schema;
@@ -200,7 +207,14 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
 
     // первая отрисовка страницы - организуем скрытие информации
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Информация".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Информация".to_string(),
+            "вебсервисы.рф: Информация о нас, о сайте, контакты, вкладка помощи".to_string(),
+            "/info/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         use crate::schema;
@@ -350,7 +364,14 @@ pub async fn history_page(req: HttpRequest, session: Session) -> actix_web::Resu
 
     // первая отрисовка страницы - организуем скрытие информации
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "История просмотров".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "История просмотров".to_string(),
+            "вебсервисы.рф: История просмотров пользователя".to_string(),
+            "/history/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema;
@@ -530,7 +551,14 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Список опций и услуг".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Список опций и услуг".to_string(),
+            "вебсервисы.рф: Список опций и услуг".to_string(),
+            "/serve_list/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -539,13 +567,11 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/main/serve_list.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     is_ajax:      i32,
                     tech_cats:    Vec<TechCategories>,
                 }
                 let body = Template {
-                    title:        "Список опций и услуг".to_string(),
                     request_user: _request_user,
                     is_ajax:      is_ajax,
                     tech_cats:    all_tech_categories,
@@ -558,13 +584,11 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/main/serve_list.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     is_ajax:      i32,
                     tech_cats:    Vec<TechCategories>,
                 }
                 let body = Template {
-                    title:        "Список опций и услуг".to_string(),
                     request_user: _request_user,
                     is_ajax:      is_ajax,
                     tech_cats:    all_tech_categories,

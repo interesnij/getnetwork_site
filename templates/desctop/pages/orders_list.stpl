@@ -1,6 +1,6 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="Заказы" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section data-title="Заказы" data-description="вебсервисы.рф: Заказы" data-uri="/orders/" data-image="/static/images/dark/store.jpg" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>
@@ -38,7 +38,7 @@
               Открыть
             </a>
           </div>
-        </div> 
+        </div>
         <% } %>
         <% if next_page_number > 0 { %>
           <div class="load centered m-1 next_page_list" data-link="/orders/?page=<%= next_page_number %>">

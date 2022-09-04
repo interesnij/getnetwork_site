@@ -76,7 +76,14 @@ pub async fn create_wiki_categories_page(session: Session, req: HttpRequest) -> 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории статей".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание категории статей".to_string(),
+            "вебсервисы.рф: Создание категории статей".to_string(),
+            "/create_wiki_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -141,7 +148,14 @@ pub async fn create_wiki_page(session: Session, req: HttpRequest) -> actix_web::
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание статьи".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание статьи".to_string(),
+            "вебсервисы.рф: Создание статьи".to_string(),
+            "/create_wiki/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -220,7 +234,14 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение статьи ".to_string() + &_wiki.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение статьи ".to_string() + &_wiki.title,
+            "вебсервисы.рф: Изменение статьи ".to_string() + &_wiki.title,
+            "/edit_store_category/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
+            _wiki.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -330,7 +351,14 @@ pub async fn edit_content_wiki_page(session: Session, req: HttpRequest, _id: web
     let _wiki = _wikis.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение текста статьи ".to_string() + &_wiki.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение текста статьи ".to_string() + &_wiki.title,
+            "вебсервисы.рф: Изменение текста статьи ".to_string() + &_wiki.title,
+            "/edit_content_service/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
+            _wiki.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -423,7 +451,14 @@ pub async fn edit_wiki_category_page(session: Session, req: HttpRequest, _id: we
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение категории обучающих статей ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение категории обучающих статей ".to_string() + &_category.title,
+            "вебсервисы.рф: Изменение категории обучающих статей ".to_string() + &_category.title,
+            "/edit_wiki_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            _category.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -800,7 +835,14 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
     let _wiki = _wikis.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Статья ".to_string() + &_wiki.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Статья ".to_string() + &_wiki.title,
+            "вебсервисы.рф: Статья ".to_string() + &_wiki.title,
+            "/wiki/".to_string() + &_wiki.category_id.to_string() + &"/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
+            _wiki.get_images(),
+        ).await
     }
     else {
         use schema::wiki_categories::dsl::wiki_categories;
@@ -1001,7 +1043,14 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Категория обучающих статей ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категория обучающих статей ".to_string() + &_category.name,
+            "вебсервисы.рф: Категория обучающих статей ".to_string() + &_category.name,
+            "/wikis/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            _category.get_images(),
+        ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
@@ -1147,7 +1196,14 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категории обучающих статей".to_string(),
+            "вебсервисы.рф: Категории обучающих статей".to_string(),
+            "/wiki_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema::{

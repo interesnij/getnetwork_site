@@ -74,7 +74,14 @@ pub async fn create_service_categories_page(session: Session, req: HttpRequest) 
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории услуг".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание категории услуг".to_string(),
+            "вебсервисы.рф: Создание категории услуг".to_string(),
+            "/create_service_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -139,7 +146,14 @@ pub async fn create_service_page(session: Session, req: HttpRequest) -> actix_we
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание услуги".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание услуги".to_string(),
+            "вебсервисы.рф: Создание услуги".to_string(),
+            "/create_service/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -226,7 +240,14 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение услуги ".to_string() + &_service.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение услуги ".to_string() + &_service.title,
+            "вебсервисы.рф: Изменение услуги ".to_string() + &_service.title,
+            "/edit_service/".to_string() + &_service.id.to_string() + &"/".to_string(),
+            _service.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -359,7 +380,14 @@ pub async fn edit_content_service_page(session: Session, req: HttpRequest, _id: 
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение текста услуги ".to_string() + &_service.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение текста услуги ".to_string() + &_service.title,
+            "вебсервисы.рф: Изменение текста услуги ".to_string() + &_service.title,
+            "/edit_content_service/".to_string() + &_service.id.to_string() + &"/".to_string(),
+            _service.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -451,7 +479,14 @@ pub async fn edit_service_category_page(session: Session, req: HttpRequest, _id:
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение категории услуги ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение категории услуг ".to_string() + &_category.title,
+            "вебсервисы.рф: Изменение категории услуг ".to_string() + &_category.title,
+            "/edit_service_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            _category.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -1017,7 +1052,14 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
         .expect("E");
     let _service = _services.into_iter().nth(0).unwrap();
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Услуга ".to_string() + &_service.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Услуга ".to_string() + &_service.title,
+            "вебсервисы.рф: Услуга ".to_string() + &_service.title,
+            "/service/".to_string() + &_service.category_id.to_string() + &"/".to_string() + &_service.id.to_string() + &"/".to_string(),
+            _service.get_images(),
+        ).await
     }
     else {
         use schema::{
@@ -1226,7 +1268,14 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Категория услуг ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категория услуг ".to_string() + &_category.name,
+            "вебсервисы.рф: Категория услуг ".to_string() + &_category.name,
+            "/services/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            _category.get_images(),
+        ).await
     }
     else {
         use crate::utils::get_page;
@@ -1371,7 +1420,14 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Категории услуг".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категории услуг".to_string(),
+            "вебсервисы.рф: Категории услуг".to_string(),
+            "/service_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema::{

@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="7" data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section page-id="7" data-title="Регистрация" data-description="вебсервисы.рф: Регистрация" data-uri="/signup/" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>

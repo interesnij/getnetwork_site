@@ -74,7 +74,14 @@ pub async fn create_work_categories_page(session: Session, req: HttpRequest) -> 
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории работ".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание категории работ".to_string(),
+            "вебсервисы.рф: Создание категории работ".to_string(),
+            "/create_work_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -139,7 +146,14 @@ pub async fn create_work_page(session: Session, req: HttpRequest) -> actix_web::
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание работы".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание работы".to_string(),
+            "вебсервисы.рф: Создание работы".to_string(),
+            "/create_work/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -226,7 +240,14 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение работы ".to_string() + &_work.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение работы ".to_string() + &_work.title,
+            "вебсервисы.рф: Изменение работы ".to_string() + &_work.title,
+            "/edit_work/".to_string() + &_work.id.to_string() + &"/".to_string(),
+            _work.get_images(),
+        ).await
     }
 
     else if is_signed_in(&session) {
@@ -359,7 +380,14 @@ pub async fn edit_content_work_page(session: Session, req: HttpRequest, _id: web
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение текста работы ".to_string() + &_work.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение текста работы ".to_string() + &_work.title,
+            "вебсервисы.рф: Изменение текста работы ".to_string() + &_work.title,
+            "/edit_content_service/".to_string() + &_work.id.to_string() + &"/".to_string(),
+            _work.get_images(),
+        ).await
     }
 
     else if is_signed_in(&session) {
@@ -454,7 +482,14 @@ pub async fn edit_work_category_page(session: Session, req: HttpRequest, _id: we
     let _category = _categorys.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение категории работ ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение категории работ ".to_string() + &_category.title,
+            "вебсервисы.рф: Изменение категории работ ".to_string() + &_category.title,
+            "/edit_work_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            _category.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -1019,7 +1054,14 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
     let _work = _works.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Работа ".to_string() + &_work.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Работа ".to_string() + &_work.title,
+            "вебсервисы.рф: Работа ".to_string() + &_work.title,
+            "/work/".to_string() + &_work.category_id.to_string() + &"/".to_string() + &_work.id.to_string() + &"/".to_string(),
+            _work.get_images(),
+        ).await
     }
     else {
         use schema::{
@@ -1223,7 +1265,14 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
     let _category = _categorys.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Категория работ ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категория работ ".to_string() + &_category.name,
+            "вебсервисы.рф: Категория работ ".to_string() + &_category.name,
+            "/works/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            _category.get_images(),
+        ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
@@ -1370,7 +1419,14 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категории работ".to_string(),
+            "вебсервисы.рф: Категории работ".to_string(),
+            "/work_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema::{

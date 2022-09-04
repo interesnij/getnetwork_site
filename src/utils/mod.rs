@@ -205,7 +205,14 @@ pub fn get_request_user_data(session: &Session) -> User {
     }
 }
 
-pub async fn get_first_load_page(session: &Session, is_desctop: bool, title: String) -> actix_web::Result<HttpResponse> {
+pub async fn get_first_load_page (
+    session:     &Session,
+    is_desctop:  bool,
+    title:       String,
+    description: String,
+    uri:         String,
+    image:       String,
+) -> actix_web::Result<HttpResponse> {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -214,10 +221,16 @@ pub async fn get_first_load_page(session: &Session, is_desctop: bool, title: Str
             struct Template {
                 request_user: User,
                 title:        String,
+                description:  String,
+                image:        String,
+                uri:          String,
             }
             let body = Template {
                 request_user: _request_user,
                 title:        title,
+                description:  description,
+                image:        image,
+                uri:          uri,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -229,10 +242,16 @@ pub async fn get_first_load_page(session: &Session, is_desctop: bool, title: Str
             struct Template {
                 request_user: User,
                 title:        String,
+                description:  String,
+                image:        String,
+                uri:          String,
             }
             let body = Template {
                 request_user: _request_user,
                 title:        title,
+                description:  description,
+                image:        image,
+                uri:          uri,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -244,10 +263,16 @@ pub async fn get_first_load_page(session: &Session, is_desctop: bool, title: Str
             #[derive(TemplateOnce)]
             #[template(path = "desctop/generic/anon_first_load.stpl")]
             struct Template {
-                title: String,
+                title:        String,
+                description:  String,
+                image:        String,
+                uri:          String,
             }
             let body = Template {
-                title: title,
+                title:        title,
+                description:  description,
+                image:        image,
+                uri:          uri,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -257,10 +282,16 @@ pub async fn get_first_load_page(session: &Session, is_desctop: bool, title: Str
             #[derive(TemplateOnce)]
             #[template(path = "mobile/generic/anon_first_load.stpl")]
             struct Template {
-                title: String,
+                title:        String,
+                description:  String,
+                image:        String,
+                uri:          String,
             }
             let body = Template {
-                title: title,
+                title:        title,
+                description:  description,
+                image:        image,
+                uri:          uri,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

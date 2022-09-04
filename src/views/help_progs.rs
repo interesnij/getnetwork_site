@@ -61,7 +61,14 @@ pub async fn create_categories_page(session: Session, req: HttpRequest) -> actix
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории помощи".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание категории помощи".to_string(),
+            "вебсервисы.рф: Создание категории помощи".to_string(),
+            "/help/create_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -123,7 +130,14 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание объекта помощи".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание объекта помощи".to_string(),
+            "вебсервисы.рф: Создание объекта помощи".to_string(),
+            "/help/create_item/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -192,7 +206,14 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение категории помощи ".to_string() + &_category.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение категории помощи ".to_string() + &_category.title,
+            "вебсервисы.рф: Изменение категории помощи ".to_string() + &_category.title,
+            "/help/edit_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            "".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -255,7 +276,14 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
     let _item = _items.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение элемента помощи ".to_string() + &_item.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение элемента помощи ".to_string() + &_item.title,
+            "вебсервисы.рф: Изменение элемента помощи ".to_string() + &_item.title,
+            "/help/edit_item/".to_string() + &_item.id.to_string() + &"/".to_string(),
+            "".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -469,7 +497,14 @@ pub async fn category_page(session: Session, req: HttpRequest, _id: web::Path<i3
     let _category = _categorys.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Помощь - ".to_string() + &_category.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категория помощи ".to_string() + &_category.title,
+            "вебсервисы.рф: Категория помощи ".to_string() + &_category.title,
+            "/help/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         let object_list = _category.get_list();

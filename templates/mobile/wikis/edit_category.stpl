@@ -1,10 +1,8 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section data-title="Изменение категории wiki <%= category.name %>" data-description="вебсервисы.рф: Изменение категории wiki <%= category.name %>" data-uri="/edit_wiki_category/<%= category.id %>/" data-image="<%= category.get_image() %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
-            <a class="ajax" href="/">Главная</a>
-            &nbsp;/&nbsp;
             <a class="ajax" href="/wiki_categories/">База знаний</a>
             &nbsp;/&nbsp;
             <span>Изменение категории wiki</span>

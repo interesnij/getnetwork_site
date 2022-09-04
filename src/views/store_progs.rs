@@ -74,7 +74,14 @@ pub async fn create_store_categories_page(session: Session, req: HttpRequest) ->
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории товаров".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание категории товаров".to_string(),
+            "вебсервисы.рф: Создание категории товаров".to_string(),
+            "/create_store_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -139,7 +146,14 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание товара".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание категории товара".to_string(),
+            "вебсервисы.рф: Создание категории товара".to_string(),
+            "/create_store_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -225,7 +239,14 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение товара ".to_string() + &_store.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение товара ".to_string() + &_store.title,
+            "вебсервисы.рф: Изменение товара ".to_string() + &_store.title,
+            "/edit_service_category/".to_string() + &_store.id.to_string() + &"/".to_string(),
+            _store.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -352,7 +373,14 @@ pub async fn edit_content_store_page(session: Session, req: HttpRequest, _id: we
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение текста товара ".to_string() + &_store.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение текста товара ".to_string() + &_store.title,
+            "вебсервисы.рф: Изменение текста товара ".to_string() + &_store.title,
+            "/edit_content_store/".to_string() + &_store.id.to_string() + &"/".to_string(),
+            _store.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -445,7 +473,14 @@ pub async fn edit_store_category_page(session: Session, req: HttpRequest, _id: w
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение категории товаров ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение категории товаров ".to_string() + &_category.title,
+            "вебсервисы.рф: Изменение категории товаров ".to_string() + &_category.title,
+            "/edit_store_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            _category.get_images(),
+        ).await
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -1011,7 +1046,14 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории блога".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Товар ".to_string() + &_store.title,
+            "вебсервисы.рф: Товар ".to_string() + &_store.title,
+            "/store/".to_string() + &_store.category_id.to_string() + &"/".to_string() + &_store.id.to_string() + &"/".to_string(),
+            _store.get_images(),
+        ).await
     }
     else {
         use schema::{
@@ -1212,7 +1254,14 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
     let _category = _categorys.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Категория товаров ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категория товаров ".to_string() + &_category.name,
+            "вебсервисы.рф: Категория товаров ".to_string() + &_category.name,
+            "/stores/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            _category.get_images(),
+        ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
@@ -1357,7 +1406,14 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Категории услуг".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категории товаров".to_string(),
+            "вебсервисы.рф: Категории товаров".to_string(),
+            "/store_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         use crate::schema::{

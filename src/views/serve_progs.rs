@@ -80,7 +80,14 @@ pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Технологии услуг и опций".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Категории услуг".to_string(),
+            "вебсервисы.рф: Категории услуг".to_string(),
+            "/serve_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -156,7 +163,14 @@ pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i
     let _serve = _serves.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Опция услуг ".to_string() + &_serve.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Опция ".to_string() + &_serve.name,
+            "вебсервисы.рф: Опция ".to_string() + &_serve.name,
+            "/serve/".to_string() + &_serve.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -226,7 +240,14 @@ pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> 
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание категории услуг".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание веб-сервиса".to_string(),
+            "вебсервисы.рф: Создание веб-сервиса".to_string(),
+            "/create_tech_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -289,7 +310,14 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание технологии услуг".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание технологии услуг".to_string(),
+            "вебсервисы.рф: Создание технологии услуг".to_string(),
+            "/create_serve_categories/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -409,7 +437,14 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Создание опции услуг".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание опции".to_string(),
+            "вебсервисы.рф: Создание опции".to_string(),
+            "/create_serve/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -478,7 +513,14 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение категории услуг ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение веб-сервиса ".to_string() + &_category.title,
+            "вебсервисы.рф: Изменение веб-сервиса ".to_string() + &_category.title,
+            "/edit_tech_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            "".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -548,7 +590,14 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение технологии услуг ".to_string() + &_category.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение категории опций ".to_string() + &_category.title,
+            "вебсервисы.рф: Изменение категории опций ".to_string() + &_category.title,
+            "/edit_serve_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
+            "".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -619,7 +668,14 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
     let _serve = _serves.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Изменение опции услуг ".to_string() + &_serve.name).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение опции ".to_string() + &_serve.title,
+            "вебсервисы.рф: Изменение опции ".to_string() + &_serve.title,
+            "/edit_serve/".to_string() + &_serve.id.to_string() + &"/".to_string(),
+            "".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))

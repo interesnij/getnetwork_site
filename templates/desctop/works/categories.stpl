@@ -1,11 +1,11 @@
 <% include!("../header.stpl"); %>
 
-<section page-id="91" data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section page-id="91" data-title="Работы" data-description="вебсервисы.рф: Работы" data-uri="/work_categories/" data-image="/static/images/dark/store.jpg" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
                 <div class="hs-line-4 font-alt black">
                     <a class="ajax" href="/">Главная</a>
                     &nbsp;/&nbsp;
-                    <span>Портфолио</span>
+                    <span>Работы</span>
                     <% include!("../generic/page_stat.stpl"); %>
                 </div>
     </div>

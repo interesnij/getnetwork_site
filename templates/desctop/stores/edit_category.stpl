@@ -1,6 +1,6 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="<%= title %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section data-title="Изменение категории товаров <%= category.name %>" data-description="вебсервисы.рф: Изменение категории товаров <%= category.name %>" data-uri="/edit_store_category/<%= category.id %>/" data-image="<%= category.get_image() %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>

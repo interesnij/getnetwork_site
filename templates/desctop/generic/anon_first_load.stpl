@@ -3,9 +3,17 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="amphtml" href="">
+
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="<%= uri %>" />
+  <meta property="og:title" content="<%= title %>">
+  <meta property="og:description" content="<%= description %>">
+  <meta property="og:image" content="<%= image %>">
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <link rel="canonical" href="" />
+  <link rel="canonical" href="<%= uri %>" />
   <title><%= title %></title>
   <link type="text/css" media="all" rel="stylesheet" href="/static/styles/grid.css">
   <link type="text/css" media="all" rel="stylesheet" href="/static/styles/style.css">

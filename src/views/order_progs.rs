@@ -53,7 +53,14 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Заказы".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Заказы".to_string(),
+            "вебсервисы.рф: Заказы".to_string(),
+            "/orders/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
@@ -116,7 +123,14 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Ваши заказы".to_string()).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Ваши заказы".to_string(),
+            "вебсервисы.рф: Ваши заказы".to_string(),
+            "/user_orders/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else {
         let user_id = get_cookie_user_id(&req).await;
@@ -226,7 +240,14 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
         .expect("E");
     let _order = _orders.into_iter().nth(0).unwrap();
     if is_ajax == 0 {
-        get_first_load_page(&session, is_desctop, "Заказ ".to_string() + &_order.title).await
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Заказ ".to_string() + &_object.title,
+            "вебсервисы.рф: Заказ ".to_string() + &_object.title,
+            "/order/".to_string() + &_object.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
     }
     else if user_id != _order.user_id {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Информация о заказчике не найдена"))
