@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="42" data-id="<%= category.id %>" data-title="Категория блога <%= category.name %>" data-description="вебсервисы.рф: Категория блога <%= category.name %>" data-uri="/blogs/<%= category.id %>/" data-image="<%= category.get_images() %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section page-id="42" data-id="<%= category.id %>" data-title="Категория блога <%= category.name %>" data-description="вебсервисы.рф: Категория блога <%= category.name %>" data-uri="/blogs/<%= category.id %>/" data-image="<%= category.get_image() %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/blog_categories/">Блог</a>
