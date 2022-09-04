@@ -27,7 +27,7 @@
     <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
   </head>
 
-  <body data-device="1">
+  <body>
     <span class="span"></span>
     <script defer type="text/javascript" src="/static/scripts/mobile/func.js?ver9"></script>
     <script defer type="text/javascript" src="/static/scripts/mobile/main.js?ver9"></script>
