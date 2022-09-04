@@ -151,7 +151,7 @@ function ajax_get_reload(url) {
         document.querySelector('meta[name="title"]').setAttribute("content", _title);
         document.querySelector('meta[name="description"]').setAttribute("content", _meta.getAttribute("data-description"));
         document.querySelector('meta[name="image"]').setAttribute("content", "http://вебсервисы.рф" + _meta.getAttribute("data-image"));
-        document.querySelector('meta[name="link"]').setAttribute("href", _uri);
+        document.querySelector('meta[name="canonical"]').setAttribute("href", _uri);
 
         window.scrollTo(0,0);
         window.history.pushState(null, "ajax_reload", url);
