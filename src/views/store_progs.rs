@@ -97,13 +97,11 @@ pub async fn create_store_categories_page(session: Session, req: HttpRequest) ->
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/create_categories.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     store_cats:   Vec<StoreCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание категории товаров".to_string(),
                     request_user: _request_user,
                     store_cats:   _store_cats,
                     is_ajax:      is_ajax,
@@ -116,14 +114,10 @@ pub async fn create_store_categories_page(session: Session, req: HttpRequest) ->
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/create_categories.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     store_cats:   Vec<StoreCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание категории товаров".to_string(),
-                    //request_user: _request_user,
                     store_cats:   _store_cats,
                     is_ajax:      is_ajax,
                 }
@@ -181,14 +175,12 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/create_store.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание товара".to_string(),
                     request_user: _request_user,
                     store_cats:   _store_cats,
                     all_tags:     all_tags,
@@ -202,15 +194,11 @@ pub async fn create_store_page(session: Session, req: HttpRequest) -> actix_web:
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/create_store.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание товара".to_string(),
-                    //request_user: _request_user,
                     store_cats:   _store_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
@@ -287,7 +275,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/edit_store.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     object:       Store,
                     store_cats:   Vec<StoreCategories>,
@@ -300,7 +287,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     level:        i16,
                 }
                 let body = Template {
-                    title:        "Изменение товара ".to_string() + &_store.title,
                     request_user: _request_user,
                     object:       _store,
                     store_cats:   _store_cats,
@@ -320,8 +306,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/edit_store.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     object:       Store,
                     store_cats:   Vec<StoreCategories>,
                     is_ajax:      i32,
@@ -333,8 +317,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
                     level:        i16,
                 }
                 let body = Template {
-                    title:        "Изменение товара ".to_string() + &_store.title,
-                    //request_user: _request_user,
                     object:       _store,
                     store_cats:   _store_cats,
                     is_ajax:      is_ajax,
@@ -389,13 +371,11 @@ pub async fn edit_content_store_page(session: Session, req: HttpRequest, _id: we
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/edit_content_store.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     store:        Store,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение текста товара ".to_string() + &_store.title,
                     request_user: _request_user,
                     store:        _store,
                     is_ajax:      is_ajax,
@@ -408,14 +388,10 @@ pub async fn edit_content_store_page(session: Session, req: HttpRequest, _id: we
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/edit_content_store.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     store:        Store,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение текста товара ".to_string() + &_store.title,
-                    //request_user: _request_user,
                     store:        _store,
                     is_ajax:      is_ajax,
                 }
@@ -489,13 +465,11 @@ pub async fn edit_store_category_page(session: Session, req: HttpRequest, _id: w
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/edit_category.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     category:     StoreCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение категории товаров ".to_string() + &_category.name,
                     request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
@@ -508,14 +482,10 @@ pub async fn edit_store_category_page(session: Session, req: HttpRequest, _id: w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/edit_category.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     category:     StoreCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение категории товаров ".to_string() + &_category.name,
-                    //request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
@@ -1119,7 +1089,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/store.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     object:       Store,
                     images:       Vec<StoreImage>,
@@ -1130,7 +1099,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Товар ".to_string() + &_store.title,
                     request_user: _request_user,
                     object:       _store,
                     images:       _images,
@@ -1148,7 +1116,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/store.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     object:       Store,
                     images:       Vec<StoreImage>,
@@ -1161,7 +1128,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Товар ".to_string() + &_store.title,
                     request_user: _request_user,
                     object:       _store,
                     images:       _images,
@@ -1183,7 +1149,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/anon_store.stpl")]
                 struct Template {
-                    title:      String,
                     object:     Store,
                     images:     Vec<StoreImage>,
                     videos:     Vec<StoreVideo>,
@@ -1193,7 +1158,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     is_ajax:    i32,
                 }
                 let body = Template {
-                    title:      "Товар ".to_string() + &_store.title,
                     object:     _store,
                     images:     _images,
                     videos:     _videos,
@@ -1210,7 +1174,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/anon_store.stpl")]
                 struct Template {
-                    title:      String,
                     object:     Store,
                     images:     Vec<StoreImage>,
                     videos:     Vec<StoreVideo>,
@@ -1222,7 +1185,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     is_ajax:    i32,
                 }
                 let body = Template {
-                    title:      "Товар ".to_string() + &_store.title,
                     object:     _store,
                     images:     _images,
                     videos:     _videos,
@@ -1294,7 +1256,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/category.stpl")]
                 struct Template {
-                    title:            String,
                     request_user:     User,
                     all_tags:         Vec<Tag>,
                     category:         StoreCategories,
@@ -1304,7 +1265,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Категория товаров ".to_string() + &_category.name,
                     request_user:     _request_user,
                     all_tags:         _tags,
                     category:         _category,
@@ -1321,8 +1281,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/category.stpl")]
                 struct Template {
-                    title:            String,
-                    //request_user:     User,
                     all_tags:         Vec<Tag>,
                     category:         StoreCategories,
                     store_cats:       Vec<StoreCategories>,
@@ -1331,8 +1289,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Категория товаров ".to_string() + &_category.name,
-                    //request_user:     _request_user,
                     all_tags:         _tags,
                     category:         _category,
                     store_cats:       _wiki_store_categories,
@@ -1350,7 +1306,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/anon_category.stpl")]
                 struct Template {
-                    title:            String,
                     all_tags:         Vec<Tag>,
                     category:         StoreCategories,
                     store_cats:       Vec<StoreCategories>,
@@ -1359,7 +1314,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Категория товаров ".to_string() + &_category.name,
                     all_tags:         _tags,
                     category:         _category,
                     store_cats:       _wiki_store_categories,
@@ -1375,7 +1329,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/anon_category.stpl")]
                 struct Template {
-                    title:            String,
                     all_tags:         Vec<Tag>,
                     category:         StoreCategories,
                     store_cats:       Vec<StoreCategories>,
@@ -1384,7 +1337,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Категория товаров ".to_string() + &_category.name,
                     all_tags:         _tags,
                     category:         _category,
                     store_cats:       _wiki_store_categories,
@@ -1473,7 +1425,6 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/categories.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     is_ajax:      i32,
                     store_cats:   Vec<StoreCategories>,
@@ -1481,7 +1432,6 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     stat:         StatStoreCategorie,
                 }
                 let body = Template {
-                    title:        "Категории товаров".to_string(),
                     request_user: _request_user,
                     is_ajax:      is_ajax,
                     store_cats:   _store_cats,
@@ -1496,14 +1446,12 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/categories.stpl")]
                 struct Template {
-                    title:        String,
                     is_ajax:      i32,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatStoreCategorie,
                 }
                 let body = Template {
-                    title:        "Категории товаров".to_string(),
                     is_ajax:      is_ajax,
                     store_cats:   _store_cats,
                     all_tags:     _tags,
@@ -1519,14 +1467,12 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/anon_categories.stpl")]
                 struct Template {
-                    title:        String,
                     is_ajax:      i32,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatStoreCategorie,
                 }
                 let body = Template {
-                    title:        "Категории товаров".to_string(),
                     is_ajax:      is_ajax,
                     store_cats:   _store_cats,
                     all_tags:     _tags,
@@ -1540,14 +1486,12 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/anon_categories.stpl")]
                 struct Template {
-                    title:        String,
                     is_ajax:      i32,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatStoreCategorie,
                 }
                 let body = Template {
-                    title:        "Категории товаров".to_string(),
                     is_ajax:      is_ajax,
                     store_cats:   _store_cats,
                     all_tags:     _tags,

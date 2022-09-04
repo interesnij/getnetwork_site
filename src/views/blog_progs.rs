@@ -98,13 +98,11 @@ pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> 
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/create_categories.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     blog_cats:    Vec<BlogCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание категории блога".to_string(),
                     request_user: _request_user,
                     blog_cats:    _blog_cats,
                     is_ajax:      is_ajax,
@@ -117,14 +115,10 @@ pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> 
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/create_categories.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     blog_cats:    Vec<BlogCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание категории блога".to_string(),
-                    //request_user: _request_user,
                     blog_cats:    _blog_cats,
                     is_ajax:      is_ajax,
                 }
@@ -175,14 +169,12 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/create_blog.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание статьи блога".to_string(),
                     request_user: _request_user,
                     blog_cats:    _blog_cats,
                     all_tags:     all_tags,
@@ -196,15 +188,11 @@ pub async fn create_blog_page(session: Session, req: HttpRequest) -> actix_web::
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/create_blog.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание статьи блога".to_string(),
-                    //request_user: _request_user,
                     blog_cats:    _blog_cats,
                     all_tags:     all_tags,
                     is_ajax:      is_ajax,
@@ -268,7 +256,6 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     #[derive(TemplateOnce)]
                     #[template(path = "desctop/blogs/edit_blog.stpl")]
                     struct Template {
-                        title:        String,
                         request_user: User,
                         object:       Blog,
                         categories:   Vec<BlogCategories>,
@@ -280,7 +267,6 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                         blog_cats:    Vec<BlogCategories>,
                     }
                     let body = Template {
-                        title:        "Изменение статьи блога ".to_string() + &_blog.title,
                         request_user: _request_user,
                         object:       _blog,
                         categories:   _categories,
@@ -299,8 +285,6 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                     #[derive(TemplateOnce)]
                     #[template(path = "mobile/blogs/edit_blog.stpl")]
                     struct Template {
-                        title:        String,
-                        //request_user: User,
                         object:       Blog,
                         categories:   Vec<BlogCategories>,
                         is_ajax:      i32,
@@ -311,8 +295,6 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                         blog_cats:    Vec<BlogCategories>,
                     }
                     let body = Template {
-                        title:        "Изменение статьи блога ".to_string() + &_blog.title,
-                        //request_user: _request_user,
                         object:       _blog,
                         categories:   _categories,
                         is_ajax:      is_ajax,
@@ -369,13 +351,11 @@ pub async fn edit_content_blog_page(session: Session, req: HttpRequest, _id: web
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/edit_content_blog.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     blog:         Blog,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение текста статьи блога ".to_string() + &_blog.title,
                     request_user: _request_user,
                     blog:         _blog,
                     is_ajax:      is_ajax,
@@ -388,14 +368,10 @@ pub async fn edit_content_blog_page(session: Session, req: HttpRequest, _id: web
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/edit_content_blog.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     blog:         Blog,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение текста статьи блога ".to_string() + &_blog.title,
-                    //request_user: _request_user,
                     blog:         _blog,
                     is_ajax:      is_ajax,
                 }
@@ -469,13 +445,11 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/edit_category.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     category:     BlogCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение категории блога ".to_string() + &_category.name,
                     request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
@@ -488,14 +462,10 @@ pub async fn edit_blog_category_page(session: Session, req: HttpRequest, _id: we
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/edit_category.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     category:     BlogCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение категории блога ".to_string() + &_category.name,
-                    //request_user: _request_user,
                     category:     _category,
                     is_ajax:      is_ajax,
                 }
@@ -904,7 +874,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/blog.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     object:       Blog,
                     images:       Vec<BlogImage>,
@@ -917,7 +886,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Статья блога ".to_string() + &_blog.title,
                     request_user: _request_user,
                     object:       _blog,
                     images:       _images,
@@ -937,7 +905,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/blog.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     object:       Blog,
                     images:       Vec<BlogImage>,
@@ -950,7 +917,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Статья блога ".to_string() + &_blog.title,
                     request_user: _request_user,
                     object:       _blog,
                     images:       _images,
@@ -972,7 +938,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/anon_blog.stpl")]
                 struct Template {
-                    title:      String,
                     object:     Blog,
                     images:     Vec<BlogImage>,
                     videos:     Vec<BlogVideo>,
@@ -984,7 +949,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                     is_ajax:    i32,
                 }
                 let body = Template {
-                    title:      "Статья блога ".to_string() + &_blog.title,
                     object:     _blog,
                     images:     _images,
                     videos:     _videos,
@@ -1003,7 +967,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/anon_blog.stpl")]
                 struct Template {
-                    title:      String,
                     object:     Blog,
                     images:     Vec<BlogImage>,
                     videos:     Vec<BlogVideo>,
@@ -1015,7 +978,6 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                     is_ajax:    i32,
                 }
                 let body = Template {
-                    title:      "Статья блога ".to_string() + &_blog.title,
                     object:     _blog,
                     images:     _images,
                     videos:     _videos,
@@ -1090,7 +1052,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/category.stpl")]
                 struct Template {
-                    title:            String,
                     request_user:     User,
                     all_tags:         Vec<Tag>,
                     category:         BlogCategories,
@@ -1100,7 +1061,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Категория блога ".to_string() + &_category.name,
                     request_user:     _request_user,
                     all_tags:         _tags,
                     category:        _category,
@@ -1117,8 +1077,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/category.stpl")]
                 struct Template {
-                    title:            String,
-                    //request_user:     User,
                     all_tags:         Vec<Tag>,
                     category:         BlogCategories,
                     blog_cats:        Vec<BlogCategories>,
@@ -1127,8 +1085,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Категория блога ".to_string() + &_category.name,
-                    //request_user:     _request_user,
                     all_tags:         _tags,
                     category:        _category,
                     blog_cats:        all_categories,
@@ -1146,7 +1102,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/anon_category.stpl")]
                 struct Template {
-                    title:            String,
                     all_tags:         Vec<Tag>,
                     category:         BlogCategories,
                     blog_cats:        Vec<BlogCategories>,
@@ -1155,7 +1110,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:            "Категория блога ".to_string() + &_category.name,
                     all_tags:         _tags,
                     category:         _category,
                     blog_cats:        all_categories,
@@ -1171,7 +1125,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/anon_category.stpl")]
                 struct Template {
-                    title:           String,
                     all_tags:         Vec<Tag>,
                     category:         BlogCategories,
                     blog_cats:        Vec<BlogCategories>,
@@ -1180,7 +1133,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     is_ajax:          i32,
                 }
                 let body = Template {
-                    title:           "Категория блога ".to_string() + &_category.name,
                     all_tags:         _tags,
                     category:         _category,
                     blog_cats:        all_categories,
@@ -1269,7 +1221,6 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/categories.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
@@ -1277,7 +1228,6 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                     stat:         StatBlogCategorie,
                 }
                 let body = Template {
-                    title:        "Категории блога".to_string(),
                     request_user: _request_user,
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
@@ -1292,14 +1242,12 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/categories.stpl")]
                 struct Template {
-                    title:        String,
                     is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatBlogCategorie,
                 }
                 let body = Template {
-                    title:        "Категории блога".to_string(),
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
@@ -1315,14 +1263,12 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/anon_categories.stpl")]
                 struct Template {
-                    title:        String,
                     is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatBlogCategorie,
                 }
                 let body = Template {
-                    title:        "Категории блога".to_string(),
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
@@ -1336,14 +1282,12 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/anon_categories.stpl")]
                 struct Template {
-                    title:        String,
                     is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatBlogCategorie,
                 }
                 let body = Template {
-                    title:        "Категории блога".to_string(),
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,

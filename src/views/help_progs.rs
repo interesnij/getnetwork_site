@@ -88,13 +88,11 @@ pub async fn create_categories_page(session: Session, req: HttpRequest) -> actix
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/help/create_categories.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     help_cats:    Vec<HelpItemCategorie>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание категории помощи".to_string(),
                     request_user: _request_user,
                     help_cats:    _categories,
                     is_ajax:      is_ajax,
@@ -107,12 +105,10 @@ pub async fn create_categories_page(session: Session, req: HttpRequest) -> actix
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/help/create_categories.stpl")]
                 struct Template {
-                    title:        String,
                     help_cats:    Vec<HelpItemCategorie>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание категории помощи".to_string(),
                     help_cats:    _categories,
                     is_ajax:      is_ajax,
                 }
@@ -159,13 +155,11 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/help/create_item.stpl")]
                 struct Template {
-                    title:        String,
                     help_cats:    Vec<HelpItemCategorie>,
                     request_user: User,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание объекта помощи".to_string(),
                     help_cats:    _help_categories,
                     request_user: _request_user,
                     is_ajax:      is_ajax,
@@ -178,12 +172,10 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/help/create_item.stpl")]
                 struct Template {
-                    title:     String,
                     help_cats: Vec<HelpItemCategorie>,
                     is_ajax:   i32,
                 }
                 let body = Template {
-                    title:     "Создание объекта помощи".to_string(),
                     help_cats: _help_categories,
                     is_ajax:   is_ajax,
                 }
@@ -226,14 +218,12 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "desctop/help/edit_category.stpl")]
             struct Template {
-                title:        String,
                 request_user: User,
                 help_cats:    Vec<HelpItemCategorie>,
                 category:     HelpItemCategorie,
                 is_ajax:      i32,
             }
             let body = Template {
-                title:        "Изменение категории помощи ".to_string() + &_category.title,
                 request_user: _request_user,
                 help_cats:    _help_categories,
                 category:     _category,
@@ -247,13 +237,11 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
             #[derive(TemplateOnce)]
             #[template(path = "mobile/help/edit_category.stpl")]
             struct Template {
-                title:        String,
                 help_cats:    Vec<HelpItemCategorie>,
                 category:     HelpItemCategorie,
                 is_ajax:      i32,
             }
             let body = Template {
-                title:        "Изменение категории помощи ".to_string() + &_category.title,
                 help_cats:    _help_categories,
                 category:     _category,
                 is_ajax:      is_ajax,
@@ -300,14 +288,12 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "desctop/help/edit_item.stpl")]
             struct Template {
-                title:        String,
                 request_user: User,
                 help_cats:    Vec<HelpItemCategorie>,
                 object:       HelpItem,
                 is_ajax:      i32,
             }
             let body = Template {
-                title:        "Изменение элемента помощи ".to_string() + &_item.title,
                 request_user: _request_user,
                 help_cats:    _help_cats,
                 object:       _item,
@@ -321,13 +307,11 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
             #[derive(TemplateOnce)]
             #[template(path = "mobile/help/edit_item.stpl")]
             struct Template {
-                title:     String,
                 help_cats: Vec<HelpItemCategorie>,
                 object:    HelpItem,
                 is_ajax:   i32,
             }
             let body = Template {
-                title:     "Изменение элемента помощи ".to_string() + &_item.title,
                 help_cats: _help_cats,
                 object:    _item,
                 is_ajax:   is_ajax,

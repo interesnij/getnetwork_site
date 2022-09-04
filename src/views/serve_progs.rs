@@ -112,13 +112,11 @@ pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_
                     request_user: User,
                     serve_cats:   Vec<ServeCategories>,
                     is_ajax:      i32,
-                    title:        String,
                 }
                 let body = Template {
                     request_user: _request_user,
                     serve_cats:   _serve_cats,
                     is_ajax:      is_ajax,
-                    title:        "Технологии услуг и опций".to_string(),
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -128,16 +126,12 @@ pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/serve/categories.stpl")]
                 struct Template {
-                    //request_user: User,
                     serve_cats:   Vec<ServeCategories>,
                     is_ajax:      i32,
-                    title:        String,
                 }
                 let body = Template {
-                    //request_user: _request_user,
                     serve_cats:   _serve_cats,
                     is_ajax:      is_ajax,
-                    title:        "Технологии услуг и опций".to_string(),
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -193,14 +187,12 @@ pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/serve/serve.stpl")]
                 struct Template {
-                    //title:        String,
                     request_user: User,
                     category:     ServeCategories,
                     object:       Serve,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    //title:        "Опция услуг ".to_string() + &_serve.name,
                     request_user: _request_user,
                     category:     _s_category,
                     object:       _serve,
@@ -214,15 +206,11 @@ pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/serve/serve.stpl")]
                 struct Template {
-                    //title:        String,
-                    //request_user: User,
                     category:     ServeCategories,
                     object:       Serve,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    //title:        "Опция услуг ".to_string() + &_serve.name,
-                    //request_user: _request_user,
                     category:     _s_category,
                     object:       _serve,
                     is_ajax:      is_ajax,
@@ -267,13 +255,11 @@ pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> 
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/serve/create_tech_categories.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание категории услуг".to_string(),
                     request_user: _request_user,
                     tech_cats:    _categories,
                     is_ajax:      is_ajax,
@@ -286,14 +272,10 @@ pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> 
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/serve/create_tech_categories.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание категории услуг".to_string(),
-                    //request_user: _request_user,
                     tech_cats:    _categories,
                     is_ajax:      is_ajax,
                 }
@@ -339,13 +321,11 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/serve/create_serve_categories.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание технологии услуг".to_string(),
                     request_user: _request_user,
                     tech_cats:    _tech_categories,
                     is_ajax:      is_ajax,
@@ -358,12 +338,10 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/serve/create_serve_categories.stpl")]
                 struct Template {
-                    title:        String,
                     tech_cats:    Vec<TechCategories>,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание технологии услуг".to_string(),
                     tech_cats:    _tech_categories,
                     is_ajax:      is_ajax,
                 }
@@ -468,12 +446,10 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/serve/create_serve.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание опции услуг".to_string(),
                     request_user: _request_user,
                     is_ajax:      is_ajax,
                 }
@@ -485,13 +461,9 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/serve/create_serve.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Создание опции услуг".to_string(),
-                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                 }
                 .render_once()
@@ -537,14 +509,12 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/serve/edit_tech_category.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     category:     TechCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение категории услуг ".to_string() + &_category.name,
                     request_user: _request_user,
                     tech_cats:    _tech_categories,
                     category:     _category,
@@ -558,15 +528,11 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/serve/edit_tech_category.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     category:     TechCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение категории услуг ".to_string() + &_category.name,
-                    //request_user: _request_user,
                     tech_cats:    _tech_categories,
                     category:     _category,
                     is_ajax:      is_ajax,
@@ -617,14 +583,12 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/serve/edit_serve_category.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     tech_cats:    Vec<TechCategories>,
                     category:     ServeCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение технологии услуг ".to_string() + &_category.name,
                     request_user: _request_user,
                     tech_cats:    _tech_categories,
                     category:     _category,
@@ -638,13 +602,11 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/serve/edit_serve_category.stpl")]
                 struct Template {
-                    title:        String,
                     tech_cats:    Vec<TechCategories>,
                     category:     ServeCategories,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение технологии услуг ".to_string() + &_category.name,
                     tech_cats:    _tech_categories,
                     category:     _category,
                     is_ajax:      is_ajax,
@@ -714,7 +676,6 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/serve/edit_serve.stpl")]
                 struct Template {
-                    title:        String,
                     request_user: User,
                     level:        i16,
                     serve_cats:   Vec<ServeCategories>,
@@ -722,7 +683,6 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение опции услуг ".to_string() + &_serve.name,
                     request_user: _request_user,
                     level:        _level,
                     serve_cats:   _serve_cats,
@@ -737,16 +697,12 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/serve/edit_serve.stpl")]
                 struct Template {
-                    title:        String,
-                    //request_user: User,
                     level:        i16,
                     serve_cats:   Vec<ServeCategories>,
                     object:       Serve,
                     is_ajax:      i32,
                 }
                 let body = Template {
-                    title:        "Изменение опции услуг ".to_string() + &_serve.name,
-                    //request_user: _request_user,
                     level:        _level,
                     serve_cats:   _serve_cats,
                     object:       _serve,

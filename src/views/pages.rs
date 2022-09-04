@@ -501,13 +501,11 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/main/feedback_list.stpl")]
                 struct Template {
-                    title:         String,
                     request_user:  User,
                     is_ajax:       i32,
                     feedback_list: Vec<Feedback>,
                 }
                 let body = Template {
-                    title:         "Сообщения с формы".to_string(),
                     request_user:  _request_user,
                     is_ajax:       is_ajax,
                     feedback_list: _feedbacks,
@@ -520,14 +518,10 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/main/feedback_list.stpl")]
                 struct Template {
-                    title:         String,
-                    //request_user:  User,
                     is_ajax:       i32,
                     feedback_list: Vec<Feedback>,
                 }
                 let body = Template {
-                    title:         "Сообщения с формы".to_string(),
-                    //request_user:  _request_user,
                     is_ajax:       is_ajax,
                     feedback_list: _feedbacks,
                 }
@@ -624,11 +618,9 @@ pub async fn get_tech_category_page(_id: web::Path<i32>) -> actix_web::Result<Ht
     #[derive(TemplateOnce)]
     #[template(path = "desctop/load/tech_category.stpl")]
     struct Template {
-        title:  String,
         object: TechCategories,
     }
     let body = Template {
-        title:  "Технический блок ".to_string() + &tech_category.name,
         object: tech_category,
     }
     .render_once()
@@ -653,11 +645,9 @@ pub async fn get_serve_category_page(_id: web::Path<i32>) -> actix_web::Result<H
     #[derive(TemplateOnce)]
     #[template(path = "desctop/load/serve_category.stpl")]
     struct Template {
-        title:  String,
         object: ServeCategories,
     }
     let body = Template {
-        title:  "Технология опций ".to_string() + &serve_category.name,
         object: serve_category,
     }
     .render_once()
@@ -682,11 +672,9 @@ pub async fn get_serve_page(_id: web::Path<i32>) -> actix_web::Result<HttpRespon
     #[derive(TemplateOnce)]
     #[template(path = "desctop/load/serve.stpl")]
     struct Template {
-        title:  String,
         object: Serve,
     }
     let body = Template {
-        title:  "Опция ".to_string() + &_serve.name,
         object: _serve,
     }
     .render_once()
