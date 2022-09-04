@@ -147,11 +147,11 @@ function ajax_get_reload(url) {
         _title = _meta.getAttribute("data-title");
         _uri = "http://вебсервисы.рф" + _meta.getAttribute("data-uri");
         document.title = _title;
-        document.getElementById("document_url") = _uri;
-        document.getElementById("document_title") = _title;
-        document.getElementById("document_description") = _meta.getAttribute("data-description");
-        document.getElementById("document_image") = "http://вебсервисы.рф" + _meta.getAttribute("data-image");
-        document.getElementById("document_canonical") = _uri;
+        document.getElementById("document_url").setAttribute("content", _uri);
+        document.getElementById("document_title").setAttribute("content", _title);
+        document.getElementById("document_description").setAttribute("content", _meta.getAttribute("data-description"));
+        document.getElementById("document_image").setAttribute("content", "http://вебсервисы.рф" + _meta.getAttribute("data-image"));
+        document.getElementById("document_canonical").setAttribute("href", _uri);
 
         window.scrollTo(0,0);
         window.history.pushState(null, "ajax_reload", url);
