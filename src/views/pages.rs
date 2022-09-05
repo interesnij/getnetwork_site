@@ -26,6 +26,7 @@ use crate::diesel::{
 };
 use actix_session::Session;
 use sailfish::TemplateOnce;
+use actix_web::dev::ConnectionInfo;
 
 
 pub fn pages_routes(config: &mut web::ServiceConfig) {
@@ -359,7 +360,7 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
     }
 }
 
-pub async fn history_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
+pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     // первая отрисовка страницы - организуем скрытие информации
@@ -379,7 +380,7 @@ pub async fn history_page(req: HttpRequest, session: Session) -> actix_web::Resu
         use crate::models::{CookieUser, CookieStat};
         use crate::utils::{get_page, get_or_create_cookie_user_id};
 
-        let user_id = get_or_create_cookie_user_id(&req).await;
+        let user_id = get_or_create_cookie_user_id(conn, &req).await;
         let _connection = establish_connection();
         let _cookie_user = cookie_users
             .filter(schema::cookie_users::id.eq(&user_id))

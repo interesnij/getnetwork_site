@@ -27,6 +27,7 @@ use actix_multipart::{Field, Multipart};
 use std::borrow::BorrowMut;
 //use futures_util::stream::StreamExt as _;
 use sailfish::TemplateOnce;
+use actix_web::dev::ConnectionInfo;
 
 
 pub fn auth_routes(config: &mut web::ServiceConfig) {

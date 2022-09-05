@@ -31,6 +31,7 @@ use actix_session::Session;
 use actix_multipart::Multipart;
 use sailfish::TemplateOnce;
 use crate::models::User;
+use actix_web::dev::ConnectionInfo;
 
 
 pub fn order_routes(config: &mut web::ServiceConfig) {
@@ -338,7 +339,7 @@ pub async fn create_order_page() -> actix_web::Result<HttpResponse> {
     Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
 }
 
-pub async fn create_order(req: HttpRequest, mut payload: Multipart) -> impl Responder {
+pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: Multipart) -> impl Responder {
     use crate::schema::serve::dsl::serve;
     use crate::models::{
         TechCategoriesItem,
@@ -353,7 +354,7 @@ pub async fn create_order(req: HttpRequest, mut payload: Multipart) -> impl Resp
     };
 
     let _connection = establish_connection();
-    let user_id = get_or_create_cookie_user_id(&req).await;
+    let user_id = get_or_create_cookie_user_id(conn, &req).await;
 
     if user_id != 0 {
         let form = order_form(payload.borrow_mut(), user_id).await;
