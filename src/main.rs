@@ -29,7 +29,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
-        let cors = Cors::permissive();
+        //let cors = Cors::permissive();
             //Cors::default()
             //.allowed_origin("127.0.0.1:6379")
             //.allowed_origin("194.58.90.123")
@@ -39,7 +39,7 @@ async fn main() -> std::io::Result<()> {
             //.allowed_methods(vec!["GET", "POST"])
             //.max_age(3600);
         App::new()
-            .wrap(cors)
+            //.wrap(cors)
             .wrap(middleware::Compress::default())
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .service(_files)
