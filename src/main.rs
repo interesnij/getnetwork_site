@@ -30,8 +30,8 @@ async fn main() -> std::io::Result<()> {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
         let cors = Cors::default()
-            .allowed_origin("http://вебсервисы.рф")
-            .allowed_origin("https://вебсервисы.рф")
+            //.allowed_origin("http://вебсервисы.рф")
+            //.allowed_origin("https://вебсервисы.рф")
             //.allowed_origin("194.58.90.123:8084")
             .allowed_methods(vec!["GET", "POST"])
             .max_age(3600);
