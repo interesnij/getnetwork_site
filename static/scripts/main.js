@@ -122,7 +122,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   formData.append('seconds', $seconds);
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', "http://194.58.90.123:80/create_history/", true );
+  link.open( 'POST', "http://вебсервисы.рф/create_history/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     console.log("Данные отправлены!");
