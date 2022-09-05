@@ -46,13 +46,13 @@ pub struct SParams {
 }
 
 pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
-    use std::net::IpAddr;
-    use futures::executor::block_on;
+    //use std::net::IpAddr;
+    //use futures::executor::block_on;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let result = external_ip::get_ip();
+    //let result = external_ip::get_ip();
     //let value : Option<IpAddr> = block_on(result);
-    println!("ip {:?}", result.await.unwrap());
+    //println!("ip {:?}", result.await.unwrap());
     // первая отрисовка страницы - организуем скрытие информации
     if is_ajax == 0 {
         get_first_load_page (
