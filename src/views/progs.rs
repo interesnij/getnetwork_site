@@ -104,7 +104,7 @@ pub async fn create_c_user(conn: ConnectionInfo, req: &HttpRequest) -> CookieUse
     return _new_user;
 }
 
-pub async fn get_c_user(id: i32, req: &HttpRequest) -> CookieUser {
+pub async fn get_c_user(conn: ConnectionInfo, id: i32, req: &HttpRequest) -> CookieUser {
     if id > 0 {
         use crate::schema;
         use crate::schema::cookie_users::dsl::cookie_users;
@@ -119,11 +119,11 @@ pub async fn get_c_user(id: i32, req: &HttpRequest) -> CookieUser {
             return _users.into_iter().nth(0).unwrap();
         }
         else {
-            return create_c_user(&req).await;
+            return create_c_user(conn, &req).await;
         }
     }
     else {
-        return create_c_user(&req).await;
+        return create_c_user(conn, &req).await;
     }
 }
 
@@ -215,14 +215,14 @@ pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
     form
 }
 
-pub async fn create_history(mut payload: Multipart, req: HttpRequest) -> web::Json<HistoryResponse> {
+pub async fn create_history(conn: ConnectionInfo, mut payload: Multipart, req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::schema;
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
 
     let form = history_form(payload.borrow_mut()).await;
     let p_id = form.user_id;
-    let user = get_c_user(p_id, &req).await;
+    let user = get_c_user(conn, p_id, &req).await;
 
     let p_object_id = form.object_id;
     let p_page_id = form.page_id;
@@ -361,8 +361,8 @@ pub struct ObjectResponse {
     pub country_ru: Option<String>,
     pub country_en: Option<String>,
 }
-pub async fn object_history(req: HttpRequest, id: web::Path<i32>) -> web::Json<ObjectResponse> {
-    let _user = get_c_user(*id, &req).await;
+pub async fn object_history(conn: ConnectionInfo, req: HttpRequest, id: web::Path<i32>) -> web::Json<ObjectResponse> {
+    let _user = get_c_user(conn, *id, &req).await;
     return web::Json( ObjectResponse {
         id:         _user.id,
         ip:         _user.ip,
