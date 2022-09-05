@@ -45,15 +45,17 @@ pub struct SParams {
     pub q: String,
 }
 
-pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
-    //use std::net::IpAddr;
-    //use futures::executor::block_on;
-
+use actix_web::dev::ConnectionInfo;
+pub async fn index_page(conn: ConnectionInfo, req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    //let result = external_ip::get_ip();
-    //let value : Option<IpAddr> = block_on(result);
-    //println!("ip {:?}", result.await.unwrap());
-    // первая отрисовка страницы - организуем скрытие информации
+    let ip = conn.realip_remote_addr();
+    if ip.is_some() {
+        println!("ip {:?}", ip.unwrap());
+    }
+    else {
+        println!("ip bad");
+    }
+
     if is_ajax == 0 {
         get_first_load_page (
             &session,
