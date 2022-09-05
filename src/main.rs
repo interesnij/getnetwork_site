@@ -29,7 +29,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
-        let cors = Cors::new().supports_credentials();
+        let cors = Cors::permissive();
             //Cors::default()
             //.allowed_origin("127.0.0.1:6379")
             //.allowed_origin("194.58.90.123")
