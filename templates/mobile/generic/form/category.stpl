@@ -38,9 +38,9 @@
                 </a>
                 <br />
                 <span style="font-size:80%">
-                  <span class="price_td"><span class="price"><%= first_child.price %></span> ₽</span>
+                  <span class="price_td"><span class="price">-</span> ₽</span>
                   &nbsp;&nbsp;
-                  <span class="hours"><%= first_child.man_hours %></span>
+                  <span class="hours">-</span>
                 </span>
               </td>
               <td class="border-top action_text border-top" style="width:30%">
