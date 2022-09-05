@@ -124,7 +124,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   port = window.location.protocol == "https:" ? "194.58.90.123:8082" : "194.58.90.123:8084";
   console.log(window.location.protocol);
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', "http://" + port + "/create_history/", true );
+  link.open( 'POST', "http://" + port + "/create_history", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     console.log("Данные отправлены!");
