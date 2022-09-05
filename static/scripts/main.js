@@ -121,7 +121,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   formData.append('height', $height);
   formData.append('seconds', $seconds);
 
-  port = window.location.protocol == "https" ? "вебсервисы.рф:8082" : "194.58.90.123:8084";
+  port = window.location.protocol == "https" ? "194.58.90.123:8082" : "194.58.90.123:8084";
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', "http://" + port + "/create_history/", true );
   link.onreadystatechange = function () {
@@ -164,7 +164,7 @@ function get_or_create_cookie_user() {
   ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   ajax_link.overrideMimeType("application/json");
 
-  port = window.location.protocol == "https" ? "вебсервисы.рф:8082" : "194.58.90.123:8084";
+  port = window.location.protocol == "https" ? "194.58.90.123:8082" : "194.58.90.123:8084";
 
   ajax_link.open( 'GET', "http://" + port + "/object_history/" + id + "/", true );
   ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
