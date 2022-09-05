@@ -22,6 +22,7 @@ use actix_multipart::{Field, Multipart};
 use futures::StreamExt;
 use std::str;
 use std::borrow::BorrowMut;
+use actix_web::dev::ConnectionInfo;
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {
@@ -31,10 +32,9 @@ pub fn progs_routes(config: &mut web::ServiceConfig) {
 }
 
 
-pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
+pub async fn create_c_user(conn: ConnectionInfo, req: &HttpRequest) -> CookieUser {
     use crate::models::NewCookieUser;
     use crate::schema;
-    use actix_web::dev::ConnectionInfo;
 
     #[derive(Debug, Deserialize)]
     pub struct UserLoc {

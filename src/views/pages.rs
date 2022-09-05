@@ -45,7 +45,7 @@ pub struct SParams {
     pub q: String,
 }
 
-pub async fn index_page(conn: ConnectionInfo, req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
+pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
