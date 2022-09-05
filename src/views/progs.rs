@@ -58,10 +58,6 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
     }
 
     let _connection = establish_connection();
-    let mut ipaddr: String = String::new();
-    if let Some(val) = &req.peer_addr() {
-        ipaddr = val.ip().to_string();
-    };
     let mut device: i16 = 1;
     for header in req.headers().into_iter() {
         if header.0 == "user-agent" {
@@ -72,7 +68,10 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
             break;
         }
     };
-
+    let mut ipaddr: String = String::new();
+    if let Some(val) = &req.peer_addr() {
+        ipaddr = val.ip().to_string();
+    };
     let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_string() + &ipaddr;
     let _geo_request = reqwest::get(_geo_url).await.expect("E.");
     let new_request = _geo_request.text().await.unwrap();
