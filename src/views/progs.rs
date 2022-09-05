@@ -69,7 +69,7 @@ pub async fn create_c_user(conn: ConnectionInfo, req: &HttpRequest) -> CookieUse
             break;
         }
     };
-    let conn: ConnectionInfo;
+
     let mut ipaddr: String = String::new();
     let ip = conn.realip_remote_addr();
     if ip.is_some() {
