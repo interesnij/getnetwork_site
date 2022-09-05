@@ -32,7 +32,7 @@ async fn main() -> std::io::Result<()> {
         let cors = Cors::default()
             .allowed_origin("127.0.0.1:6379")
             .allowed_origin("194.58.90.123:8084")
-            .allowed_origin("http://вебсервисы.рф")
+            .allowed_origin("вебсервисы.рф")
             //.allowed_origin("https://вебсервисы.рф")
 
             .allowed_methods(vec!["GET", "POST"])
