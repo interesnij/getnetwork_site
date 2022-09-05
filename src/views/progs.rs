@@ -34,6 +34,7 @@ pub fn progs_routes(config: &mut web::ServiceConfig) {
 pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
     use crate::models::NewCookieUser;
     use crate::schema;
+    use actix_web::dev::ConnectionInfo;
 
     #[derive(Debug, Deserialize)]
     pub struct UserLoc {
@@ -68,8 +69,13 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
             break;
         }
     };
+
     let mut ipaddr: String = String::new();
-    if let Some(val) = &req.peer_addr() {
+    let ip = ConnectionInfo::realip_remote_addr();
+    if ip.is_some() {
+        ipaddr = ip.unwrap().to_string();
+    }
+    else if let Some(val) = &req.peer_addr() {
         ipaddr = val.ip().to_string();
     };
     let _geo_url = "http://api.sypexgeo.net/J5O6d/json/".to_string() + &ipaddr;

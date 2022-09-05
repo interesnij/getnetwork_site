@@ -45,23 +45,14 @@ pub struct SParams {
     pub q: String,
 }
 
-use actix_web::dev::ConnectionInfo;
 pub async fn index_page(conn: ConnectionInfo, req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
-        let ip = conn.realip_remote_addr();
-        let real_ip: String;
-        if ip.is_some() {
-            real_ip = ip.unwrap().to_string();
-        }
-        else {
-            real_ip = "not ip".to_string();
-        }
         get_first_load_page (
             &session,
             is_desctop,
-            "Главная страница ".to_string() + &real_ip,
+            "Главная страница ".to_string(),
             "вебсервисы - Комплексное, экспертное создание и развитие высоконагруженных веб-ресурсов".to_string(),
             "/".to_string(),
             "/static/images/dark/store.jpg".to_string()
