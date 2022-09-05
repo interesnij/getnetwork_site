@@ -7,6 +7,7 @@ use actix_web::{
 //use crate::schema;
 use crate::{errors::AuthError, vars};
 use crate::models::SessionUser;
+use actix_web::dev::ConnectionInfo;
 
 
 pub fn hash_password(password: &str) -> String {
@@ -81,7 +82,7 @@ pub async fn get_cookie_user_id(req: &HttpRequest) -> i32 {
     };
     user_id
 }
-pub async fn get_or_create_cookie_user_id(req: &HttpRequest) -> i32 {
+pub async fn get_or_create_cookie_user_id(conn: ConnectionInfo, req: &HttpRequest) -> i32 {
     let mut user_id = 0;
     for header in req.headers().into_iter() {
         if header.0 == "cookie" {
@@ -100,13 +101,13 @@ pub async fn get_or_create_cookie_user_id(req: &HttpRequest) -> i32 {
     if user_id == 0 {
         use crate::views::create_c_user;
 
-        let user = create_c_user(&req).await;
+        let user = create_c_user(conn, &req).await;
         user_id = user.id;
     }
     else {
         use crate::views::get_c_user;
 
-        let user = get_c_user(user_id, &req).await;
+        let user = get_c_user(conn, user_id, &req).await;
         user_id = user.id;
     }
     user_id
