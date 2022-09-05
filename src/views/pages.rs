@@ -53,7 +53,7 @@ pub async fn index_page(conn: ConnectionInfo, req: HttpRequest, session: Session
         let ip = conn.realip_remote_addr();
         let real_ip: String;
         if ip.is_some() {
-            real_ip = ip.unwrap();
+            real_ip = ip.unwrap().to_string();
         }
         else {
             real_ip = "not ip".to_string();
