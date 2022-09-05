@@ -71,7 +71,7 @@ pub async fn create_c_user(req: &HttpRequest) -> CookieUser {
     };
     let conn: ConnectionInfo;
     let mut ipaddr: String = String::new();
-    let ip = conn::realip_remote_addr();
+    let ip = conn.realip_remote_addr();
     if ip.is_some() {
         ipaddr = ip.unwrap().to_string();
     }
