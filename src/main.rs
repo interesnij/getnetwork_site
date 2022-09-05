@@ -24,6 +24,7 @@ mod views;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     use actix_redis::RedisSession;
+    use actix_cors::Cors;
 
     HttpServer::new(|| {
         let _files = Files::new("/static", "static/").show_files_listing();
