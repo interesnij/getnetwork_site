@@ -51,8 +51,8 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let result = external_ip::get_ip();
-    let value : Option<IpAddr> = block_on(result);
-    println!("ip {:?}", value);
+    //let value : Option<IpAddr> = block_on(result);
+    println!("ip {:?}", result);
     // первая отрисовка страницы - организуем скрытие информации
     if is_ajax == 0 {
         get_first_load_page (
