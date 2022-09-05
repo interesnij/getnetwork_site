@@ -121,8 +121,9 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   formData.append('height', $height);
   formData.append('seconds', $seconds);
 
+  port = window.location.protocol == "https" ? "8084" : "8082";
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', "http://вебсервисы.рф:8084/create_history/", true );
+  link.open( 'POST', "http://вебсервисы.рф:" + port + "/create_history/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     console.log("Данные отправлены!");
@@ -162,7 +163,10 @@ function get_or_create_cookie_user() {
   }
   ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   ajax_link.overrideMimeType("application/json");
-  ajax_link.open( 'GET', "http://вебсервисы.рф:8084/object_history/" + id + "/", true );
+
+  port = window.location.protocol == "https" ? "8084" : "8082";
+
+  ajax_link.open( 'GET', "http://вебсервисы.рф:" + port + "/object_history/" + id + "/", true );
   ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   ajax_link.onreadystatechange = function () {
     if ( this.readyState == 4 && this.status == 200 ) {
