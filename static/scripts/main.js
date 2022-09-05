@@ -91,6 +91,40 @@ function get_page_view_time(count) {
   }, 1000);
 };
 
+function getUserIP(onNewIP) {
+    var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+    var pc = new myPeerConnection({
+        iceServers: []
+    }),
+    noop = function() {},
+    localIPs = {},
+    ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
+    key;
+
+    function iterateIP(ip) {
+        if (!localIPs[ip]) onNewIP(ip);
+        localIPs[ip] = true;
+    }
+
+    pc.createDataChannel("");
+    pc.createOffer().then(function(sdp) {
+        sdp.sdp.split('\n').forEach(function(line) {
+            if (line.indexOf('candidate') < 0) return;
+            line.match(ipRegex).forEach(iterateIP);
+        });
+        pc.setLocalDescription(sdp, noop, noop);
+    }).catch(function(reason) {
+    });
+    pc.onicecandidate = function(ice) {
+        if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
+        ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
+    };
+}
+
+getUserIP(function(ip){
+    alert("Got IP! :" + ip);
+});
+
 function get_stat_meta($link, $title, $object_id, $page_id) {
   //return
   if (!$page_id) {
@@ -124,7 +158,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   port = window.location.protocol == "https:" ? "194.58.90.123:8082" : "194.58.90.123:8084";
   console.log(window.location.protocol);
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', "http://" + port + "/create_history", true );
+  link.open( 'POST', "http://" + port + "/create_history/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     console.log("Данные отправлены!");
