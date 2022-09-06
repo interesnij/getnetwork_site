@@ -497,36 +497,36 @@ on('body', 'change', '.close_tech_categories', function() {
 
 
 on('body', 'click', '.hide_blog', function() {
-  get_and_change_btn("/hide_blog/", true);
+  get_and_change_btn("/hide_blog/" + this.getAttribute("data-pk") + "/", true);
 });
 on('body', 'click', '.publish_blog', function() {
-  get_and_change_btn("/publish_blog/", false);
+  get_and_change_btn("/publish_blog/" + this.getAttribute("data-pk") + "/", false);
 });
 
 on('body', 'click', '.hide_service', function() {
-  get_and_change_btn("/hide_service/", true);
+  get_and_change_btn("/hide_service/" + this.getAttribute("data-pk") + "/", true);
 });
 on('body', 'click', '.publish_service', function() {
-  get_and_change_btn("/publish_service/", false);
+  get_and_change_btn("/publish_service/" + this.getAttribute("data-pk") + "/", false);
 });
 
 on('body', 'click', '.hide_store', function() {
-  get_and_change_btn("/hide_store/", true);
+  get_and_change_btn("/hide_store/" + this.getAttribute("data-pk") + "/", true);
 });
 on('body', 'click', '.publish_store', function() {
-  get_and_change_btn("/publish_store/", false);
+  get_and_change_btn("/publish_store/" + this.getAttribute("data-pk") + "/", false);
 });
 
 on('body', 'click', '.hide_wiki', function() {
-  get_and_change_btn("/hide_wiki/", true);
+  get_and_change_btn("/hide_wiki/" + this.getAttribute("data-pk") + "/", true);
 });
 on('body', 'click', '.publish_wiki', function() {
-  get_and_change_btn("/publish_wiki/", false);
+  get_and_change_btn("/publish_wiki/" + this.getAttribute("data-pk") + "/", false);
 });
 
 on('body', 'click', '.hide_work', function() {
-  get_and_change_btn("/hide_work/", true);
+  get_and_change_btn("/hide_work/" + this.getAttribute("data-pk") + "/", true);
 });
 on('body', 'click', '.publish_work', function() {
-  get_and_change_btn("/publish_work/", false);
+  get_and_change_btn("/publish_work/" + this.getAttribute("data-pk") + "/", false);
 });
