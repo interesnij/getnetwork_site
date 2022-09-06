@@ -150,6 +150,17 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   window.clearInterval(intervalListener2);
 }
 window.onbeforeunload = function() {
+  $link = document.location.pathname;
+  meta_block = document.body.querySelector(".doc_title");
+  if (meta_block.getAttribute("data-id")) {
+    $object_id = meta_block.getAttribute("data-id");
+  }
+  else {
+    $object_id = ""
+  }
+  $page_id = meta_block.getAttribute("page-id");
+  $title = meta_block.getAttribute("data-title");
+  get_stat_meta($link, $title, $object_id, $page_id);
   return "Есть несохранённые изменения. Всё равно уходим?";
 };
 
