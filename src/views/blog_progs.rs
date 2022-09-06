@@ -64,10 +64,14 @@ pub fn blog_routes(config: &mut web::ServiceConfig) {
         .route(web::get().to(edit_content_blog_page))
         .route(web::post().to(edit_content_blog))
     );
-    config.route("/delete_blog/{id}/", web::get().to(delete_blog));
-    config.route("/delete_blog_category/{id}/", web::get().to(delete_blog_category));
     config.service(web::resource("/blog/{cat_id}/{blog_id}/").route(web::get().to(get_blog_page)));
     config.service(web::resource("/blogs/{id}/").route(web::get().to(blog_category_page)));
+
+    config.route("/delete_blog/{id}/", web::get().to(delete_blog));
+    config.route("/delete_blog_category/{id}/", web::get().to(delete_blog_category));
+    config.route("/delete_blog/{id}/", web::get().to(delete_blog));
+    config.route("/publish/{id}/", web::get().to(publish_blog));
+    config.route("/hide/{id}/", web::get().to(hide_blog));
 }
 
 pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
@@ -788,6 +792,53 @@ pub async fn delete_blog_category(session: Session, _id: web::Path<i32>) -> impl
             let _cat_id: i32 = *_id;
             let _category = blog_categories.filter(schema::blog_categories::id.eq(_cat_id)).load::<BlogCategories>(&_connection).expect("E");
             diesel::delete(blog_categories.filter(schema::blog_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn publish_blog(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::blogs::dsl::blogs;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _blog = blogs
+                .filter(schema::blogs::id.eq(_id))
+                .load::<Blog>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_blog)
+                .set(schema::blogs::is_active.eq(true))
+                .get_result::<Blog>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn hide_blog(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::blogs::dsl::blogs;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _blog = blogs
+                .filter(schema::blogs::id.eq(_id))
+                .load::<Blog>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_blog)
+                .set(schema::blogs::is_active.eq(false))
+                .get_result::<Blog>(&_connection)
+                .expect("Error.");
         }
     }
     HttpResponse::Ok()
