@@ -1128,3 +1128,8 @@ on('body', 'click', '#create_feedback_btn', function() {
   }};
   link.send(form_data);
 });
+
+window.addEventListener('popstate', function (e) {
+  console.log("lendth", history.lendth);
+  console.log("state", history.state)
+}
