@@ -167,6 +167,11 @@ function ajax_get_reload(url) {
     }
     ajax_link.send();
 };
+window.addEventListener('popstate', function (e) {
+  console.log(history.state["url"]);
+  ajax_get_reload(history.state["url"]);
+  //return false
+})
 
 on('body', 'input', '.desctop_folder_search', function() {
     _this = this;
@@ -201,8 +206,3 @@ on('body', 'input', '.desctop_folder_search', function() {
 });
 
 check_first_load();
-
-window.addEventListener('popstate', function (e) {
-  ajax_get_reload(history.state["url"]);
-  //return false
-})
