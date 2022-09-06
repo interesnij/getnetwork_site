@@ -66,10 +66,11 @@
     box-shadow: 0px 0px 200px rgba(0, 0, 0, .2) !important;
 }
 
-body{
+body {
     color: rgba(255,255,255, 0.8) !important;
     background-image: url('/static/images/dark_wood.jpg') !important;
     background-size: unset !important;
+    font-family: Special Elite,cursive,Georgia,Times New Roman,Times,serif;
 }
 
 .window_fullscreen, .card_fullscreen, .hover, pre {

@@ -63,10 +63,10 @@
   border-top: 1px solid rgba(127,127,127, 0.7) !important;
 }
 
-body{
+body {
     color: rgba(0,0,0, 0.9) !important;
     background-color: #fee6a1 !important;
-
+    font-family: "Open Sans",arial,sans-serif;
 }
 .window_fullscreen, .card_fullscreen, .hover, pre {
   color: rgba(0,0,0, 0.9) !important;

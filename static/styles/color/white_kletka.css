@@ -69,6 +69,7 @@
     border-top: 1px dotted #eaeaea !important;
 }
 body {
+	font-family: Special Elite,cursive,Georgia,Times New Roman,Times,serif;
   color: rgba(0,0,0, 0.9) !important;
   background-image: url("/static/images/skin/yellow-paper.jpg") !important;
 }
