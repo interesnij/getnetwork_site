@@ -26,6 +26,11 @@
                             | <a class="ajax" href="/edit_blog/<%= object.id %>/">~</a>
                             | <a class="ajax" href="/edit_content_blog/<%= object.id %>/">Aa</a>
                             | <a class="pointer remove_blog" data-pk="<%= object.id %>">x</a>
+                            <% if object.is_active { %>
+                            | <a class="pointer hide_blog" data-pk="<%= object.id %>">🛇</a>
+                            <% } else { %>
+                            | <a class="pointer publish_blog" data-pk="<%= object.id %>">👁</a>
+                            <% } %>
                           <% } %>
 
                           <span class="separator">&nbsp;</span>

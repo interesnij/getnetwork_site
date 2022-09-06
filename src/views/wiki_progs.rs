@@ -66,6 +66,9 @@ pub fn wiki_routes(config: &mut web::ServiceConfig) {
     );
     config.route("/delete_wiki/{id}/", web::get().to(delete_wiki));
     config.route("/delete_wiki_category/{id}/", web::get().to(delete_wiki_category));
+    config.route("/publish_wiki/{id}/", web::get().to(publish_wiki));
+    config.route("/hide_wiki/{id}/", web::get().to(hide_wiki));
+
     config.service(web::resource("/wiki/{cat_id}/{wiki_id}/").route(web::get().to(get_wiki_page)));
     config.service(web::resource("/wikis/{id}/").route(web::get().to(wiki_category_page)));
 }
@@ -1291,4 +1294,51 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
             }
         }
     }
+}
+
+pub async fn publish_wiki(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::wikis::dsl::wikis;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _wiki = wikis
+                .filter(schema::wikis::id.eq(_id))
+                .load::<Wiki>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_wiki)
+                .set(schema::wikis::is_active.eq(true))
+                .get_result::<Wiki>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn hide_wiki(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::wikis::dsl::wikis;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _wiki = wikis
+                .filter(schema::wikis::id.eq(_id))
+                .load::<Wiki>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_wiki)
+                .set(schema::wikis::is_active.eq(false))
+                .get_result::<Wiki>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
 }

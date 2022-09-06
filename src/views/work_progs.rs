@@ -65,6 +65,9 @@ pub fn work_routes(config: &mut web::ServiceConfig) {
     );
     config.route("/delete_work/{id}/", web::get().to(delete_work));
     config.route("/delete_work_category/{id}/", web::get().to(delete_work_category));
+    config.route("/publish_work/{id}/", web::get().to(publish_work));
+    config.route("/hide_work/{id}/", web::get().to(hide_work));
+
     config.service(web::resource("/work/{cat_id}/{work_id}/").route(web::get().to(get_work_page)));
     config.service(web::resource("/works/{id}/").route(web::get().to(work_category_page)));
 }
@@ -1508,4 +1511,51 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
             }
         }
     }
+}
+
+pub async fn publish_work(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::works::dsl::works;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _work = works
+                .filter(schema::works::id.eq(_id))
+                .load::<Work>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_work)
+                .set(schema::works::is_active.eq(true))
+                .get_result::<Work>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn hide_work(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::works::dsl::works;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _work = works
+                .filter(schema::works::id.eq(_id))
+                .load::<Work>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_work)
+                .set(schema::works::is_active.eq(false))
+                .get_result::<Work>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
 }

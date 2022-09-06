@@ -65,6 +65,9 @@ pub fn service_routes(config: &mut web::ServiceConfig) {
     );
     config.route("/delete_service/{id}/", web::get().to(delete_service));
     config.route("/delete_service_category/{id}/", web::get().to(delete_service_category));
+    config.route("/publish_service/{id}/", web::get().to(publish_service));
+    config.route("/hide_service/{id}/", web::get().to(hide_service));
+
     config.service(web::resource("/service/{cat_id}/{service_id}/").route(web::get().to(get_service_page)));
     config.service(web::resource("/services/{id}/").route(web::get().to(service_category_page)));
 }
@@ -1505,4 +1508,51 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
             }
         }
     }
+}
+
+pub async fn publish_service(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::services::dsl::services;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _service = services
+                .filter(schema::services::id.eq(_id))
+                .load::<Service>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_service)
+                .set(schema::services::is_active.eq(true))
+                .get_result::<Service>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn hide_service(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::services::dsl::services;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _service = services
+                .filter(schema::services::id.eq(_id))
+                .load::<Service>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_service)
+                .set(schema::services::is_active.eq(false))
+                .get_result::<Service>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
 }

@@ -137,6 +137,21 @@ on('body', 'click', '#edit_help_category_btn', function() {
   link.send(form_data);
 });
 
+function get_and_change_btn(url, hide) {
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'GET', url, true );
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    if (hide) {
+      this.innerHTML = "👁";
+    }
+    else {
+      this.innerHTML = "🛇";
+    }
+  }};
+  link.send(form_data);
+};
+
 function send_category_data(form, url) {
   if (!form.querySelector(".form_title").value) {
     form.querySelector(".form_title").style.setProperty('border', '1px #FF0000 solid', 'important');
@@ -478,4 +493,40 @@ on('body', 'change', '.close_tech_categories', function() {
       next.querySelector('[data-pk=' + '"' + options[i].value + '"' + ']').classList.remove("hidden");
     }
   }
+});
+
+
+on('body', 'click', '.hide_blog', function() {
+  get_and_change_btn("/hide_blog/", true);
+});
+on('body', 'click', '.publish_blog', function() {
+  get_and_change_btn("/publish_blog/", false);
+});
+
+on('body', 'click', '.hide_service', function() {
+  get_and_change_btn("/hide_service/", true);
+});
+on('body', 'click', '.publish_service', function() {
+  get_and_change_btn("/publish_service/", false);
+});
+
+on('body', 'click', '.hide_store', function() {
+  get_and_change_btn("/hide_store/", true);
+});
+on('body', 'click', '.publish_store', function() {
+  get_and_change_btn("/publish_store/", false);
+});
+
+on('body', 'click', '.hide_wiki', function() {
+  get_and_change_btn("/hide_wiki/", true);
+});
+on('body', 'click', '.publish_wiki', function() {
+  get_and_change_btn("/publish_wiki/", false);
+});
+
+on('body', 'click', '.hide_work', function() {
+  get_and_change_btn("/hide_work/", true);
+});
+on('body', 'click', '.publish_work', function() {
+  get_and_change_btn("/publish_work/", false);
 });

@@ -65,6 +65,9 @@ pub fn store_routes(config: &mut web::ServiceConfig) {
     );
     config.route("/delete_store/{id}/", web::get().to(delete_store));
     config.route("/delete_store_category/{id}/", web::get().to(delete_store_category));
+    config.route("/publish_store/{id}/", web::get().to(publish_store));
+    config.route("/hide_store/{id}/", web::get().to(hide_store));
+
     config.service(web::resource("/store/{cat_id}/{store_id}/").route(web::get().to(get_store_page)));
     config.service(web::resource("/stores/{id}/").route(web::get().to(store_category_page)));
 }
@@ -1503,4 +1506,51 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
             }
         }
     }
+}
+
+pub async fn publish_blog(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::blogs::dsl::blogs;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _blog = blogs
+                .filter(schema::blogs::id.eq(_id))
+                .load::<Blog>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_blog)
+                .set(schema::blogs::is_active.eq(true))
+                .get_result::<Blog>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn hide_store(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::stores::dsl::stores;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _store = stores
+                .filter(schema::stores::id.eq(_id))
+                .load::<Store>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_store)
+                .set(schema::stores::is_active.eq(false))
+                .get_result::<Store>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
 }

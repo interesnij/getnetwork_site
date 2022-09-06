@@ -30,6 +30,11 @@
                             | <a class="ajax" href="/edit_work/<%= object.id %>/">~</a>
                             | <a class="ajax" href="/edit_content_work/<%= object.id %>/?content=">Aa</a>
                             | <a class="pointer remove_work" data-pk="<%= object.id %>">x</a>
+                            <% if object.is_active { %>
+                            | <a class="pointer hide_work" data-pk="<%= object.id %>">🛇</a>
+                            <% } else { %>
+                            | <a class="pointer publish_work" data-pk="<%= object.id %>">👁</a>
+                            <% } %>
                             <% } %>
                         </p>
                         <p>

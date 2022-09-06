@@ -23,6 +23,11 @@
                 | <a class="ajax" href="/edit_service/<%= object.id %>/">~</a>
                 | <a class="ajax" href="/edit_content_service/<%= object.id %>/?content=">Aa</a>
                 | <a class="pointer remove_service" data-pk="<%= object.id %>">x</a>
+                <% if object.is_active { %>
+                | <a class="pointer hide_service" data-pk="<%= object.id %>">🛇</a>
+                <% } else { %>
+                | <a class="pointer publish_service" data-pk="<%= object.id %>">👁</a>
+                <% } %>
                 <span class="separator">&nbsp;</span>
                 <% } %>
             </div>

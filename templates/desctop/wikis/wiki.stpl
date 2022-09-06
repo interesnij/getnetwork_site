@@ -28,6 +28,11 @@
                             | <a class="ajax" href="/edit_wiki/<%= object.id %>/">~</a>
                             | <a class="ajax" href="/edit_content_wiki/<%= object.id %>/?content=">Aa</a>
                             | <a class="pointer remove_wiki" data-pk="<%= object.id %>">x</a>
+                            <% if object.is_active { %>
+                            | <a class="pointer hide_wiki" data-pk="<%= object.id %>">🛇</a>
+                            <% } else { %>
+                            | <a class="pointer publish_wiki" data-pk="<%= object.id %>">👁</a>
+                            <% } %>
                           <% } %>
                           <span class="separator">&nbsp;</span>
                         </div>

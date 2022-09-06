@@ -69,9 +69,8 @@ pub fn blog_routes(config: &mut web::ServiceConfig) {
 
     config.route("/delete_blog/{id}/", web::get().to(delete_blog));
     config.route("/delete_blog_category/{id}/", web::get().to(delete_blog_category));
-    config.route("/delete_blog/{id}/", web::get().to(delete_blog));
-    config.route("/publish/{id}/", web::get().to(publish_blog));
-    config.route("/hide/{id}/", web::get().to(hide_blog));
+    config.route("/publish_blog/{id}/", web::get().to(publish_blog));
+    config.route("/hide_blog/{id}/", web::get().to(hide_blog));
 }
 
 pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
@@ -797,53 +796,6 @@ pub async fn delete_blog_category(session: Session, _id: web::Path<i32>) -> impl
     HttpResponse::Ok()
 }
 
-pub async fn publish_blog(session: Session, _id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::schema::blogs::dsl::blogs;
-
-            let _connection = establish_connection();
-            let _id: i32 = *_id;
-            let _blog = blogs
-                .filter(schema::blogs::id.eq(_id))
-                .load::<Blog>(&_connection)
-                .expect("E")
-                .into_iter()
-                .nth(0)
-                .unwrap();
-            diesel::update(&_blog)
-                .set(schema::blogs::is_active.eq(true))
-                .get_result::<Blog>(&_connection)
-                .expect("Error.");
-        }
-    }
-    HttpResponse::Ok()
-}
-pub async fn hide_blog(session: Session, _id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::schema::blogs::dsl::blogs;
-
-            let _connection = establish_connection();
-            let _id: i32 = *_id;
-            let _blog = blogs
-                .filter(schema::blogs::id.eq(_id))
-                .load::<Blog>(&_connection)
-                .expect("E")
-                .into_iter()
-                .nth(0)
-                .unwrap();
-            diesel::update(&_blog)
-                .set(schema::blogs::is_active.eq(false))
-                .get_result::<Blog>(&_connection)
-                .expect("Error.");
-        }
-    }
-    HttpResponse::Ok()
-}
-
 pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_ajax;
     use schema::blogs::dsl::blogs;
@@ -1350,4 +1302,51 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
             }
         }
     }
+}
+
+pub async fn publish_blog(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::blogs::dsl::blogs;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _blog = blogs
+                .filter(schema::blogs::id.eq(_id))
+                .load::<Blog>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_blog)
+                .set(schema::blogs::is_active.eq(true))
+                .get_result::<Blog>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn hide_blog(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::blogs::dsl::blogs;
+
+            let _connection = establish_connection();
+            let _id: i32 = *_id;
+            let _blog = blogs
+                .filter(schema::blogs::id.eq(_id))
+                .load::<Blog>(&_connection)
+                .expect("E")
+                .into_iter()
+                .nth(0)
+                .unwrap();
+            diesel::update(&_blog)
+                .set(schema::blogs::is_active.eq(false))
+                .get_result::<Blog>(&_connection)
+                .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
 }
