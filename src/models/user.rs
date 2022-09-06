@@ -231,6 +231,7 @@ impl CookieStat {
     }
     pub fn create(user_id: i32, page: i16, link: String,
         title: String, height: f64, seconds: i32) -> Json<HistoryResponse> {
+        use chrono::Duration;
 
         let _connection = establish_connection();
         let _h = NewCookieStat {
@@ -240,7 +241,7 @@ impl CookieStat {
             title:   title.clone(),
             height:  height,
             seconds: seconds,
-            created: chrono::Local::now().naive_utc(),
+            created: chrono::Local::now().naive_utc() + Duration::hours(3), 
         };
         diesel::insert_into(schema::cookie_stats::table)
             .values(&_h)
