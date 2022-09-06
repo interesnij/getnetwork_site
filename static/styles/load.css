@@ -262,14 +262,9 @@ dl dd {
   }
 }
 pre {
-  padding-left: 7px;
+  padding: 7px;
 }
 
-.highlight pre{
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
-}
 .pr-button {
     margin: 30px -20px 0;
     padding-top: 30px;
