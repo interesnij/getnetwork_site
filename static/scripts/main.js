@@ -1128,8 +1128,3 @@ on('body', 'click', '#create_feedback_btn', function() {
   }};
   link.send(form_data);
 });
-
-window.addEventListener('popstate', function (e) {
-  console.log("state", history.state["url"])
-  return false
-})

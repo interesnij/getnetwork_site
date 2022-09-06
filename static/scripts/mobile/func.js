@@ -124,6 +124,11 @@ function ajax_get_reload(url) {
     ajax_link.send();
 };
 
+window.addEventListener('popstate', function (e) {
+  ajax_get_reload(history.state["url"]);
+  return false
+})
+
 function deactivate_nav_buttons() {
   $mobile_nav = document.body.querySelector(".mobile_nav");
   buttons = $mobile_nav.querySelectorAll(".mobile_icon");

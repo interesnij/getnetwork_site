@@ -201,3 +201,8 @@ on('body', 'input', '.desctop_folder_search', function() {
 });
 
 check_first_load();
+
+window.addEventListener('popstate', function (e) {
+  ajax_get_reload(history.state["url"]);
+  return false
+})
