@@ -109,9 +109,13 @@ a.btn-mod:focus{
   background: #DDD1C5 !important;
 }
 
-.btn-mod.btn-border{
+.btn-mod.btn-border {
     color: #151515 !important;
     border: 2px solid #151515 !important;
+}
+.btn-mod.btn-border:hover {
+  color: #000000 !important;
+  background: #DDD1C5 !important;
 }
 
 .form input[type="text"],
