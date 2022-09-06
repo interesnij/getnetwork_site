@@ -261,6 +261,10 @@ dl dd {
     right: 30px !important;
   }
 }
+.pre {
+  padding-left: 7px;
+}
+
 .highlight pre{
     -webkit-border-radius: 0;
     -moz-border-radius: 0;

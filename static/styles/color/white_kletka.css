@@ -84,7 +84,7 @@ body {
   background-color: white !important;
 }
 
-.window_fullscreen, .card_fullscreen, .hover {
+.window_fullscreen, .card_fullscreen, .hover, pre {
   color: rgba(0,0,0, 0.9) !important;
   background-color: rgba(255,255,255, 1) !important;
 }
