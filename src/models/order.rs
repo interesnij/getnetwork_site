@@ -168,6 +168,8 @@ impl NewOrder {
         description: Option<String>,
         user_id:     i32,
     ) -> Self {
+        use chrono::Duration;
+
         NewOrder {
             title:       title,
             types:       types,
@@ -175,7 +177,7 @@ impl NewOrder {
             username:    username,
             email:       email,
             description: description,
-            created:     chrono::Local::now().naive_utc(),
+            created:     chrono::Local::now().naive_utc() + Duration::hours(3),
             user_id:     user_id,
             price:       0,
         }

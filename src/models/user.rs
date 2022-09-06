@@ -241,7 +241,7 @@ impl CookieStat {
             title:   title.clone(),
             height:  height,
             seconds: seconds,
-            created: chrono::Local::now().naive_utc() + Duration::hours(3), 
+            created: chrono::Local::now().naive_utc() + Duration::hours(3),
         };
         diesel::insert_into(schema::cookie_stats::table)
             .values(&_h)

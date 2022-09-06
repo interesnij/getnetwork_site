@@ -306,6 +306,8 @@ impl NewWiki {
         is_active: bool,
         user_id: i32,
     ) -> Self {
+        use chrono::Duration;
+
         NewWiki {
             title:       title,
             description: Some(description),
@@ -313,7 +315,7 @@ impl NewWiki {
             image:       Some(image),
             is_active:   is_active,
             user_id:     user_id,
-            created:     chrono::Local::now().naive_utc(),
+            created:     chrono::Local::now().naive_utc() + Duration::hours(3),
             view:        0,
             height:      0.0,
             seconds:     0,

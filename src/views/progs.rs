@@ -35,6 +35,7 @@ pub fn progs_routes(config: &mut web::ServiceConfig) {
 pub async fn create_c_user(conn: ConnectionInfo, req: &HttpRequest) -> CookieUser {
     use crate::models::NewCookieUser;
     use crate::schema;
+    use chrono::Duration;
 
     #[derive(Debug, Deserialize)]
     pub struct UserLoc {
@@ -95,7 +96,7 @@ pub async fn create_c_user(conn: ConnectionInfo, req: &HttpRequest) -> CookieUse
         country_en: Some(location200.country.name_en),
         height:     0.0,
         seconds:    0,
-        created:    chrono::Local::now().naive_utc(),
+        created:    chrono::Local::now().naive_utc() + Duration::hours(3),
     };
     let _new_user = diesel::insert_into(schema::cookie_users::table)
         .values(&_user)
