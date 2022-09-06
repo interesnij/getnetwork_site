@@ -1311,6 +1311,15 @@ pub async fn publish_wiki(session: Session, _id: web::Path<i32>) -> impl Respond
                 .into_iter()
                 .nth(0)
                 .unwrap();
+
+            let _categories = _wiki.get_categories();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::wiki_categories::count.eq(_category.count + 1))
+                    .get_result::<WikiCategories>(&_connection)
+                    .expect("Error.");
+            };
+
             diesel::update(&_wiki)
                 .set(schema::wikis::is_active.eq(true))
                 .get_result::<Wiki>(&_connection)
@@ -1334,6 +1343,15 @@ pub async fn hide_wiki(session: Session, _id: web::Path<i32>) -> impl Responder 
                 .into_iter()
                 .nth(0)
                 .unwrap();
+
+            let _categories = _wiki.get_categories();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::wiki_categories::count.eq(_category.count - 1))
+                    .get_result::<WikiCategories>(&_connection)
+                    .expect("Error.");
+            };
+
             diesel::update(&_wiki)
                 .set(schema::wikis::is_active.eq(false))
                 .get_result::<Wiki>(&_connection)

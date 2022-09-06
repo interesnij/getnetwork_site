@@ -1525,6 +1525,15 @@ pub async fn publish_service(session: Session, _id: web::Path<i32>) -> impl Resp
                 .into_iter()
                 .nth(0)
                 .unwrap();
+
+            let _categories = _service.get_categories();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::service_categories::count.eq(_category.count + 1))
+                    .get_result::<ServiceCategories>(&_connection)
+                    .expect("Error.");
+            };
+
             diesel::update(&_service)
                 .set(schema::services::is_active.eq(true))
                 .get_result::<Service>(&_connection)
@@ -1548,6 +1557,15 @@ pub async fn hide_service(session: Session, _id: web::Path<i32>) -> impl Respond
                 .into_iter()
                 .nth(0)
                 .unwrap();
+
+            let _categories = _service.get_categories();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::service_categories::count.eq(_category.count - 1))
+                    .get_result::<ServiceCategories>(&_connection)
+                    .expect("Error.");
+            };
+
             diesel::update(&_service)
                 .set(schema::services::is_active.eq(false))
                 .get_result::<Service>(&_connection)

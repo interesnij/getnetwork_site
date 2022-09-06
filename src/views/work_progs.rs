@@ -1528,6 +1528,15 @@ pub async fn publish_work(session: Session, _id: web::Path<i32>) -> impl Respond
                 .into_iter()
                 .nth(0)
                 .unwrap();
+
+            let _categories = _work.get_categories();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::work_categories::count.eq(_category.count + 1))
+                    .get_result::<WorkCategories>(&_connection)
+                    .expect("Error.");
+            };
+
             diesel::update(&_work)
                 .set(schema::works::is_active.eq(true))
                 .get_result::<Work>(&_connection)
@@ -1551,6 +1560,15 @@ pub async fn hide_work(session: Session, _id: web::Path<i32>) -> impl Responder 
                 .into_iter()
                 .nth(0)
                 .unwrap();
+
+            let _categories = _work.get_categories();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::work_categories::count.eq(_category.count - 1))
+                    .get_result::<WorkCategories>(&_connection)
+                    .expect("Error.");
+            };
+
             diesel::update(&_work)
                 .set(schema::works::is_active.eq(false))
                 .get_result::<Work>(&_connection)

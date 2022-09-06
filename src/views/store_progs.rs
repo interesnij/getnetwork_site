@@ -1523,6 +1523,15 @@ pub async fn publish_store(session: Session, _id: web::Path<i32>) -> impl Respon
                 .into_iter()
                 .nth(0)
                 .unwrap();
+
+            let _categories = _store.get_categories();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::store_categories::count.eq(_category.count + 1))
+                    .get_result::<StoreCategories>(&_connection)
+                    .expect("Error.");
+            };
+
             diesel::update(&_store)
                 .set(schema::stores::is_active.eq(true))
                 .get_result::<Store>(&_connection)
@@ -1545,7 +1554,16 @@ pub async fn hide_store(session: Session, _id: web::Path<i32>) -> impl Responder
                 .expect("E")
                 .into_iter()
                 .nth(0)
-                .unwrap();
+            .unwrap();
+
+            let _categories = _store.get_categories();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::store_categories::count.eq(_category.count - 1))
+                    .get_result::<StoreCategories>(&_connection)
+                    .expect("Error.");
+            };
+
             diesel::update(&_store)
                 .set(schema::stores::is_active.eq(false))
                 .get_result::<Store>(&_connection)

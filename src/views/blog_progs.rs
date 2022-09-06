@@ -1319,6 +1319,15 @@ pub async fn publish_blog(session: Session, _id: web::Path<i32>) -> impl Respond
                 .into_iter()
                 .nth(0)
                 .unwrap();
+
+            let _categories = _blog.get_categories();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::blog_categories::count.eq(_category.count + 1))
+                    .get_result::<BlogCategories>(&_connection)
+                    .expect("Error.");
+            };
+
             diesel::update(&_blog)
                 .set(schema::blogs::is_active.eq(true))
                 .get_result::<Blog>(&_connection)
@@ -1341,7 +1350,16 @@ pub async fn hide_blog(session: Session, _id: web::Path<i32>) -> impl Responder 
                 .expect("E")
                 .into_iter()
                 .nth(0)
-                .unwrap();
+            .unwrap();
+
+            let _categories = _blog.get_categories();
+            for _category in _categories.iter() {
+                diesel::update(_category)
+                    .set(schema::blog_categories::count.eq(_category.count - 1))
+                    .get_result::<BlogCategories>(&_connection)
+                    .expect("Error.");
+            };
+
             diesel::update(&_blog)
                 .set(schema::blogs::is_active.eq(false))
                 .get_result::<Blog>(&_connection)

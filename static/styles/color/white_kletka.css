@@ -74,14 +74,7 @@
 }
 body {
   color: rgba(0,0,0, 0.9) !important;
-  background-color: #f2f2f2 !important;
-  background: linear-gradient( #bbb, transparent 1px), linear-gradient( 90deg, #bbb, transparent 1px) !important;
-	background-size: 20px 20px !important;
-	background-position: center center;
-  }
-
-.main-nav{
-  background-color: white !important;
+  background-image: url("/static/images/skin/yellow-paper.jpg") !important;
 }
 
 .window_fullscreen, .card_fullscreen, .hover, pre {
@@ -89,7 +82,7 @@ body {
   background-color: rgba(255,255,255, 1) !important;
 }
 
-a{
+a {
     color: rgba(0,0,0, 0.7) !important;
 }
 a:hover{
