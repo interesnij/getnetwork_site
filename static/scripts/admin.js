@@ -102,7 +102,7 @@ on('body', 'click', '#create_help_category_btn', function() {
   link.open( 'POST', "/help/create_categories/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload("/help/create_categories/");
+    ajax_get_reload("/help/create_categories/", true);
   }};
   link.send(form_data);
 });
@@ -118,7 +118,7 @@ on('body', 'click', '#edit_help_category_btn', function() {
   link.open( 'POST', "/help/edit_category/" + this.getAttribute("data-pk") + "/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload("/help/create_categories/");
+    ajax_get_reload("/help/create_categories/", true);
   } else {
     alert("not ok");
   }};
@@ -146,7 +146,7 @@ function send_category_data(form, url) {
   link.open( 'POST', url, true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload(url)
+    ajax_get_reload(url, true)
   }};
   link.send(form_data);
 };
@@ -205,7 +205,7 @@ function send_post_data(form, url) {
   link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload(url)
+    ajax_get_reload(url, true)
   } else { console.log(link.responseText) }};
   link.send(form_data);
 };

@@ -76,7 +76,7 @@ function check_first_load() {
   }
 }
 
-function ajax_get_reload(url) {
+function ajax_get_reload(url, history_enable) {
   var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url + "?ajax=2", true );
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -101,14 +101,9 @@ function ajax_get_reload(url) {
         rtr.innerHTML = elem_.innerHTML;
         window.scrollTo(0,0);
         document.title = rtr.querySelector(".doc_title").getAttribute("data-title");
-        window.history.pushState (
-          {
-            "url":url,
-            "title":$title,
-
-          },
-          "ajax_reload", url
-        );
+        if (history_enable) {
+          window.history.pushState ({"url":url}, $title, url);
+        }
         hide_nav_first_span();
         hide_nav_second_span();
         get_active_button();
@@ -125,7 +120,7 @@ function ajax_get_reload(url) {
 };
 
 window.addEventListener('popstate', function (e) {
-  ajax_get_reload(history.state["url"]);
+  ajax_get_reload(history.state["url"], false);
   return false
 })
 

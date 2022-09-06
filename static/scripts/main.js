@@ -809,7 +809,7 @@ on('body', 'click', '.ajax', function(event) {
   //  toast_info("Вы уже на этой странице");
   //  return
   //};
-  ajax_get_reload(this.getAttribute("href"))
+  ajax_get_reload(this.getAttribute("href"), true)
 });
 
 
@@ -906,11 +906,11 @@ on('body', 'input', '.general_search', function() {
     value = _this.value;
 
     if (value == "") {
-      ajax_get_reload("/search/");
+      ajax_get_reload("/search/", true);
       return;
     }
     else if (_this.classList.contains("search-field") && !document.body.querySelector(".search_section")) {
-      ajax_get_reload("/search/" + _this.value + "/");
+      ajax_get_reload("/search/" + _this.value + "/", true);
       return;
     }
     else if (document.body.querySelector(".search_section")) {
@@ -1077,7 +1077,7 @@ on('body', 'click', '#create_order_btn', function() {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     get_document_opacity_1();
-    ajax_get_reload("/user_orders/");
+    ajax_get_reload("/user_orders/", true);
   }};
   link.send(form_data);
 });
@@ -1087,7 +1087,7 @@ on('body', 'click', '.remove_order', function() {
   link.open( 'GET', "/delete_order/" + this.getAttribute("data-pk") + "/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload("/user_orders/");
+    ajax_get_reload("/user_orders/", true);
   }};
   link.send();
 });
