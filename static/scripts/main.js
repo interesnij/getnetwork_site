@@ -1131,6 +1131,6 @@ on('body', 'click', '#create_feedback_btn', function() {
 
 window.addEventListener('popstate', function (e) {
   console.log("lendth", window.history.length);
-  console.log("state", history)
+  console.log("state", history.state)
   return false
 })

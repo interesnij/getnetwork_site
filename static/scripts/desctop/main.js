@@ -146,15 +146,19 @@ function ajax_get_reload(url) {
         _meta = rtr.querySelector(".doc_title");
         _title = _meta.getAttribute("data-title");
         _uri = "http://вебсервисы.рф" + _meta.getAttribute("data-uri");
+        _description = _meta.getAttribute("data-description");
+        _image = "http://вебсервисы.рф" + _meta.getAttribute("data-image");
         document.title = _title;
         document.querySelector('meta[name="url"]').setAttribute("content", _uri);
         document.querySelector('meta[name="title"]').setAttribute("content", _title);
-        document.querySelector('meta[name="description"]').setAttribute("content", _meta.getAttribute("data-description"));
-        document.querySelector('meta[name="image"]').setAttribute("content", "http://вебсервисы.рф" + _meta.getAttribute("data-image"));
+        document.querySelector('meta[name="description"]').setAttribute("content", _description);
+        document.querySelector('meta[name="image"]').setAttribute("content", _image);
         document.querySelector('link[rel="canonical"]').setAttribute("href", _uri);
 
         window.scrollTo(0,0);
-        window.history.pushState(null, "ajax_reload", url);
+        window.history.pushState (
+          {"url": url}, $title, url
+        );
         get_active_button();
         get_page_view_time(120);
         scrolled(rtr);
