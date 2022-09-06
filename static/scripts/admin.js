@@ -86,6 +86,7 @@ function format_text(text) {
         Object.keys(div[i].dataset).forEach(key=> {
         delete div[i].dataset[key];
         })
+      }
   };
 
   return text
