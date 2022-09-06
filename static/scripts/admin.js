@@ -137,16 +137,16 @@ on('body', 'click', '#edit_help_category_btn', function() {
   link.send(form_data);
 });
 
-function get_and_change_btn(url, hide) {
+function get_and_change_btn(_this, url, hide) {
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'GET', url, true );
+  link.open( 'GET', url + _this.getAttribute("data-pk") + "/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     if (hide) {
-      this.innerHTML = "👁";
+      _this.innerHTML = "👁";
     }
     else {
-      this.innerHTML = "🛇";
+      _this.innerHTML = "🛇";
     }
   }};
   link.send();
@@ -497,36 +497,36 @@ on('body', 'change', '.close_tech_categories', function() {
 
 
 on('body', 'click', '.hide_blog', function() {
-  get_and_change_btn("/hide_blog/" + this.getAttribute("data-pk") + "/", true);
+  get_and_change_btn(this, "/hide_blog/", true);
 });
 on('body', 'click', '.publish_blog', function() {
-  get_and_change_btn("/publish_blog/" + this.getAttribute("data-pk") + "/", false);
+  get_and_change_btn(this, "/publish_blog/", false);
 });
 
 on('body', 'click', '.hide_service', function() {
-  get_and_change_btn("/hide_service/" + this.getAttribute("data-pk") + "/", true);
+  get_and_change_btn(this, "/hide_service/", true);
 });
 on('body', 'click', '.publish_service', function() {
-  get_and_change_btn("/publish_service/" + this.getAttribute("data-pk") + "/", false);
+  get_and_change_btn(this, "/publish_service/", false);
 });
 
 on('body', 'click', '.hide_store', function() {
-  get_and_change_btn("/hide_store/" + this.getAttribute("data-pk") + "/", true);
+  get_and_change_btn(this, "/hide_store/", true);
 });
 on('body', 'click', '.publish_store', function() {
-  get_and_change_btn("/publish_store/" + this.getAttribute("data-pk") + "/", false);
+  get_and_change_btn(this, "/publish_store/", false);
 });
 
 on('body', 'click', '.hide_wiki', function() {
-  get_and_change_btn("/hide_wiki/" + this.getAttribute("data-pk") + "/", true);
+  get_and_change_btn(this, "/hide_wiki/", true);
 });
 on('body', 'click', '.publish_wiki', function() {
-  get_and_change_btn("/publish_wiki/" + this.getAttribute("data-pk") + "/", false);
+  get_and_change_btn(this, "/publish_wiki/", false);
 });
 
 on('body', 'click', '.hide_work', function() {
-  get_and_change_btn("/hide_work/" + this.getAttribute("data-pk") + "/", true);
+  get_and_change_btn(this, "/hide_work/", true);
 });
 on('body', 'click', '.publish_work', function() {
-  get_and_change_btn("/publish_work/" + this.getAttribute("data-pk") + "/", false);
+  get_and_change_btn(this, "/publish_work/", false);
 });
