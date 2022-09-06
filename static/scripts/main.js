@@ -149,6 +149,10 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   $window_seconds = 1;
   window.clearInterval(intervalListener2);
 }
+window.onbeforeunload = function() {
+  console.log("Reload");
+  alert("Reload")
+};
 
 ///////////////
 function get_or_create_cookie_user() {
