@@ -150,8 +150,7 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   window.clearInterval(intervalListener2);
 }
 window.onbeforeunload = function() {
-  console.log("Reload");
-  alert("Reload")
+  return "Есть несохранённые изменения. Всё равно уходим?";
 };
 
 ///////////////
