@@ -33,10 +33,17 @@ function format_text(text) {
   h6 = text.querySelectorAll("h6");
   div = text.querySelectorAll("div");
   span = text.querySelectorAll("span");
+  pre = text.querySelectorAll("pre");
 
   for (var i = 0; i < br.length; i++){
       br[i].removeAttribute("style"); br[i].removeAttribute("class")
   };
+  for (var i = 0; i < pre.length; i++){
+    Object.keys(pre[i].dataset).forEach(key=> {
+    delete pre[i].dataset[key];
+    })
+  };
+
   for (var i = 0; i < img.length; i++){
       img[i].removeAttribute("style"); img[i].removeAttribute("class")
   };
@@ -75,6 +82,10 @@ function format_text(text) {
   };
   for (var i = 0; i < div.length; i++){
       div[i].removeAttribute("style"); div[i].removeAttribute("class")
+      for (var i = 0; i < div.length; i++){
+        Object.keys(div[i].dataset).forEach(key=> {
+        delete div[i].dataset[key];
+        })
   };
 
   return text
