@@ -105,19 +105,13 @@ hr{
 .btn-mod:focus,
 a.btn-mod:hover,
 a.btn-mod:focus{
-    color: rgba(255,255,255, .85) !important;
-    background: rgba(0,0,0, .7) !important;
+  color: #000000 !important;
+  background: #DDD1C5 !important;
 }
 
 .btn-mod.btn-border{
     color: #151515 !important;
     border: 2px solid #151515 !important;
-}
-
-.btn-mod.btn-border:hover,
-.btn-mod.btn-border:focus{
-    color: #000000 !important;
-    background: #DDD1C5 !important;
 }
 
 .form input[type="text"],
