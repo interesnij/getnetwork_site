@@ -149,7 +149,7 @@ function get_and_change_btn(url, hide) {
       this.innerHTML = "🛇";
     }
   }};
-  link.send(form_data);
+  link.send();
 };
 
 function send_category_data(form, url) {
