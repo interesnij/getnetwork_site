@@ -106,7 +106,9 @@ body{
   color: rgba(255,255,255, 0.8) !important;
   background-color: #2f4f4f !important
 }
-
+.font-alt {
+  font-family: Dosis,arial,sans-serif;
+}
 a, ::-webkit-scrollbar {
     color: rgba(255,255,255, 0.8) !important;
 }

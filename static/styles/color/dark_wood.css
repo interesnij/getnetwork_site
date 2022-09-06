@@ -70,7 +70,10 @@ body {
     color: rgba(255,255,255, 0.8) !important;
     background-image: url('/static/images/dark_wood.jpg') !important;
     background-size: unset !important;
-    font-family: Special Elite,cursive,Georgia,Times New Roman,Times,serif;
+    font-family: "Open Sans",arial,sans-serif;
+}
+.font-alt {
+  font-family: Dosis,arial,sans-serif;
 }
 
 .window_fullscreen, .card_fullscreen, .hover, pre {

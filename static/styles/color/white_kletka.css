@@ -73,6 +73,9 @@ body {
   color: rgba(0,0,0, 0.9) !important;
   background-image: url("/static/images/skin/yellow-paper.jpg") !important;
 }
+.font-alt {
+  font-family: Special Elite,cursive,Georgia,Times New Roman,Times,serif;
+}
 
 .hover, pre {
   background: #DDD1C5 !important;

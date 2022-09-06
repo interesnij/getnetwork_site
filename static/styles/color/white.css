@@ -75,6 +75,10 @@ body{
     font-family: "Open Sans",arial,sans-serif;
 }
 
+.font-alt {
+  font-family: Dosis,arial,sans-serif;
+}
+
 .window_fullscreen, .card_fullscreen, .hover, pre {
   color: rgba(0,0,0, 0.9) !important;
   background-color: #e6e3df !important;
