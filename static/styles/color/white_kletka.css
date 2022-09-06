@@ -116,7 +116,7 @@ a.btn-mod:focus{
 
 .btn-mod.btn-border:hover,
 .btn-mod.btn-border:focus{
-    color: #fff !important;
+    color: #000000 !important;
     background: #DDD1C5 !important;
 }
 
