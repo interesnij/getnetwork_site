@@ -483,33 +483,58 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
             next_item = 21;
         }
 
-        let _blogs = blogs
-            .filter(schema::blogs::title.ilike(&_q_standalone))
-            .or_filter(schema::blogs::description.ilike(&_q_standalone))
-            .or_filter(schema::blogs::content.ilike(&_q_standalone))
-            .limit(20)
-            .offset(offset.into())
-            .order(schema::blogs::created.desc())
-            .load::<Blog>(&_connection)
-            .expect("e");
-
-        let blogs_count = _blogs.len();
-
-        if blogs
-            .filter(schema::blogs::title.ilike(&_q_standalone))
-            .or_filter(schema::blogs::description.ilike(&_q_standalone))
-            .or_filter(schema::blogs::content.ilike(&_q_standalone))
-            .limit(1)
-            .offset(next_item.into())
-            .select(schema::blogs::id)
-            .load::<i32>(&_connection)
-            .expect("e")
-            .len() > 0 {
-                next_page_number = page + 1;
-            }
-
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let blog_list: Vec<Blog>;
+
+            if _request_user.is_superuser() {
+                blog_list = blogs
+                    .filter(schema::blogs::title.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
+                    .limit(20)
+                    .offset(offset.into())
+                    .order(schema::blogs::created.desc())
+                    .load::<Blog>(&_connection)
+                    .expect("e");
+                if blogs
+                    .filter(schema::blogs::title.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
+                    .limit(1)
+                    .offset(next_item.into())
+                    .select(schema::blogs::id)
+                    .load::<i32>(&_connection)
+                    .expect("e")
+                    .len() > 0 {
+                        next_page_number = page + 1;
+                    }
+            } else {
+                blog_list = blogs
+                    .filter(schema::blogs::title.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
+                    .filter(schema::blogs::is_active.eq(true))
+                    .limit(20)
+                    .offset(offset.into())
+                    .order(schema::blogs::created.desc())
+                    .load::<Blog>(&_connection)
+                    .expect("e");
+                if blogs
+                    .filter(schema::blogs::title.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
+                    .limit(1)
+                    .offset(next_item.into())
+                    .select(schema::blogs::id)
+                    .load::<i32>(&_connection)
+                    .expect("e")
+                    .len() > 0 {
+                        next_page_number = page + 1;
+                    }
+            }
+
+            let blogs_count = blog_list.len();
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/blogs.stpl")]
@@ -556,6 +581,28 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
             }
         }
         else {
+            blog_list = blogs
+                .filter(schema::blogs::title.ilike(&_q_standalone))
+                .or_filter(schema::blogs::description.ilike(&_q_standalone))
+                .or_filter(schema::blogs::content.ilike(&_q_standalone))
+                .filter(schema::blogs::is_active.eq(true))
+                .limit(20)
+                .offset(offset.into())
+                .order(schema::blogs::created.desc())
+                .load::<Blog>(&_connection)
+                .expect("e");
+            if blogs
+                .filter(schema::blogs::title.ilike(&_q_standalone))
+                .or_filter(schema::blogs::description.ilike(&_q_standalone))
+                .or_filter(schema::blogs::content.ilike(&_q_standalone))
+                .limit(1)
+                .offset(next_item.into())
+                .select(schema::blogs::id)
+                .load::<i32>(&_connection)
+                .expect("e")
+                .len() > 0 {
+                    next_page_number = page + 1;
+                }
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/anon_blogs.stpl")]
