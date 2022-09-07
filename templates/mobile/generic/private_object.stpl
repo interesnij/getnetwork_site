@@ -1,0 +1,27 @@
+<% include!("../header.stpl"); %>
+
+
+<section data-title="<%= title %>" data-description="<%= description %>" data-uri="<%= uri %>" data-image="<%= image %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+  <div class="relative container align-left">
+    <div class="hs-line-4 font-alt black">
+      <a class="ajax"href="/blog_categories/">Главная</a>
+      &nbsp;/&nbsp;
+      <span>Страница приватная</span>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+    <div style="margin-top: 40px;">
+      <div class="align-center">
+        <span class="border" style="padding: 5px 12px;">
+          Это приватная страница. Это либо страница нового, но не проверенного
+          объекта, либо - раздела администратора.
+        </span>
+      </div>
+    </div>
+    </div>
+  </section>
+
+<% include!("../footer.stpl"); %>
