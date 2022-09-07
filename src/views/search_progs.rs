@@ -119,7 +119,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
     let _q_standalone = "%".to_owned() + &_q + "%";
-    
+
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -227,7 +227,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                     .filter(schema::works::title.ilike(&_q_standalone))
                     .or_filter(schema::works::description.ilike(&_q_standalone))
                     .or_filter(schema::works::content.ilike(&_q_standalone))
-                    .filter(schema::wikis::is_active.eq(true))
+                    .filter(schema::works::is_active.eq(true))
                     .order(schema::works::created.desc())
                     .load::<Work>(&_connection)
                     .expect("e");

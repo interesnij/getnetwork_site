@@ -316,7 +316,7 @@ impl Store {
         }
     }
 
-    pub fn get_3_publish_stores(user: User) -> Vec<Store> {
+    pub fn get_3_publish_stores() -> Vec<Store> {
         use crate::schema::stores::dsl::stores;
 
         let _connection = establish_connection();
