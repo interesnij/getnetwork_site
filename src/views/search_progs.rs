@@ -616,7 +616,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                     next_page_number: i32,
                 }
                 let body = Template {
-                    blogs_list:       _blogs,
+                    blogs_list:       blog_list,
                     blogs_count:      blogs_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -637,7 +637,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                     next_page_number: i32,
                 }
                 let body = Template {
-                    blogs_list:       _blogs,
+                    blogs_list:       blog_list,
                     blogs_count:      blogs_count,
                     is_ajax:          is_ajax,
                     q:                _q,
