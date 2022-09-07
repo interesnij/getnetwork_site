@@ -84,7 +84,7 @@ function get_active_button() {
 function get_custom_design() {
   color = "white";
   background = getCookie("background");
-  if (background != "") {
+  if (background != "" || background == "white_kletka") {
     color = background;
   }
   addStyleSheets("/static/styles/color/" + color + ".css")
