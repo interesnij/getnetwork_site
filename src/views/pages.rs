@@ -127,6 +127,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/main/mainpage.stpl")]
                 struct Template {
+                    request_user:  User,
                     last_works:    Vec<Work>,
                     last_services: Vec<Service>,
                     last_wikis:    Vec<Wiki>,
@@ -136,6 +137,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     stat:          StatMainpage,
                 }
                 let body = Template {
+                    request_user:  _request_user,
                     last_works:    _last_works,
                     last_services: _last_services,
                     last_wikis:    _last_wikis,
