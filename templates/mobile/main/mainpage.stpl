@@ -2,6 +2,10 @@
 
 <% include!("banner.stpl"); %>
 
+<% if request_user.is_superuser() { %>
+  <% include!("admin.stpl"); %>
+<% } %>
+
 <% include!("sections.stpl"); %>
 
 <% include!("service.stpl"); %>
