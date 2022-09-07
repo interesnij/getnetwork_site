@@ -697,23 +697,58 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
             .load::<Service>(&_connection)
             .expect("e");
 
-        let services_count = _services.len();
-
-        if services
-            .filter(schema::services::title.ilike(&_q_standalone))
-            .or_filter(schema::services::description.ilike(&_q_standalone))
-            .or_filter(schema::services::content.ilike(&_q_standalone))
-            .limit(1)
-            .offset(next_item.into())
-            .select(schema::services::id)
-            .load::<i32>(&_connection)
-            .expect("e")
-            .len() > 0 {
-                next_page_number = page + 1;
-            }
-
         if is_signed_in(&session) {
+            let services_list: Vec<Blog>;
             let _request_user = get_request_user_data(&session);
+            if _request_user.is_superuser() {
+                services_list = services
+                    .filter(schema::services::title.ilike(&_q_standalone))
+                    .or_filter(schema::services::description.ilike(&_q_standalone))
+                    .or_filter(schema::services::content.ilike(&_q_standalone))
+                    .limit(20)
+                    .offset(offset.into())
+                    .order(schema::services::created.desc())
+                    .load::<Service>(&_connection)
+                    .expect("e");
+
+                if services
+                    .filter(schema::services::title.ilike(&_q_standalone))
+                    .or_filter(schema::services::description.ilike(&_q_standalone))
+                    .or_filter(schema::services::content.ilike(&_q_standalone))
+                    .limit(1)
+                    .offset(next_item.into())
+                    .select(schema::services::id)
+                    .load::<i32>(&_connection)
+                    .expect("e")
+                    .len() > 0 {
+                        next_page_number = page + 1;
+                    }
+            } else {
+                services_list = services
+                    .filter(schema::services::title.ilike(&_q_standalone))
+                    .or_filter(schema::services::description.ilike(&_q_standalone))
+                    .or_filter(schema::services::content.ilike(&_q_standalone))
+                    .limit(20)
+                    .offset(offset.into())
+                    .order(schema::services::created.desc())
+                    .load::<Service>(&_connection)
+                    .expect("e");
+
+                if services
+                    .filter(schema::services::title.ilike(&_q_standalone))
+                    .or_filter(schema::services::description.ilike(&_q_standalone))
+                    .or_filter(schema::services::content.ilike(&_q_standalone))
+                    .limit(1)
+                    .offset(next_item.into())
+                    .select(schema::services::id)
+                    .load::<i32>(&_connection)
+                    .expect("e")
+                    .len() > 0 {
+                        next_page_number = page + 1;
+                    }
+            }
+            let services_count = services_list.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/services.stpl")]
@@ -727,7 +762,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 }
                 let body = Template {
                     request_user:     _request_user,
-                    services_list:    _services,
+                    services_list:    services_list,
                     services_count:   services_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -748,7 +783,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                     next_page_number: i32,
                 }
                 let body = Template {
-                    services_list:    _services,
+                    services_list:    services_list,
                     services_count:   services_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -760,6 +795,31 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
             }
         }
         else {
+            let services_list = services
+                .filter(schema::services::title.ilike(&_q_standalone))
+                .or_filter(schema::services::description.ilike(&_q_standalone))
+                .or_filter(schema::services::content.ilike(&_q_standalone))
+                .limit(20)
+                .offset(offset.into())
+                .order(schema::services::created.desc())
+                .load::<Service>(&_connection)
+                .expect("e");
+
+            if services
+                .filter(schema::services::title.ilike(&_q_standalone))
+                .or_filter(schema::services::description.ilike(&_q_standalone))
+                .or_filter(schema::services::content.ilike(&_q_standalone))
+                .limit(1)
+                .offset(next_item.into())
+                .select(schema::services::id)
+                .load::<i32>(&_connection)
+                .expect("e")
+                .len() > 0 {
+                    next_page_number = page + 1;
+                }
+        }
+        let services_count = services_list.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/anon_services.stpl")]
@@ -771,7 +831,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                     next_page_number: i32,
                 }
                 let body = Template {
-                    services_list:    _services,
+                    services_list:    services_list,
                     services_count:   services_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -792,7 +852,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                     next_page_number: i32,
                 }
                 let body = Template {
-                    services_list:       _services,
+                    services_list:    services_list,
                     services_count:   services_count,
                     is_ajax:          is_ajax,
                     q:                _q,
