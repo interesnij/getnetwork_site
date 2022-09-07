@@ -118,6 +118,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
+    let _q_standalone = "%".to_owned() + &_q + "%";
+    
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -141,7 +143,6 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             let wiki_list: Vec<Wiki>;
             let work_list: Vec<Work>;
 
-            let _q_standalone = "%".to_owned() + &_q + "%";
             if _request_user.is_superuser() {
                 blog_list = schema::blogs::table
                     .filter(schema::blogs::title.ilike(&_q_standalone))
