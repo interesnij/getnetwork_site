@@ -246,18 +246,15 @@ a.logo:hover{
     color: #FFFFFF !important;
 }
 
-.footer-social-links a{
-    color: #FFFFFF !important;
-}
-
-.footer-social-links a:before{
-    border: 1px solid #FFFFFF !important;
-}
-
 .blog-item-title a{
     color: #FFFFFF !important;
 }
-
+.footer-social-links a:before {
+    border: 1px solid rgb(255, 0, 0, 0.7) !important;
+}
+.footer-social-links a:hover {
+    border: 1px solid rgb(0, 0, 0, 0.9) !important;
+}
 .blog-item-data a:hover{
     color: #FFFFFF !important;
 }

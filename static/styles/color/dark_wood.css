@@ -231,19 +231,17 @@ a.logo:hover{
     color: #FFFFFF !important;
 }
 
-.footer-social-links a{
-    color: #FFFFFF !important;
-}
-
-.footer-social-links a:before{
-    border: 1px solid #FFFFFF !important;
-}
-
 .tpl-alt-tabs li.active a,
 .tpl-alt-tabs li.active a:hover,
 .tpl-alt-tabs li.active a:focus{
     color: #FFFFFF !important;
     font-weight: bold;
+}
+.footer-social-links a:before {
+    border: 1px solid rgb(255, 0, 0, 0.7) !important;
+}
+.footer-social-links a:hover {
+    border: 1px solid rgb(0, 0, 0, 0.9) !important;
 }
 .tpl-alt-tabs li.active span{
     color: #FFFFFF !important;

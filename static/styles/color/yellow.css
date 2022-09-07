@@ -8,6 +8,12 @@
 .hs-line-14 {
   text-shadow: 0px 5px 3px rgb(0 0 0 / 30%);
 }
+.footer-social-links a:before {
+    border: 1px solid rgb(0, 0, 0, 0.7) !important;
+}
+.footer-social-links a:hover {
+    border: 1px solid rgb(0, 0, 0, 0.9) !important;
+}
 .solid_left {
   border-left: 1px solid #222;
 }

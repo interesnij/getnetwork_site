@@ -10,6 +10,12 @@
 a:hover {
     color: rgba(0, 0, 0, 1) !important;
 }
+.footer-social-links a:before {
+    border: 1px solid rgb(0, 0, 0, 0.7) !important;
+}
+.footer-social-links a:hover {
+    border: 1px solid rgb(0, 0, 0, 0.9) !important;
+}
 .solid_left {
   border-left: 1px solid #222;
 }
