@@ -316,7 +316,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             }
         }
         else {
-            blog_list = schema::blogs::table
+            let blog_list = schema::blogs::table
                 .filter(schema::blogs::title.ilike(&_q_standalone))
                 .or_filter(schema::blogs::description.ilike(&_q_standalone))
                 .or_filter(schema::blogs::content.ilike(&_q_standalone))
@@ -326,7 +326,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 .load::<Blog>(&_connection)
                 .expect("e");
 
-            service_list = schema::services::table
+            let service_list = schema::services::table
                 .filter(schema::services::title.ilike(&_q_standalone))
                 .or_filter(schema::services::description.ilike(&_q_standalone))
                 .or_filter(schema::services::content.ilike(&_q_standalone))
@@ -335,7 +335,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 .load::<Service>(&_connection)
                 .expect("e");
 
-            store_list = schema::stores::table
+            let store_list = schema::stores::table
                 .filter(schema::stores::title.ilike(&_q_standalone))
                 .or_filter(schema::stores::description.ilike(&_q_standalone))
                 .or_filter(schema::stores::content.ilike(&_q_standalone))
@@ -344,7 +344,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 .load::<Store>(&_connection)
                 .expect("e");
 
-            wiki_list = schema::wikis::table
+            let wiki_list = schema::wikis::table
                 .filter(schema::wikis::title.ilike(&_q_standalone))
                 .or_filter(schema::wikis::description.ilike(&_q_standalone))
                 .or_filter(schema::wikis::content.ilike(&_q_standalone))
@@ -353,7 +353,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 .load::<Wiki>(&_connection)
                 .expect("e");
 
-            work_list = schema::works::table
+            let work_list = schema::works::table
                 .filter(schema::works::title.ilike(&_q_standalone))
                 .or_filter(schema::works::description.ilike(&_q_standalone))
                 .or_filter(schema::works::content.ilike(&_q_standalone))
