@@ -1180,7 +1180,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                     _service.get_image(),
                 ).await
             }
-            if is_desctop {
+            else if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/anon_service.stpl")]
                 struct Template {
