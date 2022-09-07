@@ -296,7 +296,7 @@ impl Store {
             .expect("E");
     }
 
-    pub fn get_3_stores(user: User) -> Vec<Store> {
+    pub fn get_3_stores(user: &User) -> Vec<Store> {
         use crate::schema::stores::dsl::stores;
 
         let _connection = establish_connection();

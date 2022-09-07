@@ -199,7 +199,7 @@ impl Work {
             .expect("E");
     }
 
-    pub fn get_3_works(user: User) -> Vec<Work> {
+    pub fn get_3_works(user: &User) -> Vec<Work> {
         use crate::schema::works::dsl::works;
 
         let _connection = establish_connection();

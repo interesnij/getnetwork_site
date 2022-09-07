@@ -308,7 +308,7 @@ impl Service {
             .expect("E");
     }
 
-    pub fn get_3_services(user: User) -> Vec<Service> {
+    pub fn get_3_services(user: &User) -> Vec<Service> {
         use crate::schema::services::dsl::services;
 
         let _connection = establish_connection();

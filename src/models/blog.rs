@@ -235,7 +235,7 @@ impl Blog {
             .load::<Blog>(&_connection)
             .expect("E.");
     }
-    pub fn get_3_blogs(user: User) -> Vec<Blog> {
+    pub fn get_3_blogs(user: &User) -> Vec<Blog> {
         use crate::schema::blogs::dsl::blogs;
 
         let _connection = establish_connection();

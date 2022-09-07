@@ -358,7 +358,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                 .filter(schema::works::title.ilike(&_q_standalone))
                 .or_filter(schema::works::description.ilike(&_q_standalone))
                 .or_filter(schema::works::content.ilike(&_q_standalone))
-                .filter(schema::wikis::is_active.eq(true))
+                .filter(schema::works::is_active.eq(true))
                 .order(schema::works::created.desc())
                 .load::<Work>(&_connection)
                 .expect("e");

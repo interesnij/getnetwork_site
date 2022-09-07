@@ -219,7 +219,7 @@ impl Wiki {
             .load::<Wiki>(&_connection)
             .expect("E.");
     }
-    pub fn get_3_wikis(user: User) -> Vec<Wiki> {
+    pub fn get_3_wikis(user: &User) -> Vec<Wiki> {
         use crate::schema::wikis::dsl::wikis;
 
         let _connection = establish_connection();
