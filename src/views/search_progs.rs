@@ -687,16 +687,6 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
             next_item = 21;
         }
 
-        let _services = services
-            .filter(schema::services::title.ilike(&_q_standalone))
-            .or_filter(schema::services::description.ilike(&_q_standalone))
-            .or_filter(schema::services::content.ilike(&_q_standalone))
-            .limit(20)
-            .offset(offset.into())
-            .order(schema::services::created.desc())
-            .load::<Service>(&_connection)
-            .expect("e");
-
         if is_signed_in(&session) {
             let services_list: Vec<Blog>;
             let _request_user = get_request_user_data(&session);
