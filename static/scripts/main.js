@@ -842,6 +842,7 @@ on('body', 'click', '.s_7', function() {
 
 on('body', 'click', '.anon_color_change', function() {
   color = "white";
+  
   background = getCookie("background");
   if (background != "" || background == "white_kletka") {
     color = background;
