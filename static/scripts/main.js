@@ -845,7 +845,7 @@ on('body', 'click', '.anon_color_change', function() {
 
   background = getCookie("background");
   console.log(background);
-  if (background != "" || background == "white_kletka") {
+  if (background != "") {
     color = background;
   }
   if (color == "white") {
@@ -867,6 +867,9 @@ on('body', 'click', '.anon_color_change', function() {
   } else if (color == "dark_wood") {
     addStyleSheets("/static/styles/color/white.css");
     this.setAttribute("data-color", "white");
+    new_color = "white"
+  }
+  else {
     new_color = "white"
   };
   if (new_color != color) {
