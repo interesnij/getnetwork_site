@@ -461,7 +461,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
             }
         }
         else {
-            let (_blogs, next_page_number) = Blog::get_publish_blogs_for_ids(page.into(), 20, &_tag_items);
+            let (_blogs, next_page_number) = Blog::get_publish_blogs_list_for_ids(page.into(), 20, &_tag_items);
             let blog_count = _blogs.len();
 
             if is_desctop {

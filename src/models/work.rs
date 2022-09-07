@@ -278,7 +278,7 @@ impl Work {
             have_next = limit + 1;
             object_list = Work::get_publish_works_for_ids(limit.into(), 0, &ids);
         }
-        if Eork::get_publish_works_for_ids(1, have_next.into(), &ids).len() > 0 {
+        if Work::get_publish_works_for_ids(1, have_next.into(), &ids).len() > 0 {
             next_page_number = page + 1;
         }
         return (object_list, next_page_number);
