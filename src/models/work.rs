@@ -199,7 +199,26 @@ impl Work {
             .expect("E");
     }
 
-    pub fn get_3_works() -> Vec<Work> {
+    pub fn get_3_works(user: User) -> Vec<Work> {
+        use crate::schema::works::dsl::works;
+
+        let _connection = establish_connection();
+        if user.is_superuser() {
+            return works
+                .order(schema::works::position.desc())
+                .limit(3)
+                .load::<Work>(&_connection)
+                .expect("E.");
+        } else {
+            return works
+                .filter(schema::works::is_active.eq(true))
+                .order(schema::works::position.desc())
+                .limit(3)
+                .load::<Work>(&_connection)
+                .expect("E.");
+        }
+    }
+    pub fn get_3_publish_works() -> Vec<Work> {
         use crate::schema::works::dsl::works;
 
         let _connection = establish_connection();

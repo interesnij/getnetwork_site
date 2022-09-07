@@ -296,7 +296,27 @@ impl Store {
             .expect("E");
     }
 
-    pub fn get_3_stores() -> Vec<Store> {
+    pub fn get_3_stores(user: User) -> Vec<Store> {
+        use crate::schema::stores::dsl::stores;
+
+        let _connection = establish_connection();
+        if user.is_superuser() {
+            return stores
+                .order(schema::stores::position.desc())
+                .limit(6)
+                .load::<Store>(&_connection)
+                .expect("E.");
+        } else {
+            return stores
+                .filter(schema::stores::is_active.eq(true))
+                .order(schema::stores::position.desc())
+                .limit(6)
+                .load::<Store>(&_connection)
+                .expect("E.");
+        }
+    }
+
+    pub fn get_3_publish_stores(user: User) -> Vec<Store> {
         use crate::schema::stores::dsl::stores;
 
         let _connection = establish_connection();

@@ -28,8 +28,8 @@
                             <strong>Дата:</strong>
                             <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
                             <% if request_user.is_superuser() { %>
-                            | <a class="ajax" href="/edit_store/<%= object.id %>/">~</a>
-                            | <a class="ajax" href="/edit_content_store/<%= object.id %>/?content=">Aa</a>
+                            | <a target="_blank" rel="nofollow" href="/edit_store/<%= object.id %>/">~</a>
+                            | <a target="_blank" rel="nofollow" href="/edit_content_store/<%= object.id %>/?content=">Aa</a>
                             | <a class="pointer remove_store" data-pk="<%= object.id %>">x</a>
                             <% if object.is_active { %>
                             | <a class="pointer hide_store" data-pk="<%= object.id %>">🛇</a>

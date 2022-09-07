@@ -208,7 +208,7 @@ impl Wiki {
             .expect("E")
     }
 
-    pub fn get_3_wikis() -> Vec<Wiki> {
+    pub fn get_3_publish_wikis() -> Vec<Wiki> {
         use crate::schema::wikis::dsl::wikis;
 
         let _connection = establish_connection();
@@ -218,6 +218,25 @@ impl Wiki {
             .limit(6)
             .load::<Wiki>(&_connection)
             .expect("E.");
+    }
+    pub fn get_3_wikis(user: User) -> Vec<Wiki> {
+        use crate::schema::wikis::dsl::wikis;
+
+        let _connection = establish_connection();
+        if user.is_superuser() {
+            return wikis
+                .order(schema::wikis::created.desc())
+                .limit(6)
+                .load::<Wiki>(&_connection)
+                .expect("E.");
+        } else {
+            return wikis
+                .filter(schema::wikis::is_active.eq(true))
+                .order(schema::wikis::created.desc())
+                .limit(6)
+                .load::<Wiki>(&_connection)
+                .expect("E.");
+        }
     }
 
     pub fn get_wikis_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Wiki>, i32) {

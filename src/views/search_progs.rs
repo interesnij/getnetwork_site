@@ -115,6 +115,7 @@ pub async fn empty_search_page(req: HttpRequest, session: Session) -> actix_web:
 pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_ajax;
 
+
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
     if is_ajax == 0 {
@@ -129,91 +130,114 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     }
     else {
         use crate::models::{Work, Blog, Service, Store, Wiki};
-
-        let _q_standalone = "%".to_owned() + &_q + "%";
         let _connection = establish_connection();
-        let _blogs = schema::blogs::table
-            .filter(schema::blogs::title.ilike(&_q_standalone))
-            .or_filter(schema::blogs::description.ilike(&_q_standalone))
-            .or_filter(schema::blogs::content.ilike(&_q_standalone))
-            .order(schema::blogs::created.desc())
-            .load::<Blog>(&_connection)
-            .expect("e");
-        let blog_count = _blogs.len();
-        let blog_list: Vec<Blog>;
-        if blog_count > 2 {
-            blog_list = _blogs[..3].to_vec();
-        }
-        else {
-            blog_list = _blogs;
-        }
-
-        let _services = schema::services::table
-            .filter(schema::services::title.ilike(&_q_standalone))
-            .or_filter(schema::services::description.ilike(&_q_standalone))
-            .or_filter(schema::services::content.ilike(&_q_standalone))
-            .order(schema::services::created.desc())
-            .load::<Service>(&_connection)
-            .expect("e");
-        let service_count = _services.len();
-        let service_list: Vec<Service>;
-        if service_count > 2 {
-            service_list = _services[..3].to_vec();
-        }
-        else {
-            service_list = _services;
-        }
-
-        let _stores = schema::stores::table
-            .filter(schema::stores::title.ilike(&_q_standalone))
-            .or_filter(schema::stores::description.ilike(&_q_standalone))
-            .or_filter(schema::stores::content.ilike(&_q_standalone))
-            .order(schema::stores::created.desc())
-            .load::<Store>(&_connection)
-            .expect("e");
-        let store_count = _stores.len();
-        let store_list: Vec<Store>;
-        if store_count > 2 {
-            store_list = _stores[..3].to_vec();
-        }
-        else {
-            store_list = _stores;
-        }
-
-        let _wikis = schema::wikis::table
-            .filter(schema::wikis::title.ilike(&_q_standalone))
-            .or_filter(schema::wikis::description.ilike(&_q_standalone))
-            .or_filter(schema::wikis::content.ilike(&_q_standalone))
-            .order(schema::wikis::created.desc())
-            .load::<Wiki>(&_connection)
-            .expect("e");
-        let wiki_count = _wikis.len();
-        let wiki_list: Vec<Wiki>;
-        if wiki_count > 2 {
-            wiki_list = _wikis[..3].to_vec();
-        }
-        else {
-            wiki_list = _wikis;
-        }
-
-        let _works = schema::works::table
-            .filter(schema::works::title.ilike(&_q_standalone))
-            .or_filter(schema::works::description.ilike(&_q_standalone))
-            .or_filter(schema::works::content.ilike(&_q_standalone))
-            .order(schema::works::created.desc())
-            .load::<Work>(&_connection)
-            .expect("e");
-        let work_count = _works.len();
-        let work_list: Vec<Work>;
-        if work_count > 2 {
-            work_list = _works[..3].to_vec();
-        }
-        else {
-            work_list = _works;
-        }
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+
+            let blog_list: Vec<Blog>;
+            let service_list: Vec<Service>;
+            let store_list: Vec<Store>;
+            let wiki_list: Vec<Wiki>;
+            let work_list: Vec<Work>;
+
+            let _q_standalone = "%".to_owned() + &_q + "%";
+            if _request_user.is_superuser() {
+                blog_list = schema::blogs::table
+                    .filter(schema::blogs::title.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
+                    .order(schema::blogs::created.desc())
+                    .limit(3)
+                    .load::<Blog>(&_connection)
+                .expect("e");
+
+                service_list = schema::services::table
+                    .filter(schema::services::title.ilike(&_q_standalone))
+                    .or_filter(schema::services::description.ilike(&_q_standalone))
+                    .or_filter(schema::services::content.ilike(&_q_standalone))
+                    .order(schema::services::created.desc())
+                    .load::<Service>(&_connection)
+                    .expect("e");
+
+                store_list = schema::stores::table
+                    .filter(schema::stores::title.ilike(&_q_standalone))
+                    .or_filter(schema::stores::description.ilike(&_q_standalone))
+                    .or_filter(schema::stores::content.ilike(&_q_standalone))
+                    .order(schema::stores::created.desc())
+                    .load::<Store>(&_connection)
+                    .expect("e");
+
+                wiki_list = schema::wikis::table
+                    .filter(schema::wikis::title.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
+                    .order(schema::wikis::created.desc())
+                    .load::<Wiki>(&_connection)
+                    .expect("e");
+
+                work_list = schema::works::table
+                    .filter(schema::works::title.ilike(&_q_standalone))
+                    .or_filter(schema::works::description.ilike(&_q_standalone))
+                    .or_filter(schema::works::content.ilike(&_q_standalone))
+                    .order(schema::works::created.desc())
+                    .load::<Work>(&_connection)
+                    .expect("e");
+            }
+            else {
+                blog_list = schema::blogs::table
+                    .filter(schema::blogs::title.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
+                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
+                    .filter(schema::blogs::is_active.eq(true))
+                    .order(schema::blogs::created.desc())
+                    .limit(3)
+                    .load::<Blog>(&_connection)
+                    .expect("e");
+
+                service_list = schema::services::table
+                    .filter(schema::services::title.ilike(&_q_standalone))
+                    .or_filter(schema::services::description.ilike(&_q_standalone))
+                    .or_filter(schema::services::content.ilike(&_q_standalone))
+                    .filter(schema::services::is_active.eq(true))
+                    .order(schema::services::created.desc())
+                    .load::<Service>(&_connection)
+                    .expect("e");
+
+                store_list = schema::stores::table
+                    .filter(schema::stores::title.ilike(&_q_standalone))
+                    .or_filter(schema::stores::description.ilike(&_q_standalone))
+                    .or_filter(schema::stores::content.ilike(&_q_standalone))
+                    .filter(schema::stores::is_active.eq(true))
+                    .order(schema::stores::created.desc())
+                    .load::<Store>(&_connection)
+                    .expect("e");
+
+                wiki_list = schema::wikis::table
+                    .filter(schema::wikis::title.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
+                    .filter(schema::wikis::is_active.eq(true))
+                    .order(schema::wikis::created.desc())
+                    .load::<Wiki>(&_connection)
+                    .expect("e");
+
+                work_list = schema::works::table
+                    .filter(schema::works::title.ilike(&_q_standalone))
+                    .or_filter(schema::works::description.ilike(&_q_standalone))
+                    .or_filter(schema::works::content.ilike(&_q_standalone))
+                    .filter(schema::wikis::is_active.eq(true))
+                    .order(schema::works::created.desc())
+                    .load::<Work>(&_connection)
+                    .expect("e");
+            }
+
+            let blog_count = blog_list.len();
+            let service_count = service_list.len();
+            let store_count = store_list.len();
+            let wiki_count = wiki_list.len();
+            let work_count = work_list.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/all.stpl")]

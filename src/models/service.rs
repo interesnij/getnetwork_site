@@ -308,16 +308,24 @@ impl Service {
             .expect("E");
     }
 
-    pub fn get_6_services() -> Vec<Service> {
+    pub fn get_6_services(user: User) -> Vec<Service> {
         use crate::schema::services::dsl::services;
 
         let _connection = establish_connection();
-        return services
-            .filter(schema::services::is_active.eq(true))
-            .order(schema::services::position.desc())
-            .limit(6)
-            .load::<Service>(&_connection)
-            .expect("E.");
+        if user.is_superuser() {
+            return services
+                .order(schema::services::position.desc())
+                .limit(6)
+                .load::<Service>(&_connection)
+                .expect("E.");
+        } else {
+            return services
+                .filter(schema::services::is_active.eq(true))
+                .order(schema::services::position.desc())
+                .limit(6)
+                .load::<Service>(&_connection)
+                .expect("E.");
+        }
     }
 
     pub fn get_services_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Service>, i32) {

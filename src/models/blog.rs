@@ -224,7 +224,7 @@ impl Blog {
             .expect("E")
     }
 
-    pub fn get_3_blogs() -> Vec<Blog> {
+    pub fn get_3_publish_blogs() -> Vec<Blog> {
         use crate::schema::blogs::dsl::blogs;
 
         let _connection = establish_connection();
@@ -234,6 +234,25 @@ impl Blog {
             .limit(6)
             .load::<Blog>(&_connection)
             .expect("E.");
+    }
+    pub fn get_3_blogs(user: User) -> Vec<Blog> {
+        use crate::schema::blogs::dsl::blogs;
+
+        let _connection = establish_connection();
+        if user.is_superuser() {
+            return blogs
+                .order(schema::blogs::created.desc())
+                .limit(6)
+                .load::<Blog>(&_connection)
+                .expect("E.");
+        } else {
+            return blogs
+                .filter(schema::blogs::is_active.eq(true))
+                .order(schema::blogs::created.desc())
+                .limit(6)
+                .load::<Blog>(&_connection)
+                .expect("E.");
+        }
     }
 
     pub fn get_blogs_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Blog>, i32) {

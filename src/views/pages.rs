@@ -86,15 +86,16 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                 .get_result::<StatMainpage>(&_connection)
                 .expect("Error.");
         }
-        let _last_works = Work::get_3_works();
-        let _last_services = Service::get_6_services();
-        let _last_wikis = Wiki::get_3_wikis();
-        let _last_blogs = Blog::get_3_blogs();
-        let _last_stores = Store::get_3_stores();
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            _request_user.create_superuser();
+            //_request_user.create_superuser();
+            let _last_works = Work::get_3_works(_request_user);
+            let _last_services = Service::get_3_services(_request_user);
+            let _last_wikis = Wiki::get_3_wikis(_request_user);
+            let _last_blogs = Blog::get_3_blogs(_request_user);
+            let _last_stores = Store::get_3_stores(_request_user);
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/main/mainpage.stpl")]
@@ -149,6 +150,12 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
             }
         }
         else {
+            let _last_works = Work::get_3_publish_works();
+            let _last_services = Service::get_3_publish_services();
+            let _last_wikis = Wiki::get_3_publish_wikis();
+            let _last_blogs = Blog::get_3_publish_blogs();
+            let _last_stores = Store::get_3_publish_stores();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/main/anon_mainpage.stpl")]
