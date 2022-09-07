@@ -893,33 +893,59 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
             next_item = 21;
         }
 
-        let _stores = stores
-            .filter(schema::stores::title.ilike(&_q_standalone))
-            .or_filter(schema::stores::description.ilike(&_q_standalone))
-            .or_filter(schema::stores::content.ilike(&_q_standalone))
-            .limit(20)
-            .offset(offset.into())
-            .order(schema::stores::created.desc())
-            .load::<Store>(&_connection)
-            .expect("e");
-
-        let stores_count = _stores.len();
-
-        if stores
-            .filter(schema::stores::title.ilike(&_q_standalone))
-            .or_filter(schema::stores::description.ilike(&_q_standalone))
-            .or_filter(schema::stores::content.ilike(&_q_standalone))
-            .limit(1)
-            .offset(next_item.into())
-            .select(schema::stores::id)
-            .load::<i32>(&_connection)
-            .expect("e")
-            .len() > 0 {
-                next_page_number = page + 1;
-            }
-
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let store_list: Vec<Store>;
+
+            if _request_user.is_superuser() {
+                store_list = stores
+                    .filter(schema::stores::title.ilike(&_q_standalone))
+                    .or_filter(schema::stores::description.ilike(&_q_standalone))
+                    .or_filter(schema::stores::content.ilike(&_q_standalone))
+                    .limit(20)
+                    .offset(offset.into())
+                    .order(schema::stores::created.desc())
+                    .load::<Store>(&_connection)
+                    .expect("e");
+                if stores
+                    .filter(schema::stores::title.ilike(&_q_standalone))
+                    .or_filter(schema::stores::description.ilike(&_q_standalone))
+                    .or_filter(schema::stores::content.ilike(&_q_standalone))
+                    .limit(1)
+                    .offset(next_item.into())
+                    .select(schema::stores::id)
+                    .load::<i32>(&_connection)
+                    .expect("e")
+                    .len() > 0 {
+                        next_page_number = page + 1;
+                    }
+            } else {
+                store_list = stores
+                    .filter(schema::stores::title.ilike(&_q_standalone))
+                    .or_filter(schema::stores::description.ilike(&_q_standalone))
+                    .or_filter(schema::stores::content.ilike(&_q_standalone))
+                    .filter(schema::stores::is_active.eq(true))
+                    .limit(20)
+                    .offset(offset.into())
+                    .order(schema::stores::created.desc())
+                    .load::<Store>(&_connection)
+                    .expect("e");
+                if stores
+                    .filter(schema::stores::title.ilike(&_q_standalone))
+                    .or_filter(schema::stores::description.ilike(&_q_standalone))
+                    .or_filter(schema::stores::content.ilike(&_q_standalone))
+                    .limit(1)
+                    .offset(next_item.into())
+                    .select(schema::stores::id)
+                    .load::<i32>(&_connection)
+                    .expect("e")
+                    .len() > 0 {
+                        next_page_number = page + 1;
+                    }
+            }
+
+            let stores_count = store_list.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/stores.stpl")]
@@ -933,7 +959,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                 }
                 let body = Template {
                     request_user:     _request_user,
-                    stores_list:       _stores,
+                    stores_list:       store_list,
                     stores_count:      stores_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -954,7 +980,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     next_page_number: i32,
                 }
                 let body = Template {
-                    stores_list:       _stores,
+                    stores_list:       store_list,
                     stores_count:     stores_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -966,6 +992,31 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
             }
         }
         else {
+            let store_list = stores
+                .filter(schema::stores::title.ilike(&_q_standalone))
+                .or_filter(schema::stores::description.ilike(&_q_standalone))
+                .or_filter(schema::stores::content.ilike(&_q_standalone))
+                .filter(schema::stores::is_active.eq(true))
+                .limit(20)
+                .offset(offset.into())
+                .order(schema::stores::created.desc())
+                .load::<Store>(&_connection)
+                .expect("e");
+            if stores
+                .filter(schema::stores::title.ilike(&_q_standalone))
+                .or_filter(schema::stores::description.ilike(&_q_standalone))
+                .or_filter(schema::stores::content.ilike(&_q_standalone))
+                .limit(1)
+                .offset(next_item.into())
+                .select(schema::stores::id)
+                .load::<i32>(&_connection)
+                .expect("e")
+                .len() > 0 {
+                    next_page_number = page + 1;
+                }
+
+            let stores_count = store_list.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/anon_stores.stpl")]
@@ -977,7 +1028,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     next_page_number: i32,
                 }
                 let body = Template {
-                    stores_list:      _stores,
+                    stores_list:      store_list,
                     stores_count:     stores_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -998,7 +1049,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     next_page_number: i32,
                 }
                 let body = Template {
-                    stores_list:      _stores,
+                    stores_list:      store_list,
                     stores_count:     stores_count,
                     is_ajax:          is_ajax,
                     q:                _q,
