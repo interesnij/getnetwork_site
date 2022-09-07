@@ -876,7 +876,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             if _blog.is_active == false && _request_user.perm < 10 {
                 use crate::utils::get_private_page;
                 get_private_page (
-                    &_request_user,
+                    _request_user,
                     is_desctop,
                     "Статья блога ".to_string() + &_blog.title,
                     "вебсервисы.рф: Статья блога ".to_string() + &_blog.title,
