@@ -92,6 +92,7 @@ function get_page_view_time(count) {
 };
 
 function get_stat_meta($link, $title, $object_id, $page_id) {
+  ip_block = document.body.querySelector("#is_superuser")
   if (document.body.querySelector("#is_superuser")) {
     return
   }
@@ -195,7 +196,7 @@ function get_or_create_cookie_user() {
         _device = "Телефон";
       }
       stat_meta = document.body.querySelector(".stat_meta");
-      stat_meta.querySelector(".device").innerHTML = data.ip + " (" + _device + ") ";
+      stat_meta.querySelector(".device").innerHTML = "<span class='ip_span'>" +  data.ip + "</span> (" + _device + ") ";
       stat_meta.querySelector(".city").innerHTML = data.city_en + " (" + data.country_en + ") ";
 
       setCookie("user", data.id, 120);

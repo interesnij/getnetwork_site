@@ -54,14 +54,7 @@ function check_first_load() {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
         span.innerHTML = elem_.innerHTML;
-        window.history.pushState (
-          {
-            "url":url,
-            "title":$title,
-
-          },
-          "ajax_reload", url
-        );
+        window.history.pushState ({"url":url}, document.title, url);
         get_custom_design();
         get_or_create_cookie_user();
         get_page_view_time(120);
