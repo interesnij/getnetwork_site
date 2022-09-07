@@ -1092,20 +1092,21 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 break;
             }
         };
-        if _service.is_active == false && _request_user.perm < 10 {
-            use crate::utils::get_private_page;
-            get_private_page (
-                _request_user,
-                is_desctop,
-                "Услуга ".to_string() + &_service.title,
-                "вебсервисы.рф: Услуга ".to_string() + &_service.title,
-                "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_service.id.to_string() + &"/".to_string(),
-                _service.get_image(),
-            ).await
-        }
-        else if is_signed_in(&session) {
+
+        if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            if is_desctop {
+            if _service.is_active == false && _request_user.perm < 10 {
+                use crate::utils::get_private_page;
+                get_private_page (
+                    _request_user,
+                    is_desctop,
+                    "Услуга ".to_string() + &_service.title,
+                    "вебсервисы.рф: Услуга ".to_string() + &_service.title,
+                    "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_service.id.to_string() + &"/".to_string(),
+                    _service.get_image(),
+                ).await
+            }
+            else if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/service.stpl")]
                 struct Template {
