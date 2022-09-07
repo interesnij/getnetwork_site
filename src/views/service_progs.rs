@@ -1092,8 +1092,18 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 break;
             }
         };
-
-        if is_signed_in(&session) {
+        if _service.is_active == false && _request_user.perm < 10 {
+            use crate::utils::get_private_page;
+            get_private_page (
+                _request_user,
+                is_desctop,
+                "Услуга ".to_string() + &_service.title,
+                "вебсервисы.рф: Услуга ".to_string() + &_service.title,
+                "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_service.id.to_string() + &"/".to_string(),
+                _service.get_image(),
+            ).await
+        }
+        else if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -1159,6 +1169,16 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             }
         }
         else {
+            if _service.is_active == false {
+                use crate::utils::get_anon_private_page;
+                get_anon_private_page (
+                    is_desctop,
+                    "Услуга ".to_string() + &_service.title,
+                    "вебсервисы.рф: Услуга ".to_string() + &_service.title,
+                    "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_service.id.to_string() + &"/".to_string(),
+                    _service.get_image(),
+                ).await
+            }
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/anon_service.stpl")]
