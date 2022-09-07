@@ -340,7 +340,7 @@ pub async fn get_private_page (
             uri:          String,
         }
         let body = Template {
-            request_user: _request_user,
+            request_user: user,
             title:        title,
             description:  description,
             image:        image,
