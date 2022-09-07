@@ -83,6 +83,7 @@ body {
 
 .window_fullscreen, .card_fullscreen {
   color: rgba(0,0,0, 0.9) !important;
+	background-image: url("/static/images/skin/yellow-paper.jpg") !important;
 }
 
 a {
