@@ -807,8 +807,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                 .len() > 0 {
                     next_page_number = page + 1;
                 }
-        }
-        let services_count = services_list.len();
+
+            let services_count = services_list.len();
 
             if is_desctop {
                 #[derive(TemplateOnce)]
