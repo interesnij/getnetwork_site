@@ -301,6 +301,7 @@ pub async fn get_first_load_page (
 }
 
 pub async fn get_private_page (
+    is_ajax:     i32,
     user:        User,
     is_desctop:  bool,
     title:       String,
@@ -312,6 +313,7 @@ pub async fn get_private_page (
         #[derive(TemplateOnce)]
         #[template(path = "desctop/generic/private_object.stpl")]
         struct Template {
+            is_ajax:      i32,
             request_user: User,
             title:        String,
             description:  String,
@@ -319,6 +321,7 @@ pub async fn get_private_page (
             uri:          String,
         }
         let body = Template {
+            is_ajax:      is_ajax,
             request_user: user,
             title:        title,
             description:  description,
@@ -333,6 +336,7 @@ pub async fn get_private_page (
         #[derive(TemplateOnce)]
         #[template(path = "mobile/generic/private_object.stpl")]
         struct Template {
+            is_ajax:      i32,
             request_user: User,
             title:        String,
             description:  String,
@@ -340,6 +344,7 @@ pub async fn get_private_page (
             uri:          String,
         }
         let body = Template {
+            is_ajax:      is_ajax,
             request_user: user,
             title:        title,
             description:  description,
@@ -353,6 +358,7 @@ pub async fn get_private_page (
 }
 
 pub async fn get_anon_private_page (
+    is_ajax:     i32,
     is_desctop:  bool,
     title:       String,
     description: String,
@@ -363,12 +369,14 @@ pub async fn get_anon_private_page (
         #[derive(TemplateOnce)]
         #[template(path = "desctop/generic/anon_private_object.stpl")]
         struct Template {
+            is_ajax:     i32,
             title:       String,
             description: String,
             image:       String,
             uri:         String,
         }
         let body = Template {
+            is_ajax:     is_ajax,
             title:       title,
             description: description,
             image:       image,
@@ -382,6 +390,7 @@ pub async fn get_anon_private_page (
         #[derive(TemplateOnce)]
         #[template(path = "mobile/generic/anon_private_object.stpl")]
         struct Template {
+            is_ajax:     i32,
             title:       String,
             description: String,
             image:       String,

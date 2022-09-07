@@ -874,6 +874,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             if _wiki.is_active == false && _request_user.perm < 10 {
                 use crate::utils::get_private_page;
                 get_private_page (
+                    is_ajax,
                     _request_user,
                     is_desctop,
                     "Обучающая статья ".to_string() + &_wiki.title,
@@ -949,6 +950,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             if _wiki.is_active == false {
                 use crate::utils::get_anon_private_page;
                 get_anon_private_page (
+                    is_ajax,
                     is_desctop,
                     "Обучающая статья ".to_string() + &_wiki.title,
                     "вебсервисы.рф: Обучающая статья ".to_string() + &_wiki.title,

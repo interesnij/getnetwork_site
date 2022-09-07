@@ -1098,6 +1098,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             if _service.is_active == false && _request_user.perm < 10 {
                 use crate::utils::get_private_page;
                 get_private_page (
+                    is_ajax,
                     _request_user,
                     is_desctop,
                     "Услуга ".to_string() + &_service.title,
@@ -1173,6 +1174,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             if _service.is_active == false {
                 use crate::utils::get_anon_private_page;
                 get_anon_private_page (
+                    is_ajax,
                     is_desctop,
                     "Услуга ".to_string() + &_service.title,
                     "вебсервисы.рф: Услуга ".to_string() + &_service.title,

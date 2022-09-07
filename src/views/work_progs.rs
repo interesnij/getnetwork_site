@@ -1102,6 +1102,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             if _work.is_active == false && _request_user.perm < 10 {
                 use crate::utils::get_private_page;
                 get_private_page (
+                    is_ajax,
                     _request_user,
                     is_desctop,
                     "Работа ".to_string() + &_work.title,
@@ -1173,6 +1174,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             if _work.is_active == false {
                 use crate::utils::get_anon_private_page;
                 get_anon_private_page (
+                    is_ajax,
                     is_desctop,
                     "Работа ".to_string() + &_work.title,
                     "вебсервисы.рф: Работа ".to_string() + &_work.title,
