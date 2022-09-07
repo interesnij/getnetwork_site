@@ -1099,33 +1099,59 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
             next_item = 21;
         }
 
-        let _wikis = wikis
-            .filter(schema::wikis::title.ilike(&_q_standalone))
-            .or_filter(schema::wikis::description.ilike(&_q_standalone))
-            .or_filter(schema::wikis::content.ilike(&_q_standalone))
-            .limit(20)
-            .offset(offset.into())
-            .order(schema::wikis::created.desc())
-            .load::<Wiki>(&_connection)
-            .expect("e");
-
-        let wikis_count = _wikis.len();
-
-        if wikis
-            .filter(schema::wikis::title.ilike(&_q_standalone))
-            .or_filter(schema::wikis::description.ilike(&_q_standalone))
-            .or_filter(schema::wikis::content.ilike(&_q_standalone))
-            .limit(1)
-            .offset(next_item.into())
-            .select(schema::wikis::id)
-            .load::<i32>(&_connection)
-            .expect("e")
-            .len() > 0 {
-                next_page_number = page + 1;
-            }
-
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let wiki_list: Vec<Wiki>;
+
+            if _request_user.is_superuser() {
+                wiki_list = wikis
+                    .filter(schema::wikis::title.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
+                    .limit(20)
+                    .offset(offset.into())
+                    .order(schema::wikis::created.desc())
+                    .load::<Wiki>(&_connection)
+                    .expect("e");
+                if wikis
+                    .filter(schema::wikis::title.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
+                    .limit(1)
+                    .offset(next_item.into())
+                    .select(schema::wikis::id)
+                    .load::<i32>(&_connection)
+                    .expect("e")
+                    .len() > 0 {
+                        next_page_number = page + 1;
+                    }
+            } else {
+                wiki_list = wikis
+                    .filter(schema::wikis::title.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
+                    .filter(schema::wikis::is_active.eq(true))
+                    .limit(20)
+                    .offset(offset.into())
+                    .order(schema::wikis::created.desc())
+                    .load::<Wiki>(&_connection)
+                    .expect("e");
+                if wikis
+                    .filter(schema::wikis::title.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
+                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
+                    .limit(1)
+                    .offset(next_item.into())
+                    .select(schema::wikis::id)
+                    .load::<i32>(&_connection)
+                    .expect("e")
+                    .len() > 0 {
+                        next_page_number = page + 1;
+                    }
+            }
+
+            let wikis_count = wiki_list.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/wikis.stpl")]
@@ -1139,7 +1165,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                 }
                 let body = Template {
                     request_user:     _request_user,
-                    wikis_list:       _wikis,
+                    wikis_list:       wiki_list,
                     wikis_count:      wikis_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -1160,7 +1186,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     next_page_number: i32,
                 }
                 let body = Template {
-                    wikis_list:       _wikis,
+                    wikis_list:       wiki_list,
                     wikis_count:      wikis_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -1172,6 +1198,31 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
             }
         }
         else {
+            let wiki_list = wikis
+                .filter(schema::wikis::title.ilike(&_q_standalone))
+                .or_filter(schema::wikis::description.ilike(&_q_standalone))
+                .or_filter(schema::wikis::content.ilike(&_q_standalone))
+                .filter(schema::wikis::is_active.eq(true))
+                .limit(20)
+                .offset(offset.into())
+                .order(schema::wikis::created.desc())
+                .load::<Wiki>(&_connection)
+                .expect("e");
+            if wikis
+                .filter(schema::wikis::title.ilike(&_q_standalone))
+                .or_filter(schema::wikis::description.ilike(&_q_standalone))
+                .or_filter(schema::wikis::content.ilike(&_q_standalone))
+                .limit(1)
+                .offset(next_item.into())
+                .select(schema::wikis::id)
+                .load::<i32>(&_connection)
+                .expect("e")
+                .len() > 0 {
+                    next_page_number = page + 1;
+                }
+
+            let wikis_count = wiki_list.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/anon_wikis.stpl")]
@@ -1183,7 +1234,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     next_page_number: i32,
                 }
                 let body = Template {
-                    wikis_list:       _wikis,
+                    wikis_list:       wiki_list,
                     wikis_count:      wikis_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -1204,7 +1255,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     next_page_number: i32,
                 }
                 let body = Template {
-                    wikis_list:       _wikis,
+                    wikis_list:       wiki_list,
                     wikis_count:      wikis_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -1254,33 +1305,59 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
             next_item = 21;
         }
 
-        let _works = works
-            .filter(schema::works::title.ilike(&_q_standalone))
-            .or_filter(schema::works::description.ilike(&_q_standalone))
-            .or_filter(schema::works::content.ilike(&_q_standalone))
-            .limit(20)
-            .offset(offset.into())
-            .order(schema::works::created.desc())
-            .load::<Work>(&_connection)
-            .expect("e");
+        if is_signed_in(&session) {
+            let work_list: Vec<Work>;
+            let _request_user = get_request_user_data(&session);
 
-        let works_count = _works.len();
-
-        if works
-            .filter(schema::works::title.ilike(&_q_standalone))
-            .or_filter(schema::works::description.ilike(&_q_standalone))
-            .or_filter(schema::works::content.ilike(&_q_standalone))
-            .limit(1)
-            .offset(next_item.into())
-            .select(schema::works::id)
-            .load::<i32>(&_connection)
-            .expect("e")
-            .len() > 0 {
-                next_page_number = page + 1;
+            if _request_user.is_superuser() {
+                work_list = works
+                    .filter(schema::works::title.ilike(&_q_standalone))
+                    .or_filter(schema::works::description.ilike(&_q_standalone))
+                    .or_filter(schema::works::content.ilike(&_q_standalone))
+                    .limit(20)
+                    .offset(offset.into())
+                    .order(schema::works::created.desc())
+                    .load::<Work>(&_connection)
+                    .expect("e");
+                if works
+                    .filter(schema::works::title.ilike(&_q_standalone))
+                    .or_filter(schema::works::description.ilike(&_q_standalone))
+                    .or_filter(schema::works::content.ilike(&_q_standalone))
+                    .limit(1)
+                    .offset(next_item.into())
+                    .select(schema::works::id)
+                    .load::<i32>(&_connection)
+                    .expect("e")
+                    .len() > 0 {
+                        next_page_number = page + 1;
+                    }
+            } else {
+                work_list = works
+                    .filter(schema::works::title.ilike(&_q_standalone))
+                    .or_filter(schema::works::description.ilike(&_q_standalone))
+                    .or_filter(schema::works::content.ilike(&_q_standalone))
+                    .filter(schema::works::is_active.eq(true))
+                    .limit(20)
+                    .offset(offset.into())
+                    .order(schema::works::created.desc())
+                    .load::<Work>(&_connection)
+                    .expect("e");
+                if works
+                    .filter(schema::works::title.ilike(&_q_standalone))
+                    .or_filter(schema::works::description.ilike(&_q_standalone))
+                    .or_filter(schema::works::content.ilike(&_q_standalone))
+                    .limit(1)
+                    .offset(next_item.into())
+                    .select(schema::works::id)
+                    .load::<i32>(&_connection)
+                    .expect("e")
+                    .len() > 0 {
+                        next_page_number = page + 1;
+                    }
             }
 
-        if is_signed_in(&session) {
-            let _request_user = get_request_user_data(&session);
+            let works_count = work_list.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/works.stpl")]
@@ -1294,7 +1371,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                 }
                 let body = Template {
                     request_user:     _request_user,
-                    works_list:       _works,
+                    works_list:       work_list,
                     works_count:      works_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -1315,7 +1392,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     next_page_number: i32,
                 }
                 let body = Template {
-                    works_list:       _works,
+                    works_list:       work_list,
                     works_count:      works_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -1327,6 +1404,31 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
             }
         }
         else {
+            let work_list = works
+                .filter(schema::works::title.ilike(&_q_standalone))
+                .or_filter(schema::works::description.ilike(&_q_standalone))
+                .or_filter(schema::works::content.ilike(&_q_standalone))
+                .filter(schema::works::is_active.eq(true))
+                .limit(20)
+                .offset(offset.into())
+                .order(schema::works::created.desc())
+                .load::<Work>(&_connection)
+                .expect("e");
+            if works
+                .filter(schema::works::title.ilike(&_q_standalone))
+                .or_filter(schema::works::description.ilike(&_q_standalone))
+                .or_filter(schema::works::content.ilike(&_q_standalone))
+                .limit(1)
+                .offset(next_item.into())
+                .select(schema::works::id)
+                .load::<i32>(&_connection)
+                .expect("e")
+                .len() > 0 {
+                    next_page_number = page + 1;
+                }
+
+            let works_count = work_list.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/anon_works.stpl")]
@@ -1338,7 +1440,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     next_page_number: i32,
                 }
                 let body = Template {
-                    works_list:       _works,
+                    works_list:       work_list,
                     works_count:      works_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -1359,7 +1461,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     next_page_number: i32,
                 }
                 let body = Template {
-                    works_list:       _works,
+                    works_list:       work_list,
                     works_count:      works_count,
                     is_ajax:          is_ajax,
                     q:                _q,
