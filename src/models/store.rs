@@ -328,7 +328,7 @@ impl Store {
             .expect("E.");
     }
 
-    pub fn get_stores_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Store>, i32) {
+    pub fn get_stores_list_for_ids(user: &User, page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Store>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Store>;
@@ -336,30 +336,72 @@ impl Store {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Store::get_stores_for_ids(limit.into(), step.into(), &ids);
+            object_list = Store::get_stores_for_ids(user, limit.into(), step.into(), &ids);
         }
         else {
             have_next = limit + 1;
-            object_list = Store::get_stores_for_ids(limit.into(), 0, &ids);
+            object_list = Store::get_stores_for_ids(user, limit.into(), 0, &ids);
         }
-        if Store::get_stores_for_ids(1, have_next.into(), &ids).len() > 0 {
+        if Store::get_stores_for_ids(user, 1, have_next.into(), &ids).len() > 0 {
             next_page_number = page + 1;
         }
-        // возвращает порцию статей и следующую страницу, если она есть
         return (object_list, next_page_number);
     }
-    pub fn get_stores_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Store> {
+    pub fn get_publish_stores_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Store>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Store>;
+
+        if page > 1 {
+            let step = (page - 1) * 20;
+            have_next = page * limit + 1;
+            object_list = Store::get_publish_stores_for_ids(limit.into(), step.into(), &ids);
+        }
+        else {
+            have_next = limit + 1;
+            object_list = Store::get_publish_stores_for_ids(limit.into(), 0, &ids);
+        }
+        if Store::get_publish_stores_for_ids(1, have_next.into(), &ids).len() > 0 {
+            next_page_number = page + 1;
+        }
+        return (object_list, next_page_number);
+    }
+    pub fn get_publish_stores_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Store> {
         use crate::schema::stores::dsl::stores;
 
         let _connection = establish_connection();
         return stores
             .filter(schema::stores::id.eq_any(ids))
             .filter(schema::stores::is_active.eq(true))
-            .order(schema::stores::position.desc())
+            .order(schema::stores::created.desc())
             .limit(limit)
             .offset(offset)
             .load::<Store>(&_connection)
             .expect("E.");
+    }
+    pub fn get_stores_for_ids(user: &User, limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Store> {
+        use crate::schema::stores::dsl::stores;
+
+        let _connection = establish_connection();
+        if user.is_superuser() {
+            return stores
+                .filter(schema::stores::id.eq_any(ids))
+                .order(schema::stores::created.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Store>(&_connection)
+                .expect("E.");
+        }
+        else {
+            return stores
+                .filter(schema::stores::id.eq_any(ids))
+                .filter(schema::stores::is_active.eq(true))
+                .order(schema::stores::created.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Store>(&_connection)
+                .expect("E.");
+        }
     }
 }
 

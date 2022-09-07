@@ -255,7 +255,7 @@ impl Blog {
         }
     }
 
-    pub fn get_blogs_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Blog>, i32) {
+    pub fn get_blogs_list_for_ids(user: &User, page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Blog>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Blog>;
@@ -263,19 +263,37 @@ impl Blog {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Blog::get_blogs_for_ids(limit.into(), step.into(), &ids);
+            object_list = Blog::get_blogs_for_ids(user, limit.into(), step.into(), &ids);
         }
         else {
             have_next = limit + 1;
-            object_list = Blog::get_blogs_for_ids(limit.into(), 0, &ids);
+            object_list = Blog::get_blogs_for_ids(user, limit.into(), 0, &ids);
         }
-        if Blog::get_blogs_for_ids(1, have_next.into(), &ids).len() > 0 {
+        if Blog::get_blogs_for_ids(user, 1, have_next.into(), &ids).len() > 0 {
             next_page_number = page + 1;
         }
-        // возвращает порцию статей и следующую страницу, если она есть
         return (object_list, next_page_number);
     }
-    pub fn get_blogs_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Blog> {
+    pub fn get_publish_blogs_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Blog>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Blog>;
+
+        if page > 1 {
+            let step = (page - 1) * 20;
+            have_next = page * limit + 1;
+            object_list = Blog::get_publish_blogs_for_ids(limit.into(), step.into(), &ids);
+        }
+        else {
+            have_next = limit + 1;
+            object_list = Blog::get_publish_blogs_for_ids(limit.into(), 0, &ids);
+        }
+        if Blog::get_publish_blogs_for_ids(1, have_next.into(), &ids).len() > 0 {
+            next_page_number = page + 1;
+        }
+        return (object_list, next_page_number);
+    }
+    pub fn get_publish_blogs_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Blog> {
         use crate::schema::blogs::dsl::blogs;
 
         let _connection = establish_connection();
@@ -287,6 +305,30 @@ impl Blog {
             .offset(offset)
             .load::<Blog>(&_connection)
             .expect("E.");
+    }
+    pub fn get_blogs_for_ids(user: &User, limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Blog> {
+        use crate::schema::blogs::dsl::blogs;
+
+        let _connection = establish_connection();
+        if user.is_superuser() {
+            return blogs
+                .filter(schema::blogs::id.eq_any(ids))
+                .order(schema::blogs::created.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Blog>(&_connection)
+                .expect("E.");
+        }
+        else {
+            return blogs
+                .filter(schema::blogs::id.eq_any(ids))
+                .filter(schema::blogs::is_active.eq(true))
+                .order(schema::blogs::created.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Blog>(&_connection)
+                .expect("E.");
+        }
     }
 }
 

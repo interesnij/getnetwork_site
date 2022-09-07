@@ -192,19 +192,20 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             }
         };
 
-        let _blogs = Blog::get_blogs_list_for_ids(0, 3, &blog_stack).0;
-        let _services = Service::get_services_list_for_ids(0, 3, &service_stack).0;
-        let _stores = Store::get_stores_list_for_ids(0, 3, &store_stack).0;
-        let _wikis = Wiki::get_wikis_list_for_ids(0, 3, &wiki_stack).0;
-        let _works = Work::get_works_list_for_ids(0, 3, &work_stack).0;
-
-        let blogs_count = _blogs.len();
-        let services_count = _services.len();
-        let stores_count = _stores.len();
-        let wikis_count = _wikis.len();
-        let works_count = _works.len();
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+
+            let _blogs = Blog::get_blogs_list_for_ids(&_request_user, 0, 3, &blog_stack).0;
+            let _services = Service::get_services_list_for_ids(&_request_user, 0, 3, &service_stack).0;
+            let _stores = Store::get_stores_list_for_ids(&_request_user, 0, 3, &store_stack).0;
+            let _wikis = Wiki::get_wikis_list_for_ids(&_request_user, 0, 3, &wiki_stack).0;
+            let _works = Work::get_works_list_for_ids(&_request_user, 0, 3, &work_stack).0;
+
+            let blogs_count = _blogs.len();
+            let services_count = _services.len();
+            let stores_count = _stores.len();
+            let wikis_count = _wikis.len();
+            let works_count = _works.len();
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/tag.stpl")]
@@ -283,6 +284,18 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             }
         }
         else {
+            let _blogs = Blog::get_publish_blogs_list_for_ids(0, 3, &blog_stack).0;
+            let _services = Service::get_publish_services_list_for_ids(0, 3, &service_stack).0;
+            let _stores = Store::get_publish_stores_list_for_ids(0, 3, &store_stack).0;
+            let _wikis = Wiki::get_publish_wikis_list_for_ids(0, 3, &wiki_stack).0;
+            let _works = Work::get_publish_works_list_for_ids(0, 3, &work_stack).0;
+
+            let blogs_count = _blogs.len();
+            let services_count = _services.len();
+            let stores_count = _stores.len();
+            let wikis_count = _wikis.len();
+            let works_count = _works.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/anon_tag.stpl")]
@@ -397,10 +410,11 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
             .load::<i32>(&_connection)
             .expect("E");
 
-        let (_blogs, next_page_number) = Blog::get_blogs_list_for_ids(page, 20, &_tag_items);
-        let blog_count = _blogs.len();
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let (_blogs, next_page_number) = Blog::get_blogs_list_for_ids(&_request_user, page, 20, &_tag_items);
+            let blog_count = _blogs.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/tag_blogs.stpl")]
@@ -447,6 +461,9 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
             }
         }
         else {
+            let (_blogs, next_page_number) = Blog::get_publish_blogs_for_ids(page, 20, &_tag_items);
+            let blog_count = _blogs.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/anon_tag_blogs.stpl")]
@@ -528,10 +545,11 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             .load::<i32>(&_connection)
             .expect("E");
 
-        let (_services, next_page_number) = Service::get_services_list_for_ids(page, 20, &_tag_items);
-        let service_count = _services.len();
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let (_services, next_page_number) = Service::get_services_list_for_ids(&_request_user, page, 20, &_tag_items);
+            let service_count = _services.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/tag_services.stpl")]
@@ -578,6 +596,9 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             }
         }
         else {
+            let (_services, next_page_number) = Service::get_publish_services_list_for_ids(page, 20, &_tag_items);
+            let service_count = _services.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/anon_tag_services.stpl")]
@@ -660,10 +681,11 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             .load::<i32>(&_connection)
             .expect("E");
 
-        let (_stores, next_page_number) = Store::get_stores_list_for_ids(page, 20, &_tag_items);
-        let stores_count = _stores.len();
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let (_stores, next_page_number) = Store::get_stores_list_for_ids(&_request_user, page, 20, &_tag_items);
+            let stores_count = _stores.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/tag_stores.stpl")]
@@ -710,6 +732,9 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             }
         }
         else {
+            let (_stores, next_page_number) = Store::get_publish_stores_list_for_ids(page, 20, &_tag_items);
+            let stores_count = _stores.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/anon_tag_stores.stpl")]
@@ -792,10 +817,11 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             .load::<i32>(&_connection)
             .expect("E");
 
-        let (_wikis, next_page_number) = Wiki::get_wikis_list_for_ids(page, 20, &_tag_items);
-        let wikis_count = _wikis.len();
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let (_wikis, next_page_number) = Wiki::get_wikis_list_for_ids(&_request_user, page, 20, &_tag_items);
+            let wikis_count = _wikis.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/tag_wikis.stpl")]
@@ -842,6 +868,9 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             }
         }
         else {
+            let (_wikis, next_page_number) = Wiki::get_publish_wikis_list_for_ids(page, 20, &_tag_items);
+            let wikis_count = _wikis.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/anon_tag_wikis.stpl")]
@@ -924,10 +953,11 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
             .load::<i32>(&_connection)
             .expect("E");
 
-        let (_works, next_page_number) = Work::get_works_list_for_ids(page, 20, &_tag_items);
-        let works_count = _works.len();
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let (_works, next_page_number) = Work::get_works_list_for_ids(&_request_user, page, 20, &_tag_items);
+            let works_count = _works.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/tag_works.stpl")]
@@ -974,6 +1004,9 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
             }
         }
         else {
+            let (_works, next_page_number) = Work::get_publish_works_list_for_ids(page, 20, &_tag_items);
+            let works_count = _works.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/anon_tag_works.stpl")]

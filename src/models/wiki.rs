@@ -239,7 +239,7 @@ impl Wiki {
         }
     }
 
-    pub fn get_wikis_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Wiki>, i32) {
+    pub fn get_wikis_list_for_ids(user: &User, page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Wiki>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Wiki>;
@@ -247,19 +247,37 @@ impl Wiki {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Wiki::get_wikis_for_ids(limit.into(), step.into(), &ids);
+            object_list = Wiki::get_wikis_for_ids(user, limit.into(), step.into(), &ids);
         }
         else {
             have_next = limit + 1;
-            object_list = Wiki::get_wikis_for_ids(limit.into(), 0, &ids);
+            object_list = Wiki::get_wikis_for_ids(user, limit.into(), 0, &ids);
         }
-        if Wiki::get_wikis_for_ids(1, have_next.into(), &ids).len() > 0 {
+        if Wiki::get_wikis_for_ids(user, 1, have_next.into(), &ids).len() > 0 {
             next_page_number = page + 1;
         }
-        // возвращает порцию статей и следующую страницу, если она есть
         return (object_list, next_page_number);
     }
-    pub fn get_wikis_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Wiki> {
+    pub fn get_publish_wikis_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Wiki>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Wiki>;
+
+        if page > 1 {
+            let step = (page - 1) * 20;
+            have_next = page * limit + 1;
+            object_list = Wiki::get_publish_wikis_for_ids(limit.into(), step.into(), &ids);
+        }
+        else {
+            have_next = limit + 1;
+            object_list = Wiki::get_publish_wikis_for_ids(limit.into(), 0, &ids);
+        }
+        if Eork::get_publish_wikis_for_ids(1, have_next.into(), &ids).len() > 0 {
+            next_page_number = page + 1;
+        }
+        return (object_list, next_page_number);
+    }
+    pub fn get_publish_wikis_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Wiki> {
         use crate::schema::wikis::dsl::wikis;
 
         let _connection = establish_connection();
@@ -271,6 +289,30 @@ impl Wiki {
             .offset(offset)
             .load::<Wiki>(&_connection)
             .expect("E.");
+    }
+    pub fn get_wikis_for_ids(user: &User, limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Wiki> {
+        use crate::schema::wikis::dsl::wikis;
+
+        let _connection = establish_connection();
+        if user.is_superuser() {
+            return wikis
+                .filter(schema::wikis::id.eq_any(ids))
+                .order(schema::wikis::created.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Wiki>(&_connection)
+                .expect("E.");
+        }
+        else {
+            return wikis
+                .filter(schema::wikis::id.eq_any(ids))
+                .filter(schema::wikis::is_active.eq(true))
+                .order(schema::wikis::created.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Wiki>(&_connection)
+                .expect("E.");
+        }
     }
 }
 

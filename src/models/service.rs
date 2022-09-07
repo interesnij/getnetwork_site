@@ -339,7 +339,7 @@ impl Service {
             .expect("E.");
     }
 
-    pub fn get_services_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Service>, i32) {
+    pub fn get_services_list_for_ids(user: &User, page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Service>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Service>;
@@ -347,30 +347,72 @@ impl Service {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Service::get_services_for_ids(limit.into(), step.into(), &ids);
+            object_list = Service::get_services_for_ids(user, limit.into(), step.into(), &ids);
         }
         else {
             have_next = limit + 1;
-            object_list = Service::get_services_for_ids(limit.into(), 0, &ids);
+            object_list = Service::get_services_for_ids(user, limit.into(), 0, &ids);
         }
-        if Service::get_services_for_ids(1, have_next.into(), &ids).len() > 0 {
+        if Service::get_services_for_ids(user, 1, have_next.into(), &ids).len() > 0 {
             next_page_number = page + 1;
         }
-        // возвращает порцию статей и следующую страницу, если она есть
         return (object_list, next_page_number);
     }
-    pub fn get_services_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Service> {
+    pub fn get_publish_services_list_for_ids(page: i32, limit: i32, ids: &Vec<i32>) -> (Vec<Service>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<Service>;
+
+        if page > 1 {
+            let step = (page - 1) * 20;
+            have_next = page * limit + 1;
+            object_list = Service::get_publish_services_for_ids(limit.into(), step.into(), &ids);
+        }
+        else {
+            have_next = limit + 1;
+            object_list = Service::get_publish_services_for_ids(limit.into(), 0, &ids);
+        }
+        if Service::get_publish_services_for_ids(1, have_next.into(), &ids).len() > 0 {
+            next_page_number = page + 1;
+        }
+        return (object_list, next_page_number);
+    }
+    pub fn get_publish_services_for_ids(limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Service> {
         use crate::schema::services::dsl::services;
 
         let _connection = establish_connection();
         return services
             .filter(schema::services::id.eq_any(ids))
             .filter(schema::services::is_active.eq(true))
-            .order(schema::services::position.desc())
+            .order(schema::services::created.desc())
             .limit(limit)
             .offset(offset)
             .load::<Service>(&_connection)
             .expect("E.");
+    }
+    pub fn get_services_for_ids(user: &User, limit: i64, offset: i64, ids: &Vec<i32>) -> Vec<Service> {
+        use crate::schema::services::dsl::services;
+
+        let _connection = establish_connection();
+        if user.is_superuser() {
+            return services
+                .filter(schema::services::id.eq_any(ids))
+                .order(schema::services::created.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Service>(&_connection)
+                .expect("E.");
+        }
+        else {
+            return services
+                .filter(schema::services::id.eq_any(ids))
+                .filter(schema::services::is_active.eq(true))
+                .order(schema::services::created.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Service>(&_connection)
+                .expect("E.");
+        }
     }
 }
 
