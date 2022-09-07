@@ -581,7 +581,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
             }
         }
         else {
-            blog_list = blogs
+            let blog_list = blogs
                 .filter(schema::blogs::title.ilike(&_q_standalone))
                 .or_filter(schema::blogs::description.ilike(&_q_standalone))
                 .or_filter(schema::blogs::content.ilike(&_q_standalone))
@@ -603,6 +603,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                 .len() > 0 {
                     next_page_number = page + 1;
                 }
+
+            let blogs_count = blog_list.len();
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/anon_blogs.stpl")]
