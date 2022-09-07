@@ -946,7 +946,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             }
         }
         else {
-            if _wiki.is_active == false && _request_user.perm < 10 {
+            if _wiki.is_active == false {
                 use crate::utils::get_anon_private_page;
                 get_anon_private_page (
                     is_desctop,

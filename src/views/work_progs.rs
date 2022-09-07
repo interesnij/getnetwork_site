@@ -1170,7 +1170,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             }
         }
         else {
-            if _work.is_active == false && _request_user.perm < 10 {
+            if _work.is_active == false {
                 use crate::utils::get_anon_private_page;
                 get_anon_private_page (
                     is_desctop,
@@ -1178,7 +1178,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                     "вебсервисы.рф: Работа ".to_string() + &_work.title,
                     "/work/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_work.id.to_string() + &"/".to_string(),
                     _work.get_image(),
-                ).await 
+                ).await
             }
             else if is_desctop {
                 #[derive(TemplateOnce)]
