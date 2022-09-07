@@ -80,7 +80,7 @@
             </div>
             <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_service_btn">Изменить</button>
         </form>
-        <div class="col-md-4">
+        <div class="col-md-4" style="padding-top: 50px">
             <% for category in service_cats.iter() { %>
             <div class="margin-bottom:15px">
               <h6>

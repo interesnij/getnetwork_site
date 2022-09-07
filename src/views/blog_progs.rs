@@ -873,7 +873,10 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            if is_desctop {
+            if _blog.is_active == false && _request_user.perm < 10 {
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Объект пока недоступен"))
+            }
+            else if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/blog.stpl")]
                 struct Template {
@@ -937,7 +940,10 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             }
         }
         else {
-            if is_desctop {
+            if _blog.is_active == false {
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Объект пока недоступен"))
+            }
+            else if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/anon_blog.stpl")]
                 struct Template {

@@ -59,7 +59,7 @@
             <button style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_wiki_btn">Отправить</button>
         </form>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4" style="padding-top: 50px">
         <% for category in wiki_cats.iter() { %>
         <div class="margin-bottom:15px">
           <h6>

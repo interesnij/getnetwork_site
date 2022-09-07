@@ -46,7 +46,7 @@
             </div>
             <button data-pk="<%= category.id %>" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_serve_category_btn">Изменить</button>
         </form>
-        <section class="border small-section bg-dark">
+        <section style="padding-top: 50px">
         <% for category in tech_cats.iter() { %>
           <h6><%= category.name %> (<%= category.level %>)
             | <a class="ajax" href="/edit_tech_category/<%= category.id %>/">~</a>
