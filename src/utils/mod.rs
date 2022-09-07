@@ -397,6 +397,7 @@ pub async fn get_anon_private_page (
             uri:         String,
         }
         let body = Template {
+            is_ajax:     is_ajax,
             title:       title,
             description: description,
             image:       image,
