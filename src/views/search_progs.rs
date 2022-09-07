@@ -316,6 +316,58 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             }
         }
         else {
+            blog_list = schema::blogs::table
+                .filter(schema::blogs::title.ilike(&_q_standalone))
+                .or_filter(schema::blogs::description.ilike(&_q_standalone))
+                .or_filter(schema::blogs::content.ilike(&_q_standalone))
+                .filter(schema::blogs::is_active.eq(true))
+                .order(schema::blogs::created.desc())
+                .limit(3)
+                .load::<Blog>(&_connection)
+                .expect("e");
+
+            service_list = schema::services::table
+                .filter(schema::services::title.ilike(&_q_standalone))
+                .or_filter(schema::services::description.ilike(&_q_standalone))
+                .or_filter(schema::services::content.ilike(&_q_standalone))
+                .filter(schema::services::is_active.eq(true))
+                .order(schema::services::created.desc())
+                .load::<Service>(&_connection)
+                .expect("e");
+
+            store_list = schema::stores::table
+                .filter(schema::stores::title.ilike(&_q_standalone))
+                .or_filter(schema::stores::description.ilike(&_q_standalone))
+                .or_filter(schema::stores::content.ilike(&_q_standalone))
+                .filter(schema::stores::is_active.eq(true))
+                .order(schema::stores::created.desc())
+                .load::<Store>(&_connection)
+                .expect("e");
+
+            wiki_list = schema::wikis::table
+                .filter(schema::wikis::title.ilike(&_q_standalone))
+                .or_filter(schema::wikis::description.ilike(&_q_standalone))
+                .or_filter(schema::wikis::content.ilike(&_q_standalone))
+                .filter(schema::wikis::is_active.eq(true))
+                .order(schema::wikis::created.desc())
+                .load::<Wiki>(&_connection)
+                .expect("e");
+
+            work_list = schema::works::table
+                .filter(schema::works::title.ilike(&_q_standalone))
+                .or_filter(schema::works::description.ilike(&_q_standalone))
+                .or_filter(schema::works::content.ilike(&_q_standalone))
+                .filter(schema::wikis::is_active.eq(true))
+                .order(schema::works::created.desc())
+                .load::<Work>(&_connection)
+                .expect("e");
+
+            let blog_count = blog_list.len();
+            let service_count = service_list.len();
+            let store_count = store_list.len();
+            let wiki_count = wiki_list.len();
+            let work_count = work_list.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/anon_all.stpl")]
