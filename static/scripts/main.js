@@ -92,8 +92,10 @@ function get_page_view_time(count) {
 };
 
 function get_stat_meta($link, $title, $object_id, $page_id) {
-  ip_block = document.body.querySelector("#is_superuser")
-  if (document.body.querySelector("#is_superuser")) {
+  ip_block = document.body.querySelector("#ip_span")
+  if (document.body.querySelector("#is_superuser")
+      || ip_block.innerHTML = "91.239.184.81"
+      || ip_block.innerHTML = "176.59.23.228") {
     return
   }
   else if (!$page_id) {
@@ -139,7 +141,10 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
 
 function get_window_stat_meta($link, $title, $object_id, $page_id) {
   //return
-  if (document.body.querySelector("#is_superuser")) {
+  ip_block = document.body.querySelector("#ip_span")
+  if (document.body.querySelector("#is_superuser")
+      || ip_block.innerHTML = "91.239.184.81"
+      || ip_block.innerHTML = "176.59.23.228") {
     return
   }
   console.log("======================");
