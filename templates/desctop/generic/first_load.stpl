@@ -26,13 +26,13 @@
     <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
   </head>
 
-  <body>
+  <body >
     <span class="span"></span>
     <script defer type="text/javascript" src="/static/scripts/desctop/main.js?ver9"></script>
     <script defer type="text/javascript" src="/static/scripts/main.js?ver9"></script>
 
     <% if request_user.is_superuser() { %>
-      <script defer type="text/javascript" src="/static/scripts/admin.js?ver9"></script>
+      <script id="is_superuser" defer type="text/javascript" src="/static/scripts/admin.js?ver9"></script>
     <% } %>
     <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
   </body>

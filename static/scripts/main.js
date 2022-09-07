@@ -92,8 +92,10 @@ function get_page_view_time(count) {
 };
 
 function get_stat_meta($link, $title, $object_id, $page_id) {
-  //return
-  if (!$page_id) {
+  if (document.body.querySelector("#is_superuser")) {
+    return
+  }
+  else if (!$page_id) {
     return
   }
   // сначала активизируется функция отрисовки первого контента,
@@ -136,6 +138,9 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
 
 function get_window_stat_meta($link, $title, $object_id, $page_id) {
   //return
+  if (document.body.querySelector("#is_superuser")) {
+    return
+  }
   console.log("======================");
   console.log("id пользователя",   $user_id);
   console.log("id объекта",        $object_id);
@@ -850,10 +855,10 @@ on('body', 'click', '.anon_color_change', function() {
     this.setAttribute("data-color", "yellow");
     new_color = "yellow"
   } else if (color == "yellow") {
-    addStyleSheets("/static/styles/color/white_kletka.css");
-    this.setAttribute("data-color", "white_kletka");
-    new_color = "white_kletka"
-  } else if (color == "white_kletka") {
+    addStyleSheets("/static/styles/color/old_paper.css");
+    this.setAttribute("data-color", "old_paper");
+    new_color = "old_paper"
+  } else if (color == "old_paper") {
     addStyleSheets("/static/styles/color/dark_wood.css");
     this.setAttribute("data-color", "dark_wood");
     new_color = "dark_wood"
