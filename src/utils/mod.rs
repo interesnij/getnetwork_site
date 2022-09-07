@@ -299,3 +299,102 @@ pub async fn get_first_load_page (
         }
     }
 }
+
+pub async fn get_private_page (
+    user:        &User,
+    is_desctop:  bool,
+    title:       String,
+    description: String,
+    uri:         String,
+    image:       String,
+) -> actix_web::Result<HttpResponse> {
+    if is_desctop {
+        #[derive(TemplateOnce)]
+        #[template(path = "desctop/generic/private_object.stpl")]
+        struct Template {
+            request_user: User,
+            title:        String,
+            description:  String,
+            image:        String,
+            uri:          String,
+        }
+        let body = Template {
+            request_user: user,
+            title:        title,
+            description:  description,
+            image:        image,
+            uri:          uri,
+        }
+        .render_once()
+        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+    }
+    else {
+        #[derive(TemplateOnce)]
+        #[template(path = "mobile/generic/private_object.stpl")]
+        struct Template {
+            request_user: User,
+            title:        String,
+            description:  String,
+            image:        String,
+            uri:          String,
+        }
+        let body = Template {
+            request_user: _request_user,
+            title:        title,
+            description:  description,
+            image:        image,
+            uri:          uri,
+        }
+        .render_once()
+        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+    }
+}
+
+pub async fn get_anon_private_page (
+    is_desctop:  bool,
+    title:       String,
+    description: String,
+    uri:         String,
+    image:       String,
+) -> actix_web::Result<HttpResponse> {
+    if is_desctop {
+        #[derive(TemplateOnce)]
+        #[template(path = "desctop/generic/anon_private_object.stpl")]
+        struct Template {
+            title:       String,
+            description: String,
+            image:       String,
+            uri:         String,
+        }
+        let body = Template {
+            title:       title,
+            description: description,
+            image:       image,
+            uri:         uri,
+        }
+        .render_once()
+        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+    }
+    else {
+        #[derive(TemplateOnce)]
+        #[template(path = "mobile/generic/anon_private_object.stpl")]
+        struct Template {
+            title:       String,
+            description: String,
+            image:       String,
+            uri:         String,
+        }
+        let body = Template {
+            title:       title,
+            description: description,
+            image:       image,
+            uri:         uri,
+        }
+        .render_once()
+        .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+    }
+}
