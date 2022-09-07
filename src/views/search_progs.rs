@@ -688,7 +688,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
         }
 
         if is_signed_in(&session) {
-            let services_list: Vec<Blog>;
+            let services_list: Vec<Service>;
             let _request_user = get_request_user_data(&session);
             if _request_user.is_superuser() {
                 services_list = services
