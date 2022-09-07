@@ -312,7 +312,7 @@ pub async fn get_private_page (
         #[derive(TemplateOnce)]
         #[template(path = "desctop/generic/private_object.stpl")]
         struct Template {
-            request_user: User,
+            request_user: &User,
             title:        String,
             description:  String,
             image:        String,
@@ -333,7 +333,7 @@ pub async fn get_private_page (
         #[derive(TemplateOnce)]
         #[template(path = "mobile/generic/private_object.stpl")]
         struct Template {
-            request_user: User,
+            request_user: &User,
             title:        String,
             description:  String,
             image:        String,
