@@ -337,7 +337,6 @@ pub async fn get_private_page (
         #[template(path = "mobile/generic/private_object.stpl")]
         struct Template {
             is_ajax:      i32,
-            request_user: User,
             title:        String,
             description:  String,
             image:        String,
@@ -345,7 +344,6 @@ pub async fn get_private_page (
         }
         let body = Template {
             is_ajax:      is_ajax,
-            request_user: user,
             title:        title,
             description:  description,
             image:        image,

@@ -9,8 +9,6 @@ pub fn plus_mainpage_stat(height: f64, seconds: i32) -> () {
     use crate::models::StatMainpage;
 
     let _connection = establish_connection();
-    let format_height = format!("{:.2}", height);
-    let parse_height: f64 = format_height.parse().unwrap();
     let items = stat_mainpages
         .filter(schema::stat_mainpages::id.eq(1))
         .load::<StatMainpage>(&_connection)
@@ -21,7 +19,7 @@ pub fn plus_mainpage_stat(height: f64, seconds: i32) -> () {
         diesel::update(&item)
             .set ((
                 schema::stat_mainpages::view.eq(item.view + 1),
-                schema::stat_mainpages::height.eq(item.height + parse_height),
+                schema::stat_mainpages::height.eq(item.height + height),
                 schema::stat_mainpages::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StatMainpage>(&_connection)
@@ -31,7 +29,7 @@ pub fn plus_mainpage_stat(height: f64, seconds: i32) -> () {
         use crate::models::NewStatMainpage;
         let _new_item = NewStatMainpage {
             view:    1,
-            height:  parse_height,
+            height:  height,
             seconds: seconds,
         };
         diesel::insert_into(schema::stat_mainpages::table)

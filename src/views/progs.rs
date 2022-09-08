@@ -227,7 +227,10 @@ pub async fn create_history(conn: ConnectionInfo, mut payload: Multipart, req: H
 
     let p_object_id = form.object_id;
     let p_page_id = form.page_id;
-    let p_height = form.height;
+    let _p_height = form.height;
+    let format_height = format!("{:.2}", __p_height);
+    let p_height: f64 = format_height.parse().unwrap();
+    
     let p_seconds = form.seconds;
     let p_link = form.link.clone();
     let p_title = form.title.clone();
