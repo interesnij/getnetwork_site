@@ -24,7 +24,7 @@
               <div class="content">
                 <% for category in blog_cats.iter() { %>
 
-                <% let get_6_blogs = category.get_6_blogs(false); %> 
+                <% let get_6_blogs = category.get_6_blogs(false); %>
 
                 <h4 class="font-alt mb-10">
                     <a class="ajax" href="/blogs/<%= category.id %>/">

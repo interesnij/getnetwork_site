@@ -124,7 +124,7 @@
             </div>
             <div class="col-sm-8">
                 <div class="section-text">
-                  <% for object in category.get_6_wikis().iter() { %>
+                  <% for object in category.get_6_wikis(request_user.is_superuser()).iter() { %>
                     <% include!("../generic/wiki.stpl"); %>
                   <% } %>
                 </div>

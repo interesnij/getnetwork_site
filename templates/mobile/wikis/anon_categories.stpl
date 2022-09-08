@@ -107,7 +107,7 @@
         </h4>
 
         <div class="section-text">
-            <% for object in category.get_6_wikis().iter() { %>
+            <% for object in category.get_6_wikis(false).iter() { %>
             <% include!("../generic/wiki.stpl"); %>
             <% } %>
         </div>

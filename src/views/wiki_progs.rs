@@ -1045,8 +1045,6 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
         use crate::utils::get_page;
 
         let page = get_page(&req);
-        let (object_list, next_page_number) = _category.get_wikis_list(page, 20);
-
         let mut stack = Vec::new();
         let _tag_items = tags_items
             .filter(schema::tags_items::wiki_id.ne(0))
@@ -1069,6 +1067,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let (object_list, next_page_number) = _category.get_wikis_list(page, 20, _request_user.is_superuser());
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/category.stpl")]
@@ -1119,6 +1118,8 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
         }
         else {
+            let (object_list, next_page_number) = _category.get_wikis_list(page, 20, false);
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/anon_category.stpl")]
@@ -1262,12 +1263,14 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/categories.stpl")]
                 struct Template {
+                    request_user: User,
                     is_ajax:      i32,
                     wiki_cats:    Vec<WikiCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatWikiCategorie,
                 }
                 let body = Template {
+                    request_user: _request_user,
                     is_ajax:      is_ajax,
                     wiki_cats:    _wiki_cats,
                     all_tags:     _tags,

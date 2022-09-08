@@ -1266,8 +1266,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
         use crate::utils::get_page;
 
         let page = get_page(&req);
-        let (object_list, next_page_number) = _category.get_works_list(page, 20);
-
         let _work_categories = work_categories
             .load::<WorkCategories>(&_connection)
             .expect("E");
@@ -1291,6 +1289,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let (object_list, next_page_number) = _category.get_works_list(page, 20, _request_user.is_superuser());
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/works/category.stpl")]
@@ -1339,6 +1338,8 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
         }
         else {
+            let (object_list, next_page_number) = _category.get_works_list(page, 20, false);
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/works/anon_category.stpl")]
@@ -1480,12 +1481,14 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/works/categories.stpl")]
                 struct Template {
+                    request_user: User,
                     is_ajax:      i32,
                     work_cats:    Vec<WorkCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatWorkCategorie,
                 }
                 let body = Template {
+                    request_user: _request_user,
                     is_ajax:      is_ajax,
                     work_cats:    _work_cats,
                     all_tags:     _tags,

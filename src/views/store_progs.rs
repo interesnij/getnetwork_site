@@ -1232,7 +1232,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
         use crate::utils::get_page;
 
         let page = get_page(&req);
-        let (object_list, next_page_number) = _category.get_stores_list(page, 20);
         let _wiki_store_categories = store_categories
             .load::<StoreCategories>(&_connection)
             .expect("E");
@@ -1255,6 +1254,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let (object_list, next_page_number) = _category.get_stores_list(page, 20, _request_user.is_superuser());
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/category.stpl")]
@@ -1305,6 +1306,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             }
         }
         else {
+            let (object_list, next_page_number) = _category.get_stores_list(page, 20, false);
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/stores/anon_category.stpl")]
@@ -1449,12 +1451,14 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/stores/categories.stpl")]
                 struct Template {
+                    request_user: User,
                     is_ajax:      i32,
                     store_cats:   Vec<StoreCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatStoreCategorie,
                 }
                 let body = Template {
+                    request_user: _request_user,
                     is_ajax:      is_ajax,
                     store_cats:   _store_cats,
                     all_tags:     _tags,

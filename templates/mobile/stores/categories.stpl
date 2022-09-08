@@ -24,7 +24,7 @@
         </h3>
         <div class="row multi-columns-row">
             <% if category.count > 0 { %>
-            <% let object_list = category.get_6_stores(); %>
+            <% let object_list = category.get_6_stores(request_user.is_superuser()); %>
             <% for object in object_list.iter() { %>
             <% include!("../generic/store.stpl"); %>
             <% } %>

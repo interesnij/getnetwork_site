@@ -60,7 +60,7 @@ impl ServiceCategories {
             .load::<Service>(&_connection)
             .expect("E");
     }
-    pub fn get_services_list(&self, page: i32, limit: i32) -> (Vec<Service>, i32) {
+    pub fn get_services_list(&self, page: i32, limit: i32, is_admin: bool) -> (Vec<Service>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Service>;
@@ -68,20 +68,20 @@ impl ServiceCategories {
         if page > 1 {
             have_next = page * limit + 1;
             let step = (page - 1) * 20;
-            object_list = self.get_services(limit.into(), step.into());
+            object_list = self.get_services(limit.into(), step.into(), is_admin);
         }
         else {
             have_next = limit + 1;
-            object_list = self.get_services(limit.into(), 0);
+            object_list = self.get_services(limit.into(), 0, is_admin);
         }
-        if self.get_services(1, have_next.into()).len() > 0 {
+        if self.get_services(1, have_next.into(), is_admin).len() > 0 {
             next_page_number = page + 1;
         }
 
         return (object_list, next_page_number);
     }
 
-    pub fn get_services(&self, limit: i64, offset: i64) -> Vec<Service> {
+    pub fn get_services(&self, limit: i64, offset: i64, is_admin: bool) -> Vec<Service> {
         use crate::schema::{
             services::dsl::services,
             service_category::dsl::service_category,
@@ -93,16 +93,27 @@ impl ServiceCategories {
             .select(schema::service_category::service_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return services
-            .filter(schema::services::id.eq_any(ids))
-            .filter(schema::services::is_active.eq(true))
-            .order(schema::services::position.desc())
-            .limit(limit)
-            .offset(offset)
-            .load::<Service>(&_connection)
-            .expect("E.");
+
+        if is_admin {
+            return services
+                .filter(schema::services::id.eq_any(ids))
+                .order(schema::services::position.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Service>(&_connection)
+                .expect("E.");
+        } else {
+            return services
+                .filter(schema::services::id.eq_any(ids))
+                .filter(schema::services::is_active.eq(true))
+                .order(schema::services::position.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Service>(&_connection)
+                .expect("E.");
+        }
     }
-    pub fn get_3_services(&self) -> Vec<Service> {
+    pub fn get_3_services(&self, is_admin: bool) -> Vec<Service> {
         use crate::schema::{
             services::dsl::services,
             service_category::dsl::service_category,
@@ -114,13 +125,22 @@ impl ServiceCategories {
             .select(schema::service_category::service_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return services
-            .filter(schema::services::id.eq_any(ids))
-            .filter(schema::services::is_active.eq(true))
-            .order(schema::services::position.desc())
-            .limit(6)
-            .load::<Service>(&_connection)
-            .expect("E.");
+        if is_admin {
+            return services
+                .filter(schema::services::id.eq_any(ids))
+                .order(schema::services::position.desc())
+                .limit(6)
+                .load::<Service>(&_connection)
+                .expect("E.");
+        } else {
+            return services
+                .filter(schema::services::id.eq_any(ids))
+                .filter(schema::services::is_active.eq(true))
+                .order(schema::services::position.desc())
+                .limit(6)
+                .load::<Service>(&_connection)
+                .expect("E.");
+        }
     }
 }
 

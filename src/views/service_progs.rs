@@ -1274,7 +1274,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             .load::<ServiceCategories>(&_connection)
             .expect("E");
 
-        let (object_list, next_page_number) = _category.get_services_list(page, 20);
         let mut stack = Vec::new();
         let _tag_items = tags_items
             .filter(schema::tags_items::service_id.ne(0))
@@ -1293,6 +1292,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let (object_list, next_page_number) = _category.get_services_list(page, 20, _request_user.is_superuser());
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/category.stpl")]
@@ -1339,6 +1339,8 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             }
         }
         else {
+            let (object_list, next_page_number) = _category.get_services_list(page, 20, false);
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/anon_category.stpl")]
@@ -1476,12 +1478,14 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/services/categories.stpl")]
                 struct Template {
+                    request_user: User,
                     is_ajax:      i32,
                     service_cats: Vec<ServiceCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatServiceCategorie,
                 }
                 let body = Template {
+                    request_user: _request_user,
                     is_ajax:      is_ajax,
                     service_cats: _service_cats,
                     all_tags:     _tags,
