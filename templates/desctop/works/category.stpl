@@ -21,7 +21,7 @@
 <section class="page-section">
   <div class="container relative">
     <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
-      <% if category.count > 0 { %>
+      <% if object_list.len() > 0 { %>
         <div class="is_paginate">
         <% for object in object_list.iter() { %>
           <% include!("../generic/work.stpl"); %>
