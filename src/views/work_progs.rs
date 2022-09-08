@@ -1481,14 +1481,14 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/works/categories.stpl")]
                 struct Template {
-                    request_user: User,
+                    //request_user: User,
                     is_ajax:      i32,
                     work_cats:    Vec<WorkCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatWorkCategorie,
                 }
                 let body = Template {
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     work_cats:    _work_cats,
                     all_tags:     _tags,

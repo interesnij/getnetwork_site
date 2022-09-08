@@ -9,7 +9,6 @@
       <h3 class="work-title">
         <% if !object.is_active { %>
           <span style="color: red">🛇</span>
-          &nbsp;
         <% } %>
         <%= object.title %>
       </h3>

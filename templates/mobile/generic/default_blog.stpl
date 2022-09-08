@@ -6,7 +6,6 @@
         <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/blog/1/<%= object.id %>/">
           <% if !object.is_active { %>
             <span style="color: red">🛇</span>
-            &nbsp;
           <% } %>
           <%= object.title %>
         </a>

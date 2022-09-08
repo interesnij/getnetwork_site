@@ -1478,14 +1478,14 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/services/categories.stpl")]
                 struct Template {
-                    request_user: User,
+                    //request_user: User,
                     is_ajax:      i32,
                     service_cats: Vec<ServiceCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatServiceCategorie,
                 }
                 let body = Template {
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     is_ajax:      is_ajax,
                     service_cats: _service_cats,
                     all_tags:     _tags,

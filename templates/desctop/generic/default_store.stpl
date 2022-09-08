@@ -13,7 +13,6 @@
     <a class="ajax" href="/store/1/<%= object.id %>/">
       <% if !object.is_active { %>
         <span style="color: red">🛇</span>
-        &nbsp;
       <% } %>
       <%= object.title %>
     </a>
