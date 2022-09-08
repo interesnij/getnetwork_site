@@ -11,6 +11,10 @@
   </div>
   <div class="post-prev-title font-alt align-center">
     <a class="ajax" href="/store/<%= category.id %>/<%= object.id %>/">
+      <% if !object.is_active { %>
+        <span style="color: red">🛇</span>
+        &nbsp;
+      <% } %>
       <%= object.title %>
     </a>
   </div>

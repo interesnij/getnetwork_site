@@ -10,6 +10,10 @@
         <%= object.title %>
       </h3>
       <div class="work-descr">
+        <% if !object.is_active { %>
+          <span style="color: red">🛇</span>
+          &nbsp;
+        <% } %>
         <% if object.description.is_some() { %>
           <%= object.description.as_deref().unwrap() %>
         <% } %>

@@ -10,6 +10,10 @@
     </div>
   </div>
   <div class="post-prev-title font-alt align-center">
+    <% if !object.is_active { %>
+      <span style="color: red">🛇</span>
+      &nbsp;
+    <% } %>
     <a class="ajax" href="/store/1/<%= object.id %>/">
       <%= object.title %>
     </a>
