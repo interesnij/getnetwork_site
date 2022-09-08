@@ -234,13 +234,12 @@ impl CookieStat {
         use chrono::Duration;
 
         let _connection = establish_connection();
-        let format_height = format!("{:.2}", height);
         let _h = NewCookieStat {
             user_id: user_id,
             page:    page,
             link:    link.clone(),
             title:   title.clone(),
-            height:  format_height,
+            height:  height,
             seconds: seconds,
             created: chrono::Local::now().naive_utc() + Duration::hours(3),
         };
