@@ -14,8 +14,8 @@
 <section class="page-section">
     <div class="container relative">
     <div style="margin-top: 40px;">
-      <div class="align-center">
-        <span class="border" style="padding: 5px 12px;">
+      <div class="border align-center">
+        <span style="padding: 5px 12px;">
           Это приватная страница. Это либо страница нового, но не проверенного
           объекта, либо - раздела администратора.
         </span>
