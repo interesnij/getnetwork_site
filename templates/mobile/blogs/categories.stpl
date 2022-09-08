@@ -20,7 +20,7 @@
     <div class="container relative">
         <% for category in blog_cats.iter() { %>
 
-        <% let get_6_blogs = category.get_6_blogs(<%= requeat_user.is_superuser() %>); %>
+        <% let get_6_blogs = category.get_6_blogs(requeat_user.is_superuser()); %>
 
         <h5 class="font-alt mb-10">
             <a class="ajax" href="/blogs/<%= category.id %>/">
