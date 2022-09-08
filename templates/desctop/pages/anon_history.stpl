@@ -48,7 +48,7 @@
                   </p>
                   <p style="display: flex;">
                       <strong>Намотано метров:</strong>
-                      <span style="margin-left: auto;margin-right: 10px"><%= user.height.round() %></span>
+                      <span style="margin-left: auto;margin-right: 10px"><%= user.height %></span>
                   </p>
                   <p style="display: flex;">
                       <strong>Затрачено секунд:</strong>
