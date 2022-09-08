@@ -7,13 +7,13 @@
     </div>
     <div class="work-intro">
       <h3 class="work-title">
-        <%= object.title %>
-      </h3>
-      <div class="work-descr">
         <% if !object.is_active { %>
           <span style="color: red">🛇</span>
           &nbsp;
         <% } %>
+        <%= object.title %>
+      </h3>
+      <div class="work-descr">
         <% if object.description.is_some() { %>
           <%= object.description.as_deref().unwrap() %>
         <% } %>

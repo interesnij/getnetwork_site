@@ -7,13 +7,15 @@
       </a>
     </div>
     <div class="post-prev-title font-alt">
-        <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/"><%= object.title %></a>
+        <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/">
+          <% if !object.is_active { %>
+            <span style="color: red">🛇</span>
+            &nbsp;
+          <% } %>
+          <%= object.title %>
+        </a>
     </div>
     <div class="post-prev-info font-alt">
-      <% if !object.is_active { %>
-        <span style="color: red">🛇</span>
-        &nbsp;
-      <% } %>
       <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
     </div>
     <div class="post-prev-text">

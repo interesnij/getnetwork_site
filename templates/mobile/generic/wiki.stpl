@@ -1,14 +1,14 @@
 <div class="mb-20">
   <h4 class="font-alt mb-0">
     <a class="ajax" href="/wiki/<%= category.id %>/<%= object.id %>/">
+      <% if !object.is_active { %>
+        <span style="color: red">🛇</span>
+        &nbsp;
+      <% } %>
       <%= object.title %>
     </a>
   </h4>
   <p>
-    <% if !object.is_active { %>
-      <span style="color: red">🛇</span>
-      &nbsp;
-    <% } %>
     <% if object.description.is_some() { %>
       <%= object.description.as_deref().unwrap() %>
     <% } %>

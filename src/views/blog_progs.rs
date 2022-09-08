@@ -1054,8 +1054,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         use crate::schema::tags_items::dsl::tags_items;
 
         let page = get_page(&req);
-        let (object_list, next_page_number) = _category.get_blogs_list(page, 20);
-
         let mut stack = Vec::new();
         let _tag_items = tags_items
             .filter(schema::tags_items::blog_id.ne(0))
@@ -1074,6 +1072,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let (object_list, next_page_number) = _category.get_blogs_list(page, 20, _request_user.is_superuser());
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/category.stpl")]
@@ -1124,6 +1123,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
         }
         else {
+            let (object_list, next_page_number) = _category.get_blogs_list(page, 20, false);
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/anon_category.stpl")]

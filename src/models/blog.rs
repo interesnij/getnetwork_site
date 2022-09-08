@@ -34,7 +34,7 @@ pub struct BlogCategories {
 }
 
 impl BlogCategories {
-    pub fn get_blogs_list(&self, page: i32, limit: i32) -> (Vec<Blog>, i32) {
+    pub fn get_blogs_list(&self, page: i32, limit: i32, is_admin: bool) -> (Vec<Blog>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Blog>;
@@ -42,19 +42,19 @@ impl BlogCategories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = self.get_blogs(limit.into(), step.into());
+            object_list = self.get_blogs(limit.into(), step.into(), is_admin);
         }
         else {
             have_next = limit + 1;
-            object_list = self.get_blogs(limit.into(), 0);
+            object_list = self.get_blogs(limit.into(), 0, is_admin);
         }
-        if self.get_blogs(1, have_next.into()).len() > 0 {
+        if self.get_blogs(1, have_next.into(), is_admin).len() > 0 {
             next_page_number = page + 1;
         }
 
         return (object_list, next_page_number);
     }
-    pub fn get_blogs(&self, limit: i64, offset: i64) -> Vec<Blog> {
+    pub fn get_blogs(&self, limit: i64, offset: i64, is_admin: bool) -> Vec<Blog> {
         use crate::schema::{
             blogs::dsl::blogs,
             blog_category::dsl::blog_category,
@@ -66,16 +66,26 @@ impl BlogCategories {
             .select(schema::blog_category::blog_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return blogs
-            .filter(schema::blogs::id.eq_any(ids))
-            .filter(schema::blogs::is_active.eq(true))
-            .order(schema::blogs::created.desc())
-            .limit(limit)
-            .offset(offset)
-            .load::<Blog>(&_connection)
-            .expect("E.");
+        if is_admin {
+            return blogs
+                .filter(schema::blogs::id.eq_any(ids))
+                .order(schema::blogs::created.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Blog>(&_connection)
+                .expect("E.");
+        } else {
+            return blogs
+                .filter(schema::blogs::id.eq_any(ids))
+                .filter(schema::blogs::is_active.eq(true))
+                .order(schema::blogs::created.desc())
+                .limit(limit)
+                .offset(offset)
+                .load::<Blog>(&_connection)
+                .expect("E.");
+        }
     }
-    pub fn get_6_blogs(&self) -> Vec<Blog> {
+    pub fn get_6_blogs(&self, is_admin: bool) -> Vec<Blog> {
         use crate::schema::{
             blogs::dsl::blogs,
             blog_category::dsl::blog_category,
@@ -87,13 +97,22 @@ impl BlogCategories {
             .select(schema::blog_category::blog_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return blogs
-            .filter(schema::blogs::id.eq_any(ids))
-            .filter(schema::blogs::is_active.eq(true))
-            .order(schema::blogs::created.desc())
-            .limit(6)
-            .load::<Blog>(&_connection)
-            .expect("E.");
+        if is_admin {
+            return blogs
+                .filter(schema::blogs::id.eq_any(ids))
+                .order(schema::blogs::created.desc())
+                .limit(6)
+                .load::<Blog>(&_connection)
+                .expect("E.");
+        } else {
+            return blogs
+                .filter(schema::blogs::id.eq_any(ids))
+                .filter(schema::blogs::is_active.eq(true))
+                .order(schema::blogs::created.desc())
+                .limit(6)
+                .load::<Blog>(&_connection)
+                .expect("E.");
+        }
     }
 
     pub fn get_blogs_ids(&self) -> Vec<i32> {

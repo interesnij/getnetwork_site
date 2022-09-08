@@ -4,13 +4,13 @@
     </a>
     <div class="widget-posts-descr">
         <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/blog/1/<%= object.id %>/">
-          <%= object.title %>
-        </a>
-        <span>
           <% if !object.is_active { %>
             <span style="color: red">🛇</span>
             &nbsp;
           <% } %>
+          <%= object.title %>
+        </a>
+        <span>
           <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
           <p><%= object.get_100_description() %></p>
         </span>
