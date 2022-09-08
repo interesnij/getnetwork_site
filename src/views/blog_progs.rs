@@ -1268,12 +1268,14 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/blogs/categories.stpl")]
                 struct Template {
+                    request_user: User,
                     is_ajax:      i32,
                     blog_cats:    Vec<BlogCategories>,
                     all_tags:     Vec<Tag>,
                     stat:         StatBlogCategorie,
                 }
                 let body = Template {
+                    request_user: _request_user,
                     is_ajax:      is_ajax,
                     blog_cats:    _blog_cats,
                     all_tags:     _tags,
