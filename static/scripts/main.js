@@ -96,7 +96,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   if (
       document.body.querySelector("#is_superuser")
       || ip_block.innerHTML == "91.239.184.81"
-      || ip_block.innerHTML == "176.59.23.228"
+      //|| ip_block.innerHTML == "176.59.23.228"
     ) {
     return
   }
