@@ -9,8 +9,6 @@ pub fn plus_mainpage_stat(height: f64, seconds: i32) -> () {
     use crate::models::StatMainpage;
 
     let _connection = establish_connection();
-    let format_height = format!("{:.2}", height);
-    let p_height: f64 = format_height.parse().unwrap();
 
     let items = stat_mainpages
         .filter(schema::stat_mainpages::id.eq(1))
@@ -21,12 +19,10 @@ pub fn plus_mainpage_stat(height: f64, seconds: i32) -> () {
         let item = items.into_iter().nth(0).unwrap();
         let item_height = format!("{:.2}", item.height);
         let _height: f64 = item_height.parse().unwrap();
-        println!("height {:?}", p_height);
-        println!("item_height {:?}", _height);
         diesel::update(&item)
             .set ((
                 schema::stat_mainpages::view.eq(item.view + 1),
-                schema::stat_mainpages::height.eq(_height + p_height),
+                schema::stat_mainpages::height.eq(_height + height),
                 schema::stat_mainpages::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StatMainpage>(&_connection)
@@ -36,7 +32,7 @@ pub fn plus_mainpage_stat(height: f64, seconds: i32) -> () {
         use crate::models::NewStatMainpage;
         let _new_item = NewStatMainpage {
             view:    1,
-            height:  p_height,
+            height:  height,
             seconds: seconds,
         };
         diesel::insert_into(schema::stat_mainpages::table)
@@ -59,10 +55,12 @@ pub fn plus_blog_categories_stat(height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::stat_blog_categories::view.eq(item.view + 1),
-                schema::stat_blog_categories::height.eq(item.height + height),
+                schema::stat_blog_categories::height.eq(_height + height),
                 schema::stat_blog_categories::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StatBlogCategorie>(&_connection)
@@ -94,10 +92,12 @@ pub fn plus_blog_category_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
         .set ((
             schema::blog_categories::view.eq(item.view + 1),
-            schema::blog_categories::height.eq(item.height + height),
+            schema::blog_categories::height.eq(_height + height),
             schema::blog_categories::seconds.eq(item.seconds + seconds),
         ))
         .get_result::<BlogCategories>(&_connection)
@@ -117,10 +117,12 @@ pub fn plus_blog_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::blogs::view.eq(item.view + 1),
-                schema::blogs::height.eq(item.height + height),
+                schema::blogs::height.eq(_height + height),
                 schema::blogs::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<Blog>(&_connection)
@@ -141,10 +143,12 @@ pub fn plus_service_categories_stat(height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::stat_service_categories::view.eq(item.view + 1),
-                schema::stat_service_categories::height.eq(item.height + height),
+                schema::stat_service_categories::height.eq(_height + height),
                 schema::stat_service_categories::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StatServiceCategorie>(&_connection)
@@ -176,10 +180,12 @@ pub fn plus_service_category_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::service_categories::view.eq(item.view + 1),
-                schema::service_categories::height.eq(item.height + height),
+                schema::service_categories::height.eq(_height + height),
                 schema::service_categories::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<ServiceCategories>(&_connection)
@@ -199,10 +205,12 @@ pub fn plus_service_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::services::view.eq(item.view + 1),
-                schema::services::height.eq(item.height + height),
+                schema::services::height.eq(_height + height),
                 schema::services::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<Service>(&_connection)
@@ -216,6 +224,7 @@ pub fn plus_store_categories_stat(height: f64, seconds: i32) -> () {
     use crate::models::StatStoreCategorie;
 
     let _connection = establish_connection();
+
     let items = stat_store_categories
         .filter(schema::stat_store_categories::id.eq(1))
         .load::<StatStoreCategorie>(&_connection)
@@ -223,10 +232,12 @@ pub fn plus_store_categories_stat(height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::stat_store_categories::view.eq(item.view + 1),
-                schema::stat_store_categories::height.eq(item.height + height),
+                schema::stat_store_categories::height.eq(_height + height),
                 schema::stat_store_categories::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StatStoreCategorie>(&_connection)
@@ -258,10 +269,12 @@ pub fn plus_store_category_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::store_categories::view.eq(item.view + 1),
-                schema::store_categories::height.eq(item.height + height),
+                schema::store_categories::height.eq(_height + height),
                 schema::store_categories::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StoreCategories>(&_connection)
@@ -281,10 +294,12 @@ pub fn plus_store_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::stores::view.eq(item.view + 1),
-                schema::stores::height.eq(item.height + height),
+                schema::stores::height.eq(_height + height),
                 schema::stores::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<Store>(&_connection)
@@ -305,10 +320,12 @@ pub fn plus_wiki_categories_stat(height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::stat_wiki_categories::view.eq(item.view + 1),
-                schema::stat_wiki_categories::height.eq(item.height + height),
+                schema::stat_wiki_categories::height.eq(_height + height),
                 schema::stat_wiki_categories::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StatWikiCategorie>(&_connection)
@@ -340,10 +357,12 @@ pub fn plus_wiki_category_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::wiki_categories::view.eq(item.view + 1),
-                schema::wiki_categories::height.eq(item.height + height),
+                schema::wiki_categories::height.eq(_height + height),
                 schema::wiki_categories::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<WikiCategories>(&_connection)
@@ -363,10 +382,12 @@ pub fn plus_wiki_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::wikis::view.eq(item.view + 1),
-                schema::wikis::height.eq(item.height + height),
+                schema::wikis::height.eq(_height + height),
                 schema::wikis::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<Wiki>(&_connection)
@@ -387,10 +408,12 @@ pub fn plus_work_categories_stat(height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::stat_work_categories::view.eq(item.view + 1),
-                schema::stat_work_categories::height.eq(item.height + height),
+                schema::stat_work_categories::height.eq(_height + height),
                 schema::stat_work_categories::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StatWorkCategorie>(&_connection)
@@ -422,10 +445,12 @@ pub fn plus_work_category_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::work_categories::view.eq(item.view + 1),
-                schema::work_categories::height.eq(item.height + height),
+                schema::work_categories::height.eq(_height + height),
                 schema::work_categories::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<WorkCategories>(&_connection)
@@ -445,10 +470,12 @@ pub fn plus_work_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::works::view.eq(item.view + 1),
-                schema::works::height.eq(item.height + height),
+                schema::works::height.eq(_height + height),
                 schema::works::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<Work>(&_connection)
@@ -469,10 +496,12 @@ pub fn plus_tags_stat(height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::stat_tags::view.eq(item.view + 1),
-                schema::stat_tags::height.eq(item.height + height),
+                schema::stat_tags::height.eq(_height + height),
                 schema::stat_tags::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StatTag>(&_connection)
@@ -504,10 +533,12 @@ pub fn plus_tag_stat(id: i32, height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::tags::view.eq(item.view + 1),
-                schema::tags::height.eq(item.height + height),
+                schema::tags::height.eq(_height + height),
                 schema::tags::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<Tag>(&_connection)
@@ -528,10 +559,12 @@ pub fn plus_info_stat(height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::stat_infos::view.eq(item.view + 1),
-                schema::stat_infos::height.eq(item.height + height),
+                schema::stat_infos::height.eq(_height + height),
                 schema::stat_infos::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StatInfo>(&_connection)
@@ -564,10 +597,12 @@ pub fn plus_help_stat(height: f64, seconds: i32) -> () {
 
     if items.len() > 0 {
         let item = items.into_iter().nth(0).unwrap();
+        let item_height = format!("{:.2}", item.height);
+        let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
                 schema::stat_helps::view.eq(item.view + 1),
-                schema::stat_helps::height.eq(item.height + height),
+                schema::stat_helps::height.eq(_height + height),
                 schema::stat_helps::seconds.eq(item.seconds + seconds),
             ))
             .get_result::<StatHelp>(&_connection)
