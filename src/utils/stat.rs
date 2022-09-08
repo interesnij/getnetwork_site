@@ -21,6 +21,8 @@ pub fn plus_mainpage_stat(height: f64, seconds: i32) -> () {
         let item = items.into_iter().nth(0).unwrap();
         let item_height = format!("{:.2}", item.height);
         let _height: f64 = item_height.parse().unwrap();
+        println!("height {:?}", p_height);
+        println!("item_height {:?}", _height);
         diesel::update(&item)
             .set ((
                 schema::stat_mainpages::view.eq(item.view + 1),
