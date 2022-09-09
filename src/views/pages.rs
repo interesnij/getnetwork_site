@@ -31,17 +31,15 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/history/", web::get().to(history_page));
     config.route("/feedback_list/", web::get().to(feedback_list_page));
     config.route("/serve_list/", web::get().to(serve_list_page));
+    config.route("/cookie_users_list/", web::get().to(cookie_users_list_page));
+
     config.route("/load_tech_category/{id}/", web::get().to(get_tech_category_page));
     config.route("/load_serve_category/{id}/", web::get().to(get_serve_category_page));
     config.route("/load_serve/{id}/", web::get().to(get_serve_page));
     config.route("/load_feedback/", web::get().to(get_feedback_page));
-    config.route("/cookie_users_list/", web::get().to(cookie_users_list_page));
-}
+    config.route("/load_user_history/{id}/", web::get().to(get_user_history_page));
 
-//#[derive(Debug, Deserialize)]
-//pub struct SParams {
-//    pub q: String,
-//}
+}
 
 pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -793,5 +791,54 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
                 Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
             }
         }
+    }
+}
+
+pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.is_superuser() {
+            use crate::utils::get_page;
+            use crate::models::CookieStat;
+            
+            let (object_list, next_page_number) = CookieStat::get_stat_list(user_id, get_page(&req), 20);
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/user_stat.stpl")]
+                struct Template {
+                    object_list:      Vec<CookieUser>,
+                    next_page_number: i32,
+                }
+                let body = Template {
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/user_stat.stpl")]
+                struct Template {
+                    object_list:      Vec<CookieUser>,
+                    next_page_number: i32,
+                }
+                let body = Template {
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
     }
 }
