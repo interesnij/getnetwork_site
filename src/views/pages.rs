@@ -799,7 +799,7 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
         let _request_user = get_request_user_data(&session);
         if _request_user.is_superuser() {
             use crate::utils::{get_page, is_desctop};
-            use crate::models::CookieStat
+            use crate::models::CookieStat;
 
             let (object_list, next_page_number) = CookieStat::get_stat_list(*user_id, get_page(&req), 20);
 
