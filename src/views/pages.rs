@@ -798,12 +798,12 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.is_superuser() {
-            use crate::utils::get_page;
-            use crate::models::CookieStat;
+            use crate::utils::{get_page, is_desctop};
+            use crate::models::CookieStat
 
             let (object_list, next_page_number) = CookieStat::get_stat_list(*user_id, get_page(&req), 20);
 
-            if is_desctop {
+            if is_desctop(&req) {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/pages/user_stat.stpl")]
                 struct Template {
