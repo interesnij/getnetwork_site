@@ -125,6 +125,8 @@ impl CookieUser {
 
         let _connection = establish_connection();
         return cookie_users
+            .filter(schema::cookie_users::seconds.ne(0))
+            .filter(schema::cookie_users::height.ne(0.0))
             .order(schema::cookie_users::created.desc())
             .limit(limit)
             .offset(offset)
