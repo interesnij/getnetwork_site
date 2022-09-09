@@ -798,41 +798,24 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.is_superuser() {
-            use crate::utils::{get_page, is_desctop};
+            use crate::utils::get_page;
             use crate::models::CookieStat;
 
             let (object_list, next_page_number) = CookieStat::get_stat_list(*user_id, get_page(&req), 20);
 
-            if is_desctop(&req) {
-                #[derive(TemplateOnce)]
-                #[template(path = "desctop/pages/user_stat.stpl")]
-                struct Template {
-                    object_list:      Vec<CookieStat>,
-                    next_page_number: i32,
-                }
-                let body = Template {
-                    object_list:      object_list,
-                    next_page_number: next_page_number,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/load/user_stat.stpl")]
+            struct Template {
+                object_list:      Vec<CookieStat>,
+                next_page_number: i32,
             }
-            else {
-                #[derive(TemplateOnce)]
-                #[template(path = "mobile/pages/user_stat.stpl")]
-                struct Template {
-                    object_list:      Vec<CookieStat>,
-                    next_page_number: i32,
-                }
-                let body = Template {
-                    object_list:      object_list,
-                    next_page_number: next_page_number,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            let body = Template {
+                object_list:      object_list,
+                next_page_number: next_page_number,
             }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
         else {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))

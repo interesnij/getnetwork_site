@@ -530,3 +530,7 @@ on('body', 'click', '.hide_work', function() {
 on('body', 'click', '.publish_work', function() {
   get_and_change_btn(this, "/publish_work/", false);
 });
+
+on('body', 'click', '.show_user_history', function() {
+  create_fullscreen("/load_user_history/" + this.getAttribute("data-pk") + "/", "item_fullscreen");
+});
