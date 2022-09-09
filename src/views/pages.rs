@@ -8,10 +8,6 @@ use actix_web::{
 };
 
 use crate::models::User;
-use serde::{
-    Deserialize,
-    //Serialize
-};
 use crate::utils::{
     establish_connection,
     get_device_and_ajax,
