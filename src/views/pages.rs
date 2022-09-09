@@ -720,7 +720,7 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
         ).await
     }
     else {
-        let (object_list, next_page_number) = CookieUser::get_users_list(page, 20);
+        let (object_list, next_page_number) = CookieUser::get_users_list(get_page(&req), 20);
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -729,7 +729,7 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
                 #[template(path = "desctop/pages/stat.stpl")]
                 struct Template {
                     request_user:     User,
-                    object_list:      Vec<Blog>,
+                    object_list:      Vec<CookieUser>,
                     next_page_number: i32,
                     is_ajax:          i32,
                 }
@@ -747,7 +747,7 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/pages/stat.stpl")]
                 struct Template {
-                    object_list:      Vec<Blog>,
+                    object_list:      Vec<CookieUser>,
                     next_page_number: i32,
                     is_ajax:          i32,
                 }
@@ -766,7 +766,7 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/pages/anon_stat.stpl")]
                 struct Template {
-                    object_list:      Vec<Blog>,
+                    object_list:      Vec<CookieUser>,
                     next_page_number: i32,
                     is_ajax:          i32,
                 }
@@ -783,7 +783,7 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/pages/anon_stat.stpl")]
                 struct Template {
-                    object_list:      Vec<Blog>,
+                    object_list:      Vec<CookieUser>,
                     next_page_number: i32,
                     is_ajax:          i32,
                 }
