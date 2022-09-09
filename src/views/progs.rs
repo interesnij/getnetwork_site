@@ -297,6 +297,10 @@ pub async fn create_history(conn: ConnectionInfo, mut payload: Multipart, req: H
                     use crate::utils::plus_tag_stat;
                     plus_tag_stat(p_object_id.unwrap(), p_height, p_seconds)
                 },
+                9 => {
+                    use crate::utils::plus_help_category_stat;
+                    plus_help_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+                },
                 _ => println!("no value"),
             };
         }
@@ -305,10 +309,6 @@ pub async fn create_history(conn: ConnectionInfo, mut payload: Multipart, req: H
                 1 => {
                     use crate::utils::plus_mainpage_stat;
                     plus_mainpage_stat(p_height, p_seconds)
-                },
-                9 => {
-                    use crate::utils::plus_help_stat;
-                    plus_help_stat(p_height, p_seconds)
                 },
                 10 => {
                     use crate::utils::plus_info_stat;

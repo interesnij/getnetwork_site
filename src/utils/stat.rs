@@ -584,15 +584,15 @@ pub fn plus_info_stat(height: f64, seconds: i32) -> () {
     }
 }
 
-pub fn plus_help_stat(height: f64, seconds: i32) -> () {
-    // статистика страницы помощи
-    use schema::stat_helps::dsl::stat_helps;
-    use crate::models::StatHelp;
+pub fn plus_help_category_stat(id: i32, height: f64, seconds: i32) -> () {
+    // статистика страницы категории работ
+    use schema::help_item_categories::dsl::help_item_categories;
+    use crate::models::HelpItemCategorie;
 
     let _connection = establish_connection();
-    let items = stat_helps
-        .filter(schema::stat_helps::id.eq(1))
-        .load::<StatHelp>(&_connection)
+    let items = help_item_categories
+        .filter(schema::help_item_categories::id.eq(id))
+        .load::<HelpItemCategorie>(&_connection)
         .expect("E");
 
     if items.len() > 0 {
@@ -601,23 +601,11 @@ pub fn plus_help_stat(height: f64, seconds: i32) -> () {
         let _height: f64 = item_height.parse().unwrap();
         diesel::update(&item)
             .set ((
-                schema::stat_helps::view.eq(item.view + 1),
-                schema::stat_helps::height.eq(_height + height),
-                schema::stat_helps::seconds.eq(item.seconds + seconds),
+                schema::help_item_categories::view.eq(item.view + 1),
+                schema::help_item_categories::height.eq(_height + height),
+                schema::help_item_categories::seconds.eq(item.seconds + seconds),
             ))
-            .get_result::<StatHelp>(&_connection)
-            .expect("Error.");
-    }
-    else {
-        use crate::models::NewStatHelp;
-        let _new_item = NewStatHelp {
-            view:    1,
-            height:  height,
-            seconds: seconds,
-        };
-        diesel::insert_into(schema::stat_helps::table)
-            .values(&_new_item)
-            .get_result::<StatHelp>(&_connection)
+            .get_result::<HelpItemCategorie>(&_connection)
             .expect("Error.");
     }
 }
