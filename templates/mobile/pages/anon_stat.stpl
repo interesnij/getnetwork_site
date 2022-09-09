@@ -17,24 +17,24 @@
           <div class="row <% if i % 2 == 0 { %>hover<% } %>" style="padding: 5px 0;">
             <div class="col-md-6">
               <% if object.country_ru.is_some() { %>
-                <%= object.country_ru.unwrap() %>
+                <%= object.country_ru.as_deref().unwrap() %>
               <% } %>
               <% if object.country_en.is_some() { %>
-                <%= object.country_en.unwrap() %>
+                <%= object.country_en.as_deref().unwrap() %>
               <% } %>,
 
               <% if object.region_ru.is_some() { %>
-                <%= object.region_ru.unwrap() %>
+                <%= object.region_ru.as_deref().unwrap() %>
               <% } %>
               <% if object.region_en.is_some() { %>
-                <%= object.region_en.unwrap() %>
+                <%= object.region_en.as_deref().unwrap() %>
               <% } %>,
 
               <% if object.city_ru.is_some() { %>
-                <%= object.city_ru.unwrap() %>
+                <%= object.city_ru.as_deref().unwrap() %>
               <% } %>
               <% if object.city_en.is_some() { %>
-                <%= object.city_en.unwrap() %>
+                <%= object.city_en.as_deref().unwrap() %>
               <% } %>
             </div>
             <div class="col-md-1">
