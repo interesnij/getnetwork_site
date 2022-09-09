@@ -39,12 +39,13 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/load_serve_category/{id}/", web::get().to(get_serve_category_page));
     config.route("/load_serve/{id}/", web::get().to(get_serve_page));
     config.route("/load_feedback/", web::get().to(get_feedback_page));
+    config.route("/cookie_users_list/", web::get().to(cookie_users_list_page));
 }
 
-#[derive(Debug, Deserialize)]
-pub struct SParams {
-    pub q: String,
-}
+//#[derive(Debug, Deserialize)]
+//pub struct SParams {
+//    pub q: String,
+//}
 
 pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -700,4 +701,101 @@ pub async fn get_feedback_page() -> actix_web::Result<HttpResponse> {
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
     Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+}
+
+pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    use crate::utils::{get_device_and_ajax, get_page};
+    use crate::models::CookieUser;
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let _connection = establish_connection();
+    if is_ajax == 0 {
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Общая статистика сайта".to_string(),
+            "вебсервисы.рф: Общая статистика сайта".to_string(),
+            "/cookie_users_list/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
+    }
+    else {
+        let (object_list, next_page_number) = CookieUser::get_users_list(page, 20);
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/stat.stpl")]
+                struct Template {
+                    request_user:     User,
+                    object_list:      Vec<Blog>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    request_user:     _request_user,
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/stat.stpl")]
+                struct Template {
+                    object_list:      Vec<Blog>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/anon_stat.stpl")]
+                struct Template {
+                    object_list:      Vec<Blog>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/anon_stat.stpl")]
+                struct Template {
+                    object_list:      Vec<Blog>,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    object_list:      object_list,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
 }

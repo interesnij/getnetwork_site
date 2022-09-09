@@ -99,6 +99,39 @@ pub struct CookieUser {
     pub seconds:    i32,
     pub created:    chrono::NaiveDateTime,
 }
+impl CookieUser {
+    pub fn get_users_list(page: i32, limit: i32) -> (Vec<CookieUser>, i32) {
+        let mut next_page_number = 0;
+        let have_next: i32;
+        let object_list: Vec<CookieUser>;
+
+        if page > 1 {
+            let step = (page - 1) * 20;
+            have_next = page * limit + 1;
+            object_list = CookieUser::get_users(limit.into(), step.into());
+        }
+        else {
+            have_next = limit + 1;
+            object_list = CookieUser::get_users(limit.into(), 0);
+        }
+        if CookieUser::get_users(1, have_next.into()).len() > 0 {
+            next_page_number = page + 1;
+        }
+
+        return (object_list, next_page_number);
+    }
+    pub fn get_users(limit: i64, offset: i64) -> Vec<CookieUser> {
+        use crate::schema::cookie_users::dsl::cookie_users;
+
+        let _connection = establish_connection();
+        return cookie_users
+            .order(schema::cookie_users::created.desc())
+            .limit(limit)
+            .offset(offset)
+            .load::<CookieUser>(&_connection)
+            .expect("E.");
+    }
+}
 
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="cookie_users"]
