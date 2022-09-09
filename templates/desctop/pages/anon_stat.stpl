@@ -16,9 +16,8 @@
     <h5 class="font-alt mb-20">Статистика сайта</h5>
       <div class="is_paginate">
         <% for (i, object) in object_list.iter().enumerate() { %>
-          <div class="row <% if i % 2 == 0 { %>hover<% } %>" style="padding: 5px 0;">
-            <div class="col-md-9">
-              <p>
+          <div class="<% if i % 2 == 0 { %>hover<% } %>" style="padding: 5px 0;">
+              <p style="margin-bottom:0 !important;">
               <% if object.country_ru.is_some() { %>
                 <%= object.country_ru.as_deref().unwrap() %>
               <% } %>
@@ -56,10 +55,6 @@
                 <% } %>
               </p>
             </div>
-            <div class="col-md-3">
-               <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-            </div>
-          </div>
         <% } %>
         <% if next_page_number > 0 { %>
           <div class="load centered m-1 next_page_list" data-link="/cookie_users_list/?page=<%= next_page_number %>">
