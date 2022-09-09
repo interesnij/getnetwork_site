@@ -15,7 +15,7 @@
 
     <h5 class="font-alt mb-20">Статистика сайта</h5>
       <div class="is_paginate">
-        <% for (i, object) in object_list.iter() { %>
+        <% for object in object_list.iter() { %>
           <div class="solid_bottom" style="padding: 5px 0;">
               <span>
               <% if object.country_ru.is_some() { %>
