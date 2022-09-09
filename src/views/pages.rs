@@ -704,7 +704,7 @@ pub async fn get_feedback_page() -> actix_web::Result<HttpResponse> {
 }
 
 pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::utils::{get_device_and_ajax, get_page};
+    use crate::utils::get_page;
     use crate::models::CookieUser;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);

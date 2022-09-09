@@ -1,0 +1,73 @@
+<% include!("../anon_header.stpl"); %>
+
+<section page-id="13" data-title="История просмотров" data-description="вебсервисы.рф: История просмотров пользователя" data-uri="/history/" data-image="/static/images/dark/store.jpg" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt black">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <span>Статистика сайта</span>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+
+    <h5 class="font-alt mb-20">Статистика сайта</h5>
+      <div class="is_paginate">
+        <% for (i, object) in object_list.iter().enumerate() { %>
+          <div class="row <% if i % 2 == 0 { %>hover<% } %>" style="padding: 5px 0;">
+            <div class="col-md-6">
+              <% if object.country_ru.is_some() { %>
+                <%= object.country_ru.unwrap() %>
+              <% } %>
+              <% if object.country_en.is_some() { %>
+                <%= object.country_en.unwrap() %>
+              <% } %>,
+
+              <% if object.region_ru.is_some() { %>
+                <%= object.region_ru.unwrap() %>
+              <% } %>
+              <% if object.region_en.is_some() { %>
+                <%= object.region_en.unwrap() %>
+              <% } %>,
+
+              <% if object.city_ru.is_some() { %>
+                <%= object.city_ru.unwrap() %>
+              <% } %>
+              <% if object.city_en.is_some() { %>
+                <%= object.city_en.unwrap() %>
+              <% } %>
+            </div>
+            <div class="col-md-1">
+              <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
+                <g><rect fill="none" height="24" width="24"/></g><g><g/><polygon points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/></g>
+              </svg><%= object.height %>
+            </div>
+            <div class="col-md-1">
+              <svg fill="currentColor" style="width:17px;vertical-align: text-bottom;" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"/>
+              </svg> <%= object.seconds %>
+            </div>
+            <div class="col-md-2">
+              <% if object.device == 1 { %>
+                Компьютер
+              <% } else { %>
+                Телефон
+              <% } %>
+            </div>
+            <div class="col-md-2">
+               <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+            </div>
+          </div>
+        <% } %>
+        <% if next_page_number > 0 { %>
+          <div class="load centered m-1 next_page_list" data-link="/cookie_users_list/?page=<%= next_page_number %>">
+            <img src="/static/images/preloader.gif">
+          </div>
+        <% } %>
+        </div>
+    </div>
+</section>
+
+<% include!("../anon_footer.stpl"); %>

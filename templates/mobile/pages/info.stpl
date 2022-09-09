@@ -14,34 +14,29 @@
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
             <li class="yy s_1 active">
               <a>
-                <div class="alt-tabs-icon">
-                  <span class="icon-heart"></span>
-                </div>
                 О нас
               </a>
             </li>
             <li class="yy s_2 pointer">
               <a>
-                <div class="alt-tabs-icon">
-                  <span class="icon-envelope"></span>
-                </div>
                 Контакты
               </a>
             </li>
 
             <li class="yy s_3 pointer">
               <a>
-                <div class="alt-tabs-icon">
-                  <span class="icon-happy"></span>
-                </div>
                 О сайте
               </a>
             </li>
             <li class="yy s_4 pointer">
-                <div class="alt-tabs-icon">
-                  <span class="icon-lifesaver"></span>
-                </div>
+              <a>
                 Помощь
+              </a>
+            </li>
+            <li>
+              <a class="ajax" href="/cookie_users_list/">
+                Статистика
+              </a>
             </li>
         </ul>
 
