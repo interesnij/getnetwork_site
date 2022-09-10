@@ -207,7 +207,7 @@ on('body', 'input', '.desctop_folder_search', function() {
         elem_.innerHTML = ajax_link.responseText;
         search_section = elem_.querySelector(".search_section");
         //replace_section = search_section.replaceAll(value, "<span class='selected'>" + value + "</span>");
-        search_block.innerHTML = search_section.innerHTML.toLowerCase().replaceAll(value, "<span class='selected'>" + value + "</span>");
+        search_block.innerHTML = search_section.innerHTML.replaceAll(value.toLowerCase(), "<span class='selected'>" + value + "</span>");
         content_block.classList.add("hidden");
       }
     }
