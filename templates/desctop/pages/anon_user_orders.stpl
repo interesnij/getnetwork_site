@@ -70,7 +70,7 @@
       <% } else { %>
         <div style="margin-top: 40px;">
           <div class="align-center">
-            <span class="border" style="padding: 5px 12px;">
+            <span class="border" style="padding: 10px 15px;">
               Заказов пока нет. Вы можете заказывать у нас веб-сервисы со
               страниц
               <a href="/service_categories/" class="ajax underline">услуг</a>
