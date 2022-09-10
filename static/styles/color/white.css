@@ -1,6 +1,8 @@
-::-moz-selection, ::-webkit-selection, ::selection, .selected {
-  color: #fff !important;
-  background:#000 !important;
+::-moz-selection{ color: #fff !important; background:#000 !important; }
+::-webkit-selection{ color: #fff !important; background:#000 !important; }
+::selection{ color: #fff !important; background:#000 !important; }
+.selected {
+  color: #fff !important; background:#000 !important;
 }
 
 .js-height-full, .small-section, .mob_menu, .mn-sub {
