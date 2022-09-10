@@ -183,17 +183,11 @@ on('body', 'input', '.desctop_folder_search', function() {
     search_block = content_block.previousElementSibling;
 
     if (value == "") {
-      _help.classList.add("hide");
       search_block.innerHTML= "";
-      content_block.classList.remove("hidden");
       return;
     }
     else if (value.length < 3) {
-      _help.classList.remove("hide");
       return;
-    }
-    else {
-      _help.classList.add("hide");
     }
 
     if (_this.getAttribute("data-folder")) {
