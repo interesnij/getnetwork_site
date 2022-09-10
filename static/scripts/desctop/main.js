@@ -179,7 +179,7 @@ on('body', 'input', '.desctop_folder_search', function() {
     _help = _this.parentElement;
     value = _this.value;
     if (value.length < 3) {
-      _help.innerHTML = "Поиск от 3х букв"ж
+      _help.innerHTML = "Поиск от 3х букв";
       return;
     }
     _help.innerHTML = "";
