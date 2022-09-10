@@ -1,5 +1,5 @@
 
-<section page-id="1" data-title="Главная страница" data-description="вебсервисы.рф - Комплексное, экспертное создание и развитие веб-ресурсов" data-image="/static/images/dark/store.jpg" data-uri="/" class="doc_title home-section main_banner">
+<section page-id="1" style="padding: 0;" data-title="Главная страница" data-description="вебсервисы.рф - Комплексное, экспертное создание и развитие веб-ресурсов" data-image="/static/images/dark/store.jpg" data-uri="/" class="doc_title home-section main_banner">
     <div class="js-height-full" style="height: 100vh">
         <div class="home-content container">
             <div class="home-text">

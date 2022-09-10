@@ -20,8 +20,8 @@
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css?ver11">
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/fonts.css">
     <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/load.css?ver11">
-    <link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/static/images/favicon.png" type="image/x-icon" />
+    <link rel="icon" href="/static/images/favicon.png" type="image/x-icon" />
     <meta name="yandex-verification" content="6990cfa2f76f8dca" />
     <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
   </head>
