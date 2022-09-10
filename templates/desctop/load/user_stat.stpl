@@ -1,4 +1,4 @@
-<div data-title="История куки-пользователя" class="doc_title">
+<div data-title="История куки-пользователя" class="doc_title" style="padding: 0;">
 <h5 class="font-alt mb-20">История просмотров</h5>
   <% if object_list.len() > 0 { %>
   <div class="is_paginate">
