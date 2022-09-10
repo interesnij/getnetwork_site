@@ -2,7 +2,7 @@
 
 <section page-id="37" data-title="Работы тега <%= tag.name %>" data-description="вебсервисы.рф: Работы тега <%= tag.name %>" data-uri="/tag_works/<%= tag.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
           <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
           <a class="ajax" href="/tags/">Ключевые слова</a>

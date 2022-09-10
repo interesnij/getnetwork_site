@@ -2,8 +2,8 @@
 
 <section data-title="Создание тега" data-description="вебсервисы.рф: Создание тега" data-uri="/create_tag/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
-            <span>Создание тега</span>
+        <div class="hs-line-4 font-alt">
+            <a>Создание тега</a>
         </div>
     </div>
 </section>

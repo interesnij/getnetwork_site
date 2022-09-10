@@ -2,7 +2,7 @@
 
 <section page-id="93" data-id="<%= object.id %>" data-title="Работа <%= object.title %>" data-description="вебсервисы.рф: Работа <%= object.title %>" data-uri="/work/<%= category.id %>/<%= object.id %>/" data-image="<%= object.get_image() %>" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/work_categories/">Портфолио</a>
             &nbsp;/&nbsp;
             <a class="ajax" href="/works/<%= category.id %>/"><%= category.name %></a>

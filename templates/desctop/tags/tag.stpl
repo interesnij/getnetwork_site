@@ -2,12 +2,12 @@
 
 <section page-id="32" data-id="<%= tag.id %>" data-title="Тег <%= tag.name %>" data-description="вебсервисы.рф: Тег <%= tag.name %>" data-uri="/tag/<%= tag.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
             <a class="ajax" href="/tags/">Ключевые слова</a>
             &nbsp;/&nbsp;
-            <span><%= tag.name %></span>
+            <a><%= tag.name %></a>
         </div>
     </div>
 </section>

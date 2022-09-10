@@ -2,10 +2,10 @@
 
 <section page-id="7" data-title="Регистрация" data-description="вебсервисы.рф: Регистрация" data-uri="/signup/" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <span>Регистрация</span>
+            <a>Регистрация</a>
         </div>
     </div>
 </section>

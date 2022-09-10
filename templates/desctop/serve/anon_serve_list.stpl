@@ -1,5 +1,5 @@
 <div class="container align-center">
-  <h1 class="magazine-logo-text black font-alt">Список опций</h1>
+  <h1 class="font-alt">Список опций</h1>
 </div>
 <div class="container relative">
   <% for (i, tech_category) in tech_cats.iter().enumerate() { %>

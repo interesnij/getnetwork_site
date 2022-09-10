@@ -2,8 +2,8 @@
 
 <section data-title="Изменение тега <%= tag.name %>" data-description="вебсервисы.рф: Изменение тега <%= tag.name %>" data-uri="/edit_tag/<%= tag.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
-            <span>Изменение тега</span>
+        <div class="hs-line-4 font-alt">
+            <a>Изменение тега</a>
         </div>
     </div>
 </section>

@@ -2,10 +2,10 @@
 
 <section data-title="Создание категории услуг" data-description="вебсервисы.рф: Создание категории услуг" data-uri="/create_service_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/service_categories/">Услуги</a>
             &nbsp;/&nbsp;
-            <span>Создание категории услуг</span>
+            <a>Создание категории услуг</a>
         </div>
     </div>
 </section>

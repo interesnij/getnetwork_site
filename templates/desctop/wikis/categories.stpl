@@ -2,10 +2,10 @@
 
 <section page-id="81" data-title="База знаний" data-description="вебсервисы.рф: База знаний" data-uri="/wiki_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-                <div class="hs-line-4 font-alt black">
+                <div class="hs-line-4 font-alt">
                     <a class="ajax" href="/">Главная</a>
                     &nbsp;/&nbsp;
-                    <span>База знаний</span>
+                    <a>База знаний</a>
                     <% include!("../generic/page_stat.stpl"); %>
                 </div>
     </div>
@@ -15,7 +15,7 @@
     <div class="relative container-1400">
       <div class="home-content">
         <div class="home-text align-center">
-          <h1 class="hs-line-4 black font-alt">База знаний программиста</h1>
+          <h1 class="hs-line-4 font-alt">База знаний программиста</h1>
           <h2 class="hs-line-15 font-alt mb-0">
             Статьи о программировании на python, rust,
             javascript, c++, C#, java
@@ -24,7 +24,7 @@
       </div>
     </div>
   </section>
-  <hr class="mt-0 mb-0 black">
+  <hr class="mt-0 mb-0 ">
 
   <div class="pt-10 container-1400 relative">
       <div class="row">
@@ -68,7 +68,7 @@
           </div>
       </div>
   </div>
-  <hr class="mt-0 mb-0 black">
+  <hr class="mt-0 mb-0">
 
   <section class="page-section">
     <div class="container-1400 relative">
@@ -109,7 +109,7 @@
         </div>
     </div>
 </section>
-<hr class="mt-0 mb-0 black">
+<hr class="mt-0 mb-0">
 <% for category in wiki_cats.iter() { %>
 
 <section class="page-section">
@@ -132,7 +132,7 @@
         </div>
     </div>
 </section>
-<hr class="mt-0 mb-0 black">
+<hr class="mt-0 mb-0">
 <% } %>
 
 <% include!("../footer.stpl"); %>

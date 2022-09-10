@@ -2,10 +2,10 @@
 
 <section page-id="53" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <span>Калькулятор стоимости</span>
+            <a>Калькулятор стоимости</a>
         </div>
     </div>
 </section>

@@ -2,8 +2,8 @@
 
 <section page-id="14" data-title="Статистика сайта" data-description="вебсервисы.рф: Статистика сайта" data-uri="/cookie_users_list/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
-            <span>Статистика сайта</span>
+        <div class="hs-line-4 font-alt">
+            <a>Статистика сайта</a>
         </div>
     </div>
 </section>

@@ -2,8 +2,8 @@
 
 <section page-id="53" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
-            <span>Калькулятор стоимости</span>
+        <div class="hs-line-4 font-alt">
+            <a>Калькулятор стоимости</a>
         </div>
     </div>
 </section>

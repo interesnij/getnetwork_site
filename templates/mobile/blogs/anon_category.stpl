@@ -2,10 +2,10 @@
 
 <section page-id="42" data-id="<%= category.id %>" data-title="Категория блога <%= category.name %>" data-description="вебсервисы.рф: Категория блога <%= category.name %>" data-uri="/blogs/<%= category.id %>/" data-image="<%= category.get_image() %>" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/blog_categories/">Блог</a>
             &nbsp;/&nbsp;
-            <span><%= category.name %></span>
+            <a><%= category.name %></a>
             <% include!("../generic/category_stat.stpl"); %>
         </div>
     </div>

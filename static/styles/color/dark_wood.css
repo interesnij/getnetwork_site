@@ -97,11 +97,6 @@ hr{
     border-top: 1px solid rgba(255,255,255, .7);
 }
 
-.big-icon{
-    border: 3px solid #000000 !important;
-    color: rgba(0,0,0, .97) !important;
-}
-
 .btn-mod:hover,
 .btn-mod:focus,
 a.btn-mod:hover,
@@ -158,24 +153,6 @@ a.btn-mod:focus{
     box-shadow: 0 0 3px rgba(255,255,255, .3) !important;
 }
 
-.hs-line-4{
-    color: rgba(255,255,255, .85) !important;
-}
-
-.hs-line-10{
-    background: rgba(255,255,255, .75) !important;
-    color: rgba(0,0,0, .85) !important;
-}
-
-.hs-line-10.highlight{
-    background: #e41919 !important;
-}
-
-.logo,
-a.logo:hover{
-    color: rgba(255,255,255, .9) !important;
-}
-
 .main-nav {
     background-color: rgb(0 0 0 / 50%) !important;
     box-shadow: 0 1px 0 rgb(255 255 255 / 25%) !important;
@@ -184,13 +161,6 @@ a.logo:hover{
 .inner-nav ul li a:hover,
 .inner-nav ul li a.active{
     color: #FFFFFF !important;
-}
-
-.mn-soc-link{
-    border: 1px solid rgba(255,255,255, .1) !important;
-}
-.mn-soc-link:hover{
-    border: 1px solid rgba(255,255,255, .25) !important;
 }
 
 .alt-features-icon{
@@ -236,9 +206,6 @@ a.logo:hover{
 .tpl-alt-tabs li.active a:focus{
     color: #FFFFFF !important;
     font-weight: bold;
-}
-.footer-social-links a:before {
-    border: 1px solid rgb(255, 0, 0, 0.7) !important;
 }
 
 .tpl-alt-tabs li.active span{

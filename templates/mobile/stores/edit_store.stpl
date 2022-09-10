@@ -2,10 +2,10 @@
 
 <section data-title="Изменение товара <%= object.title %>" data-description="вебсервисы.рф: Изменение товара <%= object.title %>" data-uri="/edit_store/<%= object.id %>/" data-image="<%= object.get_image() %>" class="doc_title">
     <div class="relative container align-left">
-                <div class="hs-line-4 font-alt black">
+                <div class="hs-line-4 font-alt">
                     <a class="ajax" href="/store/<%= object.id %>/"><%= object.title %></a>
                     &nbsp;/&nbsp;
-                    <span>Изменение товара</span>
+                    <a>Изменение товара</a>
                 </div>
     </div>
 </section>

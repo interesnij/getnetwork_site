@@ -2,12 +2,12 @@
 
 <section data-title="Создание статьи" data-description="вебсервисы.рф: Создание статьи" data-uri="/create_blog/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-                <div class="hs-line-4 font-alt black">
+                <div class="hs-line-4 font-alt">
                     <a class="ajax" href="/">Главная</a>
                     &nbsp;/&nbsp;
                     <a class="ajax" href="/blog_categories/">Блог</a>
                     &nbsp;/&nbsp;
-                    <span>Создание статьи</span>
+                    <a>Создание статьи</a>
                 </div>
     </div>
 </section>

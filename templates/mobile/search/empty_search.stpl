@@ -2,8 +2,8 @@
 
 <section page-id="21" data-title="Общий поиск | начало" data-description="вебсервисы.рф: Общий поиск | начало" data-uri="/search/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
-            <span>Поиск</span>
+        <div class="hs-line-4 font-alt">
+            <a>Поиск</a>
         </div>
     </div>
 </section>

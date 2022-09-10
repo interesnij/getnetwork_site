@@ -2,10 +2,10 @@
 
 <section data-title="Изменение текста услуги <%= service.title %>" data-description="вебсервисы.рф: Изменение текста услуги <%= service.title %>" data-uri="/edit_content_service/<%= service.id %>/" data-image="<%= service.get_image() %>" class="doc_title">
     <div class="relative container align-left">
-                <div class="hs-line-4 font-alt black">
+                <div class="hs-line-4 font-alt">
                     <a class="ajax" href="/service/<%= service.id %>/"><%= service.title %></a>
                     &nbsp;/&nbsp;
-                    <span>Изменение текста услуги</span>
+                    <a>Изменение текста услуги</a>
                 </div>
     </div>
 </section>

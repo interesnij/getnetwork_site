@@ -2,10 +2,10 @@
 
 <section page-id="21" data-title="Общий поиск по фрагменту <%= q %>" data-description="вебсервисы.рф: Общий поиск по фрагменту <%= q %>" data-uri="/search/<%= q %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <span>Общий поиск</span>
+            <a>Общий поиск</a>
         </div>
     </div>
 </section>

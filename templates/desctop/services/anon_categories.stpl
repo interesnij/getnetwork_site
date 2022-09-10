@@ -2,10 +2,10 @@
 
 <section page-id="61" data-title="Услуги" data-description="вебсервисы.рф: Услуги" data-uri="/service_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <span>Услуги</span>
+            <a>Услуги</a>
             <% include!("../generic/page_stat.stpl"); %>
         </div>
     </div>

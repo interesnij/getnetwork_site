@@ -2,7 +2,7 @@
 
 <section page-id="25" data-title="Общий поиск статей по фрагменту <%= q %>" data-description="вебсервисы.рф: Общий поиск статей по фрагменту <%= q %>" data-uri="/search_wikis/<%= q %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
             <a href="/search/<%= q %>/" class="ajax">Общий поиск</a>

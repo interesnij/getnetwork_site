@@ -8,9 +8,6 @@
 .hs-line-14 {
   text-shadow: 0px 5px 3px rgb(0 0 0 / 30%);
 }
-.footer-social-links a:before {
-    border: 1px solid rgb(0, 0, 0, 0.7) !important;
-}
 
 .solid_left {
   border-left: 1px solid #222;
@@ -92,11 +89,6 @@ hr{
     border-top: 1px solid rgba(0,0,0, .7);
 }
 
-.big-icon{
-    border: 3px solid #fff !important;
-    color: rgba(255,255,255, .97) !important;
-}
-
 .btn-mod:hover,
 .btn-mod:focus,
 a.btn-mod:hover,
@@ -163,24 +155,6 @@ a:hover {
     color: rgba(0, 0, 0, 1) !important;
 }
 
-.hs-line-4{
-    color: rgba(0,0,0, .85) !important;
-}
-
-.hs-line-10{
-    background: rgba(0,0,0, .75) !important;
-    color: rgba(255,255,255, .85) !important;
-}
-
-.hs-line-10.highlight{
-    background: #e41919 !important;
-}
-
-.logo,
-a.logo:hover{
-    color: rgba(0,0,0, .9) !important;
-}
-
 .main-nav{
     background: #F4E0E3 !important;
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.05) !important;
@@ -193,14 +167,7 @@ a.logo:hover{
     color: #000 !important;
 }
 
-.mn-soc-link{
-    border: 1px solid rgba(0,0,0, .1) !important;
-}
-.mn-soc-link:hover{
-    border: 1px solid rgba(0,0,0, .25) !important;
-}
-
-.count-wrapper{
+.count-wrapper {
     border: 1px solid rgba(0,0,0, .09) !important;
 }
 

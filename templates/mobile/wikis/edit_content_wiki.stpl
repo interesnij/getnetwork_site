@@ -2,10 +2,10 @@
 
 <section data-title="Изменение текста статьи <%= wiki.title %>" data-description="вебсервисы.рф: Изменение текста статьи <%= wiki.title %>" data-uri="/edit_content_wiki/<%= wiki.id %>/" data-image="<%= wiki.get_image() %>" class="doc_title">
     <div class="relative container align-left">
-                <div class="hs-line-4 font-alt black">
+                <div class="hs-line-4 font-alt">
                     <a class="ajax" href="/wiki/<%= wiki.id %>/"><%= wiki.title %></a>
                     &nbsp;/&nbsp;
-                    <span>Изменение текста статьи</span>
+                    <a>Изменение текста статьи</a>
                 </div>
     </div>
 </section>

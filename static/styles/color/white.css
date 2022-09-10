@@ -1,5 +1,3 @@
-/* white ver5 */
-
 ::-moz-selection{ color: #fff !important; background:#000 !important; }
 ::-webkit-selection{ color: #fff !important; background:#000 !important; }
 ::selection{ color: #fff !important; background:#000 !important; }
@@ -9,9 +7,6 @@
 }
 a:hover {
     color: rgba(0, 0, 0, 1) !important;
-}
-.footer-social-links a:before {
-    border: 1px solid rgb(0, 0, 0, 0.7) !important;
 }
 
 .solid_left {
@@ -52,7 +47,7 @@ a:hover {
 .second_span {
   background: #FFFFFF !important;
 }
-.mobile_icon_active, .mobile_icon_current{
+.mobile_icon_active, .mobile_icon_current {
   background: #e6e3df !important;
 }
 .mobile_icon p{
@@ -97,11 +92,6 @@ hr{
     border-top: 1px solid rgba(0,0,0, .7);
 }
 
-.big-icon{
-    border: 3px solid #fff !important;
-    color: rgba(255,255,255, .97) !important;
-}
-
 .btn-mod:hover,
 .btn-mod:focus,
 a.btn-mod:hover,
@@ -129,7 +119,7 @@ a.btn-mod:focus{
 .form .smile_supported,
 .form textarea,
 .form input[type="file"],
-.form select{
+.form select {
     color: #777 !important;
     border: 1px solid rgba(0,0,0, .1) !important;
     background: rgba(255,255,255, 1) !important;
@@ -163,24 +153,6 @@ a.active {
     font-weight: bold;
 }
 
-.hs-line-4{
-    color: rgba(0,0,0, .85) !important;
-}
-
-.hs-line-10{
-    background: rgba(0,0,0, .75) !important;
-    color: rgba(255,255,255, .85) !important;
-}
-
-.hs-line-10.highlight{
-    background: #e41919 !important;
-}
-
-.logo,
-a.logo:hover{
-    color: rgba(0,0,0, .9) !important;
-}
-
 .main-nav{
     background: #e6e3df !important;
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.05) !important;
@@ -193,12 +165,6 @@ a.logo:hover{
     color: #000000 !important;
 }
 
-.mn-soc-link{
-    border: 1px solid rgba(0,0,0, .1) !important;
-}
-.mn-soc-link:hover{
-    border: 1px solid rgba(0,0,0, .25) !important;
-}
 
 .count-wrapper{
     border: 1px solid rgba(0,0,0, .09) !important;

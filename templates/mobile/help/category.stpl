@@ -2,8 +2,8 @@
 
 <section page-id="9" data-title="Категория помощи '<%= category.title %>'" data-description="вебсервисы.рф: Категория помощи <%= category.title %>" data-uri="/help/<%= category.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
-            <span><%= category.title %></span>
+        <div class="hs-line-4 font-alt">
+            <a><%= category.title %></a>
             <% include!("../generic/category_stat.stpl"); %>
         </div>
     </div>

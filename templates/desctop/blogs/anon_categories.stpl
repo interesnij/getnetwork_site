@@ -2,12 +2,12 @@
 
 <section page-id="41" data-title="Блог" data-description="вебсервисы.рф: блог, статьи на тему программирования, стратегии, жизни компании" data-uri="/blog_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/">
                 Главная
             </a>
             &nbsp;/&nbsp;
-            <span>Блог</span>
+            <a>Блог</a>
             <% include!("../generic/page_stat.stpl"); %>
         </div>
     </div>
@@ -15,7 +15,7 @@
 
 <section class="page-section">
     <div class="container align-center">
-        <h1 class="magazine-logo-text black font-alt">Наш блог</h1>
+        <h1 class="magazine-logo-text font-alt">Наш блог</h1>
     </div>
     <div class="container relative">
         <div class="row">

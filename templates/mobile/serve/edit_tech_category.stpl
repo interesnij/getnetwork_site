@@ -2,10 +2,10 @@
 
 <section data-title="Изменение категории технологий <%= category.name %>" data-description="вебсервисы.рф: Изменение категории технологий <%= category.name %>" data-uri="/edit_tech_category/<%= category.id %>/" data-image="" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/serve_categories/">Тех. категории</a>
             &nbsp;/&nbsp;
-            <span>Изменение тех. категории</span>
+            <a>Изменение тех. категории</a>
         </div>
     </div>
 </section>

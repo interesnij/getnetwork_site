@@ -2,10 +2,10 @@
 
 <section page-id="13" data-title="История просмотров" data-description="вебсервисы.рф: История просмотров пользователя" data-uri="/history/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <span>История просмотров</span>
+            <a>История просмотров</a>
         </div>
     </div>
 </section>

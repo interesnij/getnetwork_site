@@ -2,10 +2,10 @@
 
 <section data-title="Создание опции" data-description="вебсервисы.рф: Создание опции" data-uri="/create_serve/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/serve_categories/">Категории опций</a>
             &nbsp;/&nbsp;
-            <span>Создание опции</span>
+            <a>Создание опции</a>
         </div>
     </div>
 </section>

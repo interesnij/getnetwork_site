@@ -3,10 +3,10 @@
 
 <section data-title="Создание категории помощи" data-description="вебсервисы.рф: Создание категории помощи" data-uri="/help/create_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/help/1/">Помощь</a>
             &nbsp;/&nbsp;
-            <span>Создание категории помощи</span>
+            <a>Создание категории помощи</a>
         </div>
     </div>
 </section>

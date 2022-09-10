@@ -3,10 +3,10 @@
 
 <section data-title="<%= title %>" data-description="<%= description %>" data-uri="<%= uri %>" data-image="<%= image %>" class="doc_title">
   <div class="relative container align-left">
-    <div class="hs-line-4 font-alt black">
+    <div class="hs-line-4 font-alt">
       <a class="ajax"href="/blog_categories/">Главная</a>
       &nbsp;/&nbsp;
-      <span>Страница приватная</span>
+      <a>Страница приватная</a>
     </div>
   </div>
 </section>

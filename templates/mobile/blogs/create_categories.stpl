@@ -2,10 +2,10 @@
 
 <section data-title="Создание категории блога" data-description="вебсервисы.рф: Создание категории блога" data-uri="/create_blog_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/blog_categories/">Блог</a>
             &nbsp;/&nbsp;
-            <span>Создание категории блога</span>
+            <a>Создание категории блога</a>
         </div>
     </div>
 </section>

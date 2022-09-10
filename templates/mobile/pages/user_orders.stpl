@@ -2,8 +2,8 @@
 
 <section page-id="12" data-title="Ваши заказы" data-description="вебсервисы.рф: Ваши заказы" data-uri="/user_orders/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
-            <span>Ваши заказы</span>
+        <div class="hs-line-4 font-alt">
+            <a>Ваши заказы</a>
         </div>
     </div>
 </section>

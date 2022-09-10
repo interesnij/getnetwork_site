@@ -5,9 +5,6 @@
 .mob_menu, .mn-sub {
 	background-color: #DDD1C5;
 }
-.footer-social-links a:before {
-    border: 1px solid rgb(0, 0, 0, 0.7) !important;
-}
 
 .solid_left {
   border-left: 1px solid #222;
@@ -105,11 +102,6 @@ hr{
     border-top: 1px solid rgba(0,0,0, .7);
 }
 
-.big-icon{
-    border: 3px solid #fff !important;
-    color: rgba(255,255,255, .97) !important;
-}
-
 .btn-mod:hover,
 .btn-mod:focus,
 a.btn-mod:hover,
@@ -165,34 +157,9 @@ a.btn-mod:focus{
     box-shadow: 0 0 3px rgba(0,0,0, .3) !important;
 }
 
-.hs-line-4{
-    color: rgba(0,0,0, .85) !important;
-}
-
-.hs-line-10{
-    background: rgba(0,0,0, .75) !important;
-    color: rgba(255,255,255, .85) !important;
-}
-
-.hs-line-10.highlight{
-    background: #e41919 !important;
-}
-
-.logo,
-a.logo:hover{
-    color: rgba(0,0,0, .9) !important;
-}
-
 .inner-nav ul li a:hover,
 .inner-nav ul li a.active{
     color: #000 !important;
-}
-
-.mn-soc-link{
-    border: 1px solid rgba(0,0,0, .1) !important;
-}
-.mn-soc-link:hover{
-    border: 1px solid rgba(0,0,0, .25) !important;
 }
 
 .count-wrapper{

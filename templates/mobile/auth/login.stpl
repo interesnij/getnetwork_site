@@ -2,8 +2,8 @@
 
 <section page-id="6" data-title="Вход" data-description="вебсервисы.рф: Вход" data-uri="/login/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
-            <span>Вход</span>
+        <div class="hs-line-4 font-alt">
+            <a>Вход</a>
         </div>
     </div>
 </section>

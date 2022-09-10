@@ -3,10 +3,10 @@
 
 <section data-title="Изменение категории помощи <%= category.title %>" data-description="вебсервисы.рф: Изменение категории помощи <%= category.title %>" data-uri="/help/edit_category/<%= category.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/help/1/">Помощь</a>
             &nbsp;/&nbsp;
-            <span>Изменение категории помощи</span>
+            <a>Изменение категории помощи</a>
         </div>
     </div>
 </section>

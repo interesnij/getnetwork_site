@@ -2,10 +2,10 @@
 
 <section data-title="Изменение категории работ <%= category.name %>" data-description="вебсервисы.рф: Изменение категории работ <%= category.name %>" data-uri="/edit_work_category/<%= category.id %>/" data-image="<%= category.get_image() %>" class="doc_title">
     <div class="relative container align-left">
-        <div class="hs-line-4 font-alt black">
+        <div class="hs-line-4 font-alt">
             <a class="ajax" href="/work_categories/">Работы</a>
             &nbsp;/&nbsp;
-            <span>Изменение категории работ</span>
+            <a>Изменение категории работ</a>
         </div>
     </div>
 </section>
