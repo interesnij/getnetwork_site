@@ -1,6 +1,11 @@
 ::-moz-selection{ color: #000000 !important; background:#FFFFFF !important; }
 ::-webkit-selection{ color: #000000 !important; background:#FFFFFF !important; }
 ::selection{ color: #000000 !important; background:#FFFFFF !important; }
+.selected {
+  color: #000000 !important;
+  background:#FFFFFF !important;
+  padding: 0px 2px;
+}
 
 a:hover {
     color: rgba(255,255,255, 1) !important;

@@ -1,6 +1,11 @@
 ::-moz-selection{ color: #fff !important; background:#000 !important; }
 ::-webkit-selection{ color: #fff !important; background:#000 !important; }
 ::selection{ color: #fff !important; background:#000 !important; }
+.selected {
+  color: #fff !important;
+  background:#000 !important;
+  padding: 0px 2px;
+}
 
 .js-height-full, .small-section, .mob_menu, .mn-sub {
   background: #F4E0E3 !important;

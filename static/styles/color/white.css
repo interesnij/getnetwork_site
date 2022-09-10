@@ -2,7 +2,9 @@
 ::-webkit-selection{ color: #fff !important; background:#000 !important; }
 ::selection{ color: #fff !important; background:#000 !important; }
 .selected {
-  color: #fff !important; background:#000 !important;
+  color: #fff !important;
+  background:#000 !important;
+  padding: 0px 2px;
 }
 
 .js-height-full, .small-section, .mob_menu, .mn-sub {
