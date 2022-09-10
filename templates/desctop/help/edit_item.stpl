@@ -1,6 +1,6 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="Изменение элемента помощи <%= object.title %>" data-description="вебсервисы.рф: Изменение элемента помощи <%= object.title %>" data-uri="/help/edit_item/<%= object.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section data-title="Изменение элемента помощи <%= object.title %>" data-description="вебсервисы.рф: Изменение элемента помощи <%= object.title %>" data-uri="/help/edit_item/<%= object.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
                 <div class="hs-line-4 font-alt black">
                     <a class="ajax" href="/">Главная</a>

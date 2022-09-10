@@ -1,7 +1,7 @@
 <% include!("../header.stpl"); %>
 
 
-<section data-title="<%= title %>" data-description="<%= description %>" data-uri="<%= uri %>" data-image="<%= image %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section data-title="<%= title %>" data-description="<%= description %>" data-uri="<%= uri %>" data-image="<%= image %>" class="doc_title">
   <div class="relative container align-left">
     <div class="hs-line-4 font-alt black">
       <a class="ajax"href="/blog_categories/">Главная</a>

@@ -1,7 +1,7 @@
 <% include!("../header.stpl"); %>
 
 
-<section data-title="Создание категории помощи" data-description="вебсервисы.рф: Создание категории помощи" data-uri="/help/create_categories/" data-image="/static/images/dark/store.jpg" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section data-title="Создание категории помощи" data-description="вебсервисы.рф: Создание категории помощи" data-uri="/help/create_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/help/1/">Помощь</a>

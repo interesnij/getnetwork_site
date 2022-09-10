@@ -1,6 +1,6 @@
 <% include!("../header.stpl"); %>
 
-<section page-id="62" data-id="<%= category.id %>" data-title="Категория услуг <%= category.name %>" data-description="вебсервисы.рф: Категория услуг <%= category.name %>" data-uri="/services/<%= category.id %>/" data-image="<%= category.get_image() %>" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section page-id="62" data-id="<%= category.id %>" data-title="Категория услуг <%= category.name %>" data-description="вебсервисы.рф: Категория услуг <%= category.name %>" data-uri="/services/<%= category.id %>/" data-image="<%= category.get_image() %>" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/service_categories/">Услуги</a>

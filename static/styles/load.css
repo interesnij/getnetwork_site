@@ -1,3 +1,6 @@
+.doc_title {
+  padding-top: 90px;
+}
 .mn-sub li {
     display: block;
     width: 100%;
@@ -3205,8 +3208,14 @@ hr {
 .nav_mobile .active a {
   font-weight: bold;
 }
-
+.progressive img{display:block;width:100%;max-width:none;border:0}
 .big_1::first-letter {
   font-size: 30px;
   font-weight: bold;
 }
+p{margin:0 0 1em!important}
+.progressive img.preview{transform:scale(1)}.progressive img.reveal{position:absolute;left:0;top:0;animation:progressiveReveal 1s linear}@keyframes progressiveReveal{0%{transform:scale(1);opacity:0}to{transform:scale(1);opacity:1}}
+.fade{opacity:0;-webkit-transition:opacity .15s linear;-o-transition:opacity .15s linear;transition:opacity .15s linear}.fade.in{opacity:1}
+h1,h2,h3,h4,h5,h6{margin-top:10px;margin-bottom:10px}h1{font-size:36px}h2{font-size:30px}h3{font-size:24px}h4{font-size:18px}h5{font-size:14px}h6{font-size:12px}
+.tab-content>.tab-pane{display:none;visibility:hidden}.tab-content>.active{display:block;visibility:visible}
+.show{display:block!important}

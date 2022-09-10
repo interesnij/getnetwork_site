@@ -1,6 +1,6 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="Список опций и услуг" data-description="вебсервисы.рф: Список опций и услуг" data-uri="/serve_list/" data-image="/static/images/dark/store.jpg" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section data-title="Список опций и услуг" data-description="вебсервисы.рф: Список опций и услуг" data-uri="/serve_list/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <span>Список опций</span>

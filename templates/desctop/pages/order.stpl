@@ -1,6 +1,6 @@
 <% include!("../header.stpl"); %>
 
-<section page-id="63" data-id="<%= object.id %>" data-title="Мои заказы - <%= object.title %>" data-description="вебсервисы.рф: Мои заказы <%= object.title %>" data-uri="/order/<%= object.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section page-id="63" data-id="<%= object.id %>" data-title="Мои заказы - <%= object.title %>" data-description="вебсервисы.рф: Мои заказы <%= object.title %>" data-uri="/order/<%= object.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>

@@ -1,9 +1,9 @@
 <% include!("../header.stpl"); %>
 
-<section page-id="83" data-id="<%= object.id %>" data-title="Статья <%= object.title %>" data-description="вебсервисы.рф: Статья <%= object.title %>" data-uri="/wiki/<%= category.id %>/<%= object.id %>/" data-image="<%= object.get_image() %>" class="doc_title small-section bg-gray-lighter">
+<section page-id="83" data-id="<%= object.id %>" data-title="Статья <%= object.title %>" data-description="вебсервисы.рф: Статья <%= object.title %>" data-uri="/wiki/<%= category.id %>/<%= object.id %>/" data-image="<%= object.get_image() %>" class="doc_title small-section">
   <div class="relative container align-left">
       <div class="mt-30">
-        <div class="mod-breadcrumbs font-alt align-right">
+        <div class="font-alt">
           <a class="ajax" href="/wiki_categories/">База знаний</a>
           &nbsp;/&nbsp;
           <a class="ajax" href="/wikis/<%= category.id %>/"><%= category.name %></a>

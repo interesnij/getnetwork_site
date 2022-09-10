@@ -1,6 +1,6 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="Сообщения" data-description="вебсервисы.рф: Сообщения" data-uri="/feedback_list/" data-image="/static/images/dark/store.jpg" class="doc_title bg-gray-lighter" style="padding-top: 90px;">
+<section data-title="Сообщения" data-description="вебсервисы.рф: Сообщения" data-uri="/feedback_list/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt black">
             <a class="ajax" href="/">Главная</a>
@@ -11,9 +11,6 @@
 </section>
 
 <section class="page-section">
-    <div class="container align-center">
-        <h1 class="magazine-logo-text black font-alt">Сообщения с формы</h1>
-    </div>
     <div class="container relative is_paginate">
     <% for object in feedback_list.iter() { %>
       <p>
