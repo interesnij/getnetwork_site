@@ -741,11 +741,13 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/pages/stat.stpl")]
                 struct Template {
+                    request_user:     User,
                     object_list:      Vec<CookieUser>,
                     next_page_number: i32,
                     is_ajax:          i32,
                 }
                 let body = Template {
+                    request_user:     _request_user,
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
