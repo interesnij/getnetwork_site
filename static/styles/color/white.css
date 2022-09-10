@@ -1,5 +1,5 @@
 ::-moz-selection, ::-webkit-selection, ::selection, .selected {
-  color: #fff !important; 
+  color: #fff !important;
   background:#000 !important;
 }
 
