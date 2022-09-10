@@ -176,7 +176,13 @@ window.addEventListener('popstate', function (e) {
 
 on('body', 'input', '.desctop_folder_search', function() {
     _this = this;
+    _help = _this.parentElement;
     value = _this.value;
+    if (value.length < 3) {
+      _help.innerHTML = "Поиск от 3х букв"ж
+      return;
+    }
+    _help.innerHTML = "";
     parent = _this.parentElement.parentElement.parentElement.parentElement.parentElement;
     content_block = parent.querySelector(".content");
     search_block = content_block.previousElementSibling;

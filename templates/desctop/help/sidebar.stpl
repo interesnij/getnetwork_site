@@ -1,7 +1,8 @@
 <div class="widget">
     <form class="form-inline form" role="form">
         <div class="search-wrap">
-            <input data-folder="_help" type="text" class="form-control search-field desctop_folder_search" placeholder="Поиск...">
+          <span></span>
+          <input data-folder="_help" type="text" class="form-control search-field desctop_folder_search" placeholder="Поиск...">
         </div>
     </form>
 </div>
