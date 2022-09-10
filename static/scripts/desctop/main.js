@@ -178,19 +178,25 @@ on('body', 'input', '.desctop_folder_search', function() {
     _this = this;
     _help = _this.previousElementSibling;
     value = _this.value;
-    if (value.length < 3) {
-      _help.innerHTML = "Поиск от 3х букв";
-      return;
-    }
     _help.innerHTML = "";
     parent = _this.parentElement.parentElement.parentElement.parentElement.parentElement;
     content_block = parent.querySelector(".content");
     search_block = content_block.previousElementSibling;
+
     if (value == "") {
+      _help.classList.add("hide");
       search_block.innerHTML= "";
       content_block.classList.remove("hidden");
       return;
     }
+    else if (value.length < 3) {
+      _help.classList.remove("hide");
+      return;
+    }
+    else {
+      _help.classList.add("hide");
+    }
+
     if (_this.getAttribute("data-folder")) {
       folder = _this.getAttribute("data-folder")
     } else {
