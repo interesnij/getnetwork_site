@@ -190,7 +190,7 @@ on('body', 'input', '.desctop_folder_search', function() {
     } else {
       folder = ""
     };
-    url = "/search" + folder + "/" + _this.value + "/";
+    url = "/search" + folder + "/" + value + "/";
 
     var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url + "?ajax=1", true );
@@ -199,7 +199,9 @@ on('body', 'input', '.desctop_folder_search', function() {
       if ( this.readyState == 4 && this.status == 200 ) {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
-        search_block.innerHTML = elem_.querySelector(".search_section").innerHTML;
+        search_section = elem_.querySelector(".search_section");
+        replace_section = search_section.replaceAll(value, "<span class='selected'>" + value + "</span>");
+        search_block.innerHTML = replace_section.innerHTML;
         content_block.classList.add("hidden");
       }
     }
