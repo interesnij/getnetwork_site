@@ -11,7 +11,6 @@
 <section class="page-section">
     <div class="container relative">
 
-    <h5 class="font-alt mb-20">Статистика сайта</h5>
       <div class="is_paginate">
       <% for object in object_list.iter() { %>
         <div class="solid_bottom" style="padding: 5px 0;">
