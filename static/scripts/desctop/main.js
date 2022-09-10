@@ -176,7 +176,7 @@ window.addEventListener('popstate', function (e) {
 
 on('body', 'input', '.desctop_folder_search', function() {
     _this = this;
-    _help = _this.parentElement;
+    _help = _this.previousElementSibling;
     value = _this.value;
     if (value.length < 3) {
       _help.innerHTML = "Поиск от 3х букв";
