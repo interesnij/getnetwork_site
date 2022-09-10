@@ -178,7 +178,6 @@ on('body', 'input', '.desctop_folder_search', function() {
     _this = this;
     _help = _this.previousElementSibling;
     value = _this.value;
-    _help.innerHTML = "";
     parent = _this.parentElement.parentElement.parentElement.parentElement.parentElement;
     content_block = parent.querySelector(".content");
     search_block = content_block.previousElementSibling;
