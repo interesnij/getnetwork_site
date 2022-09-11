@@ -11,34 +11,24 @@
 
 <section class="page-section">
     <div class="container relative">
-        <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
-            <li class="yy s_1 active border">
-              <a>
-                О нас
-              </a>
-            </li>
-            <li class="yy s_2 pointer border">
-              <a>
-                Контакты
-              </a>
-            </li>
+    <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
+        <li class="yy s_1 active border">
+          <a>О нас</a>
+        </li>
+        <li class="yy s_2 pointer border">
+          <a>Контакты</a>
+        </li>
 
-            <li class="yy s_3 pointer border">
-              <a>
-                О сайте
-              </a>
-            </li>
-            <li class="yy s_4 pointer border">
-              <a>
-                Помощь
-              </a>
-            </li>
-            <li>
-              <a class="ajax border" href="/cookie_users_list/">
-                Статистика
-              </a>
-            </li>
-        </ul>
+        <li class="yy s_3 pointer border">
+          <a>О сайте</a>
+        </li>
+        <li class="yy s_4 pointer border">
+            <a>Помощь</a>
+        </li>
+        <li class="border">
+          <a class="ajax" href="/cookie_users_list/">Статистика</a>
+        </li>
+    </ul>
 
         <div class="tab-content tpl-tabs-cont">
             <div class="tab_1 fade tab-pane in active">
