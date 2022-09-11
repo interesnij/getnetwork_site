@@ -209,7 +209,8 @@ on('body', 'input', '.desctop_folder_search', function() {
         search_section = elem_.querySelector(".search_section");
         //console.log()
         //replace_section = search_section.replaceAll(value, "<span class='selected'>" + value + "</span>");
-        search_block.innerHTML = search_section.innerHTML.replaceAll("/[а-яА-Я]/" + value + "+/g", "<span class='selected'>" + value + "</span>");
+        //search_block.innerHTML = search_section.innerHTML.replaceAll("/[а-яА-Я]/" + value + "+/g", "<span class='selected'>" + value + "</span>");
+        search_block.innerHTML = search_section.innerHTML.replaceAll("/[а-яА-Я]/веб+/g", "<span class='selected'>" + value + "</span>");
         content_block.classList.add("hidden");
       }
     }
