@@ -46,6 +46,10 @@ on('body', 'click', '.mob_menu', function() {
 on('body', 'input', '.mobile_folder_search', function() {
     _this = this;
     value = _this.value;
+    if (value == "") {
+      _this.parentElement.parentElement.parentElement.querySelector(".search_result").innerHTML= "";
+      return;
+    }
     parent = _this.parentElement.parentElement.parentElement;
     search_block = parent.querySelector(".search_result");
     if (value == "") {
