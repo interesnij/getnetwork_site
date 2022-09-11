@@ -53,14 +53,14 @@ function check_first_load() {
       if ( this.readyState == 4 && this.status == 200 ) {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
-
+        span.innerHTML = elem_.innerHTML;
         //try {
           sidebar = elem_.querySelector(".sidebar");
           console.log(elem_.querySelector(".sidebar"));
           document.body.querySelector("#reload_nav_block").innerHTML = sidebar.innerHTML;
           sidebar.innerHTML = "";
         //  } catch { null };
-        span.innerHTML = elem_.innerHTML;
+
         window.history.pushState ({"url":url}, document.title, url);
         get_custom_design();
         get_or_create_cookie_user();
