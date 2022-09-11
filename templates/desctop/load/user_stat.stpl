@@ -33,7 +33,7 @@
   <% } else { %>
     <div style="margin-top: 40px;">
       <div class="align-center">
-        <span class="border" style="padding: 5px 12px;">История просмотров пока пуста.</span>
+        <span class="border" style="padding: 10px 15px;">История просмотров пока пуста.</span>
       </div>
     </div>
   <% } %>

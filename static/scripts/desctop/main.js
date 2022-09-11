@@ -213,7 +213,7 @@ on('body', 'input', '.desctop_folder_search', function() {
         (
           search_section = elem_.querySelector(".is_paginate"),
           search_block.innerHTML = search_section.innerHTML.replaceAll(new RegExp(value, 'ig'), "<span class='selected'>" + value + "</span>")
-        ) : search_block.innerHTML = "<div style='margin-top: 40px;'><div class='align-center'><span class='border' style='padding: 5px 12px;'>Искать пока не из чего...</div></div>";
+        ) : search_block.innerHTML = "<div style='margin-top: 40px;'><div class='align-center'><span class='border' style='padding: 10px 15px;'>Искать пока не из чего...</div></div>";
         content_block.classList.add("hidden")
       }
     }
