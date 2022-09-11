@@ -56,6 +56,7 @@ function check_first_load() {
         span.innerHTML = elem_.innerHTML;
       //  try {
           sidebar = elem_.querySelector(".sidebar");
+          console.log(sidebar);
           document.body.querySelector("#reload_nav_block").innerHTML = sidebar.innerHTML;
           sidebar.innerHTML = "";
       //  } catch { null };
