@@ -1,7 +1,5 @@
 <div class="widget">
-    <form class="form-inline form" role="form">
-        <div class="search-wrap">
-            <input type="text" class="general_search form-control search-field mobile" placeholder="Общий поиск">
-        </div>
-    </form>
+  <h5 href="/search/" class="widget-title ajax font-alt">
+    Перейти в поиск
+  </h5>
 </div>

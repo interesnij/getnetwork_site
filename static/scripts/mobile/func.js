@@ -54,12 +54,12 @@ function check_first_load() {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
         span.innerHTML = elem_.innerHTML;
-        //try {
+        try {
           sidebar = elem_.querySelector(".sidebar");
           console.log(elem_.querySelector(".sidebar"));
           document.body.querySelector("#reload_nav_block").innerHTML = sidebar.innerHTML;
           sidebar.innerHTML = "";
-        //  } catch { null };
+        } catch { null };
 
         window.history.pushState ({"url":url}, document.title, url);
         get_custom_design();
