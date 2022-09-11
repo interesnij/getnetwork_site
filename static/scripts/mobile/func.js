@@ -51,15 +51,22 @@ function check_first_load() {
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
       if ( this.readyState == 4 && this.status == 200 ) {
+        sidebar = elem_.querySelector(".sidebar");
+        try {
+          document.body.querySelector("#reload_nav_block").innerHTML = sidebar.innerHTML
+        } catch { null };
+        sidebar.innerHTML = "";
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
         span.innerHTML = elem_.innerHTML;
+
         window.history.pushState ({"url":url}, document.title, url);
         get_custom_design();
         get_or_create_cookie_user();
         get_page_view_time(120);
         get_active_button();
         scrolled(document.body.querySelector(".span"));
+
       }
     }
     ajax_link.send();

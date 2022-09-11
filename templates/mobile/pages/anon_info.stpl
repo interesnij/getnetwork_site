@@ -12,27 +12,27 @@
 <section class="page-section">
     <div class="container relative">
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
-            <li class="yy s_1 active">
+            <li class="yy s_1 active border">
               <a>
                 О нас
               </a>
             </li>
-            <li class="yy s_2 pointer">
+            <li class="yy s_2 pointer border">
               <a>
                 Контакты
               </a>
             </li>
 
-            <li class="yy s_3 pointer">
+            <li class="yy s_3 pointer border">
               <a>
                 О сайте
               </a>
             </li>
-            <li class="yy s_4 pointer">
+            <li class="yy s_4 pointer border">
                 Помощь
             </li>
             <li>
-              <a class="ajax" href="/cookie_users_list/">
+              <a class="ajax border" href="/cookie_users_list/">
                 Статистика
               </a>
             </li>
