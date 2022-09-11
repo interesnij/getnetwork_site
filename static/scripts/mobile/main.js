@@ -66,7 +66,7 @@ on('body', 'input', '.mobile_folder_search', function() {
       if ( this.readyState == 4 && this.status == 200 ) {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
-        search_block.innerHTML = elem_.querySelector(".search_section").innerHTML;
+        search_block.innerHTML = search_section.innerHTML.replaceAll(new RegExp(value, 'ig'), "<span class='selected'>" + value + "</span>");
       }
     }
     ajax_link.send();
