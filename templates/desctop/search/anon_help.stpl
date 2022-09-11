@@ -16,7 +16,6 @@
       </form>
     <div class="search_section">
       <% if items_count > 0 { %>
-      <section class="page-section">
           <div style='margin-left:10px; margin-right:10px'>
               <div class="multi-columns-row is_paginate">
                 <% for object in items_list.iter() { %>
@@ -29,7 +28,6 @@
                 <% } %>
               </div>
           </div>
-      </section>
       <hr class="mt-0 mb-0 " />
       <% } else { %>
           <div class="text-center">
