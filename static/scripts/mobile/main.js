@@ -52,6 +52,10 @@ on('body', 'input', '.mobile_folder_search', function() {
       search_block.innerHTML= "";
       return;
     }
+    else if (value.length < 3) {
+      return;
+    }
+    
     if (_this.getAttribute("data-folder")) {
       folder = _this.getAttribute("data-folder")
     } else {
