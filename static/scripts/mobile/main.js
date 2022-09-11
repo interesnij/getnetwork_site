@@ -55,7 +55,7 @@ on('body', 'input', '.mobile_folder_search', function() {
     else if (value.length < 3) {
       return;
     }
-    
+
     if (_this.getAttribute("data-folder")) {
       folder = _this.getAttribute("data-folder")
     } else {
@@ -70,7 +70,8 @@ on('body', 'input', '.mobile_folder_search', function() {
       if ( this.readyState == 4 && this.status == 200 ) {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
-        search_block.innerHTML = search_block.innerHTML.replaceAll(new RegExp(value, 'ig'), "<span class='selected'>" + value + "</span>");
+        search_section = elem_.querySelector(".search_section");
+        search_block.innerHTML = search_section.innerHTML.replaceAll(new RegExp(value, 'ig'), "<span class='selected'>" + value + "</span>");
       }
     }
     ajax_link.send();
