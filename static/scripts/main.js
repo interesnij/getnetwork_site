@@ -927,8 +927,14 @@ on('body', 'input', '.general_search', function() {
       ajax_get_reload("/search/", true);
       return;
     }
+    else if (value.length < 3) {
+      return;
+    }
     else if (_this.classList.contains("search-field") && !document.body.querySelector(".search_section")) {
       ajax_get_reload("/search/" + _this.value + "/", true);
+      try{
+        document.body.querySelector(".search_section").innerHTML.replaceAll(new RegExp(value, 'ig'), "<span class='selected'>" + value + "</span>");
+      } catch { null };
       return;
     }
     else if (document.body.querySelector(".search_section")) {
@@ -950,9 +956,7 @@ on('body', 'input', '.general_search', function() {
           search = elem_.querySelector(".search_section");
           div = document.body.querySelector(".search_section");
           div.innerHTML = '';
-          console.log("search_block", search);
-          console.log("target_block", div);
-          div.innerHTML = search.innerHTML;
+          div.innerHTML = search.innerHTML.replaceAll(new RegExp(value, 'ig'), "<span class='selected'>" + value + "</span>");
           document.title = elem_.querySelector(".doc_title").getAttribute("data-title");
           window.history.replaceState(null, null, url);
         }
