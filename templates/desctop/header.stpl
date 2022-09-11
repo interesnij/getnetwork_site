@@ -84,7 +84,7 @@
                                   <div class="mn-wrap">
                                       <form method="post" class="form">
                                           <div class="search-wrap">
-                                              <input type="text" class="general_search form-control search-field" placeholder="Поиск...">
+                                              <input type="text" class="general_search form-control search-field" placeholder="Поиск от 3х букв">
                                           </div>
                                       </form>
                                   </div>

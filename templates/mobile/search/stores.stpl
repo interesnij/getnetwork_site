@@ -10,7 +10,7 @@
 <section class="page-section">
     <div class="container relative">
       <form class="form mb-20" role="form">
-          <input data-folder="_stores" value="<%= q %>" type="text" class="input-md form-control general_search search_page" placeholder="Поиск...">
+          <input data-folder="_stores" value="<%= q %>" type="text" class="input-md form-control general_search search_page" placeholder="Поиск от 3х букв">
       </form>
     <div class="search_section">
       <% if stores_count > 0 { %>

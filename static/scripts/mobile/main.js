@@ -57,6 +57,7 @@ on('body', 'input', '.mobile_folder_search', function() {
       return;
     }
     else if (value.length < 3) {
+      search_block.innerHTML= "";
       return;
     }
 

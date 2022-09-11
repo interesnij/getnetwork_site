@@ -15,7 +15,7 @@
     <div class="container relative">
         <div class="row">
             <div class="col-sm-8">
-              <div class="content row">
+              <div class="content">
                 <div class="content search_result col-sm-8"></div>
               </div>
               <div class="content_block content">

@@ -189,6 +189,8 @@ on('body', 'input', '.desctop_folder_search', function() {
       return;
     }
     else if (value.length < 3) {
+      search_block.innerHTML= "";
+      content_block.classList.remove("hidden");
       return;
     }
 

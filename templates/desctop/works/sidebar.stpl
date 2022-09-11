@@ -1,7 +1,7 @@
 <div class="widget">
     <form class="form-inline form" role="form">
         <div class="search-wrap">
-            <input data-folder="_works" type="text" class="form-control search-field desctop_folder_search" placeholder="Поиск...">
+            <input data-folder="_works" type="text" class="form-control search-field desctop_folder_search" placeholder="Поиск от 3х букв">
         </div>
     </form>
 </div>

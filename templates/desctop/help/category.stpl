@@ -15,7 +15,7 @@
     <div class="container relative">
         <div class="row">
             <div class="col-sm-8">
-              <div class="content row search_result"></div>
+              <div class="content search_result"></div>
               <div class="content_block content">
                 <% for object in object_list.iter() { %>
                   <h4 class="font-alt"><%= object.title %></h4>
