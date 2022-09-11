@@ -258,7 +258,7 @@ dl dd {
     padding: 5px !important;
   }
   h1 {
-    font-size: 22px;
+    font-size: 22px !important;
   }
   .this_fullscreen_hide {
     right: 30px !important;
