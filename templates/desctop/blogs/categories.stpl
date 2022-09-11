@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-sm-8">
               <div class="row search_result"></div>
-              <div class="content">
+              <div class="content_block content">
                 <% for category in blog_cats.iter() { %>
 
                 <% let get_6_blogs = category.get_6_blogs(request_user.is_superuser()); %>

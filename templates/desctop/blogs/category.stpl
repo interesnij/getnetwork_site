@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <div class="row search_result"></div>
-                <div class="row multi-columns-row content">
+                <div class="content_block row multi-columns-row content">
                   <% if object_list.len() > 0 { %>
                   <div class="is_paginate">
                     <% for object in object_list.iter() { %>

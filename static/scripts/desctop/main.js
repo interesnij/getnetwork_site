@@ -180,7 +180,7 @@ on('body', 'input', '.desctop_folder_search', function() {
     _help = _this.previousElementSibling;
     value = _this.value;
     parent = _this.parentElement.parentElement.parentElement.parentElement.parentElement;
-    content_block = parent.querySelector(".content");
+    content_block = parent.querySelector(".content_block");
     search_block = content_block.previousElementSibling;
 
     if (value == "") {

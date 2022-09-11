@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-sm-8">
               <div class="row search_result"></div>
-              <div class="blog-item mb-80 content mb-xs-40">
+              <div class="content_block blog-item mb-80 content mb-xs-40">
                     <div class="blog-item-body">
                         <h1 class="mt-0 font-alt"><%= object.title %></h1>
                         <div class="blog-item-data">
