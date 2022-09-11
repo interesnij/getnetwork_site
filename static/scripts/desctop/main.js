@@ -207,10 +207,10 @@ on('body', 'input', '.desctop_folder_search', function() {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
         search_section = elem_.querySelector(".search_section");
-        //console.log()
+        /{value}
         //replace_section = search_section.replaceAll(value, "<span class='selected'>" + value + "</span>");
         //search_block.innerHTML = search_section.innerHTML.replaceAll("/[а-яА-Я]/" + value + "+/g", "<span class='selected'>" + value + "</span>");
-        search_block.innerHTML = search_section.innerHTML.replaceAll(/[value]/ig, "<span class='selected'>" + value + "</span>");
+        search_block.innerHTML = search_section.innerHTML.replaceAll(new RegExp(value, 'ig'), "<span class='selected'>" + value + "</span>");
         content_block.classList.add("hidden");
       }
     }
