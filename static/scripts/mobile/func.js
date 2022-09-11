@@ -53,11 +53,11 @@ function check_first_load() {
       if ( this.readyState == 4 && this.status == 200 ) {
         elem_ = document.createElement('span');
         elem_.innerHTML = ajax_link.responseText;
-        try {
+        //try {
           sidebar = elem_.querySelector(".sidebar");
           document.body.querySelector("#reload_nav_block").innerHTML = sidebar.innerHTML;
           sidebar.innerHTML = "";
-        } catch { null };
+      //  } catch { null };
 
 
         span.innerHTML = elem_.innerHTML;
