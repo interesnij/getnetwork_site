@@ -290,7 +290,7 @@ pub async fn help_form(payload: &mut Multipart) -> HelpForm {
     let mut form: HelpForm = HelpForm {
         category_id: 0,
         title:       "".to_string(),
-        content:     "".to_string(),
+        description: "".to_string(),
         position:    0,
     };
 
@@ -323,8 +323,8 @@ pub async fn help_form(payload: &mut Multipart) -> HelpForm {
                     let data_string = s.to_string();
                     if field.name() == "title" {
                         form.title = data_string
-                    } else if field.name() == "content" {
-                        form.content = data_string
+                    } else if field.name() == "description" {
+                        form.description = data_string
                     }
                 }
             }

@@ -384,7 +384,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
             let _new_item = NewHelpItem {
                 category_id: form.category_id,
                 title:       form.title.clone(),
-                content:     form.content.clone(),
+                content:     form.description.clone(),
                 position:    form.position,
             };
 
@@ -415,7 +415,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
             let _new_item = NewHelpItem {
                 category_id: form.category_id,
                 title:       form.title.clone(),
-                content:     form.content.clone(),
+                content:     form.description.clone(),
                 position:    form.position,
             };
 
