@@ -65,6 +65,14 @@ pub struct CategoriesForm {
 }
 
 #[derive(Deserialize, Serialize, Debug)]
+pub struct HelpForm {
+    pub category_id: i32,
+    pub title:       String,
+    pub content:     String,
+    pub position:    i16,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ServeCategoriesForm {
     pub name:            String,
     pub description:     String,
@@ -270,6 +278,53 @@ pub async fn category_form(payload: &mut Multipart, owner_id: i32) -> Categories
                         form.name = data_string
                     } else if field.name() == "description" {
                         form.description = data_string
+                    }
+                }
+            }
+        }
+    }
+    form
+}
+
+pub async fn help_form(payload: &mut Multipart) -> HelpForm {
+    let mut form: HelpForm = HelpForm {
+        category_id: 0,
+        title:       "".to_string(),
+        content:     "".to_string(),
+        position:    0,
+    };
+
+    while let Some(item) = payload.next().await {
+        let mut field: Field = item.expect("split_payload err");
+        let name = field.name();
+
+        if name == "position" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i16 = s.parse().unwrap();
+                    form.position = _int;
+                }
+            }
+        }
+        else if name == "category_id" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.category_id = _int;
+                }
+            }
+        }
+        else {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let data_string = s.to_string();
+                    if field.name() == "title" {
+                        form.title = data_string
+                    } else if field.name() == "content" {
+                        form.content = data_string
                     }
                 }
             }

@@ -15,6 +15,7 @@ use crate::diesel::{
 };
 use crate::utils::{
     category_form,
+    help_form,
     establish_connection,
     is_signed_in,
     get_request_user_data,
@@ -378,13 +379,12 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
+            let form = help_form(payload.borrow_mut()).await;
 
-            let cat_id: i32 = form.position.into();
             let _new_item = NewHelpItem {
-                category_id: cat_id,
-                title:       form.name.clone(),
-                content:     form.description.clone(),
+                category_id: form.category_id,
+                title:       form.title.clone(),
+                content:     form.content.clone(),
                 position:    form.position,
             };
 
@@ -411,12 +411,11 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
-            let cat_id: i32 = form.position.into();
+            let form = help_form(payload.borrow_mut()).await;
             let _new_item = NewHelpItem {
-                category_id: cat_id,
-                title:       form.name.clone(),
-                content:     form.description.clone(),
+                category_id: form.category_id,
+                title:       form.title.clone(),
+                content:     form.content.clone(),
                 position:    form.position,
             };
 

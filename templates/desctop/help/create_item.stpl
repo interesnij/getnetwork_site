@@ -28,7 +28,7 @@
             </div>
             <div class="mb-20 mb-md-10">
                 <label>Категории</label>
-                <select class="form-control input-md" name="position">
+                <select class="form-control input-md" name="category_id">
                   <% for category in help_cats.iter() { %>
                     <option value="<%= category.id %>"><%= category.title %></option>
                   <% } %>
