@@ -120,6 +120,7 @@ table! {
         category_id -> Int4,
         title -> Varchar,
         content -> Varchar,
+        position -> Int2,
     }
 }
 
