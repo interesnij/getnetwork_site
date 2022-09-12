@@ -68,7 +68,7 @@ pub struct CategoriesForm {
 pub struct HelpForm {
     pub category_id: i32,
     pub title:       String,
-    pub content:     String,
+    pub description: String,
     pub position:    i16,
 }
 
