@@ -63,7 +63,7 @@
                         <li>
                           <a>
                             <% if child.is_default { %>♦ <% } %>
-                            <%= child.name %>, <%= child.price %> / <%= child.man_hours %>
+                            <%= child.name %>  <%= child.price %> / <%= child.man_hours %>
                           </a>
                           <a target="_blank" rel="nofollow" href="/edit_serve/<%= child.id %>/">~</a>
                           <a class="pointer remove_serve" data-pk="<%= child.id %>">x</a>
@@ -75,7 +75,7 @@
                       <% } else { %>
                         <a>
                           <% if object.is_default { %>♦ <% } %>
-                          <%= object.name %>, <%= object.price %> / <%= object.man_hours %>
+                          <%= object.name %>  <%= object.price %> / <%= object.man_hours %>
                         </a>
                         <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
                         <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
