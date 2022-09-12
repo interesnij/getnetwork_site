@@ -25,23 +25,25 @@
         <% for tech_category in tech_cats.iter() { %>
           <li>
             <input type="checkbox" id="tech<%= tech_category.id %>" />
-            <label for="tech<%= tech_category.id %>">
-              <%= tech_category.name %> (Ур. <%= tech_category.level %>)
+            <label class="font-alt" for="tech<%= tech_category.id %>">
+              <%= tech_category.name %> (<%= tech_category.level %>)
             </label>
             <a target="_blank" rel="nofollow" href="/edit_tech_category/<%= tech_category.id %>/">~</a>
             <a class="pointer remove_tech_category" data-pk="<%= tech_category.id %>">x</a>
-            <ul style="margin-left: 2%;border-left: 1px orange solid;">
+            <a class="pointer get_tech_category_info" data-pk="<%= tech_category.id %>">i</a>
+            <ul>
               <% for category in tech_category.get_serve_categories().iter() { %>
                 <li>
                   <input checked type="checkbox" id="cat<%= category.id %>" />
-                  <label for="cat<%= category.id %>">
+                  <label class="selected" for="cat<%= category.id %>">
                     <%= category.name %>
                   </label>
                   <span>
                     <a target="_blank" rel="nofollow" href="/edit_serve_category/<%= category.id %>/">~</a>
                     <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
+                    <a class="pointer get_serve_category_info" data-pk="<%= category.id %>">i</a>
                   </span>
-                  <ul style="margin-left: 2%;border-left: 1px orange solid;">
+                  <ul>
                     <% for object in category.get_serves().iter() { %>
                     <li>
                       <% if object.is_parent() { %>
@@ -52,7 +54,8 @@
                       </label>
                       <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
                       <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
-                      <ul style="margin-left: 2%;border-left: 1px orange solid;">
+                      <a class="pointer get_serve_info" data-pk="<%= object.id %>">i</a>
+                      <ul>
                         <% for child in object.get_variables().iter() { %>
                         <li>
                           <a>
@@ -61,6 +64,7 @@
                           </a>
                           <a target="_blank" rel="nofollow" href="/edit_serve/<%= child.id %>/">~</a>
                           <a class="pointer remove_serve" data-pk="<%= child.id %>">x</a>
+                          <a class="pointer get_serve_info" data-pk="<%= child.id %>">i</a>
                         </li>
                         <% } %>
                       </ul>
