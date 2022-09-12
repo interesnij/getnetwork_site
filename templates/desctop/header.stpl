@@ -129,10 +129,10 @@
                                           <a href="/create_wiki_categories/" class="ajax">+ категория обучалки</a>
                                       </li>
                                       <li>
-                                          <a href="/create_tech_categories/" class="ajax">+ технология опций</a>
+                                          <a href="/create_tech_categories/" class="ajax">+ веб-сервис</a>
                                       </li>
                                       <li>
-                                          <a href="/create_serve_categories/" class="ajax">+ категория опций</a>
+                                          <a href="/create_serve_categories/" class="ajax">+ технология опций</a>
                                       </li>
                                       <li>
                                           <a href="/help/create_categories/" class="ajax">+ категория помощи</a>

@@ -501,6 +501,7 @@ pub struct HelpItem {
     pub category_id: i32,
     pub title:       String,
     pub content:     String,
+    pub position:    i16,
 }
 
 #[derive(Debug, Deserialize, AsChangeset, Insertable)]
@@ -509,4 +510,5 @@ pub struct NewHelpItem {
     pub category_id: i32,
     pub title:       String,
     pub content:     String,
+    pub position:    i16,
 }

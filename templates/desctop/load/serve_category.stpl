@@ -1,4 +1,4 @@
-<div page-id="" object-id="" data-link="" data-title="Категория опций <%= object.name %>" class="doc_title" style="padding: 0;">
+<div page-id="" object-id="" data-link="" data-title="технология опций <%= object.name %>" class="doc_title" style="padding: 0;">
   <h4 style="margin-bottom: 0 !important"><%= object.name %></h4>
   <p class="solid_bottom" style="font-size: 80%;">
     Это язык программирования или технология для веб-приложений.

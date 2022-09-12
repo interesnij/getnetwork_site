@@ -18,6 +18,9 @@
             <input value="<%= object.title %>" class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
         </div>
         <div class="mb-20 mb-md-10">
+            <input value="<%= object.position %>" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+        </div>
+        <div class="mb-20 mb-md-10">
           <p><%= object.content.len() %></p>
           <div style="display:inline-block" contenteditable="true" placeholder="Описание" class="input-md form-control content_1 smile_supported">
             <%- object.content %>

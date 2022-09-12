@@ -53,7 +53,8 @@ CREATE TABLE help_items (
     id          SERIAL PRIMARY KEY,
     category_id INT NOT NULL,
     title       VARCHAR(200) NOT NULL,
-    content     VARCHAR(10000) NOT NULL
+    content     VARCHAR(10000) NOT NULL,
+    position    SMALLINT NOT NULL DEFAULT 0,
 );
 
 -- users -------
