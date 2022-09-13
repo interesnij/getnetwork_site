@@ -131,8 +131,6 @@ on('body', 'click', '#edit_help_category_btn', function() {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     ajax_get_reload("/help/create_categories/", true);
-  } else {
-    alert("not ok");
   }};
   link.send(form_data);
 });

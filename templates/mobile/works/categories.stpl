@@ -11,7 +11,7 @@
 </section>
 
 <% for object in work_cats.iter() { %>
-<section class="page-section need_darked_this fixed-height-small pt-0 pb-0 bg-dark-alfa-30" style="background-image: url(&quot;<%= object.get_image() %>&quot;);">
+<section class="page-section need_darked_this fixed-height-small pt-0 pb-0 bg-dark-alfa-30" style="background-image: url(&quot;<%= object.get_image() %>&quot;); background-position: 50% -26px;">
     <div class="js-height-parent container relative" style="height: 600px;">
         <div class="home-content">
             <div class="home-text">
