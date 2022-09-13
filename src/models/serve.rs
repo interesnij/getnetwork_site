@@ -40,7 +40,7 @@ impl TechCategories {
         let _connection = establish_connection();
         return serve_categories
             .filter(schema::serve_categories::tech_categories.eq(self.id))
-            .order(schema::serve_categories::position)
+            .order(schema::serve_categories::position.acs())
             .load::<ServeCategories>(&_connection)
             .expect("E");
     }
