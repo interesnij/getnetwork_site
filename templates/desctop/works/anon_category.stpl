@@ -5,6 +5,8 @@
     <div class="hs-line-4 font-alt">
       <a class="ajax" href="/">Главная</a>
       &nbsp;/&nbsp;
+      <a class="ajax" href="/work_categories/">Работы</a>
+      &nbsp;/&nbsp;
       <a><%= category.name %></a>
       <% include!("../generic/category_stat.stpl"); %>
     </div>
