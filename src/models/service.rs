@@ -434,6 +434,16 @@ impl Service {
                 .expect("E.");
         }
     }
+    pub fn get_images_ids(&self) -> Vec<i32> {
+        use crate::schema::service_images::dsl::service_images;
+
+        let _connection = establish_connection();
+        return service_images
+            .filter(schema::service_images::service.eq(self.id))
+            .select(schema::service_images::service)
+            .load::<i32>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]

@@ -334,6 +334,16 @@ impl Wiki {
                 .expect("E.");
         }
     }
+    pub fn get_images_ids(&self) -> Vec<i32> {
+        use crate::schema::wiki_images::dsl::wiki_images;
+
+        let _connection = establish_connection();
+        return wiki_images
+            .filter(schema::wiki_images::wiki.eq(self.id))
+            .select(schema::wiki_images::wiki)
+            .load::<i32>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]

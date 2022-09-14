@@ -422,6 +422,16 @@ impl Store {
                 .expect("E.");
         }
     }
+    pub fn get_images_ids(&self) -> Vec<i32> {
+        use crate::schema::store_images::dsl::store_images;
+
+        let _connection = establish_connection();
+        return store_images
+            .filter(schema::store_images::store.eq(self.id))
+            .select(schema::store_images::store)
+            .load::<i32>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]

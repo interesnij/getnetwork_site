@@ -423,6 +423,16 @@ impl Work {
             .load::<i32>(&_connection)
             .expect("E");
     }
+    pub fn get_images_ids(&self) -> Vec<i32> {
+        use crate::schema::work_images::dsl::work_images;
+
+        let _connection = establish_connection();
+        return work_images
+            .filter(schema::work_images::work.eq(self.id))
+            .select(schema::work_images::work)
+            .load::<i32>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
