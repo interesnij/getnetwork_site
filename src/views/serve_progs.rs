@@ -14,8 +14,6 @@ use crate::diesel::{
     QueryDsl,
 };
 use crate::utils::{
-    category_form,
-    serve_category_form,
     establish_connection,
     is_signed_in,
     get_request_user_data,
@@ -722,6 +720,7 @@ pub async fn create_tech_categories(session: Session, mut payload: Multipart) ->
         if _request_user.perm == 60 {
 
             use schema::tech_categories;
+            use crate::utils::category_form;
 
             let _connection = establish_connection();
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
@@ -750,6 +749,7 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use schema::tech_categories::dsl::tech_categories;
+            use crate::utils::serve_category_form
 
             let _connection = establish_connection();
             let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;
@@ -793,6 +793,7 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && _category.user_id == _request_user.id {
+            use crate::utils::category_form;
 
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewTechCategories {

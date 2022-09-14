@@ -9,7 +9,6 @@ use actix_web::{
 use actix_multipart::Multipart;
 use std::borrow::BorrowMut;
 use crate::utils::{
-    category_form,
     establish_connection,
     is_signed_in,
     get_request_user_data,
@@ -503,6 +502,8 @@ pub async fn create_service_categories(session: Session, mut payload: Multipart)
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::utils::category_form;
+
             let _connection = establish_connection();
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewServiceCategories {
@@ -922,6 +923,8 @@ pub async fn edit_service_category(session: Session, mut payload: Multipart, _id
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::utils::category_form;
+
             let _connection = establish_connection();
             let _cat_id: i32 = *_id;
             let _category = service_categories.filter(schema::service_categories::id.eq(_cat_id)).load::<ServiceCategories>(&_connection).expect("E");

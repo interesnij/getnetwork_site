@@ -43,10 +43,16 @@ pub struct Forms {
     pub link:          String,
     pub main_image:    String,
     pub is_active:     bool,
-    pub images:        Vec<String>,
-    pub videos:        Vec<String>,
     pub category_list: Vec<i32>,
     pub tags_list:     Vec<i32>,
+}
+#[derive(Deserialize, Serialize, Debug)]
+pub struct ImageForm {
+    pub images: Vec<String>,
+}
+#[derive(Deserialize, Serialize, Debug)]
+pub struct VideoForm {
+    pub videos: Vec<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -722,6 +728,73 @@ pub async fn order_form(payload: &mut Multipart, owner_id: i32) -> OrderForms {
                 };
                 files.push(file.clone());
                 form.files.push(file.path.clone().replace("./","/"));
+            }
+        }
+    }
+    form
+}
+
+
+pub async fn images_form(payload: &mut Multipart, owner_id: i32) -> ImageForm {
+    let mut files: Vec<UploadedFiles> = Vec::new();
+
+    let mut form: ImageForm = ImageForm {
+        images: Vec::new(),
+    };
+
+    while let Some(item) = payload.next().await {
+        let mut field: Field = item.expect("split_payload err");
+
+        if field.name() == "images[]" {
+            let _new_path = field.content_disposition().get_filename().unwrap();
+            if _new_path != "" {
+                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
+                let file_path = file.path.clone();
+                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
+                    .await
+                    .unwrap();
+                while let Some(chunk) = field.next().await {
+                    let data = chunk.unwrap();
+                    f = web::block(move || f.write_all(&data).map(|_| f))
+                        .await
+                        .unwrap()
+                        .expect("E");
+                };
+                files.push(file.clone());
+                form.images.push(file.path.clone().replace("./","/"));
+            }
+        }
+    }
+    form
+}
+
+pub async fn videos_form(payload: &mut Multipart, owner_id: i32) -> VideoForm {
+    let mut files: Vec<UploadedFiles> = Vec::new();
+
+    let mut form: VideoForm = VideoForm {
+        images: Vec::new(),
+    };
+
+    while let Some(item) = payload.next().await {
+        let mut field: Field = item.expect("split_payload err");
+
+        if field.name() == "videos[]" {
+            let _new_path = field.content_disposition().get_filename().unwrap();
+            if _new_path != "" {
+                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
+                let file_path = file.path.clone();
+                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
+                    .await
+                    .unwrap();
+                while let Some(chunk) = field.next().await {
+                    let data = chunk.unwrap();
+                    f = web::block(move || f.write_all(&data).map(|_| f))
+                        .await
+                        .unwrap()
+                        .expect("E");
+                };
+                files.push(file.clone());
+                form.videos.push(file.path.clone().replace("./","/"));
             }
         }
     }

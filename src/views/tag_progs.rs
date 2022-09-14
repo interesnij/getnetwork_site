@@ -16,7 +16,6 @@ use crate::diesel::{
 };
 use actix_session::Session;
 use crate::utils::{
-    category_form,
     establish_connection,
     is_signed_in,
     get_request_user_data,
@@ -117,6 +116,8 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::utils::category_form;
+
             let _connection = establish_connection();
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_tag = NewTag {
@@ -1268,6 +1269,7 @@ pub async fn edit_tag(session: Session, mut payload: Multipart, _id: web::Path<i
         if _request_user.perm == 60 {
             use crate::models::EditTag;
             use crate::schema::tags::dsl::tags;
+            use crate::utils::category_form;
 
             let _connection = establish_connection();
             let _tag_id : i32 = *_id;

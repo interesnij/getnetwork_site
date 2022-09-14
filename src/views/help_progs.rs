@@ -14,7 +14,6 @@ use crate::diesel::{
     QueryDsl,
 };
 use crate::utils::{
-    category_form,
     help_form,
     establish_connection,
     is_signed_in,
@@ -328,6 +327,8 @@ pub async fn create_categories(session: Session, mut payload: Multipart) -> impl
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::utils::category_form;
+
             let _connection = establish_connection();
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewHelpItemCategorie {
@@ -357,6 +358,8 @@ pub async fn edit_category(session: Session, mut payload: Multipart, _id: web::P
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
+            use crate::utils::category_form;
+
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewHelpItemCategorie {
                 title:    form.name.clone(),
