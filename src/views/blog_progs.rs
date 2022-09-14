@@ -70,8 +70,8 @@ pub fn blog_routes(config: &mut web::ServiceConfig) {
 
     config.route("/create_blog_images/{id}/", web::post().to(create_blog_images));
     config.route("/create_blog_videos/{id}/", web::post().to(create_blog_videos));
-    config.route("/delete_blog_image/{id}/", web::get().to(delete_blog_images));
-    config.route("/delete_blog_video/{id}/", web::get().to(delete_blog_videos));
+    config.route("/delete_blog_image/{id}/", web::get().to(delete_blog_image));
+    config.route("/delete_blog_video/{id}/", web::get().to(delete_blog_video));
 }
 
 pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
