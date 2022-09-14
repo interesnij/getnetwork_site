@@ -1,6 +1,6 @@
 <% if videos.len() > 0 { %>
 
-<% if request_user.is_supermanager() { %>
+<% if request_user.is_superuser() { %>
 <h6>Видеозаписи <a class="add_video_in_object pointer">+</a></h6>
 <div class="row multi-columns-row mb-30 mb-xs-10">
     <% for video in videos.iter() { %>
