@@ -30,9 +30,7 @@ use crate::models::{
     BlogCategory,
     NewBlogCategory,
     BlogImage,
-    NewBlogImage,
     BlogVideo,
-    NewBlogVideo,
     TagItems,
     NewTagItems,
     Tag,
@@ -69,6 +67,11 @@ pub fn blog_routes(config: &mut web::ServiceConfig) {
     config.route("/delete_blog_category/{id}/", web::get().to(delete_blog_category));
     config.route("/publish_blog/{id}/", web::get().to(publish_blog));
     config.route("/hide_blog/{id}/", web::get().to(hide_blog));
+
+    config.route("/create_blog_images/{id}/", web::post().to(create_blog_images));
+    config.route("/create_blog_videos/{id}/", web::post().to(create_blog_videos));
+    config.route("/delete_blog_image/{id}/", web::get().to(delete_blog_images));
+    config.route("/delete_blog_video/{id}/", web::get().to(delete_blog_videos));
 }
 
 pub async fn create_blog_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
@@ -496,58 +499,7 @@ pub async fn create_blog_categories(session: Session, mut payload: Multipart) ->
     }
     return HttpResponse::Ok();
 }
-pub async fn create_blog_images(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::utils::images_form;
-            use crate::schema::blogs::dsl::blogs;
 
-            let _connection = establish_connection();
-            let _blogs = blogs.filter(schema::blogs::id.eq(*_id)).load::<Blog>(&_connection).expect("E");
-            let _blog = _blogs.into_iter().nth(0).unwrap();
-
-            let form = images_form(payload.borrow_mut(), _request_user.id).await;
-            for image in form.images.iter() {
-                let new_image = NewBlogImage::create (
-                    _blog.id,
-                    image.to_string()
-                );
-                diesel::insert_into(schema::blog_images::table)
-                    .values(&new_image)
-                    .get_result::<BlogImage>(&_connection)
-                    .expect("E.");
-                };
-        }
-    }
-    HttpResponse::Ok()
-}
-pub async fn create_blog_videos(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::utils::videos_form;
-            use crate::schema::blogs::dsl::blogs;
-
-            let _connection = establish_connection();
-            let _blogs = blogs.filter(schema::blogs::id.eq(*_id)).load::<Blog>(&_connection).expect("E");
-            let _blog = _blogs.into_iter().nth(0).unwrap();
-
-            let form = videos_form(payload.borrow_mut(), _request_user.id).await;
-            for video in form.videos.iter() {
-                let new_video = NewBlogVideo::create (
-                    _blog.id,
-                    video.to_string()
-                );
-                diesel::insert_into(schema::blog_videos::table)
-                    .values(&new_video)
-                    .get_result::<BlogVideo>(&_connection)
-                    .expect("Error saving blog.");
-            };
-        }
-    }
-    HttpResponse::Ok()
-}
 pub async fn create_blog(session: Session, mut payload: Multipart) -> impl Responder {
     use crate::schema::tags::dsl::tags;
     use crate::schema::blog_categories::dsl::blog_categories;
@@ -1389,6 +1341,80 @@ pub async fn hide_blog(session: Session, _id: web::Path<i32>) -> impl Responder 
                 .set(schema::blogs::is_active.eq(false))
                 .get_result::<Blog>(&_connection)
                 .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn create_blog_images(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::images_form;
+            use crate::schema::blogs::dsl::blogs;
+            use crate::models::NewBlogImage;
+
+            let _connection = establish_connection();
+            let _blogs = blogs.filter(schema::blogs::id.eq(*_id)).load::<Blog>(&_connection).expect("E");
+            let _blog = _blogs.into_iter().nth(0).unwrap();
+
+            let form = images_form(payload.borrow_mut(), _request_user.id).await;
+            for image in form.images.iter() {
+                let new_image = NewBlogImage::create (
+                    _blog.id,
+                    image.to_string()
+                );
+                diesel::insert_into(schema::blog_images::table)
+                    .values(&new_image)
+                    .get_result::<BlogImage>(&_connection)
+                    .expect("E.");
+                };
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn create_blog_videos(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::videos_form;
+            use crate::schema::blogs::dsl::blogs;
+            use crate::models::NewBlogVideo;
+
+            let _connection = establish_connection();
+            let _blogs = blogs.filter(schema::blogs::id.eq(*_id)).load::<Blog>(&_connection).expect("E");
+            let _blog = _blogs.into_iter().nth(0).unwrap();
+
+            let form = videos_form(payload.borrow_mut(), _request_user.id).await;
+            for video in form.videos.iter() {
+                let new_video = NewBlogVideo::create (
+                    _blog.id,
+                    video.to_string()
+                );
+                diesel::insert_into(schema::blog_videos::table)
+                    .values(&new_video)
+                    .get_result::<BlogVideo>(&_connection)
+                    .expect("Error saving blog.");
+            };
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn delete_blog_image(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            diesel::delete(schema::blog_images.filter(schema::blog_images::id.eq(*_id))).execute(&establish_connection()).expect("E");
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn delete_blog_video(session: Session, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            diesel::delete(schema::blog_videos.filter(schema::blog_videos::id.eq(*_id))).execute(&establish_connection()).expect("E");
         }
     }
     HttpResponse::Ok()
