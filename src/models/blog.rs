@@ -355,6 +355,7 @@ impl Blog {
         let _connection = establish_connection();
         return blog_images
             .filter(schema::blog_images::blog.eq(self.id))
+            .order(schema::blog_images::id)
             .select(schema::blog_images::id)
             .load::<i32>(&_connection)
             .expect("E");
