@@ -1426,7 +1426,7 @@ pub async fn delete_blog_video(session: Session, id: web::Path<i32>) -> impl Res
             let _connection = establish_connection();
             let _videos = blog_videos.filter(schema::blog_videos::id.eq(*id)).load::<BlogVideo>(&_connection).expect("E");
             let _video = _videos.into_iter().nth(0).unwrap();
-            let src = "/my".to_string() + &_image.src;
+            let src = "/my".to_string() + &_video.src;
             diesel::delete(blog_videos.filter(schema::blog_videos::id.eq(*id))).execute(&_connection).expect("E");
             std::fs::remove_file(src).expect("E");
         }
