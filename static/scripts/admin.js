@@ -567,7 +567,7 @@ on('body', 'change', '.add_photos_in_object', function() {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     ajax_get_reload(document.location.href, false)
-  } else { console.log(link.responseText) }};
+  } else { console.log("not ok") }};
   link.send(form_data);
 });
 
@@ -598,6 +598,6 @@ on('body', 'change', '.add_videos_in_object', function() {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     ajax_get_reload(document.location.href, false)
-  } else { console.log(link.responseText) }};
+  } else { console.log("not ok") }};
   link.send(form_data);
 });
