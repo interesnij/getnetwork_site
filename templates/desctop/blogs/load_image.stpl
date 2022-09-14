@@ -7,7 +7,7 @@
     </a>
   <% } %>
   <% if next.is_some() { %>
-    % let _next = next.unwrap(); %>
+    <% let _next = next.unwrap(); %>
     <a class="next_item" href="/blog_image/<%= _next.id %>/">
       <svg fill="currentColor" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>
     </a>
