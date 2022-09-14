@@ -3222,12 +3222,14 @@ h1,h2,h3,h4,h5,h6{margin-top:10px;margin-bottom:10px}
 .prev_item {
   left: 50px;
   cursor: pointer;
-  z-index: 400
+  z-index: 400;
+  position: absolute;
 }
 .next_item {
   left: -60px;
   cursor: pointer;
-  z-index: 400
+  z-index: 400;
+  position: absolute;
 }
 
 .desctop_version .prev_item svg,
@@ -3237,10 +3239,7 @@ h1,h2,h3,h4,h5,h6{margin-top:10px;margin-bottom:10px}
   width:50px;
   height:100%;
 }
-.desctop_version .prev_item,
-.desctop_version .next_item {
-  position: absolute;
-}
+
 .desctop_version .prev_item svg :hover,
 .desctop_version .next_item svg :hover{
   color: rgba(255, 255, 255, 1) !important;
