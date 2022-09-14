@@ -1,5 +1,5 @@
 <% if is_ajax == 1 { %>
-    <div class="page" id="top">
+    <div class="page desctop_version" id="top">
       <nav class="main-nav small-height stick-fixed">
           <div class="full-wrapper relative clearfix">
               <div class="nav-logo-wrap local-scroll">
