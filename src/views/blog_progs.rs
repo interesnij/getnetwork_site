@@ -1360,7 +1360,6 @@ pub async fn create_blog_images(session: Session, mut payload: Multipart, id: we
 
             let form = images_form(payload.borrow_mut(), _request_user.id).await;
             for image in form.images.iter() {
-                println!("image{:?}", image);
                 let new_image = NewBlogImage::create (
                     _blog.id,
                     image.to_string()
@@ -1388,7 +1387,6 @@ pub async fn create_blog_videos(session: Session, mut payload: Multipart, id: we
 
             let form = videos_form(payload.borrow_mut(), _request_user.id).await;
             for video in form.videos.iter() {
-                println!("video{:?}", video);
                 let new_video = NewBlogVideo::create (
                     _blog.id,
                     video.to_string()
