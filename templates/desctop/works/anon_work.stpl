@@ -78,9 +78,9 @@
                 </div>
             </div>
             <div class="col-md-6">
-            <% include!("../generic/photos.stpl"); %>
+            <% include!("../generic/anon_photos.stpl"); %>
 
-            <% include!("../generic/videos.stpl"); %>
+            <% include!("../generic/anon_videos.stpl"); %>
             </div>
         </div>
     </div>

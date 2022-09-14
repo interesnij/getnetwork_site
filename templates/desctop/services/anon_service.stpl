@@ -30,9 +30,9 @@
                 <% let object_serve_ids = object.get_serves_ids(); %>
                 <% include!("../generic/form/serves_table.stpl"); %>
 
-                <% include!("../generic/photos.stpl"); %>
+                <% include!("../generic/anon_photos.stpl"); %>
 
-                <% include!("../generic/videos.stpl"); %>
+                <% include!("../generic/anon_videos.stpl"); %>
 
                 <div class="clearfix mt-40">
                   <% if next.is_some() { %>

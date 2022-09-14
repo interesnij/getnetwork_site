@@ -29,9 +29,9 @@
                 <% } %>
             </div>
 
-            <% include!("../generic/photos.stpl"); %>
+            <% include!("../generic/anon_photos.stpl"); %>
 
-            <% include!("../generic/videos.stpl"); %>
+            <% include!("../generic/anon_videos.stpl"); %>
         </div>
 
         <div class="clearfix mt-40">

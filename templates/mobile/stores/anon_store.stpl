@@ -74,9 +74,9 @@
             <a href="/stores/<%= category.id %>/<%= _prev.id %>/" class="border ajax blog-item-more right"><%= _prev.title %>&nbsp;&nbsp;⇢</a>
             <% } %>
         </div>
-        <% include!("../generic/photos.stpl"); %>
+        <% include!("../generic/anon_photos.stpl"); %>
 
-        <% include!("../generic/videos.stpl"); %>
+        <% include!("../generic/anon_videos.stpl"); %>
     </div>
 
     </div>

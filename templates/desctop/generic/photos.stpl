@@ -1,5 +1,21 @@
 <% if images.len() > 0 { %>
-<h6 class="mt-20">Изображения</h6>
+
+<% if request_user.is_supermanager() { %>
+<h6 class="mt-20">Изображения <a class="add_photo_in_object pointer">+</a></h6>
+<div class="row multi-columns-row mb-30 mb-xs-10">
+    <% for img in images.iter() { %>
+    <div class="col-md-6 col-lg-6 mb-md-10">
+      <a class="remove_photo_from_object pointer" data-pk="<%= img.id %>">Удалить</a>
+        <div class="post-prev-img">
+          <div class="progressive replace" data-href="<%= img.src %>">
+            <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
+          </div>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<% } else { %>
 <div class="row multi-columns-row mb-30 mb-xs-10">
     <% for img in images.iter() { %>
     <div class="col-md-6 col-lg-6 mb-md-10">
