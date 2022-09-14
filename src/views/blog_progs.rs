@@ -1388,6 +1388,7 @@ pub async fn create_blog_videos(session: Session, mut payload: Multipart, id: we
 
             let form = videos_form(payload.borrow_mut(), _request_user.id).await;
             for video in form.videos.iter() {
+                println!("video{:?}", video);
                 let new_video = NewBlogVideo::create (
                     _blog.id,
                     video.to_string()
