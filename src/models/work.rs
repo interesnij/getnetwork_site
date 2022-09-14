@@ -429,7 +429,7 @@ impl Work {
         let _connection = establish_connection();
         return work_images
             .filter(schema::work_images::work.eq(self.id))
-            .select(schema::work_images::work)
+            .select(schema::work_images::id)
             .load::<i32>(&_connection)
             .expect("E");
     }

@@ -340,7 +340,7 @@ impl Wiki {
         let _connection = establish_connection();
         return wiki_images
             .filter(schema::wiki_images::wiki.eq(self.id))
-            .select(schema::wiki_images::wiki)
+            .select(schema::wiki_images::id)
             .load::<i32>(&_connection)
             .expect("E");
     }

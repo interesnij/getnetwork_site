@@ -440,7 +440,7 @@ impl Service {
         let _connection = establish_connection();
         return service_images
             .filter(schema::service_images::service.eq(self.id))
-            .select(schema::service_images::service)
+            .select(schema::service_images::id)
             .load::<i32>(&_connection)
             .expect("E");
     }
