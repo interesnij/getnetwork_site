@@ -3225,6 +3225,10 @@ h1,h2,h3,h4,h5,h6{margin-top:10px;margin-bottom:10px}
   z-index: 400;
   position: absolute;
 }
+.next_item,
+.prev_item {
+  width: 30px;
+}
 .next_item {
   left: -60px;
   cursor: pointer;
@@ -3244,7 +3248,7 @@ h1,h2,h3,h4,h5,h6{margin-top:10px;margin-bottom:10px}
 .desctop_version .next_item svg {
   position: fixed;
   color: rgba(255, 255, 255, 0.8) !important;
-  width:50px;
+  width: 50px;
   height:100%;
 }
 
