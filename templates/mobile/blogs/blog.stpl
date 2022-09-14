@@ -30,6 +30,8 @@
                     <% } else { %>
                     | <a class="pointer publish_blog" data-pk="<%= object.id %>">👁</a>
                     <% } %>
+                    | <a class="add_photo_in_blog pointer" data-pk="<%= object.id %>">+ф</a>
+                    | <a class="add_video_in_blog pointer" data-pk="<%= object.id %>">+в</a>
                     <% } %>
 
                     <span class="separator">&nbsp;</span>

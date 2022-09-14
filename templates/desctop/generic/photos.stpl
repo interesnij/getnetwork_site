@@ -1,4 +1,3 @@
-<a class="add_photo_in_object pointer">Добавить фото</a>
 
 <% if images.len() > 0 { %>
 

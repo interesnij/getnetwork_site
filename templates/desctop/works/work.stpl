@@ -37,6 +37,8 @@
                                     <% } else { %>
                                     | <a class="pointer publish_work" data-pk="<%= object.id %>">👁</a>
                                     <% } %>
+                                    | <a class="add_photo_in_work pointer" data-pk="<%= object.id %>">+ф</a>
+                                    | <a class="add_video_in_work pointer" data-pk="<%= object.id %>">+в</a>
                                     <% } %>
                                 </p>
                                 <p>
