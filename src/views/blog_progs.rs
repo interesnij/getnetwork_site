@@ -1411,8 +1411,10 @@ pub async fn delete_blog_image(session: Session, _id: web::Path<i32>) -> impl Re
             let _connection = establish_connection();
             let _images = blog_images.filter(schema::blog_images::id.eq(*_id)).load::<BlogImage>(&_connection).expect("E");
             let _image = _images.into_iter().nth(0).unwrap();
-            remove_file(_image.src)?;
+            let src = _image.src;
             diesel::delete(blog_images.filter(schema::blog_images::id.eq(*_id))).execute(&_connection).expect("E");
+            remove_file(src)?;
+            Ok(())
         }
     }
     HttpResponse::Ok()
@@ -1427,8 +1429,10 @@ pub async fn delete_blog_video(session: Session, _id: web::Path<i32>) -> impl Re
             let _connection = establish_connection();
             let _videos = blog_videos.filter(schema::blog_videos::id.eq(*_id)).load::<BlogVideo>(&_connection).expect("E");
             let _video = _videos.into_iter().nth(0).unwrap();
-            remove_file(_video.src)?;
-            diesel::delete(blog_videos.filter(schema::blog_videos::id.eq(*_id))).execute(&establish_connection()).expect("E");
+            let src = _video.src;
+            diesel::delete(blog_videos.filter(schema::blog_videos::id.eq(*_id))).execute(&_connection).expect("E");
+            remove_file(src)?;
+            Ok(())
         }
     }
     HttpResponse::Ok()
