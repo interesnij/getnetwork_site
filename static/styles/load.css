@@ -1565,12 +1565,6 @@ blockquote footer{
   z-index: 500;
   color: white;
 }
-.prev_item {
-  position: absolute;
-  right: -10px;
-  cursor: pointer;
-  z-index: 400
-}
 
 #fullscreen_loader {
   position: absolute;
@@ -3226,7 +3220,7 @@ h1,h2,h3,h4,h5,h6{margin-top:10px;margin-bottom:10px}
 .show{display:block!important}
 
 .prev_item {
-  right: -10px;
+  left: 50px;
   cursor: pointer;
   z-index: 400
 }
