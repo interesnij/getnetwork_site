@@ -566,26 +566,6 @@ pub async fn create_work(session: Session, mut payload: Multipart) -> impl Respo
                 .get_result::<Work>(&_connection)
                 .expect("E.");
 
-            for image in form.images.iter() {
-                let new_image = NewWorkImage::create (
-                    _work.id,
-                    image.to_string()
-                );
-                diesel::insert_into(schema::work_images::table)
-                    .values(&new_image)
-                    .get_result::<WorkImage>(&_connection)
-                    .expect("E.");
-                };
-            for video in form.videos.iter() {
-                let new_video = NewWorkVideo::create (
-                    _work.id,
-                    video.to_string()
-                );
-                diesel::insert_into(schema::work_videos::table)
-                    .values(&new_video)
-                    .get_result::<WorkVideo>(&_connection)
-                    .expect("E.");
-            };
             for category_id in form.category_list.iter() {
                 let new_category = NewWorkCategory {
                     work_categories_id: *category_id,
@@ -713,8 +693,6 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
                 serve::dsl::serve,
                 works::dsl::works,
                 work_categories::dsl::work_categories,
-                work_images::dsl::work_images,
-                work_videos::dsl::work_videos,
                 tags_items::dsl::tags_items,
                 serve_items::dsl::serve_items,
                 tech_categories_items::dsl::tech_categories_items,
@@ -757,8 +735,6 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
                 .expect("Error.");
             };
 
-            diesel::delete(work_images.filter(schema::work_images::work.eq(_work_id))).execute(&_connection).expect("E");
-            diesel::delete(work_videos.filter(schema::work_videos::work.eq(_work_id))).execute(&_connection).expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::work_id.eq(_work_id))).execute(&_connection).expect("E");
             diesel::delete(work_category.filter(schema::work_category::work_id.eq(_work_id))).execute(&_connection).expect("E");
             diesel::delete(serve_items.filter(schema::serve_items::work_id.eq(_work_id))).execute(&_connection).expect("E");
@@ -779,26 +755,6 @@ pub async fn edit_work(session: Session, mut payload: Multipart, _id: web::Path<
             .get_result::<Work>(&_connection)
             .expect("E");
 
-            for _image in form.images.iter() {
-                let new_edit_image = NewWorkImage::create (
-                    _work_id,
-                    _image.to_string()
-                );
-                diesel::insert_into(schema::work_images::table)
-                .values(&new_edit_image)
-                .get_result::<WorkImage>(&_connection)
-                .expect("E.");
-            };
-            for _video in form.videos.iter() {
-                let new_video = NewWorkVideo::create (
-                    _work_id,
-                    _video.to_string()
-                );
-                diesel::insert_into(schema::work_videos::table)
-                .values(&new_video)
-                .get_result::<WorkVideo>(&_connection)
-                .expect("E.");
-            };
             for category_id in form.category_list.iter() {
                 let new_category = NewWorkCategory {
                     work_categories_id: *category_id,

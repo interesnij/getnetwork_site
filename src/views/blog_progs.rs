@@ -496,7 +496,50 @@ pub async fn create_blog_categories(session: Session, mut payload: Multipart) ->
     }
     return HttpResponse::Ok();
 }
+pub async fn create_blog_images(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::images_form;
 
+            let _connection = establish_connection();
+            let form = images_form(payload.borrow_mut(), _request_user.id).await;
+            for image in form.images.iter() {
+                let new_image = NewBlogImage::create (
+                    _blog.id,
+                    image.to_string()
+                );
+                diesel::insert_into(schema::blog_images::table)
+                    .values(&new_image)
+                    .get_result::<BlogImage>(&_connection)
+                    .expect("E.");
+                };
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn create_blog_videos(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::videos_form;
+
+            let _connection = establish_connection();
+            let form = videos_form(payload.borrow_mut(), _request_user.id).await;
+            for video in form.videos.iter() {
+                let new_video = NewBlogVideo::create (
+                    _blog.id,
+                    video.to_string()
+                );
+                diesel::insert_into(schema::blog_videos::table)
+                    .values(&new_video)
+                    .get_result::<BlogVideo>(&_connection)
+                    .expect("Error saving blog.");
+            };
+        }
+    }
+    HttpResponse::Ok()
+}
 pub async fn create_blog(session: Session, mut payload: Multipart) -> impl Responder {
     use crate::schema::tags::dsl::tags;
     use crate::schema::blog_categories::dsl::blog_categories;
@@ -523,26 +566,6 @@ pub async fn create_blog(session: Session, mut payload: Multipart) -> impl Respo
                 .get_result::<Blog>(&_connection)
                 .expect("Error saving blog.");
 
-            for image in form.images.iter() {
-                let new_image = NewBlogImage::create (
-                    _blog.id,
-                    image.to_string()
-                );
-                diesel::insert_into(schema::blog_images::table)
-                    .values(&new_image)
-                    .get_result::<BlogImage>(&_connection)
-                    .expect("Error saving blog.");
-                };
-            for video in form.videos.iter() {
-                let new_video = NewBlogVideo::create (
-                    _blog.id,
-                    video.to_string()
-                );
-                diesel::insert_into(schema::blog_videos::table)
-                    .values(&new_video)
-                    .get_result::<BlogVideo>(&_connection)
-                    .expect("Error saving blog.");
-            };
             for category_id in form.category_list.iter() {
                 let new_category = NewBlogCategory {
                     blog_categories_id: *category_id,
@@ -590,8 +613,6 @@ pub async fn edit_blog(session: Session, mut payload: Multipart, _id: web::Path<
     use crate::schema::blogs::dsl::blogs;
     use crate::schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::blog_images::dsl::blog_images;
-    use crate::schema::blog_videos::dsl::blog_videos;
     use crate::schema::blog_category::dsl::blog_category;
     use crate::schema::blog_categories::dsl::blog_categories;
 
@@ -624,8 +645,6 @@ pub async fn edit_blog(session: Session, mut payload: Multipart, _id: web::Path<
                 .expect("Error.");
             };
 
-            diesel::delete(blog_images.filter(schema::blog_images::blog.eq(_blog_id))).execute(&_connection).expect("E");
-            diesel::delete(blog_videos.filter(schema::blog_videos::blog.eq(_blog_id))).execute(&_connection).expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
             diesel::delete(blog_category.filter(schema::blog_category::blog_id.eq(_blog_id))).execute(&_connection).expect("E");
 
@@ -643,26 +662,6 @@ pub async fn edit_blog(session: Session, mut payload: Multipart, _id: web::Path<
             .get_result::<Blog>(&_connection)
             .expect("E");
 
-            for _image in form.images.iter() {
-                let new_edit_image = NewBlogImage::create (
-                    _blog_id,
-                    _image.to_string()
-                );
-                diesel::insert_into(schema::blog_images::table)
-                .values(&new_edit_image)
-                .get_result::<BlogImage>(&_connection)
-                .expect("E.");
-            };
-            for _video in form.videos.iter() {
-                let new_video = NewBlogVideo::create (
-                    _blog_id,
-                    _video.to_string()
-                );
-                diesel::insert_into(schema::blog_videos::table)
-                .values(&new_video)
-                .get_result::<BlogVideo>(&_connection)
-                .expect("E.");
-            };
             for category_id in form.category_list.iter() {
                 let new_category = NewBlogCategory {
                     blog_categories_id: *category_id,

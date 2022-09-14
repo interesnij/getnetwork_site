@@ -45,14 +45,6 @@
                 </select>
             </div>
             <div class="mb-20 mb-md-10">
-                <label>Изображения</label>
-                <input type="file" multiple name="images[]" />
-            </div>
-            <div class="mb-20 mb-md-10">
-                <label>Видеозаписи</label>
-                <input type="file" multiple name="videos[]" />
-            </div>
-            <div class="mb-20 mb-md-10">
               <label class="checkbox-inline">
                 <input type="checkbox" name="is_active" checked>
                   Статья открыта

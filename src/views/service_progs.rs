@@ -564,26 +564,6 @@ pub async fn create_service(session: Session, mut payload: Multipart) -> impl Re
                 .get_result::<Service>(&_connection)
                 .expect("E.");
 
-            for image in form.images.iter() {
-                let new_image = NewServiceImage::create (
-                    _service.id,
-                    image.to_string()
-                );
-                diesel::insert_into(schema::service_images::table)
-                    .values(&new_image)
-                    .get_result::<ServiceImage>(&_connection)
-                    .expect("E.");
-                };
-            for video in form.videos.iter() {
-                let new_video = NewServiceVideo::create (
-                    _service.id,
-                    video.to_string()
-                );
-                diesel::insert_into(schema::service_videos::table)
-                    .values(&new_video)
-                    .get_result::<ServiceVideo>(&_connection)
-                    .expect("E.");
-            };
             for category_id in form.category_list.iter() {
                 let new_category = NewServiceCategory {
                     service_categories_id: *category_id,
@@ -711,8 +691,6 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 tags::dsl::tags,
                 serve::dsl::serve,
                 service_categories::dsl::service_categories,
-                service_images::dsl::service_images,
-                service_videos::dsl::service_videos,
                 tags_items::dsl::tags_items,
                 serve_items::dsl::serve_items,
                 tech_categories_items::dsl::tech_categories_items,
@@ -756,8 +734,6 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
                 .expect("Error.");
             };
 
-            diesel::delete(service_images.filter(schema::service_images::service.eq(_service_id))).execute(&_connection).expect("E");
-            diesel::delete(service_videos.filter(schema::service_videos::service.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(serve_items.filter(schema::serve_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
             diesel::delete(tech_categories_items.filter(schema::tech_categories_items::service_id.eq(_service_id))).execute(&_connection).expect("E");
@@ -778,26 +754,6 @@ pub async fn edit_service(session: Session, mut payload: Multipart, _id: web::Pa
             .get_result::<Service>(&_connection)
             .expect("E");
 
-            for _image in form.images.iter() {
-                let new_edit_image = NewServiceImage::create (
-                    _service_id,
-                    _image.to_string()
-                );
-                diesel::insert_into(schema::service_images::table)
-                .values(&new_edit_image)
-                .get_result::<ServiceImage>(&_connection)
-                .expect("E.");
-            };
-            for _video in form.videos.iter() {
-                let new_video = NewServiceVideo::create (
-                    _service_id,
-                    _video.to_string()
-                );
-                diesel::insert_into(schema::service_videos::table)
-                .values(&new_video)
-                .get_result::<ServiceVideo>(&_connection)
-                .expect("E.");
-            };
             for category_id in form.category_list.iter() {
                 let new_category = NewServiceCategory {
                     service_categories_id: *category_id,

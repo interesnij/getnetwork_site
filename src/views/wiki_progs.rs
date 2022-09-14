@@ -521,26 +521,6 @@ pub async fn create_wiki(session: Session, mut payload: Multipart) -> impl Respo
                 .get_result::<Wiki>(&_connection)
                 .expect("E.");
 
-            for image in form.images.iter() {
-                let new_image = NewWikiImage::create (
-                    _wiki.id,
-                    image.to_string()
-                );
-                diesel::insert_into(schema::wiki_images::table)
-                    .values(&new_image)
-                    .get_result::<WikiImage>(&_connection)
-                    .expect("E.");
-                };
-            for video in form.videos.iter() {
-                let new_video = NewWikiVideo::create (
-                    _wiki.id,
-                    video.to_string()
-                );
-                diesel::insert_into(schema::wiki_videos::table)
-                    .values(&new_video)
-                    .get_result::<WikiVideo>(&_connection)
-                    .expect("E.");
-            };
             for category_id in form.category_list.iter() {
                 let new_category = NewWikiCategory {
                     wiki_categories_id: *category_id,
@@ -588,8 +568,6 @@ pub async fn edit_wiki(session: Session, mut payload: Multipart, _id: web::Path<
     use crate::schema::wikis::dsl::wikis;
     use crate::schema::tags::dsl::tags;
     use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::wiki_images::dsl::wiki_images;
-    use crate::schema::wiki_videos::dsl::wiki_videos;
     use crate::schema::wiki_category::dsl::wiki_category;
     use crate::schema::wiki_categories::dsl::wiki_categories;
 
@@ -622,8 +600,6 @@ pub async fn edit_wiki(session: Session, mut payload: Multipart, _id: web::Path<
                 .expect("Error.");
             };
 
-            diesel::delete(wiki_images.filter(schema::wiki_images::wiki.eq(_wiki_id))).execute(&_connection).expect("E");
-            diesel::delete(wiki_videos.filter(schema::wiki_videos::wiki.eq(_wiki_id))).execute(&_connection).expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::wiki_id.eq(_wiki_id))).execute(&_connection).expect("E");
             diesel::delete(wiki_category.filter(schema::wiki_category::wiki_id.eq(_wiki_id))).execute(&_connection).expect("E");
 
@@ -641,26 +617,6 @@ pub async fn edit_wiki(session: Session, mut payload: Multipart, _id: web::Path<
             .get_result::<Wiki>(&_connection)
             .expect("E");
 
-            for _image in form.images.iter() {
-                let new_edit_image = NewWikiImage::create (
-                    _wiki_id,
-                    _image.to_string()
-                );
-                diesel::insert_into(schema::wiki_images::table)
-                .values(&new_edit_image)
-                .get_result::<WikiImage>(&_connection)
-                .expect("E.");
-            };
-            for _video in form.videos.iter() {
-                let new_video = NewWikiVideo::create (
-                    _wiki_id,
-                    _video.to_string()
-                );
-                diesel::insert_into(schema::wiki_videos::table)
-                .values(&new_video)
-                .get_result::<WikiVideo>(&_connection)
-                .expect("E.");
-            };
             for category_id in form.category_list.iter() {
                 let new_category = NewWikiCategory {
                     wiki_categories_id: *category_id,

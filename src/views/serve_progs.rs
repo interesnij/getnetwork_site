@@ -749,7 +749,7 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use schema::tech_categories::dsl::tech_categories;
-            use crate::utils::serve_category_form
+            use crate::utils::serve_category_form;
 
             let _connection = establish_connection();
             let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;

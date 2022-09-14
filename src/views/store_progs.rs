@@ -557,26 +557,6 @@ pub async fn create_store(session: Session, mut payload: Multipart) -> impl Resp
                 .get_result::<Store>(&_connection)
                 .expect("E.");
 
-            for image in form.images.iter() {
-                let new_image = NewStoreImage::create (
-                    _store.id,
-                    image.to_string()
-                );
-                diesel::insert_into(schema::store_images::table)
-                    .values(&new_image)
-                    .get_result::<StoreImage>(&_connection)
-                    .expect("E.");
-                };
-            for video in form.videos.iter() {
-                let new_video = NewStoreVideo::create (
-                    _store.id,
-                    video.to_string()
-                );
-                diesel::insert_into(schema::store_videos::table)
-                    .values(&new_video)
-                    .get_result::<StoreVideo>(&_connection)
-                    .expect("E.");
-            };
             for category_id in form.category_list.iter() {
                 let new_category = NewStoreCategory {
                     store_categories_id: *category_id,
@@ -705,8 +685,6 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 serve::dsl::serve,
                 stores::dsl::stores,
                 store_categories::dsl::store_categories,
-                store_images::dsl::store_images,
-                store_videos::dsl::store_videos,
                 tags_items::dsl::tags_items,
                 serve_items::dsl::serve_items,
                 tech_categories_items::dsl::tech_categories_items,
@@ -749,8 +727,6 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
                 .expect("Error.");
             };
 
-            diesel::delete(store_images.filter(schema::store_images::store.eq(_store_id))).execute(&_connection).expect("E");
-            diesel::delete(store_videos.filter(schema::store_videos::store.eq(_store_id))).execute(&_connection).expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
             diesel::delete(store_category.filter(schema::store_category::store_id.eq(_store_id))).execute(&_connection).expect("E");
             diesel::delete(serve_items.filter(schema::serve_items::store_id.eq(_store_id))).execute(&_connection).expect("E");
@@ -771,26 +747,6 @@ pub async fn edit_store(session: Session, mut payload: Multipart, _id: web::Path
             .get_result::<Store>(&_connection)
             .expect("E");
 
-            for _image in form.images.iter() {
-                let new_edit_image = NewStoreImage::create (
-                    _store_id,
-                    _image.to_string()
-                );
-                diesel::insert_into(schema::store_images::table)
-                .values(&new_edit_image)
-                .get_result::<StoreImage>(&_connection)
-                .expect("E.");
-            };
-            for _video in form.videos.iter() {
-                let new_video = NewStoreVideo::create (
-                    _store_id,
-                    _video.to_string()
-                );
-                diesel::insert_into(schema::store_videos::table)
-                .values(&new_video)
-                .get_result::<StoreVideo>(&_connection)
-                .expect("E.");
-            };
             for category_id in form.category_list.iter() {
                 let new_category = NewStoreCategory {
                     store_categories_id: *category_id,
