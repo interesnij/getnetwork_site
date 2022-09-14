@@ -252,9 +252,6 @@ pub async fn edit_store_page(session: Session, req: HttpRequest, _id: web::Path<
             let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
             let _store_tags = _store.get_tags();
 
-            let _images = store_images.filter(schema::store_images::store.eq(_store.id)).load::<StoreImage>(&_connection).expect("E");
-            let _videos = store_videos.filter(schema::store_videos::store.eq(_store.id)).load::<StoreVideo>(&_connection).expect("E");
-
             let _store_cats = store_categories
                 .load::<StoreCategories>(&_connection)
                 .expect("Error");
