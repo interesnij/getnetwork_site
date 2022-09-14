@@ -101,8 +101,6 @@ pub async fn item_form(payload: &mut Multipart, owner_id: i32) -> Forms {
         link:          "".to_string(),
         main_image:    "".to_string(),
         is_active:     true,
-        images:        Vec::new(),
-        videos:        Vec::new(),
         category_list: Vec::new(),
         tags_list:     Vec::new(),
     };
@@ -180,46 +178,6 @@ pub async fn item_form(payload: &mut Multipart, owner_id: i32) -> Forms {
                         .expect("E");
                     }
                 form.main_image = file.path.clone().replace("./","/");
-            }
-        }
-
-        else if name == "images[]" {
-            let _new_path = field.content_disposition().get_filename().unwrap();
-            if _new_path != "" {
-                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
-                let file_path = file.path.clone();
-                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                    .await
-                    .unwrap();
-                while let Some(chunk) = field.next().await {
-                    let data = chunk.unwrap();
-                    f = web::block(move || f.write_all(&data).map(|_| f))
-                        .await
-                        .unwrap()
-                        .expect("E");
-                };
-                files.push(file.clone());
-                form.images.push(file.path.clone().replace("./","/"));
-            }
-        }
-
-        else if name == "videos[]" {
-            let _new_path = field.content_disposition().get_filename().unwrap();
-            if _new_path != "" {
-                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
-                let file_path = file.path.clone();
-                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                    .await
-                    .unwrap();
-                while let Some(chunk) = field.next().await {
-                    let data = chunk.unwrap();
-                    f = web::block(move || f.write_all(&data).map(|_| f))
-                        .await
-                        .unwrap()
-                    .expect("E");
-                };
-                files.push(file.clone());
-                form.videos.push(file.path.clone().replace("./","/"));
             }
         }
     }
