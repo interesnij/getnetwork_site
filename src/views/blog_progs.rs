@@ -1405,7 +1405,8 @@ pub async fn delete_blog_image(session: Session, _id: web::Path<i32>) -> impl Re
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            diesel::delete(schema::blog_images.filter(schema::blog_images::id.eq(*_id))).execute(&establish_connection()).expect("E");
+            use crate::schema::blog_images::dsl::blog_images;
+            diesel::delete(blog_images.filter(schema::blog_images::id.eq(*_id))).execute(&establish_connection()).expect("E");
         }
     }
     HttpResponse::Ok()
@@ -1414,7 +1415,8 @@ pub async fn delete_blog_video(session: Session, _id: web::Path<i32>) -> impl Re
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            diesel::delete(schema::blog_videos.filter(schema::blog_videos::id.eq(*_id))).execute(&establish_connection()).expect("E");
+            use crate::schema::blog_videos::dsl::blog_videos;
+            diesel::delete(blog_videos.filter(schema::blog_videos::id.eq(*_id))).execute(&establish_connection()).expect("E");
         }
     }
     HttpResponse::Ok()
