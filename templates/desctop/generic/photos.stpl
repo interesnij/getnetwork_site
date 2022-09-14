@@ -1,7 +1,8 @@
+<a class="add_photo_in_object pointer">Добавить фото</a>
+
 <% if images.len() > 0 { %>
 
 <% if request_user.is_superuser() { %>
-<h6 class="mt-20">Изображения <a class="add_photo_in_object pointer">+</a></h6>
 <div class="row multi-columns-row mb-30 mb-xs-10">
     <% for img in images.iter() { %>
     <div class="col-md-6 col-lg-6 mb-md-10">

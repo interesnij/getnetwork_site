@@ -1,3 +1,5 @@
+<a class="add_video_in_object pointer">Добавить видео</a>
+
 <% if videos.len() > 0 { %>
 
 <% if request_user.is_superuser() { %>
