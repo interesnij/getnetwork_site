@@ -1615,9 +1615,9 @@ pub async fn delete_service_image(session: Session, id: web::Path<i32>) -> impl 
             let _connection = establish_connection();
             let _images = service_images.filter(schema::service_images::id.eq(*id)).load::<ServiceImage>(&_connection).expect("E");
             let _image = _images.into_iter().nth(0).unwrap();
-            std::fs::remove_file(_image.src).expect("E");
+            let src = "/my".to_string() + &_image.src;
             diesel::delete(service_images.filter(schema::service_images::id.eq(*id))).execute(&_connection).expect("E");
-
+            std::fs::remove_file(src).expect("E");
         }
     }
     HttpResponse::Ok()
@@ -1631,8 +1631,9 @@ pub async fn delete_service_video(session: Session, id: web::Path<i32>) -> impl 
             let _connection = establish_connection();
             let _videos = service_videos.filter(schema::service_videos::id.eq(*id)).load::<ServiceVideo>(&_connection).expect("E");
             let _video = _videos.into_iter().nth(0).unwrap();
-            std::fs::remove_file(_video.src).expect("E");
+            let src = "/my".to_string() + &_video.src;
             diesel::delete(service_videos.filter(schema::service_videos::id.eq(*id))).execute(&_connection).expect("E");
+            std::fs::remove_file(src).expect("E");
         }
     }
     HttpResponse::Ok()

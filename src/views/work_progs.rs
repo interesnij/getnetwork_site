@@ -1618,9 +1618,9 @@ pub async fn delete_work_image(session: Session, id: web::Path<i32>) -> impl Res
             let _connection = establish_connection();
             let _images = work_images.filter(schema::work_images::id.eq(*id)).load::<WorkImage>(&_connection).expect("E");
             let _image = _images.into_iter().nth(0).unwrap();
-            std::fs::remove_file(_image.src).expect("E");
+            let src = "/my".to_string() + &_image.src;
             diesel::delete(work_images.filter(schema::work_images::id.eq(*id))).execute(&_connection).expect("E");
-
+            std::fs::remove_file(src).expect("E");
         }
     }
     HttpResponse::Ok()
@@ -1634,8 +1634,9 @@ pub async fn delete_work_video(session: Session, id: web::Path<i32>) -> impl Res
             let _connection = establish_connection();
             let _videos = work_videos.filter(schema::work_videos::id.eq(*id)).load::<WorkVideo>(&_connection).expect("E");
             let _video = _videos.into_iter().nth(0).unwrap();
-            std::fs::remove_file(_video.src).expect("E");
+            let src = "/my".to_string() + &_video.src;
             diesel::delete(work_videos.filter(schema::work_videos::id.eq(*id))).execute(&_connection).expect("E");
+            std::fs::remove_file(src).expect("E");
         }
     }
     HttpResponse::Ok()

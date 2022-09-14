@@ -1,6 +1,6 @@
 
 <% if images.len() > 0 { %>
-
+<h5 class="mt-20">Изображения</h5>
 <% if request_user.is_superuser() { %>
 <div class="row multi-columns-row mb-30 mb-xs-10">
     <% for img in images.iter() { %>

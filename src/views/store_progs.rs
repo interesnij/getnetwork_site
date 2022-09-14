@@ -1590,9 +1590,9 @@ pub async fn delete_store_image(session: Session, id: web::Path<i32>) -> impl Re
             let _connection = establish_connection();
             let _images = store_images.filter(schema::store_images::id.eq(*id)).load::<StoreImage>(&_connection).expect("E");
             let _image = _images.into_iter().nth(0).unwrap();
-            std::fs::remove_file(_image.src).expect("E");
+            let src = "/my".to_string() + &_image.src;
             diesel::delete(store_images.filter(schema::store_images::id.eq(*id))).execute(&_connection).expect("E");
-
+            std::fs::remove_file(src).expect("E");
         }
     }
     HttpResponse::Ok()
@@ -1606,8 +1606,9 @@ pub async fn delete_store_video(session: Session, id: web::Path<i32>) -> impl Re
             let _connection = establish_connection();
             let _videos = store_videos.filter(schema::store_videos::id.eq(*id)).load::<StoreVideo>(&_connection).expect("E");
             let _video = _videos.into_iter().nth(0).unwrap();
-            std::fs::remove_file(_video.src).expect("E");
+            let src = "/my".to_string() + &_video.src;
             diesel::delete(store_videos.filter(schema::store_videos::id.eq(*id))).execute(&_connection).expect("E");
+            std::fs::remove_file(src).expect("E");
         }
     }
     HttpResponse::Ok()
