@@ -45,7 +45,9 @@
 
                           <span class="separator">&nbsp;</span>
                         </div>
-                        <%= object.get_images_ids() %>
+                        <% for id in object.get_images_ids().iter() { %>
+                          <%= id %>
+                        <% } %>
                         <% if object.content.is_some() { %>
                           <%- object.content.as_deref().unwrap() %>
                         <% } else { %>
