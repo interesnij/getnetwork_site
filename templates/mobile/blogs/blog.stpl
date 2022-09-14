@@ -32,12 +32,12 @@
                     <% } %>
                     |
                     <form class="add_photos_in_object" data-pk="<%= object.id %>" style="display: contents;">
-                      <input type="hidden" multiple name="photos[]" />
+                      <input type="file" style="display:none" multiple name="photos[]" />
                       <a class="previous_click pointer">+ф</a>
                     </form>
                     |
                     <form class="add_videos_in_object" data-pk="<%= object.id %>" style="display: contents;">
-                      <input type="hidden" multiple name="videos[]" />
+                      <input type="file" style="display:none" multiple name="videos[]" />
                       <a class="previous_click pointer">+в</a>
                     </form>
                     <% } %>
