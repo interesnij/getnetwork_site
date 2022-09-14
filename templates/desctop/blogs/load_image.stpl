@@ -1,0 +1,19 @@
+<div page-id="" object-id="" data-link="" data-title="Изображение статьи | <%= blog.title %>" class="doc_title" style="padding: 0;">
+  <span class="text-hide-xs">
+  <% if prev.is_some() { %>
+    <a class="prev_item" href="/blog_image/<%= prev.unwrap() %>/">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>
+    </a>
+  <% } %>
+  <% if next.is_some() { %>
+    <a class="next_item" href="/blog_image/<%= next.unwrap() %>/">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>
+    </a>
+  <% } %>
+  </span>
+
+  <div class="card rounded-0 border-0 mb-3">
+    <img style="width: 100%;" src="<%= object.src %>" alt="image">
+  </div>
+
+</div>

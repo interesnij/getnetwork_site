@@ -1,5 +1,5 @@
 <% if images.len() > 0 { %>
-<h5 class="mt-20">Изображения</h5>
+<h3 class="mt-20">Изображения</h3>
 <div class="row multi-columns-row mb-30 mb-xs-10">
     <% for img in images.iter() { %>
     <div class="col-md-6 col-lg-6 mb-md-10">

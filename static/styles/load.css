@@ -1552,6 +1552,9 @@ blockquote footer{
 @media screen and (min-width: 621px) {
     .worker_fullscreen{left: 25%;width: 50% !important;padding-left: 5%;padding-right: 5%;}
 }
+@media screen and (min-width: 621px) {
+  .photo_fullscreen{left: 10%;width: 70%;padding-left: 5%;padding-right: 5%;}
+}
 
 .this_fullscreen_hide {
   cursor: pointer;
@@ -1592,6 +1595,7 @@ blockquote footer{
 
 
 .item_fullscreen,
+.photo_fullscreen,
 .worker_fullscreen {
   position: fixed;
   width: 100%;

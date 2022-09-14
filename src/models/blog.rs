@@ -349,6 +349,16 @@ impl Blog {
                 .expect("E.");
         }
     }
+    pub fn get_images_ids(&self) -> Vec<i32> {
+        use crate::schema::blog_images::dsl::blog_images;
+
+        let _connection = establish_connection();
+        return blog_images
+            .filter(schema::blog_images::blog.eq(self.id))
+            .select(schema::blog_images::blog)
+            .load::<i32>(&_connection)
+            .expect("E");
+    }
 }
 
 #[derive(Serialize, Insertable)]

@@ -40,6 +40,7 @@ use sailfish::TemplateOnce;
 
 pub fn blog_routes(config: &mut web::ServiceConfig) {
     config.route("/blog_categories/", web::get().to(blog_categories_page));
+    config.route("/blog_image/{id}/", web::get().to(blog_image_page));
     config.service(web::resource("/create_blog_categories/")
         .route(web::get().to(create_blog_categories_page))
         .route(web::post().to(create_blog_categories))
@@ -1432,4 +1433,76 @@ pub async fn delete_blog_video(session: Session, id: web::Path<i32>) -> impl Res
         }
     }
     HttpResponse::Ok()
+}
+
+pub async fn blog_image_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::schema::{
+        blogs::dsl::blogs,
+        blog_images::dsl::blog_images,
+    };
+
+    let _connection = establish_connection();
+    let _id: i32 = _id;
+    let _image = blog_images
+        .filter(schema::blog_images::id.eq(_id))
+        .load::<BlogImage>(&_connection)
+        .expect("E.")
+        .into_iter()
+        .nth(0)
+        .unwrap();
+
+    let _blog = blogs
+        .filter(schema::blogs::id.eq(_image.blog))
+        .load::<Blog>(&_connection)
+        .expect("E.")
+        .into_iter()
+        .nth(0)
+        .unwrap();
+
+    let _images = _blog.get_images_ids();
+    let _images_len = _images.len();
+    let mut prev: Option<BlogImage> = None;
+    let mut next: Option<BlogImage> = None;
+
+    for (i, item) in _images.iter().enumerate().rev() {
+        if item == &_id {
+            if (i + 1) != _images_len {
+                let _next = Some(&_images[i + 1]);
+                next = blog_images
+                    .filter(schema::blog_images::id.eq(_next.unwrap()))
+                    .load::<BlogImage>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
+            };
+            if i != 0 {
+                let _prev = Some(&_images[i - 1]);
+                prev = blog_images
+                    .filter(schema::blog_images::id.eq(_prev.unwrap()))
+                    .load::<BlogImage>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
+            };
+            break;
+        }
+    };
+
+    #[derive(TemplateOnce)]
+    #[template(path = "desctop/blogs/load_image.stpl")]
+    struct Template {
+        object: BlogImage,
+        blog:   Blog,
+        prev:   Option<BlogImage>,
+        next:   Option<BlogImage>,
+    }
+    let body = Template {
+        object: _image,
+        blog:   _blog,
+        prev:   prev,
+        next:   next,
+    }
+    .render_once()
+    .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+    Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
 }
