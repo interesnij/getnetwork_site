@@ -1442,7 +1442,7 @@ pub async fn blog_image_page(_id: web::Path<i32>) -> actix_web::Result<HttpRespo
     };
 
     let _connection = establish_connection();
-    let _id: i32 = _id;
+    let _id: i32 = *_id;
     let _image = blog_images
         .filter(schema::blog_images::id.eq(_id))
         .load::<BlogImage>(&_connection)
