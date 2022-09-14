@@ -898,6 +898,27 @@ on('body', 'click', '.create_feedback_form', function() {
   create_fullscreen("/load_feedback/", "worker_fullscreen");
 });
 
+on('body', 'click', '.get_object_photo', function() {
+  data_block = document.body.querySelector(".doc_title");
+  page_id = data_block.getAttribute("page-id");
+  if (page_id == 43) {
+    url = "/blog_image/";
+  }
+  else if (page_id == 63) {
+    url = "/service_image/";
+  }
+  else if (page_id == 73) {
+    url = "/store_image/";
+  }
+  else if (page_id == 83) {
+    url = "/wiki_image/";
+  }
+  else if (page_id == 93) {
+    url = "/work_image/";
+  }
+  create_fullscreen(url + this.getAttribute("data-pk") + "/", "item_fullscreen");
+});
+
 on('body', 'click', '.get_tech_category_info', function() {
   create_fullscreen("/load_tech_category/" + this.getAttribute("data-pk") + "/", "worker_fullscreen");
 });

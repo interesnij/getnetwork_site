@@ -4,9 +4,9 @@
 <% if request_user.is_superuser() { %>
 <div class="row multi-columns-row mb-30 mb-xs-10">
     <% for img in images.iter() { %>
-    <div class="col-md-6 col-lg-6 mb-md-10">
+    <div class="col-md-6">
       <a class="remove_photo_from_object pointer" data-pk="<%= img.id %>">Удалить</a>
-        <div class="post-prev-img">
+        <div class="post-prev-img pointer get_object_photo" data-pk="<%= img.id %>">
           <div class="progressive replace" data-href="<%= img.src %>">
             <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
           </div>
@@ -18,8 +18,8 @@
 <% } else { %>
 <div class="row multi-columns-row mb-30 mb-xs-10">
     <% for img in images.iter() { %>
-    <div class="col-md-6 col-lg-6 mb-md-10">
-        <div class="post-prev-img">
+    <div class="col-md-6">
+        <div class="post-prev-img pointer get_object_photo" data-pk="<%= img.id %>">
           <div class="progressive replace" data-href="<%= img.src %>">
             <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
           </div>
