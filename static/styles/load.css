@@ -3226,13 +3226,11 @@ h1,h2,h3,h4,h5,h6{margin-top:10px;margin-bottom:10px}
 .show{display:block!important}
 
 .prev_item {
-  position: absolute;
   right: -10px;
   cursor: pointer;
   z-index: 400
 }
 .next_item {
-  position: absolute;
   left: -60px;
   cursor: pointer;
   z-index: 400
