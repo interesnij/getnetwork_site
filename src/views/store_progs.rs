@@ -67,6 +67,11 @@ pub fn store_routes(config: &mut web::ServiceConfig) {
 
     config.service(web::resource("/store/{cat_id}/{store_id}/").route(web::get().to(get_store_page)));
     config.service(web::resource("/stores/{id}/").route(web::get().to(store_category_page)));
+
+    config.route("/create_store_images/{id}/", web::post().to(create_store_images));
+    config.route("/create_store_videos/{id}/", web::post().to(create_store_videos));
+    config.route("/delete_store_image/{id}/", web::get().to(delete_store_image));
+    config.route("/delete_store_video/{id}/", web::get().to(delete_store_video));
 }
 
 pub async fn create_store_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
@@ -1516,6 +1521,93 @@ pub async fn hide_store(session: Session, _id: web::Path<i32>) -> impl Responder
                 .set(schema::stores::is_active.eq(false))
                 .get_result::<Store>(&_connection)
                 .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn create_store_images(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::images_form;
+            use crate::schema::stores::dsl::stores;
+            use crate::models::NewStoreImage;
+
+            let _connection = establish_connection();
+            let _stores = stores.filter(schema::stores::id.eq(*id)).load::<Store>(&_connection).expect("E");
+            let _store = _stores.into_iter().nth(0).unwrap();
+
+            let form = images_form(payload.borrow_mut(), _request_user.id).await;
+            for image in form.images.iter() {
+                let new_image = NewStoreImage::create (
+                    _store.id,
+                    image.to_string()
+                );
+                diesel::insert_into(schema::store_images::table)
+                    .values(&new_image)
+                    .get_result::<StoreImage>(&_connection)
+                    .expect("E.");
+                };
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn create_store_videos(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::videos_form;
+            use crate::schema::stores::dsl::stores;
+            use crate::models::NewStoreVideo;
+
+            let _connection = establish_connection();
+            let _stores = stores.filter(schema::stores::id.eq(*id)).load::<Store>(&_connection).expect("E");
+            let _store = _stores.into_iter().nth(0).unwrap();
+
+            let form = videos_form(payload.borrow_mut(), _request_user.id).await;
+            for video in form.videos.iter() {
+                let new_video = NewStoreVideo::create (
+                    _store.id,
+                    video.to_string()
+                );
+                diesel::insert_into(schema::store_videos::table)
+                    .values(&new_video)
+                    .get_result::<StoreVideo>(&_connection)
+                    .expect("E.");
+            };
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn delete_store_image(session: Session, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::store_images::dsl::store_images;
+
+            let _connection = establish_connection();
+            let _images = store_images.filter(schema::store_images::id.eq(*id)).load::<StoreImage>(&_connection).expect("E");
+            let _image = _images.into_iter().nth(0).unwrap();
+            std::fs::remove_file(_image.src).expect("E");
+            diesel::delete(store_images.filter(schema::store_images::id.eq(*id))).execute(&_connection).expect("E");
+
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn delete_store_video(session: Session, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::store_videos::dsl::store_videos;
+
+            let _connection = establish_connection();
+            let _videos = store_videos.filter(schema::store_videos::id.eq(*id)).load::<StoreVideo>(&_connection).expect("E");
+            let _video = _videos.into_iter().nth(0).unwrap();
+            std::fs::remove_file(_video.src).expect("E");
+            diesel::delete(store_videos.filter(schema::store_videos::id.eq(*id))).execute(&_connection).expect("E");
         }
     }
     HttpResponse::Ok()

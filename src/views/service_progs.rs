@@ -67,6 +67,11 @@ pub fn service_routes(config: &mut web::ServiceConfig) {
 
     config.service(web::resource("/service/{cat_id}/{service_id}/").route(web::get().to(get_service_page)));
     config.service(web::resource("/services/{id}/").route(web::get().to(service_category_page)));
+
+    config.route("/create_service_images/{id}/", web::post().to(create_service_images));
+    config.route("/create_service_videos/{id}/", web::post().to(create_service_videos));
+    config.route("/delete_service_image/{id}/", web::get().to(delete_service_image));
+    config.route("/delete_service_video/{id}/", web::get().to(delete_service_video));
 }
 
 pub async fn create_service_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
@@ -1541,6 +1546,93 @@ pub async fn hide_service(session: Session, _id: web::Path<i32>) -> impl Respond
                 .set(schema::services::is_active.eq(false))
                 .get_result::<Service>(&_connection)
                 .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn create_service_images(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::images_form;
+            use crate::schema::services::dsl::services;
+            use crate::models::NewServiceImage;
+
+            let _connection = establish_connection();
+            let _services = services.filter(schema::services::id.eq(*id)).load::<Service>(&_connection).expect("E");
+            let _service = _services.into_iter().nth(0).unwrap();
+
+            let form = images_form(payload.borrow_mut(), _request_user.id).await;
+            for image in form.images.iter() {
+                let new_image = NewServiceImage::create (
+                    _service.id,
+                    image.to_string()
+                );
+                diesel::insert_into(schema::service_images::table)
+                    .values(&new_image)
+                    .get_result::<ServiceImage>(&_connection)
+                    .expect("E.");
+                };
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn create_service_videos(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::videos_form;
+            use crate::schema::services::dsl::services;
+            use crate::models::NewServiceVideo;
+
+            let _connection = establish_connection();
+            let _services = services.filter(schema::services::id.eq(*id)).load::<Service>(&_connection).expect("E");
+            let _service = _services.into_iter().nth(0).unwrap();
+
+            let form = videos_form(payload.borrow_mut(), _request_user.id).await;
+            for video in form.videos.iter() {
+                let new_video = NewServiceVideo::create (
+                    _service.id,
+                    video.to_string()
+                );
+                diesel::insert_into(schema::service_videos::table)
+                    .values(&new_video)
+                    .get_result::<ServiceVideo>(&_connection)
+                    .expect("E.");
+            };
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn delete_service_image(session: Session, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::service_images::dsl::service_images;
+
+            let _connection = establish_connection();
+            let _images = service_images.filter(schema::service_images::id.eq(*id)).load::<ServiceImage>(&_connection).expect("E");
+            let _image = _images.into_iter().nth(0).unwrap();
+            std::fs::remove_file(_image.src).expect("E");
+            diesel::delete(service_images.filter(schema::service_images::id.eq(*id))).execute(&_connection).expect("E");
+
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn delete_service_video(session: Session, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::service_videos::dsl::service_videos;
+
+            let _connection = establish_connection();
+            let _videos = service_videos.filter(schema::service_videos::id.eq(*id)).load::<ServiceVideo>(&_connection).expect("E");
+            let _video = _videos.into_iter().nth(0).unwrap();
+            std::fs::remove_file(_video.src).expect("E");
+            diesel::delete(service_videos.filter(schema::service_videos::id.eq(*id))).execute(&_connection).expect("E");
         }
     }
     HttpResponse::Ok()

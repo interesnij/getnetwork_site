@@ -1346,7 +1346,7 @@ pub async fn hide_blog(session: Session, _id: web::Path<i32>) -> impl Responder 
     HttpResponse::Ok()
 }
 
-pub async fn create_blog_images(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+pub async fn create_blog_images(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
@@ -1355,7 +1355,7 @@ pub async fn create_blog_images(session: Session, mut payload: Multipart, _id: w
             use crate::models::NewBlogImage;
 
             let _connection = establish_connection();
-            let _blogs = blogs.filter(schema::blogs::id.eq(*_id)).load::<Blog>(&_connection).expect("E");
+            let _blogs = blogs.filter(schema::blogs::id.eq(*id)).load::<Blog>(&_connection).expect("E");
             let _blog = _blogs.into_iter().nth(0).unwrap();
 
             let form = images_form(payload.borrow_mut(), _request_user.id).await;
@@ -1373,7 +1373,7 @@ pub async fn create_blog_images(session: Session, mut payload: Multipart, _id: w
     }
     HttpResponse::Ok()
 }
-pub async fn create_blog_videos(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
+pub async fn create_blog_videos(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
@@ -1382,7 +1382,7 @@ pub async fn create_blog_videos(session: Session, mut payload: Multipart, _id: w
             use crate::models::NewBlogVideo;
 
             let _connection = establish_connection();
-            let _blogs = blogs.filter(schema::blogs::id.eq(*_id)).load::<Blog>(&_connection).expect("E");
+            let _blogs = blogs.filter(schema::blogs::id.eq(*id)).load::<Blog>(&_connection).expect("E");
             let _blog = _blogs.into_iter().nth(0).unwrap();
 
             let form = videos_form(payload.borrow_mut(), _request_user.id).await;
@@ -1401,35 +1401,33 @@ pub async fn create_blog_videos(session: Session, mut payload: Multipart, _id: w
     HttpResponse::Ok()
 }
 
-pub async fn delete_blog_image(session: Session, _id: web::Path<i32>) -> impl Responder {
+pub async fn delete_blog_image(session: Session, id: web::Path<i32>) -> impl Responder {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use crate::schema::blog_images::dsl::blog_images;
-            use std::fs::remove_file;
 
             let _connection = establish_connection();
-            let _images = blog_images.filter(schema::blog_images::id.eq(*_id)).load::<BlogImage>(&_connection).expect("E");
+            let _images = blog_images.filter(schema::blog_images::id.eq(*id)).load::<BlogImage>(&_connection).expect("E");
             let _image = _images.into_iter().nth(0).unwrap();
-            remove_file(_image.src).expect("E");
-            diesel::delete(blog_images.filter(schema::blog_images::id.eq(*_id))).execute(&_connection).expect("E");
+            std::fs::remove_file(_image.src).expect("E");
+            diesel::delete(blog_images.filter(schema::blog_images::id.eq(*id))).execute(&_connection).expect("E");
 
         }
     }
     HttpResponse::Ok()
 }
-pub async fn delete_blog_video(session: Session, _id: web::Path<i32>) -> impl Responder {
+pub async fn delete_blog_video(session: Session, id: web::Path<i32>) -> impl Responder {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use crate::schema::blog_videos::dsl::blog_videos;
-            use std::fs::remove_file;
 
             let _connection = establish_connection();
-            let _videos = blog_videos.filter(schema::blog_videos::id.eq(*_id)).load::<BlogVideo>(&_connection).expect("E");
+            let _videos = blog_videos.filter(schema::blog_videos::id.eq(*id)).load::<BlogVideo>(&_connection).expect("E");
             let _video = _videos.into_iter().nth(0).unwrap();
-            remove_file(_video.src).expect("E");
-            diesel::delete(blog_videos.filter(schema::blog_videos::id.eq(*_id))).execute(&_connection).expect("E");
+            std::fs::remove_file(_video.src).expect("E");
+            diesel::delete(blog_videos.filter(schema::blog_videos::id.eq(*id))).execute(&_connection).expect("E");
         }
     }
     HttpResponse::Ok()

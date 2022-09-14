@@ -67,6 +67,11 @@ pub fn wiki_routes(config: &mut web::ServiceConfig) {
 
     config.service(web::resource("/wiki/{cat_id}/{wiki_id}/").route(web::get().to(get_wiki_page)));
     config.service(web::resource("/wikis/{id}/").route(web::get().to(wiki_category_page)));
+
+    config.route("/create_wiki_images/{id}/", web::post().to(create_wiki_images));
+    config.route("/create_wiki_videos/{id}/", web::post().to(create_wiki_videos));
+    config.route("/delete_wiki_image/{id}/", web::get().to(delete_wiki_image));
+    config.route("/delete_wiki_video/{id}/", web::get().to(delete_wiki_video));
 }
 
 pub async fn create_wiki_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
@@ -1329,6 +1334,93 @@ pub async fn hide_wiki(session: Session, _id: web::Path<i32>) -> impl Responder 
                 .set(schema::wikis::is_active.eq(false))
                 .get_result::<Wiki>(&_connection)
                 .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn create_wiki_images(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::images_form;
+            use crate::schema::wikis::dsl::wikis;
+            use crate::models::NewWikiImage;
+
+            let _connection = establish_connection();
+            let _wikis = wikis.filter(schema::wikis::id.eq(*id)).load::<Wiki>(&_connection).expect("E");
+            let _wiki = _wikis.into_iter().nth(0).unwrap();
+
+            let form = images_form(payload.borrow_mut(), _request_user.id).await;
+            for image in form.images.iter() {
+                let new_image = NewWikiImage::create (
+                    _wiki.id,
+                    image.to_string()
+                );
+                diesel::insert_into(schema::wiki_images::table)
+                    .values(&new_image)
+                    .get_result::<WikiImage>(&_connection)
+                    .expect("E.");
+                };
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn create_wiki_videos(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::videos_form;
+            use crate::schema::wikis::dsl::wikis;
+            use crate::models::NewWikiVideo;
+
+            let _connection = establish_connection();
+            let _wikis = wikis.filter(schema::wikis::id.eq(*id)).load::<Wiki>(&_connection).expect("E");
+            let _wiki = _wikis.into_iter().nth(0).unwrap();
+
+            let form = videos_form(payload.borrow_mut(), _request_user.id).await;
+            for video in form.videos.iter() {
+                let new_video = NewWikiVideo::create (
+                    _wiki.id,
+                    video.to_string()
+                );
+                diesel::insert_into(schema::wiki_videos::table)
+                    .values(&new_video)
+                    .get_result::<WikiVideo>(&_connection)
+                    .expect("E.");
+            };
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn delete_wiki_image(session: Session, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::wiki_images::dsl::wiki_images;
+
+            let _connection = establish_connection();
+            let _images = wiki_images.filter(schema::wiki_images::id.eq(*id)).load::<WikiImage>(&_connection).expect("E");
+            let _image = _images.into_iter().nth(0).unwrap();
+            std::fs::remove_file(_image.src).expect("E");
+            diesel::delete(wiki_images.filter(schema::wiki_images::id.eq(*id))).execute(&_connection).expect("E");
+
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn delete_wiki_video(session: Session, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::wiki_videos::dsl::wiki_videos;
+
+            let _connection = establish_connection();
+            let _videos = wiki_videos.filter(schema::wiki_videos::id.eq(*id)).load::<WikiVideo>(&_connection).expect("E");
+            let _video = _videos.into_iter().nth(0).unwrap();
+            std::fs::remove_file(_video.src).expect("E");
+            diesel::delete(wiki_videos.filter(schema::wiki_videos::id.eq(*id))).execute(&_connection).expect("E");
         }
     }
     HttpResponse::Ok()

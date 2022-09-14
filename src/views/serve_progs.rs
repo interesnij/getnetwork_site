@@ -848,7 +848,7 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 && s_category.user_id == _request_user.id {
             use crate::utils::serve_category_form;
-            
+
             let t_category = tech_categories
                 .filter(schema::tech_categories::id.eq(s_category.tech_categories))
                 .load::<TechCategories>(&_connection)

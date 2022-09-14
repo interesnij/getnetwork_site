@@ -67,6 +67,11 @@ pub fn work_routes(config: &mut web::ServiceConfig) {
 
     config.service(web::resource("/work/{cat_id}/{work_id}/").route(web::get().to(get_work_page)));
     config.service(web::resource("/works/{id}/").route(web::get().to(work_category_page)));
+
+    config.route("/create_work_images/{id}/", web::post().to(create_work_images));
+    config.route("/create_work_videos/{id}/", web::post().to(create_work_videos));
+    config.route("/delete_work_image/{id}/", web::get().to(delete_work_image));
+    config.route("/delete_work_video/{id}/", web::get().to(delete_work_video));
 }
 
 pub async fn create_work_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
@@ -1544,6 +1549,93 @@ pub async fn hide_work(session: Session, _id: web::Path<i32>) -> impl Responder 
                 .set(schema::works::is_active.eq(false))
                 .get_result::<Work>(&_connection)
                 .expect("Error.");
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn create_work_images(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::images_form;
+            use crate::schema::works::dsl::works;
+            use crate::models::NewWorkImage;
+
+            let _connection = establish_connection();
+            let _works = works.filter(schema::works::id.eq(*id)).load::<Work>(&_connection).expect("E");
+            let _work = _works.into_iter().nth(0).unwrap();
+
+            let form = images_form(payload.borrow_mut(), _request_user.id).await;
+            for image in form.images.iter() {
+                let new_image = NewWorkImage::create (
+                    _work.id,
+                    image.to_string()
+                );
+                diesel::insert_into(schema::work_images::table)
+                    .values(&new_image)
+                    .get_result::<WorkImage>(&_connection)
+                    .expect("E.");
+                };
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn create_work_videos(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::utils::videos_form;
+            use crate::schema::works::dsl::works;
+            use crate::models::NewWorkVideo;
+
+            let _connection = establish_connection();
+            let _works = works.filter(schema::works::id.eq(*id)).load::<Work>(&_connection).expect("E");
+            let _work = _works.into_iter().nth(0).unwrap();
+
+            let form = videos_form(payload.borrow_mut(), _request_user.id).await;
+            for video in form.videos.iter() {
+                let new_video = NewWorkVideo::create (
+                    _work.id,
+                    video.to_string()
+                );
+                diesel::insert_into(schema::work_videos::table)
+                    .values(&new_video)
+                    .get_result::<WorkVideo>(&_connection)
+                    .expect("E.");
+            };
+        }
+    }
+    HttpResponse::Ok()
+}
+
+pub async fn delete_work_image(session: Session, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::work_images::dsl::work_images;
+
+            let _connection = establish_connection();
+            let _images = work_images.filter(schema::work_images::id.eq(*id)).load::<WorkImage>(&_connection).expect("E");
+            let _image = _images.into_iter().nth(0).unwrap();
+            std::fs::remove_file(_image.src).expect("E");
+            diesel::delete(work_images.filter(schema::work_images::id.eq(*id))).execute(&_connection).expect("E");
+
+        }
+    }
+    HttpResponse::Ok()
+}
+pub async fn delete_work_video(session: Session, id: web::Path<i32>) -> impl Responder {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use crate::schema::work_videos::dsl::work_videos;
+
+            let _connection = establish_connection();
+            let _videos = work_videos.filter(schema::work_videos::id.eq(*id)).load::<WorkVideo>(&_connection).expect("E");
+            let _video = _videos.into_iter().nth(0).unwrap();
+            std::fs::remove_file(_video.src).expect("E");
+            diesel::delete(work_videos.filter(schema::work_videos::id.eq(*id))).execute(&_connection).expect("E");
         }
     }
     HttpResponse::Ok()
