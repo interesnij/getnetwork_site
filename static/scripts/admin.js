@@ -603,3 +603,66 @@ on('body', 'change', '.add_videos_in_object', function() {
   }};
   link.send(form_data);
 });
+
+
+on('body', 'click', '.remove_photo_from_object', function() {
+  _this = this;
+  pk = _this.getAttribute("data-pk");
+  data_block = document.body.querySelector(".doc_title");
+  page_id = data_block.getAttribute("page-id");
+  if (page_id == 43) {
+    url = "/delete_blog_image/";
+  }
+  else if (page_id == 63) {
+    url = "/delete_service_image/";
+  }
+  else if (page_id == 73) {
+    url = "/delete_store_image/";
+  }
+  else if (page_id == 83) {
+    url = "/delete_wiki_image/";
+  }
+  else if (page_id == 93) {
+    url = "/delete_work_image/";
+  }
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'GET', url + pk + "/", true );
+  link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    _this.nextElementSibling.remove();
+  }};
+  link.send();
+});
+
+on('body', 'click', '.remove_video_from_object', function() {
+  _this = this;
+  pk = _this.getAttribute("data-pk");
+  data_block = document.body.querySelector(".doc_title");
+  page_id = data_block.getAttribute("page-id");
+  if (page_id == 43) {
+    url = "/delete_blog_video/";
+  }
+  else if (page_id == 63) {
+    url = "/delete_service_video/";
+  }
+  else if (page_id == 73) {
+    url = "/delete_store_video/";
+  }
+  else if (page_id == 83) {
+    url = "/delete_wiki_video/";
+  }
+  else if (page_id == 93) {
+    url = "/delete_work_video/";
+  }
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'GET', url + pk + "/", true );
+  link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    _this.nextElementSibling.remove();
+  }};
+  link.send();
+});
