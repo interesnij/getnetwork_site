@@ -632,6 +632,7 @@ on('body', 'click', '.remove_photo_from_object', function() {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     _this.nextElementSibling.remove();
+    _this.remove();
   }};
   link.send();
 });
@@ -663,6 +664,7 @@ on('body', 'click', '.remove_video_from_object', function() {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     _this.nextElementSibling.remove();
+    _this.remove();
   }};
   link.send();
 });
