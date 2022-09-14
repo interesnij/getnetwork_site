@@ -501,8 +501,12 @@ pub async fn create_blog_images(session: Session, mut payload: Multipart, _id: w
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use crate::utils::images_form;
+            use crate::schema::blogs::dsl::blogs;
 
             let _connection = establish_connection();
+            let _blogs = blogs.filter(schema::blogs::id.eq(*_id)).load::<Blog>(&_connection).expect("E");
+            let _blog = _blogs.into_iter().nth(0).unwrap();
+
             let form = images_form(payload.borrow_mut(), _request_user.id).await;
             for image in form.images.iter() {
                 let new_image = NewBlogImage::create (
@@ -523,8 +527,12 @@ pub async fn create_blog_videos(session: Session, mut payload: Multipart, _id: w
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use crate::utils::videos_form;
+            use crate::schema::blogs::dsl::blogs;
 
             let _connection = establish_connection();
+            let _blogs = blogs.filter(schema::blogs::id.eq(*_id)).load::<Blog>(&_connection).expect("E");
+            let _blog = _blogs.into_iter().nth(0).unwrap();
+
             let form = videos_form(payload.borrow_mut(), _request_user.id).await;
             for video in form.videos.iter() {
                 let new_video = NewBlogVideo::create (

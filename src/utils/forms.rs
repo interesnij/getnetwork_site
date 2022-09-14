@@ -93,8 +93,6 @@ pub struct ContentForm {
 }
 
 pub async fn item_form(payload: &mut Multipart, owner_id: i32) -> Forms {
-    let mut files: Vec<UploadedFiles> = Vec::new();
-
     let mut form: Forms = Forms {
         title:         "".to_string(),
         description:   "".to_string(),
@@ -730,7 +728,7 @@ pub async fn videos_form(payload: &mut Multipart, owner_id: i32) -> VideoForm {
     let mut files: Vec<UploadedFiles> = Vec::new();
 
     let mut form: VideoForm = VideoForm {
-        images: Vec::new(),
+        videos: Vec::new(),
     };
 
     while let Some(item) = payload.next().await {
