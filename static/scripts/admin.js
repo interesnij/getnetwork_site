@@ -212,9 +212,9 @@ function send_serve_data(form, url) {
   link.open( 'POST', url, true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    alert("ok");
+    console.log("ok");
   } else {
-    alert("not ok");
+    console.log("not ok");
   }};
   link.send(form_data);
 };
@@ -531,4 +531,72 @@ on('body', 'click', '.publish_work', function() {
 
 on('body', 'click', '.show_user_history', function() {
   create_fullscreen("/load_user_history/" + this.getAttribute("data-pk") + "/", "item_fullscreen");
+});
+
+on('body', 'click', '.previous_click', function() {
+  this.previousElementSibling.click();
+});
+
+
+
+on('body', 'change', '.add_photos_in_object', function() {
+  pk = this.getAttribute("data-pk");
+  form_data = new FormData(this);
+  data_block = document.body.querySelector(".doc_title");
+  page_id = data_block.getAttribute("page-id");
+  if (page_id == 43) {
+    url = "/create_blog_images/";
+  }
+  else if (page_id == 63) {
+    url = "/create_service_images/";
+  }
+  else if (page_id == 73) {
+    url = "/create_store_images/";
+  }
+  else if (page_id == 83) {
+    url = "/create_wiki_images/";
+  }
+  else if (page_id == 93) {
+    url = "/create_work_images/";
+  }
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', url + pk + "/", true );
+  link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    ajax_get_reload(url, false)
+  } else { console.log(link.responseText) }};
+  link.send(form_data);
+});
+
+on('body', 'change', '.add_videos_in_object', function() {
+  pk = this.getAttribute("data-pk");
+  form_data = new FormData(this);
+  data_block = document.body.querySelector(".doc_title");
+  page_id = data_block.getAttribute("page-id");
+  if (page_id == 43) {
+    url = "/create_blog_videos/";
+  }
+  else if (page_id == 63) {
+    url = "/create_service_videos/";
+  }
+  else if (page_id == 73) {
+    url = "/create_store_videos/";
+  }
+  else if (page_id == 83) {
+    url = "/create_wiki_videos/";
+  }
+  else if (page_id == 93) {
+    url = "/create_work_videos/";
+  }
+
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'POST', url + pk + "/", true );
+  link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    ajax_get_reload(url, false)
+  } else { console.log(link.responseText) }};
+  link.send(form_data);
 });

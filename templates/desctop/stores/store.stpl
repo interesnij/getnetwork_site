@@ -35,8 +35,16 @@
                                 <% } else { %>
                                 | <a class="pointer publish_store" data-pk="<%= object.id %>">👁</a>
                                 <% } %>
-                                | <a class="add_photo_in_store pointer" data-pk="<%= object.id %>">+ф</a>
-                                | <a class="add_video_in_store pointer" data-pk="<%= object.id %>">+в</a>
+                                |
+                                <form class="add_photos_in_object" data-pk="<%= object.id %>" style="display: contents;">
+                                  <input type="hidden" multiple name="photos[]" />
+                                  <a class="previous_click pointer">+ф</a>
+                                </form>
+                                |
+                                <form class="add_videos_in_object" data-pk="<%= object.id %>" style="display: contents;">
+                                  <input type="hidden" multiple name="videos[]" />
+                                  <a class="previous_click pointer">+в</a>
+                                </form>
                                 <% } %>
                             </p>
                                 <p>
