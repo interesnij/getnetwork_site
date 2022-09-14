@@ -566,7 +566,7 @@ on('body', 'change', '.add_photos_in_object', function() {
   link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload(url, false)
+    ajax_get_reload(document.location.href, false)
   } else { console.log(link.responseText) }};
   link.send(form_data);
 });
@@ -597,7 +597,7 @@ on('body', 'change', '.add_videos_in_object', function() {
   link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload(url, false)
+    ajax_get_reload(document.location.href, false)
   } else { console.log(link.responseText) }};
   link.send(form_data);
 });
