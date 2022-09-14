@@ -535,6 +535,7 @@ on('body', 'click', '.show_user_history', function() {
 
 on('body', 'click', '.previous_click', function() {
   this.previousElementSibling.click();
+  console.log("previous click")
 });
 
 
