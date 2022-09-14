@@ -3232,6 +3232,12 @@ h1,h2,h3,h4,h5,h6{margin-top:10px;margin-bottom:10px}
   position: absolute;
   display: contents;
 }
+.desctop_version .prev_item {
+  right: -10px;
+}
+.desctop_version .next_item {
+  display: unset;
+}
 
 .desctop_version .prev_item svg,
 .desctop_version .next_item svg {
