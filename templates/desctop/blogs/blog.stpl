@@ -32,13 +32,13 @@
                             | <a class="pointer publish_blog" data-pk="<%= object.id %>">👁</a>
                             <% } %>
                             |
-                            <form class="add_photos_in_object" data-pk="<%= object.id %>" style="display: contents;">
-                              <input type="file" style="display:none" multiple name="photos[]" />
+                            <form data-pk="<%= object.id %>" style="display: contents;">
+                              <input class="add_photos_in_object hidden" type="file" multiple name="photos[]" />
                               <a class="previous_click pointer">+ф</a>
                             </form>
                             |
-                            <form class="add_videos_in_object" data-pk="<%= object.id %>" style="display: contents;">
-                              <input type="file" style="display:none" multiple name="videos[]" />
+                            <form data-pk="<%= object.id %>" style="display: contents;">
+                              <input class="add_videos_in_object hidden" type="file" multiple name="videos[]" />
                               <a class="previous_click pointer">+в</a>
                             </form>
                           <% } %>

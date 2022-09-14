@@ -541,8 +541,9 @@ on('body', 'click', '.previous_click', function() {
 
 
 on('body', 'change', '.add_photos_in_object', function() {
-  pk = this.getAttribute("data-pk");
-  form_data = new FormData(this);
+  form = this.parentElement;
+  pk = form.getAttribute("data-pk");
+  form_data = new FormData(form);
   data_block = document.body.querySelector(".doc_title");
   page_id = data_block.getAttribute("page-id");
   if (page_id == 43) {
@@ -567,13 +568,14 @@ on('body', 'change', '.add_photos_in_object', function() {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     ajax_get_reload(document.location.href, false)
-  } else { console.log("not ok") }};
+  }};
   link.send(form_data);
 });
 
 on('body', 'change', '.add_videos_in_object', function() {
-  pk = this.getAttribute("data-pk");
-  form_data = new FormData(this);
+  form = this.parentElement;
+  pk = form.getAttribute("data-pk");
+  form_data = new FormData(form);
   data_block = document.body.querySelector(".doc_title");
   page_id = data_block.getAttribute("page-id");
   if (page_id == 43) {
@@ -598,6 +600,6 @@ on('body', 'change', '.add_videos_in_object', function() {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     ajax_get_reload(document.location.href, false)
-  } else { console.log("not ok") }};
+  }};
   link.send(form_data);
 });
