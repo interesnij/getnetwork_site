@@ -1410,7 +1410,7 @@ pub async fn delete_blog_image(session: Session, id: web::Path<i32>) -> impl Res
             let _connection = establish_connection();
             let _images = blog_images.filter(schema::blog_images::id.eq(*id)).load::<BlogImage>(&_connection).expect("E");
             let _image = _images.into_iter().nth(0).unwrap();
-            std::fs::remove_file(_image.src).expect("E");
+            std::fs::remove_file("/my".to_string() + &_image.src).expect("E");
             diesel::delete(blog_images.filter(schema::blog_images::id.eq(*id))).execute(&_connection).expect("E");
 
         }
