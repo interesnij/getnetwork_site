@@ -245,8 +245,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
         if _request_user.perm == 60 && _service.user_id == _request_user.id {
             use schema::{
                 tags::dsl::tags,
-                service_images::dsl::service_images,
-                service_videos::dsl::service_videos,
                 service_categories::dsl::service_categories,
                 tech_categories::dsl::tech_categories,
             };
@@ -255,9 +253,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
             let _categories = _service.get_categories();
             let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
             let _service_tags = _service.get_tags();
-
-            let _images = service_images.filter(schema::service_images::service.eq(_service.id)).load::<ServiceImage>(&_connection).expect("E");
-            let _videos = service_videos.filter(schema::service_videos::service.eq(_service.id)).load::<ServiceVideo>(&_connection).expect("E");
 
             let _service_cats = service_categories
                 .load::<ServiceCategories>(&_connection)
@@ -284,8 +279,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     object:       Service,
                     categories:   Vec<ServiceCategories>,
                     is_ajax:      i32,
-                    images:       Vec<ServiceImage>,
-                    videos:       Vec<ServiceVideo>,
                     all_tags:     Vec<Tag>,
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
@@ -297,8 +290,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     object:       _service,
                     categories:   _categories,
                     is_ajax:      is_ajax,
-                    images:       _images,
-                    videos:       _videos,
                     all_tags:     _all_tags,
                     service_tags: _service_tags,
                     service_cats: _service_cats,
@@ -316,8 +307,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     object:       Service,
                     categories:   Vec<ServiceCategories>,
                     is_ajax:      i32,
-                    images:       Vec<ServiceImage>,
-                    videos:       Vec<ServiceVideo>,
                     all_tags:     Vec<Tag>,
                     service_tags: Vec<Tag>,
                     service_cats: Vec<ServiceCategories>,
@@ -328,8 +317,6 @@ pub async fn edit_service_page(session: Session, req: HttpRequest, _id: web::Pat
                     object:       _service,
                     categories:   _categories,
                     is_ajax:      is_ajax,
-                    images:       _images,
-                    videos:       _videos,
                     all_tags:     _all_tags,
                     service_tags: _service_tags,
                     service_cats: _service_cats,

@@ -60,24 +60,6 @@
             <% include!("../generic/form/edit_serves.stpl"); %>
 
             <div class="mb-20 mb-md-10">
-              <% for img in images.iter() { %>
-                <img style="height:50px" src="<%= img.src %>" />
-              <% } %>
-              <br>
-                <label>Изображения</label>
-                <input type="file" multiple name="images[]" />
-            </div>
-            <div class="mb-20 mb-md-10">
-              <% for video in videos.iter() { %>
-                <video width="400" height="300" controls="controls">
-                  <source src="<%= video.src %>" type='video/mp4;'>
-                </video>
-              <% } %>
-              <br>
-                <label>Видеозаписи</label>
-                <input type="file" multiple name="videos[]" />
-            </div>
-            <div class="mb-20 mb-md-10">
               <label class="checkbox-inline">
                 <input type="checkbox" name="is_active" <% if object.is_active { %>checked<% } %>>
                   Услуга открыта

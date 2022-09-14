@@ -239,17 +239,12 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
         if _request_user.perm == 60 && _wiki.user_id == _request_user.id {
             use schema::{
                 tags::dsl::tags,
-                wiki_images::dsl::wiki_images,
-                wiki_videos::dsl::wiki_videos,
                 wiki_categories::dsl::wiki_categories,
             };
 
             let _categories = _wiki.get_categories();
             let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
             let _wiki_tags = _wiki.get_tags();
-
-            let _images = wiki_images.filter(schema::wiki_images::wiki.eq(_wiki.id)).load::<WikiImage>(&_connection).expect("E");
-            let _videos = wiki_videos.filter(schema::wiki_videos::wiki.eq(_wiki.id)).load::<WikiVideo>(&_connection).expect("E");
 
             let _wiki_cats:Vec<WikiCategories> = wiki_categories
                 .load(&_connection)
@@ -262,8 +257,6 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                     object:       Wiki,
                     categories:   Vec<WikiCategories>,
                     is_ajax:      i32,
-                    images:       Vec<WikiImage>,
-                    videos:       Vec<WikiVideo>,
                     all_tags:     Vec<Tag>,
                     wiki_tags:    Vec<Tag>,
                     wiki_cats:    Vec<WikiCategories>,
@@ -274,8 +267,6 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                     object:       _wiki,
                     categories:   _categories,
                     is_ajax:      is_ajax,
-                    images:       _images,
-                    videos:       _videos,
                     all_tags:     _all_tags,
                     wiki_tags:    _wiki_tags,
                     wiki_cats:    _wiki_cats,
@@ -291,8 +282,6 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                     object:       Wiki,
                     categories:   Vec<WikiCategories>,
                     is_ajax:      i32,
-                    images:       Vec<WikiImage>,
-                    videos:       Vec<WikiVideo>,
                     all_tags:     Vec<Tag>,
                     wiki_tags:    Vec<Tag>,
                     wiki_cats:    Vec<WikiCategories>,
@@ -302,8 +291,6 @@ pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i
                     object:       _wiki,
                     categories:   _categories,
                     is_ajax:      is_ajax,
-                    images:       _images,
-                    videos:       _videos,
                     all_tags:     _all_tags,
                     wiki_tags:    _wiki_tags,
                     wiki_cats:    _wiki_cats,

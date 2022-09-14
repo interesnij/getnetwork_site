@@ -240,17 +240,12 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
             if _request_user.perm == 60 && _blog.user_id == _request_user.id {
                 use schema::{
                     tags::dsl::tags,
-                    blog_images::dsl::blog_images,
-                    blog_videos::dsl::blog_videos,
                     blog_categories::dsl::blog_categories,
                 };
 
                 let _categories = _blog.get_categories();
                 let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
                 let _blog_tags = _blog.get_tags();
-
-                let _images = blog_images.filter(schema::blog_images::blog.eq(_blog.id)).load::<BlogImage>(&_connection).expect("E");
-                let _videos = blog_videos.filter(schema::blog_videos::blog.eq(_blog.id)).load::<BlogVideo>(&_connection).expect("E");
 
                 let _blog_cats:Vec<BlogCategories> = blog_categories
                     .load(&_connection)
@@ -263,8 +258,6 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                         object:       Blog,
                         categories:   Vec<BlogCategories>,
                         is_ajax:      i32,
-                        images:       Vec<BlogImage>,
-                        videos:       Vec<BlogVideo>,
                         all_tags:     Vec<Tag>,
                         blog_tags:    Vec<Tag>,
                         blog_cats:    Vec<BlogCategories>,
@@ -274,8 +267,6 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                         object:       _blog,
                         categories:   _categories,
                         is_ajax:      is_ajax,
-                        images:       _images,
-                        videos:       _videos,
                         all_tags:     _all_tags,
                         blog_tags:    _blog_tags,
                         blog_cats:    _blog_cats,
@@ -291,8 +282,6 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                         object:       Blog,
                         categories:   Vec<BlogCategories>,
                         is_ajax:      i32,
-                        images:       Vec<BlogImage>,
-                        videos:       Vec<BlogVideo>,
                         all_tags:     Vec<Tag>,
                         blog_tags:    Vec<Tag>,
                         blog_cats:    Vec<BlogCategories>,
@@ -301,8 +290,6 @@ pub async fn edit_blog_page(session: Session, req: HttpRequest, _id: web::Path<i
                         object:       _blog,
                         categories:   _categories,
                         is_ajax:      is_ajax,
-                        images:       _images,
-                        videos:       _videos,
                         all_tags:     _all_tags,
                         blog_tags:    _blog_tags,
                         blog_cats:    _blog_cats,

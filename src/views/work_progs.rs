@@ -246,8 +246,6 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
         if _request_user.perm == 60 && _work.user_id == _request_user.id {
             use schema::{
                 tags::dsl::tags,
-                work_images::dsl::work_images,
-                work_videos::dsl::work_videos,
                 work_categories::dsl::work_categories,
                 tech_categories::dsl::tech_categories,
             };
@@ -256,9 +254,6 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
             let _categories = _work.get_categories();
             let _all_tags = tags.load::<Tag>(&_connection).expect("Error.");
             let _work_tags = _work.get_tags();
-
-            let _images = work_images.filter(schema::work_images::work.eq(_work.id)).load::<WorkImage>(&_connection).expect("E");
-            let _videos = work_videos.filter(schema::work_videos::work.eq(_work.id)).load::<WorkVideo>(&_connection).expect("E");
 
             let _work_cats = work_categories
                 .load::<WorkCategories>(&_connection)
@@ -286,8 +281,6 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     categories:   Vec<WorkCategories>,
                     tech_cats:    Vec<TechCategories>,
                     is_ajax:      i32,
-                    images:       Vec<WorkImage>,
-                    videos:       Vec<WorkVideo>,
                     all_tags:     Vec<Tag>,
                     work_tags:    Vec<Tag>,
                     work_cats:    Vec<WorkCategories>,
@@ -299,8 +292,6 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     categories:   _categories,
                     tech_cats:    _tech_cats,
                     is_ajax:      is_ajax,
-                    images:       _images,
-                    videos:       _videos,
                     all_tags:     _all_tags,
                     work_tags:    _work_tags,
                     work_cats:    _work_cats,
@@ -318,8 +309,6 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     categories:   Vec<WorkCategories>,
                     tech_cats:    Vec<TechCategories>,
                     is_ajax:      i32,
-                    images:       Vec<WorkImage>,
-                    videos:       Vec<WorkVideo>,
                     all_tags:     Vec<Tag>,
                     work_tags:    Vec<Tag>,
                     work_cats:    Vec<WorkCategories>,
@@ -330,8 +319,6 @@ pub async fn edit_work_page(session: Session, req: HttpRequest, _id: web::Path<i
                     categories:   _categories,
                     tech_cats:    _tech_cats,
                     is_ajax:      is_ajax,
-                    images:       _images,
-                    videos:       _videos,
                     all_tags:     _all_tags,
                     work_tags:    _work_tags,
                     work_cats:    _work_cats,

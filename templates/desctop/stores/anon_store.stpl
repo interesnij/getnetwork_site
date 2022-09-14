@@ -83,7 +83,6 @@
         </div>
 
     </div>
-    <% include!("../generic/form/btn_block.stpl"); %>
 </section>
-
+<% include!("../generic/form/btn_block.stpl"); %>
 <% include!("../anon_footer.stpl"); %>
