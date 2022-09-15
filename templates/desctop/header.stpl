@@ -75,10 +75,10 @@
                         <a href="/info/" class="mn-has-sub ajax folder infos">Инфо</a>
                         <ul class="border mn-sub">
                           <li>
-                            <a class="mn-group-title ajax" href="/history/">История просмотров</a>
-                            <a class="mn-group-title ajax" href="/user_orders/">Ваши заказы</a>
-                            <a class="mn-group-title ajax" href="/help/7/">Помощь</a>
-                            <a class="mn-group-title ajax" href="/cookie_users_list/">Статистика</a>
+                            <a class="mn-group-title history ajax" href="/history/">История просмотров</a>
+                            <a class="mn-group-title user_orders ajax" href="/user_orders/">Ваши заказы</a>
+                            <a class="mn-group-title help ajax" href="/help/7/">Помощь</a>
+                            <a class="mn-group-title cookie_users_list ajax" href="/cookie_users_list/">Статистика</a>
                           </li>
                         </ul>
                       </li>

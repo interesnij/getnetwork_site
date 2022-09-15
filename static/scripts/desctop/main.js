@@ -66,6 +66,22 @@ function get_active_button() {
     else if (path == "/info/") {
       $nav.querySelector(".infos").classList.add("active");
     }
+    else if (path.includes('help')) {
+      $nav.querySelector(".infos").classList.add("active");
+      $nav.querySelector(".help").classList.add("active");
+    }
+    else if (path == "/history/") {
+      $nav.querySelector(".infos").classList.add("active");
+      $nav.querySelector(".history").classList.add("active");
+    }
+    else if (path == "/user_orders/") {
+      $nav.querySelector(".infos").classList.add("active");
+      $nav.querySelector(".user_orders").classList.add("active");
+    }
+    else if (path == "/cookie_users_list/") {
+      $nav.querySelector(".infos").classList.add("active");
+      $nav.querySelector(".cookie_users_list").classList.add("active");
+    }
     else if (path == "/tags/") {
       $nav.querySelector(".tags").classList.add("active");
     }
