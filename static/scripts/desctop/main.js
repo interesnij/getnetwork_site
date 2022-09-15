@@ -42,7 +42,7 @@ on('body', 'mouseout', '.mn-sub', function(event) {
 function get_active_button() {
   try {
     $nav = document.body.querySelector(".desktop-nav");
-    links = $nav.querySelectorAll(".folder");
+    links = $nav.querySelectorAll("a");
     path = document.location.pathname;
     for (var i = 0; i < links.length; i++){links[i].classList.remove("active")};
     if (path == "/") {
