@@ -1,4 +1,4 @@
-<% include!("../header.stpl"); %>
+<% include!("../anon_header.stpl"); %>
 
 <section data-title="Список опций и услуг" data-description="вебсервисы.рф: Список опций и услуг" data-uri="/serve_list/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -10,19 +10,8 @@
     </div>
 </section>
 
-<% let is_admin = request_user.is_superuser(); %>
 <section class="page-section">
     <div class="container relative">
-    <% if is_admin { %>
-      <div class="container align-center">
-        <a href="/create_tech_categories/" target="_blank" rel="nofollow">+ веб-сервис</a>
-          &nbsp;
-        <a href="/create_serve_categories/" target="_blank" rel="nofollow">+ технология опций</a>
-          &nbsp;
-        <a href="/create_serve/" target="_blank" rel="nofollow">+ опция</a>
-      </div>
-      <br />
-    <% } %>
     <div class="css-treeview">
       <ul>
         <% for tech_category in tech_cats.iter() { %>
@@ -47,4 +36,4 @@
     </div>
 </section>
 
-<% include!("../footer.stpl"); %>
+<% include!("../anon_footer.stpl"); %>

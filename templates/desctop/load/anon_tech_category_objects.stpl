@@ -1,0 +1,42 @@
+<% for category in tech_category.get_serve_categories().iter() { %>
+  <li>
+    <input checked type="checkbox" id="cat<%= category.id %>" />
+    <label class="selected" for="cat<%= category.id %>">
+      <%= category.name %>
+    </label>
+    <span>
+      <a class="pointer get_serve_category_info" data-pk="<%= category.id %>">i</a>
+    </span>
+    <ul style="margin-left: 2%">
+      <% for object in category.get_serves().iter() { %>
+      <li>
+        <% if object.is_parent() { %>
+        <input checked type="checkbox" id="serve<%= object.id %>" />
+        <label for="serve<%= object.id %>">
+          <% if object.is_default { %>♦ <% } %>
+          <%= object.name %> (<%= object.id %>)
+        </label>
+        <a class="pointer get_serve_info" data-pk="<%= object.id %>">i</a>
+        <ul style="margin-left: 2%">
+          <% for child in object.get_variables().iter() { %>
+          <li>
+            <a>
+              <% if child.is_default { %>♦ <% } %>
+              <%= child.name %>  <%= child.price %> / <%= child.man_hours %>
+            </a>
+            <a class="pointer get_serve_info" data-pk="<%= child.id %>">i</a>
+          </li>
+          <% } %>
+        </ul>
+        <% } else { %>
+          <a>
+            <% if object.is_default { %>♦ <% } %>
+            <%= object.name %>  <%= object.price %> / <%= object.man_hours %>
+          </a>
+          <a class="pointer get_serve_info" data-pk="<%= object.id %>">i</a>
+        <% } %>
+      </li>
+      <% } %>
+    </ul>
+  </li>
+<% } %>

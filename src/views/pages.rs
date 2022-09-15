@@ -561,48 +561,72 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
     }
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            if is_desctop {
-                #[derive(TemplateOnce)]
-                #[template(path = "desctop/main/serve_list.stpl")]
-                struct Template {
-                    request_user: User,
-                    is_ajax:      i32,
-                    tech_cats:    Vec<TechCategories>,
-                }
-                let body = Template {
-                    request_user: _request_user,
-                    is_ajax:      is_ajax,
-                    tech_cats:    all_tech_categories,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/main/serve_list.stpl")]
+            struct Template {
+                request_user: User,
+                is_ajax:      i32,
+                tech_cats:    Vec<TechCategories>,
             }
-            else {
-                #[derive(TemplateOnce)]
-                #[template(path = "mobile/main/serve_list.stpl")]
-                struct Template {
-                    //request_user: User,
-                    is_ajax:      i32,
-                    tech_cats:    Vec<TechCategories>,
-                }
-                let body = Template {
-                    //request_user: _request_user,
-                    is_ajax:      is_ajax,
-                    tech_cats:    all_tech_categories,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            let body = Template {
+                request_user: _request_user,
+                is_ajax:      is_ajax,
+                tech_cats:    all_tech_categories,
             }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
         else {
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/main/serve_list.stpl")]
+            struct Template {
+                request_user: User,
+                is_ajax:      i32,
+                tech_cats:    Vec<TechCategories>,
+            }
+            let body = Template {
+                request_user: _request_user,
+                is_ajax:      is_ajax,
+                tech_cats:    all_tech_categories,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
     }
     else {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+        if is_desctop {
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/main/anon_serve_list.stpl")]
+            struct Template {
+                is_ajax:      i32,
+                tech_cats:    Vec<TechCategories>,
+            }
+            let body = Template {
+                is_ajax:      is_ajax,
+                tech_cats:    all_tech_categories,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+        else {
+            #[derive(TemplateOnce)]
+            #[template(path = "mobile/main/anon_serve_list.stpl")]
+            struct Template {
+                is_ajax:      i32,
+                tech_cats:    Vec<TechCategories>,
+            }
+            let body = Template {
+                is_ajax:      is_ajax,
+                tech_cats:    all_tech_categories,
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
     }
 }
 
