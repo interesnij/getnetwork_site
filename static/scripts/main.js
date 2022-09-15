@@ -1186,7 +1186,8 @@ on('body', 'click', '.load_tech_objects', function() {
       block.innerHTML = elem_.innerHTML;
     }
     else {
-      console.log("pass")
+      console.log("pass");
+      console.log(block.innerHTML)
     }
   }};
   link.send();
