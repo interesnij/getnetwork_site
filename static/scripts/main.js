@@ -1183,7 +1183,7 @@ on('body', 'change', '.load_tech_objects', function() {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     block = _this.parentElement.querySelector(".loader_ul");
-    if (!block.firstChild) {
+    if (block.querySelector("li")) {
       elem_ = document.createElement('span');
       elem_.innerHTML = link.responseText;
       block.innerHTML = elem_.innerHTML;
