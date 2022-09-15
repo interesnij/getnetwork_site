@@ -915,7 +915,7 @@ on('body', 'click', '.get_object_photo', function() {
   else if (page_id == 93) {
     url = "/work_image/";
   }
-  create_fullscreen(url + this.getAttribute("data-pk") + "/", "item_fullscreen");
+  create_fullscreen(url + this.getAttribute("data-pk") + "/", "photo_fullscreen", 1);
 });
 
 on('body', 'click', '.get_tech_category_info', function() {
