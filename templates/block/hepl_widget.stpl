@@ -1,0 +1,17 @@
+<div class="widget">
+    <h5 class="widget-title font-alt">Помощь</h5>
+    <div class="widget-body">
+      <ul class="clearlist widget-menu">
+        <li>
+          <a target="_blank" tel="nofollow" href="/help/7/">
+            Как заказать проект
+          </a>
+        </li>
+        <li>
+          <a target="_blank" tel="nofollow" href="/help/8/">
+            Этапы создания проектов
+          </a>
+        </li>
+      </ul>
+    </div>
+</div>

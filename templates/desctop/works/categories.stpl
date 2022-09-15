@@ -13,9 +13,9 @@
 
 <section class="page-section">
 <% for object in work_cats.iter() { %>
-<section class="need_darked_this fixed-height-small pt-0 pb-0 bg-dark-alfa-30" style="background-image: url(&quot;<%= object.get_image() %>&quot;); background-position: 50% -26px;">
-    <div class="" style="height: 100vh;">
-        <div class="home-content">
+<section class="page-section need_darked_this fixed-height-small pt-0 pb-0 bg-dark-alfa-30" style="background-image: url(&quot;<%= object.get_image() %>&quot;); background-position: 50% -26px;">
+    <div class="" style="height: 100vh">
+        <div class="home-content container">
             <div class="home-text">
                 <h2 class="hs-line-14 font-alt mb-50 mb-xs-30">
                   <a class="ajax dark_target" href="/works/<%= object.id %>/">
