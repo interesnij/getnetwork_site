@@ -27,7 +27,7 @@
               <select class="input-md form-control" name="tech_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
                 <% for category in tech_cats.iter() { %>
                   <option value="<%= category.id %>">
-                    <%= category.name %> (Уровень <%= category.level %>)
+                    <%= category.name %> (<%= category.get_level_ru() %>)
                   </option>
                 <% } %>
               </select>
@@ -37,7 +37,7 @@
 
         <section style="padding-top: 50px">
         <% for category in tech_cats.iter() { %>
-          <h6><%= category.name %> (<%= category.level %>)
+          <h6><%= category.name %> (<%= category.get_level_ru() %>)
             | <a class="ajax" href="/edit_tech_category/<%= category.id %>/">~</a>
             | <a class="pointer remove_tech_category" data-pk="<%= category.id %>">x</a>
           </h6>

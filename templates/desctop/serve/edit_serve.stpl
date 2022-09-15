@@ -44,10 +44,11 @@
             <div class="mb-20 mb-md-10">
               <label>Уровень сложности</label>
               <select data-level="<%= level %>" class="input-md form-control load_tech_categories_from_level" data-live-search="true" tabindex="-1" aria-hidden="true">
-                <option <% if level == 0 { %>selected=""<% } %> value="0">Бюджетный</option>
-                <option <% if level == 1 { %>selected=""<% } %> value="1">Начальный</option>
-                <option <% if level == 2 { %>selected=""<% } %> value="2">Продвинутый</option>
-                <option <% if level == 3 { %>selected=""<% } %> value="3">Экспертный</option>
+                <option <% if level == 0 { %>selected=""<% } %> value="0">Бюджетно</option>
+                <option <% if level == 1 { %>selected=""<% } %> value="1">Обычно</option>
+                <option <% if level == 2 { %>selected=""<% } %> value="2">Средне</option>
+                <option <% if level == 3 { %>selected=""<% } %> value="3">Сложно</option>
+                <option <% if level == 4 { %>selected=""<% } %> value="4">Экспертно</option>
               </select>
             </div>
             <div class="mb-20 mb-md-10">

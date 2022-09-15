@@ -44,7 +44,7 @@ impl TechCategories {
             .load::<ServeCategories>(&_connection)
             .expect("E");
     }
-    pub fn get_level_ru(&self) -> String {
+    pub fn get_level_ru(&self) -> String { 
         return match self.level {
             0 => "Бюджетно".to_string(),
             1 => "Обычно".to_string(),

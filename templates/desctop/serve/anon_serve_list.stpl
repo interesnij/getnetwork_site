@@ -6,7 +6,7 @@
 
   <h4>
     <a style="padding:5px" class="ajax underline" href="/tech_categories/<%= tech_category.id %>/">
-      <%= tech_category.name %> (Уровень <%= tech_category.level %>)
+      <%= tech_category.name %> (<%= tech_category.get_level_ru() %>)
     </a>
   </h4>
 

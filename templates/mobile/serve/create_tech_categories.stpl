@@ -29,7 +29,7 @@
         </form>
         <section style="padding-top: 50px">
           <% for category in tech_cats.iter() { %>
-            <p><%= category.name %> (Ур. <%= category.level %>)
+            <p><%= category.name %> (<%= category.get_level_ru() %>)
               | <a class="ajax" href="/edit_tech_category/<%= category.id %>/">~</a>
               | <a class="pointer remove_tech_category" data-pk="<%= category.id %>">x</a>
             </p>
