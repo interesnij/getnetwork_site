@@ -38,7 +38,7 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/load_serve/{id}/", web::get().to(get_serve_page));
     config.route("/load_feedback/", web::get().to(get_feedback_page));
     config.route("/load_user_history/{id}/", web::get().to(get_user_history_page));
-
+    config.route("/load_tech_objects/{id}/", web::get().to(get_tech_objects_page));
 }
 
 pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
@@ -850,4 +850,40 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
     else {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
     }
+}
+
+pub async fn get_tech_objects_page(session: Session, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::models::TechCategories;
+    use crate::schema;
+    use crate::schema::tech_categories::dsl::tech_categories;
+
+    let mut is_admin = false;
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.is_superuser() {
+            is_admin = true;
+        }
+    }
+    let _connection = establish_connection();
+    let _cat = tech_categories
+        .filter(schema::tech_categories::id.eq(*_id))
+        .load::<TechCategories>(&_connection)
+        .expect("E.")
+        .into_iter()
+        .nth(0)
+        .unwrap();
+
+    #[derive(TemplateOnce)]
+    #[template(path = "desctop/load/tech_category_objects.stpl")]
+    struct Template {
+        object:   TechCategories,
+        is_admin: bool,
+    }
+    let body = Template {
+        object:   _cat,
+        is_admin: is_admin
+    }
+    .render_once()
+    .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+    Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
 }

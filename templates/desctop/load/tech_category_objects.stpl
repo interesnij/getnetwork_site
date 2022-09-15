@@ -1,6 +1,5 @@
-<% let is_admin = request_user.is_superuser(); %>
 
-<% for category in tech_category.get_serve_categories().iter() { %>
+<% for category in object.get_serve_categories().iter() { %>
   <li>
     <input checked type="checkbox" id="cat<%= category.id %>" />
     <label class="selected" for="cat<%= category.id %>">
