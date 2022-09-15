@@ -1174,18 +1174,23 @@ on('body', 'click', '#create_feedback_btn', function() {
 on('body', 'change', '.load_tech_objects', function() {
   _this = this;
   if (_this.checked = false) {
+    console.log("no checked");
     return
   };
-
+  console.log("checked!");
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'GET', "/load_tech_objects/" + _this.getAttribute("data-pk") + "/", true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     block = _this.parentElement.querySelector(".loader_ul");
     if (!block.firstChild) {
+      console.log("no block.firstChild");
       elem_ = document.createElement('span');
       elem_.innerHTML = link.responseText;
       block.innerHTML = elem_.innerHTML;
+    }
+    else {
+      console.log("block.firstChild exists");
     }
   }};
   link.send();
