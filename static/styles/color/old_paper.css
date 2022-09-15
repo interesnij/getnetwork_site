@@ -1,13 +1,13 @@
-::-moz-selection{ color: #fff !important; background:#000 !important; }
-::-webkit-selection{ color: #fff !important; background:#000 !important; }
-::selection{ color: #fff !important; background:#000 !important; }
+::-moz-selection{ color: #fff !important; background: rgb(0, 0, 0, 0.6) !important; }
+::-webkit-selection{ color: #fff !important; background: rgb(0, 0, 0, 0.6) !important; }
+::selection{ color: #fff !important; background: rgb(0, 0, 0, 0.6) !important; }
 .selected {
   color: #fff !important;
   background: rgb(0, 0, 0, 0.6) !important;
   padding: 0px 2px;
 }
 .alt-features-icon{
-    color: #FFFFFF !important;
+    color: #00000 !important;
 }
 .mob_menu, .mn-sub {
 	background-color: #DDD1C5;
