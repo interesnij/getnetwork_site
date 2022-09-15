@@ -1,6 +1,6 @@
-::-moz-selection{ color: #000000 !important; background:#FFFFFF !important; }
-::-webkit-selection{ color: #000000 !important; background:#FFFFFF !important; }
-::selection{ color: #000000 !important; background:#FFFFFF !important; }
+::-moz-selection{ color: #000000 !important; background: rgb(255, 255, 255, 0.6) !important; }
+::-webkit-selection{ color: #000000 !important; background: rgb(255, 255, 255, 0.6) !important; }
+::selection{ color: #000000 !important; background: rgb(255, 255, 255, 0.6) !important; }
 .selected {
   color: #000000 !important;
   background: rgb(255, 255, 255, 0.6) !important;
