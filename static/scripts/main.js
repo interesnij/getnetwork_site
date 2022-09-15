@@ -932,12 +932,12 @@ on('body', 'click', '.get_serve_info', function() {
 on('body', 'click', '.next_item', function(event) {
   event.preventDefault();
   this.style.display = "none";
-  change_this_fullscreen(this, document.getElementById('item_loader'));
+  change_this_fullscreen(this, document.getElementById("fullscreen_loader"));
 });
 on('body', 'click', '.prev_item', function(event) {
   event.preventDefault();
   this.style.display = "none";
-  change_this_fullscreen(this, document.getElementById('item_loader'));
+  change_this_fullscreen(this, document.getElementById("fullscreen_loader"));
 });
 
 on('body', 'input', '.general_search', function() {
