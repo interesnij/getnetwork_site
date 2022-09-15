@@ -1171,8 +1171,12 @@ on('body', 'click', '#create_feedback_btn', function() {
   link.send(form_data);
 });
 
-on('body', 'click', '.load_tech_objects', function() {
-  _this = this; 
+on('body', 'change', '.load_tech_objects', function() {
+  _this = this;
+  if (_this.checked = false) {
+    return
+  };
+
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'GET', "/load_tech_objects/" + _this.getAttribute("data-pk") + "/", true );
   link.onreadystatechange = function () {

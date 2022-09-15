@@ -14,8 +14,8 @@
       <ul>
         <% for tech_category in tech_cats.iter() { %>
           <li>
-            <input type="checkbox" id="tech<%= tech_category.id %>" />
-            <label class="font-alt load_tech_objects" for="tech<%= tech_category.id %>" data-pk="<%= tech_category.id %>">
+            <input data-pk="<%= tech_category.id %>" class="font-alt load_tech_objects" type="checkbox" id="tech<%= tech_category.id %>" />
+            <label for="tech<%= tech_category.id %>">
               <%= tech_category.name %> (<%= tech_category.level %>)
             </label>
             <a class="pointer get_tech_category_info" data-pk="<%= tech_category.id %>">i</a>

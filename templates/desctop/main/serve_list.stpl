@@ -27,8 +27,8 @@
       <ul>
         <% for tech_category in tech_cats.iter() { %>
           <li>
-            <input type="checkbox" id="tech<%= tech_category.id %>" />
-            <label class="font-alt load_tech_objects" for="tech<%= tech_category.id %>" data-pk="<%= tech_category.id %>">
+            <input class="load_tech_objects" data-pk="<%= tech_category.id %>" type="checkbox" id="tech<%= tech_category.id %>" />
+            <label class="font-alt" for="tech<%= tech_category.id %>">
               <%= tech_category.name %> (<%= tech_category.level %>)
             </label>
             <% if is_admin { %>
