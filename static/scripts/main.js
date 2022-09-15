@@ -1170,3 +1170,19 @@ on('body', 'click', '#create_feedback_btn', function() {
   }};
   link.send(form_data);
 });
+
+on('body', 'click', '.load_tech_objects', function() {
+  _this = this;
+  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+  link.open( 'GET', "/load_tech_objects/" + _this.getAttribute("data-pk") + "/", true );
+  link.onreadystatechange = function () {
+  if ( link.readyState == 4 && link.status == 200 ) {
+    block = _this.parentElement.querySelector(".loader_ul");
+    if (!block.firstChild) {
+      elem_ = document.createElement('span');
+      elem_.innerHTML = link.responseText;
+      block.innerHTML = elem_.responseText;
+    }
+  }};
+  link.send();
+});
