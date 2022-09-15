@@ -50,18 +50,34 @@ function get_active_button() {
     }
     else if (path.includes('service')) {
       $nav.querySelector(".service").classList.add("active");
+      if (path.includes("/services/")) {
+        $nav.querySelector('[href=' + '"' + path + '"' + ']').classList.add("active");
+      }
     }
+
     else if (path.includes('work')) {
       $nav.querySelector(".work").classList.add("active");
+      if (path.includes("/works/")) {
+        $nav.querySelector('[href=' + '"' + path + '"' + ']').classList.add("active");
+      }
     }
     else if (path.includes('store')) {
       $nav.querySelector(".store").classList.add("active");
+      if (path.includes("/stores/")) {
+        $nav.querySelector('[href=' + '"' + path + '"' + ']').classList.add("active");
+      }
     }
     else if (path.includes('blog')) {
       $nav.querySelector(".blog").classList.add("active");
+      if (path.includes("/blogs/")) {
+        $nav.querySelector('[href=' + '"' + path + '"' + ']').classList.add("active");
+      }
     }
     else if (path.includes('wiki')) {
       $nav.querySelector(".wiki").classList.add("active");
+      if (path.includes("/wikis/")) {
+        $nav.querySelector('[href=' + '"' + path + '"' + ']').classList.add("active");
+      }
     }
     else if (path == "/info/") {
       $nav.querySelector(".infos").classList.add("active");
