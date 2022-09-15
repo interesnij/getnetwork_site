@@ -44,6 +44,16 @@ impl TechCategories {
             .load::<ServeCategories>(&_connection)
             .expect("E");
     }
+    pub fn get_level_ru(&self) -> String {
+        return match self.level {
+            0 => "Бюджетно".to_string(),
+            1 => "Обычно".to_string(),
+            2 => "Средне".to_string(),
+            3 => "Сложно".to_string(),
+            4 => "Экспертно".to_string(),
+            _ => "Непонятно".to_string(),
+        };
+    }
 }
 #[derive(Insertable,AsChangeset)]
 #[table_name="tech_categories"]
