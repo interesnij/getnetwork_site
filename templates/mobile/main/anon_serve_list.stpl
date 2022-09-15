@@ -19,9 +19,7 @@
               <%= tech_category.name %> (<%= tech_category.level %>)
             </label>
             <a class="pointer get_tech_category_info" data-pk="<%= tech_category.id %>">i</a>
-            <ul class="loader_ul" style="margin-left: 2%">
-
-            </ul>
+            <ul class="loader_ul" style="margin-left: 2%"></ul>
           </li>
         <% } %>
       </ul>
