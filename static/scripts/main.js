@@ -1181,7 +1181,7 @@ on('body', 'click', '.load_tech_objects', function() {
     if (!block.firstChild) {
       elem_ = document.createElement('span');
       elem_.innerHTML = link.responseText;
-      block.innerHTML = elem_.responseText;
+      block.innerHTML = elem_.innerHTML;
     }
   }};
   link.send();
