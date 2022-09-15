@@ -428,6 +428,7 @@ impl Store {
         let _connection = establish_connection();
         return store_images
             .filter(schema::store_images::store.eq(self.id))
+            .order(schema::store_images::id.desc())
             .select(schema::store_images::id)
             .load::<i32>(&_connection)
             .expect("E");
