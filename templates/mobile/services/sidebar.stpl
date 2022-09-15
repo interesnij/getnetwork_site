@@ -6,6 +6,9 @@
     </form>
   <div class="search_result"></div>
 </div>
+
+<% include!("../../block/help_widget.stpl"); %>
+
 <div class="widget">
   <h5 class="widget-title font-alt">
     <a target="_blank" rel="nofollow" href="/help/7/">

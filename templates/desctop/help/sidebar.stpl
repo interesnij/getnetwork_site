@@ -9,9 +9,9 @@
     <h5 class="widget-title font-alt">Категории</h5>
     <div class="widget-body">
         <ul class="clearlist widget-menu">
-          <% for category in help_cats.iter() { %>
+          <% for cat in help_cats.iter() { %>
             <li>
-              <a class="ajax" href="/help/<%= category.id %>/"><%= category.title %></a>
+              <a <% if cat.id == category.id { %>style="font-weight:bold"<% } %> class="ajax" href="/help/<%= cat.id %>/"><%= cat.title %></a>
             </li>
           <% } %>
         </ul>
