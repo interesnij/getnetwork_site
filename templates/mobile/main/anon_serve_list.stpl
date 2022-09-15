@@ -1,0 +1,36 @@
+<% include!("../anon_header.stpl"); %>
+
+<section data-title="Список опций и услуг" data-description="вебсервисы.рф: Список опций и услуг" data-uri="/serve_list/" data-image="/static/images/dark/store.jpg" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a>Список опций</a>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+    <div class="css-treeview">
+      <ul>
+        <% for tech_category in tech_cats.iter() { %>
+          <li>
+            <input type="checkbox" id="tech<%= tech_category.id %>" />
+            <label class="font-alt load_objects_from_tech_categories" for="tech<%= tech_category.id %>" data-pk="<%= tech_category.id %>">
+              <%= tech_category.name %> (<%= tech_category.level %>)
+            </label>
+            <a class="pointer get_tech_category_info" data-pk="<%= tech_category.id %>">i</a>
+            <ul class="loader_ul" style="margin-left: 2%">
+
+            </ul>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+    </div>
+</section>
+
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>
+
+<% include!("../anon_footer.stpl"); %>

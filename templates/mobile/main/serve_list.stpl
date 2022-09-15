@@ -3,86 +3,50 @@
 <section data-title="Список опций и услуг" data-description="вебсервисы.рф: Список опций и услуг" data-uri="/serve_list/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
             <a>Список опций</a>
         </div>
     </div>
 </section>
 
+<% let is_admin = request_user.is_superuser(); %>
 <section class="page-section">
     <div class="container relative">
-    <div class="container align-center">
-      <a href="/create_tech_categories/" target="_blank" rel="nofollow">+ веб-сервис</a>
-      &nbsp;
-      <a href="/create_serve_categories/" target="_blank" rel="nofollow">+ технология опций</a>
-      &nbsp;
-      <a href="/create_serve/" target="_blank" rel="nofollow">+ опция</a>
-    </div>
-    <div class="container relative">
+    <% if is_admin { %>
+      <div class="container align-center">
+        <a href="/create_tech_categories/" target="_blank" rel="nofollow">+ веб-сервис</a>
+          &nbsp;
+        <a href="/create_serve_categories/" target="_blank" rel="nofollow">+ технология опций</a>
+          &nbsp;
+        <a href="/create_serve/" target="_blank" rel="nofollow">+ опция</a>
+      </div>
+      <br />
+    <% } %>
     <div class="css-treeview">
       <ul>
         <% for tech_category in tech_cats.iter() { %>
           <li>
             <input type="checkbox" id="tech<%= tech_category.id %>" />
-            <label for="tech<%= tech_category.id %>">
-              <%= tech_category.name %> (Ур. <%= tech_category.level %>)
+            <label class="font-alt load_objects_from_tech_categories" for="tech<%= tech_category.id %>" data-pk="<%= tech_category.id %>">
+              <%= tech_category.name %> (<%= tech_category.level %>)
             </label>
-            <a target="_blank" rel="nofollow" href="/edit_tech_category/<%= tech_category.id %>/">~</a>
-            <a class="pointer remove_tech_category" data-pk="<%= tech_category.id %>">x</a>
-            <ul style="margin-left: 2%;border-left: 1px orange solid;">
-              <% for category in tech_category.get_serve_categories().iter() { %>
-                <li>
-                  <input checked type="checkbox" id="cat<%= category.id %>" />
-                  <label for="cat<%= category.id %>">
-                    <%= category.name %>
-                  </label>
-                  <span>
-                    <a target="_blank" rel="nofollow" href="/edit_serve_category/<%= category.id %>/">~</a>
-                    <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
-                  </span>
-                  <ul style="margin-left: 2%;border-left: 1px orange solid;">
-                    <% for object in category.get_serves().iter() { %>
-                    <li>
-                      <% if object.is_parent() { %>
-                      <input checked type="checkbox" id="serve<%= object.id %>" />
-                      <label for="serve<%= object.id %>">
-                        <% if object.is_default { %>♦ <% } %>
-                        <%= object.name %> (<%= object.id %>)
-                      </label>
-                      <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
-                      <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
-                      <ul style="margin-left: 2%;border-left: 1px orange solid;">
-                        <% for child in object.get_variables().iter() { %>
-                        <li>
-                          <a>
-                            <% if child.is_default { %>♦ <% } %>
-                            <%= child.name %>, <%= child.price %> :: <%= child.man_hours %>
-                          </a>
-                          <a target="_blank" rel="nofollow" href="/edit_serve/<%= child.id %>/">~</a>
-                          <a class="pointer remove_serve" data-pk="<%= child.id %>">x</a>
-                        </li>
-                        <% } %>
-                      </ul>
-                      <% } else { %>
-                        <a>
-                          <% if object.is_default { %>♦ <% } %>
-                          <%= object.name %>, <%= object.price %> :: <%= object.man_hours %>
-                        </a>
-                        <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
-                        <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
-                      <% } %>
-                    </li>
-                    <% } %>
-                  </ul>
-                </li>
-              <% } %>
+            <% if is_admin { %>
+              <a target="_blank" rel="nofollow" href="/edit_tech_category/<%= tech_category.id %>/">~</a>
+              <a class="pointer remove_tech_category" data-pk="<%= tech_category.id %>">x</a>
+              &nbsp;
+            <% } %>
+            <a class="pointer get_tech_category_info" data-pk="<%= tech_category.id %>">i</a>
+            <ul class="loader_ul" style="margin-left: 2%">
+
             </ul>
           </li>
         <% } %>
       </ul>
     </div>
     </div>
-    </div>
 </section>
+
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>

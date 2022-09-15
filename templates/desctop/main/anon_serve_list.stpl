@@ -20,11 +20,6 @@
             <label class="font-alt load_objects_from_tech_categories" for="tech<%= tech_category.id %>" data-pk="<%= tech_category.id %>">
               <%= tech_category.name %> (<%= tech_category.level %>)
             </label>
-            <% if is_admin { %>
-              <a target="_blank" rel="nofollow" href="/edit_tech_category/<%= tech_category.id %>/">~</a>
-              <a class="pointer remove_tech_category" data-pk="<%= tech_category.id %>">x</a>
-              &nbsp;
-            <% } %>
             <a class="pointer get_tech_category_info" data-pk="<%= tech_category.id %>">i</a>
             <ul class="loader_ul" style="margin-left: 2%">
 
