@@ -9,7 +9,7 @@
   <% } %>
 
     <p class="solid_bottom" style="font-size: 80%;">
-      Опция технологии "<%= object.cat_name() %>".
+      Опция технологии "<%= object.cat_name %>".
     </p>
 
   <div style="margin-top:10px">
