@@ -407,7 +407,7 @@ pub async fn get_anon_private_page (
     }
 }
 
-pub fn get_count_for_ru(count: i32, word1: String, word2: String, word3: String) -> String {
+pub fn get_count_for_ru(count: i16, word1: String, word2: String, word3: String) -> String {
     let a = count % 10;
     let b = count % 100;
     let count_str: String = count.to_string().parse().unwrap();
