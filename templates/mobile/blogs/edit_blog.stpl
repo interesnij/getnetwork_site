@@ -64,15 +64,15 @@
     <div class="col-md-4" style="padding-top: 50px">
         <% for category in blog_cats.iter() { %>
         <div class="margin-bottom:15px">
-          <h6>
+          <h4>
             <a rel="nofollow" target="_blank" href="/blogs/<%= category.id %>/">
               <%= category.name %>
             </a>
             | <a class="ajax" href="/edit_blog_category/<%= category.id %>/">~</a>
             | <a class="pointer remove_blog_category" data-pk="<%= category.id %>">x</a>
-          </h6>
+          </h4>
           <% for object in category.get_all_blogs().iter() { %>
-            <p>
+            <p style="margin:0">
               <a rel="nofollow" target="_blank" href="/blog/<%= category.id %>/<%= object.id %>/">
                 <%= object.title %>
               </a>

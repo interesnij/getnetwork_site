@@ -39,12 +39,12 @@
         <div class="col-md-4">
             <% for category in help_cats.iter() { %>
             <div class="margin-bottom:15px">
-              <h6><%= category.title %>
+              <h4><%= category.title %>
                 | <a class="ajax" href="/help/edit_help_category/<%= category.id %>/">~</a>
                 | <a class="pointer remove_help_category" data-pk="<%= category.id %>">x</a>
-              </h6>
+              </h4>
               <% for object in category.get_list().iter() { %>
-                <p><%= object.title %>
+                <p style="margin:0"><%= object.title %>
                   | <a class="ajax" href="/help/edit_item/<%= object.id %>/">~</a>
                   | <a class="pointer remove_help" data-pk="<%= object.id %>">x</a>
                 </p>

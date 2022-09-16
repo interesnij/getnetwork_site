@@ -73,15 +73,15 @@
     <div class="col-md-4" style="padding-top: 50px">
         <% for category in store_cats.iter() { %>
         <div class="margin-bottom:15px">
-          <h6>
+          <h4>
             <a rel="nofollow" target="_blank" href="/stores/<%= category.id %>/">
               <%= category.name %>
             </a>
             | <a class="ajax" href="/edit_store_category/<%= category.id %>/">~</a>
             | <a class="pointer remove_store_category" data-pk="<%= category.id %>">x</a>
-          </h6>
+          </h4>
           <% for object in category.get_all_stores().iter() { %>
-            <p>
+            <p style="margin:0">
               <a rel="nofollow" target="_blank" href="/store/<%= category.id %>/<%= object.id %>/">
                 <%= object.title %>
               </a>

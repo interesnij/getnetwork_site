@@ -39,12 +39,12 @@
 
         <section class="col-md-4">
             <% for category in tech_cats.iter() { %>
-              <h6><%= category.name %> (<%= category.get_level_ru() %>)
+              <h4><%= category.name %> (<%= category.get_level_ru() %>)
                 | <a class="ajax" href="/edit_tech_category/<%= category.id %>/">~</a>
                 | <a class="pointer remove_tech_category" data-pk="<%= category.id %>">x</a>
-              </h6>
+              </h4>
               <% for object in category.get_serve_categories().iter() { %>
-                <p>
+                <p style="margin:0">
                   <%= object.name %>
                   | <a class="ajax" href="/edit_serve_category/<%= object.id %>/">~</a>
                   | <a class="pointer remove_serve_category" data-pk="<%= object.id %>">x</a>
