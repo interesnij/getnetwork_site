@@ -23,12 +23,10 @@
 
         <% if object.is_parent() { %>
           <span class="border">
-        <label for="serve<%= object.id %>">
           <span style="font-weight: bold">
             <% if object.is_default { %>* <% } %>
             <%= object.name %>
           </span> <% if is_admin { %>(<%= object.id %>)<% } %>
-        </label>
         <% if is_admin { %>
           <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
           <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
