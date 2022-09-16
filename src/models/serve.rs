@@ -172,7 +172,7 @@ impl Serve {
         use crate::utils::get_count_for_ru;
 
         return get_count_for_ru (
-            self.hours,
+            self.man_hours,
             " час".to_string(),
             " часа".to_string(),
             " часов".to_string(),
