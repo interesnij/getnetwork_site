@@ -20,11 +20,14 @@
     <ul style="margin-left: 2%">
       <% for object in category.get_serves().iter() { %>
       <li>
+
         <% if object.is_parent() { %>
-        <input checked type="checkbox" id="serve<%= object.id %>" />
+          <span class="border">
         <label for="serve<%= object.id %>">
-          <% if object.is_default { %>* <% } %>
-          <%= object.name %> <% if is_admin { %>(<%= object.id %>)<% } %>
+          <span style="font-weight: bold">
+            <% if object.is_default { %>* <% } %>
+            <%= object.name %>
+          </span> <% if is_admin { %>(<%= object.id %>)<% } %>
         </label>
         <% if is_admin { %>
           <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
@@ -54,6 +57,7 @@
               </svg>
             </a>
           </li>
+          </span>
           <% } %>
         </ul>
         <% } else { %>
