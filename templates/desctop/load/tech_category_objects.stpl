@@ -23,7 +23,7 @@
         <% if object.is_parent() { %>
         <input checked type="checkbox" id="serve<%= object.id %>" />
         <label for="serve<%= object.id %>">
-          <% if object.is_default { %>♦ <% } %>
+          <% if object.is_default { %>* <% } %>
           <%= object.name %> <% if is_admin { %>(<%= object.id %>)<% } %>
         </label>
         <% if is_admin { %>
@@ -39,10 +39,10 @@
         <ul style="margin-left: 2%">
           <% for child in object.get_variables().iter() { %>
           <li>
-            <a>
-              <% if child.is_default { %>♦ <% } %>
-              <%= child.name %>  <%= child.price %> / <%= child.man_hours %>
-            </a>
+            <span>
+              <% if child.is_default { %>* <% } %>
+              <%= child.name %>: <%= child.price %> руб. (<%= child.get_hours() %>)
+            </span>
             <% if is_admin { %>
               <a target="_blank" rel="nofollow" href="/edit_serve/<%= child.id %>/">~</a>
               <a class="pointer remove_serve" data-pk="<%= child.id %>">x</a>
@@ -57,10 +57,10 @@
           <% } %>
         </ul>
         <% } else { %>
-          <a>
-            <% if object.is_default { %>♦ <% } %>
-            <%= object.name %>  <%= object.price %> / <%= object.man_hours %>
-          </a>
+          <span>
+            <% if object.is_default { %>* <% } %>
+            <%= object.name %>: <%= object.price %> руб. (<%= object.get_hours() %>)
+          </span>
           <% if is_admin { %>
             <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
             <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>

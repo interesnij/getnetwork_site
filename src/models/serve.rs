@@ -44,7 +44,7 @@ impl TechCategories {
             .load::<ServeCategories>(&_connection)
             .expect("E");
     }
-    pub fn get_level_ru(&self) -> String { 
+    pub fn get_level_ru(&self) -> String {
         return match self.level {
             0 => "Бюджетно".to_string(),
             1 => "Обычно".to_string(),
@@ -168,6 +168,16 @@ pub struct Serve {
 }
 
 impl Serve {
+    pub fn get_hours(&self) -> String {
+        use crate::utils::get_count_for_ru;
+
+        return get_count_for_ru (
+            self.hours,
+            " час".to_string(),
+            " часа".to_string(),
+            " часов".to_string(),
+        );
+    }
     pub fn get_variables(&self) -> Vec<Serve> {
         use crate::schema::serve::dsl::serve;
 
