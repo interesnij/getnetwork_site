@@ -24,7 +24,7 @@
         <input checked type="checkbox" id="serve<%= object.id %>" />
         <label for="serve<%= object.id %>">
           <% if object.is_default { %>♦ <% } %>
-          <%= object.name %> (<%= object.id %>)
+          <%= object.name %> <% if is_admin { %>(<%= object.id %>)<% } %>
         </label>
         <% if is_admin { %>
           <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>

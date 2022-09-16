@@ -29,7 +29,7 @@
           <li>
             <input class="load_tech_objects" data-pk="<%= tech_category.id %>" type="checkbox" id="tech<%= tech_category.id %>" />
             <label class="font-alt" for="tech<%= tech_category.id %>">
-              <%= tech_category.name %> (<%= tech_category.get_level_ru() %>)
+              <%= tech_category.name %> <span style="font-size:80%;text-transform: capitalize;">(<%= tech_category.get_level_ru() %>)<span>
             </label>
             <% if is_admin { %>
               <a target="_blank" rel="nofollow" href="/edit_tech_category/<%= tech_category.id %>/">~</a>
