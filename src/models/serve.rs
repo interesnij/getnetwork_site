@@ -127,7 +127,7 @@ impl ServeCategories {
             .load::<Serve>(&_connection)
             .expect("E");
     }
-    pub fn get_category(&self) -> Serve {
+    pub fn get_category(&self) -> TechCategories {
         use crate::schema::tech_categories::dsl::tech_categories;
 
         let _connection = establish_connection();
@@ -257,7 +257,7 @@ impl Serve {
             .nth(0)
             .unwrap();
     }
-    pub fn get_category(&self) -> Serve {
+    pub fn get_category(&self) -> ServeCategories {
         use crate::schema::serve_categories::dsl::serve_categories;
 
         let _connection = establish_connection();
