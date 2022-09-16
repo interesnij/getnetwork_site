@@ -25,7 +25,7 @@
     <% } %>
     <div class="css-treeview">
       <ul>
-        <% for tech_category in tech_cats.iter() { %>
+        <% for (i, tech_category) in tech_cats.iter().enumerate() { %>
           <li>
             <input class="load_tech_objects" data-pk="<%= tech_category.id %>" type="checkbox" id="tech<%= tech_category.id %>" />
             <label class="font-alt" for="tech<%= tech_category.id %>">
