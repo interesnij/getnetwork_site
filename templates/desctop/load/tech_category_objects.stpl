@@ -22,7 +22,6 @@
       <li>
 
         <% if object.is_parent() { %>
-          <span class="border">
           <span style="font-weight: bold">
             <% if object.is_default { %>* <% } %>
             <%= object.name %>
@@ -55,7 +54,6 @@
               </svg>
             </a>
           </li>
-          </span>
           <% } %>
         </ul>
         <% } else { %>
