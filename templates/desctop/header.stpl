@@ -119,7 +119,7 @@
                           <a href="#" class="mn-has-sub folder auth" style="height: 75px; line-height: 75px;">Профиль</a>
                           <ul class="mn-sub mn-has-multi border" style="display: none;">
                               <li class="mn-sub-multi">
-                                  <a class="mn-group-title">Профиль</a>
+                                  <a href="/logout/" class="mn-group-title">Выйти</a>
                                   <ul>
                                       <li>
                                           <a href="/create_work_categories/" class="ajax">+ категория портфолио</a>
