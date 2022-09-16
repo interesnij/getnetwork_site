@@ -40,7 +40,7 @@
           <% for child in object.get_variables().iter() { %>
           <li>
             <span>
-              <% if child.is_default { %>* <% } %>
+              - <% if child.is_default { %>* <% } %>
               <%= child.name %>: <%= child.price %> руб. (<%= child.get_hours() %>)
             </span>
             <% if is_admin { %>
