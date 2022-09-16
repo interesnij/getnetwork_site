@@ -21,8 +21,6 @@
       <span class="pointer get_serve_category_info underline" data-pk="<%= s_cat.id %>">
         <%= s_cat.name %>
       </span>
-      <br />
-      <%= object.name %>
     </p>
 
   <div style="margin-top:10px">

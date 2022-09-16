@@ -2,7 +2,7 @@
   <h4 style="margin-bottom: 0 !important"><%= object.name %></h4>
   <p class="solid_bottom" style="font-size: 80%;">
     <% let category = object.get_category(); %>
-    Это язык программирования или технология приложения
+    Язык / технология приложения
       <a class="pointer get_tech_category_info" data-pk="<%= category.id %>" style="font-weight: bold">"<%= category.name %> (сложность: <%= category.get_level_ru() %>)"</a>.
   </p>
 
