@@ -12,14 +12,16 @@
   <% } %>
 
     <p class="solid_bottom" style="font-size: 80%;">
-      <a class="pointer get_tech_category_info" data-pk="<%= t_cat.id %>">
+      Веб-сервис:
+      <span class="pointer get_tech_category_info underline" data-pk="<%= t_cat.id %>">
         <%= t_cat.name %> (сложность: <%= t_cat.get_level_ru() %>)
-      </a>
-       →
-      <a class="pointer get_serve_category_info" data-pk="<%= s_cat.id %>">
+      </span>
+      <br />
+      Язык / технология:
+      <span class="pointer get_serve_category_info underline" data-pk="<%= s_cat.id %>">
         <%= s_cat.name %>
-      </a>
-       →
+      </span>
+      <br />
       <%= object.name %>
     </p>
 
