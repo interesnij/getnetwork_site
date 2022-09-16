@@ -9,13 +9,10 @@
   <% } %>
 
     <p class="solid_bottom" style="font-size: 80%;">
-      Это опция конкретной технологии и веб-приложения. Опции бывают
-      обязательные, дополнительные, вариативные
-      (имеющие выбор между ними для конкретного случая).
+      Опция технологии "<%= object.cat_name() %>".
     </p>
 
   <div style="margin-top:10px">
-
     <% if object.description.is_some() { %>
       <%- object.description.as_deref().unwrap() %>
     <% } else { %>
