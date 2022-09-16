@@ -127,6 +127,18 @@ impl ServeCategories {
             .load::<Serve>(&_connection)
             .expect("E");
     }
+    pub fn get_category(&self) -> Serve {
+        use crate::schema::tech_categories::dsl::tech_categories;
+
+        let _connection = establish_connection();
+        return tech_categories
+            .filter(schema::tech_categories::id.eq(self.tech_categories))
+            .load::<TechCategories>(&_connection)
+            .expect("E")
+            .into_iter()
+            .nth(0)
+            .unwrap();
+    }
 }
 
 #[derive(Insertable,AsChangeset)]
@@ -240,6 +252,18 @@ impl Serve {
         return serve
             .filter(schema::serve::id.eq(self.serve_id.unwrap()))
             .load::<Serve>(&_connection)
+            .expect("E")
+            .into_iter()
+            .nth(0)
+            .unwrap();
+    }
+    pub fn get_category(&self) -> Serve {
+        use crate::schema::serve_categories::dsl::serve_categories;
+
+        let _connection = establish_connection();
+        return serve_categories
+            .filter(schema::serve_categories::id.eq(self.serve_categories))
+            .load::<ServeCategories>(&_connection)
             .expect("E")
             .into_iter()
             .nth(0)
