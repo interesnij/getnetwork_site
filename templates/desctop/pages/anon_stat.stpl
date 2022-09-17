@@ -12,9 +12,9 @@
 
 <section class="page-section">
     <div class="container relative">
-      <div class="row is_paginate">
+      <div class="is_paginate">
       <% for object in object_list.iter() { %>
-        <div class="solid_bottom" style="padding: 5px 0;">
+        <div class="row solid_bottom" style="padding: 5px 0;">
           <div class="col-md-6">
             <% if object.country_ru.is_some() { %>
               <%= object.country_ru.as_deref().unwrap() %>,
@@ -48,7 +48,6 @@
           <div class="col-md-2">
               <% if object.device == 1 { %>
                 <span class="icon-desktop"></span>
-                Компьютер
               <% } else { %>
                 <span class="icon-mobile"></span>
               <% } %>

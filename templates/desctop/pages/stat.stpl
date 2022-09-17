@@ -14,9 +14,9 @@
     <div class="container relative">
 
       <% let is_admin = request_user.is_superuser(); %>
-      <div class="row is_paginate">
+      <div class="is_paginate">
       <% for object in object_list.iter() { %>
-        <div class="solid_bottom" style="padding: 5px 0;">
+        <div class="row solid_bottom" style="padding: 5px 0;">
           <div class="col-md-6 <% if is_admin { %>pointer show_user_history" data-pk="<%= object.id %>"<% } else { %>"<% } %>>
             <% if object.country_ru.is_some() { %>
               <%= object.country_ru.as_deref().unwrap() %>,
