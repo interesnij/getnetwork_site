@@ -18,22 +18,19 @@
               <span>
               <% if object.country_ru.is_some() { %>
                 <%= object.country_ru.as_deref().unwrap() %>
-              <% } %>
-              <% if object.country_en.is_some() { %>
+              <% } else if object.country_en.is_some() { %>
                 <%= object.country_en.as_deref().unwrap() %>
               <% } %>,
 
               <% if object.region_ru.is_some() { %>
                 <%= object.region_ru.as_deref().unwrap() %>
-              <% } %>
-              <% if object.region_en.is_some() { %>
+              <% } else if object.region_en.is_some() { %>
                 <%= object.region_en.as_deref().unwrap() %>
               <% } %>,
 
               <% if object.city_ru.is_some() { %>
                 <%= object.city_ru.as_deref().unwrap() %>
-              <% } %>
-              <% if object.city_en.is_some() { %>
+              <% } else if object.city_en.is_some() { %>
                 <%= object.city_en.as_deref().unwrap() %>
               <% } %>
               </span>
