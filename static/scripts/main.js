@@ -177,7 +177,7 @@ window.addEventListener("unload", function() {
   headers = {
     "Content-Type": 'text/html; charset=utf-8',
   };
-  const blob = new Blob(formData, headers);
+  blob = new Blob(formData, headers);
   navigator.sendBeacon("/create_history/", blob);
 });
 
