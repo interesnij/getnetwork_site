@@ -175,7 +175,7 @@ window.addEventListener("unload", function() {
   formData = get_stat_form(document.location.href, $title, $object_id, $page_id);
 
   headers = {
-    "content-type": 'text/html; charset=utf-8',
+    "Content-Type": 'text/html; charset=utf-8',
   };
   const blob = new Blob(formData, headers);
   navigator.sendBeacon("/create_history/", blob);
