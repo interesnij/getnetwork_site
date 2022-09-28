@@ -173,7 +173,7 @@ pub async fn create_history(conn: ConnectionInfo, data: web::Json<HistoryData>, 
 
     let p_object_id = data.object_id;
     let p_page_id = data.page_id;
-    let _p_height = data.height;
+    let _p_height = data.height.clone();
     let format_height = format!("{:.2}", _p_height);
     let p_height: f64 = format_height.parse().unwrap();
 
