@@ -179,8 +179,15 @@ window.addEventListener("unload", function() {
   $title = meta.getAttribute("data-title");
   $page_id = meta.getAttribute("page-id");
   $object_id = meta.getAttribute("data-id") ? meta.getAttribute("data-id") : "";
-  formData = get_stat_form(document.location.href, $title, $object_id, $page_id);
 
+  formData = new FormData();
+  formData.append('user_id', $user_id);
+  formData.append('object_id', $object_id);
+  formData.append('page_id', $page_id);
+  formData.append('link', $link);
+  formData.append('title', $title);
+  formData.append('height', $height);
+  formData.append('seconds', $seconds);
   headers = {
     "Content-Type": 'text/html; charset=utf-8',
   };
