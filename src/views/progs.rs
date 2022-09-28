@@ -165,7 +165,7 @@ pub struct HistoryData {
     pub seconds:   i32,
 }
 
-#[post("/create_history")]
+#[web::post("/create_history")]
 pub async fn create_history(conn: ConnectionInfo, data: web::Json<HistoryData>, req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
