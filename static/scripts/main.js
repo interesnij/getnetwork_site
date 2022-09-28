@@ -195,6 +195,7 @@ window.addEventListener("unload", function() {
   meta = document.body.querySelector(".doc_title");
   $title = meta.getAttribute("data-title");
   $page_id = meta.getAttribute("page-id");
+  $object_id = meta.getAttribute("data-id");
   if ($object_id) {
     analyticsData = {
       user_id: $user_id,
