@@ -90,6 +90,16 @@ function get_page_view_time(count) {
     i += 1;
   }, 1000);
 };
+function get_stat_form($link, $title, $object_id, $page_id) {
+  formData = new FormData();
+  formData.append('user_id', $user_id);
+  formData.append('object_id', $object_id);
+  formData.append('page_id', $page_id);
+  formData.append('link', $link);
+  formData.append('title', $title);
+  formData.append('height', $height);
+  formData.append('seconds', $seconds);
+}
 
 function get_stat_meta($link, $title, $object_id, $page_id) {
   //ip_block = document.body.querySelector(".ip_span");
@@ -120,14 +130,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("затрачено секунд",  $seconds);
   console.log("======================");
 
-  formData = new FormData();
-  formData.append('user_id', $user_id);
-  formData.append('object_id', $object_id);
-  formData.append('page_id', $page_id);
-  formData.append('link', $link);
-  formData.append('title', $title);
-  formData.append('height', $height);
-  formData.append('seconds', $seconds);
+  formData = get_stat_form($link, $title, $object_id, $page_id);
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', "/create_history/", true );
@@ -163,20 +166,16 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   $window_seconds = 1;
   window.clearInterval(intervalListener2);
 }
-window.onbeforeunload = function() {
-  $link = document.location.pathname;
-  meta_block = document.body.querySelector(".doc_title");
-  if (meta_block.getAttribute("data-id")) {
-    $object_id = meta_block.getAttribute("data-id");
-  }
-  else {
-    $object_id = ""
-  }
-  $page_id = meta_block.getAttribute("page-id");
-  $title = meta_block.getAttribute("data-title");
-  get_stat_meta($link, $title, $object_id, $page_id);
-  return "Есть несохранённые изменения. Всё равно уходим?";
-};
+
+window.addEventListener("unload", function() {
+  meta = document.body.querySelector(".doc_title");
+  $title = meta.getAttribute("data-title");
+  $page_id = meta.getAttribute("page-id");
+  $object_id = meta.getAttribute("data-id") ? meta.getAttribute("data-id") : "";
+  formData = get_stat_form(document.location.href, $title, $object_id, $page_id);
+
+  navigator.sendBeacon("/create_history/", formData);
+});
 
 ///////////////
 function get_or_create_cookie_user() {
