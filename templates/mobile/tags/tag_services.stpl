@@ -1,11 +1,11 @@
 <% include!("../header.stpl"); %>
 
-<section page-id="34" data-title="Услуги тега <%= tag.name %>" data-description="вебсервисы.рф: Услуги тега <%= tag.name %>" data-uri="/tag_services/<%= tag.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
+<section page-id="34" data-title="Услуги тега <%= tag.name %>" data-description="вебсервисы.рф: Услуги тега <%= tag.name %>" data-uri="/tag_services/<%= tag.name %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
           <a class="ajax" href="/tags/">Ключевые слова</a>
             &nbsp;/&nbsp;
-          <a class="ajax border" href="/tag/<%= tag.id %>/"><%= tag.name %></a>
+          <a class="ajax" href="/tag/<%= tag.name %>/"><%= tag.name %></a>
         </div>
     </div>
 </section>
@@ -22,7 +22,7 @@
                   <% include!("../generic/default_service.stpl"); %>
                 <% } %>
                 <% if next_page_number > 0 { %>
-                  <div class="load centered m-1 next_page_list" data-link="/tag_services/<%= tag.id %>/?page=<%= next_page_number %>">
+                  <div class="load centered m-1 next_page_list" data-link="/tag_services/<%= tag.name %>/?page=<%= next_page_number %>">
                     <img src="/static/images/preloader.gif">
                   </div>
                 <% } %>

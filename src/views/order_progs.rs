@@ -388,11 +388,9 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
         let mut serve_ids = Vec::new();
         for serve_id in form.serve_list.iter() {
             let new_serve_form = NewServeItems {
-                serve_id:   *serve_id,
-                service_id: 0,
-                store_id:   0,
-                work_id:    0,
-                orders_id:  Some(_order.id),
+                serve_id: *serve_id,
+                item_id:  form.object_id,
+                types:    form.types,
             };
             diesel::insert_into(schema::serve_items::table)
                 .values(&new_serve_form)
@@ -420,11 +418,9 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
         for id in tech_cat_ids.iter() {
             let new_cat = NewTechCategoriesItem {
                 category_id: *id,
-                service_id:  0,
-                store_id:    0,
-                work_id:     0,
-                types:       1,
-                orders_id:   Some(_order.id),
+                item_id:     form.object_id,
+                types:       form.types,
+                is_active:   1,
             };
             diesel::insert_into(schema::tech_categories_items::table)
                 .values(&new_cat)
@@ -465,14 +461,24 @@ pub async fn delete_order(req: HttpRequest, _id: web::Path<i32>) -> impl Respond
 
     if user_id == _order.user_id {
         use crate::schema::{
-            order_files::dsl::order_files,
             serve_items::dsl::serve_items,
             tech_categories_items::dsl::tech_categories_items,
         };
 
-        diesel::delete(order_files.filter(schema::order_files::order_id.eq(_order_id))).execute(&_connection).expect("E");
-        diesel::delete(serve_items.filter(schema::serve_items::orders_id.eq(_order_id))).execute(&_connection).expect("E");
-        diesel::delete(tech_categories_items.filter(schema::tech_categories_items::orders_id.eq(_order_id))).execute(&_connection).expect("E");
+        diesel::delete (
+            serve_items
+                .filter(schema::serve_items::item_id.eq(_order_id))
+                .filter(schema::serve_items::types.eq(7))
+            )
+            .execute(&_connection)
+            .expect("E");
+        diesel::delete(
+            tech_categories_items
+                .filter(schema::tech_categories_items::item_id.eq(_order_id))
+                .filter(schema::tech_categories_items::types.eq(7))
+            )
+            .execute(&_connection)
+            .expect("E");
         diesel::delete(&_order).execute(&_connection).expect("E");
     }
     HttpResponse::Ok()

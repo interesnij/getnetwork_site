@@ -5,12 +5,7 @@ use actix_web::{
     error::InternalError,
     http::StatusCode,
 };
-use crate::diesel::{
-    RunQueryDsl,
-    ExpressionMethods,
-    QueryDsl,
-    PgTextExpressionMethods,
-};
+
 use actix_session::Session;
 use crate::utils::{
     establish_connection,
@@ -18,7 +13,7 @@ use crate::utils::{
     get_request_user_data,
     get_first_load_page,
 };
-use crate::schema;
+
 use sailfish::TemplateOnce;
 use crate::models::User;
 
@@ -131,107 +126,19 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
         ).await
     }
     else {
-        use crate::models::{Work, Blog, Service, Store, Wiki};
+        use crate::models::{Item, Blog, Service, Store, Wiki, Work};
+
         let _connection = establish_connection();
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let is_admin = _request_user.is_superuser();
 
-            let blog_list: Vec<Blog>;
-            let service_list: Vec<Service>;
-            let store_list: Vec<Store>;
-            let wiki_list: Vec<Wiki>;
-            let work_list: Vec<Work>;
-
-            if _request_user.is_superuser() {
-                blog_list = schema::blogs::table
-                    .filter(schema::blogs::title.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
-                    .order(schema::blogs::created.desc())
-                    .limit(3)
-                    .load::<Blog>(&_connection)
-                .expect("e");
-
-                service_list = schema::services::table
-                    .filter(schema::services::title.ilike(&_q_standalone))
-                    .or_filter(schema::services::description.ilike(&_q_standalone))
-                    .or_filter(schema::services::content.ilike(&_q_standalone))
-                    .order(schema::services::created.desc())
-                    .load::<Service>(&_connection)
-                    .expect("e");
-
-                store_list = schema::stores::table
-                    .filter(schema::stores::title.ilike(&_q_standalone))
-                    .or_filter(schema::stores::description.ilike(&_q_standalone))
-                    .or_filter(schema::stores::content.ilike(&_q_standalone))
-                    .order(schema::stores::created.desc())
-                    .load::<Store>(&_connection)
-                    .expect("e");
-
-                wiki_list = schema::wikis::table
-                    .filter(schema::wikis::title.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
-                    .order(schema::wikis::created.desc())
-                    .load::<Wiki>(&_connection)
-                    .expect("e");
-
-                work_list = schema::works::table
-                    .filter(schema::works::title.ilike(&_q_standalone))
-                    .or_filter(schema::works::description.ilike(&_q_standalone))
-                    .or_filter(schema::works::content.ilike(&_q_standalone))
-                    .order(schema::works::created.desc())
-                    .load::<Work>(&_connection)
-                    .expect("e");
-            }
-            else {
-                blog_list = schema::blogs::table
-                    .filter(schema::blogs::title.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
-                    .filter(schema::blogs::is_active.eq(true))
-                    .order(schema::blogs::created.desc())
-                    .limit(3)
-                    .load::<Blog>(&_connection)
-                    .expect("e");
-
-                service_list = schema::services::table
-                    .filter(schema::services::title.ilike(&_q_standalone))
-                    .or_filter(schema::services::description.ilike(&_q_standalone))
-                    .or_filter(schema::services::content.ilike(&_q_standalone))
-                    .filter(schema::services::is_active.eq(true))
-                    .order(schema::services::created.desc())
-                    .load::<Service>(&_connection)
-                    .expect("e");
-
-                store_list = schema::stores::table
-                    .filter(schema::stores::title.ilike(&_q_standalone))
-                    .or_filter(schema::stores::description.ilike(&_q_standalone))
-                    .or_filter(schema::stores::content.ilike(&_q_standalone))
-                    .filter(schema::stores::is_active.eq(true))
-                    .order(schema::stores::created.desc())
-                    .load::<Store>(&_connection)
-                    .expect("e");
-
-                wiki_list = schema::wikis::table
-                    .filter(schema::wikis::title.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
-                    .filter(schema::wikis::is_active.eq(true))
-                    .order(schema::wikis::created.desc())
-                    .load::<Wiki>(&_connection)
-                    .expect("e");
-
-                work_list = schema::works::table
-                    .filter(schema::works::title.ilike(&_q_standalone))
-                    .or_filter(schema::works::description.ilike(&_q_standalone))
-                    .or_filter(schema::works::content.ilike(&_q_standalone))
-                    .filter(schema::works::is_active.eq(true))
-                    .order(schema::works::created.desc())
-                    .load::<Work>(&_connection)
-                    .expect("e");
-            }
+            let work_list = Item::search_works(&_q_standalone, 3, 0, is_admin);
+            let service_list = Item::search_services(&_q_standalone, 3, 0, is_admin);
+            let wiki_list = Item::search_wikis(&_q_standalone, 3, 0, is_admin);
+            let blog_list = Item::search_blogs(&_q_standalone, 3, 0, is_admin);
+            let store_list = Item::search_stores(&_q_standalone, 3, 0, is_admin);
 
             let blog_count = blog_list.len();
             let service_count = service_list.len();
@@ -317,51 +224,11 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             }
         }
         else {
-            let blog_list = schema::blogs::table
-                .filter(schema::blogs::title.ilike(&_q_standalone))
-                .or_filter(schema::blogs::description.ilike(&_q_standalone))
-                .or_filter(schema::blogs::content.ilike(&_q_standalone))
-                .filter(schema::blogs::is_active.eq(true))
-                .order(schema::blogs::created.desc())
-                .limit(3)
-                .load::<Blog>(&_connection)
-                .expect("e");
-
-            let service_list = schema::services::table
-                .filter(schema::services::title.ilike(&_q_standalone))
-                .or_filter(schema::services::description.ilike(&_q_standalone))
-                .or_filter(schema::services::content.ilike(&_q_standalone))
-                .filter(schema::services::is_active.eq(true))
-                .order(schema::services::created.desc())
-                .load::<Service>(&_connection)
-                .expect("e");
-
-            let store_list = schema::stores::table
-                .filter(schema::stores::title.ilike(&_q_standalone))
-                .or_filter(schema::stores::description.ilike(&_q_standalone))
-                .or_filter(schema::stores::content.ilike(&_q_standalone))
-                .filter(schema::stores::is_active.eq(true))
-                .order(schema::stores::created.desc())
-                .load::<Store>(&_connection)
-                .expect("e");
-
-            let wiki_list = schema::wikis::table
-                .filter(schema::wikis::title.ilike(&_q_standalone))
-                .or_filter(schema::wikis::description.ilike(&_q_standalone))
-                .or_filter(schema::wikis::content.ilike(&_q_standalone))
-                .filter(schema::wikis::is_active.eq(true))
-                .order(schema::wikis::created.desc())
-                .load::<Wiki>(&_connection)
-                .expect("e");
-
-            let work_list = schema::works::table
-                .filter(schema::works::title.ilike(&_q_standalone))
-                .or_filter(schema::works::description.ilike(&_q_standalone))
-                .or_filter(schema::works::content.ilike(&_q_standalone))
-                .filter(schema::works::is_active.eq(true))
-                .order(schema::works::created.desc())
-                .load::<Work>(&_connection)
-                .expect("e");
+            let work_list = Item::search_works(&_q_standalone, 3, 0, false);
+            let service_list = Item::search_services(&_q_standalone, 3, 0, false);
+            let wiki_list = Item::search_wikis(&_q_standalone, 3, 0, false);
+            let blog_list = Item::search_blogs(&_q_standalone, 3, 0, false);
+            let store_list = Item::search_stores(&_q_standalone, 3, 0, false);
 
             let blog_count = blog_list.len();
             let service_count = service_list.len();
@@ -464,8 +331,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
         ).await
     }
     else {
-        use crate::schema::blogs::dsl::blogs;
-        use crate::models::Blog;
+        use crate::models::{Item, Blog};
+
         let page = get_page(&req);
         let _connection = establish_connection();
 
@@ -485,53 +352,11 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let blog_list: Vec<Blog>;
+            let is_admin = _request_user.is_superuser();
+            let blog_list = Item::search_blogs(&_q_standalone, 20, offset.into(), is_admin);
 
-            if _request_user.is_superuser() {
-                blog_list = blogs
-                    .filter(schema::blogs::title.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
-                    .limit(20)
-                    .offset(offset.into())
-                    .order(schema::blogs::created.desc())
-                    .load::<Blog>(&_connection)
-                    .expect("e");
-                if blogs
-                    .filter(schema::blogs::title.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
-                    .limit(1)
-                    .offset(next_item.into())
-                    .select(schema::blogs::id)
-                    .load::<i32>(&_connection)
-                    .expect("e")
-                    .len() > 0 {
-                        next_page_number = page + 1;
-                    }
-            } else {
-                blog_list = blogs
-                    .filter(schema::blogs::title.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
-                    .filter(schema::blogs::is_active.eq(true))
-                    .limit(20)
-                    .offset(offset.into())
-                    .order(schema::blogs::created.desc())
-                    .load::<Blog>(&_connection)
-                    .expect("e");
-                if blogs
-                    .filter(schema::blogs::title.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::description.ilike(&_q_standalone))
-                    .or_filter(schema::blogs::content.ilike(&_q_standalone))
-                    .limit(1)
-                    .offset(next_item.into())
-                    .select(schema::blogs::id)
-                    .load::<i32>(&_connection)
-                    .expect("e")
-                    .len() > 0 {
-                        next_page_number = page + 1;
-                    }
+            if Item::search_blogs(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
             }
 
             let blogs_count = blog_list.len();
@@ -581,28 +406,12 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
             }
         }
         else {
-            let blog_list = blogs
-                .filter(schema::blogs::title.ilike(&_q_standalone))
-                .or_filter(schema::blogs::description.ilike(&_q_standalone))
-                .or_filter(schema::blogs::content.ilike(&_q_standalone))
-                .filter(schema::blogs::is_active.eq(true))
-                .limit(20)
-                .offset(offset.into())
-                .order(schema::blogs::created.desc())
-                .load::<Blog>(&_connection)
-                .expect("e");
-            if blogs
-                .filter(schema::blogs::title.ilike(&_q_standalone))
-                .or_filter(schema::blogs::description.ilike(&_q_standalone))
-                .or_filter(schema::blogs::content.ilike(&_q_standalone))
-                .limit(1)
-                .offset(next_item.into())
-                .select(schema::blogs::id)
-                .load::<i32>(&_connection)
-                .expect("e")
-                .len() > 0 {
-                    next_page_number = page + 1;
-                }
+            let is_admin = false;
+            let blog_list = Item::search_blogs(&_q_standalone, 20, offset.into(), is_admin);
+
+            if Item::search_blogs(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
+            }
 
             let blogs_count = blog_list.len();
             if is_desctop {
@@ -668,8 +477,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
         ).await
     }
     else {
-        use crate::schema::services::dsl::services;
-        use crate::models::Service;
+        use crate::models::{Item, Service};
+
         let page = get_page(&req);
         let _connection = establish_connection();
 
@@ -688,54 +497,12 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
         }
 
         if is_signed_in(&session) {
-            let services_list: Vec<Service>;
             let _request_user = get_request_user_data(&session);
-            if _request_user.is_superuser() {
-                services_list = services
-                    .filter(schema::services::title.ilike(&_q_standalone))
-                    .or_filter(schema::services::description.ilike(&_q_standalone))
-                    .or_filter(schema::services::content.ilike(&_q_standalone))
-                    .limit(20)
-                    .offset(offset.into())
-                    .order(schema::services::created.desc())
-                    .load::<Service>(&_connection)
-                    .expect("e");
+            let is_admin = _request_user.is_superuser();
+            let services_list = Item::search_services(&_q_standalone, 20, offset.into(), is_admin);
 
-                if services
-                    .filter(schema::services::title.ilike(&_q_standalone))
-                    .or_filter(schema::services::description.ilike(&_q_standalone))
-                    .or_filter(schema::services::content.ilike(&_q_standalone))
-                    .limit(1)
-                    .offset(next_item.into())
-                    .select(schema::services::id)
-                    .load::<i32>(&_connection)
-                    .expect("e")
-                    .len() > 0 {
-                        next_page_number = page + 1;
-                    }
-            } else {
-                services_list = services
-                    .filter(schema::services::title.ilike(&_q_standalone))
-                    .or_filter(schema::services::description.ilike(&_q_standalone))
-                    .or_filter(schema::services::content.ilike(&_q_standalone))
-                    .limit(20)
-                    .offset(offset.into())
-                    .order(schema::services::created.desc())
-                    .load::<Service>(&_connection)
-                    .expect("e");
-
-                if services
-                    .filter(schema::services::title.ilike(&_q_standalone))
-                    .or_filter(schema::services::description.ilike(&_q_standalone))
-                    .or_filter(schema::services::content.ilike(&_q_standalone))
-                    .limit(1)
-                    .offset(next_item.into())
-                    .select(schema::services::id)
-                    .load::<i32>(&_connection)
-                    .expect("e")
-                    .len() > 0 {
-                        next_page_number = page + 1;
-                    }
+            if Item::search_services(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
             }
             let services_count = services_list.len();
 
@@ -785,29 +552,12 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
             }
         }
         else {
-            let services_list = services
-                .filter(schema::services::title.ilike(&_q_standalone))
-                .or_filter(schema::services::description.ilike(&_q_standalone))
-                .or_filter(schema::services::content.ilike(&_q_standalone))
-                .limit(20)
-                .offset(offset.into())
-                .order(schema::services::created.desc())
-                .load::<Service>(&_connection)
-                .expect("e");
+            let is_admin = false;
+            let services_list = Item::search_services(&_q_standalone, 20, offset.into(), is_admin);
 
-            if services
-                .filter(schema::services::title.ilike(&_q_standalone))
-                .or_filter(schema::services::description.ilike(&_q_standalone))
-                .or_filter(schema::services::content.ilike(&_q_standalone))
-                .limit(1)
-                .offset(next_item.into())
-                .select(schema::services::id)
-                .load::<i32>(&_connection)
-                .expect("e")
-                .len() > 0 {
-                    next_page_number = page + 1;
-                }
-
+            if Item::search_services(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
+            }
             let services_count = services_list.len();
 
             if is_desctop {
@@ -873,8 +623,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
         ).await
     }
     else {
-        use crate::schema::stores::dsl::stores;
-        use crate::models::Store;
+        use crate::models::{Item, Store};
 
         let page = get_page(&req);
 
@@ -895,53 +644,11 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let store_list: Vec<Store>;
+            let is_admin = _request_user.is_superuser();
+            let store_list = Item::search_stores(&_q_standalone, 20, offset.into(), is_admin);
 
-            if _request_user.is_superuser() {
-                store_list = stores
-                    .filter(schema::stores::title.ilike(&_q_standalone))
-                    .or_filter(schema::stores::description.ilike(&_q_standalone))
-                    .or_filter(schema::stores::content.ilike(&_q_standalone))
-                    .limit(20)
-                    .offset(offset.into())
-                    .order(schema::stores::created.desc())
-                    .load::<Store>(&_connection)
-                    .expect("e");
-                if stores
-                    .filter(schema::stores::title.ilike(&_q_standalone))
-                    .or_filter(schema::stores::description.ilike(&_q_standalone))
-                    .or_filter(schema::stores::content.ilike(&_q_standalone))
-                    .limit(1)
-                    .offset(next_item.into())
-                    .select(schema::stores::id)
-                    .load::<i32>(&_connection)
-                    .expect("e")
-                    .len() > 0 {
-                        next_page_number = page + 1;
-                    }
-            } else {
-                store_list = stores
-                    .filter(schema::stores::title.ilike(&_q_standalone))
-                    .or_filter(schema::stores::description.ilike(&_q_standalone))
-                    .or_filter(schema::stores::content.ilike(&_q_standalone))
-                    .filter(schema::stores::is_active.eq(true))
-                    .limit(20)
-                    .offset(offset.into())
-                    .order(schema::stores::created.desc())
-                    .load::<Store>(&_connection)
-                    .expect("e");
-                if stores
-                    .filter(schema::stores::title.ilike(&_q_standalone))
-                    .or_filter(schema::stores::description.ilike(&_q_standalone))
-                    .or_filter(schema::stores::content.ilike(&_q_standalone))
-                    .limit(1)
-                    .offset(next_item.into())
-                    .select(schema::stores::id)
-                    .load::<i32>(&_connection)
-                    .expect("e")
-                    .len() > 0 {
-                        next_page_number = page + 1;
-                    }
+            if Item::search_stores(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
             }
 
             let stores_count = store_list.len();
@@ -980,7 +687,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     next_page_number: i32,
                 }
                 let body = Template {
-                    stores_list:       store_list,
+                    stores_list:      store_list,
                     stores_count:     stores_count,
                     is_ajax:          is_ajax,
                     q:                _q,
@@ -992,28 +699,12 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
             }
         }
         else {
-            let store_list = stores
-                .filter(schema::stores::title.ilike(&_q_standalone))
-                .or_filter(schema::stores::description.ilike(&_q_standalone))
-                .or_filter(schema::stores::content.ilike(&_q_standalone))
-                .filter(schema::stores::is_active.eq(true))
-                .limit(20)
-                .offset(offset.into())
-                .order(schema::stores::created.desc())
-                .load::<Store>(&_connection)
-                .expect("e");
-            if stores
-                .filter(schema::stores::title.ilike(&_q_standalone))
-                .or_filter(schema::stores::description.ilike(&_q_standalone))
-                .or_filter(schema::stores::content.ilike(&_q_standalone))
-                .limit(1)
-                .offset(next_item.into())
-                .select(schema::stores::id)
-                .load::<i32>(&_connection)
-                .expect("e")
-                .len() > 0 {
-                    next_page_number = page + 1;
-                }
+            let is_admin = false;
+            let store_list = Item::search_stores(&_q_standalone, 20, offset.into(), is_admin);
+
+            if Item::search_stores(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
+            }
 
             let stores_count = store_list.len();
 
@@ -1080,8 +771,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
         ).await
     }
     else {
-        use crate::schema::wikis::dsl::wikis;
-        use crate::models::Wiki;
+        use crate::models::{Item, Wiki};
 
         let page = get_page(&req);
         let _connection = establish_connection();
@@ -1101,53 +791,11 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let wiki_list: Vec<Wiki>;
+            let is_admin = _request_user.is_superuser();
+            let wiki_list = Item::search_wikis(&_q_standalone, 20, offset.into(), is_admin);
 
-            if _request_user.is_superuser() {
-                wiki_list = wikis
-                    .filter(schema::wikis::title.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
-                    .limit(20)
-                    .offset(offset.into())
-                    .order(schema::wikis::created.desc())
-                    .load::<Wiki>(&_connection)
-                    .expect("e");
-                if wikis
-                    .filter(schema::wikis::title.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
-                    .limit(1)
-                    .offset(next_item.into())
-                    .select(schema::wikis::id)
-                    .load::<i32>(&_connection)
-                    .expect("e")
-                    .len() > 0 {
-                        next_page_number = page + 1;
-                    }
-            } else {
-                wiki_list = wikis
-                    .filter(schema::wikis::title.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
-                    .filter(schema::wikis::is_active.eq(true))
-                    .limit(20)
-                    .offset(offset.into())
-                    .order(schema::wikis::created.desc())
-                    .load::<Wiki>(&_connection)
-                    .expect("e");
-                if wikis
-                    .filter(schema::wikis::title.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::description.ilike(&_q_standalone))
-                    .or_filter(schema::wikis::content.ilike(&_q_standalone))
-                    .limit(1)
-                    .offset(next_item.into())
-                    .select(schema::wikis::id)
-                    .load::<i32>(&_connection)
-                    .expect("e")
-                    .len() > 0 {
-                        next_page_number = page + 1;
-                    }
+            if Item::search_wikis(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
             }
 
             let wikis_count = wiki_list.len();
@@ -1198,29 +846,12 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
             }
         }
         else {
-            let wiki_list = wikis
-                .filter(schema::wikis::title.ilike(&_q_standalone))
-                .or_filter(schema::wikis::description.ilike(&_q_standalone))
-                .or_filter(schema::wikis::content.ilike(&_q_standalone))
-                .filter(schema::wikis::is_active.eq(true))
-                .limit(20)
-                .offset(offset.into())
-                .order(schema::wikis::created.desc())
-                .load::<Wiki>(&_connection)
-                .expect("e");
-            if wikis
-                .filter(schema::wikis::title.ilike(&_q_standalone))
-                .or_filter(schema::wikis::description.ilike(&_q_standalone))
-                .or_filter(schema::wikis::content.ilike(&_q_standalone))
-                .limit(1)
-                .offset(next_item.into())
-                .select(schema::wikis::id)
-                .load::<i32>(&_connection)
-                .expect("e")
-                .len() > 0 {
-                    next_page_number = page + 1;
-                }
+            let is_admin = false;
+            let wiki_list = Item::search_wikis(&_q_standalone, 20, offset.into(), is_admin);
 
+            if Item::search_wikis(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
+            }
             let wikis_count = wiki_list.len();
 
             if is_desctop {
@@ -1286,8 +917,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
         ).await
     }
     else {
-        use crate::schema::works::dsl::works;
-        use crate::models::Work;
+        use crate::models::{Item, Work};
 
         let page = get_page(&req);
         let _connection = establish_connection();
@@ -1306,54 +936,13 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
         }
 
         if is_signed_in(&session) {
-            let work_list: Vec<Work>;
             let _request_user = get_request_user_data(&session);
 
-            if _request_user.is_superuser() {
-                work_list = works
-                    .filter(schema::works::title.ilike(&_q_standalone))
-                    .or_filter(schema::works::description.ilike(&_q_standalone))
-                    .or_filter(schema::works::content.ilike(&_q_standalone))
-                    .limit(20)
-                    .offset(offset.into())
-                    .order(schema::works::created.desc())
-                    .load::<Work>(&_connection)
-                    .expect("e");
-                if works
-                    .filter(schema::works::title.ilike(&_q_standalone))
-                    .or_filter(schema::works::description.ilike(&_q_standalone))
-                    .or_filter(schema::works::content.ilike(&_q_standalone))
-                    .limit(1)
-                    .offset(next_item.into())
-                    .select(schema::works::id)
-                    .load::<i32>(&_connection)
-                    .expect("e")
-                    .len() > 0 {
-                        next_page_number = page + 1;
-                    }
-            } else {
-                work_list = works
-                    .filter(schema::works::title.ilike(&_q_standalone))
-                    .or_filter(schema::works::description.ilike(&_q_standalone))
-                    .or_filter(schema::works::content.ilike(&_q_standalone))
-                    .filter(schema::works::is_active.eq(true))
-                    .limit(20)
-                    .offset(offset.into())
-                    .order(schema::works::created.desc())
-                    .load::<Work>(&_connection)
-                    .expect("e");
-                if works
-                    .filter(schema::works::title.ilike(&_q_standalone))
-                    .or_filter(schema::works::description.ilike(&_q_standalone))
-                    .or_filter(schema::works::content.ilike(&_q_standalone))
-                    .limit(1)
-                    .offset(next_item.into())
-                    .select(schema::works::id)
-                    .load::<i32>(&_connection)
-                    .expect("e")
-                    .len() > 0 {
-                        next_page_number = page + 1;
-                    }
+            let is_admin = _request_user.is_superuser();
+            let work_list = Item::search_works(&_q_standalone, 20, offset.into(), is_admin);
+
+            if Item::search_works(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
             }
 
             let works_count = work_list.len();
@@ -1404,29 +993,12 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
             }
         }
         else {
-            let work_list = works
-                .filter(schema::works::title.ilike(&_q_standalone))
-                .or_filter(schema::works::description.ilike(&_q_standalone))
-                .or_filter(schema::works::content.ilike(&_q_standalone))
-                .filter(schema::works::is_active.eq(true))
-                .limit(20)
-                .offset(offset.into())
-                .order(schema::works::created.desc())
-                .load::<Work>(&_connection)
-                .expect("e");
-            if works
-                .filter(schema::works::title.ilike(&_q_standalone))
-                .or_filter(schema::works::description.ilike(&_q_standalone))
-                .or_filter(schema::works::content.ilike(&_q_standalone))
-                .limit(1)
-                .offset(next_item.into())
-                .select(schema::works::id)
-                .load::<i32>(&_connection)
-                .expect("e")
-                .len() > 0 {
-                    next_page_number = page + 1;
-                }
+            let is_admin = false;
+            let work_list = Item::search_works(&_q_standalone, 20, offset.into(), is_admin);
 
+            if Item::search_works(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
+            }
             let works_count = work_list.len();
 
             if is_desctop {
@@ -1492,8 +1064,7 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
         ).await
     }
     else {
-        use crate::schema::help_items::dsl::help_items;
-        use crate::models::HelpItem;
+        use crate::models::{Item, Help};
 
         let page = get_page(&req);
         let _connection = establish_connection();
@@ -1511,37 +1082,21 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
             next_item = 21;
         }
 
-        let _items = help_items
-            .filter(schema::help_items::title.ilike(&_q_standalone))
-            .or_filter(schema::help_items::content.ilike(&_q_standalone))
-            .limit(20)
-            .offset(offset.into())
-            .order(schema::help_items::id.asc())
-            .load::<HelpItem>(&_connection)
-            .expect("e");
-
-        let items_count = _items.len();
-
-        if help_items
-            .filter(schema::help_items::title.ilike(&_q_standalone))
-            .or_filter(schema::help_items::content.ilike(&_q_standalone))
-            .limit(1)
-            .offset(next_item.into())
-            .select(schema::help_items::id)
-            .load::<i32>(&_connection)
-            .expect("e")
-            .len() > 0 {
-                next_page_number = page + 1;
-            }
-
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let is_admin = _request_user.is_superuser();
+            let _items = Item::search_helps(&_q_standalone, 20, offset.into(), is_admin);
+            let items_count = _items.len();
+
+            if Item::search_helps(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
+            }
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/help.stpl")]
                 struct Template {
                     request_user:     User,
-                    items_list:       Vec<HelpItem>,
+                    items_list:       Vec<Help>,
                     items_count:      usize,
                     is_ajax:          i32,
                     q:                String,
@@ -1563,7 +1118,7 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/search/help.stpl")]
                 struct Template {
-                    items_list:       Vec<HelpItem>,
+                    items_list:       Vec<Help>,
                     items_count:      usize,
                     is_ajax:          i32,
                     q:                String,
@@ -1582,11 +1137,17 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
             }
         }
         else {
+            let is_admin = false;
+            let _items = Item::search_helps(&_q_standalone, 20, offset.into(), is_admin);
+            let items_count = _items.len();
+            if Item::search_helps(&_q_standalone, 1, next_item.into(), is_admin).len() > 0 {
+                next_page_number = page + 1;
+            }
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/search/anon_help.stpl")]
                 struct Template {
-                    items_list:       Vec<HelpItem>,
+                    items_list:       Vec<Help>,
                     items_count:      usize,
                     is_ajax:          i32,
                     q:                String,
@@ -1607,7 +1168,7 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/search/anon_help.stpl")]
                 struct Template {
-                    items_list:       Vec<HelpItem>,
+                    items_list:       Vec<Help>,
                     items_count:      usize,
                     is_ajax:          i32,
                     q:                String,

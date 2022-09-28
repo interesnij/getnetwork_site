@@ -61,11 +61,15 @@
             Наши услуги
         </h5>
         <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
-          <% for category in service_cats.iter() { %>
+          <% for category in cats.iter() { %>
             <li>
-              <a href="/services/<%= category.id %>/" class="ajax">
+              <a href="/services/<%= category.slug %>/" class="ajax">
                 <div class="alt-tabs-icon">
-                  <img class="image_fit_200" src="<%= category.get_image() %>" alt="img" />
+                  <img class="image_fit_200" src="<% if category.image.is_some() { %>
+                    <%= category.image.as_deref().unwrap() %>
+                  <% } else { %>
+                    /static/images/img.jpg
+                  <% } %>" alt="img" />
                 </div>
                 <%= category.name %> (<%= category.count %>)
               </a>

@@ -1,0 +1,57 @@
+<% include!("../header.stpl"); %>
+
+<section data-title="Создание категории" data-description="вебсервисы.рф: Создание категории" data-uri="/create_category/" data-image="/static/images/dark/store.jpg" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a>Создание категории</a>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="row container relative">
+        <form enctype="multipart/form-data" class="form mb-20 col-md-8">
+            <div class="mb-20 mb-md-10">
+                <input class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="form_title input-md form-control" type="text" name="slug" placeholder="Slug" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <label>Выберите тип категории</label>
+              <select name="types" class="input-md form-control" data-live-search="true" tabindex="-1" aria-hidden="true">
+                <option value="">Не выбрано</option>
+                <option value="1">Категория блога</option>
+                <option value="2">Категория услуг</option>
+                <option value="3">Категория товаров</option>
+                <option value="4">Категория обучающих статей</option>
+                <option value="5">Категория работ</option>
+                <option value="6">Категория помощи</option>
+              </select>
+            </div>
+            <div class="mb-20 mb-md-10">
+              <p>0</p>
+                <div style="display:inline-block" contenteditable="true" placeholder="Описание" class="input-md form-control content_1 smile_supported"></div>
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Обложка</label>
+                <input class="input-md form-control" class="input-md form-control" type="file" name="image" />
+            </div>
+            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_category_btn">Создать</button>
+        </form>
+        <div class="col-md-4">
+            <% for category in cats.iter() { %>
+            <p><%= category.name %> (<%= category.get_type() %>)
+                | <a class="ajax" href="/edit_category/<%= category.id %>/">~</a>
+                | <a class="pointer remove_category" data-pk="<%= category.id %>">x</a>
+            </p>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<% include!("../footer.stpl"); %>

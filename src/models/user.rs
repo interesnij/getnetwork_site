@@ -3,17 +3,7 @@ use crate::schema::{
     users,
     cookie_users,
     cookie_stats,
-    stat_mainpages,
-    stat_blog_categories,
-    stat_service_categories,
-    stat_store_categories,
-    stat_wiki_categories,
-    stat_work_categories,
-    stat_tags,
-    stat_helps,
-    stat_infos,
-    help_items,
-    help_item_categories,
+    stat_pages,
 };
 use crate::diesel::{
     Queryable,
@@ -308,207 +298,60 @@ pub struct NewCookieStat {
 
 
 ////////////////////
+// Шифры посещаемых страниц
+// 1 - главная
+// 2 - о сайте
+// 3 - контакты
+// 4 - команда
+// 5 - сотрудничество
+// 6 - вход
+// 7 - регитрация
+// 8 - выход
+// 9 - вопросы ответы
+// 10 - инфо
+
+// 11 - профиль
+// 12 - заказы
+// 13 - история
+// 14 - статистика
+
+// 21 - общий поиск
+// 22 - поиск статей блога
+// 23 - поиск услуг
+// 24 - поиск товаров
+// 25 - поиск статей обучающих
+// 26 - поиск работ
+
+// 31 - теги
+// 32 - тег
+// 33 - тег - статьи блога
+// 34 - тег - услуги
+// 35 - тег - товары
+// 36 - тег - статьи обучающие
+// 37 - тег - работы
+
+// 41 - категории блога
+// 51 - категории опций
+// 53 - технологии опций
+// 61 - категории услуг
+// 71 - категории товаров
+// 81 - категории обучения
+// 91 - категории работ
+
 #[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatMainpage {
+pub struct StatPage {
     pub id:      i32,
+    pub types:   i16,
     pub view:    i32,
     pub height:  f64,
     pub seconds: i32,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_mainpages"]
-pub struct NewStatMainpage {
+#[table_name="stat_pages"]
+pub struct NewStatPage {
+    pub types:   i16,
     pub view:    i32,
     pub height:  f64,
     pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatBlogCategorie {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_blog_categories"]
-pub struct NewStatBlogCategorie {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatServiceCategorie {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_service_categories"]
-pub struct NewStatServiceCategorie {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatStoreCategorie {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_store_categories"]
-pub struct NewStatStoreCategorie {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatWikiCategorie {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_wiki_categories"]
-pub struct NewStatWikiCategorie {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatWorkCategorie {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_work_categories"]
-pub struct NewStatWorkCategorie {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatTag {
-    pub id:       i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_tags"]
-pub struct NewStatTag {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatInfo {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_infos"]
-pub struct NewStatInfo {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct StatHelp {
-    pub id:      i32,
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-////////////////////
-#[derive(Debug, Deserialize, Insertable)]
-#[table_name="stat_helps"]
-pub struct NewStatHelp {
-    pub view:    i32,
-    pub height:  f64,
-    pub seconds: i32,
-}
-
-////////////////////
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct HelpItemCategorie {
-    pub id:       i32,
-    pub title:    String,
-    pub view:     i32,
-    pub height:   f64,
-    pub seconds:  i32,
-    pub position: i32,
-
-}
-impl HelpItemCategorie {
-    pub fn get_list(&self) -> Vec<HelpItem> {
-        use crate::schema::help_items::dsl::help_items;
-
-        let _connection = establish_connection();
-        return help_items
-            .filter(schema::help_items::category_id.eq(self.id))
-            .order(schema::help_items::position.asc())
-            .load::<HelpItem>(&_connection)
-            .expect("E");
-    }
-}
-////////////////////
-#[derive(Debug, Deserialize, AsChangeset, Insertable)]
-#[table_name="help_item_categories"]
-pub struct NewHelpItemCategorie {
-    pub title:    String,
-    pub view:     i32,
-    pub height:   f64,
-    pub seconds:  i32,
-    pub position: i32,
-}
-
-#[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct HelpItem {
-    pub id:          i32,
-    pub category_id: i32,
-    pub title:       String,
-    pub content:     String,
-    pub position:    i16,
-}
-
-#[derive(Debug, Deserialize, AsChangeset, Insertable)]
-#[table_name="help_items"]
-pub struct NewHelpItem {
-    pub category_id: i32,
-    pub title:       String,
-    pub content:     String,
-    pub position:    i16,
 }

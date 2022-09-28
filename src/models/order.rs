@@ -101,7 +101,8 @@ impl Order {
 
         let _connection = establish_connection();
         let _serve_items = serve_items
-            .filter(schema::serve_items::orders_id.eq(&self.id))
+            .filter(schema::serve_items::item_id.eq(&self.id))
+            .filter(schema::serve_items::types.eq(7))
             .select(schema::serve_items::serve_id)
             .load::<i32>(&_connection)
             .expect("E");
@@ -117,7 +118,8 @@ impl Order {
 
         let _connection = establish_connection();
         return serve_items
-            .filter(schema::serve_items::orders_id.eq(&self.id))
+            .filter(schema::serve_items::item_id.eq(&self.id))
+            .filter(schema::serve_items::types.eq(7))
             .select(schema::serve_items::serve_id)
             .load::<i32>(&_connection)
             .expect("E");
@@ -131,8 +133,9 @@ impl Order {
 
         let _connection = establish_connection();
         let ids = tech_categories_items
-            .filter(schema::tech_categories_items::orders_id.eq(&self.id))
-            .filter(schema::tech_categories_items::types.eq(1))
+            .filter(schema::tech_categories_items::item_id.eq(&self.id))
+            .filter(schema::tech_categories_items::types.eq(7))
+            .filter(schema::tech_categories_items::is_active.eq(1))
             .select(schema::tech_categories_items::category_id)
             .load::<i32>(&_connection)
             .expect("E");
@@ -193,7 +196,6 @@ pub struct EditOrder {
 
 
 #[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
-#[belongs_to(Order, foreign_key="order_id")]
 pub struct OrderFile {
     pub id:       i32,
     pub order_id: i32,

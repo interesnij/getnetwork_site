@@ -1,11 +1,13 @@
 mod forms;
 mod auth;
 mod stat;
+//mod items;
 
 pub use self::{
     forms::*,
     auth::*,
     stat::*,
+//    items::*,
 };
 use actix_web::{
     HttpRequest,
@@ -18,12 +20,9 @@ use actix_web::{
 use crate::schema;
 use serde::Deserialize;
 use crate::models::{
-    BlogCategories,
-    ServiceCategories,
-    StoreCategories,
-    WikiCategories,
-    WorkCategories,
+    Categories,
     User,
+    Cat,
 };
 use crate::diesel::{
     Connection,
@@ -110,37 +109,20 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
         (_type, is_ajax)
     }
 
-    pub fn get_categories() -> (
-        Vec<ServiceCategories>,
-        Vec<StoreCategories>,
-        Vec<BlogCategories>,
-        Vec<WikiCategories>,
-        Vec<WorkCategories>
+    pub fn get_categories_2() -> (
+        Vec<Cat>,
+        Vec<Cat>,
+        Vec<Cat>,
+        Vec<Cat>,
+        Vec<Cat>,
+        Vec<Cat>
     ) {
-        use crate::schema::{
-            service_categories::dsl::service_categories,
-            store_categories::dsl::store_categories,
-            blog_categories::dsl::blog_categories,
-            work_categories::dsl::work_categories,
-            wiki_categories::dsl::wiki_categories,
-        };
-
-        let _conn = establish_connection();
-        let _service_cats = service_categories
-            .load::<ServiceCategories>(&_conn)
-            .expect("Error");
-        let _store_cats = store_categories
-            .load::<StoreCategories>(&_conn)
-            .expect("Error");
-        let _blog_cats = blog_categories
-            .load::<BlogCategories>(&_conn)
-            .expect("Error");
-        let _wiki_cats = wiki_categories
-            .load::<WikiCategories>(&_conn)
-            .expect("Error");
-        let _work_cats = work_categories
-            .load::<WorkCategories>(&_conn)
-            .expect("Error");
+        let _service_cats = Categories::get_categories_for_types(2);
+        let _store_cats = Categories::get_categories_for_types(3);
+        let _blog_cats = Categories::get_categories_for_types(1);
+        let _wiki_cats = Categories::get_categories_for_types(4);
+        let _work_cats = Categories::get_categories_for_types(5);
+        let _help_cats = Categories::get_categories_for_types(6);
 
         return (
             _service_cats,
@@ -148,6 +130,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
             _blog_cats,
             _wiki_cats,
             _work_cats,
+            _help_cats
         );
     }
 //}

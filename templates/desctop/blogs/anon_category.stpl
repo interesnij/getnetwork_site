@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="42" data-id="<%= category.id %>" data-title="Категория блога <%= category.name %>" data-description="вебсервисы.рф: Категория блога <%= category.name %>" data-uri="/blogs/<%= category.id %>/" data-image="<%= category.get_image() %>" class="doc_title">
+<section page-id="42" data-id="<%= category.id %>" data-title="Категория блога <%= category.name %>" data-description="вебсервисы.рф: Категория блога <%= category.name %>" data-uri="/blogs/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
             <a class="ajax" href="/blog_categories/">Блог</a>
@@ -16,13 +16,13 @@
             <div class="col-sm-8">
               <div class="row search_result"></div>
               <div class="content_block row multi-columns-row content">
-                  <% if category.count > 0 { %>
+                  <% if object_list.len() > 0 { %>
                   <div class="is_paginate">
                     <% for object in object_list.iter() { %>
                       <% include!("../generic/blog.stpl"); %>
                     <% } %>
                     <% if next_page_number > 0 { %>
-                      <div class="load centered m-1 next_page_list" data-link="/blog/<%= category.id %>/?page=<%= next_page_number %>">
+                      <div class="load centered m-1 next_page_list" data-link="/blogs/<%= category.slug %>/?page=<%= next_page_number %>">
                         <img src="/static/images/preloader.gif">
                       </div>
                     <% } %>

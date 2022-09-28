@@ -1,6 +1,6 @@
 <div class="mb-20">
   <h4 class="font-alt mb-0">
-    <a class="ajax" href="/wiki/<%= category.id %>/<%= object.id %>/">
+    <a class="ajax" href="/wiki/<%= category.slug %>/<%= object.slug %>/">
       <% if !object.is_active { %>
         <span style="color: red">🛇</span>
       <% } %>
@@ -8,8 +8,11 @@
     </a>
   </h4>
   <p>
+    <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
     <% if object.description.is_some() { %>
       <%= object.description.as_deref().unwrap() %>
+    <% } else { %>
+      Без описания
     <% } %>
   </p>
   </div>

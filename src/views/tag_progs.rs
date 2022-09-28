@@ -24,6 +24,7 @@ use crate::utils::{
 use crate::schema;
 use crate::models::{
     Tag,
+    SmallTag,
     NewTag,
     TagItems,
 };
@@ -32,12 +33,12 @@ use sailfish::TemplateOnce;
 
 pub fn tag_routes(config: &mut web::ServiceConfig) {
     config.route("/tags/", web::get().to(tags_page));
-    config.route("/tag/{id}/", web::get().to(tag_page));
-    config.route("/tag_blogs/{id}/", web::get().to(tag_blogs_page));
-    config.route("/tag_services/{id}/", web::get().to(tag_services_page));
-    config.route("/tag_stores/{id}/", web::get().to(tag_stores_page));
-    config.route("/tag_wikis/{id}/", web::get().to(tag_wikis_page));
-    config.route("/tag_works/{id}/", web::get().to(tag_works_page));
+    config.route("/tag/{slug}/", web::get().to(tag_page));
+    config.route("/tag_blogs/{slug}/", web::get().to(tag_blogs_page));
+    config.route("/tag_services/{slug}/", web::get().to(tag_services_page));
+    config.route("/tag_stores/{slug}/", web::get().to(tag_stores_page));
+    config.route("/tag_wikis/{slug}/", web::get().to(tag_wikis_page));
+    config.route("/tag_works/{slug}/", web::get().to(tag_works_page));
     config.service(web::resource("/create_tag/")
         .route(web::get().to(create_tag_page))
         .route(web::post().to(create_tag))
@@ -67,8 +68,8 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
         use schema::tags::dsl::tags;
 
         let _connection = establish_connection();
-        let all_tags: Vec<Tag> = tags
-            .load(&_connection)
+        let all_tags = tags
+            .load::<Tag>(&_connection)
             .expect("Error.");
 
         if is_signed_in(&session) {
@@ -115,7 +116,7 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
 pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Responder {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
+        if _request_user.is_superuser() {
             use crate::utils::category_form;
 
             let _connection = establish_connection();
@@ -124,11 +125,6 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
                 name:          form.name.clone(),
                 position:      form.position,
                 count:         0,
-                blog_count:    0,
-                service_count: 0,
-                store_count:   0,
-                wiki_count:    0,
-                work_count:    0,
                 user_id:       _request_user.id,
                 view:          0,
                 height:        0.0,
@@ -143,15 +139,15 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
     return HttpResponse::Ok();
 }
 
-pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_ajax;
     use schema::tags::dsl::tags;
 
     let _connection = establish_connection();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let _tag_id: i32 = *_id;
+    let _tag_id: String = _id.to_string();
     let _tags = tags
-        .filter(schema::tags::id.eq(_tag_id))
+        .filter(schema::tags::name.eq(&_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
     let _tag = _tags.into_iter().nth(0).unwrap();
@@ -160,18 +156,18 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
         get_first_load_page (
             &session,
             is_desctop,
-            "Тег ".to_string() + &_tag.name,
-            "вебсервисы.рф: Тег ".to_string() + &_tag.name,
-            "/tag/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            _tag.name.clone() + &" | Тег".to_string(),
+            _tag.name.clone() + &" | вебсервисы.рф:Тег".to_string(),
+            "/tag/".to_string() + &_tag_id.clone() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
         ).await
     }
     else {
         use schema::tags_items::dsl::tags_items;
-        use crate::models::{Work, Blog, Service, Store, Wiki};
+        use crate::models::{Item, Blog, Service, Store, Wiki, Work};
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::tag_id.eq(&_tag_id))
+            .filter(schema::tags_items::tag_id.eq(&_tag.id))
             .load::<TagItems>(&_connection)
             .expect("E");
         let mut blog_stack = Vec::new();
@@ -180,27 +176,25 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
         let mut wiki_stack = Vec::new();
         let mut work_stack = Vec::new();
         for _tag_item in _tag_items.iter() {
-            if _tag_item.blog_id > 0 {
-                blog_stack.push(_tag_item.blog_id);
-            } else if _tag_item.service_id > 0 {
-                service_stack.push(_tag_item.service_id);
-            } else if _tag_item.store_id > 0 {
-                store_stack.push(_tag_item.store_id);
-            } else if _tag_item.wiki_id > 0 {
-                wiki_stack.push(_tag_item.wiki_id);
-            } else if _tag_item.work_id > 0 {
-                work_stack.push(_tag_item.work_id);
-            }
+            match _tag_item.types {
+                1 => blog_stack.push(_tag_item.item_id),
+                2 => service_stack.push(_tag_item.item_id),
+                3 => store_stack.push(_tag_item.item_id),
+                4 => wiki_stack.push(_tag_item.item_id),
+                5 => work_stack.push(_tag_item.item_id),
+                _ => println!("no value"),
+            };
         };
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let is_admin = _request_user.is_superuser();
 
-            let _blogs = Blog::get_blogs_list_for_ids(&_request_user, 0, 3, &blog_stack).0;
-            let _services = Service::get_services_list_for_ids(&_request_user, 0, 3, &service_stack).0;
-            let _stores = Store::get_stores_list_for_ids(&_request_user, 0, 3, &store_stack).0;
-            let _wikis = Wiki::get_wikis_list_for_ids(&_request_user, 0, 3, &wiki_stack).0;
-            let _works = Work::get_works_list_for_ids(&_request_user, 0, 3, &work_stack).0;
+            let _blogs = Item::get_blogs_for_ids(3, 0, &blog_stack, is_admin);
+            let _services = Item::get_services_for_ids(3, 0, &service_stack, is_admin);
+            let _stores = Item::get_stores_for_ids(3, 0, &store_stack, is_admin);
+            let _wikis = Item::get_wikis_for_ids(3, 0, &wiki_stack, is_admin);
+            let _works = Item::get_works_for_ids(3, 0, &work_stack, is_admin);
 
             let blogs_count = _blogs.len();
             let services_count = _services.len();
@@ -285,11 +279,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
             }
         }
         else {
-            let _blogs = Blog::get_publish_blogs_list_for_ids(0, 3, &blog_stack).0;
-            let _services = Service::get_publish_services_list_for_ids(0, 3, &service_stack).0;
-            let _stores = Store::get_publish_stores_list_for_ids(0, 3, &store_stack).0;
-            let _wikis = Wiki::get_publish_wikis_list_for_ids(0, 3, &wiki_stack).0;
-            let _works = Work::get_publish_works_list_for_ids(0, 3, &work_stack).0;
+            let _blogs = Item::get_blogs_for_ids(3, 0, &blog_stack, false);
+            let _services = Item::get_services_for_ids(3, 0, &service_stack, false);
+            let _stores = Item::get_stores_for_ids(3, 0, &store_stack, false);
+            let _wikis = Item::get_wikis_for_ids(3, 0, &wiki_stack, false);
+            let _works = Item::get_works_for_ids(3, 0, &work_stack, false);
 
             let blogs_count = _blogs.len();
             let services_count = _services.len();
@@ -375,15 +369,15 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -
     }
 }
 
-pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_ajax;
     use schema::tags::dsl::tags;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
-    let _tag_id: i32 = *_id;
+    let _tag_id: String = _id.to_string();
     let _tags = tags
-        .filter(schema::tags::id.eq(_tag_id))
+        .filter(schema::tags::name.eq(&_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
     let _tag = _tags.into_iter().nth(0).unwrap();
@@ -392,28 +386,30 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
         get_first_load_page (
             &session,
             is_desctop,
-            "Статьи тега ".to_string() + &_tag.name,
-            "вебсервисы.рф: Статьи тега ".to_string() + &_tag.name,
-            "/tag_blogs/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            _tag.name.clone() + &" | Статьи тега".to_string(),
+            _tag.name.clone() + &" | вебсервисы.рф: Статьи тега".to_string(),
+            "/tag_blogs/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
         ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
-        use crate::models::Blog;
+        use crate::models::{Item, Blog};
         use crate::utils::get_page;
 
         let page = get_page(&req);
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::tag_id.eq(&_tag_id))
-            .select(schema::tags_items::blog_id)
+            .filter(schema::tags_items::tag_id.eq(&_tag.id))
+            .filter(schema::tags_items::types.eq(1))
+            .select(schema::tags_items::item_id)
             .load::<i32>(&_connection)
             .expect("E");
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let (_blogs, next_page_number) = Blog::get_blogs_list_for_ids(&_request_user, page, 20, &_tag_items);
+
+            let (_blogs, next_page_number) = Item::get_blogs_list_for_ids(page, 20, &_tag_items, _request_user.is_superuser());
             let blog_count = _blogs.len();
 
             if is_desctop {
@@ -462,7 +458,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
             }
         }
         else {
-            let (_blogs, next_page_number) = Blog::get_publish_blogs_list_for_ids(page.into(), 20, &_tag_items);
+            let (_blogs, next_page_number) = Item::get_blogs_list_for_ids(page, 20, &_tag_items, false);
             let blog_count = _blogs.len();
 
             if is_desctop {
@@ -511,14 +507,14 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<i
     }
 }
 
-pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let _tag_id: i32 = *_id;
+    let _tag_id: String = _id.clone();
     let _tags = tags
-        .filter(schema::tags::id.eq(_tag_id))
+        .filter(schema::tags::name.eq(&_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
     let _tag = _tags.into_iter().nth(0).unwrap();
@@ -528,27 +524,28 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
         get_first_load_page (
             &session,
             is_desctop,
-            "Услуги тега ".to_string() + &_tag.name,
-            "вебсервисы.рф: Услуги тега ".to_string() + &_tag.name,
-            "/tag_services/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            _tag.name.clone() + &" | Услуги тега".to_string(),
+            _tag.name.clone() + &" | вебсервисы.рф: Услуги тега".to_string(),
+            "/tag_services/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
         ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
-        use crate::models::Service;
+        use crate::models::{Item, Service};
         use crate::utils::get_page;
 
         let page = get_page(&req);
         let _tag_items = tags_items
-            .filter(schema::tags_items::tag_id.eq(&_tag_id))
-            .select(schema::tags_items::service_id)
+            .filter(schema::tags_items::tag_id.eq(&_tag.id))
+            .filter(schema::tags_items::types.eq(2))
+            .select(schema::tags_items::item_id)
             .load::<i32>(&_connection)
             .expect("E");
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let (_services, next_page_number) = Service::get_services_list_for_ids(&_request_user, page, 20, &_tag_items);
+            let (_services, next_page_number) = Item::get_services_list_for_ids(page, 20, &_tag_items, _request_user.is_superuser());
             let service_count = _services.len();
 
             if is_desctop {
@@ -597,7 +594,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             }
         }
         else {
-            let (_services, next_page_number) = Service::get_publish_services_list_for_ids(page, 20, &_tag_items);
+            let (_services, next_page_number) = Item::get_services_list_for_ids(page, 20, &_tag_items, false);
             let service_count = _services.len();
 
             if is_desctop {
@@ -646,14 +643,14 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
     }
 }
 
-pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let _tag_id: i32 = *_id;
+    let _tag_id: String = _id.clone();
     let _tags = tags
-        .filter(schema::tags::id.eq(_tag_id))
+        .filter(schema::tags::name.eq(&_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
     let _tag = _tags.into_iter().nth(0).unwrap();
@@ -663,28 +660,29 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
         get_first_load_page (
             &session,
             is_desctop,
-            "Товары тега ".to_string() + &_tag.name,
-            "вебсервисы.рф: Товары тега ".to_string() + &_tag.name,
-            "/tag_stores/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            _tag.name.clone() + &" | Товары тега ".to_string(),
+            _tag.name.clone() + &" | вебсервисы.рф: Товары тега ".to_string(),
+            "/tag_stores/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
         ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
-        use crate::models::Store;
+        use crate::models::{Item, Store};
         use crate::utils::get_page;
 
         let page = get_page(&req);
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::tag_id.eq(&_tag_id))
-            .select(schema::tags_items::store_id)
+            .filter(schema::tags_items::tag_id.eq(&_tag.id))
+            .filter(schema::tags_items::types.eq(3))
+            .select(schema::tags_items::item_id)
             .load::<i32>(&_connection)
             .expect("E");
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let (_stores, next_page_number) = Store::get_stores_list_for_ids(&_request_user, page, 20, &_tag_items);
+            let (_stores, next_page_number) = Item::get_stores_list_for_ids(page, 20, &_tag_items, _request_user.is_superuser());
             let stores_count = _stores.len();
 
             if is_desctop {
@@ -733,7 +731,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             }
         }
         else {
-            let (_stores, next_page_number) = Store::get_publish_stores_list_for_ids(page, 20, &_tag_items);
+            let (_stores, next_page_number) = Item::get_stores_list_for_ids(page, 20, &_tag_items, false);
             let stores_count = _stores.len();
 
             if is_desctop {
@@ -782,14 +780,14 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
     }
 }
 
-pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let _tag_id: i32 = *_id;
+    let _tag_id: String = _id.clone();
     let _tags = tags
-        .filter(schema::tags::id.eq(_tag_id))
+        .filter(schema::tags::name.eq(&_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
     let _tag = _tags.into_iter().nth(0).unwrap();
@@ -799,28 +797,29 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
         get_first_load_page (
             &session,
             is_desctop,
-            "Статьи тега ".to_string() + &_tag.name,
-            "вебсервисы.рф: Статьи тега ".to_string() + &_tag.name,
-            "/tag_wikis/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            _tag.name.clone() + &" | Статьи тега".to_string(),
+            _tag.name.clone() + &" | вебсервисы.рф: Статьи тега".to_string(),
+            "/tag_wikis/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
         ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
-        use crate::models::Wiki;
+        use crate::models::{Item, Wiki};
         use crate::utils::get_page;
 
         let page = get_page(&req);
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::tag_id.eq(&_tag_id))
-            .select(schema::tags_items::wiki_id)
+            .filter(schema::tags_items::tag_id.eq(&_tag.id))
+            .filter(schema::tags_items::types.eq(4))
+            .select(schema::tags_items::item_id)
             .load::<i32>(&_connection)
             .expect("E");
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let (_wikis, next_page_number) = Wiki::get_wikis_list_for_ids(&_request_user, page, 20, &_tag_items);
+            let (_wikis, next_page_number) = Item::get_wikis_list_for_ids(page, 20, &_tag_items, _request_user.is_superuser());
             let wikis_count = _wikis.len();
 
             if is_desctop {
@@ -869,7 +868,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
             }
         }
         else {
-            let (_wikis, next_page_number) = Wiki::get_publish_wikis_list_for_ids(page, 20, &_tag_items);
+            let (_wikis, next_page_number) = Item::get_wikis_list_for_ids(page, 20, &_tag_items, false);
             let wikis_count = _wikis.len();
 
             if is_desctop {
@@ -918,14 +917,14 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<i
     }
 }
 
-pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
     use schema::tags::dsl::tags;
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let _tag_id: i32 = *_id;
+    let _tag_id: String = _id.clone();
     let _tags = tags
-        .filter(schema::tags::id.eq(_tag_id))
+        .filter(schema::tags::name.eq(&_tag_id))
         .load::<Tag>(&_connection)
         .expect("E");
     let _tag = _tags.into_iter().nth(0).unwrap();
@@ -935,28 +934,29 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
         get_first_load_page (
             &session,
             is_desctop,
-            "Работы тега ".to_string() + &_tag.name,
-            "вебсервисы.рф: Работы тега ".to_string() + &_tag.name,
-            "/tag_works/".to_string() + &_tag.id.to_string() + &"/".to_string(),
+            _tag.name.clone() + &" | Работы тега".to_string(),
+            _tag.name.clone() + &" | вебсервисы.рф: Работы тега".to_string(),
+            "/tag_works/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
         ).await
     }
     else {
         use crate::schema::tags_items::dsl::tags_items;
-        use crate::models::Work;
+        use crate::models::{Item, Work};
         use crate::utils::get_page;
 
         let page = get_page(&req);
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::tag_id.eq(&_tag_id))
-            .select(schema::tags_items::work_id)
+            .filter(schema::tags_items::tag_id.eq(&_tag.id))
+            .filter(schema::tags_items::types.eq(5))
+            .select(schema::tags_items::item_id)
             .load::<i32>(&_connection)
             .expect("E");
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let (_works, next_page_number) = Work::get_works_list_for_ids(&_request_user, page, 20, &_tag_items);
+            let (_works, next_page_number) = Item::get_works_list_for_ids(page, 20, &_tag_items, _request_user.is_superuser());
             let works_count = _works.len();
 
             if is_desctop {
@@ -1005,7 +1005,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<i
             }
         }
         else {
-            let (_works, next_page_number) = Work::get_publish_works_list_for_ids(page, 20, &_tag_items);
+            let (_works, next_page_number) = Item::get_works_list_for_ids(page, 20, &_tag_items, false);
             let works_count = _works.len();
 
             if is_desctop {
@@ -1070,8 +1070,8 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
     }
     else {
         use crate::utils::get_page;
-        use crate::schema::stat_tags::dsl::stat_tags;
-        use crate::models::StatTag;
+        use crate::schema::stat_pages::dsl::stat_pages;
+        use crate::models::StatPage;
 
         let page = get_page(&req);
 
@@ -1079,24 +1079,26 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
         let (all_tags, next_page_number) = Tag::get_tags_list(page, 20);
         let tags_count = all_tags.len();
 
-        let _stat: StatTag;
-        let _stats = stat_tags
+        let _stat: StatPage;
+        let _stats = stat_pages
+            .filter(schema::stat_pages::types.eq(31))
             .limit(1)
-            .load::<StatTag>(&_connection)
+            .load::<StatPage>(&_connection)
             .expect("E");
         if _stats.len() > 0 {
             _stat = _stats.into_iter().nth(0).unwrap();
         }
         else {
-            use crate::models::NewStatTag;
-            let form = NewStatTag {
-                view: 0,
-                height: 0.0,
+            use crate::models::NewStatPage;
+            let form = NewStatPage {
+                types:   31,
+                view:    0,
+                height:  0.0,
                 seconds: 0,
             };
-            _stat = diesel::insert_into(schema::stat_tags::table)
+            _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
-                .get_result::<StatTag>(&_connection)
+                .get_result::<StatPage>(&_connection)
                 .expect("Error.");
         }
 
@@ -1107,11 +1109,11 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 #[template(path = "desctop/tags/tags.stpl")]
                 struct Template {
                     request_user:     User,
-                    all_tags:         Vec<Tag>,
+                    all_tags:         Vec<SmallTag>,
                     tags_count:       usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    stat:             StatTag,
+                    stat:             StatPage,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -1129,11 +1131,11 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/tags/tags.stpl")]
                 struct Template {
-                    all_tags:         Vec<Tag>,
+                    all_tags:         Vec<SmallTag>,
                     tags_count:       usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    stat:             StatTag,
+                    stat:             StatPage,
                 }
                 let body = Template {
                     all_tags:         all_tags,
@@ -1152,11 +1154,11 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/anon_tags.stpl")]
                 struct Template {
-                    all_tags:         Vec<Tag>,
+                    all_tags:         Vec<SmallTag>,
                     tags_count:       usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    stat:             StatTag,
+                    stat:             StatPage,
                 }
                 let body = Template {
                     all_tags:         all_tags,
@@ -1173,11 +1175,11 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/tags/anon_tags.stpl")]
                 struct Template {
-                    all_tags:         Vec<Tag>,
+                    all_tags:         Vec<SmallTag>,
                     tags_count:       usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    stat:             StatTag,
+                    stat:             StatPage,
                 }
                 let body = Template {
                     all_tags:         all_tags,

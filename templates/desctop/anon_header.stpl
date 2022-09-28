@@ -13,15 +13,15 @@
                           <a href="/" class="ajax folder main">Главная</a>
                       </li>
                       <%
-                        use crate::utils::get_categories;
-                        let (service_cats, store_cats, blog_cats, wiki_cats, work_cats) = get_categories();
+                        use crate::utils::get_categories_2;
+                        let (service_cats, store_cats, blog_cats, wiki_cats, work_cats, help_cats) = get_categories_2();
                       %>
                       <li>
                           <a href="/service_categories/" class="mn-has-sub service ajax folder">Услуги</a>
                           <ul class="border mn-sub">
                               <% for object in service_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/services/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
+                                  <a class="mn-group-title ajax" href="/services/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
@@ -31,7 +31,7 @@
                           <ul class="border mn-sub">
                               <% for object in work_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/works/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
+                                  <a class="mn-group-title ajax" href="/works/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
@@ -41,7 +41,7 @@
                           <ul class="border mn-sub">
                               <% for object in store_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/stores/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
+                                  <a class="mn-group-title ajax" href="/stores/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
@@ -52,7 +52,7 @@
                           <ul class="border mn-sub">
                               <% for object in wiki_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/wikis/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
+                                  <a class="mn-group-title ajax" href="/wikis/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
@@ -62,7 +62,7 @@
                           <ul class="border mn-sub">
                               <% for object in blog_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/blogs/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
+                                  <a class="mn-group-title ajax" href="/blogs/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
@@ -71,14 +71,33 @@
                           <a href="/tags/" class="ajax folder tags">Теги</a>
                       </li>
                       <li>
-                        <a href="/info/" class="mn-has-sub ajax infos folder">Инфо</a>
-                        <ul class="border mn-sub">
-                          <li>
-                            <a class="mn-group-title history ajax" href="/history/">История просмотров</a>
-                            <a class="mn-group-title user_orders ajax" href="/user_orders/">Ваши заказы</a>
-                            <a class="mn-group-title help ajax" href="/help/7/">Помощь</a>
-                            <a class="mn-group-title cookie_users_list ajax" href="/cookie_users_list/">Статистика</a>
-                          </li>
+                        <a href="/info/" class="mn-has-sub ajax folder infos">Инфо</a>
+                        <ul class="mn-sub mn-has-multi border" style="display:none;right:-200px;left:auto;">
+                            <li class="mn-sub-multi">
+                                <a class="mn-group-title" style="cursor:default;font-weight:bold;">Помощь:</a>
+                                <ul>
+                                  <% for object in help_cats.iter() { %>
+                                    <li>
+                                      <a class="mn-group-title ajax" href="/helps/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
+                                    </li>
+                                  <% } %>
+                                </ul>
+                            </li>
+
+                            <li class="mn-sub-multi">
+                                <a class="mn-group-title" style="cursor:default;font-weight:bold;">Страницы:</a>
+                                <ul>
+                                  <li>
+                                    <a class="history ajax" href="/history/">История просмотров</a>
+                                  </li>
+                                  <li>
+                                    <a class="user_orders ajax" href="/user_orders/">Ваши заказы</a>
+                                  </li>
+                                  <li>
+                                    <a class="cookie_users_list ajax" href="/cookie_users_list/">Статистика</a>
+                                  </li>
+                                </ul>
+                            </li>
                         </ul>
                       </li>
                       <li><a>&nbsp;</a></li>

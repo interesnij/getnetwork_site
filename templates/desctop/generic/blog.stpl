@@ -1,13 +1,17 @@
 <div class="col-lg-4 col-md-6 mb-md-50">
     <div class="post-prev-img">
-      <a href="/blog/<%= category.id %>/<%= object.id %>/" class="ajax">
-        <div class="progressive replace" data-href="<%= object.get_image() %>">
+      <a href="/blog/<%= category.slug %>/<%= object.slug %>/" class="ajax">
+        <div class="progressive replace" data-href="<% if object.image.is_some() { %>
+          <%= object.image.as_deref().unwrap() %>
+        <% } else { %>
+          /static/images/img.jpg
+        <% } %>">
           <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
         </div>
       </a>
     </div>
     <div class="post-prev-title font-alt">
-        <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/">
+        <a class="ajax" href="<%= category.slug %>/<%= object.slug %>/">
           <% if !object.is_active { %>
             <span style="color: red">🛇</span>
           <% } %>
@@ -18,9 +22,13 @@
       <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
     </div>
     <div class="post-prev-text">
-        <%= object.get_100_description() %>
+      <% if object.description.is_some() { %>
+        <%= object.description.as_deref().unwrap() %>
+      <% } else { %>
+        Без описания
+      <% } %>
     </div>
     <div class="post-prev-more">
-        <a href="/blog/<%= category.id %>/<%= object.id %>/" class="btn btn-mod border btn-round ajax">Читать</a>
+        <a href="/blog/<%= category.slug %>/<%= object.slug %>/" class="btn btn-mod border btn-round ajax">Читать</a>
     </div>
 </div>

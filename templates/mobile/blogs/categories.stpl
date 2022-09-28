@@ -18,12 +18,14 @@
         <h1 class="font-alt">Наш блог</h1>
     </div>
     <div class="container relative">
-        <% for category in blog_cats.iter() { %>
-
-        <% let get_6_blogs = category.get_6_blogs(request_user.is_superuser()); %>
+        <% for category in cats.iter() { %>
+          <%
+            use crate::models::Categories;
+            let get_6_blogs = Categories::get_blogs(category.id, 3, 0, request_user.is_superuser());
+          %>
 
         <h5 class="font-alt mb-10">
-            <a class="ajax" href="/blogs/<%= category.id %>/">
+            <a class="ajax" href="/blogs/<%= category.slug %>/">
                 <%= category.name %> (<%= category.count %>)
             </a>
         </h5>
@@ -38,7 +40,27 @@
 </section>
 
 <div class="sidebar hidden">
-    <% include!("sidebar.stpl"); %>
+<div class="widget">
+    <form class="form-inline form" role="form">
+        <div class="search-wrap">
+            <input data-folder="_blogs" type="text" class="form-control search-field desctop_folder_search" placeholder="Поиск от 3х букв">
+        </div>
+    </form>
+</div>
+<div class="widget">
+    <h5 class="widget-title font-alt">Категории</h5>
+    <div class="widget-body">
+        <ul class="clearlist widget-menu">
+          <% for cat in cats.iter() { %>
+            <li>
+              <a class="ajax" href="/blogs/<%= cat.slug %>/"><%= cat.name %></a>
+            </li>
+          <% } %>
+        </ul>
+    </div>
+</div>
+
+<% include!("../../block/tags_widget.stpl"); %>
 </div>
 
 <% include!("../footer.stpl"); %>

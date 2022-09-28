@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="92" data-id="<%= category.id %>" data-title="Категория работ <%= category.name %>" data-description="вебсервисы.рф: Категория работ <%= category.name %>" data-uri="/work_categories/" data-uri="/works/<%= category.id %>/" data-image="<%= category.get_image() %>" class="doc_title">
+<section page-id="92" data-id="<%= category.id %>" data-title="Категория работ <%= category.name %>" data-description="вебсервисы.рф: Категория работ <%= category.name %>" data-uri="/works/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
   <div class="relative container align-left">
     <div class="hs-line-4 font-alt">
       <a class="ajax" href="/work_categories/">Работы</a>
@@ -10,14 +10,14 @@
     </div>
   </div>
 </section>
-<section class="home-section need_darked_this" style='background-image: url("<%= category.get_image() %>"); background-position: 50% -26px;'>
+<section class="home-section need_darked_this" style='background-image: url("<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>"); background-position: 50% -26px;'>
     <div class="" style="height: 100vh">
         <div class="home-content container">
             <div class="home-text">
                 <h4 class="hs-line-8 no-transp font-alt mb-50 mb-xs-30">
                 <% let tags_count = all_tags.len(); %>
                   <% for (i, tag) in all_tags.iter().enumerate() { %>
-                      <a class="ajax dark_target" href="/tag/<%= tag.id %>/"><%= tag.name %> (<%= tag.count %>)</a>
+                      <a class="ajax dark_target" href="/tag/<%= tag.name %>/"><%= tag.name %> (<%= tag.count %>)</a>
                     <% if i != tags_count { %>, <% } %>
                   <% } %>
                 </h4>
@@ -31,13 +31,13 @@
 <section class="page-section">
   <div class="container relative">
     <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
-      <% if category.count > 0 { %>
+      <% if object_list.len() > 0 { %>
         <div class="is_paginate">
         <% for object in object_list.iter() { %>
           <% include!("../generic/work.stpl"); %>
         <% } %>
         <% if next_page_number > 0 { %>
-          <div class="load centered m-1 next_page_list" data-link="/works/<%= category.id %>/?page=<%= next_page_number %>">
+          <div class="load centered m-1 next_page_list" data-link="/works/<%= category.slug %>/?page=<%= next_page_number %>">
             <img src="/static/images/preloader.gif">
           </div>
         <% } %>

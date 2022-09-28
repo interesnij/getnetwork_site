@@ -6,8 +6,15 @@ use actix_web::{
     error::InternalError,
     http::StatusCode,
 };
-
-use crate::models::User;
+use crate::schema;
+use crate::models::{
+    User,
+    Item,
+    Categories,
+    Tag,
+    StatPage,
+    Cat,
+};
 use crate::utils::{
     establish_connection,
     get_device_and_ajax,
@@ -39,6 +46,16 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/load_feedback/", web::get().to(get_feedback_page));
     config.route("/load_user_history/{id}/", web::get().to(get_user_history_page));
     config.route("/load_tech_objects/{id}/", web::get().to(get_tech_objects_page));
+    config.route("/unical_object_form/{id}/", web::get().to(unical_object_form_page));
+
+    config.route("/create_category/", web::get().to(create_category_page));
+    config.route("/edit_category/{id}/", web::get().to(edit_category_page));
+    config.route("/create_item/", web::get().to(create_item_page));
+    config.route("/edit_item/{id}/", web::get().to(edit_item_page));
+    config.route("/edit_content_item/{id}/", web::get().to(edit_content_item_page));
+
+    config.route("/edit_file/{id}/", web::get().to(edit_file_page));
+    config.route("/image/{id}/", web::get().to(image_page));
 }
 
 pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
@@ -55,41 +72,43 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
         ).await
     }
     else {
-        use crate::schema;
-        use crate::models::{Work, Service, Wiki, Blog, Store, StatMainpage};
-        use crate::schema::stat_mainpages::dsl::stat_mainpages;
+        use crate::schema::stat_pages::dsl::stat_pages;
+        use crate::models::{Blog, Service, Store, Wiki, Work};
 
         let _connection = establish_connection();
-        let _stat: StatMainpage;
+        let _stat: StatPage;
 
-        let _stats = stat_mainpages
+        let _stats = stat_pages
+            .filter(schema::stat_pages::types.eq(1))
             .limit(1)
-            .load::<StatMainpage>(&_connection)
+            .load::<StatPage>(&_connection)
             .expect("E");
         if _stats.len() > 0 {
             _stat = _stats.into_iter().nth(0).unwrap();
         }
         else {
-            use crate::models::NewStatMainpage;
-            let form = NewStatMainpage {
-                view: 0,
-                height: 0.0,
+            use crate::models::NewStatPage;
+            let form = NewStatPage {
+                types:   1,
+                view:    0,
+                height:  0.0,
                 seconds: 0,
             };
-            _stat = diesel::insert_into(schema::stat_mainpages::table)
+            _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
-                .get_result::<StatMainpage>(&_connection)
+                .get_result::<StatPage>(&_connection)
                 .expect("Error.");
         }
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            //_request_user.create_superuser();
-            let _last_works = Work::get_3_works(&_request_user);
-            let _last_services = Service::get_3_services(&_request_user);
-            let _last_wikis = Wiki::get_3_wikis(&_request_user);
-            let _last_blogs = Blog::get_3_blogs(&_request_user);
-            let _last_stores = Store::get_3_stores(&_request_user);
+            let is_admin = _request_user.is_superuser();
+            _request_user.create_superuser();
+            let _last_works = Item::get_works(3, 0, is_admin);
+            let _last_services = Item::get_services(3, 0, is_admin);
+            let _last_wikis = Item::get_wikis(3, 0, is_admin);
+            let _last_blogs = Item::get_blogs(3, 0, is_admin);
+            let _last_stores = Item::get_stores(3, 0, is_admin);
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -102,7 +121,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
                     is_ajax:       i32,
-                    stat:          StatMainpage,
+                    stat:          StatPage,
                 }
                 let body = Template {
                     request_user:  _request_user,
@@ -129,7 +148,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
                     is_ajax:       i32,
-                    stat:          StatMainpage,
+                    stat:          StatPage,
                 }
                 let body = Template {
                     request_user:  _request_user,
@@ -147,11 +166,11 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
             }
         }
         else {
-            let _last_works = Work::get_3_publish_works();
-            let _last_services = Service::get_3_publish_services();
-            let _last_wikis = Wiki::get_3_publish_wikis();
-            let _last_blogs = Blog::get_3_publish_blogs();
-            let _last_stores = Store::get_3_publish_stores();
+            let _last_works = Item::get_works(3, 0, false);
+            let _last_services = Item::get_services(3, 0, false);
+            let _last_wikis = Item::get_wikis(3, 0, false);
+            let _last_blogs = Item::get_blogs(3, 0, false);
+            let _last_stores = Item::get_stores(3, 0, false);
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -163,7 +182,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
                     is_ajax:       i32,
-                    stat:          StatMainpage,
+                    stat:          StatPage,
                 }
                 let body = Template {
                     last_works:    _last_works,
@@ -188,7 +207,7 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
                     last_blogs:    Vec<Blog>,
                     last_stores:   Vec<Store>,
                     is_ajax:       i32,
-                    stat:          StatMainpage,
+                    stat:          StatPage,
                 }
                 let body = Template {
                     last_works:    _last_works,
@@ -222,38 +241,33 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         ).await
     }
     else if is_signed_in(&session) {
-        use crate::schema;
-        use schema::{
-            help_item_categories::dsl::help_item_categories,
-            stat_infos::dsl::stat_infos,
-        };
-        use crate::models::{HelpItemCategorie, StatInfo};
+        use schema::stat_pages::dsl::stat_pages;
 
         let _connection = establish_connection();
-        let _stat: StatInfo;
-        let _stats = stat_infos
+        let _stat: StatPage;
+        let _stats = stat_pages
+            .filter(schema::stat_pages::types.eq(10))
             .limit(1)
-            .load::<StatInfo>(&_connection)
+            .load::<StatPage>(&_connection)
             .expect("E");
         if _stats.len() > 0 {
             _stat = _stats.into_iter().nth(0).unwrap();
         }
         else {
-            use crate::models::NewStatInfo;
-            let form = NewStatInfo {
-                view: 0,
-                height: 0.0,
+            use crate::models::NewStatPage;
+            let form = NewStatPage {
+                types:   10,
+                view:    0,
+                height:  0.0,
                 seconds: 0,
             };
-            _stat = diesel::insert_into(schema::stat_infos::table)
+            _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
-                .get_result::<StatInfo>(&_connection)
+                .get_result::<StatPage>(&_connection)
                 .expect("Error.");
         }
 
-        let _help_cats = help_item_categories
-            .load::<HelpItemCategorie>(&_connection)
-            .expect("Error");
+        let _help_cats = Categories::get_categories_for_types(6);
 
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -262,8 +276,8 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             struct Template {
                 request_user: User,
                 is_ajax:      i32,
-                help_cats:    Vec<HelpItemCategorie>,
-                stat:         StatInfo,
+                help_cats:    Vec<Cat>,
+                stat:         StatPage,
             }
             let body = Template {
                 request_user: _request_user,
@@ -280,8 +294,8 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             #[template(path = "mobile/pages/info.stpl")]
             struct Template {
                 is_ajax:   i32,
-                help_cats: Vec<HelpItemCategorie>,
-                stat:      StatInfo,
+                help_cats: Vec<Cat>,
+                stat:      StatPage,
             }
             let body = Template {
                 is_ajax:   is_ajax,
@@ -294,46 +308,41 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         }
     }
     else {
-        use crate::schema;
-        use schema::{
-            help_item_categories::dsl::help_item_categories,
-            stat_infos::dsl::stat_infos,
-        };
-        use crate::models::{HelpItemCategorie, StatInfo};
+        use schema::stat_pages::dsl::stat_pages;
 
         let _connection = establish_connection();
-        let _stat: StatInfo;
-        let _stats = stat_infos
+        let _stat: StatPage;
+        let _stats = stat_pages
+            .filter(schema::stat_pages::types.eq(10))
             .limit(1)
-            .load::<StatInfo>(&_connection)
+            .load::<StatPage>(&_connection)
             .expect("E");
         if _stats.len() > 0 {
             _stat = _stats.into_iter().nth(0).unwrap();
         }
         else {
-            use crate::models::NewStatInfo;
-            let form = NewStatInfo {
-                view: 0,
-                height: 0.0,
+            use crate::models::NewStatPage;
+            let form = NewStatPage {
+                types:   10,
+                view:    0,
+                height:  0.0,
                 seconds: 0,
             };
-            _stat = diesel::insert_into(schema::stat_infos::table)
+            _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
-                .get_result::<StatInfo>(&_connection)
+                .get_result::<StatPage>(&_connection)
                 .expect("Error.");
         }
 
-        let _help_cats = help_item_categories
-            .load::<HelpItemCategorie>(&_connection)
-            .expect("Error");
+        let _help_cats = Categories::get_categories_for_types(6);
 
         if is_desctop {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/pages/anon_info.stpl")]
             struct Template {
                 is_ajax:   i32,
-                help_cats: Vec<HelpItemCategorie>,
-                stat:      StatInfo,
+                help_cats: Vec<Cat>,
+                stat:      StatPage,
             }
             let body = Template {
                 is_ajax:   is_ajax,
@@ -348,9 +357,9 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
             #[derive(TemplateOnce)]
             #[template(path = "mobile/pages/anon_info.stpl")]
             struct Template {
-                help_cats: Vec<HelpItemCategorie>,
+                help_cats: Vec<Cat>,
                 is_ajax:   i32,
-                stat:      StatInfo,
+                stat:      StatPage,
             }
             let body = Template {
                 is_ajax:   is_ajax,
@@ -379,7 +388,6 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
         ).await
     }
     else {
-        use crate::schema;
         use schema::cookie_users::dsl::cookie_users;
         use crate::models::{CookieUser, CookieStat};
         use crate::utils::{get_page, get_or_create_cookie_user_id};
@@ -423,14 +431,12 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/pages/history.stpl")]
                 struct Template {
-                    //request_user:     User,
                     user:             CookieUser,
                     object_list:      Vec<CookieStat>,
                     is_ajax:          i32,
                     next_page_number: i32,
                 }
                 let body = Template {
-                    //request_user:     _request_user,
                     user:             _cookie_user,
                     object_list:      object_list,
                     is_ajax:          is_ajax,
@@ -539,7 +545,6 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
 
 pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     use crate::models::TechCategories;
-    use crate::schema;
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
@@ -632,7 +637,6 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
 
 pub async fn get_tech_category_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::TechCategories;
-    use crate::schema;
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
@@ -659,7 +663,6 @@ pub async fn get_tech_category_page(_id: web::Path<i32>) -> actix_web::Result<Ht
 
 pub async fn get_serve_category_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::ServeCategories;
-    use crate::schema;
     use crate::schema::serve_categories::dsl::serve_categories;
 
     let _connection = establish_connection();
@@ -686,7 +689,6 @@ pub async fn get_serve_category_page(_id: web::Path<i32>) -> actix_web::Result<H
 
 pub async fn get_serve_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::Serve;
-    use crate::schema;
     use crate::schema::serve::dsl::serve;
 
     let _connection = establish_connection();
@@ -854,7 +856,6 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
 
 pub async fn get_tech_objects_page(session: Session, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::TechCategories;
-    use crate::schema;
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let mut is_admin = false;
@@ -882,6 +883,596 @@ pub async fn get_tech_objects_page(session: Session, _id: web::Path<i32>) -> act
     let body = Template {
         object:   _cat,
         is_admin: is_admin
+    }
+    .render_once()
+    .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+    Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+}
+
+pub async fn unical_object_form_page(session: Session, _id: web::Path<i16>) -> actix_web::Result<HttpResponse> {
+    if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if !_request_user.is_superuser() {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
+        }
+        else {
+            let _connection = establish_connection();
+            let types = *_id;
+            let mut biznes_mode = false;
+            if vec![2,3,5].iter().any(|i| i==&types) {
+                biznes_mode = true;
+            }
+            let _cats = Categories::get_categories_for_types(types);
+
+            #[derive(TemplateOnce)]
+            #[template(path = "desctop/load/unical_object_form.stpl")]
+            struct Template {
+                cats:        Vec<Cat>,
+                biznes_mode: bool,
+            }
+            let body = Template {
+                cats:        _cats,
+                biznes_mode: biznes_mode
+            }
+            .render_once()
+            .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
+    }
+}
+
+pub async fn create_category_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание категории".to_string(),
+            "вебсервисы.рф: Создание категории".to_string(),
+            "/create_category/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
+    }
+    else if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use schema::categories::dsl::categories;
+
+            let _connection = establish_connection();
+            let _cats = categories
+                .load::<Categories>(&_connection)
+                .expect("Error");
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/create_category.stpl")]
+                struct Template {
+                    request_user: User,
+                    cats:         Vec<Categories>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    cats:         _cats,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/create_category.stpl")]
+                struct Template {
+                    cats:    Vec<Categories>,
+                    is_ajax: i32,
+                }
+                let body = Template {
+                    cats:    _cats,
+                    is_ajax: is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
+}
+
+pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let cat_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _cats = schema::categories::table
+        .filter(schema::categories::id.eq(&cat_id))
+        .load::<Categories>(&_connection)
+        .expect("E");
+    let _cat = _cats.into_iter().nth(0).unwrap();
+
+    if is_ajax == 0 {
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение категории ".to_string() + &_cat.name,
+            "вебсервисы.рф: Изменение категории ".to_string() + &_cat.name,
+            "/edit_category/".to_string() + &_cat.id.to_string() + &"/".to_string(),
+            _cat.get_image(),
+        ).await
+    }
+    else if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            let _cats = schema::categories::table
+                .load::<Categories>(&_connection)
+                .expect("Error");
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/edit_category.stpl")]
+                struct Template {
+                    request_user: User,
+                    cat:          Categories,
+                    cats:         Vec<Categories>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    cat:          _cat,
+                    cats:         _cats,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/edit_category.stpl")]
+                struct Template {
+                    cat:     Categories,
+                    cats:    Vec<Categories>,
+                    is_ajax: i32,
+                }
+                let body = Template {
+                    cat:     _cat,
+                    cats:    _cats,
+                    is_ajax: is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
+}
+
+pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Создание объекта".to_string(),
+            "вебсервисы.рф: Создание объекта".to_string(),
+            "/create_item/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
+    }
+    else if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 {
+            use schema::{
+                tags::dsl::tags,
+                tech_categories::dsl::tech_categories,
+                //categories::dsl::categories,
+            };
+            use crate::models::TechCategories;
+
+            let _connection = establish_connection();
+            let all_tags = tags
+                .load::<Tag>(&_connection)
+                .expect("Error.");
+
+            let _tech_categories = tech_categories
+                .load::<TechCategories>(&_connection)
+                .expect("E");
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/create_item.stpl")]
+                struct Template {
+                    request_user: User,
+                    all_tags:     Vec<Tag>,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    all_tags:     all_tags,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/create_item.stpl")]
+                struct Template {
+                    all_tags: Vec<Tag>,
+                    is_ajax:  i32,
+                }
+                let body = Template {
+                    all_tags: all_tags,
+                    is_ajax:  is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
+}
+pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use schema::items::dsl::items;
+
+    let _item_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _items = items.filter(schema::items::id.eq(&_item_id)).load::<Item>(&_connection).expect("E");
+    let _item = _items.into_iter().nth(0).unwrap();
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение объекта ".to_string() + &_item.title,
+            "вебсервисы.рф: Изменение объекта ".to_string() + &_item.title,
+            "/edit_item/".to_string() + &_item.id.to_string() + &"/".to_string(),
+            _item.get_image(),
+        ).await
+    }
+    else if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 || _item.user_id == _request_user.id {
+            use schema::{
+                tags::dsl::tags,
+                categories::dsl::categories,
+                tech_categories::dsl::tech_categories,
+                tags_items::dsl::tags_items,
+            };
+            use crate::models:: TechCategories;
+
+            let item_cats = _item.get_categories_obj();
+            let _all_tags = tags
+                .load::<Tag>(&_connection)
+                .expect("Error.");
+            let _tag_items = tags_items
+                .filter(schema::tags_items::item_id.eq(&_item.id))
+                .filter(schema::tags_items::types.eq(_item.types))
+                .select(schema::tags_items::tag_id)
+                .load::<i32>(&_connection)
+                .expect("E");
+            let item_tags = tags
+                .filter(schema::tags::id.eq_any(_tag_items))
+                .load::<Tag>(&_connection)
+                .expect("E");
+
+            let _cats = categories
+                .filter(schema::categories::types.eq(_item.types))
+                .load::<Categories>(&_connection)
+                .expect("Error");
+
+            let mut level: i16 = 0;
+            let mut _tech_categories: Vec<TechCategories> = Vec::new();
+            let _serve = _item.get_serves();
+            if _serve.len() > 0 {
+                let tech_id = _serve[0].tech_cat_id;
+                let _tech_categories = tech_categories
+                    .filter(schema::tech_categories::id.eq(tech_id))
+                    .load::<TechCategories>(&_connection)
+                    .expect("E");
+
+                level = _tech_categories[0].level;
+                let _tech_categories = tech_categories
+                    .filter(schema::tech_categories::level.eq(level))
+                    .load::<TechCategories>(&_connection)
+                    .expect("E");
+            }
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/edit_item.stpl")]
+                struct Template {
+                    request_user: User,
+                    object:       Item,
+                    cats:         Vec<Categories>,
+                    is_ajax:      i32,
+                    all_tags:     Vec<Tag>,
+                    item_tags:    Vec<Tag>,
+                    item_cats:    Vec<Categories>,
+                    tech_cats:    Vec<TechCategories>,
+                    level:        i16,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    object:       _item,
+                    cats:         _cats,
+                    is_ajax:      is_ajax,
+                    all_tags:     _all_tags,
+                    item_tags:    item_tags,
+                    item_cats:    item_cats,
+                    tech_cats:    _tech_categories,
+                    level:        level,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/edit_item.stpl")]
+                struct Template {
+                    object:     Item,
+                    cats:       Vec<Categories>,
+                    is_ajax:    i32,
+                    all_tags:   Vec<Tag>,
+                    item_tags:  Vec<Tag>,
+                    item_cats:  Vec<Categories>,
+                    tech_cats:  Vec<TechCategories>,
+                    level:      i16,
+                }
+                let body = Template {
+                    object:     _item,
+                    cats:       _cats,
+                    is_ajax:    is_ajax,
+                    all_tags:   _all_tags,
+                    item_tags:  item_tags,
+                    item_cats:  item_cats,
+                    tech_cats:  _tech_categories,
+                    level:      level,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
+}
+
+pub async fn edit_content_item_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::schema::items::dsl::items;
+
+    let _item_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _items = items
+        .filter(schema::items::id.eq(&_item_id))
+        .load::<Item>(&_connection)
+        .expect("E");
+
+    let _item = _items.into_iter().nth(0).unwrap();
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение текста объекта ".to_string() + &_item.title,
+            "вебсервисы.рф: Изменение текста объекта ".to_string() + &_item.title,
+            "/edit_content_item/".to_string() + &_item.id.to_string() + &"/".to_string(),
+            _item.get_image(),
+        ).await
+    }
+    else if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 || _request_user.id == _item.user_id {
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/edit_content_item.stpl")]
+                struct Template {
+                    request_user: User,
+                    item:         Item,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    item:         _item,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/edit_content_item.stpl")]
+                struct Template {
+                    item:    Item,
+                    is_ajax: i32,
+                }
+                let body = Template {
+                    item:    _item,
+                    is_ajax: is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
+}
+
+pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::schema::files::dsl::files;
+    use crate::models::File;
+
+    let _file_id: i32 = *_id;
+    let _connection = establish_connection();
+    let _files = files
+        .filter(schema::files::id.eq(&_file_id))
+        .load::<File>(&_connection)
+        .expect("E");
+
+    let _file = _files.into_iter().nth(0).unwrap();
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    if is_ajax == 0 {
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Изменение файла".to_string(),
+            "вебсервисы.рф: Изменение файла".to_string(),
+            "/edit_file/".to_string() + &_file.id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
+    }
+    else if is_signed_in(&session) {
+        let _request_user = get_request_user_data(&session);
+        if _request_user.perm == 60 || _request_user.id == _file.user_id {
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/edit_file.stpl")]
+                struct Template {
+                    request_user: User,
+                    file:         File,
+                    is_ajax:      i32,
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    file:         _file,
+                    is_ajax:      is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/edit_file.stpl")]
+                struct Template {
+                    file:    File,
+                    is_ajax: i32,
+                }
+                let body = Template {
+                    file:    _file,
+                    is_ajax: is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+        }
+    }
+    else {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
+    }
+}
+
+pub async fn image_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+    use crate::schema::{
+        files::dsl::files,
+        items::dsl::items,
+    };
+    use crate::models::File;
+
+    let _connection = establish_connection();
+    let _id: i32 = *_id;
+    let _file = files
+        .filter(schema::files::id.eq(_id))
+        .load::<File>(&_connection)
+        .expect("E.")
+        .into_iter()
+        .nth(0)
+        .unwrap();
+
+    let _item = items
+        .filter(schema::items::id.eq(_file.item_id))
+        .filter(schema::items::types.eq(_file.item_types))
+        .load::<Item>(&_connection)
+        .expect("E.")
+        .into_iter()
+        .nth(0)
+        .unwrap();
+
+    let _images = _item.get_images_ids();
+    let _images_len = _images.len();
+    let mut prev: Option<File> = None;
+    let mut next: Option<File> = None;
+
+    for (i, obj) in _images.iter().enumerate().rev() {
+        if obj == &_id {
+            if (i + 1) != _images_len {
+                let _next = Some(&_images[i + 1]);
+                next = files
+                    .filter(schema::files::id.eq(_next.unwrap()))
+                    .filter(schema::files::types.eq(_item.types))
+                    .load::<File>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
+            };
+            if i != 0 {
+                let _prev = Some(&_images[i - 1]);
+                prev = files
+                    .filter(schema::files::id.eq(_prev.unwrap()))
+                    .filter(schema::files::types.eq(_item.types))
+                    .load::<File>(&_connection)
+                    .expect("E")
+                    .into_iter()
+                    .nth(0);
+            };
+            break;
+        }
+    };
+
+    #[derive(TemplateOnce)]
+    #[template(path = "desctop/load/image.stpl")]
+    struct Template {
+        object: File,
+        item:   Item,
+        prev:   Option<File>,
+        next:   Option<File>,
+    }
+    let body = Template {
+        object: _file,
+        item:   _item,
+        prev:   prev,
+        next:   next,
     }
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

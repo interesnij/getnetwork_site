@@ -45,7 +45,7 @@
     <span class="icon-ribbon"></span>
     <p>Теги</p>
   </button>
-  <button href="/help/1/" class="mobile_icon help border ajax">
+  <button href="/helps/1/" class="mobile_icon help border ajax">
     <span class="icon-lifesaver"></span>
     <p>Помощь</p>
   </button>

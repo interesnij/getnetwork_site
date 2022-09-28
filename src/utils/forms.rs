@@ -26,7 +26,10 @@ impl UploadedFiles {
             now.day().to_string(),
         );
         let format_path = format_folder.clone() + &filename.to_string();
-        let create_path = format_folder.replace("./", "/my/");
+        // вариант для https
+        let create_path = format_folder.replace("./", "/web/");
+        // вариант для debug
+        //let create_path = format_folder.replace("./", "/");
         create_dir_all(create_path).unwrap();
 
         UploadedFiles {
@@ -34,25 +37,6 @@ impl UploadedFiles {
             path: format_path.to_string(),
         }
     }
-}
-
-#[derive(Deserialize, Serialize, Debug)]
-pub struct Forms {
-    pub title:         String,
-    pub description:   String,
-    pub link:          String,
-    pub main_image:    String,
-    pub is_active:     bool,
-    pub category_list: Vec<i32>,
-    pub tags_list:     Vec<i32>,
-}
-#[derive(Deserialize, Serialize, Debug)]
-pub struct ImageForm {
-    pub images: Vec<String>,
-}
-#[derive(Deserialize, Serialize, Debug)]
-pub struct VideoForm {
-    pub videos: Vec<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -68,119 +52,16 @@ pub struct CategoriesForm {
     pub position:    i16,
     pub image:       String,
     pub level:       i16,
+    pub types:       i16,
+    pub slug:        String,
 }
 
-#[derive(Deserialize, Serialize, Debug)]
-pub struct HelpForm {
-    pub category_id: i32,
-    pub title:       String,
-    pub description: String,
-    pub position:    i16,
-}
-
-#[derive(Deserialize, Serialize, Debug)]
-pub struct ServeCategoriesForm {
-    pub name:            String,
-    pub description:     String,
-    pub tech_categories: i32,
-    pub position:        i16,
-    pub default_price:   i32,
-}
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ContentForm {
     pub content: Option<String>,
 }
 
-pub async fn item_form(payload: &mut Multipart, owner_id: i32) -> Forms {
-    let mut form: Forms = Forms {
-        title:         "".to_string(),
-        description:   "".to_string(),
-        link:          "".to_string(),
-        main_image:    "".to_string(),
-        is_active:     true,
-        category_list: Vec::new(),
-        tags_list:     Vec::new(),
-    };
-
-    while let Some(item) = payload.next().await {
-        let mut field: Field = item.expect("split_payload err");
-        let name = field.name();
-        let _list = ["title", "description", "link"];
-
-        if _list.contains(&name) {
-            let mut _content = "".to_string();
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    if field.name() == "title" {
-                        form.title = data_string;
-                    } else if field.name() == "description" {
-                        form.description = data_string;
-                    } else if field.name() == "link" {
-                        form.link = data_string;
-                    }
-
-                }
-            }
-        }
-        else if name == "category_list[]" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    let _int: i32 = data_string.parse().unwrap();
-                    form.category_list.push(_int);
-                }
-            }
-        }
-
-        else if name == "is_active" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    if s.to_string() == "on" {
-                        form.is_active = true;
-                    } else {
-                        form.is_active = false;
-                    }
-                }
-            }
-        }
-
-        else if name == "tags_list[]" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    let _int: i32 = data_string.parse().unwrap();
-                    form.tags_list.push(_int);
-                }
-            }
-        }
-
-        else if name == "main_image" {
-            let _new_path = field.content_disposition().get_filename().unwrap();
-            if _new_path != "" {
-                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
-                let file_path = file.path.clone();
-                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                    .await
-                    .unwrap();
-                while let Some(chunk) = field.next().await {
-                    let data = chunk.unwrap();
-                    f = web::block(move || f.write_all(&data).map(|_| f))
-                        .await
-                        .unwrap()
-                        .expect("E");
-                    }
-                form.main_image = file.path.clone().replace("./","/");
-            }
-        }
-    }
-    form
-}
 pub async fn category_form(payload: &mut Multipart, owner_id: i32) -> CategoriesForm {
     let mut form: CategoriesForm = CategoriesForm {
         name:        "".to_string(),
@@ -188,6 +69,8 @@ pub async fn category_form(payload: &mut Multipart, owner_id: i32) -> Categories
         position:    0,
         image:       "".to_string(),
         level:       0,
+        types:       0,
+        slug:        "".to_string(),
     };
 
     while let Some(item) = payload.next().await {
@@ -230,6 +113,15 @@ pub async fn category_form(payload: &mut Multipart, owner_id: i32) -> Categories
                 }
             }
         }
+        else if name == "types" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i16 = s.parse().unwrap();
+                    form.types = _int;
+                }
+            }
+        }
 
         else {
             while let Some(chunk) = field.next().await {
@@ -241,52 +133,8 @@ pub async fn category_form(payload: &mut Multipart, owner_id: i32) -> Categories
                     } else if field.name() == "description" {
                         form.description = data_string
                     }
-                }
-            }
-        }
-    }
-    form
-}
-
-pub async fn help_form(payload: &mut Multipart) -> HelpForm {
-    let mut form: HelpForm = HelpForm {
-        category_id: 0,
-        title:       "".to_string(),
-        description: "".to_string(),
-        position:    0,
-    };
-
-    while let Some(item) = payload.next().await {
-        let mut field: Field = item.expect("split_payload err");
-        let name = field.name();
-
-        if name == "position" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i16 = s.parse().unwrap();
-                    form.position = _int;
-                }
-            }
-        }
-        else if name == "category_id" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i32 = s.parse().unwrap();
-                    form.category_id = _int;
-                }
-            }
-        }
-        else {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    if field.name() == "title" {
-                        form.title = data_string
-                    } else if field.name() == "description" {
-                        form.description = data_string
+                    else if field.name() == "slug" {
+                        form.slug = data_string
                     }
                 }
             }
@@ -318,44 +166,40 @@ pub async fn content_form(payload: &mut Multipart) -> ContentForm {
 
 
 #[derive(Deserialize, Serialize, Debug)]
-pub struct StoreForms {
-    pub title:          String,
-    pub description:    String,
-    pub link:           String,
-    pub main_image:     String,
-    pub is_active:      bool,
-    pub images:         Vec<String>,
-    pub videos:         Vec<String>,
-    pub category_list:  Vec<i32>,
-    pub tags_list:      Vec<i32>,
-    pub serve_list:     Vec<i32>,
+pub struct ItemForms {
+    pub title:         String,
+    pub description:   Option<String>,
+    pub link:          Option<String>,
+    pub main_image:    Option<String>,
+    pub category_list: Vec<i32>,
+    pub tags_list:     Vec<i32>,
+    pub serve_list:    Vec<i32>,
     pub close_tech_cats_list: Vec<i32>,
-    pub position:       i16,
+    pub position:      i16,
+    pub types:         i16,
+    pub slug:          String,
 }
 
 // форма для элементов с опциями / тех категориями
-pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
-    let mut files: Vec<UploadedFiles> = Vec::new();
-
-    let mut form: StoreForms = StoreForms {
-        title:                "".to_string(),
-        description:          "".to_string(),
-        link:                 "".to_string(),
-        main_image:           "".to_string(),
-        is_active:            true,
-        images:               Vec::new(),
-        videos:               Vec::new(),
-        category_list:        Vec::new(),
-        tags_list:            Vec::new(),
-        serve_list:           Vec::new(),
+pub async fn item_form(payload: &mut Multipart, owner_id: i32) -> ItemForms {
+    let mut form: ItemForms = ItemForms {
+        title:         "".to_string(),
+        description:   None,
+        link:          None,
+        main_image:    None,
+        category_list: Vec::new(),
+        tags_list:     Vec::new(),
+        serve_list:    Vec::new(),
         close_tech_cats_list: Vec::new(),
-        position:             0,
+        position:      0,
+        types:         0,
+        slug:          "".to_string(),
     };
 
     while let Some(item) = payload.next().await {
         let mut field: Field = item.expect("split_payload err");
         let name = field.name();
-        let string_list = ["title", "description", "link"];
+        let string_list = ["title", "description", "link", "slug"];
 
         if string_list.contains(&name) {
             let mut _content = "".to_string();
@@ -366,11 +210,13 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
                     if field.name() == "title" {
                         form.title = data_string;
                     } else if field.name() == "description" {
-                        form.description = data_string;
+                        form.description = Some(data_string);
                     } else if field.name() == "link" {
-                        form.link = data_string;
+                        form.link = Some(data_string);
                     }
-
+                    else if field.name() == "slug" {
+                        form.slug = data_string;
+                    }
                 }
             }
         }
@@ -405,25 +251,21 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
                 }
             }
         }
-
-        else if name == "is_active" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    if s.to_string() == "on" {
-                        form.is_active = true;
-                    } else {
-                        form.is_active = false;
-                    }
-                }
-            }
-        }
         else if name == "position" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
                     let _int: i16 = s.parse().unwrap();
                     form.position = _int;
+                }
+            }
+        }
+        else if name == "types" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i16 = s.parse().unwrap();
+                    form.types = _int;
                 }
             }
         }
@@ -454,105 +296,7 @@ pub async fn store_form(payload: &mut Multipart, owner_id: i32) -> StoreForms {
                         .unwrap()
                         .expect("E");
                 }
-                form.main_image = file.path.clone().replace("./","/");
-            }
-        }
-
-        else if name == "images[]" {
-            let _new_path = field.content_disposition().get_filename().unwrap();
-            if _new_path != "" {
-                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
-                let file_path = file.path.clone();
-                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                    .await
-                    .unwrap();
-                while let Some(chunk) = field.next().await {
-                    let data = chunk.unwrap();
-                    f = web::block(move || f.write_all(&data).map(|_| f))
-                        .await
-                        .unwrap()
-                        .expect("E");
-                };
-                files.push(file.clone());
-                form.images.push(file.path.clone().replace("./","/"));
-            }
-        }
-
-        else if name == "videos[]" {
-            let _new_path = field.content_disposition().get_filename().unwrap();
-            if _new_path != "" {
-                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
-                let file_path = file.path.clone();
-                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                    .await
-                    .unwrap();
-                while let Some(chunk) = field.next().await {
-                    let data = chunk.unwrap();
-                    f = web::block(move || f.write_all(&data).map(|_| f))
-                        .await
-                        .unwrap()
-                        .expect("E");
-                };
-                files.push(file.clone());
-                form.videos.push(file.path.clone().replace("./","/"));
-            }
-        }
-    }
-    form
-}
-
-pub async fn serve_category_form(payload: &mut Multipart, _owner_id: i32) -> ServeCategoriesForm {
-    let mut form: ServeCategoriesForm = ServeCategoriesForm {
-        name: "".to_string(),
-        description: "".to_string(),
-        tech_categories: 0,
-        position: 0,
-        default_price: 0,
-    };
-
-    while let Some(item) = payload.next().await {
-        let mut field: Field = item.expect("split_payload err");
-        let name = field.name();
-
-        if name == "tech_categories" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i32 = s.parse().unwrap();
-                    form.tech_categories = _int;
-                }
-            }
-        }
-        else if name == "position" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i16 = s.parse().unwrap();
-                    form.position = _int;
-                }
-            }
-        }
-        else if name == "default_price" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i32 = s.parse().unwrap();
-                    form.default_price = _int;
-                }
-            }
-        }
-
-        else {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    if field.name() == "name" {
-                        form.name = data_string
-                    } else if field.name() == "description" {
-                        form.description = data_string
-                    }
-                }
+                form.main_image = Some(file.path.clone().replace("./","/"));
             }
         }
     }
@@ -562,8 +306,8 @@ pub async fn serve_category_form(payload: &mut Multipart, _owner_id: i32) -> Ser
 pub async fn feedback_form(payload: &mut Multipart) -> FeedbackForm {
     let mut form: FeedbackForm = FeedbackForm {
         username: "".to_string(),
-        email: "".to_string(),
-        message: "".to_string(),
+        email:    "".to_string(),
+        message:  "".to_string(),
     };
 
     while let Some(item) = payload.next().await {
@@ -690,18 +434,25 @@ pub async fn order_form(payload: &mut Multipart, owner_id: i32) -> OrderForms {
     form
 }
 
+#[derive(Deserialize, Serialize, Debug)]
+pub struct FileForm {
+    pub item_types: i16,      // блог, услуга ......
+    pub types:      i16,      // фото, видео, аудио ......
+    pub files:      Vec<String>,
+}
+pub async fn files_form(payload: &mut Multipart, owner_id: i32) -> FileForm {
+    let mut _files: Vec<UploadedFiles> = Vec::new();
 
-pub async fn images_form(payload: &mut Multipart, owner_id: i32) -> ImageForm {
-    let mut files: Vec<UploadedFiles> = Vec::new();
-
-    let mut form: ImageForm = ImageForm {
-        images: Vec::new(),
+    let mut form: FileForm = FileForm {
+        item_types: 0,
+        types:      0,
+        files:      Vec::new(),
     };
 
     while let Some(item) = payload.next().await {
         let mut field: Field = item.expect("split_payload err");
 
-        if field.name() == "images[]" {
+        if field.name() == "files[]" {
             let _new_path = field.content_disposition().get_filename().unwrap();
             if _new_path != "" {
                 let file = UploadedFiles::new(_new_path.to_string(), owner_id);
@@ -716,41 +467,92 @@ pub async fn images_form(payload: &mut Multipart, owner_id: i32) -> ImageForm {
                         .unwrap()
                         .expect("E");
                 };
-                files.push(file.clone());
-                form.images.push(file.path.clone().replace("./","/"));
+                _files.push(file.clone());
+                form.files.push(file.path.clone().replace("./","/"));
+            }
+        }
+        else if field.name() == "item_types" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i16 = s.parse().unwrap();
+                    form.item_types = _int;
+                }
+            }
+        }
+        else if field.name() == "types" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i16 = s.parse().unwrap();
+                    form.types = _int;
+                }
             }
         }
     }
     form
 }
 
-pub async fn videos_form(payload: &mut Multipart, owner_id: i32) -> VideoForm {
-    let mut files: Vec<UploadedFiles> = Vec::new();
-
-    let mut form: VideoForm = VideoForm {
-        videos: Vec::new(),
+#[derive(Deserialize, Serialize, Debug)]
+pub struct ServeCategoriesForm {
+    pub name:            String,
+    pub description:     String,
+    pub tech_categories: i32,
+    pub position:        i16,
+    pub default_price:   i32,
+}
+pub async fn serve_category_form(payload: &mut Multipart, _owner_id: i32) -> ServeCategoriesForm {
+    let mut form: ServeCategoriesForm = ServeCategoriesForm {
+        name: "".to_string(),
+        description: "".to_string(),
+        tech_categories: 0,
+        position: 0,
+        default_price: 0,
     };
 
     while let Some(item) = payload.next().await {
         let mut field: Field = item.expect("split_payload err");
+        let name = field.name();
 
-        if field.name() == "videos[]" {
-            let _new_path = field.content_disposition().get_filename().unwrap();
-            if _new_path != "" {
-                let file = UploadedFiles::new(_new_path.to_string(), owner_id);
-                let file_path = file.path.clone();
-                let mut f = web::block(move || std::fs::File::create(&file_path).expect("E"))
-                    .await
-                    .unwrap();
-                while let Some(chunk) = field.next().await {
-                    let data = chunk.unwrap();
-                    f = web::block(move || f.write_all(&data).map(|_| f))
-                        .await
-                        .unwrap()
-                        .expect("E");
-                };
-                files.push(file.clone());
-                form.videos.push(file.path.clone().replace("./","/"));
+        if name == "tech_categories" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.tech_categories = _int;
+                }
+            }
+        }
+        else if name == "position" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i16 = s.parse().unwrap();
+                    form.position = _int;
+                }
+            }
+        }
+        else if name == "default_price" {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let _int: i32 = s.parse().unwrap();
+                    form.default_price = _int;
+                }
+            }
+        }
+
+        else {
+            while let Some(chunk) = field.next().await {
+                let data = chunk.expect("split_payload err chunk");
+                if let Ok(s) = str::from_utf8(&data) {
+                    let data_string = s.to_string();
+                    if field.name() == "name" {
+                        form.name = data_string
+                    } else if field.name() == "description" {
+                        form.description = data_string
+                    }
+                }
             }
         }
     }

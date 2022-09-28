@@ -2,7 +2,11 @@
   <div class="container relative">
     <div class="row">
         <div class="col-md-4 mb-sm-40">
-            <div class="progressive replace" data-href="<%= object.get_image() %>">
+            <div class="progressive replace" data-href="<% if object.image.is_some() { %>
+              <%= object.image.as_deref().unwrap() %>
+            <% } else { %>
+              /static/images/img.jpg
+            <% } %>">
               <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
             </div>
         </div>
@@ -15,10 +19,14 @@
                 <%= object.title %>
               </h3>
               <p>
-                <%= object.get_100_description() %>
+                <% if object.description.is_some() { %>
+                  <%= object.description.as_deref().unwrap() %>
+                <% } else { %>
+                  Без описания
+                <% } %>
               </p>
               <div class="mt-40">
-                <a class="btn btn-medium btn-mod border btn-round ajax" href="/service/1/<%= object.id %>/">
+                <a class="btn btn-medium btn-mod border btn-round ajax" href="/service/all-services/<%= object.slug %>/">
                   Подробнее
                 </a>
               </div>
@@ -31,19 +39,32 @@
     <div class="row" style="padding-left:0;padding-right:0">
       <div class="col-md-8">
           <div class="text">
-            <h3 class="font-alt mb-30 mb-xxs-10"><%= object.title %></h3>
+          <h3 class="font-alt mb-30 mb-xxs-10">
+            <% if !object.is_active { %>
+              <span style="color: red">🛇</span>
+            <% } %>
+            <%= object.title %>
+          </h3>
             <p>
-              <%= object.get_100_description() %>
+              <% if object.description.is_some() { %>
+                <%= object.description.as_deref().unwrap() %>
+              <% } else { %>
+                Без описания
+              <% } %>
             </p>
             <div class="mt-40">
-              <a class="btn btn-medium btn-mod border btn-round ajax" href="/service/1/<%= object.id %>/">
+              <a class="btn btn-medium btn-mod border btn-round ajax" href="/service/all-services/<%= object.slug %>/">
                 Подробнее
               </a>
             </div>
           </div>
       </div>
         <div class="col-md-4 mb-sm-40">
-        <div class="progressive replace" data-href="<%= object.get_image() %>">
+        <div class="progressive replace" data-href="<% if object.image.is_some() { %>
+          <%= object.image.as_deref().unwrap() %>
+        <% } else { %>
+          /static/images/img.jpg
+        <% } %>">
           <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
         </div>
         </div>

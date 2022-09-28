@@ -17,7 +17,7 @@
       <section class="page-section">
           <div class="container relative">
               <h5 class="section-title font-alt align-left">
-                <a href="/tag_services/<%= tag.id %>/" class="ajax">
+                <a href="/tag_services/<%= tag.name %>/" class="ajax">
                   Услуги (<%= services_count %>)
                 </a>
               </h5>
@@ -35,7 +35,7 @@
       <section class="page-section">
           <div class="container relative">
               <h5 class="section-title font-alt align-left">
-                <a href="/tag_stores/<%= tag.id %>/" class="ajax">
+                <a href="/tag_stores/<%= tag.name %>/" class="ajax">
                   Товары (<%= stores_count %>)
                 </a>
               </h5>
@@ -53,7 +53,7 @@
       <section class="page-section">
           <div class="container relative">
               <h5 class="section-title font-alt align-left">
-                <a href="/tag_works/<%= tag.id %>/" class="ajax">
+                <a href="/tag_works/<%= tag.name %>/" class="ajax">
                   Работы (<%= works_count %>)
                 </a>
               </h5>
@@ -71,7 +71,7 @@
       <section class="page-section">
           <div class="container relative">
               <h5 class="section-title font-alt align-left">
-                <a href="/tag_blogs/<%= tag.id %>/" class="ajax">
+                <a href="/tag_blogs/<%= tag.name %>/" class="ajax">
                   Статьи блога (<%= blogs_count %>)
                 </a>
               </h5>
@@ -89,7 +89,7 @@
       <section class="page-section">
           <div class="container relative">
               <h5 class="section-title font-alt align-left">
-                <a href="/tag_wikis/<%= tag.id %>/" class="ajax">
+                <a href="/tag_wikis/<%= tag.name %>/" class="ajax">
                   Товары (<%= wikis_count %>)
                 </a>
               </h5>

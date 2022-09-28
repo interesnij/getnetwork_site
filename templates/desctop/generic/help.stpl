@@ -1,5 +1,9 @@
 <h4 class="font-alt"><%= object.title %></h4>
 <p>
-  <%- object.content %>
+  <% if object.content.is_some() { %>
+    <%- object.content.as_deref().unwrap() %>
+  <% } else { %>
+    Без описания
+  <% } %>
 </p>
 <hr class="mb-30">

@@ -2,12 +2,10 @@ use actix_web::{
     web,
     HttpRequest,
     HttpResponse,
-    Responder,
     error::InternalError,
     http::StatusCode,
 };
-use actix_multipart::Multipart;
-use std::borrow::BorrowMut;
+
 use crate::utils::{
     establish_connection,
     is_signed_in,
@@ -21,818 +19,83 @@ use crate::diesel::{
     ExpressionMethods,
     QueryDsl,
 };
-use crate::models::User;
 use crate::models::{
-    WikiCategories,
-    NewWikiCategories,
-    Wiki,
-    NewWiki,
-    WikiCategory,
-    NewWikiCategory,
-    WikiImage,
-    WikiVideo,
-    TagItems,
-    NewTagItems,
-    Tag,
+    Categories,
+    Item,
+    User,
+    Cat,
+    SmallTag,
+    CatDetail,
 };
 use sailfish::TemplateOnce;
 
 
 pub fn wiki_routes(config: &mut web::ServiceConfig) {
     config.route("/wiki_categories/", web::get().to(wiki_categories_page));
-    config.service(web::resource("/create_wiki_categories/")
-        .route(web::get().to(create_wiki_categories_page))
-        .route(web::post().to(create_wiki_categories))
-    );
-    config.service(web::resource("/edit_wiki_category/{id}/")
-        .route(web::get().to(edit_wiki_category_page))
-        .route(web::post().to(edit_wiki_category))
-    );
-    config.service(web::resource("/create_wiki/")
-        .route(web::get().to(create_wiki_page))
-        .route(web::post().to(create_wiki))
-    );
-    config.service(web::resource("/edit_wiki/{id}/")
-        .route(web::get().to(edit_wiki_page))
-        .route(web::post().to(edit_wiki))
-    );
-    config.service(web::resource("/edit_content_wiki/{id}/")
-        .route(web::get().to(edit_content_wiki_page))
-        .route(web::post().to(edit_content_wiki))
-    );
-    config.route("/delete_wiki/{id}/", web::get().to(delete_wiki));
-    config.route("/delete_wiki_category/{id}/", web::get().to(delete_wiki_category));
-    config.route("/publish_wiki/{id}/", web::get().to(publish_wiki));
-    config.route("/hide_wiki/{id}/", web::get().to(hide_wiki));
-
-    config.service(web::resource("/wiki/{cat_id}/{wiki_id}/").route(web::get().to(get_wiki_page)));
-    config.service(web::resource("/wikis/{id}/").route(web::get().to(wiki_category_page)));
-
-    config.route("/create_wiki_images/{id}/", web::post().to(create_wiki_images));
-    config.route("/create_wiki_videos/{id}/", web::post().to(create_wiki_videos));
-    config.route("/delete_wiki_image/{id}/", web::get().to(delete_wiki_image));
-    config.route("/delete_wiki_video/{id}/", web::get().to(delete_wiki_video));
+    config.service(web::resource("/wiki/{cat_slug}/{wiki_slug}/").route(web::get().to(get_wiki_page)));
+    config.service(web::resource("/wikis/{slug}/").route(web::get().to(wiki_category_page)));
 }
 
-pub async fn create_wiki_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
+
+pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<(String,String)>) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_ajax;
+    use schema::items::dsl::items;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-    if is_ajax == 0 {
-        get_first_load_page (
-            &session,
-            is_desctop,
-            "Создание категории статей".to_string(),
-            "вебсервисы.рф: Создание категории статей".to_string(),
-            "/create_wiki_categories/".to_string(),
-            "/static/images/dark/store.jpg".to_string(),
-        ).await
-    }
-    else if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use schema::wiki_categories::dsl::wiki_categories;
-
-            let _connection = establish_connection();
-            let _wiki_cats:Vec<WikiCategories> = wiki_categories
-                .load(&_connection)
-                .expect("Error");
-
-            if is_desctop {
-                #[derive(TemplateOnce)]
-                #[template(path = "desctop/wikis/create_categories.stpl")]
-                struct Template {
-                    request_user: User,
-                    wiki_cats:    Vec<WikiCategories>,
-                    is_ajax:      i32,
-                }
-                let body = Template {
-                    request_user: _request_user,
-                    wiki_cats:    _wiki_cats,
-                    is_ajax:      is_ajax,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-            }
-            else {
-                #[derive(TemplateOnce)]
-                #[template(path = "mobile/wikis/create_categories.stpl")]
-                struct Template {
-                    wiki_cats:    Vec<WikiCategories>,
-                    is_ajax:      i32,
-                }
-                let body = Template {
-                    wiki_cats:    _wiki_cats,
-                    is_ajax:      is_ajax,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-            }
-        }
-        else {
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
-        }
-    }
-    else {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
-    }
-}
-
-pub async fn create_wiki_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    if is_ajax == 0 {
-        get_first_load_page (
-            &session,
-            is_desctop,
-            "Создание статьи".to_string(),
-            "вебсервисы.рф: Создание статьи".to_string(),
-            "/create_wiki/".to_string(),
-            "/static/images/dark/store.jpg".to_string(),
-        ).await
-    }
-    else if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use schema::tags::dsl::tags;
-            use schema::wiki_categories::dsl::wiki_categories;
-
-            let _connection = establish_connection();
-            let _wiki_cats:Vec<WikiCategories> = wiki_categories
-                .load(&_connection)
-                .expect("Error");
-
-            let all_tags: Vec<Tag> = tags
-                .load(&_connection)
-                .expect("Error.");
-
-            if is_desctop {
-                #[derive(TemplateOnce)]
-                #[template(path = "desctop/wikis/create_wiki.stpl")]
-                struct Template {
-                    request_user: User,
-                    wiki_cats:    Vec<WikiCategories>,
-                    all_tags:     Vec<Tag>,
-                    is_ajax:      i32,
-                }
-                let body = Template {
-                    request_user: _request_user,
-                    wiki_cats:    _wiki_cats,
-                    all_tags:     all_tags,
-                    is_ajax:      is_ajax,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-            }
-            else {
-                #[derive(TemplateOnce)]
-                #[template(path = "mobile/wikis/create_wiki.stpl")]
-                struct Template {
-                    wiki_cats:    Vec<WikiCategories>,
-                    all_tags:     Vec<Tag>,
-                    is_ajax:      i32,
-                }
-                let body = Template {
-                    wiki_cats:    _wiki_cats,
-                    all_tags:     all_tags,
-                    is_ajax:      is_ajax,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-            }
-        }
-        else {
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
-        }
-    }
-    else {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
-    }
-}
-pub async fn edit_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use schema::wikis::dsl::wikis;
-    use crate::utils::get_device_and_ajax;
-
-    let _wiki_id: i32 = *_id;
     let _connection = establish_connection();
-    let _wikis = wikis.filter(schema::wikis::id.eq(&_wiki_id)).load::<Wiki>(&_connection).expect("E");
-    let _wiki = _wikis.into_iter().nth(0).unwrap();
+    let _item_id: String = param.1.clone();
+    let _cat_id: String = param.0.clone();
 
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    if is_ajax == 0 {
-        get_first_load_page (
-            &session,
-            is_desctop,
-            "Изменение статьи ".to_string() + &_wiki.title,
-            "вебсервисы.рф: Изменение статьи ".to_string() + &_wiki.title,
-            "/edit_store_category/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
-            _wiki.get_image(),
-        ).await
-    }
-    else if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && _wiki.user_id == _request_user.id {
-            use schema::{
-                tags::dsl::tags,
-                wiki_categories::dsl::wiki_categories,
-            };
-
-            let _categories = _wiki.get_categories();
-            let _all_tags: Vec<Tag> = tags.load(&_connection).expect("Error.");
-            let _wiki_tags = _wiki.get_tags();
-
-            let _wiki_cats:Vec<WikiCategories> = wiki_categories
-                .load(&_connection)
-                .expect("Error");
-            if is_desctop {
-                #[derive(TemplateOnce)]
-                #[template(path = "desctop/wikis/edit_wiki.stpl")]
-                struct Template {
-                    request_user: User,
-                    object:       Wiki,
-                    categories:   Vec<WikiCategories>,
-                    is_ajax:      i32,
-                    all_tags:     Vec<Tag>,
-                    wiki_tags:    Vec<Tag>,
-                    wiki_cats:    Vec<WikiCategories>,
-
-                }
-                let body = Template {
-                    request_user: _request_user,
-                    object:       _wiki,
-                    categories:   _categories,
-                    is_ajax:      is_ajax,
-                    all_tags:     _all_tags,
-                    wiki_tags:    _wiki_tags,
-                    wiki_cats:    _wiki_cats,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-            }
-            else {
-                #[derive(TemplateOnce)]
-                #[template(path = "mobile/wikis/edit_wiki.stpl")]
-                struct Template {
-                    object:       Wiki,
-                    categories:   Vec<WikiCategories>,
-                    is_ajax:      i32,
-                    all_tags:     Vec<Tag>,
-                    wiki_tags:    Vec<Tag>,
-                    wiki_cats:    Vec<WikiCategories>,
-
-                }
-                let body = Template {
-                    object:       _wiki,
-                    categories:   _categories,
-                    is_ajax:      is_ajax,
-                    all_tags:     _all_tags,
-                    wiki_tags:    _wiki_tags,
-                    wiki_cats:    _wiki_cats,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-            }
-        }
-        else {
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
-        }
-    }
-    else {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
-    }
-}
-
-pub async fn edit_content_wiki_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use crate::schema::wikis::dsl::wikis;
-    use crate::utils::get_device_and_ajax;
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let _wiki_id: i32 = *_id;
-    let _connection = establish_connection();
-    let _wikis = wikis
-        .filter(schema::wikis::id.eq(&_wiki_id))
-        .load::<Wiki>(&_connection)
+    let _items = items
+        .filter(schema::items::slug.eq(&_item_id))
+        .load::<Item>(&_connection)
         .expect("E");
-    let _wiki = _wikis.into_iter().nth(0).unwrap();
-
+    let _item = _items.into_iter().nth(0).unwrap();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
             is_desctop,
-            "Изменение текста статьи ".to_string() + &_wiki.title,
-            "вебсервисы.рф: Изменение текста статьи ".to_string() + &_wiki.title,
-            "/edit_content_service/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
-            _wiki.get_image(),
+            _item.title.clone() + &" | Обучающая статья".to_string(),
+            _item.title.clone() + &" | Обучающая статья: вебсервисы.рф".to_string(),
+            "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
+            _item.get_image(),
         ).await
-    }
-    else if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && _request_user.id == _wiki.user_id {
-            if is_desctop {
-                #[derive(TemplateOnce)]
-                #[template(path = "desctop/wikis/edit_content_wiki.stpl")]
-                struct Template {
-                    request_user: User,
-                    wiki:         Wiki,
-                    is_ajax:      i32,
-                }
-                let body = Template {
-                    request_user: _request_user,
-                    wiki:         _wiki,
-                    is_ajax:      is_ajax,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-            }
-            else {
-                #[derive(TemplateOnce)]
-                #[template(path = "mobile/wikis/edit_content_wiki.stpl")]
-                struct Template {
-                    wiki:         Wiki,
-                    is_ajax:      i32,
-                }
-                let body = Template {
-                    wiki:         _wiki,
-                    is_ajax:      is_ajax,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-            }
-        }
-        else {
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
-        }
     }
     else {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied."))
-    }
-}
-pub async fn edit_content_wiki(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::wikis::dsl::wikis;
+        use schema::{
+            categories::dsl::categories,
+            tech_categories::dsl::tech_categories,
+        };
+        use crate::models::{TechCategories, FeaturedItem};
 
-    let _wiki_id: i32 = *_id;
-    let _connection = establish_connection();
-    let _wikis = wikis
-        .filter(schema::wikis::id.eq(&_wiki_id))
-        .load::<Wiki>(&_connection)
-        .expect("E");
-
-    let _wiki = _wikis.into_iter().nth(0).unwrap();
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && _request_user.id == _wiki.user_id {
-            use crate::utils::content_form;
-
-            let form = content_form(payload.borrow_mut()).await;
-            diesel::update(&_wiki)
-            .set(schema::wikis::content.eq(form.content.clone()))
-            .get_result::<Wiki>(&_connection)
-            .expect("E");
-        }
-    }
-    HttpResponse::Ok().body("")
-}
-
-pub async fn edit_wiki_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-    use crate::schema::wiki_categories::dsl::wiki_categories;
-
-    let _cat_id: i32 = *_id;
-    let _connection = establish_connection();
-    let _categorys = wiki_categories
-        .filter(schema::wiki_categories::id.eq(&_cat_id))
-        .load::<WikiCategories>(&_connection)
-        .expect("E");
-    let _category = _categorys.into_iter().nth(0).unwrap();
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-
-    if is_ajax == 0 {
-        get_first_load_page (
-            &session,
-            is_desctop,
-            "Изменение категории обучающих статей ".to_string() + &_category.name,
-            "вебсервисы.рф: Изменение категории обучающих статей ".to_string() + &_category.name,
-            "/edit_wiki_category/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_image(),
-        ).await
-    }
-    else if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            if is_desctop {
-                #[derive(TemplateOnce)]
-                #[template(path = "desctop/wikis/edit_category.stpl")]
-                struct Template {
-                    request_user: User,
-                    category:     WikiCategories,
-                    is_ajax:      i32,
-                }
-                let body = Template {
-                    request_user: _request_user,
-                    category:     _category,
-                    is_ajax:      is_ajax,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-            }
-            else {
-                #[derive(TemplateOnce)]
-                #[template(path = "mobile/wikis/edit_category.stpl")]
-                struct Template {
-                    category:     WikiCategories,
-                    is_ajax:      i32,
-                }
-                let body = Template {
-                    category:     _category,
-                    is_ajax:      is_ajax,
-                }
-                .render_once()
-                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
-                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
-            }
-        }
-        else {
-            Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
-        }
-    } else {
-        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
-    }
-}
-
-pub async fn create_wiki_categories(session: Session, mut payload: Multipart) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::utils::category_form;
-
-            let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
-            let new_cat = NewWikiCategories {
-                name:        form.name.clone(),
-                description: Some(form.description.clone()),
-                position:    form.position,
-                image:       Some(form.image.clone()),
-                count:       0,
-                view:        0,
-                height:      0.0,
-                seconds:     0,
-            };
-            let _new_wiki = diesel::insert_into(schema::wiki_categories::table)
-                .values(&new_cat)
-                .get_result::<WikiCategories>(&_connection)
-                .expect("Error saving post.");
-        }
-    }
-    return HttpResponse::Ok();
-}
-
-pub async fn create_wiki(session: Session, mut payload: Multipart) -> impl Responder {
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::wiki_categories::dsl::wiki_categories;
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::utils::item_form;
-
-            let _connection = establish_connection();
-
-            let form = item_form(payload.borrow_mut(), _request_user.id).await;
-            let new_wiki = NewWiki::create (
-                form.title.clone(),
-                form.description.clone(),
-                form.link.clone(),
-                form.main_image.clone(),
-                form.is_active.clone(),
-                _request_user.id,
-            );
-
-            let _wiki = diesel::insert_into(schema::wikis::table)
-                .values(&new_wiki)
-                .get_result::<Wiki>(&_connection)
-                .expect("E.");
-
-            for category_id in form.category_list.iter() {
-                let new_category = NewWikiCategory {
-                    wiki_categories_id: *category_id,
-                    wiki_id: _wiki.id
-                };
-                diesel::insert_into(schema::wiki_category::table)
-                    .values(&new_category)
-                    .get_result::<WikiCategory>(&_connection)
-                    .expect("E.");
-
-                let _category = wiki_categories.filter(schema::wiki_categories::id.eq(category_id)).load::<WikiCategories>(&_connection).expect("E");
-                diesel::update(&_category[0])
-                    .set(schema::wiki_categories::count.eq(_category[0].count + 1))
-                    .get_result::<WikiCategories>(&_connection)
-                    .expect("Error.");
-            };
-            for tag_id in form.tags_list.iter() {
-                let new_tag = NewTagItems {
-                    tag_id: *tag_id,
-                    service_id: 0,
-                    store_id: 0,
-                    blog_id: 0,
-                    wiki_id: _wiki.id,
-                    work_id: 0,
-                    created: chrono::Local::now().naive_utc(),
-                };
-                diesel::insert_into(schema::tags_items::table)
-                    .values(&new_tag)
-                    .get_result::<TagItems>(&_connection)
-                    .expect("Error.");
-
-                let _tag = tags.filter(schema::tags::id.eq(tag_id)).load::<Tag>(&_connection).expect("E");
-                diesel::update(&_tag[0])
-                    .set((schema::tags::count.eq(_tag[0].count + 1), schema::tags::wiki_count.eq(_tag[0].wiki_count + 1)))
-                    .get_result::<Tag>(&_connection)
-                    .expect("Error.");
-            }
-        }
-    };
-    HttpResponse::Ok()
-}
-
-pub async fn edit_wiki(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::EditWiki;
-    use crate::schema::wikis::dsl::wikis;
-    use crate::schema::tags::dsl::tags;
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::wiki_category::dsl::wiki_category;
-    use crate::schema::wiki_categories::dsl::wiki_categories;
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::utils::item_form;
-
-            let _connection = establish_connection();
-            let _wiki_id: i32 = *_id;
-            let _wikis = wikis
-                .filter(schema::wikis::id.eq(_wiki_id))
-                .load::<Wiki>(&_connection)
-                .expect("E");
-
-            let _wiki = _wikis.into_iter().nth(0).unwrap();
-
-            let _categories = _wiki.get_categories();
-            let _tags = _wiki.get_tags();
-            for _category in _categories.iter() {
-                diesel::update(_category)
-                    .set(schema::wiki_categories::count.eq(_category.count - 1))
-                    .get_result::<WikiCategories>(&_connection)
-                    .expect("Error.");
-            };
-            for _tag in _tags.iter() {
-                diesel::update(_tag)
-                .set((schema::tags::count.eq(_tag.count - 1), schema::tags::wiki_count.eq(_tag.wiki_count - 1)))
-                .get_result::<Tag>(&_connection)
-                .expect("Error.");
-            };
-
-            diesel::delete(tags_items.filter(schema::tags_items::wiki_id.eq(_wiki_id))).execute(&_connection).expect("E");
-            diesel::delete(wiki_category.filter(schema::wiki_category::wiki_id.eq(_wiki_id))).execute(&_connection).expect("E");
-
-            let form = item_form(payload.borrow_mut(), _request_user.id).await;
-            let _new_wiki = EditWiki {
-                title:       form.title.clone(),
-                description: Some(form.description.clone()),
-                link:        Some(form.link.clone()),
-                image:       Some(form.main_image.clone()),
-                is_active:   form.is_active.clone()
-            };
-
-            diesel::update(&_wiki)
-            .set(_new_wiki)
-            .get_result::<Wiki>(&_connection)
+        let _tech_categories = tech_categories
+            .load::<TechCategories>(&_connection)
             .expect("E");
 
-            for category_id in form.category_list.iter() {
-                let new_category = NewWikiCategory {
-                    wiki_categories_id: *category_id,
-                    wiki_id:            _wiki_id
-                };
-                diesel::insert_into(schema::wiki_category::table)
-                .values(&new_category)
-                .get_result::<WikiCategory>(&_connection)
-                .expect("E.");
-
-                let _category_2 = wiki_categories.filter(schema::wiki_categories::id.eq(category_id)).load::<WikiCategories>(&_connection).expect("E");
-                diesel::update(&_category_2[0])
-                    .set(schema::wiki_categories::count.eq(_category_2[0].count + 1))
-                    .get_result::<WikiCategories>(&_connection)
-                    .expect("Error.");
-            };
-            for _tag_id in form.tags_list.iter() {
-                let _new_tag = NewTagItems {
-                    tag_id:     *_tag_id,
-                    service_id: 0,
-                    store_id:   0,
-                    blog_id:    0,
-                    wiki_id:    _wiki_id,
-                    work_id:    0,
-                    created:    chrono::Local::now().naive_utc(),
-                };
-                diesel::insert_into(schema::tags_items::table)
-                    .values(&_new_tag)
-                    .get_result::<TagItems>(&_connection)
-                    .expect("Error.");
-                let _tag_2 = tags.filter(schema::tags::id.eq(_tag_id)).load::<Tag>(&_connection).expect("E");
-                diesel::update(&_tag_2[0])
-                    .set((schema::tags::count.eq(_tag_2[0].count + 1), schema::tags::wiki_count.eq(_tag_2[0].wiki_count + 1)))
-                    .get_result::<Tag>(&_connection)
-                    .expect("Error.");
-            };
-        }
-    }
-    HttpResponse::Ok()
-}
-
-pub async fn edit_wiki_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::EditWikiCategories;
-    use crate::schema::wiki_categories::dsl::wiki_categories;
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::utils::category_form;
-
-            let _connection = establish_connection();
-            let _cat_id: i32 = *_id;
-            let _category = wiki_categories.filter(schema::wiki_categories::id.eq(_cat_id)).load::<WikiCategories>(&_connection).expect("E");
-
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
-            let _new_cat = EditWikiCategories {
-                name:        form.name.clone(),
-                description: Some(form.description.clone()),
-                position:    form.position,
-                image:       Some(form.image.clone()),
-            };
-
-            diesel::update(&_category[0])
-                .set(_new_cat)
-                .get_result::<WikiCategories>(&_connection)
-                .expect("E");
-        }
-    }
-    HttpResponse::Ok()
-}
-
-pub async fn delete_wiki(session: Session, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::wikis::dsl::wikis;
-    use crate::schema::tags_items::dsl::tags_items;
-    use crate::schema::wiki_category::dsl::wiki_category;
-    use crate::schema::wiki_videos::dsl::wiki_videos;
-    use crate::schema::wiki_images::dsl::wiki_images;
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            let _connection = establish_connection();
-            let _wiki_id: i32 = *_id;
-            let _wikis = wikis.filter(schema::wikis::id.eq(_wiki_id)).load::<Wiki>(&_connection).expect("E");
-
-            let _wiki = _wikis.into_iter().nth(0).unwrap();
-            let _categories = _wiki.get_categories();
-            let _tags = _wiki.get_tags();
-            for _category in _categories.iter() {
-                diesel::update(_category)
-                .set(schema::wiki_categories::count.eq(_category.count - 1))
-                .get_result::<WikiCategories>(&_connection)
-                .expect("Error.");
-            };
-            for _tag in _tags.iter() {
-                diesel::update(_tag)
-                .set((schema::tags::count.eq(_tag.count - 1), schema::tags::wiki_count.eq(_tag.wiki_count - 1)))
-                .get_result::<Tag>(&_connection)
-                .expect("Error.");
-            };
-
-            diesel::delete(wiki_images.filter(schema::wiki_images::wiki.eq(_wiki_id))).execute(&_connection).expect("E");
-            diesel::delete(wiki_videos.filter(schema::wiki_videos::wiki.eq(_wiki_id))).execute(&_connection).expect("E");
-            diesel::delete(tags_items.filter(schema::tags_items::wiki_id.eq(_wiki_id))).execute(&_connection).expect("E");
-            diesel::delete(wiki_category.filter(schema::wiki_category::wiki_id.eq(_wiki_id))).execute(&_connection).expect("E");
-            diesel::delete(&_wiki).execute(&_connection).expect("E");
-        }
-    }
-    HttpResponse::Ok()
-}
-
-pub async fn delete_wiki_category(session: Session, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::wiki_categories::dsl::wiki_categories;
-
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            let _connection = establish_connection();
-            let _cat_id: i32 = *_id;
-            let _category = wiki_categories.filter(schema::wiki_categories::id.eq(_cat_id)).load::<WikiCategories>(&_connection).expect("E");
-            diesel::delete(wiki_categories.filter(schema::wiki_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
-        }
-    }
-    HttpResponse::Ok()
-}
-
-pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<(i32,i32)>) -> actix_web::Result<HttpResponse> {
-    use schema::wikis::dsl::wikis;
-    use crate::utils::get_device_and_ajax;
-
-    let _connection = establish_connection();
-    let _wiki_id: i32 = param.1;
-    let _cat_id: i32 = param.0;
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let _wikis = wikis
-        .filter(schema::wikis::id.eq(&_wiki_id))
-        .load::<Wiki>(&_connection)
-        .expect("E");
-    let _wiki = _wikis.into_iter().nth(0).unwrap();
-
-    if is_ajax == 0 {
-        get_first_load_page (
-            &session,
-            is_desctop,
-            "Статья ".to_string() + &_wiki.title,
-            "вебсервисы.рф: Статья ".to_string() + &_wiki.title,
-            "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
-            _wiki.get_image(),
-        ).await
-    }
-    else {
-        use schema::wiki_categories::dsl::wiki_categories;
-        use schema::wiki_images::dsl::wiki_images;
-        use schema::wiki_videos::dsl::wiki_videos;
-
-        let _categorys = wiki_categories
-            .filter(schema::wiki_categories::id.eq(&_cat_id))
-            .load::<WikiCategories>(&_connection)
+        let _categorys = categories
+            .filter(schema::categories::slug.eq(&_cat_id))
+            .filter(schema::categories::types.eq(_item.types))
+            .load::<Categories>(&_connection)
             .expect("E");
         let _category = _categorys.into_iter().nth(0).unwrap();
-        let _wiki_categories = wiki_categories
-            .load::<WikiCategories>(&_connection)
-            .expect("E");
+        let _cats = Categories::get_categories_for_types(4);
 
-        let _images: Vec<WikiImage> = wiki_images.filter(schema::wiki_images::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
-        let _videos: Vec<WikiVideo> = wiki_videos.filter(schema::wiki_videos::wiki.eq(&_wiki_id)).load(&_connection).expect("E");
-        let _tags = _wiki.get_tags();
+        let _tags = _item.get_tags();
 
-        let mut prev: Option<Wiki> = None;
-        let mut next: Option<Wiki> = None;
-
-        let _category_wikis = _category.get_wikis_ids();
-        let _category_wikis_len = _category_wikis.len();
-
-        for (i, item) in _category_wikis.iter().enumerate().rev() {
-            if item == &_wiki_id {
-                if (i + 1) != _category_wikis_len {
-                    let _next = Some(&_category_wikis[i + 1]);
-                    next = wikis
-                        .filter(schema::wikis::id.eq(_next.unwrap()))
-                        .filter(schema::wikis::is_active.eq(true))
-                        .load::<Wiki>(&_connection)
-                        .expect("E")
-                        .into_iter()
-                        .nth(0);
-                };
-                if i != 0 {
-                    let _prev = Some(&_category_wikis[i - 1]);
-                    prev = wikis
-                        .filter(schema::wikis::id.eq(_prev.unwrap()))
-                        .filter(schema::wikis::is_active.eq(true))
-                        .load::<Wiki>(&_connection)
-                        .expect("E")
-                        .into_iter()
-                        .nth(0);
-                };
-                break;
-            }
-        };
+        let (prev, next) = _category.get_featured_items(_item.types, _item.id);
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            if _wiki.is_active == false && _request_user.perm < 10 {
+            if _item.is_active == false && _request_user.perm < 10 {
                 use crate::utils::get_private_page;
                 get_private_page (
                     is_ajax,
                     _request_user,
                     is_desctop,
-                    "Обучающая статья ".to_string() + &_wiki.title,
-                    "вебсервисы.рф: Обучающая статья ".to_string() + &_wiki.title,
-                    "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
-                    _wiki.get_image(),
+                    _item.title.clone() + &" | Обучающая статья".to_string(),
+                    _item.title.clone() + &" | Обучающая статья: вебсервисы.рф".to_string(),
+                    "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
+                    _item.get_image(),
                 ).await
             }
             else if is_desctop {
@@ -840,27 +103,23 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 #[template(path = "desctop/wikis/wiki.stpl")]
                 struct Template {
                     request_user: User,
-                    object:       Wiki,
-                    images:       Vec<WikiImage>,
-                    videos:       Vec<WikiVideo>,
-                    category:     WikiCategories,
-                    wiki_cats:    Vec<WikiCategories>,
-                    all_tags:     Vec<Tag>,
-                    prev:         Option<Wiki>,
-                    next:         Option<Wiki>,
-                    is_ajax:      i32,
+                    object:   Item,
+                    category: Categories,
+                    cats:     Vec<Cat>,
+                    all_tags: Vec<SmallTag>,
+                    prev:     Option<FeaturedItem>,
+                    next:     Option<FeaturedItem>,
+                    is_ajax:  i32,
                 }
                 let body = Template {
                     request_user: _request_user,
-                    object:       _wiki,
-                    images:       _images,
-                    videos:       _videos,
-                    category:     _category,
-                    wiki_cats:    _wiki_categories,
-                    all_tags:     _tags,
-                    prev:         prev,
-                    next:         next,
-                    is_ajax:      is_ajax,
+                    object:   _item,
+                    category: _category,
+                    cats:     _cats,
+                    all_tags: _tags,
+                    prev:     prev,
+                    next:     next,
+                    is_ajax:  is_ajax,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -871,27 +130,23 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 #[template(path = "mobile/wikis/wiki.stpl")]
                 struct Template {
                     request_user: User,
-                    object:       Wiki,
-                    images:       Vec<WikiImage>,
-                    videos:       Vec<WikiVideo>,
-                    category:     WikiCategories,
-                    wiki_cats:    Vec<WikiCategories>,
-                    all_tags:     Vec<Tag>,
-                    prev:         Option<Wiki>,
-                    next:         Option<Wiki>,
-                    is_ajax:      i32,
+                    object:   Item,
+                    category: Categories,
+                    cats:     Vec<Cat>,
+                    all_tags: Vec<SmallTag>,
+                    prev:     Option<FeaturedItem>,
+                    next:     Option<FeaturedItem>,
+                    is_ajax:  i32,
                 }
                 let body = Template {
                     request_user: _request_user,
-                    object:       _wiki,
-                    images:       _images,
-                    videos:       _videos,
-                    category:     _category,
-                    wiki_cats:    _wiki_categories,
-                    all_tags:     _tags,
-                    prev:         prev,
-                    next:         next,
-                    is_ajax:      is_ajax,
+                    object:   _item,
+                    category: _category,
+                    cats:     _cats,
+                    all_tags: _tags,
+                    prev:     prev,
+                    next:     next,
+                    is_ajax:  is_ajax,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -899,41 +154,37 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             }
         }
         else {
-            if _wiki.is_active == false {
+            if _item.is_active == false {
                 use crate::utils::get_anon_private_page;
                 get_anon_private_page (
                     is_ajax,
                     is_desctop,
-                    "Обучающая статья ".to_string() + &_wiki.title,
-                    "вебсервисы.рф: Обучающая статья ".to_string() + &_wiki.title,
-                    "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_wiki.id.to_string() + &"/".to_string(),
-                    _wiki.get_image(),
+                    _item.title.clone() + &" | Обучающая статья".to_string(),
+                    _item.title.clone() + &" | Обучающая статья: вебсервисы.рф".to_string(),
+                    "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
+                    _item.get_image(),
                 ).await
             }
             else if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/anon_wiki.stpl")]
                 struct Template {
-                    object:     Wiki,
-                    images:     Vec<WikiImage>,
-                    videos:     Vec<WikiVideo>,
-                    category:   WikiCategories,
-                    wiki_cats:  Vec<WikiCategories>,
-                    all_tags:   Vec<Tag>,
-                    prev:       Option<Wiki>,
-                    next:       Option<Wiki>,
-                    is_ajax:    i32,
+                    object:   Item,
+                    category: Categories,
+                    cats:     Vec<Cat>,
+                    all_tags: Vec<SmallTag>,
+                    prev:     Option<FeaturedItem>,
+                    next:     Option<FeaturedItem>,
+                    is_ajax:  i32,
                 }
                 let body = Template {
-                    object:     _wiki,
-                    images:     _images,
-                    videos:     _videos,
-                    category:   _category,
-                    wiki_cats:  _wiki_categories,
-                    all_tags:   _tags,
-                    prev:       prev,
-                    next:       next,
-                    is_ajax:    is_ajax,
+                    object:   _item,
+                    category: _category,
+                    cats:     _cats,
+                    all_tags: _tags,
+                    prev:     prev,
+                    next:     next,
+                    is_ajax:  is_ajax,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -943,26 +194,22 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/anon_wiki.stpl")]
                 struct Template {
-                    object:     Wiki,
-                    images:     Vec<WikiImage>,
-                    videos:     Vec<WikiVideo>,
-                    category:   WikiCategories,
-                    wiki_cats:  Vec<WikiCategories>,
-                    all_tags:   Vec<Tag>,
-                    prev:       Option<Wiki>,
-                    next:       Option<Wiki>,
-                    is_ajax:    i32,
+                    object:   Item,
+                    category: Categories,
+                    cats:     Vec<Cat>,
+                    all_tags: Vec<SmallTag>,
+                    prev:     Option<FeaturedItem>,
+                    next:     Option<FeaturedItem>,
+                    is_ajax:  i32,
                 }
                 let body = Template {
-                    object:     _wiki,
-                    images:     _images,
-                    videos:     _videos,
-                    category:   _category,
-                    wiki_cats:  _wiki_categories,
-                    all_tags:   _tags,
-                    prev:       prev,
-                    next:       next,
-                    is_ajax:    is_ajax,
+                    object:   _item,
+                    category: _category,
+                    cats:     _cats,
+                    all_tags: _tags,
+                    prev:     prev,
+                    next:     next,
+                    is_ajax:  is_ajax,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -972,40 +219,63 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
     }
 }
 
-pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
+    use crate::schema::categories::dsl::categories;
     use crate::utils::get_device_and_ajax;
-    use crate::schema::wiki_categories::dsl::wiki_categories;
 
-    let _cat_id: i32 = *_id;
+    let _cat_id: String = _id.clone();
     let _connection = establish_connection();
-    let _categorys = wiki_categories.filter(schema::wiki_categories::id.eq(_cat_id)).load::<WikiCategories>(&_connection).expect("E");
-    let _category = _categorys.into_iter().nth(0).unwrap();
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
+    let _categorys = categories
+        .filter(schema::categories::slug.eq(&_cat_id))
+        .filter(schema::categories::types.eq(4))
+        .limit(1)
+        .select((
+            schema::categories::name,
+            schema::categories::slug,
+            schema::categories::count,
+            schema::categories::id,
+            schema::categories::image,
+            schema::categories::view,
+            schema::categories::height,
+            schema::categories::seconds
+        ))
+        .load::<CatDetail>(&_connection)
+        .expect("E");
+
+    let _category = _categorys.into_iter().nth(0).unwrap();
+    let cat_image: String;
+    if _category.image.is_some() {
+        cat_image = _category.image.as_deref().unwrap().to_string();
+    }
+    else {
+        cat_image = "/static/images/dark/store.jpg".to_string();
+    }
+
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
             is_desctop,
-            "Категория обучающих статей ".to_string() + &_category.name,
-            "вебсервисы.рф: Категория обучающих статей ".to_string() + &_category.name,
-            "/wikis/".to_string() + &_category.id.to_string() + &"/".to_string(),
-            _category.get_image(),
+            _category.name.clone() + &" | Категория обучения ".to_string(),
+            _category.name.clone() + &" | Категория обучения - вебсервисы.рф".to_string(),
+            "/wikis/".to_string() + &_category.slug.clone() + &"/".to_string(),
+            cat_image,
         ).await
     }
     else {
-        use crate::schema::tags_items::dsl::tags_items;
         use crate::utils::get_page;
+        use crate::schema::tags_items::dsl::tags_items;
+        use crate::models::Wiki;
 
         let page = get_page(&req);
+        let _cats = Categories::get_categories_for_types(4);
+
         let mut stack = Vec::new();
         let _tag_items = tags_items
-            .filter(schema::tags_items::wiki_id.ne(0))
+            .filter(schema::tags_items::types.eq(4))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
-            .expect("E");
-
-        let _wiki_categorys = wiki_categories
-            .load::<WikiCategories>(&_connection)
             .expect("E");
         for _tag_item in _tag_items.iter() {
             if !stack.iter().any(|&i| i==_tag_item) {
@@ -1014,20 +284,21 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
         };
         let _tags = schema::tags::table
             .filter(schema::tags::id.eq_any(stack))
-            .load::<Tag>(&_connection)
-            .expect("could not load tags");
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
+            .expect("E");
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let (object_list, next_page_number) = _category.get_wikis_list(page, 20, _request_user.is_superuser());
+            let (object_list, next_page_number) = Categories::get_wikis_list(_category.id, page, 20, _request_user.is_superuser());
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/category.stpl")]
                 struct Template {
                     request_user:     User,
-                    all_tags:         Vec<Tag>,
-                    category:         WikiCategories,
-                    wiki_cats:        Vec<WikiCategories>,
+                    all_tags:         Vec<SmallTag>,
+                    category:         CatDetail,
+                    cats:             Vec<Cat>,
                     object_list:      Vec<Wiki>,
                     next_page_number: i32,
                     is_ajax:          i32,
@@ -1036,7 +307,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     request_user:     _request_user,
                     all_tags:         _tags,
                     category:         _category,
-                    wiki_cats:        _wiki_categorys,
+                    cats:             _cats,
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
@@ -1049,9 +320,9 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/category.stpl")]
                 struct Template {
-                    all_tags:         Vec<Tag>,
-                    category:         WikiCategories,
-                    wiki_cats:        Vec<WikiCategories>,
+                    all_tags:         Vec<SmallTag>,
+                    category:         CatDetail,
+                    cats:             Vec<Cat>,
                     object_list:      Vec<Wiki>,
                     next_page_number: i32,
                     is_ajax:          i32,
@@ -1059,7 +330,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 let body = Template {
                     all_tags:         _tags,
                     category:         _category,
-                    wiki_cats:        _wiki_categorys,
+                    cats:             _cats,
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
@@ -1070,15 +341,15 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
         }
         else {
-            let (object_list, next_page_number) = _category.get_wikis_list(page, 20, false);
+            let (object_list, next_page_number) = Categories::get_wikis_list(_category.id, page, 20, false);
 
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/anon_category.stpl")]
                 struct Template {
-                    all_tags:         Vec<Tag>,
-                    category:         WikiCategories,
-                    wiki_cats:        Vec<WikiCategories>,
+                    all_tags:         Vec<SmallTag>,
+                    category:         CatDetail,
+                    cats:             Vec<Cat>,
                     object_list:      Vec<Wiki>,
                     next_page_number: i32,
                     is_ajax:          i32,
@@ -1086,7 +357,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 let body = Template {
                     all_tags:         _tags,
                     category:         _category,
-                    wiki_cats:        _wiki_categorys,
+                    cats:             _cats,
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
@@ -1099,9 +370,9 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/anon_category.stpl")]
                 struct Template {
-                    all_tags:         Vec<Tag>,
-                    category:         WikiCategories,
-                    wiki_cats:        Vec<WikiCategories>,
+                    all_tags:         Vec<SmallTag>,
+                    category:         CatDetail,
+                    cats:             Vec<Cat>,
                     object_list:      Vec<Wiki>,
                     next_page_number: i32,
                     is_ajax:          i32,
@@ -1109,7 +380,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                 let body = Template {
                     all_tags:         _tags,
                     category:         _category,
-                    wiki_cats:        _wiki_categorys,
+                    cats:             _cats,
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
@@ -1130,8 +401,8 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
         get_first_load_page (
             &session,
             is_desctop,
-            "Категории обучающих статей".to_string(),
-            "вебсервисы.рф: Категории обучающих статей".to_string(),
+            "Категории обучения".to_string(),
+            "вебсервисы.рф: Категории обучения".to_string(),
             "/wiki_categories/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
         ).await
@@ -1140,38 +411,37 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
         use crate::schema::{
             tags_items::dsl::tags_items,
             tags::dsl::tags,
-            wiki_categories::dsl::wiki_categories,
-            stat_wiki_categories::dsl::stat_wiki_categories,
+            stat_pages::dsl::stat_pages,
         };
-        use crate::models::StatWikiCategorie;
+        use crate::models::StatPage;
 
         let _connection = establish_connection();
-
-        let _stat: StatWikiCategorie;
-        let _stats = stat_wiki_categories
+        let _stat: StatPage;
+        let _stats = stat_pages
+            .filter(schema::stat_pages::types.eq(81))
             .limit(1)
-            .load::<StatWikiCategorie>(&_connection)
-        .expect("E");
-
+            .load::<StatPage>(&_connection)
+            .expect("E");
         if _stats.len() > 0 {
             _stat = _stats.into_iter().nth(0).unwrap();
         }
         else {
-            use crate::models::NewStatWikiCategorie;
-            let form = NewStatWikiCategorie {
-                view: 0,
-                height: 0.0,
+            use crate::models::NewStatPage;
+            let form = NewStatPage {
+                types:   81,
+                view:    0,
+                height:  0.0,
                 seconds: 0,
             };
-            _stat = diesel::insert_into(schema::stat_wiki_categories::table)
+            _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
-                .get_result::<StatWikiCategorie>(&_connection)
+                .get_result::<StatPage>(&_connection)
                 .expect("Error.");
         }
 
         let mut stack = Vec::new();
         let _tag_items = tags_items
-            .filter(schema::tags_items::wiki_id.ne(0))
+            .filter(schema::tags_items::types.eq(4))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
@@ -1183,12 +453,11 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
         };
         let _tags = tags
             .filter(schema::tags::id.eq_any(stack))
-            .load::<Tag>(&_connection)
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
             .expect("could not load tags");
 
-        let _wiki_cats :Vec<WikiCategories> = wiki_categories
-            .load(&_connection)
-            .expect("Error");
+        let _cats = Categories::get_categories_for_types(4);
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -1198,13 +467,15 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 struct Template {
                     request_user: User,
                     is_ajax:      i32,
-                    wiki_cats:    Vec<WikiCategories>,
-                    stat:         StatWikiCategorie,
+                    cats:         Vec<Cat>,
+                    //all_tags:     Vec<SmallTag>,
+                    stat:         StatPage,
                 }
                 let body = Template {
                     request_user: _request_user,
                     is_ajax:      is_ajax,
-                    wiki_cats:    _wiki_cats,
+                    cats:         _cats,
+                    //all_tags:     _tags,
                     stat:         _stat,
                 }
                 .render_once()
@@ -1215,16 +486,16 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/categories.stpl")]
                 struct Template {
-                    request_user: User,
+                    //request_user: User,
                     is_ajax:      i32,
-                    wiki_cats:    Vec<WikiCategories>,
-                    all_tags:     Vec<Tag>,
-                    stat:         StatWikiCategorie,
+                    cats:         Vec<Cat>,
+                    all_tags:     Vec<SmallTag>,
+                    stat:         StatPage,
                 }
                 let body = Template {
-                    request_user: _request_user,
+                    //request_user: _request_user,
                     is_ajax:      is_ajax,
-                    wiki_cats:    _wiki_cats,
+                    cats:         _cats,
                     all_tags:     _tags,
                     stat:         _stat,
                 }
@@ -1238,14 +509,16 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/anon_categories.stpl")]
                 struct Template {
-                    is_ajax:      i32,
-                    wiki_cats:    Vec<WikiCategories>,
-                    stat:         StatWikiCategorie,
+                    is_ajax:  i32,
+                    cats:     Vec<Cat>,
+                    //all_tags: Vec<SmallTag>,
+                    stat:     StatPage,
                 }
                 let body = Template {
-                    is_ajax:      is_ajax,
-                    wiki_cats:    _wiki_cats,
-                    stat:         _stat,
+                    is_ajax:  is_ajax,
+                    cats:     _cats,
+                    //all_tags: _tags,
+                    stat:     _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1255,16 +528,16 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/anon_categories.stpl")]
                 struct Template {
-                    is_ajax:      i32,
-                    wiki_cats:    Vec<WikiCategories>,
-                    all_tags:     Vec<Tag>,
-                    stat:         StatWikiCategorie,
+                    is_ajax:  i32,
+                    cats:     Vec<Cat>,
+                    all_tags: Vec<SmallTag>,
+                    stat:     StatPage,
                 }
                 let body = Template {
-                    is_ajax:      is_ajax,
-                    wiki_cats:    _wiki_cats,
-                    all_tags:     _tags,
-                    stat:         _stat,
+                    is_ajax:  is_ajax,
+                    cats:     _cats,
+                    all_tags: _tags,
+                    stat:     _stat,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1272,157 +545,4 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
             }
         }
     }
-}
-
-pub async fn publish_wiki(session: Session, _id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::schema::wikis::dsl::wikis;
-
-            let _connection = establish_connection();
-            let _id: i32 = *_id;
-            let _wiki = wikis
-                .filter(schema::wikis::id.eq(_id))
-                .load::<Wiki>(&_connection)
-                .expect("E")
-                .into_iter()
-                .nth(0)
-                .unwrap();
-
-            let _categories = _wiki.get_categories();
-            for _category in _categories.iter() {
-                diesel::update(_category)
-                    .set(schema::wiki_categories::count.eq(_category.count + 1))
-                    .get_result::<WikiCategories>(&_connection)
-                    .expect("Error.");
-            };
-
-            diesel::update(&_wiki)
-                .set(schema::wikis::is_active.eq(true))
-                .get_result::<Wiki>(&_connection)
-                .expect("Error.");
-        }
-    }
-    HttpResponse::Ok()
-}
-pub async fn hide_wiki(session: Session, _id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::schema::wikis::dsl::wikis;
-
-            let _connection = establish_connection();
-            let _id: i32 = *_id;
-            let _wiki = wikis
-                .filter(schema::wikis::id.eq(_id))
-                .load::<Wiki>(&_connection)
-                .expect("E")
-                .into_iter()
-                .nth(0)
-                .unwrap();
-
-            let _categories = _wiki.get_categories();
-            for _category in _categories.iter() {
-                diesel::update(_category)
-                    .set(schema::wiki_categories::count.eq(_category.count - 1))
-                    .get_result::<WikiCategories>(&_connection)
-                    .expect("Error.");
-            };
-
-            diesel::update(&_wiki)
-                .set(schema::wikis::is_active.eq(false))
-                .get_result::<Wiki>(&_connection)
-                .expect("Error.");
-        }
-    }
-    HttpResponse::Ok()
-}
-
-pub async fn create_wiki_images(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::utils::images_form;
-            use crate::schema::wikis::dsl::wikis;
-            use crate::models::NewWikiImage;
-
-            let _connection = establish_connection();
-            let _wikis = wikis.filter(schema::wikis::id.eq(*id)).load::<Wiki>(&_connection).expect("E");
-            let _wiki = _wikis.into_iter().nth(0).unwrap();
-
-            let form = images_form(payload.borrow_mut(), _request_user.id).await;
-            for image in form.images.iter() {
-                let new_image = NewWikiImage::create (
-                    _wiki.id,
-                    image.to_string()
-                );
-                diesel::insert_into(schema::wiki_images::table)
-                    .values(&new_image)
-                    .get_result::<WikiImage>(&_connection)
-                    .expect("E.");
-                };
-        }
-    }
-    HttpResponse::Ok()
-}
-pub async fn create_wiki_videos(session: Session, mut payload: Multipart, id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::utils::videos_form;
-            use crate::schema::wikis::dsl::wikis;
-            use crate::models::NewWikiVideo;
-
-            let _connection = establish_connection();
-            let _wikis = wikis.filter(schema::wikis::id.eq(*id)).load::<Wiki>(&_connection).expect("E");
-            let _wiki = _wikis.into_iter().nth(0).unwrap();
-
-            let form = videos_form(payload.borrow_mut(), _request_user.id).await;
-            for video in form.videos.iter() {
-                let new_video = NewWikiVideo::create (
-                    _wiki.id,
-                    video.to_string()
-                );
-                diesel::insert_into(schema::wiki_videos::table)
-                    .values(&new_video)
-                    .get_result::<WikiVideo>(&_connection)
-                    .expect("E.");
-            };
-        }
-    }
-    HttpResponse::Ok()
-}
-
-pub async fn delete_wiki_image(session: Session, id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::schema::wiki_images::dsl::wiki_images;
-
-            let _connection = establish_connection();
-            let _images = wiki_images.filter(schema::wiki_images::id.eq(*id)).load::<WikiImage>(&_connection).expect("E");
-            let _image = _images.into_iter().nth(0).unwrap();
-            let src = "/my".to_string() + &_image.src;
-            diesel::delete(wiki_images.filter(schema::wiki_images::id.eq(*id))).execute(&_connection).expect("E");
-            std::fs::remove_file(src).expect("E");
-        }
-    }
-    HttpResponse::Ok()
-}
-pub async fn delete_wiki_video(session: Session, id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            use crate::schema::wiki_videos::dsl::wiki_videos;
-
-            let _connection = establish_connection();
-            let _videos = wiki_videos.filter(schema::wiki_videos::id.eq(*id)).load::<WikiVideo>(&_connection).expect("E");
-            let _video = _videos.into_iter().nth(0).unwrap();
-            let src = "/my".to_string() + &_video.src;
-            diesel::delete(wiki_videos.filter(schema::wiki_videos::id.eq(*id))).execute(&_connection).expect("E");
-            std::fs::remove_file(src).expect("E");
-        }
-    }
-    HttpResponse::Ok()
 }

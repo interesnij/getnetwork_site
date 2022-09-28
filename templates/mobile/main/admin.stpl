@@ -36,7 +36,7 @@
                       <a href="/create_serve_categories/" class="ajax">+ технология опций</a>
                   </li>
                   <li>
-                      <a href="/help/create_categories/" class="ajax">+ категория помощи</a>
+                      <a href="/helps/create_categories/" class="ajax">+ категория помощи</a>
                   </li>
                   <li>
                       <a href="/create_work/" class="ajax">+ работа</a>
@@ -60,7 +60,7 @@
                       <a href="/create_serve/" class="ajax">+ опция</a>
                   </li>
                   <li>
-                      <a href="/help/create_item/" class="ajax">+ помощь</a>
+                      <a href="/helps/create_item/" class="ajax">+ помощь</a>
                   </li>
                   </ul>
                   <ul>

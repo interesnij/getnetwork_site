@@ -1,6 +1,6 @@
 <% include!("../header.stpl"); %>
 
-<section page-id="42" data-id="<%= category.id %>" data-title="Категория блога <%= category.name %>" data-description="вебсервисы.рф: Категория блога <%= category.name %>" data-uri="/blogs/<%= category.id %>/" data-image="<%= category.get_image() %>" class="doc_title">
+<section page-id="42" data-id="<%= category.id %>" data-title="Категория блога <%= category.name %>" data-description="вебсервисы.рф: Категория блога <%= category.name %>" data-uri="/blogs/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
             <a class="ajax" href="/blog_categories/">Блог</a>
@@ -12,24 +12,24 @@
 </section>
 <section class="page-section">
     <div class="relative">
-        <% if category.count > 0 { %>
-        <div class="is_paginate">
-        <% for object in object_list.iter() { %>
-        <% include!("../generic/blog.stpl"); %>
-        <% } %>
-        <% if next_page_number > 0 { %>
-        <div class="load centered m-1 next_page_list" data-link="/blog/<%= category.id %>/?page=<%= next_page_number %>">
-            <img src="/static/images/preloader.gif">
-        </div>
-        <% } %>
-        </div>
-        <% } else { %>
-        <div style="margin-top: 40px;">
-            <div class="align-center">
-                <span class="border" style="padding: 10px 15px;">Список пока пустой.</span>
-            </div>
-        </div>
-        <% } %>
+                  <% if object_list.len() > 0 { %>
+                    <div class="is_paginate">
+                    <% for object in object_list.iter() { %>
+                      <% include!("../generic/blog.stpl"); %>
+                    <% } %>
+                    <% if next_page_number > 0 { %>
+                      <div class="load centered m-1 next_page_list" data-link="/blogs/<%= category.slug %>/?page=<%= next_page_number %>">
+                        <img src="/static/images/preloader.gif">
+                      </div>
+                    <% } %>
+                    </div>
+                  <% } else { %>
+                  <div style="margin-top: 40px;">
+                      <div class="align-center">
+                          <span class="border" style="padding: 10px 15px;">Список пока пустой.</span>
+                      </div>
+                  </div>
+                  <% } %>
     </div>
 </section>
 <div class="sidebar hidden">

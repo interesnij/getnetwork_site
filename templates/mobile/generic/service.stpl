@@ -1,17 +1,24 @@
 <div class="blog-post-prev-small clearfix">
-    <a class="ajax" href="/service/<%= category.id %>/<%= object.id %>/">
-        <img src="<%= object.get_image() %>" alt="img" class="image_fit_100 widget-posts-img">
+    <a class="ajax" href="/service/<%= category.slug %>/<%= object.slug %>/">
+        <img src="<% if object.image.is_some() { %>
+          <%= object.image.as_deref().unwrap() %>
+        <% } else { %>
+          /static/images/img.jpg
+        <% } %>" alt="img" class="image_fit_100 widget-posts-img">
     </a>
     <div class="widget-posts-descr">
-        <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/service/<%= category.id %>/<%= object.id %>/">
+        <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/service/<%= category.slug %>/<%= object.slug %>/">
           <% if !object.is_active { %>
             <span style="color: red">🛇</span>
           <% } %>
           <%= object.title %>
         </a>
         <span>
-          <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-          <p><%= object.get_100_description() %></p>
+          <p><% if object.description.is_some() { %>
+            <%= object.description.as_deref().unwrap() %>
+          <% } else { %>
+            Без описания
+          <% } %></p>
         </span>
     </div>
 </div>

@@ -15,17 +15,21 @@
 
 <section class="page-section" style="padding-top: 45px;">
     <div class="container relative">
-        <% for category in store_cats.iter() { %>
+        <% for category in cats.iter() { %>
 
         <h3 class="blog-item-title font-alt mb-10">
-            <a class="ajax" href="/stores/<%= category.id %>/">
+            <a class="ajax" href="/stores/<%= category.slug %>/">
                 <%= category.name %> (<%= category.count %>)
             </a>
         </h3>
         <div class="row multi-columns-row">
-            <% if category.count > 0 { %>
-            <% let object_list = category.get_6_stores(request_user.is_superuser()); %>
-            <% for object in object_list.iter() { %>
+            <%
+              use crate::models::Categories;
+              let get_6_services = Categories::get_stores(category.id, 3, 0, request_user.is_superuser());
+            %>
+            <% if get_6_services.len() > 0 { %>
+
+            <% for object in get_6_services.iter() { %>
             <% include!("../generic/store.stpl"); %>
             <% } %>
             <% } else { %>
@@ -40,7 +44,27 @@
     </div>
 </section>
 <div class="sidebar hidden">
-    <% include!("sidebar.stpl"); %>
+<div class="widget">
+    <form class="form-inline form" role="form">
+        <div class="search-wrap">
+            <input data-folder="_stores" type="text" class="form-control search-field desctop_folder_search" placeholder="Поиск от 3х букв">
+        </div>
+    </form>
+</div>
+<div class="widget">
+    <h5 class="widget-title font-alt">Категории</h5>
+    <div class="widget-body">
+        <ul class="clearlist widget-menu">
+          <% for cat in cats.iter() { %>
+            <li>
+              <a class="ajax" href="/stores/<%= cat.slug %>/"><%= cat.name %></a>
+            </li>
+          <% } %>
+        </ul>
+    </div>
+</div>
+
+<% include!("../../block/tags_widget.stpl"); %>
 </div>
 
 <% include!("../footer.stpl"); %>

@@ -10,30 +10,16 @@
     <h5 class="widget-title font-alt">Категории</h5>
     <div class="widget-body">
         <ul class="clearlist widget-menu">
-          <% for category in wiki_cats.iter() { %>
+          <% for cat in cats.iter() { %>
             <li>
-                <a class="ajax" href="/wikis/<%= category.id %>/"><%= category.name %></a>
-                <small>
-                    - <%= category.count %>
-                </small>
+              <a <% if cat.id == category.id { %>style="font-weight:bold"<% } %> class="ajax" href="/wikis/<%= cat.slug %>/"><%= cat.name %></a>
             </li>
-            <% } %>
+          <% } %>
         </ul>
     </div>
 </div>
 
-<% if all_tags.len() > 0 { %>
-<div class="widget">
-    <h5 class="widget-title font-alt">Теги (<%= all_tags.len() %>)</h5>
-    <div class="widget-body">
-        <div class="tags">
-          <% for tag in all_tags.iter() { %>
-            <a class="ajax border" href="/tag/<%= tag.id %>/"><%= tag.name %> (<%= tag.count %>)</a>
-          <% } %>
-        </div>
-    </div>
-</div>
-<% } %>
+<% include!("../../block/tags_widget.stpl"); %>
 
 <!--
 <div class="widget">

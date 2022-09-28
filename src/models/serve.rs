@@ -76,7 +76,6 @@ pub struct ServeCategories {
     pub id:              i32,
     pub name:            String,
     pub description:     Option<String>,
-    pub cat_name:        String,
     pub tech_categories: i32,
     pub position:        i16,
     pub count:           i16,
@@ -146,7 +145,6 @@ impl ServeCategories {
 pub struct NewServeCategories {
     pub name:            String,
     pub description:     Option<String>,
-    pub cat_name:        String,
     pub tech_categories: i32,
     pub position:        i16,
     pub count:           i16,
@@ -159,12 +157,10 @@ pub struct NewServeCategories {
 
 /////// Serve //////
 #[derive(Debug, Serialize, Clone, Identifiable, Queryable, Associations)]
-#[belongs_to(ServeCategories, foreign_key="serve_categories")]
 #[table_name="serve"]
 pub struct Serve {
     pub id:               i32,
     pub name:             String,
-    pub cat_name:         String,
     pub description:      Option<String>,
     pub position:         i16,
     pub serve_categories: i32,
@@ -173,10 +169,18 @@ pub struct Serve {
     pub is_default:       bool,
     pub user_id:          i32,
     pub tech_cat_id:      i32,
-    pub view:             i32,
     pub height:           f64,
     pub seconds:          i32,
     pub serve_id:         Option<i32>,
+    pub view:             i32,
+}
+#[derive(Serialize, Queryable)]
+pub struct ServeVar {
+    pub id:               i32,
+    pub name:             String,
+    pub price:            i32,
+    pub man_hours:        i16,
+    pub is_default:       bool,
 }
 
 impl Serve {
@@ -190,17 +194,24 @@ impl Serve {
             " часов".to_string(),
         );
     }
-    pub fn get_variables(&self) -> Vec<Serve> {
+    pub fn get_variables(&self) -> Vec<ServeVar> {
         use crate::schema::serve::dsl::serve;
 
         let _connection = establish_connection();
         return serve
             .filter(schema::serve::serve_id.eq(self.id))
             .order(schema::serve::position)
-            .load::<Serve>(&_connection)
+            .select((
+                schema::serve::id,
+                schema::serve::name,
+                schema::serve::price,
+                schema::serve::man_hours,
+                schema::serve::is_default,
+            ))
+            .load::<ServeVar>(&_connection)
             .expect("E");
     }
-    pub fn get_variables_exclude_id(&self, id: i32) -> Vec<Serve> {
+    pub fn get_variables_exclude_id(&self, id: i32) -> Vec<ServeVar> {
         use crate::schema::serve::dsl::serve;
 
         let _connection = establish_connection();
@@ -208,7 +219,14 @@ impl Serve {
             .filter(schema::serve::serve_id.eq(self.id))
             .filter(schema::serve::id.ne(id))
             .order(schema::serve::position)
-            .load::<Serve>(&_connection)
+            .select((
+                schema::serve::id,
+                schema::serve::name,
+                schema::serve::price,
+                schema::serve::man_hours,
+                schema::serve::is_default,
+            ))
+            .load::<ServeVar>(&_connection)
             .expect("E");
     }
     pub fn get_first_variable(&self) -> Serve {
@@ -289,7 +307,6 @@ impl Serve {
 #[table_name="serve"]
 pub struct NewServe {
     pub name:             String,
-    pub cat_name:         String,
     pub description:      Option<String>,
     pub position:         i16,
     pub serve_categories: i32,
@@ -298,16 +315,15 @@ pub struct NewServe {
     pub is_default:       bool,
     pub user_id:          i32,
     pub tech_cat_id:      i32,
-    pub view:             i32,
     pub height:           f64,
     pub seconds:          i32,
     pub serve_id:         Option<i32>,
+    pub view:             i32,
 }
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="serve"]
 pub struct EditServe {
     pub name:             String,
-    pub cat_name:         String,
     pub description:      Option<String>,
     pub position:         i16,
     pub serve_categories: i32,
@@ -316,46 +332,50 @@ pub struct EditServe {
     pub is_default:       bool,
 }
 
+///////////
+// types:
+// 1. блог
+// 2. услуга
+// 3. товар
+// 4. wiki
+// 5. работа
+// 6. помощь
+// 7. заказ
+// 8. веб-сервис
+// 9. язык / технология
+// 10. опция
 /////// ServeItems //////
 #[derive(Identifiable, Queryable, Associations)]
 #[table_name="serve_items"]
 pub struct ServeItems {
-    pub id:         i32,
-    pub serve_id:   i32,
-    pub service_id: i32,
-    pub store_id:   i32,
-    pub work_id:    i32,
-    pub orders_id:  Option<i32>,
+    pub id:       i32,
+    pub serve_id: i32,
+    pub item_id:  i32,
+    pub types:    i16,
 }
 #[derive(Insertable)]
 #[table_name="serve_items"]
 pub struct NewServeItems {
-    pub serve_id:   i32,
-    pub service_id: i32,
-    pub store_id:   i32,
-    pub work_id:    i32,
-    pub orders_id:  Option<i32>,
+    pub serve_id: i32,
+    pub item_id:  i32,
+    pub types:    i16,
 }
 
-/////// ServeItems //////
+/////// TechCategoriesItem //////
 #[derive(Identifiable, Queryable, Associations)]
 #[table_name="tech_categories_items"]
 pub struct TechCategoriesItem {
     pub id:          i32,
     pub category_id: i32,
-    pub service_id:  i32,
-    pub store_id:    i32,
-    pub work_id:     i32,
-    pub types:       i16, // 1 активно, 2 неактивно
-    pub orders_id:   Option<i32>,
+    pub item_id:     i32,
+    pub types:       i16,
+    pub is_active:   i16,
 }
 #[derive(Insertable)]
 #[table_name="tech_categories_items"]
 pub struct NewTechCategoriesItem {
     pub category_id: i32,
-    pub service_id:  i32,
-    pub store_id:    i32,
-    pub work_id:     i32,
+    pub item_id:     i32,
     pub types:       i16,
-    pub orders_id:   Option<i32>,
+    pub is_active:   i16,
 }

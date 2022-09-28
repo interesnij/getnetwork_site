@@ -22,12 +22,14 @@
             <div class="col-sm-8">
               <div class="row search_result"></div>
               <div class="content_block content">
-                <% for category in blog_cats.iter() { %>
-
-                <% let get_6_blogs = category.get_6_blogs(false); %>
+                <% for category in cats.iter() { %>
+                  <%
+                    use crate::models::Categories;
+                    let get_6_blogs = Categories::get_blogs(category.id, 3, 0, false);
+                  %>
 
                 <h4 class="font-alt mb-10">
-                    <a class="ajax" href="/blogs/<%= category.id %>/">
+                    <a class="ajax" href="/blogs/<%= category.slug %>/">
                         <%= category.name %> (<%= category.count %>)
                     </a>
                 </h4>
@@ -46,15 +48,23 @@
                     <% if i > 1 { %>
                     <div class="col-sm-6">
                         <div class="blog-post-prev-small clearfix">
-                            <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/">
-                                <img src="<%= object.get_image() %>" alt="img" class="widget-posts-img">
+                            <a class="ajax" href="/blog/<%= category.slug %>/<%= object.slug %>/">
+                                <img src="<% if object.image.is_some() { %>
+                                  <%= object.image.as_deref().unwrap() %>
+                                <% } else { %>
+                                  /static/images/img.jpg
+                                <% } %>" alt="img" class="widget-posts-img">
                             </a>
                             <div class="widget-posts-descr">
-                                <a class="ajax" href="/blog/<%= category.id %>/<%= object.id %>/">
+                                <a class="ajax" href="/blog/<%= category.slug %>/<%= object.slug %>/">
                                   <%= object.title %>
                                 </a>
                                 <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-                                <p><%= object.get_100_description() %></p>
+                                <p><% if object.description.is_some() { %>
+                                  <%= object.description.as_deref().unwrap() %>
+                                <% } else { %>
+                                  Без описания
+                                <% } %></p>
                             </div>
                         </div>
                     </div>
@@ -66,7 +76,27 @@
                 </div>
             </div>
             <div class="col-sm-4">
-              <% include!("sidebar.stpl"); %>
+            <div class="widget">
+                <form class="form-inline form" role="form">
+                    <div class="search-wrap">
+                        <input data-folder="_blogs" type="text" class="form-control search-field desctop_folder_search" placeholder="Поиск от 3х букв">
+                    </div>
+                </form>
+            </div>
+            <div class="widget">
+                <h5 class="widget-title font-alt">Категории</h5>
+                <div class="widget-body">
+                    <ul class="clearlist widget-menu">
+                      <% for cat in cats.iter() { %>
+                        <li>
+                          <a class="ajax" href="/blog/<%= cat.slug %>/"><%= cat.name %></a>
+                        </li>
+                      <% } %>
+                    </ul>
+                </div>
+            </div>
+
+            <% include!("../../block/tags_widget.stpl"); %>
             </div>
         </div>
 

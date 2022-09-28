@@ -41,7 +41,7 @@
           <li>
             <span>
               - <% if child.is_default { %>* <% } %>
-              <%= child.name %>: <%= child.price %> руб. (<%= child.get_hours() %>)
+              <%= child.name %>: <%= child.price %> руб. (<%= child.man_hours %> час.)
             </span>
             <% if is_admin { %>
               <a target="_blank" rel="nofollow" href="/edit_serve/<%= child.id %>/">~</a>

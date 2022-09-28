@@ -1,7 +1,11 @@
 <div class="col-lg-4 col-md-6 mb-60 mb-xs-40">
   <div class="post-prev-img">
-    <a class="ajax" href="/store/<%= category.id %>/<%= object.id %>/">
-      <div class="progressive replace" data-href="<%= object.get_image() %>">
+    <a class="ajax" href="/store/<%= category.slug %>/<%= object.slug %>/">
+      <div class="progressive replace" data-href="<% if object.image.is_some() { %>
+        <%= object.image.as_deref().unwrap() %>
+      <% } else { %>
+        /static/images/img.jpg
+      <% } %>">
         <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
       </div>
     </a>
@@ -10,7 +14,7 @@
     </div>
   </div>
   <div class="post-prev-title font-alt align-center">
-    <a class="ajax" href="/store/<%= category.id %>/<%= object.id %>/">
+    <a class="ajax" href="/store/<%= category.slug %>/<%= object.slug %>/">
       <% if !object.is_active { %>
         <span style="color: red">🛇</span>
       <% } %>
@@ -18,10 +22,10 @@
     </a>
   </div>
   <div class="post-prev-text align-center">
-      <strong><%= object.price %> ₽</strong>
+    <strong>от <%= object.price %> ₽</strong>
   </div>
   <div class="post-prev-more align-center">
-    <a href="/store/<%= category.id %>/<%= object.id %>/" class="btn border btn-mod ajax btn-round">
+    <a href="/store/<%= category.slug %>/<%= object.slug %>/" class="btn border btn-mod ajax btn-round">
       Детали
     </a>
   </div>

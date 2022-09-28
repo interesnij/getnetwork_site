@@ -16,7 +16,7 @@
       <div class="row">
         <div class="col-8 col-offset-2">
         <ul class="clearlist widget-menu">
-          <% for category in serve_cats.iter() { %>
+          <% for category in cats.iter() { %>
             <li>
                 <a class="ajax" href=""><%= category.name %></a>
                 <small>

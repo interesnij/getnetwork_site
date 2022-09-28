@@ -1,5 +1,5 @@
 
-<% for t_category in object.get_open_tech_categories().iter() { %>
+<% for t_category in object.get_open_tech_categories(object.types).iter() { %>
   <% let s_cats = t_category.get_serve_categories(); %>
 
 <section class="banner_block mb-20 mt-20 border open_cat" style="width:100%;">
@@ -35,7 +35,7 @@
 <% } %>
 
 
-<% for t_category in object.get_close_tech_categories().iter() { %>
+<% for t_category in object.get_close_tech_categories(object.types).iter() { %>
   <% let s_cats = t_category.get_serve_categories(); %>
 
 <section class="banner_block mb-20 mt-20 border" style="width:100%;">

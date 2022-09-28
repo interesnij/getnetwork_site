@@ -14,28 +14,29 @@ use crate::schema::{
 use crate::utils::establish_connection;
 
 
-#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
+#[derive(Serialize, Queryable)]
+pub struct SmallTag {
+    pub name:  String,
+    pub count: i16,
+}
+
+#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[table_name="tags"]
 pub struct Tag {
     pub id:            i32,
     pub name:          String,
     pub position:      i16,
     pub count:         i16,
-    pub blog_count:    i16,
-    pub service_count: i16,
-    pub store_count:   i16,
-    pub wiki_count:    i16,
-    pub work_count:    i16,
     pub user_id:       i32,
     pub view:          i32,
     pub height:        f64,
     pub seconds:       i32,
 }
 impl Tag {
-    pub fn get_tags_list(page: i32, limit: i32) -> (Vec<Tag>, i32) {
+    pub fn get_tags_list(page: i32, limit: i32) -> (Vec<SmallTag>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
-        let object_list: Vec<Tag>;
+        let object_list: Vec<SmallTag>;
 
         if page > 1 {
             let step = (page - 1) * 20;
@@ -52,7 +53,7 @@ impl Tag {
 
         return (object_list, next_page_number);
     }
-    pub fn get_tags(limit: i64, offset: i64) -> Vec<Tag> {
+    pub fn get_tags(limit: i64, offset: i64) -> Vec<SmallTag> {
         use crate::schema::tags::dsl::tags;
 
         let _connection = establish_connection();
@@ -60,7 +61,11 @@ impl Tag {
             .order(schema::tags::count.desc())
             .limit(limit)
             .offset(offset)
-            .load::<Tag>(&_connection)
+            .select((
+                schema::tags::name,
+                schema::tags::count
+            ))
+            .load::<SmallTag>(&_connection)
             .expect("E.");
     }
 }
@@ -71,11 +76,6 @@ pub struct NewTag {
     pub name:          String,
     pub position:      i16,
     pub count:         i16,
-    pub blog_count:    i16,
-    pub service_count: i16,
-    pub store_count:   i16,
-    pub wiki_count:    i16,
-    pub work_count:    i16,
     pub user_id:       i32,
     pub view:          i32,
     pub height:        f64,
@@ -89,27 +89,33 @@ pub struct EditTag {
     pub position: i16,
 }
 
+///////////
+// types:
+// 1. блог
+// 2. услуга
+// 3. товар
+// 4. wiki
+// 5. работа
+// 6. помощь
+// 7. заказ
+// 8. веб-сервис
+// 9. язык / технология
+// 10. опция
 #[derive(Identifiable, Serialize, Queryable, Associations)]
 #[table_name="tags_items"]
 pub struct TagItems {
-    pub id:         i32,
-    pub tag_id:     i32,
-    pub service_id: i32,
-    pub store_id:   i32,
-    pub blog_id:    i32,
-    pub wiki_id:    i32,
-    pub work_id:    i32,
-    pub created:    chrono::NaiveDateTime,
+    pub id:      i32,
+    pub tag_id:  i32,
+    pub item_id: i32,
+    pub types:   i16,
+    pub created: chrono::NaiveDateTime,
 }
 
 #[derive(Insertable)]
 #[table_name="tags_items"]
 pub struct NewTagItems {
-    pub tag_id:     i32,
-    pub service_id: i32,
-    pub store_id:   i32,
-    pub blog_id:    i32,
-    pub wiki_id:    i32,
-    pub work_id:    i32,
-    pub created:    chrono::NaiveDateTime,
+    pub tag_id:  i32,
+    pub item_id: i32,
+    pub types:   i16,
+    pub created: chrono::NaiveDateTime,
 }

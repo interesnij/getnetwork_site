@@ -1,12 +1,12 @@
 <% include!("../header.stpl"); %>
 
-<section page-id="83" data-id="<%= object.id %>" data-title="Статья <%= object.title %>" data-description="вебсервисы.рф: Статья <%= object.title %>" data-uri="/wiki/<%= category.id %>/<%= object.id %>/" data-image="<%= object.get_image() %>" class="doc_title small-section">
+<section page-id="83" data-id="<%= object.id %>" data-title="Статья <%= object.title %>" data-description="вебсервисы.рф: Статья <%= object.title %>" data-uri="/wiki/<%= category.slug %>/<%= object.slug %>/" data-image="<%= object.get_image() %>" class="doc_title small-section">
     <div class="relative container align-left">
         <div class="mt-30">
             <div class="font-alt">
                 <a class="ajax" href="/wiki_categories/">База знаний</a>
                 &nbsp;/&nbsp;
-                <a class="ajax" href="/wikis/<%= category.id %>/"><%= category.name %></a>
+                <a class="ajax" href="/wikis/<%= category.slug %>/"><%= category.name %></a>
                 <% include!("../generic/object_stat.stpl"); %>
             </div>
         </div>
@@ -18,28 +18,7 @@
             <div class="blog-item-body">
                 <h1 class="mt-0 font-alt"><%= object.title %></h1>
                 <div class="blog-item-data">
-
-                    <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
-                    <% if request_user.is_superuser() { %>
-                    | <a target="_blank" rel="nofollow" href="/edit_wiki/<%= object.id %>/">~</a>
-                    | <a target="_blank" rel="nofollow" href="/edit_content_wiki/<%= object.id %>/?content=">Aa</a>
-                    | <a class="pointer remove_wiki" data-pk="<%= object.id %>">x</a>
-                    <% if object.is_active { %>
-                    | <a class="pointer hide_wiki" data-pk="<%= object.id %>">🛇</a>
-                    <% } else { %>
-                    | <a class="pointer publish_wiki" data-pk="<%= object.id %>">👁</a>
-                    <% } %>
-                    |
-                    <form data-pk="<%= object.id %>" style="display: contents;">
-                      <input accept="image/*" class="add_photos_in_object hidden" type="file" multiple name="images[]" />
-                      <a class="previous_click pointer">+ф</a>
-                    </form>
-                    |
-                    <form data-pk="<%= object.id %>" style="display: contents;">
-                      <input accept="video/*" class="add_videos_in_object hidden" type="file" multiple name="videos[]" />
-                      <a class="previous_click pointer">+в</a>
-                    </form>
-                    <% } %>
+                    <% include!("../../block/object_admin_panel.stpl"); %>
                     <span class="separator">&nbsp;</span>
                 </div>
                 <% if object.content.is_some() { %>
@@ -49,19 +28,17 @@
                 <% } %>
             </div>
 
-            <% include!("../generic/photos.stpl"); %>
-
-            <% include!("../generic/videos.stpl"); %>
+            <% include!("../generic/files.stpl"); %>
         </div>
 
         <div class="clearfix mt-40">
             <% if next.is_some() { %>
             <% let _next = next.unwrap(); %>
-            <a href="/wiki/<%= category.id %>/<%= _next.id %>/" class="border ajax blog-item-more left">⇠&nbsp;&nbsp;<%= _next.title %></a>
+            <a href="/wiki/<%= category.slug %>/<%= _next.slug %>/" class="border ajax blog-item-more left">⇠&nbsp;&nbsp;<%= _next.title %></a>
             <% } %>
             <% if prev.is_some() { %>
             <% let _prev = prev.unwrap(); %>
-            <a href="/wiki/<%= category.id %>/<%= _prev.id %>/" class="border ajax blog-item-more right"><%= _prev.title %>&nbsp;&nbsp;⇢</a>
+            <a href="/wiki/<%= category.slug %>/<%= _prev.slug %>/" class="border ajax blog-item-more right"><%= _prev.title %>&nbsp;&nbsp;⇢</a>
             <% } %>
         </div>
     </div>

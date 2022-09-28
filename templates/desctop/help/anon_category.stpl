@@ -1,11 +1,11 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="9" data-title="Категория помощи '<%= category.title %>'" data-description="вебсервисы.рф: Категория помощи <%= category.title %>" data-uri="/help/<%= category.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
+<section page-id="9" data-title="Категория помощи '<%= category.name %>'" data-description="вебсервисы.рф: Категория помощи <%= category.name %>" data-uri="/helps/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
-            <a><%= category.title %></a>
+            <a><%= category.name %></a>
             <% include!("../generic/category_stat.stpl"); %>
         </div>
     </div>
@@ -22,9 +22,18 @@
                 <% for object in object_list.iter() { %>
                   <h4 class="font-alt"><%= object.title %></h4>
                   <p>
-                    <%- object.content %>
+                    <% if object.content.is_some() { %>
+                      <%- object.content.as_deref().unwrap() %>
+                    <% } else { %>
+                      Без описания
+                    <% } %>
                   </p>
                   <hr class="mb-30">
+                <% } %>
+                <% if next_page_number > 0 { %>
+                  <div class="load centered m-1 next_page_list" data-link="/helps/<%= category.slug %>/?page=<%= next_page_number %>">
+                    <img src="/static/images/preloader.gif">
+                  </div>
                 <% } %>
               </div>
             </div>

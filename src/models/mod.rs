@@ -1,23 +1,19 @@
-mod blog;
-mod work;
-mod service;
-mod serve;
-mod wiki;
-mod store;
+mod item;
 mod user;
 mod feedback;
 mod tag;
 mod order;
+mod serve;
+mod media;
+mod chat;
 
 pub use self::{
-    blog::*,
-    work::*,
+    item::*,
     user::*,
-    service::*,
     serve::*,
-    wiki::*,
     feedback::*,
-    store::*,
     tag::*,
     order::*,
+    media::*,
+    chat::*,
 };

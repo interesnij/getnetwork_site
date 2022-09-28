@@ -1,0 +1,34 @@
+<%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+
+  <% if request_user.is_superuser() { %>
+    | <a target="_blank" rel="nofollow" href="/edit_item/<%= object.id %>/">~</a>
+    | <a target="_blank" rel="nofollow" href="/edit_content_item/<%= object.id %>/">Aa</a>
+    | <a class="pointer remove_item" data-pk="<%= object.id %>">x</a>
+    <% if object.is_active { %>
+    | <a class="pointer hide_item" data-pk="<%= object.id %>">🛇</a>
+    <% } else { %>
+    | <a class="pointer publish_item" data-pk="<%= object.id %>">👁</a>
+    <% } %>
+    |
+    <form item-type="<%= object.types %>" data-type="1" data-pk="<%= object.id %>" style="display: contents;">
+      <input accept="image/*" class="add_file_in_object hidden" type="file" multiple name="files[]" />
+      <a class="previous_click pointer">+ф</a>
+    </form>
+    |
+    <form item-type="<%= object.types %>" data-type="2" data-pk="<%= object.id %>" style="display: contents;">
+      <input accept="video/*" class="add_file_in_object hidden" type="file" multiple name="files[]" />
+      <a class="previous_click pointer">+в</a>
+    </form>
+    |
+    <form item-type="<%= object.types %>" data-type="3" data-pk="<%= object.id %>" style="display: contents;">
+      <input accept="audio/*" class="add_file_in_object hidden" type="file" multiple name="files[]" />
+      <a class="previous_click pointer">+а</a>
+    </form>
+    |
+    <form item-type="<%= object.types %>" data-type="4" data-pk="<%= object.id %>" style="display: contents;">
+      <input accept="doc/*" class="add_file_in_object hidden" type="file" multiple name="files[]" />
+      <a class="previous_click pointer">+д</a>
+    </form>
+  <% } %>
+
+  <span class="separator">&nbsp;</span>

@@ -23,11 +23,11 @@
                       Удалить
                     </a>
                     |
-                    <% if object.types == 1 { %>
+                    <% if object.types == 2 { %>
                       <a href="/service/1/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
-                    <% } else if object.types == 2 { %>
-                      <a href="/store/1/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
                     <% } else if object.types == 3 { %>
+                      <a href="/store/1/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
+                    <% } else if object.types == 5 { %>
                       <a href="/work/1/<%= object.object_id %>/" class="ajax">Родитель заказа</a>
                     <% } %>
                   </div>

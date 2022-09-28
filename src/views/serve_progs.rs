@@ -124,12 +124,12 @@ pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/serve/categories.stpl")]
                 struct Template {
-                    serve_cats:   Vec<ServeCategories>,
-                    is_ajax:      i32,
+                    serve_cats: Vec<ServeCategories>,
+                    is_ajax:    i32,
                 }
                 let body = Template {
-                    serve_cats:   _serve_cats,
-                    is_ajax:      is_ajax,
+                    serve_cats: _serve_cats,
+                    is_ajax:    is_ajax,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -760,7 +760,6 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
             let new_cat = NewServeCategories {
                 name: form.name.clone(),
                 description: Some(form.description.clone()),
-                cat_name: _s_category[0].name.clone(),
                 tech_categories: form.tech_categories,
                 position: form.position,
                 count: 0,
@@ -792,7 +791,7 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && _category.user_id == _request_user.id {
+        if _request_user.perm == 60 || _category.user_id == _request_user.id {
             use crate::utils::category_form;
 
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
@@ -816,13 +815,6 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
             .filter(schema::serve_categories::tech_categories.eq(_cat_id))
             .load::<ServeCategories>(&_connection)
             .expect("E");
-
-        for _cat in _serve_cats.iter() {
-            diesel::update(_cat)
-                .set(schema::serve_categories::cat_name.eq(_category.name.clone()))
-                .get_result::<ServeCategories>(&_connection)
-                .expect("Error.");
-        };
     }
     return HttpResponse::Ok();
 }
@@ -831,7 +823,6 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
     use crate::schema::{
         serve_categories::dsl::serve_categories,
         serve::dsl::serve,
-        tech_categories::dsl::tech_categories,
     };
 
     let _connection = establish_connection();
@@ -846,19 +837,13 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && s_category.user_id == _request_user.id {
+        if _request_user.perm == 60 || s_category.user_id == _request_user.id {
             use crate::utils::serve_category_form;
-
-            let t_category = tech_categories
-                .filter(schema::tech_categories::id.eq(s_category.tech_categories))
-                .load::<TechCategories>(&_connection)
-                .expect("E");
 
             let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewServeCategories {
                 name: form.name.clone(),
                 description: Some(form.description.clone()),
-                cat_name: t_category[0].name.clone(),
                 tech_categories: form.tech_categories,
                 position: form.position,
                 count: s_category.count,
@@ -877,13 +862,6 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
             .filter(schema::serve::serve_categories.eq(_cat_id))
             .load::<Serve>(&_connection)
             .expect("E");
-
-        for _serve in _serves.iter() {
-            diesel::update(_serve)
-                .set(schema::serve::cat_name.eq(s_category.name.clone()))
-                .get_result::<Serve>(&_connection)
-                .expect("Error.");
-        };
     }
     return HttpResponse::Ok();
 }
@@ -891,7 +869,6 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ServeForm {
     pub name:             String,
-    pub cat_name:         String,
     pub description:      String,
     pub position:         i16,
     pub serve_categories: i32,
@@ -904,7 +881,6 @@ pub struct ServeForm {
 pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
     let mut form: ServeForm = ServeForm {
         name:             "".to_string(),
-        cat_name:         "".to_string(),
         description:      "".to_string(),
         position:         0,
         serve_categories: 0,
@@ -981,8 +957,6 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                     let data_string = s.to_string();
                     if field.name() == "name" {
                         form.name = data_string
-                    } else if field.name() == "cat_name" {
-                        form.name = data_string
                     } else if field.name() == "description" {
                         form.description = data_string
                     };
@@ -1011,7 +985,6 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
             };
             let _new_serve = NewServe {
                 name:             form.name.clone(),
-                cat_name:         _category[0].name.clone(),
                 description:      Some(form.description.clone()),
                 position:         form.position,
                 serve_categories: _cat_id,
@@ -1020,10 +993,10 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
                 is_default:       is_default,
                 user_id:          _request_user.id,
                 tech_cat_id:      _category[0].tech_categories,
-                view:             0,
                 height:           0.0,
                 seconds:          0,
                 serve_id:         form.serve_id,
+                view:             0,
             };
 
             let _serve = diesel::insert_into(schema::serve::table)
@@ -1059,7 +1032,7 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && _serve.user_id == _request_user.id {
+        if _request_user.perm == 60 || _serve.user_id == _request_user.id {
             let _category = serve_categories.filter(schema::serve_categories::id.eq(_serve.serve_categories)).load::<ServeCategories>(&_connection).expect("E");
             let form = serve_split_payload(payload.borrow_mut()).await;
 
@@ -1091,7 +1064,6 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
 
             let _new_serve = NewServe {
                 name:             form.name.clone(),
-                cat_name:         _category[0].name.clone(),
                 description:      Some(form.description.clone()),
                 position:         form.position,
                 serve_categories: _serve.serve_categories,
@@ -1100,10 +1072,10 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
                 is_default:       is_default,
                 user_id:          _request_user.id,
                 tech_cat_id:      _category[0].tech_categories,
-                view:             0,
                 height:           0.0,
                 seconds:          0,
                 serve_id:         form.serve_id,
+                view:             0,
             };
 
             diesel::update(&_serve)
@@ -1127,7 +1099,7 @@ pub async fn delete_serve(session: Session, _id: web::Path<i32>) -> impl Respond
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && _serve.user_id == _request_user.id {
+        if _request_user.perm == 60 || _serve.user_id == _request_user.id {
             let _cat_id: i32 = _serve.serve_categories;
             let _category = serve_categories
                 .filter(schema::serve_categories::id.eq(_cat_id))
@@ -1154,7 +1126,7 @@ pub async fn delete_tech_category(session: Session, _id: web::Path<i32>) -> impl
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && _category.user_id == _request_user.id {
+        if _request_user.perm == 60 || _category.user_id == _request_user.id {
             diesel::delete(tech_categories.filter(schema::tech_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
         }
     }
@@ -1171,7 +1143,7 @@ pub async fn delete_serve_category(session: Session, _id: web::Path<i32>) -> imp
     let s_category = s_categories.into_iter().nth(0).unwrap();
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 && s_category.user_id == _request_user.id {
+        if _request_user.perm == 60 || s_category.user_id == _request_user.id {
             diesel::delete(serve_categories.filter(schema::serve_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
 
             let _category = tech_categories

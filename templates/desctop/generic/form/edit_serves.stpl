@@ -1,4 +1,4 @@
-<% let tech_cats_ids = object.get_close_tech_cats_ids(); %>
+<% let tech_cats_ids = object.get_close_tech_cats_ids(object.types); %>
 <% let serves_ids = object.get_serves_ids(); %>
 <div class="meta">
   <p class="tech_ids hidden">

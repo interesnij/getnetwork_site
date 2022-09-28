@@ -110,21 +110,25 @@
     </div>
 </section>
 <hr class="mt-0 mb-0">
-<% for category in wiki_cats.iter() { %>
+<% for category in cats.iter() { %>
 
 <section class="page-section">
     <div class="container-1400 relative">
         <div class="row">
             <div class="col-sm-4">
                 <h4 class="section-title font-alt align-left mt-0 mb-70 mb-sm-40">
-                  <a class="ajax" href="/wikis/<%= category.id %>/">
+                  <a class="ajax" href="/wikis/<%= category.slug %>/">
                     <%= category.name %> (<%= category.count %>)
                   </a>
                 </h4>
             </div>
             <div class="col-sm-8">
                 <div class="section-text">
-                  <% for object in category.get_6_wikis(request_user.is_superuser()).iter() { %>
+                <%
+                  use crate::models::Categories;
+                  let get_6_wikis = Categories::get_wikis(category.id, 3, 0, request_user.is_superuser());
+                %>
+                  <% for object in get_6_wikis.iter() { %>
                     <% include!("../generic/wiki.stpl"); %>
                   <% } %>
                 </div>

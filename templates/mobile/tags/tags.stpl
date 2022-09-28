@@ -14,7 +14,7 @@
         <div class="widget-body">
             <div class="tags is_paginate">
                 <% for tag in all_tags.iter() { %>
-                  <a class="ajax border" href="/tag/<%= tag.id %>/"><%= tag.name %> (<%= tag.count %>)</a>
+                  <a class="ajax border" href="/tag/<%= tag.name %>/"><%= tag.name %> (<%= tag.count %>)</a>
                 <% } %>
                 <% if next_page_number > 0 { %>
                   <div class="load centered m-1 next_page_list" data-link="/tags/?page=<%= next_page_number %>">

@@ -1,28 +1,24 @@
-<div class="col-md-6 mb-60 mb-xs-40">
-  <div class="post-prev-img">
-    <a class="ajax" href="/store/1/<%= object.id %>/">
-      <div class="progressive replace" data-href="<%= object.get_image() %>">
-        <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
-      </div>
+<div class="blog-post-prev-small clearfix">
+    <a class="ajax" href="/store/all-stores/<%= object.slug %>/">
+        <img src="<% if object.image.is_some() { %>
+          <%= object.image.as_deref().unwrap() %>
+        <% } else { %>
+          /static/images/img.jpg
+        <% } %>" alt="img" class="image_fit_100 widget-posts-img">
     </a>
-    <div class="intro-label">
-      <span class="label label-danger bg-red">Sale</span>
+    <div class="widget-posts-descr">
+        <a class="ajax solid_bottom" style="margin-bottom: 3px;" href="/store/all-stores/<%= object.slug %>/">
+          <% if !object.is_active { %>
+            <span style="color: red">🛇</span>
+          <% } %>
+          <%= object.title %>
+        </a>
+        <span>
+          <p><% if object.description.is_some() { %>
+            <%= object.description.as_deref().unwrap() %>
+          <% } else { %>
+            Без описания
+          <% } %></p>
+        </span>
     </div>
-  </div>
-  <div class="post-prev-title font-alt align-center">
-    <% if !object.is_active { %>
-      <span style="color: red">🛇</span>
-    <% } %>
-    <a class="ajax" href="/store/1/<%= object.id %>/">
-      <%= object.title %>
-    </a>
-  </div>
-  <div class="post-prev-text align-center">
-      <strong><%= object.price %> ₽</strong>
-  </div>
-  <div class="post-prev-more align-center">
-    <a href="/store/1/<%= object.id %>/" class="btn border btn-mod ajax btn-round">
-      Детали
-    </a>
-  </div>
 </div>

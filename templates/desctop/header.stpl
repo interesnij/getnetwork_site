@@ -14,15 +14,15 @@
                           <a href="/" class="ajax folder main">Главная</a>
                       </li>
                       <%
-                        use crate::utils::get_categories;
-                        let (service_cats, store_cats, blog_cats, wiki_cats, work_cats) = get_categories();
+                        use crate::utils::get_categories_2;
+                        let (service_cats, store_cats, blog_cats, wiki_cats, work_cats, help_cats) = get_categories_2();
                       %>
                       <li>
                           <a href="/service_categories/" class="mn-has-sub service ajax folder">Услуги</a>
                           <ul class="border mn-sub">
                               <% for object in service_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/services/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
+                                  <a class="mn-group-title ajax" href="/services/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
@@ -32,7 +32,7 @@
                           <ul class="border mn-sub">
                               <% for object in work_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/works/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
+                                  <a class="mn-group-title ajax" href="/works/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
@@ -42,7 +42,7 @@
                           <ul class="border mn-sub">
                               <% for object in store_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/stores/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
+                                  <a class="mn-group-title ajax" href="/stores/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
@@ -53,7 +53,7 @@
                           <ul class="border mn-sub">
                               <% for object in wiki_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/wikis/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
+                                  <a class="mn-group-title ajax" href="/wikis/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
@@ -63,7 +63,7 @@
                           <ul class="border mn-sub">
                               <% for object in blog_cats.iter() { %>
                               <li>
-                                  <a class="mn-group-title ajax" href="/blogs/<%= object.id %>/"><%= object.name %> - <%= object.count %></a>
+                                  <a class="mn-group-title ajax" href="/blogs/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
                               </li>
                               <% } %>
                           </ul>
@@ -73,13 +73,32 @@
                       </li>
                       <li>
                         <a href="/info/" class="mn-has-sub ajax folder infos">Инфо</a>
-                        <ul class="border mn-sub">
-                          <li>
-                            <a class="mn-group-title history ajax" href="/history/">История просмотров</a>
-                            <a class="mn-group-title user_orders ajax" href="/user_orders/">Ваши заказы</a>
-                            <a class="mn-group-title help ajax" href="/help/7/">Помощь</a>
-                            <a class="mn-group-title cookie_users_list ajax" href="/cookie_users_list/">Статистика</a>
-                          </li>
+                        <ul class="mn-sub mn-has-multi border" style="display:none;right:-200px;left:auto;">
+                            <li class="mn-sub-multi">
+                                <a class="mn-group-title" style="cursor:default;font-weight:bold;">Помощь:</a>
+                                <ul>
+                                  <% for object in help_cats.iter() { %>
+                                    <li>
+                                      <a class="mn-group-title ajax" href="/helps/<%= object.slug %>/"><%= object.name %> - <%= object.count %></a>
+                                    </li>
+                                  <% } %>
+                                </ul>
+                            </li>
+
+                            <li class="mn-sub-multi">
+                                <a class="mn-group-title" style="cursor:default;font-weight:bold;">Страницы:</a>
+                                <ul>
+                                  <li>
+                                    <a class="history ajax" href="/history/">История просмотров</a>
+                                  </li>
+                                  <li>
+                                    <a class="user_orders ajax" href="/user_orders/">Ваши заказы</a>
+                                  </li>
+                                  <li>
+                                    <a class="cookie_users_list ajax" href="/cookie_users_list/">Статистика</a>
+                                  </li>
+                                </ul>
+                            </li>
                         </ul>
                       </li>
                       <li><a>&nbsp;</a></li>
@@ -116,25 +135,19 @@
 
                       <% if request_user.is_superuser() { %>
                       <li>
-                          <a href="#" class="mn-has-sub folder auth" style="height: 75px; line-height: 75px;">Профиль</a>
+                          <a class="mn-has-sub folder auth" style="height: 75px; line-height: 75px;">Профиль</a>
                           <ul class="mn-sub mn-has-multi border" style="display: none;">
                               <li class="mn-sub-multi">
-                                  <a href="/logout/" class="mn-group-title">Выйти</a>
+                                  <a class="mn-group-title">Админка</a>
                                   <ul>
                                       <li>
-                                          <a href="/create_work_categories/" class="ajax">+ категория портфолио</a>
+                                          <a href="/create_category/" class="ajax">+ категория</a>
                                       </li>
                                       <li>
-                                          <a href="/create_blog_categories/" class="ajax">+ категория блога</a>
+                                          <a href="/create_item/" class="ajax">+ объект</a>
                                       </li>
                                       <li>
-                                          <a href="/create_service_categories/" class="ajax">+ категория услуг</a>
-                                      </li>
-                                      <li>
-                                          <a href="/create_store_categories/" class="ajax">+ категория магазина</a>
-                                      </li>
-                                      <li>
-                                          <a href="/create_wiki_categories/" class="ajax">+ категория обучалки</a>
+                                          <a href="/create_tag/" class="ajax">+ тег</a>
                                       </li>
                                       <li>
                                           <a href="/create_tech_categories/" class="ajax">+ веб-сервис</a>
@@ -143,37 +156,7 @@
                                           <a href="/create_serve_categories/" class="ajax">+ технология опций</a>
                                       </li>
                                       <li>
-                                          <a href="/help/create_categories/" class="ajax">+ категория помощи</a>
-                                      </li>
-                                  </ul>
-                              </li>
-
-                              <li class="mn-sub-multi">
-                                  <a class="mn-group-title">Элементы</a>
-                                  <ul>
-                                      <li>
-                                          <a href="/create_work/" class="ajax">+ работа</a>
-                                      </li>
-                                      <li>
-                                          <a href="/create_blog/" class="ajax">+ статья</a>
-                                      </li>
-                                      <li>
-                                          <a href="/create_service/" class="ajax">+ услуга</a>
-                                      </li>
-                                      <li>
-                                          <a href="/create_store/" class="ajax">+ товар</a>
-                                      </li>
-                                      <li>
-                                          <a href="/create_wiki/" class="ajax">+ обучалка</a>
-                                      </li>
-                                      <li>
-                                          <a href="/create_tag/" class="ajax">+ тег</a>
-                                      </li>
-                                      <li>
                                           <a href="/create_serve/" class="ajax">+ опция</a>
-                                      </li>
-                                      <li>
-                                          <a href="/help/create_item/" class="ajax">+ помощь</a>
                                       </li>
                                   </ul>
                               </li>
@@ -190,9 +173,11 @@
                                     <li>
                                       <a href="/serve_list/" class="ajax">Опции</a>
                                     </li>
+                                    <li>
+                                      <a href="/logout/">Выйти</a>
+                                    </li>
                                   </ul>
                               </li>
-
                           </ul>
                       </li>
                       <% } else { %>

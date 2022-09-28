@@ -1,7 +1,11 @@
 <li class="work-item">
-  <a href="/work/1/<%= object.id %>/" class="ajax mfp-image">
+  <a href="/work/all-works/<%= object.slug %>/" class="ajax mfp-image">
     <div class="work-img">
-      <div class="progressive replace" data-href="<%= object.get_image() %>">
+      <div class="progressive replace" data-href="<% if object.image.is_some() { %>
+        <%= object.image.as_deref().unwrap() %>
+      <% } else { %>
+        /static/images/img.jpg
+      <% } %>">
         <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
       </div>
     </div>
@@ -15,6 +19,8 @@
       <div class="work-descr">
         <% if object.description.is_some() { %>
           <%= object.description.as_deref().unwrap() %>
+        <% } else { %>
+          Без описания
         <% } %>
       </div>
     </div>
