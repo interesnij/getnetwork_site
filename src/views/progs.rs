@@ -171,6 +171,7 @@ pub async fn create_history(conn: ConnectionInfo, info: web::Json<HistoryJson>, 
     use crate::utils::plus_page_stat;
 
     let data: HistoryData = serde_json::from_str(&info.info).unwrap();
+    println!("data{:?}", info.info);
     let p_id = data.user_id;
     let user = get_c_user(conn, p_id, &req).await;
 
