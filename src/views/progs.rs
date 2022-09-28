@@ -3,6 +3,7 @@ use actix_web::{
     HttpResponse,
     Responder,
     web,
+    post,
     //error::InternalError,
     //http::StatusCode,
 };
@@ -165,7 +166,7 @@ pub struct HistoryData {
     pub seconds:   i32,
 }
 
-#[web::post("/create_history")]
+#[post("/create_history")]
 pub async fn create_history(conn: ConnectionInfo, data: web::Json<HistoryData>, req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
