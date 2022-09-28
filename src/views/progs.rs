@@ -36,7 +36,7 @@ use actix_web::dev::ConnectionInfo;
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {
-    //config.route("/create_history/", web::post().to(create_history));
+    config.route("/create_history/", web::post().to(create_history));
     config.route("/object_history/{id}/", web::get().to(object_history));
     config.route("/feedback/", web::post().to(create_feedback));
 
@@ -166,7 +166,6 @@ pub struct HistoryData {
     pub seconds:   i32,
 }
 
-#[post("/create_history")]
 pub async fn create_history(conn: ConnectionInfo, data: web::Json<HistoryData>, req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
