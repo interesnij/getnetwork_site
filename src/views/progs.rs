@@ -158,7 +158,7 @@ pub struct HistoryData {
     pub page_id:   i16,
     pub link:      String,
     pub title:     String,
-    pub height:    f64,
+    pub height:    String,
     pub seconds:   i32,
 }
 pub async fn create_history(conn: ConnectionInfo, data: web::Json<HistoryData>, req: HttpRequest) -> web::Json<HistoryResponse> {
