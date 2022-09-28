@@ -133,7 +133,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   if ($object_id) {
     analyticsData = {
       user_id: $user_id,
-      object_id: $object_id,
+      object_id: $object_id*1,
       page_id: $page_id*1,
       link: $link,
       title: $title,
@@ -195,15 +195,26 @@ window.addEventListener("unload", function() {
   meta = document.body.querySelector(".doc_title");
   $title = meta.getAttribute("data-title");
   $page_id = meta.getAttribute("page-id");
-  $object_id = meta.getAttribute("data-id") ? meta.getAttribute("data-id") : null;
-  analyticsData = {
-    user_id: $user_id,
-    object_id: $object_id,
-    page_id: $page_id,
-    link: document.location.href,
-    title: $title,
-    height: $height,
-    seconds: $seconds,
+  if ($object_id) {
+    analyticsData = {
+      user_id: $user_id,
+      object_id: $object_id*1,
+      page_id: $page_id*1,
+      link: $link,
+      title: $title,
+      height: $height,
+      seconds: $seconds,
+    }
+  } else {
+    analyticsData = {
+      user_id: $user_id,
+      object_id: 0,
+      page_id: $page_id*1,
+      link: $link,
+      title: $title,
+      height: $height,
+      seconds: $seconds,
+    }
   }
   navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
 });
