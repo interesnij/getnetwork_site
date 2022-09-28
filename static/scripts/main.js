@@ -161,8 +161,8 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       method: "POST",
       body: JSON.stringify(analyticsData)
     })
-    .then(function(res){ console.log(res) })
-    .catch(function(res){ console.log(res) })
+    .then(res => res.json())
+    .catch(function(res){ console.log("err", res) })
 
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
   $seconds = 1;

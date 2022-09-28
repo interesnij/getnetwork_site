@@ -151,11 +151,7 @@ pub async fn get_c_user(conn: ConnectionInfo, id: i32, req: &HttpRequest) -> Coo
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct HistoryJson {
-    pub info: String,
-}
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct HistoryData {
     pub user_id:   i32,
     pub object_id: Option<i32>,
@@ -165,7 +161,6 @@ pub struct HistoryData {
     pub height:    f64,
     pub seconds:   i32,
 }
-
 pub async fn create_history(conn: ConnectionInfo, data: web::Json<HistoryData>, req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
