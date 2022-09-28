@@ -174,7 +174,11 @@ window.addEventListener("unload", function() {
   $object_id = meta.getAttribute("data-id") ? meta.getAttribute("data-id") : "";
   formData = get_stat_form(document.location.href, $title, $object_id, $page_id);
 
-  navigator.sendBeacon("/create_history/", formData);
+  headers = {
+    "content-type": 'text/html; charset=utf-8',
+  };
+  const blob = new Blob(formData, headers);
+  navigator.sendBeacon("/create_history/", blob);
 });
 
 ///////////////
