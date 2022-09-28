@@ -189,7 +189,7 @@ window.addEventListener("unload", function() {
   formData.append('height', $height);
   formData.append('seconds', $seconds);
   headers = {
-    type: 'multipart/form-data; boundary=something',
+    type: 'application/x-www-form-urlencoded',
   };
   blob = new Blob(formData, headers);
   navigator.sendBeacon("/create_history/", blob);
