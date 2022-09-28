@@ -130,7 +130,14 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("затрачено секунд",  $seconds);
   console.log("======================");
 
-  formData = get_stat_form($link, $title, $object_id, $page_id);
+  formData = new FormData();
+  formData.append('user_id', $user_id);
+  formData.append('object_id', $object_id);
+  formData.append('page_id', $page_id);
+  formData.append('link', $link);
+  formData.append('title', $title);
+  formData.append('height', $height);
+  formData.append('seconds', $seconds);
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'POST', "/create_history/", true );
