@@ -143,6 +143,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   } else {
     analyticsData = {
       user_id: $user_id,
+      object_id: 0,
       page_id: $page_id,
       link: $link,
       title: $title,
