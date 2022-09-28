@@ -165,13 +165,13 @@ pub struct HistoryData {
     pub seconds:   i32,
 }
 
-pub async fn create_history(conn: ConnectionInfo, info: web::Json<HistoryJson>, req: HttpRequest) -> web::Json<HistoryResponse> {
+pub async fn create_history(conn: ConnectionInfo, data: web::Json<HistoryData>, req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
     use crate::utils::plus_page_stat;
 
-    let data: HistoryData = serde_json::from_str(&info.info).unwrap();
-    println!("data{:?}", info.info);
+    //let data: HistoryData = serde_json::from_str(&data).unwrap();
+    println!("link{:?}", data.link);
     let p_id = data.user_id;
     let user = get_c_user(conn, p_id, &req).await;
 
