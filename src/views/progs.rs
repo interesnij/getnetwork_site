@@ -151,7 +151,11 @@ pub async fn get_c_user(conn: ConnectionInfo, id: i32, req: &HttpRequest) -> Coo
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct HistoryForm {
+pub struct HistoryJson {
+    pub info: String,
+}
+#[derive(Debug, Serialize, Deserialize)]
+pub struct HistoryData {
     pub user_id:   i32,
     pub object_id: Option<i32>,
     pub page_id:   i16,
@@ -160,102 +164,25 @@ pub struct HistoryForm {
     pub height:    f64,
     pub seconds:   i32,
 }
-pub async fn history_form(payload: &mut Multipart) -> HistoryForm {
-    let mut form: HistoryForm = HistoryForm {
-        user_id:   0,
-        object_id: None,
-        page_id:   0,
-        link:      "".to_string(),
-        title:     "".to_string(),
-        height:    0.0,
-        seconds:   0,
-    };
 
-    while let Some(item) = payload.next().await {
-        let mut field: Field = item.expect("split_payload err");
-        let name = field.name();
-
-        if name == "user_id" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i32 = s.parse().unwrap();
-                    form.user_id = _int;
-                }
-            }
-        }
-        else if name == "object_id" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i32 = s.parse().unwrap();
-                    form.object_id = Some(_int);
-                }
-            }
-        }
-        else if name == "page_id" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i16 = s.parse().unwrap();
-                    form.page_id = _int;
-                }
-            }
-        }
-        else if name == "height" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: f64 = s.parse().unwrap();
-                    form.height = _int;
-                }
-            }
-        }
-        else if name == "seconds" {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let _int: i32 = s.parse().unwrap();
-                    form.seconds = _int;
-                }
-            }
-        }
-
-        else {
-            while let Some(chunk) = field.next().await {
-                let data = chunk.expect("split_payload err chunk");
-                if let Ok(s) = str::from_utf8(&data) {
-                    let data_string = s.to_string();
-                    if field.name() == "title" {
-                        form.title = data_string
-                    } else if field.name() == "link" {
-                        form.link = data_string
-                    }
-                }
-            }
-        }
-    }
-    form
-}
-
-pub async fn create_history(conn: ConnectionInfo, mut payload: Multipart, req: HttpRequest) -> web::Json<HistoryResponse> {
+pub async fn create_history(conn: ConnectionInfo, info: web::Json<HistoryJson>, req: HttpRequest) -> web::Json<HistoryResponse> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
     use crate::utils::plus_page_stat;
 
-    let form = history_form(payload.borrow_mut()).await;
-    let p_id = form.user_id;
+    let data: HistoryData = serde_json::from_str(&info).unwrap();
+    let p_id = data.user_id;
     let user = get_c_user(conn, p_id, &req).await;
 
-    let p_object_id = form.object_id;
-    let p_page_id = form.page_id;
-    let _p_height = form.height;
+    let p_object_id = data.object_id;
+    let p_page_id = data.page_id;
+    let _p_height = data.height;
     let format_height = format!("{:.2}", _p_height);
     let p_height: f64 = format_height.parse().unwrap();
 
-    let p_seconds = form.seconds;
-    let p_link = form.link.clone();
-    let p_title = form.title.clone();
+    let p_seconds = data.seconds;
+    let p_link = data.link.clone();
+    let p_title = data.title.clone();
 
     let _connection = establish_connection();
 

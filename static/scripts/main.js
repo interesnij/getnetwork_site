@@ -178,21 +178,17 @@ window.addEventListener("unload", function() {
   meta = document.body.querySelector(".doc_title");
   $title = meta.getAttribute("data-title");
   $page_id = meta.getAttribute("page-id");
-  $object_id = meta.getAttribute("data-id") ? meta.getAttribute("data-id") : "";
-
-  formData = new FormData();
-  formData.append('user_id', $user_id);
-  formData.append('object_id', $object_id);
-  formData.append('page_id', $page_id);
-  formData.append('link', $link);
-  formData.append('title', $title);
-  formData.append('height', $height);
-  formData.append('seconds', $seconds);
-  headers = {
-    "Content-Type": 'application/x-www-form-url-encoded',
-  };
-  blob = new Blob(formData, headers);
-  navigator.sendBeacon("/create_history/", blob);
+  $object_id = meta.getAttribute("data-id") ? meta.getAttribute("data-id") : null;
+  analyticsData = {
+    user_id: $user_id,
+    object_id: $object_id,
+    page_id: $page_id,
+    link: document.location.href,
+    title: $title,
+    height: $height,
+    seconds: $seconds,
+  }
+  navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
 });
 
 ///////////////
