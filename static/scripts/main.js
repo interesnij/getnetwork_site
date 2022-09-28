@@ -130,22 +130,25 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("затрачено секунд",  $seconds);
   console.log("======================");
 
-  formData = new FormData();
-  formData.append('user_id', $user_id);
-  formData.append('object_id', $object_id);
-  formData.append('page_id', $page_id);
-  formData.append('link', $link);
-  formData.append('title', $title);
-  formData.append('height', $height);
-  formData.append('seconds', $seconds);
-  analyticsData = {
-    user_id: $user_id,
-    object_id: $object_id,
-    page_id: $page_id,
-    link: $link,
-    title: $title,
-    height: $height,
-    seconds: $seconds,
+  if ($object_id) {
+    analyticsData = {
+      user_id: $user_id,
+      object_id: $object_id,
+      page_id: $page_id,
+      link: $link,
+      title: $title,
+      height: $height,
+      seconds: $seconds,
+    }
+  } else {
+    analyticsData = {
+      user_id: $user_id,
+      page_id: $page_id,
+      link: $link,
+      title: $title,
+      height: $height,
+      seconds: $seconds,
+    }
   }
 
   fetch("/create_history/",
