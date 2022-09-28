@@ -34,6 +34,8 @@ function format_text(text) {
   div = text.querySelectorAll("div");
   span = text.querySelectorAll("span");
   pre = text.querySelectorAll("pre");
+  strong = text.querySelectorAll("strong");
+  u = text.querySelectorAll("u");
 
   for (var i = 0; i < br.length; i++){
       br[i].removeAttribute("style"); br[i].removeAttribute("class")
@@ -46,6 +48,12 @@ function format_text(text) {
 
   for (var i = 0; i < img.length; i++){
       img[i].removeAttribute("style"); img[i].removeAttribute("class")
+  };
+  for (var i = 0; i < strong.length; i++){
+      strong[i].removeAttribute("style"); strong[i].removeAttribute("class")
+  };
+  for (var i = 0; i < u.length; i++){
+      u[i].removeAttribute("style"); u[i].removeAttribute("class")
   };
   for (var i = 0; i < p.length; i++){
       p[i].removeAttribute("style"); p[i].removeAttribute("class")
@@ -96,45 +104,6 @@ on('body', 'input', '.smile_supported', function() {
     this.previousElementSibling.innerHTML = this.innerHTML.length
 });
 
-// help progs
-on('body', 'click', '#create_help_btn', function() {
-  send_category_data(this.parentElement, "/help/create_item/");
-});
-on('body', 'click', '#edit_help_btn', function() {
-  send_category_data(this.parentElement, "/help/edit_item/" + this.getAttribute("data-pk") + "/");
-});
-on('body', 'click', '#create_help_category_btn', function() {
-  form = this.parentElement;
-  if (!form.querySelector(".form_title").value) {
-    form.querySelector(".form_title").style.setProperty('border', '1px #FF0000 solid', 'important');
-    return
-  }
-  form_data = new FormData(form);
-  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', "/help/create_categories/", true );
-  link.onreadystatechange = function () {
-  if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload("/help/create_categories/", true);
-  }};
-  link.send(form_data);
-});
-on('body', 'click', '#edit_help_category_btn', function() {
-  form = this.parentElement;
-  if (!form.querySelector(".form_title").value) {
-    form.querySelector(".form_title").style.setProperty('border', '1px #FF0000 solid', 'important');
-    return
-  }
-
-  form_data = new FormData(form);
-  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', "/help/edit_category/" + this.getAttribute("data-pk") + "/", true );
-  link.onreadystatechange = function () {
-  if ( link.readyState == 4 && link.status == 200 ) {
-    ajax_get_reload("/help/create_categories/", true);
-  }};
-  link.send(form_data);
-});
-
 function get_and_change_btn(_this, url, hide) {
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
   link.open( 'GET', url + _this.getAttribute("data-pk") + "/", true );
@@ -142,9 +111,13 @@ function get_and_change_btn(_this, url, hide) {
   if ( link.readyState == 4 && link.status == 200 ) {
     if (hide) {
       _this.innerHTML = "👁";
+      _this.classList.add("publish_item");
+      _this.classList.remove("hide_item");
     }
     else {
       _this.innerHTML = "🛇";
+      _this.classList.remove("publish_item");
+      _this.classList.add("hide_item");
     }
   }};
   link.send();
@@ -191,12 +164,14 @@ function send_content_data(url, field) {
   link.open( 'POST', url, true );
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
-    alert("ok");
-  } else {
-    alert("not ok");
+    console.log("ok");
   }};
   link.send(form_data);
 };
+
+on('body', 'click', '#edit_file_btn', function() {
+  send_content_data("/edit_file/" + this.getAttribute("data-pk") + "/", "description");
+});
 
 function send_serve_data(form, url) {
   text_field = form.querySelector(".smile_supported");
@@ -257,8 +232,8 @@ on('body', 'click', '#create_serve_category_btn', function() {
 on('body', 'click', '#edit_serve_btn', function() {
   send_serve_data(this.parentElement, "/edit_serve/" + this.getAttribute("data-pk") + "/");
 });
-on('body', 'click', '#edit_text_work_btn', function() {
-  send_content_data("/edit_content_serve/" + this.getAttribute("data-pk") + "/", "content");
+on('body', 'click', '#edit_object_content_btn', function() {
+  send_content_data("/edit_content_item/" + this.getAttribute("data-pk") + "/", "content");
 });
 on('body', 'click', '#edit_serve_category_btn', function() {
   send_category_data(this.parentElement, "/edit_serve_category/" + this.getAttribute("data-pk") + "/");
@@ -280,141 +255,26 @@ on('body', 'click', '.remove_tech_category', function() {
 });
 
 /////////////////////////////
-on('body', 'click', '#create_work_btn', function() {
-  send_post_data(this.parentElement, "/create_work/");
+on('body', 'click', '#create_item_btn', function() {
+  send_post_data(this.parentElement, "/create_item/");
 });
-on('body', 'click', '#create_work_category_btn', function() {
-  send_category_data(this.parentElement, "/create_work_categories/");
+on('body', 'click', '#create_category_btn', function() {
+  send_category_data(this.parentElement, "/create_category/");
 });
-on('body', 'click', '#edit_work_btn', function() {
-  send_post_data(this.parentElement, "/edit_work/" + this.getAttribute("data-pk") + "/");
+on('body', 'click', '#edit_item_btn', function() {
+  send_post_data(this.parentElement, "/edit_item/" + this.getAttribute("data-pk") + "/");
 });
-on('body', 'click', '#edit_text_work_btn', function() {
-  send_content_data("/edit_content_work/" + this.getAttribute("data-pk") + "/", "content");
+on('body', 'click', '#edit_category_btn', function() {
+  send_category_data(this.parentElement, "/edit_category/" + this.getAttribute("data-pk") + "/");
 });
-on('body', 'click', '#edit_work_category_btn', function() {
-  send_category_data(this.parentElement, "/edit_work_category/" + this.getAttribute("data-pk") + "/");
-});
-on('body', 'click', '.remove_work', function() {
-  delete_item("/delete_work/" + this.getAttribute("data-pk") + "/");
+on('body', 'click', '.remove_item', function() {
+  delete_item("/delete_item/" + this.getAttribute("data-pk") + "/");
   this.parentElement.remove();
 });
-on('body', 'click', '.remove_work_category', function() {
-  delete_item("/delete_work_category/" + this.getAttribute("data-pk") + "/");
+on('body', 'click', '.remove_category', function() {
+  delete_item("/delete_category/" + this.getAttribute("data-pk") + "/");
   this.parentElement.remove();
 });
-
-
-////////////////////////////////////
-
-on('body', 'click', '#create_blog_btn', function() {
-  send_post_data(this.parentElement, "/create_blog/");
-});
-on('body', 'click', '#edit_blog_btn', function() {
-  send_post_data(this.parentElement, "/edit_blog/" + this.getAttribute("data-pk") + "/");
-});
-on('body', 'click', '#edit_text_blog_btn', function() {
-  send_content_data("/edit_content_blog/" + this.getAttribute("data-pk") + "/", "content");
-});
-
-on('body', 'click', '#create_blog_category_btn', function() {
-  send_category_data(this.parentElement, "/create_blog_categories/");
-});
-on('body', 'click', '#edit_blog_category_btn', function() {
-  send_category_data(this.parentElement, "/edit_blog_category/" + this.getAttribute("data-pk") + "/");
-});
-on('body', 'click', '.remove_blog', function() {
-  delete_item("/delete_blog/" + this.getAttribute("data-pk") + "/");
-  this.parentElement.remove();
-});
-on('body', 'click', '.remove_blog_category', function() {
-  delete_item("/delete_blog_category/" + this.getAttribute("data-pk") + "/");
-  this.parentElement.remove();
-});
-
-/////////////////////////////////////////
-
-on('body', 'click', '#create_wiki_btn', function() {
-  send_post_data(this.parentElement, "/create_wiki/");
-});
-on('body', 'click', '#create_wiki_category_btn', function() {
-  send_category_data(this.parentElement, "/create_wiki_categories/");
-});
-on('body', 'click', '#edit_wiki_btn', function() {
-  send_post_data(this.parentElement, "/edit_wiki/" + this.getAttribute("data-pk") + "/");
-});
-on('body', 'click', '#edit_text_wiki_btn', function() {
-  send_content_data("/edit_content_wiki/" + this.getAttribute("data-pk") + "/", "content");
-});
-on('body', 'click', '#edit_wiki_category_btn', function() {
-  send_category_data(this.parentElement, "/edit_wiki_category/" + this.getAttribute("data-pk") + "/");
-});
-on('body', 'click', '.remove_wiki', function() {
-  delete_item("/delete_wiki/" + this.getAttribute("data-pk") + "/");
-  this.parentElement.remove();
-});
-on('body', 'click', '.remove_wiki_category', function() {
-  delete_item("/delete_wiki_category/" + this.getAttribute("data-pk") + "/");
-  this.parentElement.remove();
-});
-
- //////////////////////////////////
-
-on('body', 'click', '#create_store_btn', function() {
-  send_post_data(this.parentElement, "/create_store/");
-});
-on('body', 'click', '#create_store_category_btn', function() {
-  send_category_data(this.parentElement, "/create_store_categories/");
-});
-on('body', 'click', '#edit_store_btn', function() {
-  send_post_data(this.parentElement, "/edit_store/" + this.getAttribute("data-pk") + "/");
-});
-on('body', 'click', '#edit_text_store_btn', function() {
-  send_content_data("/edit_content_store/" + this.getAttribute("data-pk") + "/", "content");
-});
-on('body', 'click', '#edit_store_category_btn', function() {
-  send_category_data(this.parentElement, "/edit_store_category/" + this.getAttribute("data-pk") + "/");
-});
-on('body', 'click', '.remove_store', function() {
-  delete_item("/delete_store/" + this.getAttribute("data-pk") + "/");
-  this.parentElement.remove();
-});
-on('body', 'click', '.remove_store_category', function() {
-  delete_item("/delete_store_category/" + this.getAttribute("data-pk") + "/");
-  this.parentElement.remove();
-});
-
-////////////////////////////////////
-
-on('body', 'click', '#create_service_btn', function() {
-  send_post_data(this.parentElement, "/create_service/");
-});
-on('body', 'click', '#create_service_category_btn', function() {
-  send_category_data(this.parentElement, "/create_service_categories/");
-});
-on('body', 'click', '#edit_service_btn', function() {
-  send_post_data(this.parentElement, "/edit_service/" + this.getAttribute("data-pk") + "/");
-});
-on('body', 'click', '#edit_text_service_btn', function() {
-  send_content_data("/edit_content_service/" + this.getAttribute("data-pk") + "/", "content");
-});
-on('body', 'click', '#edit_service_category_btn', function() {
-  send_category_data(this.parentElement, "/edit_service_category/" + this.getAttribute("data-pk") + "/");
-});
-on('body', 'click', '.remove_service', function() {
-  delete_item("/delete_service/" + this.getAttribute("data-pk") + "/");
-  this.parentElement.remove();
-});
-on('body', 'click', '.remove_service_category', function() {
-  delete_item("/delete_service_category/" + this.getAttribute("data-pk") + "/");
-  this.parentElement.remove();
-});
-on('body', 'click', '.remove_help_category', function() {
-  delete_item("/help/delete_category/" + this.getAttribute("data-pk") + "/");
-  this.parentElement.remove();
-});
-
-///////////////////////////
 
 on('body', 'click', '#create_tag_btn', function() {
   send_post_data(this.parentElement, "/create_tag/");
@@ -471,6 +331,22 @@ on('body', 'change', '.load_serve_from_level', function() {
   link.send( null );
 });
 
+on('body', 'change', '.load_unical_object_form', function() {
+  val = this.value;
+  next = this.parentElement.nextElementSibling;
+  var link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+    link.open( 'GET', "/unical_object_form/" + this.value + "/", true );
+    link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    link.onreadystatechange = function () {
+      if ( link.readyState == 4 ) {
+          if ( link.status == 200 ) {
+              next.innerHTML = link.responseText;
+          }
+      }
+  };
+  link.send( null );
+});
+
 on('body', 'change', '.close_tech_categories', function() {
   options = this.querySelectorAll("option");
   next = this.parentElement.nextElementSibling;
@@ -494,39 +370,11 @@ on('body', 'change', '.close_tech_categories', function() {
 });
 
 
-on('body', 'click', '.hide_blog', function() {
-  get_and_change_btn(this, "/hide_blog/", true);
+on('body', 'click', '.hide_item', function() {
+  get_and_change_btn(this, "/hide_item/", true);
 });
-on('body', 'click', '.publish_blog', function() {
-  get_and_change_btn(this, "/publish_blog/", false);
-});
-
-on('body', 'click', '.hide_service', function() {
-  get_and_change_btn(this, "/hide_service/", true);
-});
-on('body', 'click', '.publish_service', function() {
-  get_and_change_btn(this, "/publish_service/", false);
-});
-
-on('body', 'click', '.hide_store', function() {
-  get_and_change_btn(this, "/hide_store/", true);
-});
-on('body', 'click', '.publish_store', function() {
-  get_and_change_btn(this, "/publish_store/", false);
-});
-
-on('body', 'click', '.hide_wiki', function() {
-  get_and_change_btn(this, "/hide_wiki/", true);
-});
-on('body', 'click', '.publish_wiki', function() {
-  get_and_change_btn(this, "/publish_wiki/", false);
-});
-
-on('body', 'click', '.hide_work', function() {
-  get_and_change_btn(this, "/hide_work/", true);
-});
-on('body', 'click', '.publish_work', function() {
-  get_and_change_btn(this, "/publish_work/", false);
+on('body', 'click', '.publish_item', function() {
+  get_and_change_btn(this, "/publish_item/", false);
 });
 
 on('body', 'click', '.show_user_history', function() {
@@ -572,30 +420,17 @@ on('body', 'change', '.add_photos_in_object', function() {
   link.send(form_data);
 });
 
-on('body', 'change', '.add_videos_in_object', function() {
+on('body', 'change', '.add_file_in_object', function() {
   form = this.parentElement;
-  pk = form.getAttribute("data-pk");
+  item_pk = form.getAttribute("data-pk");
+  item_types = form.getAttribute("item-type");
+  data_types = form.getAttribute("data-type");
   form_data = new FormData(form);
-  data_block = document.body.querySelector(".doc_title");
-  page_id = data_block.getAttribute("page-id");
-  if (page_id == 43) {
-    url = "/create_blog_videos/";
-  }
-  else if (page_id == 63) {
-    url = "/create_service_videos/";
-  }
-  else if (page_id == 73) {
-    url = "/create_store_videos/";
-  }
-  else if (page_id == 83) {
-    url = "/create_wiki_videos/";
-  }
-  else if (page_id == 93) {
-    url = "/create_work_videos/";
-  }
+  form_data.append("item_types", item_types);
+  form_data.append("types", data_types);
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', url + pk + "/", true );
+  link.open( 'POST', "/create_files/" + item_pk + "/", true );
   link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
@@ -604,62 +439,12 @@ on('body', 'change', '.add_videos_in_object', function() {
   link.send(form_data);
 });
 
-
-on('body', 'click', '.remove_photo_from_object', function() {
+on('body', 'click', '.remove_file_from_object', function() {
   _this = this;
   pk = _this.getAttribute("data-pk");
-  data_block = document.body.querySelector(".doc_title");
-  page_id = data_block.getAttribute("page-id");
-  if (page_id == 43) {
-    url = "/delete_blog_image/";
-  }
-  else if (page_id == 63) {
-    url = "/delete_service_image/";
-  }
-  else if (page_id == 73) {
-    url = "/delete_store_image/";
-  }
-  else if (page_id == 83) {
-    url = "/delete_wiki_image/";
-  }
-  else if (page_id == 93) {
-    url = "/delete_work_image/";
-  }
 
   link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'GET', url + pk + "/", true );
-  link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-  link.onreadystatechange = function () {
-  if ( link.readyState == 4 && link.status == 200 ) {
-    _this.nextElementSibling.remove();
-    _this.remove();
-  }};
-  link.send();
-});
-
-on('body', 'click', '.remove_video_from_object', function() {
-  _this = this;
-  pk = _this.getAttribute("data-pk");
-  data_block = document.body.querySelector(".doc_title");
-  page_id = data_block.getAttribute("page-id");
-  if (page_id == 43) {
-    url = "/delete_blog_video/";
-  }
-  else if (page_id == 63) {
-    url = "/delete_service_video/";
-  }
-  else if (page_id == 73) {
-    url = "/delete_store_video/";
-  }
-  else if (page_id == 83) {
-    url = "/delete_wiki_video/";
-  }
-  else if (page_id == 93) {
-    url = "/delete_work_video/";
-  }
-
-  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'GET', url + pk + "/", true );
+  link.open( 'GET', "/delete_file/" + pk + "/", true );
   link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
