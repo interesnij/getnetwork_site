@@ -134,7 +134,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
     analyticsData = {
       user_id: $user_id,
       object_id: $object_id,
-      page_id: $page_id,
+      page_id: $page_id*1,
       link: $link,
       title: $title,
       height: $height,
@@ -144,7 +144,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
     analyticsData = {
       user_id: $user_id,
       object_id: 0,
-      page_id: $page_id,
+      page_id: $page_id*1,
       link: $link,
       title: $title,
       height: $height,
