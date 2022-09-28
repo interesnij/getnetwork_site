@@ -138,14 +138,27 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   formData.append('title', $title);
   formData.append('height', $height);
   formData.append('seconds', $seconds);
+  analyticsData = {
+    user_id: $user_id,
+    object_id: $object_id,
+    page_id: $page_id,
+    link: $link,
+    title: $title,
+    height: $height,
+    seconds: $seconds,
+  }
 
-  link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-  link.open( 'POST', "/create_history/", true );
-  link.onreadystatechange = function () {
-  if ( link.readyState == 4 && link.status == 200 ) {
-    console.log("Данные отправлены!");
-  }};
-  link.send(formData);
+  fetch("/create_history/",
+    {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(analyticsData)
+    })
+    .then(function(res){ console.log(res) })
+    .catch(function(res){ console.log(res) })
 
   $height = parseFloat(window.innerHeight * 0.000264).toFixed(2);
   $seconds = 1;
