@@ -228,7 +228,7 @@ window.unload = function() {
   }
   navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
   console.log(analyticsData);
-});
+};
 
 ///////////////
 function get_or_create_cookie_user() {
