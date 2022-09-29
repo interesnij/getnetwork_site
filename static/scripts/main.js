@@ -151,7 +151,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       seconds: $seconds,
     }
   }
-
+  console.log(analyticsData);
   fetch("/create_history/",
     {
       headers: {
