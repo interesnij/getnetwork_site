@@ -227,6 +227,7 @@ window.addEventListener("unload", function() {
     seconds: "",
   }
   navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
+  console.log(analyticsData);
 });
 
 ///////////////
