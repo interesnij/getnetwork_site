@@ -22,7 +22,6 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     get_request_user_data,
-    MyWs,
 };
 use crate::diesel::{
     RunQueryDsl,
