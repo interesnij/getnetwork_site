@@ -222,7 +222,7 @@ function get_stat_meta() {
 
 window.unload = function() {
   navigator.sendBeacon("/create_history/", JSON.stringify(get_stat_meta()));
-});
+};
 
 ///////////////
 function get_or_create_cookie_user() {
