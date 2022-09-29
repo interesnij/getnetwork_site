@@ -58,8 +58,12 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/image/{id}/", web::get().to(image_page));
 }
 
-pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
+
+pub async fn index_page(stream: web::Payload, req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    let resp = ws::start(MyWs {}, &req, stream);
+    println!("{:?}", resp);
 
     if is_ajax == 0 {
         get_first_load_page (
