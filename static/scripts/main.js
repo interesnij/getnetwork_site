@@ -191,7 +191,7 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   window.clearInterval(intervalListener2);
 }
 
-window.unload = function() {
+function get_stat_meta() {
   meta = document.body.querySelector(".doc_title");
   $title = meta.getAttribute("data-title");
   $page_id = meta.getAttribute("page-id");
@@ -217,7 +217,11 @@ window.unload = function() {
       seconds: $seconds,
     }
   }
-  navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
+  return analyticsData;
+}
+
+window.unload = function() {
+  navigator.sendBeacon("/create_history/", JSON.stringify(get_stat_meta()));
 };
 
 ///////////////
