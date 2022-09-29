@@ -130,9 +130,6 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("затрачено секунд",  $seconds);
   console.log("======================");
 
-  float_height = parseFloat($height.replace(",",".")).toFixed(2);
-  console.log($height*1.0);
-
   if ($object_id) {
     analyticsData = {
       user_id: $user_id,
@@ -140,7 +137,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       page_id: $page_id*1,
       link: $link,
       title: $title,
-      height: float_height,
+      height: $height*1.0,
       seconds: $seconds,
     }
   } else {
@@ -150,7 +147,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       page_id: $page_id*1,
       link: $link,
       title: $title,
-      height: float_height,
+      height: $height*1.0,
       seconds: $seconds,
     }
   }
@@ -206,7 +203,7 @@ window.unload = function() {
       page_id: $page_id*1,
       link: $link,
       title: $title,
-      height: $height,
+      height: $height*1.0,
       seconds: $seconds,
     }
   } else {
@@ -216,7 +213,7 @@ window.unload = function() {
       page_id: $page_id*1,
       link: $link,
       title: $title,
-      height: $height,
+      height: $height$height*1.0,
       seconds: $seconds,
     }
   }
