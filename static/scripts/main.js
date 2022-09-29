@@ -196,38 +196,28 @@ window.unload = function() {
   $title = meta.getAttribute("data-title");
   $page_id = meta.getAttribute("page-id");
   $object_id = meta.getAttribute("data-id");
-  //if ($object_id) {
-  //  analyticsData = {
-  //    user_id: $user_id,
-  //    object_id: $object_id*1,
-  //    page_id: $page_id*1,
-  //    link: $link,
-  //    title: $title,
-  //    height: $height,
-  //    seconds: $seconds,
-  //  }
-  //} else {
-  //  analyticsData = {
-  //    user_id: $user_id,
-  //    object_id: 0,
-  //    page_id: $page_id*1,
-  //    link: $link,
-  //    title: $title,
-  //    height: $height,
-  //    seconds: $seconds,
-  //  }
-  //}
-  analyticsData = {
-    //user_id: 0,
-    //object_id: 0,
-    //page_id: 0,
-    link: "",
-    //title: "",
-    //height: "",
-    //seconds: "",
+  if ($object_id) {
+    analyticsData = {
+      user_id: $user_id,
+      object_id: $object_id*1,
+      page_id: $page_id*1,
+      link: $link,
+      title: $title,
+      height: $height,
+      seconds: $seconds,
+    }
+  } else {
+    analyticsData = {
+      user_id: $user_id,
+      object_id: 0,
+      page_id: $page_id*1,
+      link: $link,
+      title: $title,
+      height: $height,
+      seconds: $seconds,
+    }
   }
   navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
-  console.log(analyticsData);
 };
 
 ///////////////
