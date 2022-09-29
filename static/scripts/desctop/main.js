@@ -144,7 +144,7 @@ function check_first_load() {
         get_page_view_time(120);
         scrolled(document.body.querySelector(".span"));
         window.history.pushState ({"url":url}, document.title, url);
-        window.addEventListener('onbeforeunload', logVisit);
+        window.addEventListener('unload', logVisit);
       }
     }
     ajax_link.send();
