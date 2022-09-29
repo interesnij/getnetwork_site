@@ -219,7 +219,7 @@ function logVisit() {
       seconds: $seconds,
     }
   }
-  console.log(analyticsData);
+  console.log(JSON.stringify(analyticsData));
   let result = navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
   if (result) {
     console.log('Добавлено в очередь!');
