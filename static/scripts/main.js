@@ -131,7 +131,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   console.log("======================");
 
   float_height = parseFloat($height.replace(",",".")).toFixed(2);
-  console.log(float_height*1.0);
+  console.log($height*1.0);
 
   if ($object_id) {
     analyticsData = {
