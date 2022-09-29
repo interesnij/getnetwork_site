@@ -218,8 +218,6 @@ function getData() {
       seconds: $seconds,
     };
   }
-  let json = JSON.stringify(analyticsData);
-  console.log(json);
   return analyticsData;
 }
 function logVisit() {
@@ -232,9 +230,9 @@ function logVisit() {
     console.log('Ошибка.');
   }
 };
-//window.onbeforeunload = function() {
-//  console.log("Reload");
-//};
+window.onbeforeunload = function() {
+  console.log("Reload");
+};
 //window.addEventListener('onbeforeunload', logVisit);
 
 ///////////////
