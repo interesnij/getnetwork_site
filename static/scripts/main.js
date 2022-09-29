@@ -198,7 +198,7 @@ function getData() {
   object_id = meta.getAttribute("data-id");
 
   if (object_id) {
-    analyticsData = {{
+    analyticsData = {
       user_id: $user_id,
       object_id: object_id*1,
       page_id: page_id*1,
@@ -206,10 +206,10 @@ function getData() {
       title: title,
       height: $height*1.0,
       seconds: $seconds,
-    }}
+    }
     console.log(analyticsData);
   } else {
-    analyticsData = {
+    analyticsData = '{
       user_id: $user_id,
       object_id: 0,
       page_id: page_id*1,
@@ -217,7 +217,7 @@ function getData() {
       title: title,
       height: $height*1.0,
       seconds: $seconds,
-    }
+    }';
     console.log(analyticsData);
   }
 
