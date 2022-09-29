@@ -11,8 +11,6 @@ use actix_web::{
     HttpServer,
     App,
     middleware,
-    Actor,
-    StreamHandler,
 };
 use actix_files::Files;
 use crate::routes::routes;

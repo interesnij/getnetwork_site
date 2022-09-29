@@ -15,9 +15,8 @@ use actix_web::{
     web,
     error::InternalError,
     http::StatusCode,
-    Actor,
-    StreamHandler,
 };
+use actix::{Actor, StreamHandler};
 
 use crate::schema;
 use serde::Deserialize;
