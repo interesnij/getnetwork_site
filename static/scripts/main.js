@@ -191,7 +191,8 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   window.clearInterval(intervalListener2);
 }
 
-function get_analytics_data() {
+
+function logVisit() {
   meta = document.body.querySelector(".doc_title");
   $title = meta.getAttribute("data-title");
   $page_id = meta.getAttribute("page-id");
@@ -217,11 +218,7 @@ function get_analytics_data() {
       seconds: $seconds,
     }
   }
-  return analyticsData;
-}
-
-function logVisit() {
-  let result = navigator.sendBeacon("/create_history/", JSON.stringify(get_analytics_data()));
+  let result = navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
   if (result) {
     console.log('Добавлено в очередь!');
   } else {
