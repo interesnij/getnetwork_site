@@ -56,13 +56,6 @@ pub fn progs_routes(config: &mut web::ServiceConfig) {
     config.route("/create_files/{id}/", web::post().to(create_files));
     config.route("/edit_file/{id}/", web::post().to(edit_file));
     config.route("/delete_file/{id}/", web::get().to(delete_file));
-    config.route("/ws/", web::get().to(websocket));
-}
-
-async fn websocket(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
-    let resp = ws::start(MyWs {}, &req, stream);
-    println!("{:?}", resp);
-    resp
 }
 
 pub async fn create_c_user(conn: ConnectionInfo, req: &HttpRequest) -> CookieUser {
