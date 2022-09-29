@@ -191,7 +191,7 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   window.clearInterval(intervalListener2);
 }
 
-window.addEventListener("unload", function() {
+window.unload = function() {
   meta = document.body.querySelector(".doc_title");
   $title = meta.getAttribute("data-title");
   $page_id = meta.getAttribute("page-id");
