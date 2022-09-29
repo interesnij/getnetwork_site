@@ -191,16 +191,12 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
   window.clearInterval(intervalListener2);
 }
 
-
-function logVisit() {
-  console.log("logVisit!")
+function getData() {
   meta = document.body.querySelector(".doc_title");
   title = meta.getAttribute("data-title");
   page_id = meta.getAttribute("page-id");
   object_id = meta.getAttribute("data-id");
-  var test = {
-    "test": 0
-  }
+
   if (object_id) {
     analyticsData = {
       user_id: $user_id,
@@ -223,8 +219,12 @@ function logVisit() {
     }
   }
   console.log(analyticsData);
-  console.log(test);
-  let result = navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
+  return analyticsData;
+}
+function logVisit() {
+  console.log("logVisit!")
+
+  let result = navigator.sendBeacon("/create_history/", JSON.stringify(getData()));
   if (result) {
     console.log('Добавлено в очередь!');
   } else {
