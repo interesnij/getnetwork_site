@@ -218,13 +218,13 @@ window.addEventListener("unload", function() {
   //  }
   //}
   analyticsData = {
-    user_id: 0,
-    object_id: 0,
-    page_id: 0,
+    //user_id: 0,
+    //object_id: 0,
+    //page_id: 0,
     link: "",
-    title: "",
-    height: "",
-    seconds: "",
+    //title: "",
+    //height: "",
+    //seconds: "",
   }
   navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
   console.log(analyticsData);
