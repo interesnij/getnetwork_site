@@ -220,8 +220,7 @@ function get_stat_meta() {
   return analyticsData;
 }
 
-on('body', 'unload', 'window', function() {
-//window.unload = function() {
+window.unload = function() {
   navigator.sendBeacon("/create_history/", JSON.stringify(get_stat_meta()));
 });
 
