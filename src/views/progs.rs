@@ -154,7 +154,7 @@ pub async fn get_c_user(conn: ConnectionInfo, id: i32, req: &HttpRequest) -> Coo
 #[derive(Debug, Deserialize)]
 pub struct HistoryData {
     pub user_id:   i32,
-    pub object_id: Option<i32>,
+    pub object_id: i32,
     pub page_id:   i16,
     pub link:      String,
     pub title:     String,
