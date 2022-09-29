@@ -207,6 +207,7 @@ function getData() {
       height: $height*1.0,
       seconds: $seconds,
     }
+    console.log(analyticsData);
   } else {
     analyticsData = {
       user_id: $user_id,
@@ -217,8 +218,9 @@ function getData() {
       height: $height*1.0,
       seconds: $seconds,
     }
+    console.log(analyticsData);
   }
-  console.log(analyticsData);
+
   return analyticsData;
 }
 function logVisit() {
