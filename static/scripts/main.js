@@ -220,7 +220,7 @@ function get_stat_meta() {
   return analyticsData;
 }
 
-window.unload = function() {
+function logVisit() {
   let result = navigator.sendBeacon("/create_history/", JSON.stringify(get_stat_meta()));
   if (result) {
     console.log('Добавлено в очередь!');
@@ -228,6 +228,10 @@ window.unload = function() {
     console.log('Ошибка.');
   }
 };
+//window.onbeforeunload = function() {
+//  console.log("Reload");
+//};
+window.addEventListener('onbeforeunload', logVisit);
 
 ///////////////
 function get_or_create_cookie_user() {
