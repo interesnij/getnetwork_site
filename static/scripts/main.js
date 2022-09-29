@@ -227,8 +227,8 @@ function logVisit() {
 };
 //window.onbeforeunload = function() {
 //  console.log("Reload");
-//};
-window.addEventListener('onbeforeunload', logVisit);
+//}; 
+//window.addEventListener('onbeforeunload', logVisit);
 
 ///////////////
 function get_or_create_cookie_user() {
