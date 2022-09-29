@@ -137,7 +137,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       page_id: $page_id*1,
       link: $link,
       title: $title,
-      height: $height,
+      height: parseFloat($height).toFixed(2),
       seconds: $seconds,
     }
   } else {
@@ -147,7 +147,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       page_id: $page_id*1,
       link: $link,
       title: $title,
-      height: $height,
+      height: parseFloat($height).toFixed(2),
       seconds: $seconds,
     }
   }
