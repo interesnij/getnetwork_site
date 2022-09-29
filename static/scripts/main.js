@@ -223,7 +223,11 @@ function getData() {
 function logVisit() {
   console.log("logVisit!")
 
-  let result = navigator.sendBeacon("/create_history/", getData());
+  const headers = {
+    type: 'application/json',
+  };
+  const blob = new Blob([JSON.stringify(getData())], headers);
+  let result = navigator.sendBeacon("/create_history/", blob);
   if (result) {
     console.log('Добавлено в очередь!');
   } else {
