@@ -198,12 +198,15 @@ function logVisit() {
   $title = meta.getAttribute("data-title");
   $page_id = meta.getAttribute("page-id");
   $object_id = meta.getAttribute("data-id");
+  var test = {
+    "test": 0
+  }
   if ($object_id) {
     analyticsData = {
       user_id: $user_id,
       object_id: $object_id*1,
       page_id: $page_id*1,
-      link: document.location.href,
+      link: window.location.pathname,
       title: $title,
       height: $height*1.0,
       seconds: $seconds,
@@ -213,13 +216,14 @@ function logVisit() {
       user_id: $user_id,
       object_id: 0,
       page_id: $page_id*1,
-      link: document.location.href,
+      link: window.location.pathname,
       title: $title,
       height: $height*1.0,
       seconds: $seconds,
     }
   }
-  console.log(JSON.stringify(analyticsData));
+  console.log(analyticsData);
+  console.log(test);
   let result = navigator.sendBeacon("/create_history/", JSON.stringify(analyticsData));
   if (result) {
     console.log('Добавлено в очередь!');
