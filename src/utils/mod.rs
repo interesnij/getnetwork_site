@@ -39,7 +39,7 @@ use sailfish::TemplateOnce;
 
 
 /// Define HTTP actor
-struct MyWs;
+pub struct MyWs;
 
 impl Actor for MyWs {
     type Context = ws::WebsocketContext<Self>;
