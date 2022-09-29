@@ -232,6 +232,7 @@ function logVisit() {
 };
 window.onbeforeunload = function() {
   console.log("Reload");
+  logVisit()
 };
 //window.addEventListener('onbeforeunload', logVisit);
 
