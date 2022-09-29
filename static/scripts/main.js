@@ -213,7 +213,7 @@ function get_stat_meta() {
       page_id: $page_id*1,
       link: $link,
       title: $title,
-      height: $height$height*1.0,
+      height: $height*1.0,
       seconds: $seconds,
     }
   }
