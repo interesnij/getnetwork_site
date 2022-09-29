@@ -221,7 +221,12 @@ function get_stat_meta() {
 }
 
 window.unload = function() {
-  navigator.sendBeacon("/create_history/", JSON.stringify(get_stat_meta()));
+  let result = navigator.sendBeacon("/create_history/", JSON.stringify(get_stat_meta()));
+  if (result) {
+    console.log('Добавлено в очередь!');
+  } else {
+    console.log('Ошибка.');
+  }
 };
 
 ///////////////
