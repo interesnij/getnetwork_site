@@ -36,6 +36,7 @@ use crate::diesel::{
 use actix_session::Session;
 use crate::errors::AuthError;
 use sailfish::TemplateOnce;
+use actix_web_actors::ws;
 
 
 /// Define HTTP actor
