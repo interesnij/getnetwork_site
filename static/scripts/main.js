@@ -219,7 +219,7 @@ function getData() {
     };
   }
   let json = JSON.stringify(analyticsData);
-  alert(json);
+  console.log(json);
   return analyticsData;
 }
 function logVisit() {
