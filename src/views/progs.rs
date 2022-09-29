@@ -197,55 +197,55 @@ pub async fn create_history(conn: ConnectionInfo, data: web::Json<HistoryData>, 
             ))
             .get_result::<CookieUser>(&_connection)
             .expect("Error.");
-        if p_object_id.is_some() {
+        if p_object_id > 0 {
             match p_page_id {
                 42 => {
                     use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_category_stat(p_object_id, p_height, p_seconds)
                 },
                 43 => {
                     use crate::utils::plus_item_stat;
-                    plus_item_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_item_stat(p_object_id, p_height, p_seconds)
                 },
                 62 => {
                     use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_category_stat(p_object_id, p_height, p_seconds)
                 },
                 63 => {
                     use crate::utils::plus_item_stat;
-                    plus_item_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_item_stat(p_object_id, p_height, p_seconds)
                 },
                 72 => {
                     use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_category_stat(p_object_id, p_height, p_seconds)
                 },
                 73 => {
                     use crate::utils::plus_item_stat;
-                    plus_item_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_item_stat(p_object_id, p_height, p_seconds)
                 },
                 82 => {
                     use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_category_stat(p_object_id, p_height, p_seconds)
                 },
                 83 => {
                     use crate::utils::plus_item_stat;
-                    plus_item_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_item_stat(p_object_id, p_height, p_seconds)
                 },
                 92 => {
                     use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_category_stat(p_object_id, p_height, p_seconds)
                 },
                 93 => {
                     use crate::utils::plus_item_stat;
-                    plus_item_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_item_stat(p_object_id, p_height, p_seconds)
                 },
                 32 => {
                     use crate::utils::plus_tag_stat;
-                    plus_tag_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_tag_stat(p_object_id, p_height, p_seconds)
                 },
                 9 => {
                     use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id.unwrap(), p_height, p_seconds)
+                    plus_category_stat(p_object_id, p_height, p_seconds)
                 },
                 _ => println!("no value"),
             };
