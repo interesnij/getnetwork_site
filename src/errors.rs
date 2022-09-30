@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate log;
+
 use actix_web::{
     error::{BlockingError, ResponseError},
     Error as ActixError, HttpResponse,
@@ -5,6 +8,7 @@ use actix_web::{
 use derive_more::Display;
 use diesel::result::{DatabaseErrorKind, Error as DBError};
 use std::convert::From;
+use serde::{Deserialize, Serialize};
 
 
 #[derive(Clone, Debug, Display)]
