@@ -1,5 +1,3 @@
-use crate log;
-
 use actix_web::{
     error::{BlockingError, ResponseError},
     Error as ActixError, HttpResponse,
