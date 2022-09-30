@@ -1,5 +1,4 @@
-#[macro_use]
-extern crate log;
+use crate log;
 
 use actix_web::{
     error::{BlockingError, ResponseError},
