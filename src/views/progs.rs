@@ -266,12 +266,12 @@ pub async fn create_history (
         p_height,
         p_seconds,
     )).await?;
-    //let res = _res?;
-    if let Ok(_res) = to_value(_res.title.clone()) {
-        let msg = MessageToClient::new("newquestion", _res);
+    let res = _res?;
+    if let Ok(res) = to_value(res.title.clone()) {
+        let msg = MessageToClient::new("newquestion", res);
         websocket_srv.do_send(msg);
     }
-    Ok(_res)
+    Ok(res)
 }
 
 #[derive(Debug, Serialize, Deserialize)]
