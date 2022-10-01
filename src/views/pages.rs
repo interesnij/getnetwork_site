@@ -838,7 +838,7 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
             let resp = _res?;
             let (object_list, next_page_number) = match resp {
                 Ok((o,i)) => (o,i),
-                Err(error) => panic!("Problem opening the file: {:?}", error),
+                Err(error) => (Vec::new(), 0),
             };
 
             #[derive(TemplateOnce)]
