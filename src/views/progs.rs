@@ -15,6 +15,7 @@ use crate::models::{
     Categories,
     Tag,
     Item,
+    CookieStat,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::to_value;
