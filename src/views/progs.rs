@@ -270,13 +270,11 @@ pub async fn create_history (
         let msg = MessageToClient::new("newquestion", res);
         websocket_srv.do_send(msg);
     }
-    Ok(Json(question))
+    Ok(Json(res));
     //let _resp = match _res {
     //    Ok(_ok) => _ok,
     //    Err(_error) => Err(Error::BadRequest("Body is required".to_string(),
     //};
-
-    Ok(Json(question))
 }
 
 #[derive(Debug, Serialize, Deserialize)]
