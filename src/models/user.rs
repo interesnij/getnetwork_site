@@ -253,7 +253,7 @@ impl CookieStat {
             .order(schema::cookie_stats::created.desc())
             .limit(limit)
             .offset(offset)
-            .load::<CookieStat>(_connection)?)
+            .load::<CookieStat>(&_connection)?)
     }
     pub fn create(user_id: i32, page: i16, link: String,
         title: String, height: f64, seconds: i32) -> Json<HistoryResponse> {
