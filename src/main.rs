@@ -39,7 +39,7 @@ async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
     let server = websocket::Server::new().start();
 
-    HttpServer::new(|| {
+    HttpServer::new(move || {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
         let cors = Cors::default()
