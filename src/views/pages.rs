@@ -836,9 +836,9 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
             let next_page_number: i32;
             let _res = web::block(move || CookieStat::get_stat_list(*user_id, get_page(&req), 20)).await?;
             let resp = _res?;
-            let (object_list, next_page_number) = match resp {
-                Ok((o,i)) => (o,i),
-                Err(error) => (Vec::new(), 0),
+            let ooo = match resp {
+                Ok(ooa) => {object_list = ooa.0; next_page_number = ooa.1},
+                Err(error) => {object_list = Vec::new(); next_page_number = 0},
             };
 
             #[derive(TemplateOnce)]
