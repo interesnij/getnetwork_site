@@ -271,7 +271,7 @@ pub async fn create_history (
         let msg = MessageToClient::new("newquestion", res);
         websocket_srv.do_send(msg);
     }
-    Ok(res)
+    Ok(Json(res))
 }
 
 #[derive(Debug, Serialize, Deserialize)]

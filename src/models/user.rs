@@ -257,7 +257,7 @@ impl CookieStat {
         Ok(list)
     }
     pub fn create(user_id: i32, page: i16, link: String,
-        title: String, height: f64, seconds: i32) -> Result<Json<HistoryResponse>, Error> {
+        title: String, height: f64, seconds: i32) -> Result<HistoryResponse, Error> {
         use chrono::Duration;
 
         let _connection = establish_connection();
@@ -274,13 +274,13 @@ impl CookieStat {
             .values(&_h)
             .get_result::<CookieStat>(&_connection)?;
 
-         Ok(Json(HistoryResponse {
+         Ok(HistoryResponse {
             id:      user_id,
             link:    link,
             title:   title,
             height:  height,
             seconds: seconds,
-        }))
+        })
     }
 }
 
