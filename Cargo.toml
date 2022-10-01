@@ -22,7 +22,7 @@ actix-session = "0.5"
 actix-redis = "0.10"
 actix-multipart = "0.4.0-beta.12"
 futures = "0.3.5"
-awc = "3.0.0"
+#awc = "3.0.0"
 actix-form-data = "0.6.2"
 
 mime = "0.3.16"
