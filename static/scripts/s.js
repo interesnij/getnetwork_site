@@ -1,3 +1,5 @@
+try{
+
 const $status = document.querySelector('#status')
 const $connectButton = document.querySelector('#connect')
 const $log = document.querySelector('#log')
@@ -85,3 +87,5 @@ $form.addEventListener('submit', (ev) => {
 })
 
 updateConnectionStatus()
+
+} catch { null }
