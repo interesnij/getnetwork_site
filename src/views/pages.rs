@@ -402,7 +402,9 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
             .into_iter()
             .nth(0)
             .unwrap();
-        let (object_list, next_page_number) = CookieStat::get_stat_list(user_id, get_page(&req), 20);
+
+        let res = web::block(move || CookieStat::get_stat_list(*user_id, get_page(&req), 20)).await?;
+        let (object_list, next_page_number) = Ok(_res?);
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -831,8 +833,7 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
             use crate::models::CookieStat;
 
             let res = web::block(move || CookieStat::get_stat_list(*user_id, get_page(&req), 20)).await?;
-            let _res = res?;
-            let (object_list, next_page_number) = Ok(_res);
+            let (object_list, next_page_number) = Ok(_res?);
 
             #[derive(TemplateOnce)]
             #[template(path = "desctop/load/user_stat.stpl")]
