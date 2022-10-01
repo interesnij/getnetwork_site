@@ -12,6 +12,26 @@
 </section>
 <section class="page-section">
     <div class="row container relative">
+    <div>
+      <button id="connect">Connect</button>
+      <span>Status:</span>
+      <span id="status">disconnected</span>
+    </div>
+
+    <div id="log"></div>
+
+    <form id="chatform">
+      <input type="text" id="text" />
+      <input type="submit" id="send" />
+    </form>
+
+    <hr />
+
+    <section>
+      <h2>Usage</h2>
+      <p>After connecting, type into the text box and the server will echo your message.</p>
+    </section>
+
       <form class="col-md-8 col-md-offset-2 form mb-20">
         <div class="mb-20 mb-md-10">
           <p class="api_response"></p>
