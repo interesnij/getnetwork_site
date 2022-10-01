@@ -837,7 +837,7 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
             let _res = web::block(move || CookieStat::get_stat_list(*user_id, get_page(&req), 20)).await?;
             let resp = _res?;
             let (object_list, next_page_number) = match resp {
-                Ok(file) => file,
+                Ok((o,i)) => (o,i),
                 Err(error) => panic!("Problem opening the file: {:?}", error),
             };
 
