@@ -835,8 +835,14 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
             use crate::models::CookieStat;
 
             let res = web::block(move || CookieStat::get_stat_list(*user_id, get_page(&req), 20)).await?;
+            let object_list: Vec<CookieStat>;
+            let next_page_number: i32;
             let _res = res?;
-            Ok(let (object_list, next_page_number) = Ok(_res));
+            let (object_list, next_page_number) = match _res {
+                Ok(file) => file,
+                Err(error) => (Vec::new(), 0),
+            }
+
             #[derive(TemplateOnce)]
             #[template(path = "desctop/load/user_stat.stpl")]
             struct Template {
