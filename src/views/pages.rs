@@ -410,8 +410,8 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
             let page = get_page(&req);
             let _res = block(move || CookieStat::get_stat_list(user_id, page, 20)).await?;
             let _dict = match _res {
-                Ok(_foo) => {object_list = _foo.0; next_page_number = _foo.1},
-                Err(error) => {object_list = Vec::new(); next_page_number = 0},
+                Ok(_ok) => {object_list = _ok.0; next_page_number = _ok.1},
+                Err(_error) => {object_list = Vec::new(); next_page_number = 0},
             };
 
         if is_signed_in(&session) {
@@ -844,12 +844,10 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
             let next_page_number: i32;
             let page = get_page(&req);
             let _res = block(move || CookieStat::get_stat_list(*user_id, page, 20)).await?;
-            object_list = Ok(_res).0;
-            next_page_number = Ok(_res).1;
-            //let _dict = match _res {
-            //    Ok(_foo) => {object_list = _foo.0; next_page_number = _foo.1},
-            //    Err(error) => {object_list = Vec::new(); next_page_number = 0},
-            //};
+            let _dict = match _res {
+                Ok(_ok) => {object_list = _ok.0; next_page_number = _ok.1},
+                Err(_error) => {object_list = Vec::new(); next_page_number = 0},
+            };
 
             #[derive(TemplateOnce)]
             #[template(path = "desctop/load/user_stat.stpl")]
