@@ -232,13 +232,13 @@ impl CookieStat {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = CookieStat::get_stat_items(user_id, limit.into(), step.into())?;
+            object_list = CookieStat::get_stat_items(user_id, limit.into(), step.into());
         }
         else {
             have_next = limit + 1;
-            object_list = CookieStat::get_stat_items(user_id, limit.into(), 0)?;
+            object_list = CookieStat::get_stat_items(user_id, limit.into(), 0);
         }
-        if CookieStat::get_stat_items(user_id, 1, have_next.into())?.len() > 0 {
+        if CookieStat::get_stat_items(user_id, 1, have_next.into()).len() > 0 {
             next_page_number = page + 1;
         }
 
@@ -253,7 +253,8 @@ impl CookieStat {
             .order(schema::cookie_stats::created.desc())
             .limit(limit)
             .offset(offset)
-            .load::<CookieStat>(&_connection)?
+            .load::<CookieStat>(&_connection)
+            .expect("Error.");
     }
     pub fn create(user_id: i32, page: i16, link: String,
         title: String, height: f64, seconds: i32) -> Json<HistoryResponse> {
