@@ -35,10 +35,11 @@ use std::str;
 use std::borrow::BorrowMut;
 use actix_web::dev::ConnectionInfo;
 use crate::errors::Error;
-use crate::websocket::{MessageToClient, Server};
+use crate::websocket::{MessageToClient, Server, ws_index};
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {
+    config.route("/ws/", web::get().to(ws_index));
     config.route("/create_history/", web::post().to(create_history));
     config.route("/object_history/{id}/", web::get().to(object_history));
     config.route("/feedback/", web::post().to(create_feedback));
