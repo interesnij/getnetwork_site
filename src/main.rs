@@ -8,6 +8,7 @@ use actix_cors::Cors;
 use actix_rt;
 use dotenv::dotenv;
 use env_logger;
+use std::env;
 
 pub mod schema;
 pub mod models;
