@@ -406,7 +406,7 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
         let page = get_page(&req)
         let res = web::block(move || CookieStat::get_stat_list(user_id, page, 20)).await?;
         let _res = res?;
-        let (object_list, next_page_number) = Ok(_res);
+        let Ok(object_list, next_page_number) = Ok(_res);
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
