@@ -15,7 +15,7 @@ use crate::diesel::{
 use serde::{Serialize, Deserialize};
 use crate::utils::establish_connection;
 use actix_web::web::Json;
-use errors::Error;
+use crate::errors::Error;
 
 
 #[derive(Debug, Queryable, Serialize, Identifiable)]
