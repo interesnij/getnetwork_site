@@ -10,11 +10,12 @@ use crate::diesel::{
     Insertable,
     QueryDsl,
     ExpressionMethods,
-    RunQueryDsl
+    RunQueryDsl,
 };
 use serde::{Serialize, Deserialize};
 use crate::utils::establish_connection;
 use actix_web::web::Json;
+use errors::Error;
 
 
 #[derive(Debug, Queryable, Serialize, Identifiable)]
@@ -223,7 +224,7 @@ pub struct HistoryResponse {
 }
 
 impl CookieStat {
-    pub fn get_stat_list(user_id: i32, page: i32, limit: i32) -> (Vec<CookieStat>, i32) {
+    pub fn get_stat_list(user_id: i32, page: i32, limit: i32) -> Result<(Vec<CookieStat>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<CookieStat>;
@@ -241,19 +242,18 @@ impl CookieStat {
             next_page_number = page + 1;
         }
 
-        return (object_list, next_page_number);
+        return Ok((object_list, next_page_number));
     }
-    pub fn get_stat_items(user_id: i32, limit: i64, offset: i64) -> Vec<CookieStat> {
+    pub fn get_stat_items(user_id: i32, limit: i64, offset: i64) -> Result<Vec<CookieStat>, Error> {
         use crate::schema::cookie_stats::dsl::cookie_stats;
 
         let _connection = establish_connection();
-        return cookie_stats
+        Ok(cookie_stats
             .filter(schema::cookie_stats::user_id.eq(user_id))
             .order(schema::cookie_stats::created.desc())
             .limit(limit)
             .offset(offset)
-            .load::<CookieStat>(&_connection)
-            .expect("E.");
+            .load::<CookieStat>(_connection)?)
     }
     pub fn create(user_id: i32, page: i16, link: String,
         title: String, height: f64, seconds: i32) -> Json<HistoryResponse> {
