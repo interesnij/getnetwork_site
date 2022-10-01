@@ -10,7 +10,7 @@ use actix::{
 use actix_web::{web, HttpRequest, HttpResponse};
 use actix_web_actors::ws;
 
-use errors::Error;
+use crate::errors::Error;
 
 mod server;
 pub use self::server::*;
