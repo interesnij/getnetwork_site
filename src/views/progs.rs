@@ -1,8 +1,10 @@
+use actix::Addr;
 use actix_web::{
     HttpRequest,
     HttpResponse,
     Responder,
     web,
+    web::{block, Data, Json},
     //error::InternalError,
     //http::StatusCode,
 };
@@ -15,6 +17,7 @@ use crate::models::{
     Item,
 };
 use serde::{Deserialize, Serialize};
+use serde_json::to_value;
 use crate::utils::{
     establish_connection,
     is_signed_in,
@@ -30,6 +33,7 @@ use actix_multipart::Multipart;
 use std::str;
 use std::borrow::BorrowMut;
 use actix_web::dev::ConnectionInfo;
+use crate::errors::Error;
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {
@@ -157,13 +161,16 @@ pub struct HistoryData {
     pub height:    f64,
     pub seconds:   i32,
 }
-pub async fn create_history(conn: ConnectionInfo, data: web::Json<HistoryData>, req: HttpRequest) -> web::Json<HistoryResponse> {
+pub async fn create_history (
+    conn: ConnectionInfo,
+    data: Json<HistoryData>,
+    req: HttpRequest,
+    websocket_srv: Data<Addr<Server>>
+) -> Result<web::Json<HistoryResponse>, Error> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
     use crate::utils::plus_page_stat;
 
-    //let data: HistoryData = serde_json::from_str(&data).unwrap();
-    println!("link{:?}", data.link);
     let p_id = data.user_id;
     let user = get_c_user(conn, p_id, &req).await;
 
@@ -250,15 +257,26 @@ pub async fn create_history(conn: ConnectionInfo, data: web::Json<HistoryData>, 
             plus_page_stat(p_page_id, p_height, p_seconds)
         }
     }
-
-    return CookieStat::create (
+    let _res = block(move || CookieStat::create (
         user.id,
         p_page_id,
         p_link,
         p_title,
         p_height,
         p_seconds,
-    )
+    )).await?;
+    let res = res?;
+    if let Ok(res) = to_value(res.clone()) {
+        let msg = MessageToClient::new("newquestion", res);
+        websocket_srv.do_send(msg);
+    }
+    Ok(Json(question))
+    //let _resp = match _res {
+    //    Ok(_ok) => _ok,
+    //    Err(_error) => Err(Error::BadRequest("Body is required".to_string(),
+    //};
+
+    Ok(Json(question))
 }
 
 #[derive(Debug, Serialize, Deserialize)]

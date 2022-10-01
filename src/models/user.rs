@@ -257,7 +257,7 @@ impl CookieStat {
         Ok(list)
     }
     pub fn create(user_id: i32, page: i16, link: String,
-        title: String, height: f64, seconds: i32) -> Json<HistoryResponse> {
+        title: String, height: f64, seconds: i32) -> Result<Json<HistoryResponse>, Error> {
         use chrono::Duration;
 
         let _connection = establish_connection();
@@ -272,16 +272,15 @@ impl CookieStat {
         };
         diesel::insert_into(schema::cookie_stats::table)
             .values(&_h)
-            .get_result::<CookieStat>(&_connection)
-            .expect("Error.");
+            .get_result::<CookieStat>(&_connection)?;
 
-        return Json(HistoryResponse {
+         Ok(Json(HistoryResponse {
             id:      user_id,
             link:    link,
             title:   title,
             height:  height,
             seconds: seconds,
-        });
+        }))
     }
 }
 
