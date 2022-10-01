@@ -34,6 +34,7 @@ use std::str;
 use std::borrow::BorrowMut;
 use actix_web::dev::ConnectionInfo;
 use crate::errors::Error;
+use crate::websocket::{MessageToClient, Server};
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {
@@ -270,7 +271,7 @@ pub async fn create_history (
         let msg = MessageToClient::new("newquestion", res);
         websocket_srv.do_send(msg);
     }
-    Ok(Json(res));
+    Ok(Json(res))
     //let _resp = match _res {
     //    Ok(_ok) => _ok,
     //    Err(_error) => Err(Error::BadRequest("Body is required".to_string(),
