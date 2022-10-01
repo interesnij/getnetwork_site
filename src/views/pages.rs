@@ -403,7 +403,7 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
             .nth(0)
             .unwrap();
 
-        let page = get_page(&req)
+        let page = get_page(&req);
         let res = web::block(move || CookieStat::get_stat_list(user_id, page, 20)).await?;
         let _res = res?;
         let Ok(object_list, next_page_number) = Ok(_res);
