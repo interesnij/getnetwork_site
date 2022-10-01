@@ -6,6 +6,7 @@ extern crate log;
 pub mod schema;
 pub mod models;
 pub mod routes;
+pub mod websocket;
 mod errors;
 mod vars;
 
