@@ -836,7 +836,7 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
 
             let res = web::block(move || CookieStat::get_stat_list(*user_id, get_page(&req), 20)).await?;
             let _res = res?;
-            Ok(let (object_list, next_page_number)) = Ok(_res);
+            Ok(let (object_list, next_page_number) = Ok(_res));
             #[derive(TemplateOnce)]
             #[template(path = "desctop/load/user_stat.stpl")]
             struct Template {
