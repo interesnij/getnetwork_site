@@ -1,13 +1,13 @@
 mod forms;
 mod auth;
 mod stat;
-//mod items;
+mod websocket;
 
 pub use self::{
     forms::*,
     auth::*,
     stat::*,
-//    items::*,
+    websocket::*,
 };
 use actix_web::{
     HttpRequest,
