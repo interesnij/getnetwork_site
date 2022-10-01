@@ -2,9 +2,7 @@ use actix_web::{
     HttpRequest,
     HttpResponse,
     Responder,
-    Error,
     web,
-    post,
     //error::InternalError,
     //http::StatusCode,
 };
@@ -16,7 +14,6 @@ use crate::models::{
     Tag,
     Item,
 };
-use actix_web_actors::ws;
 use serde::{Deserialize, Serialize};
 use crate::utils::{
     establish_connection,
@@ -29,8 +26,7 @@ use crate::diesel::{
     QueryDsl,
 };
 use actix_session::Session;
-use actix_multipart::{Field, Multipart};
-use futures::StreamExt;
+use actix_multipart::Multipart;
 use std::str;
 use std::borrow::BorrowMut;
 use actix_web::dev::ConnectionInfo;

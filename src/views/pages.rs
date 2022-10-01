@@ -5,8 +5,7 @@ use actix_web::{
     web,
     error::InternalError,
     http::StatusCode,
-    web::{block, Data, Json},
-    Result,
+    web::block,
 };
 use crate::schema;
 use crate::models::{
