@@ -248,7 +248,7 @@ impl CookieStat {
         use crate::schema::cookie_stats::dsl::cookie_stats;
 
         let _connection = establish_connection();
-        cookie_stats
+        return cookie_stats
             .filter(schema::cookie_stats::user_id.eq(user_id))
             .order(schema::cookie_stats::created.desc())
             .limit(limit)
