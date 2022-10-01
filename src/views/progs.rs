@@ -167,7 +167,7 @@ pub async fn create_history (
     data: Json<HistoryData>,
     req: HttpRequest,
     websocket_srv: Data<Addr<Server>>
-) -> Result<web::Json<HistoryResponse>, Error> {
+) -> Result<Json<HistoryResponse>, Error> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
     use crate::utils::plus_page_stat;
@@ -267,15 +267,11 @@ pub async fn create_history (
         p_seconds,
     )).await?;
     let res = _res?;
-    if let Ok(res) = to_value(res.clone()) {
+    if let Ok(res) = to_value(res.title.clone()) {
         let msg = MessageToClient::new("newquestion", res);
         websocket_srv.do_send(msg);
     }
-    Ok(Json(res))
-    //let _resp = match _res {
-    //    Ok(_ok) => _ok,
-    //    Err(_error) => Err(Error::BadRequest("Body is required".to_string(),
-    //};
+    Ok(res)
 }
 
 #[derive(Debug, Serialize, Deserialize)]
