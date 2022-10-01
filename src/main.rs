@@ -42,18 +42,18 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
-        let cors = Cors::default()
-            .allowed_origin(&env::var("CLIENT_HOST").unwrap())
-            .allow_any_method()
-            .allowed_headers(vec![
-                http::header::AUTHORIZATION,
-                http::header::ACCEPT,
-                http::header::CONTENT_TYPE,
-            ])
-            .max_age(3600);
+        //let cors = Cors::default()
+        //    .allowed_origin(&env::var("CLIENT_HOST").unwrap())
+        //    .allow_any_method()
+        //    .allowed_headers(vec![
+        //        http::header::AUTHORIZATION,
+        //        http::header::ACCEPT,
+        //        http::header::CONTENT_TYPE,
+        //    ])
+        //    .max_age(3600);
 
         App::new()
-            .wrap(cors)
+        //    .wrap(cors)
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
             .wrap(Compress::default())
