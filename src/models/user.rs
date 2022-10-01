@@ -224,7 +224,7 @@ pub struct HistoryResponse {
 }
 
 impl CookieStat {
-    pub fn get_stat_list(user_id: i32, page: i32, limit: i32) -> (Vec<CookieStat>, i32) {
+    pub fn get_stat_list(user_id: i32, page: i32, limit: i32) -> Result<(Vec<CookieStat>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<CookieStat>;
@@ -232,29 +232,29 @@ impl CookieStat {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = CookieStat::get_stat_items(user_id, limit.into(), step.into());
+            object_list = CookieStat::get_stat_items(user_id, limit.into(), step.into())?;
         }
         else {
             have_next = limit + 1;
-            object_list = CookieStat::get_stat_items(user_id, limit.into(), 0);
+            object_list = CookieStat::get_stat_items(user_id, limit.into(), 0)?;
         }
-        if CookieStat::get_stat_items(user_id, 1, have_next.into()).len() > 0 {
+        if CookieStat::get_stat_items(user_id, 1, have_next.into())?.len() > 0 {
             next_page_number = page + 1;
         }
-
-        return (object_list, next_page_number);
+        let _tuple = (object_list, next_page_number);
+        Ok(_tuple)
     }
-    pub fn get_stat_items(user_id: i32, limit: i64, offset: i64) -> Vec<CookieStat> {
+    pub fn get_stat_items(user_id: i32, limit: i64, offset: i64) -> Result<Vec<CookieStat>, Error> {
         use crate::schema::cookie_stats::dsl::cookie_stats;
 
         let _connection = establish_connection();
-        return cookie_stats
+        let list = cookie_stats
             .filter(schema::cookie_stats::user_id.eq(user_id))
             .order(schema::cookie_stats::created.desc())
             .limit(limit)
             .offset(offset)
-            .load::<CookieStat>(&_connection)
-            .expect("Error.");
+            .load::<CookieStat>(&_connection)?;
+        Ok(list)
     }
     pub fn create(user_id: i32, page: i16, link: String,
         title: String, height: f64, seconds: i32) -> Json<HistoryResponse> {

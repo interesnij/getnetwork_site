@@ -832,7 +832,14 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
             use crate::utils::get_page;
             use crate::models::CookieStat;
 
-            let (object_list, next_page_number) = web::block(move || CookieStat::get_stat_list(*user_id, get_page(&req), 20)).await;
+            let object_list: Vec<CookieStat>;
+            let next_page_number: i32;
+            let _res = web::block(move || CookieStat::get_stat_list(*user_id, get_page(&req), 20)).await?;
+            let resp = _res?;
+            let (object_list, next_page_number) = match resp {
+                Ok(file) => file,
+                Err(error) => panic!("Problem opening the file: {:?}", error),
+            };
 
             #[derive(TemplateOnce)]
             #[template(path = "desctop/load/user_stat.stpl")]
