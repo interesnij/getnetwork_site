@@ -167,7 +167,7 @@ pub async fn create_history (
     data: Json<HistoryData>,
     req: HttpRequest,
     websocket_srv: Data<Addr<Server>>
-) -> Result<Json<HistoryResponse>, Error> {
+) -> Result<Json<CookieStat>, Error> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
     use crate::utils::plus_page_stat;
