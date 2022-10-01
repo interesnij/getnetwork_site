@@ -841,7 +841,7 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
             let (object_list, next_page_number) = match _res {
                 Ok(file) => file,
                 Err(error) => (Vec::new(), 0),
-            }
+            };
 
             #[derive(TemplateOnce)]
             #[template(path = "desctop/load/user_stat.stpl")]
