@@ -7,7 +7,7 @@ version = "1.0.1"
 edition = "2021"
 
 [dependencies]
-actix = "0.10"
+actix = "0.13.0"
 actix-web = "4.0.1"
 actix-web-actors = "4.1.0"
 actix-files = "0.6"
@@ -22,7 +22,7 @@ actix-session = "0.5"
 actix-redis = "0.10"
 actix-multipart = "0.4.0-beta.12"
 futures = "0.3.5"
-
+awc = "3.0.0"
 actix-form-data = "0.6.2"
 
 mime = "0.3.16"
@@ -37,7 +37,7 @@ validator_derive = "*"
 reqwest = "*"
 bytes = { version = "1.1", features = ["serde"] }
 regex = "1.5.4"
-actix-rt = "2"
+actix-rt = "2.7"
 derive_more = "0.99.5"
 argonautica = "0.2.0"
 futures-util = "0.3.5"
