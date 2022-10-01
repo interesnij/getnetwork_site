@@ -410,7 +410,7 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
             let page = get_page(&req);
             let _res = block(move || CookieStat::get_stat_list(user_id, page, 20)).await?;
             let _dict = match _res {
-                Ok(_foo) => {object_list = _dict.0; next_page_number = _dict.1},
+                Ok(_foo) => {object_list = _foo.0; next_page_number = _foo.1},
                 Err(error) => {object_list = Vec::new(); next_page_number = 0},
             };
 
@@ -845,7 +845,7 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
             let page = get_page(&req);
             let _res = block(move || CookieStat::get_stat_list(*user_id, page, 20)).await?;
             let _dict = match _res {
-                Ok(_foo) => {object_list = _dict.0; next_page_number = _dict.1},
+                Ok(_foo) => {object_list = _foo.0; next_page_number = _foo.1},
                 Err(error) => {object_list = Vec::new(); next_page_number = 0},
             };
 
