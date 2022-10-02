@@ -262,7 +262,7 @@ function connect() {
   const { location } = window
 
   const proto = location.protocol.startsWith('https') ? 'wss' : 'ws'
-  const wsUri = `${proto}://194.58.90.123:8082/ws`
+  const wsUri = `${proto}://127.0.0.1:8443/ws`
   //const wsUri = `${proto}://${location.host}/ws`
 
   console.log('Connecting...')
