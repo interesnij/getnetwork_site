@@ -1,7 +1,7 @@
 <div>
-  <button id="connect">Connect</button>
+  <button id="connect">Подключиться</button>
   <span>Status:</span>
-  <span id="status">disconnected</span>
+  <span id="status">отключено</span>
 </div>
 
 <div id="log"></div>
@@ -14,8 +14,8 @@
 <hr />
 
 <section>
-  <h2>Usage</h2>
-  <p>After connecting, type into the text box and the server will echo your message.</p>
+  <h2>Использование</h2>
+  <p>После подключения введите текст в текстовое поле, и сервер повторит ваше сообщение.</p>
 </section>
 
 <script defer type="text/javascript" src="/static/scripts/s.js"></script>

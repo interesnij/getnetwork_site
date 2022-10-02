@@ -272,7 +272,7 @@ pub async fn create_history (
     if let Ok(res) = to_value(res.title.clone()) {
         let msg = MessageToClient::new("newquestion", res);
         websocket_srv.do_send(msg);
-    }
+    } 
     Ok(Json(res))
 }
 
