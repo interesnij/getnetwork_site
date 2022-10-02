@@ -30,6 +30,5 @@
     <script defer type="text/javascript" src="/static/scripts/desctop/main.js?ver13"></script>
     <script defer type="text/javascript" src="/static/scripts/main.js?ver13"></script>
     <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
-    <script defer type="text/javascript" src="/static/scripts/s.js"></script>
   </body>
 </html>
