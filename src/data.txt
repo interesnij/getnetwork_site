@@ -1,6 +1,7 @@
 category
 // 0 name, 1 slug, 2 count, 3 id, 4 image
 
+
 blog
 // 0 object.slug, 1 object.image, 2 object.is_active
 // 3 object.title, 4 object.created,
