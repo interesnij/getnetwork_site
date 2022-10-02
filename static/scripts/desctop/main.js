@@ -265,20 +265,20 @@ function connect() {
   const proto = location.protocol.startsWith('https') ? 'wss' : 'ws'
   const wsUri = `${proto}://${location.host}/ws`
 
-  log('Connecting...')
+  console.log('Connecting...')
   socket = new WebSocket(wsUri)
 
   socket.onopen = () => {
-    log('Connected')
+    console.log('Connected')
     updateConnectionStatus()
   }
 
   socket.onmessage = (ev) => {
-    log('Received: ' + ev.data, 'message')
+    console.log('Received: ' + ev.data, 'message')
   }
 
   socket.onclose = () => {
-    log('Disconnected')
+    console.log('Disconnected')
     socket = null
     updateConnectionStatus()
   }
@@ -286,7 +286,7 @@ function connect() {
 
 function disconnect() {
   if (socket) {
-    log('Disconnecting...')
+    console.log('Disconnecting...')
     socket.close()
     socket = null
 
