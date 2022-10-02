@@ -39,7 +39,7 @@ use crate::websocket::{MessageToClient, Server, ws_index};
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {
-    config.route("/ws/", web::get().to(ws_index));
+    config.route("/ws", web::get().to(ws_index));
     config.route("/create_history/", web::post().to(create_history));
     config.route("/object_history/{id}/", web::get().to(object_history));
     config.route("/feedback/", web::post().to(create_feedback));
@@ -272,7 +272,7 @@ pub async fn create_history (
     if let Ok(res) = to_value(res.title.clone()) {
         let msg = MessageToClient::new("newquestion", res);
         websocket_srv.do_send(msg);
-    } 
+    }
     Ok(Json(res))
 }
 
