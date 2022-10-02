@@ -55,7 +55,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
         //    .wrap(cors)
             .wrap(Logger::default())
-            .wrap(Logger::new("%a %{User-Agent}i"))
+            //.wrap(Logger::new("%a %{User-Agent}i"))
             .wrap(Compress::default())
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .data(server.clone())
