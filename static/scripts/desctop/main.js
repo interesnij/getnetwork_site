@@ -254,3 +254,50 @@ on('body', 'input', '.desctop_folder_search', function() {
 });
 
 check_first_load();
+
+
+var socket = null;
+function connect() {
+  disconnect()
+
+  const { location } = window
+
+  const proto = location.protocol.startsWith('https') ? 'wss' : 'ws'
+  const wsUri = `${proto}://${location.host}/ws`
+
+  log('Connecting...')
+  socket = new WebSocket(wsUri)
+
+  socket.onopen = () => {
+    log('Connected')
+    updateConnectionStatus()
+  }
+
+  socket.onmessage = (ev) => {
+    log('Received: ' + ev.data, 'message')
+  }
+
+  socket.onclose = () => {
+    log('Disconnected')
+    socket = null
+    updateConnectionStatus()
+  }
+}
+
+function disconnect() {
+  if (socket) {
+    log('Disconnecting...')
+    socket.close()
+    socket = null
+
+    updateConnectionStatus()
+  }
+}
+
+function updateConnectionStatus() {
+  if (socket) {
+    console.log("connected!")
+  } else {
+    console.log("disconnected...")
+  }
+}
