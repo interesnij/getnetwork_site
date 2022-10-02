@@ -259,7 +259,6 @@ check_first_load();
 var socket = null;
 function connect() {
   disconnect()
-
   const { location } = window
 
   const proto = location.protocol.startsWith('https') ? 'wss' : 'ws'
@@ -270,7 +269,6 @@ function connect() {
 
   socket.onopen = () => {
     console.log('Connected')
-    updateConnectionStatus()
   }
 
   socket.onmessage = (ev) => {
@@ -280,7 +278,6 @@ function connect() {
   socket.onclose = () => {
     console.log('Disconnected')
     socket = null
-    updateConnectionStatus()
   }
 }
 
@@ -289,17 +286,7 @@ function disconnect() {
     console.log('Disconnecting...')
     socket.close()
     socket = null
-
-    updateConnectionStatus()
   }
 }
 
-function updateConnectionStatus() {
-  if (socket) {
-    console.log("connected!")
-  } else {
-    console.log("disconnected...")
-  }
-}
 connect()
-updateConnectionStatus()
