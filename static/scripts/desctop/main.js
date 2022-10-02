@@ -301,3 +301,4 @@ function updateConnectionStatus() {
     console.log("disconnected...")
   }
 }
+updateConnectionStatus()
