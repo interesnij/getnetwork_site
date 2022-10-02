@@ -262,7 +262,7 @@ function connect() {
   const { location } = window
 
   ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-  wsUri = ws_scheme + '://' + '194.58.90.123' + ":8443/ws";
+  wsUri = ws_scheme + '://' + '194.58.90.123' + ":8443/ws/ws";
   //const proto = location.protocol.startsWith('https') ? 'wss' : 'ws'
   //const wsUri = proto + "://" + 194.58.90.123 + "/ws"
 
