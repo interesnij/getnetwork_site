@@ -263,7 +263,7 @@ function connect() {
 
   const proto = location.protocol.startsWith('https') ? 'wss' : 'ws'
   //const wsUri = proto + "://" + 194.58.90.123 + "/ws"
-  const wsUri = `${proto}://194.58.90.123/ws`
+  const wsUri = `${proto}://194.58.90.123:8082/ws`
 
   console.log('Connecting...')
   socket = new WebSocket(wsUri)
