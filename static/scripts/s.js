@@ -6,7 +6,7 @@ function case_user_notify() {
 };
 
 ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-ws_path = ws_scheme + '://' + window.location.host + ":8443/notify/";
+ws_path = ws_scheme + '://' + window.location.host + ":8443/ws/";
 webSocket = new channels.WebSocketBridge();
 webSocket.connect(ws_path);
 
