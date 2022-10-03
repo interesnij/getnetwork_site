@@ -278,7 +278,9 @@ function connect() {
     console.log(json_data["data"]);
     if (json_data["msg_type"] == "new_viewer" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["data"]) {
       real_wiew = document.body.querySelector(".real_wiew");
+      console.log("real_wiew", real_wiew);
       counter = real_wiew.innerHTML*1;
+      console.log("counter", counter);
       real_wiew.innerHTML = counter += 1;
       console.log('Смотрит страницу: ' + json_data["data"]);
     }
