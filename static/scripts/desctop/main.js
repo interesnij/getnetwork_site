@@ -274,7 +274,7 @@ function connect() {
 
   socket.onmessage = (ev) => {
     data = ev.data;
-    if (data.new_viewer || document.body.querySelector(".real_wiew")) {
+    if (data.msg_type == "new_viewer" || document.body.querySelector(".real_wiew")) {
       counter = document.body.querySelector(".real_wiew");
       counter.innerHTML = counter.innerHTML*1 += 1;
       console.log('Смотрит страницу: ' + data.new_viewer);
