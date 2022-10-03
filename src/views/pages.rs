@@ -1,11 +1,11 @@
+use actix::Addr;
 use actix_web::{
     HttpRequest,
     HttpResponse,
-    //Responder,
     web,
     error::InternalError,
     http::StatusCode,
-    web::block,
+    web::{block, Data},
 };
 use crate::schema;
 use crate::models::{
@@ -31,6 +31,8 @@ use crate::diesel::{
 use actix_session::Session;
 use sailfish::TemplateOnce;
 use actix_web::dev::ConnectionInfo;
+use serde_json::to_value;
+use crate::websocket::Server;
 
 
 pub fn pages_routes(config: &mut web::ServiceConfig) {
@@ -60,7 +62,10 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
 }
 
 
-pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
+pub async fn index_page(
+    req: HttpRequest,
+    session: Session,
+    websocket_srv: Data<Addr<Server>) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
@@ -76,7 +81,10 @@ pub async fn index_page(req: HttpRequest, session: Session) -> actix_web::Result
     else {
         use crate::schema::stat_pages::dsl::stat_pages;
         use crate::models::{Blog, Service, Store, Wiki, Work};
+        use crate::websocket::MessageToClient;
 
+        let msg = MessageToClient::new("new_viewer", 1);
+        websocket_srv.do_send(msg);
         let _connection = establish_connection();
         let _stat: StatPage;
 

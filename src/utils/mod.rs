@@ -104,6 +104,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
                 }
             }
         };
+
         (_type, is_ajax)
     }
 
