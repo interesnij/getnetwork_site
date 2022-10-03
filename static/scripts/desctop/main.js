@@ -273,12 +273,11 @@ function connect() {
   }
 
   socket.onmessage = (ev) => {
-    data = ev.data;
-    json_data = JSON.parse(data)
+    json_data = JSON.parse(ev.data)
     console.log(json_data[0]);
     console.log(json_data["msg_type"]);
     console.log(json_data["data"]);
-    if (data["msg_type"] == "new_viewer" && document.body.querySelector(".real_wiew")) {
+    if (json_data["msg_type"] == "new_viewer" && document.body.querySelector(".real_wiew")) {
       real_wiew = document.body.querySelector(".real_wiew");
       counter = real_wiew.innerHTML*1;
       real_wiew.innerHTML = counter += 1;
