@@ -262,8 +262,8 @@ function connect() {
   const { location } = window
 
   ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-  //wsUri = ws_scheme + '://' + window.location.host + ":8445/ws";
-  wsUri = ws_scheme + "://194.58.90.123:8082/ws";
+  wsUri = ws_scheme + '://' + window.location.host + "/ws";
+  //wsUri = ws_scheme + "://194.58.90.123:8082/ws";
 
   console.log('Connecting...')
   socket = new WebSocket(wsUri)
