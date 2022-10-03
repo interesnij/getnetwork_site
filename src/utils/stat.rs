@@ -34,6 +34,7 @@ pub fn plus_page_stat(types: i16, height: f64, seconds: i32) -> () {
             view:    1,
             height:  height,
             seconds: seconds,
+            now_u:   0,
         };
         diesel::insert_into(schema::stat_pages::table)
             .values(&_new_item)

@@ -338,6 +338,7 @@ pub struct StatPage {
     pub view:    i32,
     pub height:  f64,
     pub seconds: i32,
+    pub now_u:   i16,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
@@ -347,4 +348,5 @@ pub struct NewStatPage {
     pub view:    i32,
     pub height:  f64,
     pub seconds: i32,
+    pub now_u:   i16,
 }

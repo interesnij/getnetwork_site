@@ -134,6 +134,7 @@ pub struct Categories {
     pub seconds:     i32,
     pub types:       i16,
     pub slug:        String,
+    pub now_u:       i16,
 }
 
 impl Categories {
@@ -724,6 +725,7 @@ pub struct NewCategories {
     pub seconds:     i32,
     pub types:       i16,
     pub slug:        String,
+    pub now_u:       i16,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
@@ -756,6 +758,7 @@ pub struct Item {
     pub price_acc:   Option<i32>,
     pub types:       i16,
     pub slug:        String,
+    pub now_u:       i16,
 }
 
 impl Item {
@@ -2007,6 +2010,7 @@ pub struct NewItem {
     pub price_acc:   Option<i32>,
     pub types:       i16,
     pub slug:        String,
+    pub now_u:       i16,
 }
 
 impl NewItem {
@@ -2039,6 +2043,7 @@ impl NewItem {
             price_acc:   None,
             types:       types,
             slug:        slug,
+            now_u:       0,
         }
     }
 }

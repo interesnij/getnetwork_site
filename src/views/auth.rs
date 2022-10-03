@@ -82,6 +82,7 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
                     view:    0,
                     height:  0.0,
                     seconds: 0,
+                    now_u:   0,
                 };
                 _stat = diesel::insert_into(schema::stat_pages::table)
                     .values(&form)
@@ -162,6 +163,7 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
                     view:    0,
                     height:  0.0,
                     seconds: 0,
+                    now_u:   0,
                 };
                 _stat = diesel::insert_into(schema::stat_pages::table)
                     .values(&form)
@@ -230,6 +232,7 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
                 view:    0,
                 height:  0.0,
                 seconds: 0,
+                now_u:   0,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)

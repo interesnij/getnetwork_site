@@ -102,16 +102,15 @@ function get_stat_form($link, $title, $object_id, $page_id) {
 }
 
 function get_stat_meta($link, $title, $object_id, $page_id) {
-  //ip_block = document.body.querySelector(".ip_span");
-  //if (
-  //    document.body.querySelector("#is_superuser")
-  //    || ip_block.innerHTML == "91.239.184.81"
-  //    || ip_block.innerHTML == "176.59.23.228"
-  //  ) {
-  //  return
-  //}
-  //else
-  if (!$page_id) {
+  ip_block = document.body.querySelector(".ip_span");
+  if (
+      document.body.querySelector("#is_superuser")
+      || ip_block.innerHTML == "91.239.184.81"
+      || ip_block.innerHTML == "176.59.23.228"
+    ) {
+    return
+  }
+  else if (!$page_id) {
     return
   }
   // сначала активизируется функция отрисовки первого контента,
@@ -167,15 +166,6 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
       || ip_block.innerHTML == "176.59.23.228") {
     return
   }
-  console.log("======================");
-  console.log("id пользователя",   $user_id);
-  console.log("id объекта",        $object_id);
-  console.log("id страницы",       $page_id);
-  console.log("ссылка",            $link);
-  console.log("название страницы", $title);
-  console.log("накручено метров",  $window_height);
-  console.log("затрачено секунд",  $window_seconds);
-  console.log("======================");
   $window_height = 0;
   $window_seconds = 1;
   window.clearInterval(intervalListener2);

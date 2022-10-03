@@ -708,6 +708,7 @@ pub async fn create_category(session: Session, mut payload: Multipart) -> impl R
                 seconds:     0,
                 types:       form.types,
                 slug:        form.slug,
+                now_u:       0,
             };
             diesel::insert_into(schema::categories::table)
                 .values(&new_cat)

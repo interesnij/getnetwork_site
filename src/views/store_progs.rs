@@ -432,6 +432,7 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                 view:    0,
                 height:  0.0,
                 seconds: 0,
+                now_u:   0,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)

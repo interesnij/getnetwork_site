@@ -159,6 +159,7 @@ CREATE TABLE categories (
     seconds     INT NOT NULL,
     types       SMALLINT NOT NULL, -- категория блога, категория услуги ......
     slug        VARCHAR(100) NOT NULL,
+    now_u       SMALLINT NOT NULL DEFAULT 1,
 
     UNIQUE(slug)
 );
@@ -181,6 +182,7 @@ CREATE TABLE items (
     price_acc   INT,
     types       SMALLINT NOT NULL, -- блог, услуга, товар ......
     slug        VARCHAR(100) NOT NULL,
+    now_u       SMALLINT NOT NULL DEFAULT 1,
 
     UNIQUE(slug),
 
@@ -328,5 +330,6 @@ CREATE TABLE stat_pages (
     types   SMALLINT NOT NULL,  -- главная страница, инфо ......
     view    INT NOT NULL,
     height  FLOAT NOT NULL,
-    seconds INT NOT NULL
+    seconds INT NOT NULL,
+    now_u   SMALLINT NOT NULL DEFAULT 1,
 );
