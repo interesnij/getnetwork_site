@@ -274,6 +274,8 @@ function connect() {
 
   socket.onmessage = (ev) => {
     data = ev.data;
+    console.log(data.msg_type);
+    console.log(data.data);
     if (data.msg_type == "new_viewer" && document.body.querySelector(".real_wiew")) {
       real_wiew = document.body.querySelector(".real_wiew");
       counter = real_wiew.innerHTML*1;
