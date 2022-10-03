@@ -119,14 +119,15 @@ CREATE TABLE cookie_stats (
 ---------------
 ---------------
 CREATE TABLE tags (
-    id            SERIAL PRIMARY KEY,
-    name          VARCHAR(100) NOT NULL,
-    position      SMALLINT NOT NULL,
-    count         SMALLINT NOT NULL,
-    user_id       INT NOT NULL,
-    view          INT NOT NULL,
-    height        FLOAT NOT NULL,
-    seconds       INT NOT NULL,
+    id        SERIAL PRIMARY KEY,
+    name      VARCHAR(100) NOT NULL,
+    position  SMALLINT NOT NULL,
+    count     SMALLINT NOT NULL,
+    user_id   INT NOT NULL,
+    view      INT NOT NULL,
+    height    FLOAT NOT NULL,
+    seconds   INT NOT NULL,
+    now_u     SMALLINT NOT NULL DEFAULT 0,
 
     CONSTRAINT fk_tag_creator
         FOREIGN KEY(user_id)
@@ -159,7 +160,7 @@ CREATE TABLE categories (
     seconds     INT NOT NULL,
     types       SMALLINT NOT NULL, -- категория блога, категория услуги ......
     slug        VARCHAR(100) NOT NULL,
-    now_u       SMALLINT NOT NULL DEFAULT 1,
+    now_u       SMALLINT NOT NULL DEFAULT 0,
 
     UNIQUE(slug)
 );
@@ -182,7 +183,7 @@ CREATE TABLE items (
     price_acc   INT,
     types       SMALLINT NOT NULL, -- блог, услуга, товар ......
     slug        VARCHAR(100) NOT NULL,
-    now_u       SMALLINT NOT NULL DEFAULT 1,
+    now_u       SMALLINT NOT NULL DEFAULT 0,
 
     UNIQUE(slug),
 
@@ -331,5 +332,5 @@ CREATE TABLE stat_pages (
     view    INT NOT NULL,
     height  FLOAT NOT NULL,
     seconds INT NOT NULL,
-    now_u   SMALLINT NOT NULL DEFAULT 1,
+    now_u   SMALLINT NOT NULL DEFAULT 0,
 );

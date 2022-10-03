@@ -19,14 +19,27 @@ pub fn plus_page_stat(types: i16, height: f64, seconds: i32) -> () {
         let _item = _items.into_iter().nth(0).unwrap();
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
-        diesel::update(&_item)
-            .set ((
-                schema::stat_pages::view.eq(_item.view + 1),
-                schema::stat_pages::height.eq(_height + height),
-                schema::stat_pages::seconds.eq(_item.seconds + seconds),
-            ))
-            .get_result::<StatPage>(&_connection)
-            .expect("Error.");
+        if _item.now_u > 0 {
+            diesel::update(&_item)
+                .set ((
+                    schema::stat_pages::view.eq(_item.view + 1),
+                    schema::stat_pages::height.eq(_height + height),
+                    schema::stat_pages::seconds.eq(_item.seconds + seconds),
+                    schema::stat_pages::now_u.eq(_item.now_u - 1),
+                ))
+                .get_result::<StatPage>(&_connection)
+                .expect("Error.");
+        }
+        else {
+            diesel::update(&_item)
+                .set ((
+                    schema::stat_pages::view.eq(_item.view + 1),
+                    schema::stat_pages::height.eq(_height + height),
+                    schema::stat_pages::seconds.eq(_item.seconds + seconds),
+                ))
+                .get_result::<StatPage>(&_connection)
+                .expect("Error.");
+        }
     }
     else {
         let _new_item = NewStatPage {
@@ -34,7 +47,7 @@ pub fn plus_page_stat(types: i16, height: f64, seconds: i32) -> () {
             view:    1,
             height:  height,
             seconds: seconds,
-            now_u:   0,
+            now_u:   1,
         };
         diesel::insert_into(schema::stat_pages::table)
             .values(&_new_item)
@@ -58,14 +71,25 @@ pub fn plus_category_stat(id: i32, height: f64, seconds: i32) -> () {
         let _item = _items.into_iter().nth(0).unwrap();
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
-        diesel::update(&_item)
-        .set ((
-            schema::categories::view.eq(_item.view + 1),
-            schema::categories::height.eq(_height + height),
-            schema::categories::seconds.eq(_item.seconds + seconds),
-        ))
-        .get_result::<Categories>(&_connection)
-        .expect("Error.");
+        if _item.now_u > 0 {
+            diesel::update(&_item)
+                .set ((
+                    schema::categories::view.eq(_item.view + 1),
+                    schema::categories::height.eq(_height + height),
+                    schema::categories::seconds.eq(_item.seconds + seconds),
+                    schema::categories::now_u.eq(_item.now_u - 1),
+                ))
+                .get_result::<Categories>(&_connection)
+                .expect("Error.");
+        } else {
+            .set ((
+                schema::categories::view.eq(_item.view + 1),
+                schema::categories::height.eq(_height + height),
+                schema::categories::seconds.eq(_item.seconds + seconds),
+            ))
+            .get_result::<Categories>(&_connection)
+            .expect("Error.");
+        }
     }
 }
 pub fn plus_item_stat(id: i32, height: f64, seconds: i32) -> () {
@@ -83,14 +107,26 @@ pub fn plus_item_stat(id: i32, height: f64, seconds: i32) -> () {
         let _item = _items.into_iter().nth(0).unwrap();
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
-        diesel::update(&_item)
-            .set ((
-                schema::items::view.eq(_item.view + 1),
-                schema::items::height.eq(_height + height),
-                schema::items::seconds.eq(_item.seconds + seconds),
-            ))
-            .get_result::<Item>(&_connection)
-            .expect("Error.");
+        if _item.now_u > 0 {
+            diesel::update(&_item)
+                .set ((
+                    schema::items::view.eq(_item.view + 1),
+                    schema::items::height.eq(_height + height),
+                    schema::items::seconds.eq(_item.seconds + seconds),
+                    schema::items::now_u.eq(_item.now_u - 1),
+                ))
+                .get_result::<Item>(&_connection)
+                .expect("Error.");
+        } else {
+            diesel::update(&_item)
+                .set ((
+                    schema::items::view.eq(_item.view + 1),
+                    schema::items::height.eq(_height + height),
+                    schema::items::seconds.eq(_item.seconds + seconds),
+                ))
+                .get_result::<Item>(&_connection)
+                .expect("Error.");
+        }
     }
 }
 
@@ -109,13 +145,25 @@ pub fn plus_tag_stat(id: i32, height: f64, seconds: i32) -> () {
         let _item = _items.into_iter().nth(0).unwrap();
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
-        diesel::update(&_item)
-            .set ((
-                schema::tags::view.eq(_item.view + 1),
-                schema::tags::height.eq(_height + height),
-                schema::tags::seconds.eq(_item.seconds + seconds),
-            ))
-            .get_result::<Tag>(&_connection)
-            .expect("Error.");
+        if _item.now_u > 0 {
+            diesel::update(&_item)
+                .set ((
+                    schema::tags::view.eq(_item.view + 1),
+                    schema::tags::height.eq(_height + height),
+                    schema::tags::seconds.eq(_item.seconds + seconds),
+                    schema::tags::now_u.eq(_item.now_u - 1),
+                ))
+                .get_result::<Tag>(&_connection)
+                .expect("Error.");
+        } else {
+            diesel::update(&_item)
+                .set ((
+                    schema::tags::view.eq(_item.view + 1),
+                    schema::tags::height.eq(_height + height),
+                    schema::tags::seconds.eq(_item.seconds + seconds),
+                ))
+                .get_result::<Tag>(&_connection)
+                .expect("Error.");
+        }
     }
 }

@@ -23,14 +23,15 @@ pub struct SmallTag {
 #[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
 #[table_name="tags"]
 pub struct Tag {
-    pub id:            i32,
-    pub name:          String,
-    pub position:      i16,
-    pub count:         i16,
-    pub user_id:       i32,
-    pub view:          i32,
-    pub height:        f64,
-    pub seconds:       i32,
+    pub id:       i32,
+    pub name:     String,
+    pub position: i16,
+    pub count:    i16,
+    pub user_id:  i32,
+    pub view:     i32,
+    pub height:   f64,
+    pub seconds:  i32,
+    pub now_u:    i16,
 }
 impl Tag {
     pub fn get_tags_list(page: i32, limit: i32) -> (Vec<SmallTag>, i32) {
@@ -73,13 +74,14 @@ impl Tag {
 #[derive(Insertable)]
 #[table_name="tags"]
 pub struct NewTag {
-    pub name:          String,
-    pub position:      i16,
-    pub count:         i16,
-    pub user_id:       i32,
-    pub view:          i32,
-    pub height:        f64,
-    pub seconds:       i32,
+    pub name:     String,
+    pub position: i16,
+    pub count:    i16,
+    pub user_id:  i32,
+    pub view:     i32,
+    pub height:   f64,
+    pub seconds:  i32,
+    pub now_u:    i16,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]

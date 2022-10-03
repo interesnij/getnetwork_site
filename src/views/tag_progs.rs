@@ -122,13 +122,14 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
             let _connection = establish_connection();
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_tag = NewTag {
-                name:          form.name.clone(),
-                position:      form.position,
-                count:         0,
-                user_id:       _request_user.id,
-                view:          0,
-                height:        0.0,
-                seconds:       0,
+                name:     form.name.clone(),
+                position: form.position,
+                count:    0,
+                user_id:  _request_user.id,
+                view:     0,
+                height:   0.0,
+                seconds:  0,
+                now_u:    0,
             };
             let _new_tag = diesel::insert_into(schema::tags::table)
                 .values(&new_tag)
