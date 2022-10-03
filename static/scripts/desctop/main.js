@@ -282,6 +282,7 @@ function connect() {
       counter = real_wiew.innerHTML*1;
       console.log("counter", counter);
       real_wiew.innerHTML = counter += 1;
+      console.log("real_wiew plus", real_wiew);
       console.log('Смотрит страницу: ' + json_data["data"]);
     }
   }
