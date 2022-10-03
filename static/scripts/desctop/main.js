@@ -273,7 +273,14 @@ function connect() {
   }
 
   socket.onmessage = (ev) => {
-    console.log('Received: ' + ev.data, 'message')
+    data = ev.data;
+    if (data.new_viewer || document.body.querySelector(".real_wiew")) {
+      counter = document.body.querySelector(".real_wiew");
+      counter.innerHTML = counter.innerHTML*1 += 1;
+      console.log('Смотрит страницу: ' + data.new_viewer);
+    }
+
+    console.log('Received: ' + ev.data)
   }
 
   socket.onclose = () => {
