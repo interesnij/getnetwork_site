@@ -83,9 +83,10 @@ pub async fn index_page(
         use crate::models::{Blog, Service, Store, Wiki, Work};
         use crate::websocket::MessageToClient;
 
-        let res = to_value(1);
-        let msg = MessageToClient::new("new_viewer", res);
-        websocket_srv.do_send(msg);
+        if let Ok(res) = to_value(1) {
+            let msg = MessageToClient::new("new_viewer", res);
+            websocket_srv.do_send(msg);
+        }
 
         let _connection = establish_connection();
         let _stat: StatPage;
