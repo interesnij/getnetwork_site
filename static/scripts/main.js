@@ -1234,3 +1234,48 @@ on('body', 'change', '.load_tech_objects', function() {
   }};
   link.send();
 });
+
+
+var socket = null;
+function connect() {
+  disconnect()
+  const { location } = window
+
+  ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  wsUri = ws_scheme + '://' + window.location.host + "/ws";
+  //wsUri = ws_scheme + "://194.58.90.123:8082/ws";
+
+  console.log('Connecting...')
+  socket = new WebSocket(wsUri)
+
+  socket.onopen = () => {
+    console.log('Connected')
+  }
+
+  socket.onmessage = (ev) => {
+    json_data = JSON.parse(ev.data)
+    console.log(json_data["msg_type"]);
+    console.log(json_data["data"]);
+    if (json_data["msg_type"] == "new_viewer" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["data"]) {
+      real_wiew = document.body.querySelector(".real_wiew");
+      counter = real_wiew.innerHTML*1;
+      real_wiew.innerHTML = counter + 1;
+      console.log('Смотрит страницу: ' + json_data["data"]);
+    }
+  }
+
+  socket.onclose = () => {
+    console.log('Disconnected')
+    socket = null
+  }
+}
+
+function disconnect() {
+  if (socket) {
+    console.log('Disconnecting...')
+    socket.close()
+    socket = null
+  }
+}
+
+connect()
