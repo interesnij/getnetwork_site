@@ -273,6 +273,10 @@ pub async fn create_history (
         let msg = MessageToClient::new("newquestion", res);
         websocket_srv.do_send(msg);
     }
+    if let Ok(history_page) = to_value(p_page_id.to_string()) {
+        let msg = MessageToClient::new("end_viewer", history_page);
+        websocket_srv.do_send(msg);
+    }
     Ok(Json(res))
 }
 

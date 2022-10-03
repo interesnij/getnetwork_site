@@ -120,16 +120,6 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
   // примочками - таймеры и так далее.
   // при смене страницы повторяем только эту функцию
 
-  console.log("======================");
-  console.log("id пользователя",   $user_id);
-  console.log("id объекта",        $object_id);
-  console.log("id страницы",       $page_id);
-  console.log("ссылка",            $link);
-  console.log("название страницы", $title);
-  console.log("накручено метров",  $height);
-  console.log("затрачено секунд",  $seconds);
-  console.log("======================");
-
   if ($object_id) {
     analyticsData = {
       user_id: $user_id,
@@ -1261,6 +1251,14 @@ function connect() {
       counter = real_wiew.innerHTML*1;
       real_wiew.innerHTML = counter + 1;
       console.log('Смотрит страницу: ' + json_data["data"]);
+    }
+    else if (json_data["msg_type"] == "end_viewer" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["data"]) {
+      real_wiew = document.body.querySelector(".real_wiew");
+      counter = real_wiew.innerHTML*1;
+      if (counter > 0) {
+        real_wiew.innerHTML = counter - 1;
+      }
+      console.log('Ушел со страницы: ' + json_data["data"]);
     }
   }
 
