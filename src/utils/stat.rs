@@ -82,13 +82,14 @@ pub fn plus_category_stat(id: i32, height: f64, seconds: i32) -> () {
                 .get_result::<Categories>(&_connection)
                 .expect("Error.");
         } else {
-            .set ((
-                schema::categories::view.eq(_item.view + 1),
-                schema::categories::height.eq(_height + height),
-                schema::categories::seconds.eq(_item.seconds + seconds),
-            ))
-            .get_result::<Categories>(&_connection)
-            .expect("Error.");
+            diesel::update(&_item)
+                .set ((
+                    schema::categories::view.eq(_item.view + 1),
+                    schema::categories::height.eq(_height + height),
+                    schema::categories::seconds.eq(_item.seconds + seconds),
+                ))
+                .get_result::<Categories>(&_connection)
+                .expect("Error.");
         }
     }
 }
