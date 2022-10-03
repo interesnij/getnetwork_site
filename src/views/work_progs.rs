@@ -238,7 +238,8 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             schema::categories::image,
             schema::categories::view,
             schema::categories::height,
-            schema::categories::seconds
+            schema::categories::seconds,
+            schema::categories::now_u,
         ))
         .load::<CatDetail>(&_connection)
         .expect("E");

@@ -47,6 +47,7 @@ pub struct CatDetail {
     pub view:    i32,
     pub height:  f64,
     pub seconds: i32,
+    pub now_u:   i16,
 }
 #[derive(Serialize, Queryable)]
 pub struct Cat {
