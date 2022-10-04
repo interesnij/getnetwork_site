@@ -1237,17 +1237,12 @@ function connect() {
     console.log(json_data["types"]);
     console.log(json_data["data"]);
     if (json_data["types"] == "new_viewer" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["data"]) {
-      real_wiew = document.body.querySelector(".real_wiew");
-      counter = real_wiew.innerHTML*1;
-      real_wiew.innerHTML = counter + 1;
-      console.log('Смотрит страницу: ' + json_data["data"]);
+      document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
+      console.log('Смотрит страницу: ' + json_data["id"]);
     }
     else if (json_data["types"] == "end_viewer" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["data"]) {
       real_wiew = document.body.querySelector(".real_wiew");
-      counter = real_wiew.innerHTML*1;
-      if (counter > 0) {
-        real_wiew.innerHTML = counter - 1;
-      }
+      document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
       console.log('Ушел со страницы: ' + json_data["data"]);
     }
   }
