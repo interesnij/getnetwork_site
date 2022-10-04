@@ -64,8 +64,8 @@ pub fn plus_page_stat (
             .get_result::<StatPage>(&_connection)
             .expect("Error.");
     }
-    if let Ok(history_page) = to_value(types) {
-        let msg = MessageToClient::new("end_page_view", types.into(), _item.now_u.to_string());
+    if let Ok(history_page) = to_value(_item.now_u.to_string()) {
+        let msg = MessageToClient::new("end_page_view", types.into(), history_page);
         websocket_srv.do_send(msg);
     }
 }
