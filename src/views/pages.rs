@@ -105,7 +105,7 @@ pub async fn index_page(
                 view:    0,
                 height:  0.0,
                 seconds: 0,
-                now_u:   0,
+                now_u:   1,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
