@@ -69,6 +69,7 @@ pub fn plus_page_stat (
         let msg = MessageToClient::new("end_page_view", types.into(), history_page);
         websocket_srv.do_send(msg);
     }
+    println!("{:?}", _item.now_u);
 }
 
 pub fn plus_category_stat(id: i32, height: f64, seconds: i32) -> () {
