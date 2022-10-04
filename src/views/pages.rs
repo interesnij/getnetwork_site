@@ -83,11 +83,6 @@ pub async fn index_page(
         use crate::models::{Blog, Service, Store, Wiki, Work};
         use crate::websocket::MessageToClient;
 
-        if let Ok(res) = to_value("1".to_string()) {
-            let msg = MessageToClient::new("new_viewer", 0,res);
-            websocket_srv.do_send(msg);
-        }
-
         let _connection = establish_connection();
         let _stat: StatPage;
 
@@ -112,6 +107,10 @@ pub async fn index_page(
                 .values(&form)
                 .get_result::<StatPage>(&_connection)
                 .expect("Error.");
+        }
+        if let Ok(res) = to_value(_stat.now_u.to_string()) {
+            let msg = MessageToClient::new("page_view", _stat.types, res);
+            websocket_srv.do_send(msg);
         }
 
         if is_signed_in(&session) {
