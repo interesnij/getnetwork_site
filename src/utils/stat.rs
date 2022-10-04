@@ -8,7 +8,12 @@ use serde_json::to_value;
 use crate::websocket::{MessageToClient, Server, ws_index};
 
 
-pub fn plus_page_stat(types: i16, height: f64, seconds: i32) -> () {
+pub fn plus_page_stat (
+    types: i16,
+    height: f64,
+    seconds: i32,
+    websocket_srv: Data<Addr<Server>>
+) -> () {
     // статистика страницы главной
     let _connection = establish_connection();
 
@@ -60,7 +65,7 @@ pub fn plus_page_stat(types: i16, height: f64, seconds: i32) -> () {
             .expect("Error.");
     }
     if let Ok(history_page) = to_value(types) {
-        let msg = MessageToClient::new("end_page_view", types, _item.now_u);
+        let msg = MessageToClient::new("end_page_view", types.into(), _item.now_u);
         websocket_srv.do_send(msg);
     }
 }

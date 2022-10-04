@@ -165,8 +165,7 @@ pub struct HistoryData {
 pub async fn create_history (
     conn: ConnectionInfo,
     data: Json<HistoryData>,
-    req: HttpRequest,
-    websocket_srv: Data<Addr<Server>>
+    req: HttpRequest 
 ) -> Result<Json<CookieStat>, Error> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
