@@ -94,7 +94,7 @@ pub async fn index_page(
         if _stats.len() > 0 {
             _stat = _stats.into_iter().nth(0).unwrap();
             diesel::update(&_stat)
-                .set (schema::stat_pages::view.eq(_stat.now_u + 1))
+                .set (schema::stat_pages::now_u.eq(_stat.now_u + 1))
                 .get_result::<StatPage>(&_connection)
                 .expect("Error.");
         }
