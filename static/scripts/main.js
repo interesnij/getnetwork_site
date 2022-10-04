@@ -1234,6 +1234,9 @@ function connect() {
 
   socket.onmessage = (ev) => {
     json_data = JSON.parse(ev.data)
+    console.log("types", json_data["types"]);
+    console.log("id", json_data["id"]);
+    console.log("data", json_data["data"]);
     // обновляем статистику страницы - навый пользователь смотрит
     if (json_data["types"] == "page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]) {
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
