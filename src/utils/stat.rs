@@ -6,6 +6,7 @@ use schema::stat_pages::dsl::stat_pages;
 use crate::models::{StatPage, NewStatPage};
 use serde_json::to_value;
 use crate::websocket::{MessageToClient, Server};
+use actix_web::Data;
 
 
 pub fn plus_page_stat (
