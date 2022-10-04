@@ -165,7 +165,8 @@ pub struct HistoryData {
 pub async fn create_history (
     conn: ConnectionInfo,
     data: Json<HistoryData>,
-    req: HttpRequest 
+    req: HttpRequest,
+    websocket_srv: Data<Addr<Server>>
 ) -> Result<Json<CookieStat>, Error> {
     use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
@@ -177,8 +178,6 @@ pub async fn create_history (
     let p_object_id = data.object_id;
     let p_page_id = data.page_id;
     let p_height = data.height;
-    //let format_height = format!("{:.2}", _p_height);
-    //let p_height: f64 = format_height.parse().unwrap();
 
     let p_seconds = data.seconds;
     let p_link = data.link.clone();
@@ -254,7 +253,7 @@ pub async fn create_history (
             };
         }
         else {
-            plus_page_stat(p_page_id, p_height, p_seconds)
+            plus_page_stat(p_page_id, p_height, p_seconds, websocket_srv)
         }
     }
     let _res = block(move || CookieStat::create (
