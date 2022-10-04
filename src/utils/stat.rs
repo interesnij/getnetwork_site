@@ -13,7 +13,8 @@ pub fn plus_page_stat (
     types: i16,
     height: f64,
     seconds: i32,
-    websocket_srv: Data<Addr<Server>>
+    websocket_srv: Data<Addr<Server>>,
+    is_update_needed: bool // нужно ли обновлять статистику страницы
 ) -> () {
     // статистика страницы главной
     let _connection = establish_connection();
@@ -31,7 +32,8 @@ pub fn plus_page_stat (
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
         if _item.now_u > 0 {
-            diesel::update(&_item)
+            if is_update_needed {
+                diesel::update(&_item)
                 .set ((
                     schema::stat_pages::view.eq(_item.view + 1),
                     schema::stat_pages::height.eq(_height + height),
@@ -40,8 +42,14 @@ pub fn plus_page_stat (
                 ))
                 .get_result::<StatPage>(&_connection)
                 .expect("Error.");
+            } else {
+                diesel::update(&_item)
+                    .set(schema::stat_pages::now_u.eq(_item.now_u - 1))
+                    .get_result::<StatPage>(&_connection)
+                    .expect("Error.");
+            }
         }
-        else {
+        else if is_update_needed {
             diesel::update(&_item)
                 .set ((
                     schema::stat_pages::view.eq(_item.view + 1),
@@ -72,7 +80,13 @@ pub fn plus_page_stat (
     println!("{:?}", _item.now_u);
 }
 
-pub fn plus_category_stat(id: i32, height: f64, seconds: i32) -> () {
+pub fn plus_category_stat (
+    id: i32,
+    height: f64,
+    seconds: i32,
+    websocket_srv: Data<Addr<Server>>,
+    is_update_needed: bool
+) -> () {
     // статистика страницы категории блога
     use schema::categories::dsl::categories;
     use crate::models::Categories;
@@ -109,7 +123,13 @@ pub fn plus_category_stat(id: i32, height: f64, seconds: i32) -> () {
         }
     }
 }
-pub fn plus_item_stat(id: i32, height: f64, seconds: i32) -> () {
+pub fn plus_item_stat (
+    id: i32,
+    height: f64,
+    seconds: i32,
+    websocket_srv: Data<Addr<Server>>,
+    is_update_needed: bool
+) -> () {
     // статистика страницы блога
     use schema::items::dsl::items;
     use crate::models::Item;
@@ -147,7 +167,13 @@ pub fn plus_item_stat(id: i32, height: f64, seconds: i32) -> () {
     }
 }
 
-pub fn plus_tag_stat(id: i32, height: f64, seconds: i32) -> () {
+pub fn plus_tag_stat (
+    id: i32,
+    height: f64,
+    seconds: i32,
+    websocket_srv: Data<Addr<Server>>,
+    is_update_needed: bool
+) -> () {
     // статистика страницы работы
     use schema::tags::dsl::tags;
     use crate::models::Tag;
