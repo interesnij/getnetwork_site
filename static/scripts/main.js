@@ -1237,7 +1237,7 @@ function connect() {
     console.log("types", json_data["types"]);
     console.log("id", json_data["id"]);
     console.log("data", json_data["data"]);
-    console.log("страница корректна...", json_data["types"] == "page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]);
+    console.log("страница корректна...", json_data["types"] == "end_page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]);
     // обновляем статистику страницы - навый пользователь смотрит
     if (json_data["types"] == "page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]) {
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];

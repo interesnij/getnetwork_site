@@ -30,7 +30,7 @@ pub fn plus_page_stat (
         _item = _items.into_iter().nth(0).unwrap();
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
-        //if _item.now_u > 0 {
+        if _item.now_u > 0 {
             diesel::update(&_item)
                 .set ((
                     schema::stat_pages::view.eq(_item.view + 1),
@@ -40,17 +40,17 @@ pub fn plus_page_stat (
                 ))
                 .get_result::<StatPage>(&_connection)
                 .expect("Error.");
-        //}
-        //else {
-        //    diesel::update(&_item)
-        //        .set ((
-        //            schema::stat_pages::view.eq(_item.view + 1),
-        //            schema::stat_pages::height.eq(_height + height),
-        //            schema::stat_pages::seconds.eq(_item.seconds + seconds),
-        //        ))
-        //        .get_result::<StatPage>(&_connection)
-        //        .expect("Error.");
-        //}
+        }
+        else {
+            diesel::update(&_item)
+                .set ((
+                    schema::stat_pages::view.eq(_item.view + 1),
+                    schema::stat_pages::height.eq(_height + height),
+                    schema::stat_pages::seconds.eq(_item.seconds + seconds),
+                ))
+                .get_result::<StatPage>(&_connection)
+                .expect("Error.");
+        }
     }
     else {
         let _new_item = NewStatPage {
