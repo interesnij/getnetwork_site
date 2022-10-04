@@ -109,7 +109,7 @@ pub async fn index_page(
                 .expect("Error.");
         }
         if let Ok(res) = to_value(_stat.now_u.to_string()) {
-            let msg = MessageToClient::new("page_view", _stat.types, res);
+            let msg = MessageToClient::new("page_view", _stat.types.into(), res);
             websocket_srv.do_send(msg);
         }
 
