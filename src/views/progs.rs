@@ -203,62 +203,61 @@ pub async fn create_history (
             .get_result::<CookieUser>(&_connection)
             .expect("Error.");
     }
-        if p_object_id > 0 {
-            match p_page_id {
-                42 => {
-                    use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                43 => {
-                    use crate::utils::plus_item_stat;
-                    plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                62 => {
-                    use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                63 => {
-                    use crate::utils::plus_item_stat;
-                    plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                72 => {
-                    use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                73 => {
-                    use crate::utils::plus_item_stat;
-                    plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                82 => {
-                    use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                83 => {
-                    use crate::utils::plus_item_stat;
-                    plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                92 => {
-                    use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                93 => {
-                    use crate::utils::plus_item_stat;
-                    plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                32 => {
-                    use crate::utils::plus_tag_stat;
-                    plus_tag_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                9 => {
-                    use crate::utils::plus_category_stat;
-                    plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-                },
-                _ => println!("no value"),
-            };
-        }
-        else {
-            plus_page_stat(p_page_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
-        }
+    if p_object_id > 0 {
+        match p_page_id {
+            42 => {
+                use crate::utils::plus_category_stat;
+                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            43 => {
+                use crate::utils::plus_item_stat;
+                plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            62 => {
+                use crate::utils::plus_category_stat;
+                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            63 => {
+                use crate::utils::plus_item_stat;
+                plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            72 => {
+                use crate::utils::plus_category_stat;
+                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            73 => {
+                use crate::utils::plus_item_stat;
+                plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            82 => {
+                use crate::utils::plus_category_stat;
+                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            83 => {
+                use crate::utils::plus_item_stat;
+                plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            92 => {
+                use crate::utils::plus_category_stat;
+                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            93 => {
+                use crate::utils::plus_item_stat;
+                plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            32 => {
+                use crate::utils::plus_tag_stat;
+                plus_tag_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            9 => {
+                use crate::utils::plus_category_stat;
+                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+            },
+            _ => println!("no value"),
+        };
+    }
+    else {
+        plus_page_stat(p_page_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
     }
     let _res = block(move || CookieStat::create (
         user.id,
