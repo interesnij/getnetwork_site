@@ -1243,7 +1243,7 @@ function connect() {
     else if (json_data["types"] == "end_viewer" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["data"]) {
       real_wiew = document.body.querySelector(".real_wiew");
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
-      console.log('Ушел со страницы: ' + json_data["data"]);
+      console.log('Ушел со страницы: ' + json_data["id"]);
     }
   }
 
