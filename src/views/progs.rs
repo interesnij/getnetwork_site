@@ -1,4 +1,3 @@
-use actix::Addr;
 use actix_web::{
     HttpRequest,
     HttpResponse,
@@ -18,7 +17,7 @@ use crate::models::{
     CookieStat,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::to_value;
+
 use crate::utils::{
     establish_connection,
     is_signed_in,
@@ -35,7 +34,6 @@ use std::str;
 use std::borrow::BorrowMut;
 use actix_web::dev::ConnectionInfo;
 use crate::errors::Error;
-use crate::websocket::{MessageToClient, Server, ws_index};
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {
@@ -269,14 +267,7 @@ pub async fn create_history (
         p_seconds,
     )).await?;
     let res = _res?;
-    if let Ok(res) = to_value(res.title.clone()) {
-        let msg = MessageToClient::new("newquestion", 0, res);
-        websocket_srv.do_send(msg);
-    }
-    if let Ok(history_page) = to_value(p_page_id.to_string()) {
-        let msg = MessageToClient::new("end_viewer", 0, history_page);
-        websocket_srv.do_send(msg);
-    }
+
     Ok(Json(res))
 }
 

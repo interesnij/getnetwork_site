@@ -1,8 +1,11 @@
+use actix::Addr;
 use crate::schema;
 use crate::utils::establish_connection;
 use crate::diesel::{ExpressionMethods, RunQueryDsl, QueryDsl};
 use schema::stat_pages::dsl::stat_pages;
 use crate::models::{StatPage, NewStatPage};
+use serde_json::to_value;
+use crate::websocket::{MessageToClient, Server, ws_index};
 
 
 pub fn plus_page_stat(types: i16, height: f64, seconds: i32) -> () {
@@ -15,8 +18,10 @@ pub fn plus_page_stat(types: i16, height: f64, seconds: i32) -> () {
         .load::<StatPage>(&_connection)
         .expect("E");
 
+    let _item: StatPage;
+
     if _items.len() > 0 {
-        let _item = _items.into_iter().nth(0).unwrap();
+        _item = _items.into_iter().nth(0).unwrap();
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
         if _item.now_u > 0 {
@@ -49,10 +54,14 @@ pub fn plus_page_stat(types: i16, height: f64, seconds: i32) -> () {
             seconds: seconds,
             now_u:   1,
         };
-        diesel::insert_into(schema::stat_pages::table)
+        _item = diesel::insert_into(schema::stat_pages::table)
             .values(&_new_item)
             .get_result::<StatPage>(&_connection)
             .expect("Error.");
+    }
+    if let Ok(history_page) = to_value(types) {
+        let msg = MessageToClient::new("end_page_view", types, _item.now_u);
+        websocket_srv.do_send(msg);
     }
 }
 
