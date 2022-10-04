@@ -34,6 +34,7 @@ use std::str;
 use std::borrow::BorrowMut;
 use actix_web::dev::ConnectionInfo;
 use crate::errors::Error;
+use crate::websocket::{MessageToClient, Server, ws_index};
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {

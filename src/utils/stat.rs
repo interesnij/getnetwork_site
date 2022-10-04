@@ -5,7 +5,7 @@ use crate::diesel::{ExpressionMethods, RunQueryDsl, QueryDsl};
 use schema::stat_pages::dsl::stat_pages;
 use crate::models::{StatPage, NewStatPage};
 use serde_json::to_value;
-use crate::websocket::{MessageToClient, Server, ws_index};
+use crate::websocket::{MessageToClient, Server};
 
 
 pub fn plus_page_stat (
