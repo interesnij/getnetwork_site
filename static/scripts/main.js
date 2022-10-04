@@ -1234,15 +1234,15 @@ function connect() {
 
   socket.onmessage = (ev) => {
     json_data = JSON.parse(ev.data)
-    console.log(json_data["msg_type"]);
+    console.log(json_data["types"]);
     console.log(json_data["data"]);
-    if (json_data["msg_type"] == "new_viewer" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["data"]) {
+    if (json_data["types"] == "new_viewer" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["data"]) {
       real_wiew = document.body.querySelector(".real_wiew");
       counter = real_wiew.innerHTML*1;
       real_wiew.innerHTML = counter + 1;
       console.log('Смотрит страницу: ' + json_data["data"]);
     }
-    else if (json_data["msg_type"] == "end_viewer" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["data"]) {
+    else if (json_data["types"] == "end_viewer" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["data"]) {
       real_wiew = document.body.querySelector(".real_wiew");
       counter = real_wiew.innerHTML*1;
       if (counter > 0) {
