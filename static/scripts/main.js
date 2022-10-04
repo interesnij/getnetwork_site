@@ -1234,21 +1234,23 @@ function connect() {
 
   socket.onmessage = (ev) => {
     json_data = JSON.parse(ev.data)
-    console.log(json_data["types"]);
-    console.log(json_data["data"]);
+    // обновляем статистику страницы - навый пользователь смотрит
     if (json_data["types"] == "page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]) {
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
       console.log('Смотрит страницу: ' + json_data["id"]);
     }
+    // обновляем статистику страницы - навый пользователь ушел
     else if (json_data["types"] == "end_page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]) {
       real_wiew = document.body.querySelector(".real_wiew");
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
       console.log('Ушел со страницы: ' + json_data["id"]);
     }
+    // обновляем статистику объекта - навый пользователь смотрит
     else if (json_data["types"] == "object_view" && document.body.querySelector(".doc_title").getAttribute("data-id") == json_data["id"]) {
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
       console.log('Смотрит объект: ' + json_data["id"]);
     }
+    // обновляем статистику объекта - навый пользователь ушел
     else if (json_data["types"] == "end_object_view" && document.body.querySelector(".doc_title").getAttribute("data-id") == json_data["id"]) {
       real_wiew = document.body.querySelector(".real_wiew");
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];

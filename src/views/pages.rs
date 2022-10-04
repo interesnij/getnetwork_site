@@ -93,6 +93,10 @@ pub async fn index_page(
             .expect("E");
         if _stats.len() > 0 {
             _stat = _stats.into_iter().nth(0).unwrap();
+            diesel::update(&_stat)
+                .set (schema::stat_pages::view.eq(_stat.now_u + 1))
+                .get_result::<StatPage>(&_connection)
+                .expect("Error.");
         }
         else {
             use crate::models::NewStatPage;
@@ -107,6 +111,7 @@ pub async fn index_page(
                 .values(&form)
                 .get_result::<StatPage>(&_connection)
                 .expect("Error.");
+
         }
         if let Ok(res) = to_value(_stat.now_u.to_string()) {
             let msg = MessageToClient::new("page_view", _stat.types.into(), res);
