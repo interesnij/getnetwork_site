@@ -270,11 +270,11 @@ pub async fn create_history (
     )).await?;
     let res = _res?;
     if let Ok(res) = to_value(res.title.clone()) {
-        let msg = MessageToClient::new("newquestion", res);
+        let msg = MessageToClient::new("newquestion", 0, res);
         websocket_srv.do_send(msg);
     }
     if let Ok(history_page) = to_value(p_page_id.to_string()) {
-        let msg = MessageToClient::new("end_viewer", history_page);
+        let msg = MessageToClient::new("end_viewer", 0, history_page);
         websocket_srv.do_send(msg);
     }
     Ok(Json(res))

@@ -11,14 +11,16 @@ pub struct Message(pub String);
 #[derive(ActixMessage, Deserialize, Serialize)]
 #[rtype(result = "()")]
 pub struct MessageToClient {
-    pub msg_type: String,
-    pub data: Value,
+    pub types: String,
+    pub id:    i32,
+    pub data:  Value,
 }
 
 impl MessageToClient {
-    pub fn new(msg_type: &str, data: Value) -> Self {
+    pub fn new(types: &str, id: i32, data: Value) -> Self {
         Self {
-            msg_type: msg_type.to_string(),
+            types: types.to_string(),
+            id:    id,
             data,
         }
     }

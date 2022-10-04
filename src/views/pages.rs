@@ -84,7 +84,7 @@ pub async fn index_page(
         use crate::websocket::MessageToClient;
 
         if let Ok(res) = to_value("1".to_string()) {
-            let msg = MessageToClient::new("new_viewer", res);
+            let msg = MessageToClient::new("new_viewer", 0,res);
             websocket_srv.do_send(msg);
         }
 
