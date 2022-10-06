@@ -25,14 +25,14 @@ function close_fullscreen() {
   container = document.body.querySelector("#fullscreens_container");
   _window = container.querySelector(".card_fullscreen");
 
-  try {
+  //try {
     meta_block = _window.querySelector(".doc_title");
     $link = meta_block.getAttribute("data-link");
     $title = meta_block.getAttribute("data-title");
     $object_id = meta_block.getAttribute("object-id");
     $page_id = document.body.querySelector(".doc_title").getAttribute("page-id");
     get_window_stat_meta($link, $title, $object_id, $page_id);
-  } catch { null };
+//  } catch { null };
 
   _window.remove();
 
