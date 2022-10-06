@@ -161,12 +161,12 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
 
 function get_window_stat_meta($link, $title, $object_id, $page_id) {
   //return
-  ip_block = document.body.querySelector(".ip_span");
-  if (document.body.querySelector("#is_superuser")
-      || ip_block.innerHTML == "91.239.184.81"
-      || ip_block.innerHTML == "176.59.23.228") {
-    return
-  }
+  //ip_block = document.body.querySelector(".ip_span");
+  //if (document.body.querySelector("#is_superuser")
+  //    || ip_block.innerHTML == "91.239.184.81"
+  //    || ip_block.innerHTML == "176.59.23.228") {
+  //  return
+  //}
   if (!$page_id) {
     return
   }
@@ -981,6 +981,9 @@ on('body', 'click', '.create_feedback_form', function() {
 
 on('body', 'click', '.get_object_photo', function() {
   create_fullscreen("/image/" + this.getAttribute("data-pk") + "/", "photo_fullscreen");
+});
+on('body', 'click', '.get_page_window', function() {
+  create_fullscreen(this.getAttribute("data-href"), "photo_fullscreen");
 });
 
 on('body', 'click', '.get_tech_category_info', function() {
