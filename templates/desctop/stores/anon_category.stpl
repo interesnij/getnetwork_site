@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="72" data-id="<%= category.id %>" data-title="Категория товаров <%= category.name %>" data-description="вебсервисы.рф: Категория товаров <%= category.name %>" data-uri="/stores/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
+<section page-id="72" data-id="<%= category.id %>" data-title="<%= category.name %> | Категория товаров" data-description="вебсервисы.рф: <%= category.name %> | Категория товаров" data-uri="/stores/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
     <div class="relative container align-left">
                 <div class="hs-line-4 font-alt">
                     <a class="ajax" href="/">Главная</a>

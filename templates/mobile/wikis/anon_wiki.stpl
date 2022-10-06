@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="83" data-id="<%= object.id %>" data-title="Статья <%= object.title %>" data-description="вебсервисы.рф: Статья <%= object.title %>" data-uri="/wiki/<%= category.slug %>/<%= object.slug %>/" data-image="<%= object.get_image() %>" class="doc_title">
+<section page-id="83" data-id="<%= object.id %>" data-title="<%= object.title %> | Обучающая статья" data-description="вебсервисы.рф: <%= object.title %> | Обучающая статья" data-uri="/wiki/<%= category.slug %>/<%= object.slug %>/" data-image="<%= object.get_image() %>" class="doc_title">
   <div class="relative container align-left">
       <div class="mt-30">
         <div class="font-alt">

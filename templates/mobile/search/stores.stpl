@@ -1,6 +1,6 @@
 <% include!("../header.stpl"); %>
 
-<section page-id="24" data-title="Общий поиск товаров по фрагменту <%= q %>" data-description="вебсервисы.рф: Общий поиск товаров по фрагменту <%= q %>" data-uri="/search_stores/<%= q %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
+<section page-id="24" data-title="<%= q %> | Общий поиск товаров по фрагменту" data-description="вебсервисы.рф: <%= q %> | Общий поиск товаров по фрагменту" data-uri="/search_stores/<%= q %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
             <a href="/search/<%= q %>/" class="ajax">Общий поиск</a>

@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="92" data-id="<%= category.id %>" data-title="Категория работ <%= category.name %>" data-description="вебсервисы.рф: Категория работ <%= category.name %>" data-uri="/works/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
+<section page-id="92" data-id="<%= category.id %>" data-title="<%= category.name %> | Категория работ" data-description="вебсервисы.рф: <%= category.name %> | Категория работ" data-uri="/works/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
   <div class="relative container align-left">
     <div class="hs-line-4 font-alt">
       <a class="ajax" href="/work_categories/">Работы</a>

@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="36" data-title="Статьи тега <%= tag.name %>" data-description="вебсервисы.рф: Статьи тега <%= tag.name %>" data-uri="/tag_wikis/<%= tag.name %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
+<section page-id="36" data-title="<%= tag.name %> | Статьи тега" data-description="вебсервисы.рф: <%= tag.name %> | Статьи тега" data-uri="/tag_wikis/<%= tag.name %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
           <a class="ajax" href="/">Главная</a>
