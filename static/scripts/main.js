@@ -443,7 +443,7 @@ function create_fullscreen(url, type_class, price) {
                           if (this.readyState == 4 && this.status == 200) {
                               var elem = document.createElement('span');
                               elem.innerHTML = link_3.responseText;
-                              $loader.querySelector(".is_block_paginate").insertAdjacentHTML('beforeend', elem.querySelector(".is_block_paginate").innerHTML);
+                              $loader.querySelector(".is_paginate").insertAdjacentHTML('beforeend', elem.querySelector(".is_paginate").innerHTML);
                             }
                       }
                       link_3.send();
