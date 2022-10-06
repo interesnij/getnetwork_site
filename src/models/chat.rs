@@ -119,7 +119,7 @@ impl Message {
         let _message_res = diesel::insert_into(schema::messages::table)
             .values(&new_message_form)
             .get_result::<Message>(&_connection)?;
-        let _message = _message_res?;
+        let _message = _message_res.expect("E");
         let _id = _message.id;
 
         if photos.is_some() {
