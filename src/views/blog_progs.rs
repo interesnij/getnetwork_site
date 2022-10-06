@@ -82,7 +82,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 
         let _tags = _item.get_tags();
 
-        let (prev, next) = _category.get_featured_items(_item.types, _item.id);
+        let (prev, next) = _category.get_featured_items(_item.types, _item.id).await;
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);

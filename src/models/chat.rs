@@ -119,32 +119,25 @@ impl Message {
         let _message = diesel::insert_into(schema::messages::table)
             .values(&new_message_form)
             .get_result::<Message>(&_connection)?;
-
-        //let _id: i32 = match _message {
-        //    Ok(_ok) => _ok.id,
-        //    Err(_error) => 0,
-        //};
         let _id = _message.id;
-        if _id > 0 {
-            if photos.is_some() {
-                for i in photos.unwrap() {
-                    NewFile::create(user_id, _id, 11, 1, i.clone());
-                }
+        if photos.is_some() {
+            for i in photos.unwrap() {
+                NewFile::create(user_id, _id, 11, 1, i.clone());
             }
-            if videos.is_some() {
-                for i in videos.unwrap() {
-                    NewFile::create(user_id, _id, 11, 2, i.clone());
-                }
+        }
+        if videos.is_some() {
+            for i in videos.unwrap() {
+                NewFile::create(user_id, _id, 11, 2, i.clone());
             }
-            if audios.is_some() {
-                for i in audios.unwrap() {
-                    NewFile::create(user_id, _id, 11, 3, i.clone());
-                }
+        }
+        if audios.is_some() {
+            for i in audios.unwrap() {
+                NewFile::create(user_id, _id, 11, 3, i.clone());
             }
-            if docs.is_some() {
-                for i in docs.unwrap() {
-                    NewFile::create(user_id, _id, 11, 4, i.clone());
-                }
+        }
+        if docs.is_some() {
+            for i in docs.unwrap() {
+                NewFile::create(user_id, _id, 11, 4, i.clone());
             }
         }
         return Ok(_message);
