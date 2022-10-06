@@ -196,6 +196,7 @@ function ajax_get_reload(url, history_enable) {
         get_page_view_time(120);
         scrolled(rtr);
         get_stat_meta($link, $title, $object_id, $page_id);
+        get_document_opacity_1();
       }
     }
     ajax_link.send();

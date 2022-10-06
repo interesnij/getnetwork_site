@@ -3256,3 +3256,7 @@ h1,h2,h3,h4,h5,h6{margin-top:10px;margin-bottom:10px}
 .desctop_version .next_item svg :hover{
   color: rgba(255, 255, 255, 1) !important;
 }
+
+#fullscreen_loader .container {
+  width: 100% !important;
+}

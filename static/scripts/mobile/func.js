@@ -115,6 +115,7 @@ function ajax_get_reload(url, history_enable) {
           document.body.querySelector("#reload_nav_block").innerHTML = sidebar.innerHTML
         } catch { null };
         get_stat_meta($link, $title, $object_id, $page_id);
+        get_document_opacity_1();
       }
     }
     ajax_link.send();

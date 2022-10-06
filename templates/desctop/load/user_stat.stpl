@@ -5,7 +5,7 @@
     <% for (i, object) in object_list.iter().enumerate() { %>
       <div class="row <% if i % 2 == 0 { %>hover<% } %>" style="padding: 5px 0;">
         <div class="col-md-6">
-          <a target="_blank" rel="nofollow" href="<%= object.link %>">
+          <a class="pointer get_page_window" data-href="<%= object.link %>">
             <%= object.title %>
           </a>
         </div>
