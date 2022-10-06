@@ -13,6 +13,7 @@ use diesel::{
 use serde::{Serialize, Deserialize};
 use crate::utils::establish_connection;
 use crate::schema;
+use crate::errors::Error;
 
 
 #[derive(Debug ,Queryable, Serialize, Identifiable)]
@@ -100,7 +101,7 @@ impl Message {
         videos:  Option<Vec<String>>,
         audios:  Option<Vec<String>>,
         docs:    Option<Vec<String>>,
-    ) -> Self {
+    ) -> Result<Message, Error> {
         use chrono::Duration;
         use crate::models::NewFile;
 
@@ -115,29 +116,30 @@ impl Message {
             types:   1,
         };
 
-        let _message = diesel::insert_into(schema::messages::table)
+        let _message_res = diesel::insert_into(schema::messages::table)
             .values(&new_message_form)
-            .get_result::<Message>(&_connection)
-            .expect("E.");
+            .get_result::<Message>(&_connection)?;
+        let _message = Ok(new);
+        let _id = _message.id;
 
         if photos.is_some() {
             for i in photos.unwrap() {
-                NewFile::create(user_id, self.id, 11, 1, i.clone());
+                NewFile::create(user_id, _id, 11, 1, i.clone());
             }
         }
         if videos.is_some() {
             for i in videos.unwrap() {
-                NewFile::create(user_id, self.id, 11, 2, i.clone());
+                NewFile::create(user_id, _id, 11, 2, i.clone());
             }
         }
         if audios.is_some() {
             for i in audios.unwrap() {
-                NewFile::create(user_id, self.id, 11, 3, i.clone());
+                NewFile::create(user_id, _id, 11, 3, i.clone());
             }
         }
         if docs.is_some() {
             for i in docs.unwrap() {
-                NewFile::create(user_id, self.id, 11, 4, i.clone());
+                NewFile::create(user_id, _id, 11, 4, i.clone());
             }
         }
         return _message;

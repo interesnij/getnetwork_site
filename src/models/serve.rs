@@ -15,6 +15,7 @@ use crate::schema::{
     tech_categories_items,
 };
 use crate::utils::establish_connection;
+use crate::errors::Error;
 
 
 /////// TechCategories //////

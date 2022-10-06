@@ -13,6 +13,7 @@ use crate::schema::{
     order_files,
 };
 use crate::utils::establish_connection;
+use crate::errors::Error;
 
 
 #[derive(Debug, Serialize, Identifiable, Queryable, Associations)]

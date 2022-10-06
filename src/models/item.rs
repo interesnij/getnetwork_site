@@ -25,6 +25,7 @@ use crate::schema::{
     item_comments,
 };
 use crate::utils::establish_connection;
+use crate::errors::Error;
 
 
 ///////////
