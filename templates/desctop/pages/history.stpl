@@ -117,7 +117,7 @@
             <div class="col-md-6">
               <a class="pointer get_page_window" data-href="<%= object.link %>">
                 <%= object.title %>
-              </a>
+              </a> 
             </div>
             <div class="col-md-1">
               <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
