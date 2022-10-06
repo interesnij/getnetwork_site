@@ -38,7 +38,7 @@ pub fn plus_page_stat (
                     schema::stat_pages::view.eq(_item.view + 1),
                     schema::stat_pages::height.eq(_height + height),
                     schema::stat_pages::seconds.eq(_item.seconds + seconds),
-                    schema::stat_pages::now_u.eq(_item.now_u - 1),
+                    schema::stat_pages::now_u.eq(0),
                 ))
                 .get_result::<StatPage>(&_connection)
                 .expect("Error.");
