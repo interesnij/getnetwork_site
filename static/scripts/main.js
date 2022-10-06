@@ -436,7 +436,7 @@ function create_fullscreen(url, type_class, price) {
                   if (inViewport) {
                       box.remove();
                       var link_3 = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-                      link_3.open('GET', location.protocol + "//" + location.host + box.getAttribute("data-link"), true);
+                      link_3.open('GET', location.protocol + "//" + location.host + box.getAttribute("data-link") + "&ajax=2", true);
                       link_3.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
                       link_3.onreadystatechange = function() {
