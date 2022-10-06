@@ -30,7 +30,7 @@ function close_fullscreen() {
     $link = meta_block.getAttribute("data-link");
     $title = meta_block.getAttribute("data-title");
     $object_id = meta_block.getAttribute("object-id");
-    $page_id = meta_block.getAttribute("page-id");
+    $page_id = document.body.querySelector(".doc_title").getAttribute("page-id");
     get_window_stat_meta($link, $title, $object_id, $page_id);
   } catch { null };
 
@@ -167,6 +167,44 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
       || ip_block.innerHTML == "176.59.23.228") {
     return
   }
+  if (!$page_id) {
+    return
+  }
+
+  if ($object_id) {
+    analyticsData = {
+      user_id: $user_id,
+      object_id: $object_id*1,
+      page_id: $page_id*1,
+      link: $link,
+      title: $title,
+      height: $height*1.0,
+      seconds: $seconds,
+    }
+  } else {
+    analyticsData = {
+      user_id: $user_id,
+      object_id: 0,
+      page_id: $page_id*1,
+      link: $link,
+      title: $title,
+      height: $height*1.0,
+      seconds: $seconds,
+    }
+  }
+  console.log(analyticsData);
+  fetch("/create_history/",
+    {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(analyticsData)
+    })
+    .then(res => res.json())
+    .catch(function(res){ console.log("err", res) })
+
   $window_height = 0;
   $window_seconds = 1;
   window.clearInterval(intervalListener2);

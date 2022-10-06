@@ -1,4 +1,4 @@
-<div page-id="" object-id="" data-link="" data-title="Опция <%= object.name %>" class="doc_title" style="padding: 0;">
+<div page-id="" object-id="<%= object.id %>" data-link="/load_serve/<%= object.id %>/" data-title="<%= object.name %> | Опция" class="doc_title" style="padding: 0;">
   <% let s_cat = object.get_category(); %>
   <% let t_cat = s_cat.get_category(); %>
 

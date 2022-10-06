@@ -1,4 +1,4 @@
-<div page-id="" object-id="" data-link="" data-title="Изображение статьи | <%= item.title %>" class="doc_title data_display" style="padding: 0;">
+<div page-id="" object-id="<%= object.id %>" data-link="/image/<%= object.id %>/" data-title="Изображение статьи | <%= item.title %>" class="doc_title data_display" style="padding: 0;">
   <span class="text-hide-xs">
   <% if next.is_some() { %>
     <% let _next = next.unwrap(); %>
