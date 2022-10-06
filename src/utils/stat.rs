@@ -44,7 +44,7 @@ pub fn plus_page_stat (
                 .expect("Error.");
             } else {
                 diesel::update(&_item)
-                    .set(schema::stat_pages::now_u.eq(0))
+                    .set(schema::stat_pages::now_u.eq(_item.now_u - 1))
                     .get_result::<StatPage>(&_connection)
                     .expect("Error.");
             }
