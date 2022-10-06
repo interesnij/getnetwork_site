@@ -983,7 +983,7 @@ on('body', 'click', '.get_object_photo', function() {
   create_fullscreen("/image/" + this.getAttribute("data-pk") + "/", "photo_fullscreen");
 });
 on('body', 'click', '.get_page_window', function() {
-  create_fullscreen(this.getAttribute("data-href"), "photo_fullscreen");
+  create_fullscreen(this.getAttribute("data-href") + "?ajax=2", "photo_fullscreen");
 });
 
 on('body', 'click', '.get_tech_category_info', function() {
