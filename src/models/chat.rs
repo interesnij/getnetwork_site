@@ -120,10 +120,11 @@ impl Message {
             .values(&new_message_form)
             .get_result::<Message>(&_connection)?;
 
-        let _id: i32 = match _message {
-            Ok(_ok) => _ok.id,
-            Err(_error) => 0,
-        };
+        //let _id: i32 = match _message {
+        //    Ok(_ok) => _ok.id,
+        //    Err(_error) => 0,
+        //};
+        let _id = _message.id;
         if _id > 0 {
             if photos.is_some() {
                 for i in photos.unwrap() {
@@ -146,7 +147,7 @@ impl Message {
                 }
             }
         }
-        return _message;
+        return Ok(_message);
     }
 }
 
