@@ -212,7 +212,7 @@ impl Categories {
         page:     i32,
         limit:    i32,
         is_admin: bool
-    ) -> (Vec<Blog>, i32) {
+    ) -> Result<(Vec<Blog>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Blog>;
@@ -220,13 +220,13 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_blogs(cat_id, limit.into(), step.into(), is_admin);
+            object_list = Categories::get_blogs(cat_id, limit.into(), step.into(), is_admin)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_blogs(cat_id, limit.into(), 0, is_admin);
+            object_list = Categories::get_blogs(cat_id, limit.into(), 0, is_admin)?;
         }
-        if Categories::get_blogs(cat_id, 1, have_next.into(), is_admin).len() > 0 {
+        if Categories::get_blogs(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
             next_page_number = page + 1;
         }
 
@@ -237,7 +237,7 @@ impl Categories {
         limit:    i64,
         offset:   i64,
         is_admin: bool
-    ) -> Vec<Blog> {
+    ) -> Result<Vec<Blog>, Error> {
         // 0 object.slug, 1 object.image, 2 object.is_active
         // 3 object.title, 4 object.created,
         // 5 object.get_100_description()
@@ -247,6 +247,7 @@ impl Categories {
         };
 
         let _connection = establish_connection();
+        let _items: Vec<Blog>;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(1))
@@ -254,7 +255,7 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             return items
+             _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .order(schema::items::created.desc())
                 .limit(limit)
@@ -270,7 +271,7 @@ impl Categories {
                 .load::<Blog>(&_connection)
                 .expect("E.");
         } else {
-            return items
+            _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .filter(schema::items::is_active.eq(true))
                 .order(schema::items::created.desc())
@@ -287,6 +288,7 @@ impl Categories {
                 .load::<Blog>(&_connection)
                 .expect("E.");
         }
+        return Ok(_items);
     }
     pub fn get_services_list (
         cat_id:   i32,

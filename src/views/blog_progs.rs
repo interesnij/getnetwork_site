@@ -1,5 +1,6 @@
 use actix_web::{
     web,
+    web::block,
     HttpRequest,
     HttpResponse,
     error::InternalError,
@@ -271,6 +272,9 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         let _cats = Categories::get_categories_for_types(1);
 
         let mut stack = Vec::new();
+        let object_list: Vec<Blog>;
+        let next_page_number: i32;
+
         let _tag_items = tags_items
             .filter(schema::tags_items::types.eq(1))
             .select(schema::tags_items::tag_id)
@@ -289,7 +293,12 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let (object_list, next_page_number) = Categories::get_blogs_list(_category.id, page, 20, _request_user.is_superuser());
+            let _res = block(move || CookieStat::get_blogs_list(_category.id, page, 20, _request_user.is_superuser())).await?;
+            let _dict = match _res {
+                Ok(_ok) => {object_list = _ok.0; next_page_number = _ok.1},
+                Err(_error) => {object_list = Vec::new(); next_page_number = 0},
+            };
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/blogs/category.stpl")]
@@ -340,7 +349,11 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
         }
         else {
-            let (object_list, next_page_number) = Categories::get_blogs_list(_category.id, page, 20, false);
+            let _res = block(move || CookieStat::get_blogs_list(_category.id, page, 20, false)).await?;
+            let _dict = match _res {
+                Ok(_ok) => {object_list = _ok.0; next_page_number = _ok.1},
+                Err(_error) => {object_list = Vec::new(); next_page_number = 0},
+            };
 
             if is_desctop {
                 #[derive(TemplateOnce)]
