@@ -1077,7 +1077,7 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
                 Ok(_list) => _list,
                 Err(_error) => Vec::new(),
             };
-            for _tag in _tag_list.iter() {
+            for _tag in _tags.iter() {
                 diesel::update(_tag)
                     .set(schema::tags::count.eq(_tag.count - 1))
                     .get_result::<Tag>(&_connection)
