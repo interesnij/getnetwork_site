@@ -140,7 +140,7 @@ pub struct Categories {
 }
 
 impl Categories {
-    pub fn get_tags(&self, types: i16) -> Result<Vec<SmallTag>, Error> {
+    pub fn get_tags(types: i16) -> Result<Vec<SmallTag>, Error> {
         use crate::schema::{
             tags_items::dsl::tags_items,
             tags::dsl::tags,
@@ -148,8 +148,7 @@ impl Categories {
         let _connection = establish_connection();
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::item_id.eq(&self.id))
-            .filter(schema::tags_items::types.eq(self.types))
+            .filter(schema::tags_items::types.eq(types))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
