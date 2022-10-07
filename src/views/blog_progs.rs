@@ -79,7 +79,12 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             .load::<Categories>(&_connection)
             .expect("E");
         let _category = _categorys.into_iter().nth(0).unwrap();
-        let _cats = Categories::get_categories_for_types(1);
+        let _cats: Vec<Cat>;
+        let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
+        let _cats = match cats_res {
+            Ok(_ok) => _ok,
+            Err(_error) => Vec::new(),
+        };
 
         let _tags = _item.get_tags();
         let (prev, next) = _category.get_featured_items(_item.types, _item.id);
@@ -269,9 +274,14 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         use crate::schema::tags_items::dsl::tags_items;
 
         let page = get_page(&req);
-        let _cats = Categories::get_categories_for_types(1);
 
         let mut stack = Vec::new();
+        let _cats: Vec<Cat>;
+        let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
+        let _cats = match cats_res {
+            Ok(_ok) => _ok,
+            Err(_error) => Vec::new(),
+        };
         let object_list: Vec<Blog>;
         let next_page_number: i32;
 
@@ -470,7 +480,12 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
             .load::<SmallTag>(&_connection)
             .expect("could not load tags");
 
-        let _cats = Categories::get_categories_for_types(1);
+        let _cats: Vec<Cat>;
+        let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
+        let _cats = match cats_res {
+            Ok(_ok) => _ok,
+            Err(_error) => Vec::new(),
+        };
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);

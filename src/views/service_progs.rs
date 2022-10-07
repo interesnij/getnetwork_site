@@ -79,7 +79,12 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             .load::<Categories>(&_connection)
             .expect("E");
         let _category = _categorys.into_iter().nth(0).unwrap();
-        let _cats = Categories::get_categories_for_types(2);
+        let _cats: Vec<Cat>;
+        let cats_res = block(move || Categories::get_categories_for_types(2)).await?;
+        let _cats = match cats_res {
+            Ok(_ok) => _ok,
+            Err(_error) => Vec::new(),
+        };
 
         let _tags = _item.get_tags();
 
@@ -271,7 +276,14 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
         use crate::models::Service;
 
         let page = get_page(&req);
-        let _cats = Categories::get_categories_for_types(2);
+        let object_list: Vec<Service>;
+        let next_page_number: i32;
+        let _cats: Vec<Cat>;
+        let cats_res = block(move || Categories::get_categories_for_types(2)).await?;
+        let _cats = match cats_res {
+            Ok(_ok) => _ok,
+            Err(_error) => Vec::new(),
+        };
 
         let mut stack = Vec::new();
         let _tag_items = tags_items
@@ -292,7 +304,11 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let (object_list, next_page_number) = Categories::get_services_list(_category.id, page, 20, _request_user.is_superuser());
+            let _res = block(move || Categories::get_services_list(_category.id, page, 20, _request_user.perm == 60)).await?;
+            let _dict = match _res {
+                Ok(_ok) => {object_list = _ok.0; next_page_number = _ok.1},
+                Err(_error) => {object_list = Vec::new(); next_page_number = 0},
+            };
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/category.stpl")]
@@ -343,7 +359,11 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             }
         }
         else {
-            let (object_list, next_page_number) = Categories::get_services_list(_category.id, page, 20, false);
+            let _res = block(move || Categories::get_services_list(_category.id, page, 20, false)).await?;
+            let _dict = match _res {
+                Ok(_ok) => {object_list = _ok.0; next_page_number = _ok.1},
+                Err(_error) => {object_list = Vec::new(); next_page_number = 0},
+            };
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -459,8 +479,12 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
             .select((schema::tags::name, schema::tags::count))
             .load::<SmallTag>(&_connection)
             .expect("could not load tags");
-
-        let _cats = Categories::get_categories_for_types(2);
+        let _cats: Vec<Cat>;
+        let cats_res = block(move || Categories::get_categories_for_types(2)).await?;
+        let _cats = match cats_res {
+            Ok(_ok) => _ok,
+            Err(_error) => Vec::new(),
+        };
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);

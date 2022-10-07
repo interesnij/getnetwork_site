@@ -224,7 +224,7 @@ impl Categories {
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_blogs(cat_id, limit.into(), 0, is_admin)?;
+            object_list = Categories::get_blogs(cat_id, limit.into(), 0, is_admin);
         }
         if Categories::get_blogs(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
             next_page_number = page + 1;
@@ -292,7 +292,7 @@ impl Categories {
         page:     i32,
         limit:    i32,
         is_admin: bool
-    ) -> (Vec<Service>, i32) {
+    ) -> Result<(Vec<Service>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Service>;
@@ -300,32 +300,31 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_services(cat_id, limit.into(), step.into(), is_admin);
+            object_list = Categories::get_services(cat_id, limit.into(), step.into(), is_admin)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_services(cat_id, limit.into(), 0, is_admin);
+            object_list = Categories::get_services(cat_id, limit.into(), 0, is_admin)?;
         }
-        if Categories::get_services(cat_id, 1, have_next.into(), is_admin).len() > 0 {
+        if Categories::get_services(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
             next_page_number = page + 1;
         }
 
-        return (object_list, next_page_number);
+        return Ok((object_list, next_page_number));
     }
     pub fn get_services (
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
         is_admin: bool
-    ) -> Vec<Service> {
-        // 0 object.slug, 1 object.image, 2 object.is_active
-        // 3 object.title, 4 object.get_100_description()
+    ) -> Result<Vec<Service>, Error> {
         use crate::schema::{
             items::dsl::items,
             category::dsl::category,
         };
 
         let _connection = establish_connection();
+        let _items: Service;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(2))
@@ -333,7 +332,7 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             return items
+             _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .order(schema::items::created.desc())
                 .limit(limit)
@@ -348,7 +347,7 @@ impl Categories {
                 .load::<Service>(&_connection)
                 .expect("E.");
         } else {
-            return items
+            _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .filter(schema::items::is_active.eq(true))
                 .order(schema::items::created.desc())
@@ -364,6 +363,7 @@ impl Categories {
                 .load::<Service>(&_connection)
                 .expect("E.");
         }
+        return Ok(_items);
     }
 
     pub fn get_stores_list (
@@ -371,7 +371,7 @@ impl Categories {
         page:     i32,
         limit:    i32,
         is_admin: bool
-    ) -> (Vec<Store>, i32) {
+    ) -> Result<(Vec<Store>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Store>;
@@ -379,33 +379,31 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_stores(cat_id, limit.into(), step.into(), is_admin);
+            object_list = Categories::get_stores(cat_id, limit.into(), step.into(), is_admin)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_stores(cat_id, limit.into(), 0, is_admin);
+            object_list = Categories::get_stores(cat_id, limit.into(), 0, is_admin)?;
         }
-        if Categories::get_stores(cat_id, 1, have_next.into(), is_admin).len() > 0 {
+        if Categories::get_stores(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
             next_page_number = page + 1;
         }
 
-        return (object_list, next_page_number);
+        return Ok((object_list, next_page_number));
     }
     pub fn get_stores (
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
         is_admin: bool
-    ) -> Vec<Store> {
-        // 0 object.slug, 1 object.image, 2 object.is_active
-        // 3 object.title, 4 object.get_100_description()
-        // 5 object.price, 6 object.price_acc
+    ) -> Result<Vec<Store>, Error> {
         use crate::schema::{
             items::dsl::items,
             category::dsl::category,
         };
 
         let _connection = establish_connection();
+        let _items: Store;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(3))
@@ -413,7 +411,7 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             return items
+             _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .order(schema::items::created.desc())
                 .limit(limit)
@@ -430,7 +428,7 @@ impl Categories {
                 .load::<Store>(&_connection)
                 .expect("E.");
         } else {
-            return items
+            _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .filter(schema::items::is_active.eq(true))
                 .order(schema::items::created.desc())
@@ -448,6 +446,7 @@ impl Categories {
                 .load::<Store>(&_connection)
                 .expect("E.");
         }
+        return Ok(_items);
     }
 
     pub fn get_wikis_list (
@@ -455,7 +454,7 @@ impl Categories {
         page:     i32,
         limit:    i32,
         is_admin: bool
-    ) -> (Vec<Wiki>, i32) {
+    ) -> Result<(Vec<Wiki>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Wiki>;
@@ -463,33 +462,31 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_wikis(cat_id, limit.into(), step.into(), is_admin);
+            object_list = Categories::get_wikis(cat_id, limit.into(), step.into(), is_admin)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_wikis(cat_id, limit.into(), 0, is_admin);
+            object_list = Categories::get_wikis(cat_id, limit.into(), 0, is_admin)?;
         }
-        if Categories::get_wikis(cat_id, 1, have_next.into(), is_admin).len() > 0 {
+        if Categories::get_wikis(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
             next_page_number = page + 1;
         }
 
-        return (object_list, next_page_number);
+        return Ok((object_list, next_page_number));
     }
     pub fn get_wikis (
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
         is_admin: bool
-    ) -> Vec<Wiki> {
-        // 0 object.slug, 1 object.image, 2 object.is_active
-        // 3 object.title, 4 object.get_100_description()
-        // 5 object.created
+    ) -> Result<Vec<Wiki>, Error> {
         use crate::schema::{
             items::dsl::items,
             category::dsl::category,
         };
 
         let _connection = establish_connection();
+        let _items: Wiki;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(4))
@@ -497,7 +494,7 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             return items
+             _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .order(schema::items::created.desc())
                 .limit(limit)
@@ -513,7 +510,7 @@ impl Categories {
                 .load::<Wiki>(&_connection)
                 .expect("E.");
         } else {
-            return items
+            _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .filter(schema::items::is_active.eq(true))
                 .order(schema::items::created.desc())
@@ -530,6 +527,7 @@ impl Categories {
                 .load::<Wiki>(&_connection)
                 .expect("E.");
         }
+        return Ok(_items);
     }
 
     pub fn get_works_list (
@@ -537,7 +535,7 @@ impl Categories {
         page:     i32,
         limit:    i32,
         is_admin: bool
-    ) -> (Vec<Work>, i32) {
+    ) -> Result<(Vec<Work>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Work>;
@@ -545,32 +543,31 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_works(cat_id, limit.into(), step.into(), is_admin);
+            object_list = Categories::get_works(cat_id, limit.into(), step.into(), is_admin)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_works(cat_id, limit.into(), 0, is_admin);
+            object_list = Categories::get_works(cat_id, limit.into(), 0, is_admin)?;
         }
-        if Categories::get_works(cat_id, 1, have_next.into(), is_admin).len() > 0 {
+        if Categories::get_works(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
             next_page_number = page + 1;
         }
 
-        return (object_list, next_page_number);
+        return Ok((object_list, next_page_number));
     }
     pub fn get_works (
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
         is_admin: bool
-    ) -> Vec<Work> {
-        // 0 object.slug, 1 object.image, 2 object.is_active
-        // 3 object.title, 4 object.get_100_description()
+    ) -> Result<Vec<Work>, Error> {
         use crate::schema::{
             items::dsl::items,
             category::dsl::category,
         };
 
         let _connection = establish_connection();
+        let items: Work;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(5))
@@ -578,7 +575,7 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             return items
+             _items =  items
                 .filter(schema::items::id.eq_any(ids))
                 .order(schema::items::created.desc())
                 .limit(limit)
@@ -593,7 +590,7 @@ impl Categories {
                 .load::<Work>(&_connection)
                 .expect("E.");
         } else {
-            return items
+            _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .filter(schema::items::is_active.eq(true))
                 .order(schema::items::created.desc())
@@ -609,6 +606,7 @@ impl Categories {
                 .load::<Work>(&_connection)
                 .expect("E.");
         }
+        return Ok(_items);
     }
 
     pub fn get_helps_list (
@@ -616,7 +614,7 @@ impl Categories {
         page:     i32,
         limit:    i32,
         is_admin: bool
-    ) -> (Vec<Help>, i32) {
+    ) -> Result<(Vec<Help>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
         let object_list: Vec<Help>;
@@ -624,32 +622,31 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_helps(cat_id, limit.into(), step.into(), is_admin);
+            object_list = Categories::get_helps(cat_id, limit.into(), step.into(), is_admin)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_helps(cat_id, limit.into(), 0, is_admin);
+            object_list = Categories::get_helps(cat_id, limit.into(), 0, is_admin)?;
         }
-        if Categories::get_helps(cat_id, 1, have_next.into(), is_admin).len() > 0 {
+        if Categories::get_helps(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
             next_page_number = page + 1;
         }
 
-        return (object_list, next_page_number);
+        return Ok((object_list, next_page_number));
     }
     pub fn get_helps (
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
         is_admin: bool
-    ) -> Vec<Help> {
-        // 0 object.slug, 1 object.is_active
-        // 2 object.title 3 object.content
+    ) -> Result<Vec<Help>, Error> {
         use crate::schema::{
             items::dsl::items,
             category::dsl::category,
         };
 
         let _connection = establish_connection();
+        let _items: Help;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(6))
@@ -657,7 +654,7 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             return items
+             _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .order(schema::items::position.asc())
                 .limit(limit)
@@ -671,7 +668,7 @@ impl Categories {
                 .load::<Help>(&_connection)
                 .expect("E.");
         } else {
-            return items
+            _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .filter(schema::items::is_active.eq(true))
                 .order(schema::items::created.desc())
@@ -686,6 +683,7 @@ impl Categories {
                 .load::<Help>(&_connection)
                 .expect("E.");
         }
+        return Ok(_items);
     }
 
     pub fn get_image(&self) -> String {
@@ -696,10 +694,10 @@ impl Categories {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_categories_for_types(types: i16) -> Vec<Cat> {
+    pub fn get_categories_for_types(types: i16) -> Result<Vec<Cat>, Error> {
         use crate::schema::categories::dsl::categories;
         let _connection = establish_connection();
-        return categories
+        let cats = categories
             .filter(schema::categories::types.eq(types))
             .select((
                 schema::categories::name,
@@ -710,6 +708,7 @@ impl Categories {
             ))
             .load::<Cat>(&_connection)
             .expect("E");
+        return Ok(cats);
     }
 }
 

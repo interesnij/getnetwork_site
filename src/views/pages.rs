@@ -285,8 +285,12 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
                 .get_result::<StatPage>(&_connection)
                 .expect("Error.");
         }
-
-        let _help_cats = Categories::get_categories_for_types(6);
+        let _help_cats: Vec<Cat>;
+        let cats_res = block(move || Categories::get_categories_for_types(6)).await?;
+        let _help_cats = match cats_res {
+            Ok(_ok) => _ok,
+            Err(_error) => Vec::new(),
+        };
 
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -353,8 +357,12 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
                 .get_result::<StatPage>(&_connection)
                 .expect("Error.");
         }
-
-        let _help_cats = Categories::get_categories_for_types(6);
+        let _help_cats: Vec<Cat>;
+        let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
+        let _help_cats = match cats_res {
+            Ok(_ok) => _ok,
+            Err(_error) => Vec::new(),
+        };
 
         if is_desctop {
             #[derive(TemplateOnce)]
@@ -937,7 +945,12 @@ pub async fn unical_object_form_page(session: Session, _id: web::Path<i16>) -> a
             if vec![2,3,5].iter().any(|i| i==&types) {
                 biznes_mode = true;
             }
-            let _cats = Categories::get_categories_for_types(types);
+            let _cats: Vec<Cat>;
+            let cats_res = block(move || Categories::get_categories_for_types(types)).await?;
+            let _cats = match cats_res {
+                Ok(_ok) => _ok,
+                Err(_error) => Vec::new(),
+            };
 
             #[derive(TemplateOnce)]
             #[template(path = "desctop/load/unical_object_form.stpl")]

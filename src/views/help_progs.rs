@@ -86,7 +86,14 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
         use crate::models::Help;
 
         let page = get_page(&req);
-        let _cats = Categories::get_categories_for_types(6);
+        let object_list: Vec<Help>;
+        let next_page_number: i32;
+        let _cats: Vec<Cat>;
+        let cats_res = block(move || Categories::get_categories_for_types(6)).await?;
+        let _cats = match cats_res {
+            Ok(_ok) => _ok,
+            Err(_error) => Vec::new(),
+        };
 
         let mut stack = Vec::new();
         let _tag_items = tags_items
@@ -107,7 +114,11 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let (object_list, next_page_number) = Categories::get_helps_list(_category.id, page, 20, _request_user.is_superuser());
+            let _res = block(move || Categories::get_helps_list(_category.id, page, 20, _request_user.perm == 60)).await?;
+            let _dict = match _res {
+                Ok(_ok) => {object_list = _ok.0; next_page_number = _ok.1},
+                Err(_error) => {object_list = Vec::new(); next_page_number = 0},
+            };
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/help/category.stpl")]
@@ -160,7 +171,11 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
             }
         }
         else {
-            let (object_list, next_page_number) = Categories::get_helps_list(_category.id, page, 20, false);
+            let _res = block(move || Categories::get_helps_list(_category.id, page, 20, false)).await?;
+            let _dict = match _res {
+                Ok(_ok) => {object_list = _ok.0; next_page_number = _ok.1},
+                Err(_error) => {object_list = Vec::new(); next_page_number = 0},
+            };
 
             if is_desctop {
                 #[derive(TemplateOnce)]

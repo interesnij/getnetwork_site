@@ -126,7 +126,7 @@
             <div class="section-text">
             <%
               use crate::models::Categories;
-              let get_6_wikis = Categories::get_wikis(category.id, 3, 0, false);
+              let get_6_wikis = Categories::get_wikis(category.id, 3, 0, false).expect("E");
             %>
                 <% for object in get_6_wikis.iter() { %>
                 <% include!("../generic/wiki.stpl"); %>
