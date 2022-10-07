@@ -1042,12 +1042,12 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
             let _categories: Vec<Categories>;
             let _tags: Vec<Tag>;
 
-            let cats_res = block(move || _item.get_categories_obj()).await;
+            let cats_res = block(move || _item.get_categories_obj()?).await;
             _categories = match cats_res {
                 Ok(_ok) => _ok,
                 Err(_error) => Vec::new(),
             };
-            let tags_res = block(move || _item.get_tags_obj()).await;
+            let tags_res = block(move || _item.get_tags_obj()?).await;
             _tags = match tags_res {
                 Ok(_list) => _list,
                 Err(_error) => Vec::new(),
