@@ -89,7 +89,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
         let title = _item.title.clone();
         let tags_res = block(move || &_item.get_tags()).await?;
         _tags = match tags_res {
-            Ok(_list) => _list,
+            Ok(_list) => _list.to_vec(),
             Err(_error) => Vec::new(),
         };
 
