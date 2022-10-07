@@ -835,6 +835,7 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
                 )
                 .execute(&_connection)
                 .expect("E");
+            diesel::delete(&_item).execute(&_connection).expect("E");
 
             let _categories: Vec<Categories>;
             let _tags: Vec<Tag>;
@@ -862,7 +863,7 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
                 .get_result::<Tag>(&_connection)
                 .expect("Error.");
             };
-            diesel::delete(&_item).execute(&_connection).expect("E");
+
         }
     }
     HttpResponse::Ok()
