@@ -29,22 +29,22 @@
                                 <strong>Дата:</strong>
                                 <% include!("../../block/object_admin_panel.stpl"); %>
                             </p>
-                                <p>
-                                    <strong>Категории:</strong>
-                                    <% let _work_categories = object.get_categories(); %>
-                                    <% for (i, category) in _work_categories.iter().enumerate() { %>
-                                      <a href="/works/<%= category.slug %>/" class="ajax"><%= category.name %> - <%= category.count %></a><% if i != _work_categories.len() { %>, <% } %>
-                                    <% } %>
-                                </p>
-
-                                <% if all_tags.len() > 0 { %>
-                                <p>
-                                    <strong>Теги:</strong>
-                                    <% for (i, tag) in all_tags.iter().enumerate() { %>
-                                      <a class="ajax border" href="/tag/<%= tag.name %>/"><%= tag.name %> (<%= tag.count %>)</a><% if i != all_tags.len() { %>, <% } %>
-                                    <% } %>
-                                </p>
+                            <p>
+                                <strong>Категории:</strong>
+                                <% let _work_categories = object.get_categories().expect("E"); %>
+                                <% for (i, category) in _work_categories.iter().enumerate() { %>
+                                  <a href="/works/<%= category.slug %>/" class="ajax"><%= category.name %> - <%= category.count %></a><% if i != _work_categories.len() { %>, <% } %>
                                 <% } %>
+                            </p>
+                            <% let _work_tags = object.get_tags().expect("E"); %>
+                            <% if _work_tags.len() > 0 { %>
+                            <p>
+                                <strong>Теги:</strong>
+                                <% for (i, tag) in _work_tags.iter().enumerate() { %>
+                                  <a class="ajax border" href="/tag/<%= tag.name %>/"><%= tag.name %> (<%= tag.count %>)</a><% if i != _work_tags.len() { %>, <% } %>
+                                <% } %>
+                            </p>
+                            <% } %>
                                 <% if object.link.is_some() { %>
                                   <% let work_link = object.link.as_deref().unwrap(); %>
                                   <p>
