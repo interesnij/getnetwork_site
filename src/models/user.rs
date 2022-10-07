@@ -253,7 +253,8 @@ impl CookieStat {
             .order(schema::cookie_stats::created.desc())
             .limit(limit)
             .offset(offset)
-            .load::<CookieStat>(&_connection)?;
+            .load::<CookieStat>(&_connection)
+            .expect("E");
         Ok(list)
     }
     pub fn create(user_id: i32, page: i16, link: String,

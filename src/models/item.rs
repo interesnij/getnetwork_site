@@ -140,7 +140,7 @@ pub struct Categories {
 }
 
 impl Categories {
-    pub fn get_featured_items(&self, types: i16, id: i32) -> (Option<FeaturedItem>, Option<FeaturedItem>) {
+    pub fn get_featured_items (&self, types: i16, id: i32) -> (Option<FeaturedItem>, Option<FeaturedItem>) {
         use crate::schema::{
             category::dsl::category,
             items::dsl::items,
