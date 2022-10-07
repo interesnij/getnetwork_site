@@ -52,6 +52,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
         .load::<Item>(&_connection)
         .expect("E");
     let _item = _items.into_iter().nth(0).unwrap();
+    let title = _item.title.clone();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -86,7 +87,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
-        let title = _item.title.clone();
+
         let is_active = _item.is_active;
         let tags_res = block(move || _item.get_tags()).await?;
         _tags = match tags_res {
