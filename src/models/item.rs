@@ -229,8 +229,8 @@ impl Categories {
         if Categories::get_blogs(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
             next_page_number = page + 1;
         }
-
-        return Ok((object_list, next_page_number));
+        let _tuple = (object_list, next_page_number);
+        Ok(_tuple)
     }
     pub fn get_blogs (
         cat_id:   i32,
@@ -238,9 +238,6 @@ impl Categories {
         offset:   i64,
         is_admin: bool
     ) -> Result<Vec<Blog>, Error> {
-        // 0 object.slug, 1 object.image, 2 object.is_active
-        // 3 object.title, 4 object.created,
-        // 5 object.get_100_description()
         use crate::schema::{
             items::dsl::items,
             category::dsl::category,
