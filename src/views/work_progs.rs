@@ -86,7 +86,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
-
+        let title = _item.title;
         let tags_res = block(move || _item.get_tags()).await?;
         _tags = match tags_res {
             Ok(_list) => _list,
@@ -103,8 +103,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                     is_ajax,
                     _request_user,
                     is_desctop,
-                    _item.title.clone() + &" | Работа".to_string(),
-                    _item.title.clone() + &" | Работа: вебсервисы.рф".to_string(),
+                    title.clone() + &" | Работа".to_string(),
+                    title.clone() + &" | Работа: вебсервисы.рф".to_string(),
                     "/work/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
                 ).await
@@ -170,8 +170,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                 get_anon_private_page (
                     is_ajax,
                     is_desctop,
-                    _item.title.clone() + &" | Работа".to_string(),
-                    _item.title.clone() + &" | Работа: вебсервисы.рф".to_string(),
+                    title.clone() + &" | Работа".to_string(),
+                    title.clone() + &" | Работа: вебсервисы.рф".to_string(),
                     "/work/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
                 ).await
