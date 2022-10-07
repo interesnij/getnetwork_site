@@ -21,7 +21,7 @@
         <% for category in cats.iter() { %>
           <%
             use crate::models::Categories;
-            let get_6_blogs = Categories::get_blogs(category.id, 3, 0, request_user.is_superuser())?;
+            let get_6_blogs = Categories::get_blogs(category.id, 3, 0, request_user.is_superuser()).expect("E");
           %>
 
         <h5 class="font-alt mb-10">
