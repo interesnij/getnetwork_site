@@ -1061,7 +1061,11 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
             let _categories: Vec<Categories>;
             let _tags: Vec<Tag>;
 
-            let cats_res = block(move || _item.get_categories_obj().expect("E")).await;
+            let _categories_0 = _item.get_categories_obj().expect("E");
+            let _tags_0 = _item.get_tags_obj().expect("E");
+            let cats_res = block(move || _categories_0).await;
+            let tags_res = block(move || _tags_0).await;
+
             _categories = match cats_res {
                 Ok(_ok) => _ok,
                 Err(_error) => Vec::new(),
@@ -1072,7 +1076,6 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
                     .get_result::<Categories>(&_connection)
                     .expect("Error.");
             }
-            let tags_res = block(move || _item.get_tags_obj().expect("E")).await;
             _tags = match tags_res {
                 Ok(_list) => _list,
                 Err(_error) => Vec::new(),
