@@ -1009,7 +1009,10 @@ pub async fn publish_item(session: Session, _id: web::Path<i32>) -> impl Respond
             let _categories: Vec<Categories>;
             let _tags: Vec<Tag>;
 
-            let (cats_res, tags_res) = block(move || _item.get_categories_obj().expect("E"), _item.get_tags_obj().expect("E")).await;
+            let tags_o = _item.get_tags_obj().expect("E");
+            let categories_o = _item.get_categories_obj().expect("E");
+            let cats_res = block(move || categories_o).await;
+            let tags_res = block(move || tags_o).await;
             _categories = match cats_res {
                 Ok(_ok) => _ok,
                 Err(_error) => Vec::new(),
