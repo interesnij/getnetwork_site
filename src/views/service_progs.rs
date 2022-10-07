@@ -86,7 +86,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
-        let tags_res = block(move || _item.get_tags()).await?;
+        let tags_res = block(move || Categories::get_tags(2)).await?;
         _tags = match tags_res {
             Ok(_list) => _list,
             Err(_error) => Vec::new(),

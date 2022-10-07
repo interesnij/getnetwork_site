@@ -87,7 +87,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             Err(_error) => Vec::new(),
         };
 
-        let tags_res = block(move || _item.get_tags()).await?;
+        let tags_res = block(move || Categories::get_tags(4)).await?;
         _tags = match tags_res {
             Ok(_list) => _list,
             Err(_error) => Vec::new(),
