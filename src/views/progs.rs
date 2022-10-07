@@ -840,12 +840,12 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
             let _categories: Vec<Categories>;
             let _tags: Vec<Tag>;
 
-            let cats_res = block(move || _item.get_categories_obj().expect("E")).await;
+            let cats_res = _item.get_categories_obj().expect("E");
             _categories = match cats_res {
                 Ok(_ok) => _ok,
                 Err(_error) => Vec::new(),
             };
-            let tags_res = block(move || _item.get_tags_obj().expect("E")).await;
+            let tags_res = _item.get_tags_obj().expect("E");
             _tags = match tags_res {
                 Ok(_list) => _list,
                 Err(_error) => Vec::new(),
