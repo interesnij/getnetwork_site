@@ -82,35 +82,24 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
     }
     else {
         use crate::utils::get_page;
-        use crate::schema::tags_items::dsl::tags_items;
         use crate::models::Help;
 
         let page = get_page(&req);
         let object_list: Vec<Help>;
         let next_page_number: i32;
         let _cats: Vec<Cat>;
+        let _tags: Vec<SmallTag>;
         let cats_res = block(move || Categories::get_categories_for_types(6)).await?;
-        let _cats = match cats_res {
+        _cats = match cats_res {
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
 
-        let mut stack = Vec::new();
-        let _tag_items = tags_items
-            .filter(schema::tags_items::types.eq(6))
-            .select(schema::tags_items::tag_id)
-            .load::<i32>(&_connection)
-            .expect("E");
-        for _tag_item in _tag_items.iter() {
-            if !stack.iter().any(|&i| i==_tag_item) {
-                stack.push(_tag_item);
-            }
+        let tags_res = block(move || Categories::get_tags(6)).await?;
+        _tags = match tags_res {
+            Ok(_list) => _list,
+            Err(_error) => Vec::new(),
         };
-        let _tags = schema::tags::table
-            .filter(schema::tags::id.eq_any(stack))
-            .select((schema::tags::name, schema::tags::count))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);

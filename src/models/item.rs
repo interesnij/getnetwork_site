@@ -140,7 +140,27 @@ pub struct Categories {
 }
 
 impl Categories {
-    pub fn get_featured_items (&self, types: i16, id: i32) -> (Option<FeaturedItem>, Option<FeaturedItem>) {
+    pub fn get_tags(&self, types: i16) -> Result<Vec<SmallTag>, Error> {
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+        };
+        let _connection = establish_connection();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::types.eq(self.types))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
+            .expect("E");
+        return Ok(_tags);
+    }
+    pub fn get_featured_items(&self, types: i16, id: i32) -> (Option<FeaturedItem>, Option<FeaturedItem>) {
         use crate::schema::{
             category::dsl::category,
             items::dsl::items,
@@ -847,12 +867,11 @@ impl Item {
         }
     }
 
-    pub fn get_categories(&self) -> Vec<SmallCat> {
+    pub fn get_categories(&self) -> Result<Vec<SmallCat>, Error> {
         use crate::schema::{
             category::dsl::category,
             categories::dsl::categories,
         };
-        // name, slug, count
         let _connection = establish_connection();
         let ids = category
             .filter(schema::category::item_id.eq(self.id))
@@ -861,7 +880,7 @@ impl Item {
             .load::<i32>(&_connection)
             .expect("E");
 
-        return categories
+        let _categories = categories
             .filter(schema::categories::id.eq_any(ids))
             .select((
                 schema::categories::name,
@@ -870,8 +889,9 @@ impl Item {
             ))
             .load::<SmallCat>(&_connection)
             .expect("E");
+        return Ok(_categories);
     }
-    pub fn get_categories_obj(&self) -> Vec<Categories> {
+    pub fn get_categories_obj(&self) -> Result<Vec<Categories>, Error> {
         use crate::schema::{
             category::dsl::category,
             categories::dsl::categories,
@@ -885,13 +905,14 @@ impl Item {
             .load::<i32>(&_connection)
             .expect("E");
 
-        return categories
+        let _categories = categories
             .filter(schema::categories::id.eq_any(ids))
             .load::<Categories>(&_connection)
             .expect("E");
+        return Ok(_categories);
     }
 
-    pub fn get_tags(&self) -> Vec<SmallTag> {
+    pub fn get_tags(&self) -> Result<Vec<SmallTag>, Error> {
         use crate::schema::{
             tags_items::dsl::tags_items,
             tags::dsl::tags,
@@ -904,13 +925,14 @@ impl Item {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return tags
+        let _tags = tags
             .filter(schema::tags::id.eq_any(_tag_items))
             .select((schema::tags::name, schema::tags::count))
             .load::<SmallTag>(&_connection)
             .expect("E");
+        return Ok(_tags);
     }
-    pub fn get_tags_obj(&self) -> Vec<Tag> {
+    pub fn get_tags_obj(&self) -> Result<Vec<Tag>, Error> {
         use crate::schema::{
             tags_items::dsl::tags_items,
             tags::dsl::tags,
@@ -923,10 +945,11 @@ impl Item {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return tags
+        let _tags = tags
             .filter(schema::tags::id.eq_any(_tag_items))
             .load::<Tag>(&_connection)
             .expect("E");
+        return Ok(_tags);
     }
 
     pub fn get_blogs (

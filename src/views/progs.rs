@@ -500,8 +500,20 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
             let _item = _items.into_iter().nth(0).unwrap();
 
             if _item.is_active {
-                let _categories = _item.get_categories_obj();
-                let _tags = _item.get_tags_obj();
+                let _categories: Vec<Categories>;
+                let _tags: Vec<Tag>;
+
+                let cats_res = block(move || _item.get_categories_obj()).await?;
+                _categories = match cats_res {
+                    Ok(_ok) => _ok,
+                    Err(_error) => Vec::new(),
+                };
+                let tags_res = block(move || _item.get_tags_obj()).await?;
+                _tags = match tags_res {
+                    Ok(_list) => _list,
+                    Err(_error) => Vec::new(),
+                };
+
                 for _category in _categories.iter() {
                     diesel::update(_category)
                         .set(schema::categories::count.eq(_category.count - 1))
@@ -791,8 +803,21 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
                 .expect("E");
 
             let _item = _items.into_iter().nth(0).unwrap();
-            let _categories = _item.get_categories_obj();
-            let _tags = _item.get_tags_obj();
+
+            let _categories: Vec<Categories>;
+            let _tags: Vec<Tag>;
+
+            let cats_res = block(move || _item.get_categories_obj()).await?;
+            _categories = match cats_res {
+                Ok(_ok) => _ok,
+                Err(_error) => Vec::new(),
+            };
+            let tags_res = block(move || _item.get_tags_obj()).await?;
+            _tags = match tags_res {
+                Ok(_list) => _list,
+                Err(_error) => Vec::new(),
+            };
+
             for _category in _categories.iter() {
                 diesel::update(_category)
                 .set(schema::categories::count.eq(_category.count - 1))
@@ -976,19 +1001,18 @@ pub async fn publish_item(session: Session, _id: web::Path<i32>) -> impl Respond
                 .nth(0)
                 .unwrap();
 
-            let _categories = _item.get_categories_obj();
-            for _category in _categories.iter() {
-                diesel::update(_category)
-                    .set(schema::categories::count.eq(_category.count + 1))
-                    .get_result::<Categories>(&_connection)
-                    .expect("Error.");
+            let _categories: Vec<Categories>;
+            let _tags: Vec<Tag>;
+
+            let cats_res = block(move || _item.get_categories_obj()).await?;
+            _categories = match cats_res {
+                Ok(_ok) => _ok,
+                Err(_error) => Vec::new(),
             };
-            let _tag_list = _item.get_tags_obj();
-            for _tag in _tag_list.iter() {
-                diesel::update(_tag)
-                    .set(schema::tags::count.eq(_tag.count + 1))
-                    .get_result::<Tag>(&_connection)
-                    .expect("Error.");
+            let tags_res = block(move || _item.get_tags_obj()).await?;
+            _tags = match tags_res {
+                Ok(_list) => _list,
+                Err(_error) => Vec::new(),
             };
 
             diesel::update(&_item)
@@ -1013,35 +1037,20 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
                 .expect("E")
                 .into_iter()
                 .nth(0)
-            .unwrap();
+                .unwrap();
 
-            let _categories = _item.get_categories_obj();
-            for _category in _categories.iter() {
-                if _category.count < 0 {
-                    diesel::update(_category)
-                        .set(schema::categories::count.eq(0))
-                        .get_result::<Categories>(&_connection)
-                        .expect("Error.");
-                } else {
-                    diesel::update(_category)
-                        .set(schema::categories::count.eq(_category.count - 1))
-                        .get_result::<Categories>(&_connection)
-                        .expect("Error.");
-                }
+            let _categories: Vec<Categories>;
+            let _tags: Vec<Tag>;
+
+            let cats_res = block(move || _item.get_categories_obj()).await?;
+            _categories = match cats_res {
+                Ok(_ok) => _ok,
+                Err(_error) => Vec::new(),
             };
-            let _tag_list = _item.get_tags_obj();
-            for _tag in _tag_list.iter() {
-                if _tag.count < 0 {
-                    diesel::update(_tag)
-                        .set(schema::tags::count.eq(0))
-                        .get_result::<Tag>(&_connection)
-                        .expect("Error.");
-                } else {
-                    diesel::update(_tag)
-                        .set(schema::tags::count.eq(_tag.count - 1))
-                        .get_result::<Tag>(&_connection)
-                        .expect("Error.");
-                }
+            let tags_res = block(move || _item.get_tags_obj()).await?;
+            _tags = match tags_res {
+                Ok(_list) => _list,
+                Err(_error) => Vec::new(),
             };
 
             diesel::update(&_item)

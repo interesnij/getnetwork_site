@@ -63,15 +63,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
         ).await
     }
     else {
-        use schema::{
-            categories::dsl::categories,
-            tech_categories::dsl::tech_categories,
-        };
-        use crate::models::{TechCategories, FeaturedItem};
-
-        let _tech_categories = tech_categories
-            .load::<TechCategories>(&_connection)
-            .expect("E");
+        use schema::categories::dsl::categories;
+        use crate::models::FeaturedItem;
 
         let _categorys = categories
             .filter(schema::categories::slug.eq(&_cat_id))
@@ -79,14 +72,20 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             .load::<Categories>(&_connection)
             .expect("E");
         let _category = _categorys.into_iter().nth(0).unwrap();
+
         let _cats: Vec<Cat>;
+        let _tags: Vec<SmallTag>;
         let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
-        let _cats = match cats_res {
+        _cats = match cats_res {
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
+        let tags_res = block(move || _item.get_tags()).await?;
+        _tags = match tags_res {
+            Ok(_list) => _list,
+            Err(_error) => Vec::new(),
+        };
 
-        let _tags = _item.get_tags();
         let (prev, next) = _category.get_featured_items(_item.types, _item.id);
 
         if is_signed_in(&session) {
@@ -271,35 +270,25 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
     }
     else {
         use crate::utils::get_page;
-        use crate::schema::tags_items::dsl::tags_items;
 
         let page = get_page(&req);
 
-        let mut stack = Vec::new();
         let _cats: Vec<Cat>;
+        let _tags: Vec<SmallTag>;
+
         let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
-        let _cats = match cats_res {
+        _cats = match cats_res {
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
+        let tags_res = block(move || Categories::get_tags(1)).await?;
+        _tags = match tags_res {
+            Ok(_list) => _list,
+            Err(_error) => Vec::new(),
+        };
+
         let object_list: Vec<Blog>;
         let next_page_number: i32;
-
-        let _tag_items = tags_items
-            .filter(schema::tags_items::types.eq(1))
-            .select(schema::tags_items::tag_id)
-            .load::<i32>(&_connection)
-            .expect("E");
-        for _tag_item in _tag_items.iter() {
-            if !stack.iter().any(|&i| i==_tag_item) {
-                stack.push(_tag_item);
-            }
-        };
-        let _tags = schema::tags::table
-            .filter(schema::tags::id.eq_any(stack))
-            .select((schema::tags::name, schema::tags::count))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -430,11 +419,7 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
         ).await
     }
     else {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-            stat_pages::dsl::stat_pages,
-        };
+        use crate::schema::stat_pages::dsl::stat_pages;
         use crate::models::StatPage;
 
         let _connection = establish_connection();
@@ -462,28 +447,18 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
                 .expect("Error.");
         }
 
-        let mut stack = Vec::new();
-        let _tag_items = tags_items
-            .filter(schema::tags_items::types.eq(1))
-            .select(schema::tags_items::tag_id)
-            .load::<i32>(&_connection)
-            .expect("E");
-
-        for _tag_item in _tag_items.iter() {
-            if !stack.iter().any(|&i| i==_tag_item) {
-                stack.push(_tag_item);
-            }
-        };
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(stack))
-            .select((schema::tags::name, schema::tags::count))
-            .load::<SmallTag>(&_connection)
-            .expect("could not load tags");
-
         let _cats: Vec<Cat>;
+        let _tags: Vec<SmallTag>;
+
         let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
-        let _cats = match cats_res {
+        _cats = match cats_res {
             Ok(_ok) => _ok,
+            Err(_error) => Vec::new(),
+        };
+
+        let tags_res = block(move || Categories::get_tags(1)).await?;
+        _tags = match tags_res {
+            Ok(_list) => _list,
             Err(_error) => Vec::new(),
         };
 
