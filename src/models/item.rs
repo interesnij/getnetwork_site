@@ -324,7 +324,7 @@ impl Categories {
         };
 
         let _connection = establish_connection();
-        let _items: Service;
+        let _items: Vec<Service>;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(2))
@@ -403,7 +403,7 @@ impl Categories {
         };
 
         let _connection = establish_connection();
-        let _items: Store;
+        let _items: Vec<Store>;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(3))
@@ -486,7 +486,7 @@ impl Categories {
         };
 
         let _connection = establish_connection();
-        let _items: Wiki;
+        let _items: Vec<Wiki>;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(4))
@@ -567,7 +567,7 @@ impl Categories {
         };
 
         let _connection = establish_connection();
-        let _items: Work;
+        let _items: Vec<Work>;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(5))
@@ -646,7 +646,7 @@ impl Categories {
         };
 
         let _connection = establish_connection();
-        let _items: Help;
+        let _items: Vec<Help>;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(6))
