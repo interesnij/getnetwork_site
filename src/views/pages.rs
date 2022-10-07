@@ -1211,20 +1211,23 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
             };
             use crate::models:: TechCategories;
 
-            let item_cats = _item.get_categories_obj();
+            let item_cats: Vec<Categories>;
+            let item_tags: Vec<Tag>;
+
+            let cats_res = block(move || _item.get_categories_obj().expect("E")).await;
+            item_cats = match cats_res {
+                Ok(_ok) => _ok,
+                Err(_error) => Vec::new(),
+            };
+            let tags_res = block(move || _item.get_tags_obj().expect("E")).await;
+            item_tags = match tags_res {
+                Ok(_list) => _list,
+                Err(_error) => Vec::new(),
+            };
+
             let _all_tags = tags
                 .load::<Tag>(&_connection)
                 .expect("Error.");
-            let _tag_items = tags_items
-                .filter(schema::tags_items::item_id.eq(&_item.id))
-                .filter(schema::tags_items::types.eq(_item.types))
-                .select(schema::tags_items::tag_id)
-                .load::<i32>(&_connection)
-                .expect("E");
-            let item_tags = tags
-                .filter(schema::tags::id.eq_any(_tag_items))
-                .load::<Tag>(&_connection)
-                .expect("E");
 
             let _cats = categories
                 .filter(schema::categories::types.eq(_item.types))
