@@ -224,7 +224,7 @@ impl Categories {
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_blogs(cat_id, limit.into(), 0, is_admin);
+            object_list = Categories::get_blogs(cat_id, limit.into(), 0, is_admin)?;
         }
         if Categories::get_blogs(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
             next_page_number = page + 1;
