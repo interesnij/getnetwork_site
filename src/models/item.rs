@@ -230,7 +230,7 @@ impl Categories {
             next_page_number = page + 1;
         }
 
-        return (object_list, next_page_number);
+        return Ok((object_list, next_page_number));
     }
     pub fn get_blogs (
         cat_id:   i32,
