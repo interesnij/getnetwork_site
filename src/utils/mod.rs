@@ -116,12 +116,12 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
         Vec<Cat>,
         Vec<Cat>
     ) {
-        let _service_cats = Categories::get_categories_for_types(2);
-        let _store_cats = Categories::get_categories_for_types(3);
-        let _blog_cats = Categories::get_categories_for_types(1);
-        let _wiki_cats = Categories::get_categories_for_types(4);
-        let _work_cats = Categories::get_categories_for_types(5);
-        let _help_cats = Categories::get_categories_for_types(6);
+        let _service_cats = Categories::get_categories_for_types(2).expect("E.");
+        let _store_cats = Categories::get_categories_for_types(3).expect("E.");
+        let _blog_cats = Categories::get_categories_for_types(1).expect("E.");
+        let _wiki_cats = Categories::get_categories_for_types(4).expect("E.");
+        let _work_cats = Categories::get_categories_for_types(5).expect("E.");
+        let _help_cats = Categories::get_categories_for_types(6).expect("E.");
 
         return (
             _service_cats,

@@ -567,7 +567,7 @@ impl Categories {
         };
 
         let _connection = establish_connection();
-        let items: Work;
+        let _items: Work;
         let ids = category
             .filter(schema::category::categories_id.eq(cat_id))
             .filter(schema::category::types.eq(5))
@@ -575,7 +575,7 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             _items =  items
+             _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .order(schema::items::created.desc())
                 .limit(limit)
