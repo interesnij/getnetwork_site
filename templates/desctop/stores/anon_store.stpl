@@ -35,12 +35,12 @@
                                       <a href="/works/<%= category.slug %>/" class="ajax"><%= category.name %> - <%= category.count %></a><% if i != _work_categories.len() { %>, <% } %>
                                     <% } %>
                                 </p>
-                                <% let work_tags = object.get_tags(); %>
-                                <% if work_tags.len() > 0 { %>
+
+                                <% if all_tags.len() > 0 { %>
                                 <p>
                                     <strong>Теги:</strong>
-                                    <% for (i, tag) in work_tags.iter().enumerate() { %>
-                                      <a class="ajax border" href="/tag/<%= tag.name %>/"><%= tag.name %> (<%= tag.count %>)</a><% if i != work_tags.len() { %>, <% } %>
+                                    <% for (i, tag) in all_tags.iter().enumerate() { %>
+                                      <a class="ajax border" href="/tag/<%= tag.name %>/"><%= tag.name %> (<%= tag.count %>)</a><% if i != all_tags.len() { %>, <% } %>
                                     <% } %>
                                 </p>
                                 <% } %>
