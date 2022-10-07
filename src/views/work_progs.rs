@@ -57,8 +57,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
         get_first_load_page (
             &session,
             is_desctop,
-            _item.title.clone() + &" | Работа".to_string(),
-            _item.title.clone() + &" | Работа: вебсервисы.рф".to_string(),
+            title.clone() + &" | Работа".to_string(),
+            title.clone() + &" | Работа: вебсервисы.рф".to_string(),
             "/work/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
             _item.get_image(),
         ).await
