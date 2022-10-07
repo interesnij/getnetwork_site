@@ -1214,16 +1214,16 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
             let item_cats: Vec<Categories>;
             let item_tags: Vec<Tag>;
 
-            let cats_res = block(move || _item.get_categories_obj().expect("E")).await;
-            item_cats = match cats_res {
-                Ok(_ok) => _ok,
-                Err(_error) => Vec::new(),
-            };
-            let tags_res = block(move || _item.get_tags_obj().expect("E")).await;
-            item_tags = match tags_res {
-                Ok(_list) => _list,
-                Err(_error) => Vec::new(),
-            };
+            let item_cats = _item.get_categories_obj().expect("E");
+            //item_cats = match cats_res {
+            //    Ok(_ok) => _ok,
+            //    Err(_error) => Vec::new(),
+            //};
+            let item_tags = _item.get_tags_obj().expect("E");
+            //item_tags = match tags_res {
+            //    Ok(_list) => _list,
+            //    Err(_error) => Vec::new(),
+            //};
 
             let _all_tags = tags
                 .load::<Tag>(&_connection)
