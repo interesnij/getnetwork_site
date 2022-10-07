@@ -98,7 +98,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            if _item.is_active == false && _request_user.perm < 10 {
+            if is_active == false && _request_user.perm < 10 {
                 use crate::utils::get_private_page;
                 get_private_page (
                     is_ajax,
