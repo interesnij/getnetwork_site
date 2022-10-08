@@ -34,7 +34,7 @@ impl User {
     pub fn is_superuser(&self) -> bool {
         return self.perm > 59;
     }
-    pub fn create_superuser(user_id: i32) -> User {
+    pub fn create_superuser(user_id: i32) -> Result<User, Error> { 
         let _connection = establish_connection();
         _connection.transaction(|| {
             diesel::update(users::table.filter(users::id.eq(user_id)))
