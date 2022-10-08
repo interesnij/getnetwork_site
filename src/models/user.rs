@@ -35,10 +35,11 @@ impl User {
     }
     pub fn create_superuser(&self) -> () {
         let _connection = establish_connection();
-        diesel::update(self)
-            .set(schema::users::perm.eq(60))
-            .get_result::<User>(&_connection)
-            .expect("E");
+        _connection.transaction(|| {
+            diesel::update(self)
+                .set(schema::users::perm.eq(60))
+                .execute(conn)?;
+        })
     }
 }
 
