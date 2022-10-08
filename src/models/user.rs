@@ -44,7 +44,7 @@ impl User {
             users::table
                 .find(self.id)
                 .select(users::all_columns)
-                .first(_connection)
+                .first(&_connection)
                 .map_err(Into::into)
         });
     }
