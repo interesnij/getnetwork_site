@@ -37,14 +37,13 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 
 
-static SERVER_COUNTER: AtomicUsize = AtomicUsize::new(0);
-struct AppState {
+pub struct AppState {
     server_id: usize,
     request_count: Cell<usize>,
     messages: Arc<Mutex<Vec<String>>>,
 }
 #[derive(Serialize)]
-struct IndexResponse {
+pub struct IndexResponse {
     server_id: usize,
     request_count: usize,
     messages: Vec<String>,

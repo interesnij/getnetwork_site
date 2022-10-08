@@ -37,6 +37,7 @@ mod views;
 
 use crate::utils::{SERVER_COUNTER,AppState}
 
+static SERVER_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
