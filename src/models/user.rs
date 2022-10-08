@@ -39,7 +39,7 @@ impl User {
         _connection.transaction(|| Ok({
             diesel::update(users::table.filter(users::id.eq(user_id)))
                 .set(schema::users::perm.eq(60))
-                .execute(&_connection)
+                .execute(&_connection);
 
             //users::table
             //    .find(user_id)
