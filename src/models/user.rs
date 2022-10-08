@@ -34,18 +34,18 @@ impl User {
     pub fn is_superuser(&self) -> bool {
         return self.perm > 59;
     }
-    pub fn create_superuser(user_id: i32) -> Result<User, Error> { 
+    pub fn create_superuser(user_id: i32) -> Result<(), Error> { 
         let _connection = establish_connection();
         _connection.transaction(|| {
             diesel::update(users::table.filter(users::id.eq(user_id)))
                 .set(schema::users::perm.eq(60))
-                .execute(&_connection)?;
+                .execute(&_connection)
 
-            users::table
-                .find(user_id)
-                .select(users::all_columns)
-                .first(&_connection)
-                .map_err(Into::into)
+            //users::table
+            //    .find(user_id)
+            //    .select(users::all_columns)
+            //    .first(&_connection)
+            //    .map_err(Into::into)
         })
     }
 }
