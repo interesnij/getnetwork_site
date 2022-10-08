@@ -11,6 +11,7 @@ use crate::diesel::{
     QueryDsl,
     ExpressionMethods,
     RunQueryDsl,
+    Connection,
 };
 use serde::{Serialize, Deserialize};
 use crate::utils::establish_connection;
