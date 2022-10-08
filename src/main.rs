@@ -51,7 +51,7 @@ async fn main() -> std::io::Result<()> {
         let messages = Arc::new(Mutex::new(vec![]));
 
         App::new()
-            data(AppState {
+            .data(AppState {
                 server_id: SERVER_COUNTER.fetch_add(1, Ordering::SeqCst),
                 request_count: Cell::new(0),
                 messages: messages.clone(),
