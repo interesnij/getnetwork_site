@@ -26,11 +26,16 @@ use actix_web::{
 use actix_redis::RedisSession;
 use actix_files::Files;
 use crate::routes::routes;
+use std::cell::Cell;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::{Arc, Mutex};
 
 #[macro_use]
 mod utils;
 #[macro_use]
 mod views;
+
+use crate::utils::{SERVER_COUNTER,AppState}
 
 
 #[actix_web::main]
@@ -42,20 +47,15 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
-        //let cors = Cors::default()
-        //    .allowed_origin(&env::var("CLIENT_HOST").unwrap())
-        //    .allow_any_method()
-        //    .allowed_headers(vec![
-        //        http::header::AUTHORIZATION,
-        //        http::header::ACCEPT,
-        //        http::header::CONTENT_TYPE,
-        //    ])
-        //    .max_age(3600);
+        let messages = Arc::new(Mutex::new(vec![]));
 
         App::new()
-        //    .wrap(cors)
+            data(AppState {
+                server_id: SERVER_COUNTER.fetch_add(1, Ordering::SeqCst),
+                request_count: Cell::new(0),
+                messages: messages.clone(),
+            })
             .wrap(Logger::default())
-            //.wrap(Logger::new("%a %{User-Agent}i"))
             .wrap(Compress::default())
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .data(server.clone())
@@ -66,6 +66,7 @@ async fn main() -> std::io::Result<()> {
 
     .bind("194.58.90.123:8084")?       // порт для разработки
     //.bind("194.58.90.123:8082")?     // порт для автоматической доставки
+    .workers(4)
     .run()
     .await
 }

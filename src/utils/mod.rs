@@ -32,7 +32,23 @@ use crate::diesel::{
 use actix_session::Session;
 use crate::errors::AuthError;
 use sailfish::TemplateOnce;
+use std::cell::Cell;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::{Arc, Mutex};
 
+
+static SERVER_COUNTER: AtomicUsize = AtomicUsize::new(0);
+struct AppState {
+    server_id: usize,
+    request_count: Cell<usize>,
+    messages: Arc<Mutex<Vec<String>>>,
+}
+#[derive(Serialize)]
+struct IndexResponse {
+    server_id: usize,
+    request_count: usize,
+    messages: Vec<String>,
+}
 
 pub fn get_price_acc_values(price: &i32) -> Option<i32> {
     if price > &3_000_000 {

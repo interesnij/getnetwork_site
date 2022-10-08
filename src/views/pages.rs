@@ -5,7 +5,8 @@ use actix_web::{
     web,
     error::InternalError,
     http::StatusCode,
-    web::{block, Data},
+    web::{block, Data, Json},
+    Result,
 };
 use crate::schema;
 use crate::models::{
@@ -22,6 +23,9 @@ use crate::utils::{
     get_request_user_data,
     is_signed_in,
     get_first_load_page,
+    IndexResponse,
+    AppState,
+
 };
 use crate::diesel::{
     RunQueryDsl,
@@ -36,6 +40,7 @@ use crate::websocket::Server;
 
 
 pub fn pages_routes(config: &mut web::ServiceConfig) {
+    config.route("/test/", web::get().to(test_page));
     config.route("/", web::get().to(index_page));
     config.route("/info/", web::get().to(info_page));
     config.route("/history/", web::get().to(history_page));
@@ -61,8 +66,19 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/image/{id}/", web::get().to(image_page));
 }
 
+pub async fn test_page(state: web::Data<AppState>) -> Result<web::Json<IndexResponse>> {
+    let request_count = state.request_count.get() + 1;
+    state.request_count.set(request_count);
+    let ms = state.messages.lock().unwrap();
 
-pub async fn index_page(
+    Ok(web::Json(IndexResponse {
+        server_id: state.server_id,
+        request_count,
+        messages: ms.clone(),
+    }))
+}
+
+pub async fn index_page (
     req: HttpRequest,
     session: Session,
     websocket_srv: Data<Addr<Server>>) -> actix_web::Result<HttpResponse> {
