@@ -38,15 +38,15 @@ use std::sync::{Arc, Mutex};
 
 
 pub struct AppState {
-    server_id: usize,
-    request_count: Cell<usize>,
-    messages: Arc<Mutex<Vec<String>>>,
+    pub server_id: usize,
+    pub request_count: Cell<usize>,
+    pub messages: Arc<Mutex<Vec<String>>>,
 }
 #[derive(Serialize)]
 pub struct IndexResponse {
-    server_id: usize,
-    request_count: usize,
-    messages: Vec<String>,
+    pub server_id: usize,
+    pub request_count: usize,
+    pub messages: Vec<String>,
 }
 
 pub fn get_price_acc_values(price: &i32) -> Option<i32> {
