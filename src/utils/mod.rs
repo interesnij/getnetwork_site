@@ -16,7 +16,7 @@ use actix_web::{
 };
 
 use crate::schema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use crate::models::{
     Categories,
     User,

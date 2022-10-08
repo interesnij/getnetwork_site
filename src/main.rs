@@ -35,7 +35,7 @@ mod utils;
 #[macro_use]
 mod views;
 
-use crate::utils::{SERVER_COUNTER,AppState}
+use crate::utils::AppState;
 
 static SERVER_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
