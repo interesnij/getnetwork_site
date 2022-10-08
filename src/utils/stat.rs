@@ -240,7 +240,7 @@ pub fn plus_tag_stat (
                 .expect("Error.");
         }
         if let Ok(history_page) = to_value(_item.now_u.to_string()) {
-            let msg = MessageToClient::new("end_object_view", _item.types.into(), history_page);
+            let msg = MessageToClient::new("end_object_view", _item.id, history_page);
             websocket_srv.do_send(msg);
         }
     }
