@@ -137,7 +137,7 @@ pub async fn index_page (
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
             let is_admin = _request_user.is_superuser();
-            _request_user.create_superuser();
+            //User::create_superuser(_request_user.id);
             let _last_works = Item::get_works(3, 0, is_admin);
             let _last_services = Item::get_services(3, 0, is_admin);
             let _last_wikis = Item::get_wikis(3, 0, is_admin);
