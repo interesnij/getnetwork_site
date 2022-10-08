@@ -130,10 +130,10 @@ pub fn plus_category_stat (
                 .get_result::<Categories>(&_connection)
                 .expect("Error.");
         }
-    }
-    if let Ok(history_page) = to_value(_item.now_u.to_string()) {
-        let msg = MessageToClient::new("end_object_view", _item.types.into(), history_page);
-        websocket_srv.do_send(msg);
+        if let Ok(history_page) = to_value(_item.now_u.to_string()) {
+            let msg = MessageToClient::new("end_object_view", _item.types.into(), history_page);
+            websocket_srv.do_send(msg);
+        }
     }
 }
 pub fn plus_item_stat (
@@ -184,10 +184,10 @@ pub fn plus_item_stat (
                 .get_result::<Item>(&_connection)
                 .expect("Error.");
         }
-    }
-    if let Ok(history_page) = to_value(_item.now_u.to_string()) {
-        let msg = MessageToClient::new("end_object_view", _item.types.into(), history_page);
-        websocket_srv.do_send(msg);
+        if let Ok(history_page) = to_value(_item.now_u.to_string()) {
+            let msg = MessageToClient::new("end_object_view", _item.types.into(), history_page);
+            websocket_srv.do_send(msg);
+        }
     }
 }
 
@@ -239,9 +239,9 @@ pub fn plus_tag_stat (
                 .get_result::<Tag>(&_connection)
                 .expect("Error.");
         }
-    }
-    if let Ok(history_page) = to_value(_item.now_u.to_string()) {
-        let msg = MessageToClient::new("end_object_view", _item.types.into(), history_page);
-        websocket_srv.do_send(msg);
+        if let Ok(history_page) = to_value(_item.now_u.to_string()) {
+            let msg = MessageToClient::new("end_object_view", _item.types.into(), history_page);
+            websocket_srv.do_send(msg);
+        }
     }
 }
