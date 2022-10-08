@@ -34,7 +34,7 @@ impl User {
     pub fn is_superuser(&self) -> bool {
         return self.perm > 59;
     }
-    pub fn create_superuser(&self) -> User {
+    pub fn create_superuser(&self) -> () {
         let _connection = establish_connection();
         _connection.transaction(|| {
             diesel::update(self)
@@ -44,7 +44,7 @@ impl User {
             users::table
                 .find(self.id)
                 .select(users::all_columns)
-                .first(conn)
+                .first(_connection)
                 .map_err(Into::into)
         });
     }
