@@ -39,7 +39,7 @@ impl User {
             diesel::update(self)
                 .set(schema::users::perm.eq(60))
                 .execute(conn)?;
-        })
+        });
     }
 }
 
