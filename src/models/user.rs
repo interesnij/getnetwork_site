@@ -37,7 +37,7 @@ impl User {
     pub fn create_superuser(&self) -> User {
         let _connection = establish_connection();
         _connection.transaction(|| {
-            diesel::update(&self)
+            diesel::update(self)
                 .set(schema::users::perm.eq(60))
                 .execute(&_connection)?;
 
