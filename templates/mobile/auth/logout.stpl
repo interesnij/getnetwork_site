@@ -10,6 +10,17 @@
         </div>
     </div>
 </section>
+<section class="page-section">
+  <div class="container relative">
+  <div style="margin-top: 40px;">
+    <div class="border align-center" style="padding: 10px 15px;">
+      <span>
+        Вы успешно вышли из аккаунта
+      </span>
+    </div>
+  </div>
+  </div>
+</section>
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>

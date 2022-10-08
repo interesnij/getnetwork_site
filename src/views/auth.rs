@@ -206,10 +206,10 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
 }
 
 pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
-    //if !is_signed_in(&session) {
-    //    Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
-    //}
-    //else {
+    if !is_signed_in(&session) {
+        Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
+    }
+    else {
         use crate::utils::is_desctop;
         use crate::schema::stat_pages::dsl::stat_pages;
         use crate::models::StatPage;
@@ -240,7 +240,7 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
                 .expect("Error.");
         }
 
-        //session.clear();
+        session.clear();
 
         if is_desctop(&req) {
             #[derive(TemplateOnce)]
@@ -272,7 +272,7 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
         }
-    //}
+    }
 }
 
 fn find_user(data: LoginUser2) -> Result<SessionUser, AuthError> {
