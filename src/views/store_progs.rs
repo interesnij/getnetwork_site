@@ -65,11 +65,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
         use schema::{
             categories::dsl::categories,
         };
-        use crate::models::{TechCategories, FeaturedItem};
-
-        //let _tech_categories = tech_categories
-        //    .load::<TechCategories>(&_connection)
-        //    .expect("E");
+        use crate::models::FeaturedItem;
 
         let _category = categories
             .filter(schema::categories::slug.eq(&_cat_id))

@@ -65,7 +65,6 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
     else {
         use schema::{
             categories::dsl::categories,
-            tech_categories::dsl::tech_categories,
         };
         use crate::models::FeaturedItem;
         
