@@ -186,9 +186,9 @@
                         <ul class="my_ul">
                           <% for object in help_cats.iter() { %>
                             <li>
-                              <a href="/helps/<%= object.name %>/" class="ajax">
+                              <a href="/helps/<%= object.slug %>/" class="ajax">
                                 <%= object.name %>
-                              </a>
+                              </a> 
                             </li>
                           <% } %>
                         </ul>

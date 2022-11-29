@@ -16,9 +16,9 @@
   <link type="text/css" media="all" rel="stylesheet" href="/static/styles/grid.css">
   <link type="text/css" media="all" rel="stylesheet" href="/static/styles/style.css">
 
-  <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css?ver13">
+  <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/white.css?ver14">
   <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/fonts.css">
-  <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/load.css?ver13">
+  <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/load.css?ver14">
   <link rel="shortcut icon" href="/static/images/favicon.png" type="image/x-icon" />
   <link rel="icon" href="/static/images/favicon.png" type="image/x-icon" />
   <meta name="yandex-verification" content="6990cfa2f76f8dca" />
@@ -27,8 +27,8 @@
 
   <body>
     <span class="span"></span>
-    <script defer type="text/javascript" src="/static/scripts/desctop/main.js?ver13"></script>
-    <script defer type="text/javascript" src="/static/scripts/main.js?ver13"></script>
+    <script defer type="text/javascript" src="/static/scripts/desctop/main.js?ver14"></script>
+    <script defer type="text/javascript" src="/static/scripts/main.js?ver14"></script>
     <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
   </body>
 </html>
