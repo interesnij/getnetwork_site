@@ -125,7 +125,7 @@ function get_custom_design() {
 function check_first_load() {
   span = document.body.querySelector(".span");
 
-  if (window.location.href.indexOf('ajax') > -1) {
+  if (window.location.href.indexOf('ajax=1') > -1) {
     span.innerHTML = "Permission Denied"; 
   }
   else if (!span.firstChild) {
