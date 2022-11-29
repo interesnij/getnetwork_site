@@ -124,8 +124,6 @@ function get_custom_design() {
 
 function check_first_load() {
   span = document.body.querySelector(".span");
-  console.log(window.location.href);
-  console.log(window.location.href.indexOf('?') > -1);
 
   if (window.location.href.indexOf('ajax') > -1) {
     span.innerHTML = "Permission Denied"; 
@@ -254,6 +252,8 @@ on('body', 'input', '.desctop_folder_search', function() {
     ajax_link.send();
 });
 
+console.log(window.location.href);
+console.log(window.location.href.indexOf('ajax') > -1);
 if (window.location.href.indexOf('ajax') > -1) {
   document.body.querySelector(".span").innerHTML = "Permission Denied"; 
 }
