@@ -124,6 +124,9 @@ function get_custom_design() {
 
 function check_first_load() {
   span = document.body.querySelector(".span");
+  console.log(window.location.href);
+  console.log(window.location.href.indexOf('?') > -1);
+
   if (window.location.href.indexOf('?') > -1) {
     span.innerHTML = "Permission Denied"; 
   }
