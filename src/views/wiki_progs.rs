@@ -64,9 +64,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
     else {
         use schema::{
             categories::dsl::categories,
-            tech_categories::dsl::tech_categories,
         };
-        use crate::models::{TechCategories, FeaturedItem};
+        use crate::models::FeaturedItem;
 
         //let _tech_categories = tech_categories
         //    .load::<TechCategories>(&_connection)

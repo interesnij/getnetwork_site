@@ -342,10 +342,8 @@ pub async fn create_order_page() -> actix_web::Result<HttpResponse> {
 pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: Multipart) -> impl Responder {
     use crate::schema::serve::dsl::serve;
     use crate::models::{
-        TechCategoriesItem,
         NewTechCategoriesItem,
         Serve,
-        ServeItems,
         NewServeItems,
     };
     use crate::utils::{

@@ -5,7 +5,7 @@ use actix_web::{
     web,
     error::InternalError,
     http::StatusCode,
-    web::{block, Data, Json},
+    web::{block, Data},
     Result,
 };
 use crate::schema;
@@ -1203,12 +1203,8 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
                 tags::dsl::tags,
                 categories::dsl::categories,
                 tech_categories::dsl::tech_categories,
-                tags_items::dsl::tags_items,
             };
             use crate::models:: TechCategories;
-
-            let item_cats: Vec<Categories>;
-            let item_tags: Vec<Tag>;
 
             let item_cats = _item.get_categories_obj().expect("E");
             //item_cats = match cats_res {

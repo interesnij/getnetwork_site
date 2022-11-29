@@ -12,7 +12,6 @@ use crate::schema::{
     tags_items,
 };
 use crate::utils::establish_connection;
-use crate::errors::Error;
 
 
 #[derive(Serialize, Queryable)]

@@ -33,7 +33,6 @@ use actix_session::Session;
 use crate::errors::AuthError;
 use sailfish::TemplateOnce;
 use std::cell::Cell;
-use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 
 

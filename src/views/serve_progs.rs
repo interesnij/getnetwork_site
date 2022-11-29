@@ -309,7 +309,6 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
         }
         else {
-            use schema::serve_categories::dsl::serve_categories;
             use schema::tech_categories::dsl::tech_categories;
 
             let _connection = establish_connection();
@@ -432,14 +431,7 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
         }
         else {
-            use crate::schema::{
-                serve_categories::dsl::serve_categories,
-                tech_categories::dsl::tech_categories,
-            };
-
             let _connection = establish_connection();
-            //let _tech_categories = tech_categories.load::<TechCategories>(&_connection).expect("E");
-            //let _categories = serve_categories.load::<ServeCategories>(&_connection).expect("E");
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -749,7 +741,6 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use schema::tech_categories::dsl::tech_categories;
             use crate::utils::serve_category_form;
 
             let _connection = establish_connection();
@@ -779,7 +770,6 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
 pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::{
         tech_categories::dsl::tech_categories,
-        serve_categories::dsl::serve_categories,
     };
 
     let _connection = establish_connection();
@@ -818,7 +808,6 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
 pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     use crate::schema::{
         serve_categories::dsl::serve_categories,
-        serve::dsl::serve,
     };
 
     let _connection = establish_connection();

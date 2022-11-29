@@ -67,12 +67,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             categories::dsl::categories,
             tech_categories::dsl::tech_categories,
         };
-        use crate::models::{TechCategories, FeaturedItem};
-
-        //let _tech_categories = tech_categories
-        //    .load::<TechCategories>(&_connection)
-        //    .expect("E");
-
+        use crate::models::FeaturedItem;
+        
         let _category = categories
             .filter(schema::categories::slug.eq(&_cat_id))
             .filter(schema::categories::types.eq(_item.types))

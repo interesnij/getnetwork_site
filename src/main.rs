@@ -5,10 +5,8 @@ extern crate log;
 
 use actix::Actor;
 use actix_cors::Cors;
-use actix_rt;
 use dotenv::dotenv;
 use env_logger;
-use std::env;
 
 pub mod schema;
 pub mod models;
@@ -21,7 +19,6 @@ use actix_web::{
     HttpServer,
     App,
     middleware::{Compress, Logger},
-    http,
 };
 use actix_redis::RedisSession;
 use actix_files::Files;
@@ -51,15 +48,22 @@ async fn main() -> std::io::Result<()> {
         let messages = Arc::new(Mutex::new(vec![]));
 
         App::new()
-            .data(AppState {
+            let cors = Cors::default()
+                .allowed_origin("194.58.90.123:8084")
+                .allowed_origin("194.58.90.123:8082")
+                .allowed_methods(vec!["GET", "POST"])
+                .max_age(3600);
+
+            .app_data(AppState {
                 server_id: SERVER_COUNTER.fetch_add(1, Ordering::SeqCst),
                 request_count: Cell::new(0),
                 messages: messages.clone(),
-            })
+            }) 
             .wrap(Logger::default())
             .wrap(Compress::default())
+            .wrap(cors)
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
-            .data(server.clone())
+            .app_data(server.clone()) 
             .service(_files)
             .service(_files2)
             .configure(routes)

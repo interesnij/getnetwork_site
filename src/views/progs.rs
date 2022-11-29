@@ -5,13 +5,10 @@ use actix_web::{
     Responder,
     web,
     web::{block, Data, Json},
-    //error::InternalError,
-    //http::StatusCode,
 };
 use crate::schema;
 use crate::models::{
     CookieUser,
-    HistoryResponse,
     Categories,
     Tag,
     Item,
@@ -35,7 +32,11 @@ use std::str;
 use std::borrow::BorrowMut;
 use actix_web::dev::ConnectionInfo;
 use crate::errors::Error;
-use crate::websocket::{MessageToClient, Server, ws_index};
+use crate::websocket::{
+    //MessageToClient, 
+    Server, 
+    ws_index
+};
 
 
 pub fn progs_routes(config: &mut web::ServiceConfig) {
@@ -169,7 +170,6 @@ pub async fn create_history (
     req: HttpRequest,
     websocket_srv: Data<Addr<Server>>
 ) -> Result<Json<CookieStat>, Error> {
-    use crate::models::CookieStat;
     use crate::schema::cookie_stats::dsl::cookie_stats;
     use crate::utils::plus_page_stat;
 
@@ -299,7 +299,7 @@ pub async fn object_history(conn: ConnectionInfo, req: HttpRequest, id: web::Pat
 
 pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Responder {
     use crate::schema::feedbacks;
-    use crate::models::{Feedback, NewFeedback};
+    use crate::models::NewFeedback;
     use crate::utils::feedback_form;
 
     let _connection = establish_connection();
@@ -322,15 +322,11 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             use crate::models::{
-                TechCategoriesItem,
                 NewTechCategoriesItem,
                 Serve,
-                ServeItems,
                 NewServeItems,
                 NewCategory,
-                Category,
                 NewItem,
-                TagItems,
                 NewTagItems,
             };
             use crate::utils::{
@@ -473,14 +469,10 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
             };
 
             use crate::models::{
-                TechCategoriesItem,
                 NewTechCategoriesItem,
                 Serve,
-                ServeItems,
                 NewServeItems,
-                Category,
                 NewCategory,
-                TagItems,
                 NewTagItems,
                 EditItem,
             };
@@ -886,7 +878,7 @@ pub async fn create_files(session: Session, mut payload: Multipart, id: web::Pat
         if _request_user.perm == 60 {
             use crate::utils::files_form;
             use crate::schema::items::dsl::items;
-            use crate::models::{NewFile, File};
+            use crate::models::NewFile;
 
             let form = files_form(payload.borrow_mut(), _request_user.id).await;
             let types = form.types;
