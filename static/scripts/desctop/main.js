@@ -127,7 +127,7 @@ function check_first_load() {
   console.log(window.location.href);
   console.log(window.location.href.indexOf('?') > -1);
 
-  if (window.location.href.indexOf('?') > -1) {
+  if (window.location.href.indexOf('ajax') > -1) {
     span.innerHTML = "Permission Denied"; 
   }
   else if (!span.firstChild) {
