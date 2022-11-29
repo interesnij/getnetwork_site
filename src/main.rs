@@ -19,6 +19,7 @@ use actix_web::{
     HttpServer,
     App,
     middleware::{Compress, Logger},
+    web,
 };
 use actix_redis::RedisSession;
 use actix_files::Files;
@@ -33,6 +34,7 @@ mod utils;
 mod views;
 
 use crate::utils::AppState;
+use crate::views::not_found;
 
 static SERVER_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
@@ -63,7 +65,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors)
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .data(server.clone())
-            .default_service(web::route().to(utils::not_found))
+            .default_service(web::route().to(not_found))
             .service(_files)
             .service(_files2)
 
