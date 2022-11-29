@@ -96,12 +96,12 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/tags/create_tag.stpl")]
                 struct Template {
-                    all_tags:     Vec<Tag>,
-                    is_ajax:      i32,
+                    all_tags: Vec<Tag>,
+                    is_ajax:  i32,
                 }
                 let body = Template {
-                    all_tags:     all_tags,
-                    is_ajax:      is_ajax,
+                    all_tags: all_tags,
+                    is_ajax:  is_ajax,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -134,7 +134,7 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
             };
             let _new_tag = diesel::insert_into(schema::tags::table)
                 .values(&new_tag)
-                .get_result::<Tag>(&_connection)
+                .execute(&_connection)
                 .expect("E.");
         }
     }
@@ -148,11 +148,10 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
     let _connection = establish_connection();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _tag_id: String = _id.to_string();
-    let _tags = tags
+    let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
-        .load::<Tag>(&_connection)
+        .first::<Tag>(&_connection)
         .expect("E");
-    let _tag = _tags.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -378,11 +377,10 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
     let _tag_id: String = _id.to_string();
-    let _tags = tags
+    let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
-        .load::<Tag>(&_connection)
+        .first::<Tag>(&_connection)
         .expect("E");
-    let _tag = _tags.into_iter().nth(0).unwrap();
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -515,11 +513,10 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
 
     let _connection = establish_connection();
     let _tag_id: String = _id.clone();
-    let _tags = tags
+    let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
-        .load::<Tag>(&_connection)
+        .first::<Tag>(&_connection)
         .expect("E");
-    let _tag = _tags.into_iter().nth(0).unwrap();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
@@ -651,11 +648,10 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
 
     let _connection = establish_connection();
     let _tag_id: String = _id.clone();
-    let _tags = tags
+    let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
-        .load::<Tag>(&_connection)
+        .first::<Tag>(&_connection)
         .expect("E");
-    let _tag = _tags.into_iter().nth(0).unwrap();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
@@ -788,11 +784,10 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
 
     let _connection = establish_connection();
     let _tag_id: String = _id.clone();
-    let _tags = tags
+    let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
-        .load::<Tag>(&_connection)
+        .first::<Tag>(&_connection)
         .expect("E");
-    let _tag = _tags.into_iter().nth(0).unwrap();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
@@ -925,11 +920,10 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
 
     let _connection = establish_connection();
     let _tag_id: String = _id.clone();
-    let _tags = tags
+    let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
-        .load::<Tag>(&_connection)
+        .first::<Tag>(&_connection)
         .expect("E");
-    let _tag = _tags.into_iter().nth(0).unwrap();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
@@ -1084,11 +1078,9 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
         let _stat: StatPage;
         let _stats = stat_pages
             .filter(schema::stat_pages::types.eq(31))
-            .limit(1)
-            .load::<StatPage>(&_connection)
-            .expect("E");
-        if _stats.len() > 0 {
-            _stat = _stats.into_iter().nth(0).unwrap();
+            .first::<StatPage>(&_connection);
+        if _stats.is_ok() {
+            _stat = _stats.expect("E");
         }
         else {
             use crate::models::NewStatPage;
@@ -1205,12 +1197,11 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
 
     let _tag_id: i32 = *_id;
     let _connection = establish_connection();
-    let _tags = tags
+    let _tag = tags
         .filter(schema::tags::id.eq(&_tag_id))
-        .load::<Tag>(&_connection)
+        .first::<Tag>(&_connection)
         .expect("E");
 
-    let _tag = _tags.into_iter().nth(0).unwrap();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
@@ -1280,7 +1271,7 @@ pub async fn edit_tag(session: Session, mut payload: Multipart, _id: web::Path<i
             let _tag_id : i32 = *_id;
             let _tag = tags
                 .filter(schema::tags::id.eq(_tag_id))
-                .load::<Tag>(&_connection)
+                .first::<Tag>(&_connection)
                 .expect("E");
 
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
@@ -1289,9 +1280,9 @@ pub async fn edit_tag(session: Session, mut payload: Multipart, _id: web::Path<i
                 position: form.position,
             };
 
-            diesel::update(&_tag[0])
+            diesel::update(&_tag)
                 .set(_new_tag)
-                .get_result::<Tag>(&_connection)
+                .execute(&_connection)
                 .expect("E");
         }
     }
@@ -1309,10 +1300,10 @@ pub async fn delete_tag(session: Session, _id: web::Path<i32>) -> impl Responder
 
             let _connection = establish_connection();
             let _tag_id: i32 = *_id;
-            let _tag = tags
-                .filter(schema::tags::id.eq(_tag_id))
-                .load::<Tag>(&_connection)
-                .expect("E");
+            //let _tag = tags
+            //    .filter(schema::tags::id.eq(_tag_id))
+            //    .load::<Tag>(&_connection)
+            //    .expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::tag_id.eq(_tag_id))).execute(&_connection).expect("E");
             diesel::delete(tags.filter(schema::tags::id.eq(_tag_id))).execute(&_connection).expect("E");
         }

@@ -40,12 +40,6 @@ impl User {
             diesel::update(users::table.filter(users::id.eq(user_id)))
                 .set(schema::users::perm.eq(60))
                 .execute(&_connection);
-
-            //users::table
-            //    .find(user_id)
-            //    .select(users::all_columns)
-            //    .first(&_connection)
-            //    .map_err(Into::into)
         }))
     }
 }

@@ -126,7 +126,7 @@ impl Order {
             .expect("E");
     }
     pub fn get_open_tech_categories(&self) -> Vec<TechCategories> {
-        // получаем открытые тех.категории услуги
+        // получаем открытые тех.категории элемента
         use schema::{
             tech_categories_items::dsl::tech_categories_items,
             tech_categories::dsl::tech_categories,

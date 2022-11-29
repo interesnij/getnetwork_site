@@ -104,13 +104,11 @@ pub async fn index_page (
 
         let _stats = stat_pages
             .filter(schema::stat_pages::types.eq(1))
-            .limit(1)
-            .load::<StatPage>(&_connection)
-            .expect("E");
-        if _stats.len() > 0 {
-            _stat = _stats.into_iter().nth(0).unwrap();
+            .first::<StatPage>(&_connection);
+        if _stats.is_ok() {
+            _stat = _stats.expect("E");
             diesel::update(&_stat)
-                .set (schema::stat_pages::now_u.eq(_stat.now_u + 1))
+                .set(schema::stat_pages::now_u.eq(_stat.now_u + 1))
                 .get_result::<StatPage>(&_connection)
                 .expect("Error.");
         }
@@ -281,11 +279,9 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         let _stat: StatPage;
         let _stats = stat_pages
             .filter(schema::stat_pages::types.eq(10))
-            .limit(1)
-            .load::<StatPage>(&_connection)
-            .expect("E");
-        if _stats.len() > 0 {
-            _stat = _stats.into_iter().nth(0).unwrap();
+            .first::<StatPage>(&_connection);
+        if _stats.is_ok() {
+            _stat = _stats.expect("E");
         }
         else {
             use crate::models::NewStatPage;
@@ -353,11 +349,9 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         let _stat: StatPage;
         let _stats = stat_pages
             .filter(schema::stat_pages::types.eq(10))
-            .limit(1)
-            .load::<StatPage>(&_connection)
-            .expect("E");
-        if _stats.len() > 0 {
-            _stat = _stats.into_iter().nth(0).unwrap();
+            .first::<StatPage>(&_connection);
+        if _stats.is_ok() {
+            _stat = _stats.expect("E");
         }
         else {
             use crate::models::NewStatPage;
@@ -440,11 +434,8 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
         let _connection = establish_connection();
         let _cookie_user = cookie_users
             .filter(schema::cookie_users::id.eq(&user_id))
-            .load::<CookieUser>(&_connection)
-            .expect("Error")
-            .into_iter()
-            .nth(0)
-            .unwrap();
+            .first::<CookieUser>(&_connection)
+            .expect("Error");
 
             let object_list: Vec<CookieStat>;
             let next_page_number: i32;
@@ -694,11 +685,8 @@ pub async fn get_tech_category_page(_id: web::Path<i32>) -> actix_web::Result<Ht
     let _connection = establish_connection();
     let tech_category = tech_categories
         .filter(schema::tech_categories::id.eq(*_id))
-        .load::<TechCategories>(&_connection)
-        .expect("E.")
-        .into_iter()
-        .nth(0)
-        .unwrap();
+        .first::<TechCategories>(&_connection)
+        .expect("E.");
 
     #[derive(TemplateOnce)]
     #[template(path = "desctop/load/tech_category.stpl")]
@@ -720,11 +708,8 @@ pub async fn get_serve_category_page(_id: web::Path<i32>) -> actix_web::Result<H
     let _connection = establish_connection();
     let serve_category = serve_categories
         .filter(schema::serve_categories::id.eq(*_id))
-        .load::<ServeCategories>(&_connection)
-        .expect("E.")
-        .into_iter()
-        .nth(0)
-        .unwrap();
+        .first::<ServeCategories>(&_connection)
+        .expect("E.");
 
     #[derive(TemplateOnce)]
     #[template(path = "desctop/load/serve_category.stpl")]
@@ -746,11 +731,8 @@ pub async fn get_serve_page(_id: web::Path<i32>) -> actix_web::Result<HttpRespon
     let _connection = establish_connection();
     let _serve = serve
         .filter(schema::serve::id.eq(*_id))
-        .load::<Serve>(&_connection)
-        .expect("E.")
-        .into_iter()
-        .nth(0)
-        .unwrap();
+        .first::<Serve>(&_connection)
+        .expect("E.");
 
     #[derive(TemplateOnce)]
     #[template(path = "desctop/load/serve.stpl")]
@@ -927,11 +909,8 @@ pub async fn get_tech_objects_page(session: Session, _id: web::Path<i32>) -> act
     let _connection = establish_connection();
     let _cat = tech_categories
         .filter(schema::tech_categories::id.eq(*_id))
-        .load::<TechCategories>(&_connection)
-        .expect("E.")
-        .into_iter()
-        .nth(0)
-        .unwrap();
+        .first::<TechCategories>(&_connection)
+        .expect("E.");
 
     #[derive(TemplateOnce)]
     #[template(path = "desctop/load/tech_category_objects.stpl")]
@@ -1143,7 +1122,6 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
             use schema::{
                 tags::dsl::tags,
                 tech_categories::dsl::tech_categories,
-                //categories::dsl::categories,
             };
             use crate::models::TechCategories;
 
@@ -1202,8 +1180,10 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
 
     let _item_id: i32 = *_id;
     let _connection = establish_connection();
-    let _items = items.filter(schema::items::id.eq(&_item_id)).load::<Item>(&_connection).expect("E");
-    let _item = _items.into_iter().nth(0).unwrap();
+    let _item = items
+        .filter(schema::items::id.eq(&_item_id))
+        .first::<Item>(&_connection)
+        .expect("E");
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
@@ -1338,12 +1318,10 @@ pub async fn edit_content_item_page(session: Session, req: HttpRequest, _id: web
 
     let _item_id: i32 = *_id;
     let _connection = establish_connection();
-    let _items = items
+    let _item = items
         .filter(schema::items::id.eq(&_item_id))
-        .load::<Item>(&_connection)
+        .first::<Item>(&_connection)
         .expect("E");
-
-    let _item = _items.into_iter().nth(0).unwrap();
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
@@ -1407,12 +1385,10 @@ pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i
 
     let _file_id: i32 = *_id;
     let _connection = establish_connection();
-    let _files = files
+    let _file = files
         .filter(schema::files::id.eq(&_file_id))
-        .load::<File>(&_connection)
+        .first::<File>(&_connection)
         .expect("E");
-
-    let _file = _files.into_iter().nth(0).unwrap();
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
@@ -1481,20 +1457,14 @@ pub async fn image_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> 
     let _id: i32 = *_id;
     let _file = files
         .filter(schema::files::id.eq(_id))
-        .load::<File>(&_connection)
-        .expect("E.")
-        .into_iter()
-        .nth(0)
-        .unwrap();
+        .first::<File>(&_connection)
+        .expect("E.");
 
     let _item = items
         .filter(schema::items::id.eq(_file.item_id))
         .filter(schema::items::types.eq(_file.item_types))
-        .load::<Item>(&_connection)
-        .expect("E.")
-        .into_iter()
-        .nth(0)
-        .unwrap();
+        .first::<Item>(&_connection)
+        .expect("E.");
 
     let _images = _item.get_images_ids();
     let _images_len = _images.len();
@@ -1508,20 +1478,16 @@ pub async fn image_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> 
                 next = files
                     .filter(schema::files::id.eq(_next.unwrap()))
                     .filter(schema::files::types.eq(_item.types))
-                    .load::<File>(&_connection)
-                    .expect("E")
-                    .into_iter()
-                    .nth(0);
+                    .first::<File>(&_connection)
+                    .expect("E");
             };
             if i != 0 {
                 let _prev = Some(&_images[i - 1]);
                 prev = files
                     .filter(schema::files::id.eq(_prev.unwrap()))
                     .filter(schema::files::types.eq(_item.types))
-                    .load::<File>(&_connection)
-                    .expect("E")
-                    .into_iter()
-                    .nth(0);
+                    .first::<File>(&_connection)
+                    .expect("E");
             };
             break;
         }

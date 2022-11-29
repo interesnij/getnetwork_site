@@ -224,11 +224,10 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
     let _order_id: i32 = *_id;
     let user_id = get_cookie_user_id(&req).await;
 
-    let _orders = orders
+    let _order = orders
         .filter(schema::orders::id.eq(&_order_id))
-        .load::<Order>(&_connection)
+        .first::<Order>(&_connection)
         .expect("E");
-    let _order = _orders.into_iter().nth(0).unwrap();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -381,7 +380,7 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
             );
             diesel::insert_into(schema::order_files::table)
                 .values(&new_file)
-                .get_result::<OrderFile>(&_connection)
+                .execute(&_connection)
                 .expect("E.");
         };
 
@@ -395,7 +394,7 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
             };
             diesel::insert_into(schema::serve_items::table)
                 .values(&new_serve_form)
-                .get_result::<ServeItems>(&_connection)
+                .execute(&_connection)
                 .expect("Error.");
             serve_ids.push(*serve_id);
         }
@@ -425,7 +424,7 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
             };
             diesel::insert_into(schema::tech_categories_items::table)
                 .values(&new_cat)
-                .get_result::<TechCategoriesItem>(&_connection)
+                .execute(&_connection)
                 .expect("Error.");
         }
 
@@ -449,14 +448,10 @@ pub async fn delete_order(req: HttpRequest, _id: web::Path<i32>) -> impl Respond
 
     let _order_id: i32 = *_id;
     let _connection = establish_connection();
-    let _orders = orders
+    let _order = orders
         .filter(schema::orders::id.eq(&_order_id))
-        .load::<Order>(&_connection)
+        .first::<Order>(&_connection)
         .expect("E");
-    let _order = _orders
-        .into_iter()
-        .nth(0)
-        .unwrap();
 
     let user_id = get_cookie_user_id(&req).await;
 

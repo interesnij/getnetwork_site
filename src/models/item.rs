@@ -189,10 +189,7 @@ impl Categories {
                             schema::items::slug,
                             schema::items::title,
                         ))
-                        .load::<FeaturedItem>(&_connection)
-                        .expect("E")
-                        .into_iter()
-                        .nth(0);
+                        .first::<FeaturedItem>(&_connection);
                 };
                 if i != 0 {
                     let _prev = Some(&_category_items[i - 1]);
@@ -204,10 +201,7 @@ impl Categories {
                             schema::items::slug,
                             schema::items::title,
                         ))
-                        .load::<FeaturedItem>(&_connection)
-                        .expect("E")
-                        .into_iter()
-                        .nth(0);
+                        .first::<FeaturedItem>(&_connection);
                 };
                 break;
             }
@@ -813,28 +807,44 @@ impl Item {
             .filter(schema::files::item_id.eq(self.id))
             .filter(schema::files::item_types.eq(self.types))
             .filter(schema::files::types.eq(1))
-            .select((schema::files::id, schema::files::src, schema::files::description.nullable()))
+            .select((
+                schema::files::id, 
+                schema::files::src, 
+                schema::files::description.nullable()
+            ))
             .load::<SmallFile>(&_connection)
             .expect("E");
         let videos = files
             .filter(schema::files::item_id.eq(self.id))
             .filter(schema::files::item_types.eq(self.types))
             .filter(schema::files::types.eq(2))
-            .select((schema::files::id, schema::files::src, schema::files::description.nullable()))
+            .select((
+                schema::files::id, 
+                schema::files::src, 
+                schema::files::description.nullable()
+            ))
             .load::<SmallFile>(&_connection)
             .expect("E");
         let audios = files
             .filter(schema::files::item_id.eq(self.id))
             .filter(schema::files::item_types.eq(self.types))
             .filter(schema::files::types.eq(3))
-            .select((schema::files::id, schema::files::src, schema::files::description.nullable()))
+            .select((
+                schema::files::id, 
+                schema::files::src, 
+                schema::files::description.nullable()
+            ))
             .load::<SmallFile>(&_connection)
             .expect("E");
         let docs = files
             .filter(schema::files::item_id.eq(self.id))
             .filter(schema::files::item_types.eq(self.types))
             .filter(schema::files::types.eq(4))
-            .select((schema::files::id, schema::files::src, schema::files::description.nullable()))
+            .select((
+                schema::files::id, 
+                schema::files::src, 
+                schema::files::description.nullable()
+            ))
             .load::<SmallFile>(&_connection)
             .expect("E");
 
@@ -1463,8 +1473,6 @@ impl Item {
         offset:   i64,
         is_admin: bool
     ) -> Vec<Help> {
-        // 0 object.slug, 1 object.is_active
-        // 2 object.title 3 object.content
         use crate::schema::items::dsl::items;
 
         let _connection = establish_connection();
@@ -1956,7 +1964,7 @@ impl Item {
             .expect("E");
     }
     pub fn get_open_tech_categories(&self, types: i16) -> Vec<TechCategories> {
-        // получаем открытые тех.категории товара
+        // получаем открытые тех.категории элемента
         use schema::{
             tech_categories_items::dsl::tech_categories_items,
             tech_categories::dsl::tech_categories,
@@ -1978,7 +1986,7 @@ impl Item {
             .expect("E");
     }
     pub fn get_close_tech_categories(&self, types: i16) -> Vec<TechCategories> {
-        // получаем закрытые тех.категории товара
+        // получаем закрытые тех.категории элемента
         use schema::{
             tech_categories_items::dsl::tech_categories_items,
             tech_categories::dsl::tech_categories,

@@ -42,10 +42,9 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
     let _cat_id: String = _id.clone();
     let _connection = establish_connection();
 
-    let _categorys = categories
+    let _category = categories
         .filter(schema::categories::slug.eq(&_cat_id))
         .filter(schema::categories::types.eq(6))
-        .limit(1)
         .select((
             schema::categories::name,
             schema::categories::slug,
@@ -57,10 +56,9 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
             schema::categories::seconds,
             schema::categories::now_u,
         ))
-        .load::<CatDetail>(&_connection)
+        .first::<CatDetail>(&_connection)
         .expect("E");
 
-    let _category = _categorys.into_iter().nth(0).unwrap();
     let cat_image: String;
     if _category.image.is_some() {
         cat_image = _category.image.as_deref().unwrap().to_string();

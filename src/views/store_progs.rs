@@ -47,11 +47,10 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
     let _item_id: String = param.1.clone();
     let _cat_id: String = param.0.clone();
 
-    let _items = items
+    let _item = items
         .filter(schema::items::slug.eq(&_item_id))
-        .load::<Item>(&_connection)
+        .first::<Item>(&_connection)
         .expect("E");
-    let _item = _items.into_iter().nth(0).unwrap();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -69,16 +68,15 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
         };
         use crate::models::{TechCategories, FeaturedItem};
 
-        let _tech_categories = tech_categories
-            .load::<TechCategories>(&_connection)
-            .expect("E");
+        //let _tech_categories = tech_categories
+        //    .load::<TechCategories>(&_connection)
+        //    .expect("E");
 
-        let _categorys = categories
+        let _category = categories
             .filter(schema::categories::slug.eq(&_cat_id))
             .filter(schema::categories::types.eq(_item.types))
-            .load::<Categories>(&_connection)
+            .first::<Categories>(&_connection)
             .expect("E");
-        let _category = _categorys.into_iter().nth(0).unwrap();
         let _cats: Vec<Cat>;
         let _tags: Vec<SmallTag>;
         let cats_res = block(move || Categories::get_categories_for_types(3)).await?;
@@ -116,8 +114,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     request_user: User,
                     object:   Item,
                     category: Categories,
-                    //cats:     Vec<Cat>,
-                    //all_tags: Vec<SmallTag>,
                     prev:     Option<FeaturedItem>,
                     next:     Option<FeaturedItem>,
                     is_ajax:  i32,
@@ -126,8 +122,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     request_user: _request_user,
                     object:   _item,
                     category: _category,
-                    //cats:     _cats,
-                    //all_tags: _tags,
                     prev:     prev,
                     next:     next,
                     is_ajax:  is_ajax,
@@ -182,8 +176,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 struct Template {
                     object:   Item,
                     category: Categories,
-                    //cats:     Vec<Cat>,
-                    //all_tags: Vec<SmallTag>,
                     prev:     Option<FeaturedItem>,
                     next:     Option<FeaturedItem>,
                     is_ajax:  i32,
@@ -191,8 +183,6 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                 let body = Template {
                     object:   _item,
                     category: _category,
-                    //cats:     _cats,
-                    //all_tags: _tags,
                     prev:     prev,
                     next:     next,
                     is_ajax:  is_ajax,
@@ -237,10 +227,9 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
     let _cat_id: String = _id.clone();
     let _connection = establish_connection();
 
-    let _categorys = categories
+    let _category = categories
         .filter(schema::categories::slug.eq(&_cat_id))
         .filter(schema::categories::types.eq(3))
-        .limit(1)
         .select((
             schema::categories::name,
             schema::categories::slug,
@@ -252,10 +241,9 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             schema::categories::seconds,
             schema::categories::now_u,
         ))
-        .load::<CatDetail>(&_connection)
+        .first::<CatDetail>(&_connection)
         .expect("E");
 
-    let _category = _categorys.into_iter().nth(0).unwrap();
     let cat_image: String;
     if _category.image.is_some() {
         cat_image = _category.image.as_deref().unwrap().to_string();
@@ -431,11 +419,9 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
         let _stat: StatPage;
         let _stats = stat_pages
             .filter(schema::stat_pages::types.eq(71))
-            .limit(1)
-            .load::<StatPage>(&_connection)
-            .expect("E");
-        if _stats.len() > 0 {
-            _stat = _stats.into_iter().nth(0).unwrap();
+            .first::<StatPage>(&_connection);
+        if _stats.is_ok() {
+            _stat = _stats.expect("E");
         }
         else {
             use crate::models::NewStatPage;

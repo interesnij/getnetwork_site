@@ -150,11 +150,9 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
 
             let _stats = stat_pages
                 .filter(schema::stat_pages::types.eq(6))
-                .limit(1)
-                .load::<StatPage>(&_connection)
-                .expect("E");
-            if _stats.len() > 0 {
-                _stat = _stats.into_iter().nth(0).unwrap();
+                .first::<StatPage>(&_connection);
+            if _stats.is_ok() {
+                _stat = _stats.expect("E");
             }
             else {
                 use crate::models::NewStatPage;
@@ -219,11 +217,9 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
 
         let _stats = stat_pages
             .filter(schema::stat_pages::types.eq(8))
-            .limit(1)
-            .load::<StatPage>(&_connection)
-            .expect("E");
-        if _stats.len() > 0 {
-            _stat = _stats.into_iter().nth(0).unwrap();
+            .first::<StatPage>(&_connection);
+        if _stats.is_ok() {
+            _stat = _stats.expect("E");
         }
         else {
             use crate::models::NewStatPage;

@@ -137,13 +137,12 @@ pub async fn get_c_user(conn: ConnectionInfo, id: i32, req: &HttpRequest) -> Coo
         use crate::schema::cookie_users::dsl::cookie_users;
 
         let _connection = establish_connection();
-        let _users = cookie_users
+        let _user = cookie_users
             .filter(schema::cookie_users::id.eq(id))
-            .load::<CookieUser>(&_connection)
-            .expect("E");
+            .first::<CookieUser>(&_connection);
 
-        if _users.len() > 0 {
-            return _users.into_iter().nth(0).unwrap();
+        if _user.is_ok() {
+            return _user.expect("E");
         }
         else {
             return create_c_user(conn, &req).await;
@@ -190,9 +189,8 @@ pub async fn create_history (
         .filter(schema::cookie_stats::user_id.eq(p_id))
         .filter(schema::cookie_stats::link.eq(p_link.clone()))
         .select(schema::cookie_stats::id)
-        .load::<i32>(&_connection)
-        .expect("E.")
-        .len() == 0;
+        .first::<i32>(&_connection)
+        .is_ok();
 
     if is_cookie_stats_exists {
         diesel::update(&user)
@@ -200,7 +198,7 @@ pub async fn create_history (
                 schema::cookie_users::height.eq(user.height + p_height),
                 schema::cookie_users::seconds.eq(user.seconds + p_seconds),
             ))
-            .get_result::<CookieUser>(&_connection)
+            .execute(&_connection)
             .expect("Error.");
     }
     if p_object_id > 0 {
@@ -313,7 +311,7 @@ pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Re
     };
     let _new_feedback = diesel::insert_into(feedbacks::table)
         .values(&new_feedback)
-        .get_result::<Feedback>(&_connection)
+        .execute(&_connection)
         .expect("E.");
     return HttpResponse::Ok();
 }
@@ -368,7 +366,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
                 };
                 diesel::insert_into(schema::category::table)
                     .values(&new_category)
-                    .get_result::<Category>(&_connection)
+                    .execute(&_connection)
                     .expect("E.");
             };
             for tag_id in form.tags_list.iter() {
@@ -380,7 +378,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
                 };
                 diesel::insert_into(schema::tags_items::table)
                     .values(&new_tag)
-                    .get_result::<TagItems>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
             }
 
@@ -395,7 +393,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
                 };
                 diesel::insert_into(schema::tech_categories_items::table)
                     .values(&new_cat)
-                    .get_result::<TechCategoriesItem>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
             }
 
@@ -409,7 +407,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
                 };
                 diesel::insert_into(schema::serve_items::table)
                     .values(&new_serve_form)
-                    .get_result::<ServeItems>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
                 serve_ids.push(*serve_id);
             }
@@ -439,7 +437,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
                 };
                 diesel::insert_into(schema::tech_categories_items::table)
                     .values(&new_cat)
-                    .get_result::<TechCategoriesItem>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
             }
 
@@ -452,7 +450,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
                     schema::items::price.eq(item_price),
                     schema::items::price_acc.eq(price_acc),
                 ))
-                .get_result::<Item>(&_connection)
+                .execute(&_connection)
                 .expect("Error.");
         }
     };
@@ -493,11 +491,10 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
 
             let _connection = establish_connection();
             let _item_id: i32 = *_id;
-            let _items = items
+            let _item = items
                 .filter(schema::items::id.eq(_item_id))
-                .load::<Item>(&_connection)
+                .first::<Item>(&_connection)
                 .expect("E");
-            let _item = _items.into_iter().nth(0).unwrap();
 
             if _item.is_active {
                 let _categories: Vec<Categories>;
@@ -517,13 +514,13 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 for _category in _categories.iter() {
                     diesel::update(_category)
                         .set(schema::categories::count.eq(_category.count - 1))
-                        .get_result::<Categories>(&_connection)
+                        .execute(&_connection)
                         .expect("Error.");
                 };
                 for _tag in _tags.iter() {
                     diesel::update(_tag)
                         .set(schema::tags::count.eq(_tag.count - 1))
-                        .get_result::<Tag>(&_connection)
+                        .execute(&_connection)
                         .expect("Error.");
                 };
             }
@@ -569,7 +566,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
 
             diesel::update(&_item)
                 .set(_new_item)
-                .get_result::<Item>(&_connection)
+                .execute(&_connection)
                 .expect("E");
 
             for category_id in form.category_list.iter() {
@@ -580,7 +577,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 };
                 diesel::insert_into(schema::category::table)
                     .values(&new_category)
-                    .get_result::<Category>(&_connection)
+                    .execute(&_connection)
                     .expect("E.");
 
                 if _item.is_active {
@@ -591,7 +588,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                         .expect("E");
                     diesel::update(&_category[0])
                         .set(schema::categories::count.eq(_category[0].count + 1))
-                        .get_result::<Categories>(&_connection)
+                        .execute(&_connection)
                         .expect("Error.");
                 }
             };
@@ -604,7 +601,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 };
                 diesel::insert_into(schema::tags_items::table)
                     .values(&new_tag)
-                    .get_result::<TagItems>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
 
                 if _item.is_active {
@@ -612,7 +609,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
 
                     diesel::update(&_tag[0])
                         .set(schema::tags::count.eq(_tag[0].count + 1))
-                        .get_result::<Tag>(&_connection)
+                        .execute(&_connection)
                         .expect("Error.");
                 }
             }
@@ -628,7 +625,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 };
                 diesel::insert_into(schema::tech_categories_items::table)
                     .values(&new_cat)
-                    .get_result::<TechCategoriesItem>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
             }
 
@@ -642,7 +639,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 };
                 diesel::insert_into(schema::serve_items::table)
                     .values(&new_serve_form)
-                    .get_result::<ServeItems>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
                 serve_ids.push(*serve_id);
             }
@@ -672,7 +669,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 };
                 diesel::insert_into(schema::tech_categories_items::table)
                     .values(&new_cat)
-                    .get_result::<TechCategoriesItem>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
             }
 
@@ -685,7 +682,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                     schema::items::price.eq(item_price),
                     schema::items::price_acc.eq(price_acc),
                 ))
-                .get_result::<Item>(&_connection)
+                .execute(&_connection)
                 .expect("Error.");
         }
     };
@@ -716,7 +713,7 @@ pub async fn create_category(session: Session, mut payload: Multipart) -> impl R
             };
             diesel::insert_into(schema::categories::table)
                 .values(&new_cat)
-                .get_result::<Categories>(&_connection)
+                .execute(&_connection)
                 .expect("E.");
         }
     }
@@ -750,7 +747,7 @@ pub async fn edit_category(session: Session, mut payload: Multipart, _id: web::P
 
             diesel::update(&_category[0])
                 .set(_new_cat)
-                .get_result::<Categories>(&_connection)
+                .execute(&_connection)
                 .expect("E");
         }
     }
@@ -762,12 +759,10 @@ pub async fn edit_content_item(session: Session, mut payload: Multipart, _id: we
 
     let _item_id: i32 = *_id;
     let _connection = establish_connection();
-    let _items = items
+    let _item = items
         .filter(schema::items::id.eq(&_item_id))
-        .load::<Item>(&_connection)
+        .first::<Item>(&_connection)
         .expect("E");
-
-    let _item = _items.into_iter().nth(0).unwrap();
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -777,7 +772,7 @@ pub async fn edit_content_item(session: Session, mut payload: Multipart, _id: we
             let form = content_form(payload.borrow_mut()).await;
             diesel::update(&_item)
             .set(schema::items::content.eq(form.content.clone()))
-            .get_result::<Item>(&_connection)
+            .execute(&_connection)
             .expect("E");
         }
     }
@@ -797,12 +792,11 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
         if _request_user.perm == 60 {
             let _connection = establish_connection();
             let _item_id: i32 = *_id;
-            let _items = items
+            let _item = items
                 .filter(schema::items::id.eq(_item_id))
-                .load::<Item>(&_connection)
+                .first::<Item>(&_connection)
                 .expect("E");
 
-            let _item = _items.into_iter().nth(0).unwrap();
             let _src_list = files
                 .filter(schema::files::item_id.eq(_item_id))
                 .filter(schema::files::item_types.eq(_item.types))
@@ -853,15 +847,15 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
 
             for _category in _categories.iter() {
                 diesel::update(_category)
-                .set(schema::categories::count.eq(_category.count - 1))
-                .get_result::<Categories>(&_connection)
-                .expect("Error.");
+                    .set(schema::categories::count.eq(_category.count - 1))
+                    .execute(&_connection)
+                    .expect("Error.");
             };
             for _tag in _tags.iter() {
                 diesel::update(_tag)
-                .set(schema::tags::count.eq(_tag.count - 1))
-                .get_result::<Tag>(&_connection)
-                .expect("Error.");
+                    .set(schema::tags::count.eq(_tag.count - 1))
+                    .execute(&_connection)
+                    .expect("Error.");
             };
 
         }
@@ -877,10 +871,6 @@ pub async fn delete_category(session: Session, _id: web::Path<i32>) -> impl Resp
         if _request_user.perm == 60 {
             let _connection = establish_connection();
             let _cat_id: i32 = *_id;
-            let _category = categories
-                .filter(schema::categories::id.eq(_cat_id))
-                .load::<Categories>(&_connection)
-                .expect("E");
 
             diesel::delete(categories.filter(schema::categories::id.eq(_cat_id)))
                 .execute(&_connection)
@@ -903,12 +893,11 @@ pub async fn create_files(session: Session, mut payload: Multipart, id: web::Pat
             let item_types = form.item_types;
 
             let _connection = establish_connection();
-            let _items = items
+            let _item = items
                 .filter(schema::items::id.eq(*id))
                 .filter(schema::items::types.eq(item_types))
-                .load::<Item>(&_connection)
+                .first::<Item>(&_connection)
                 .expect("E");
-            let _item = _items.into_iter().nth(0).unwrap();
 
             for file in form.files.iter() {
                 let new_file = NewFile::create (
@@ -920,7 +909,7 @@ pub async fn create_files(session: Session, mut payload: Multipart, id: web::Pat
                 );
                 diesel::insert_into(schema::files::table)
                     .values(&new_file)
-                    .get_result::<File>(&_connection)
+                    .execute(&_connection)
                     .expect("E.");
             };
         }
@@ -941,7 +930,7 @@ pub async fn edit_file(session: Session, mut payload: Multipart, _id: web::Path<
             let _file_id: i32 = *_id;
             let _file = files
                 .filter(schema::files::id.eq(_file_id))
-                .load::<File>(&_connection)
+                .first::<File>(&_connection)
                 .expect("E");
 
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
@@ -950,9 +939,9 @@ pub async fn edit_file(session: Session, mut payload: Multipart, _id: web::Path<
                 position:    form.position,
             };
 
-            diesel::update(&_file[0])
+            diesel::update(&_file)
                 .set(_new_file)
-                .get_result::<File>(&_connection)
+                .execute(&_connection)
                 .expect("E");
         }
     }
@@ -970,11 +959,8 @@ pub async fn delete_file(session: Session, _id: web::Path<i32>) -> impl Responde
             let _file_id: i32 = *_id;
             let _file = files
                 .filter(schema::files::id.eq(_file_id))
-                .load::<File>(&_connection)
-                .expect("E")
-                .into_iter()
-                .nth(0)
-                .unwrap();
+                .first::<File>(&_connection)
+                .expect("E");
             std::fs::remove_file(_file.src).expect("E");
 
             diesel::delete(files.filter(schema::files::id.eq(_file_id)))
@@ -995,15 +981,12 @@ pub async fn publish_item(session: Session, _id: web::Path<i32>) -> impl Respond
             let _id: i32 = *_id;
             let _item = items
                 .filter(schema::items::id.eq(_id))
-                .load::<Item>(&_connection)
-                .expect("E")
-                .into_iter()
-                .nth(0)
-                .unwrap();
+                .first::<Item>(&_connection)
+                .expect("E");
 
             diesel::update(&_item)
                 .set(schema::items::is_active.eq(true))
-                .get_result::<Item>(&_connection)
+                .execute(&_connection)
                 .expect("Error.");
 
             let _categories: Vec<Categories>;
@@ -1020,7 +1003,7 @@ pub async fn publish_item(session: Session, _id: web::Path<i32>) -> impl Respond
             for _category in _categories.iter() {
                 diesel::update(_category)
                     .set(schema::categories::count.eq(_category.count + 1))
-                    .get_result::<Categories>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
             }
             _tags = match tags_res {
@@ -1030,7 +1013,7 @@ pub async fn publish_item(session: Session, _id: web::Path<i32>) -> impl Respond
             for _tag in _tags.iter() {
                 diesel::update(_tag)
                     .set(schema::tags::count.eq(_tag.count + 1))
-                    .get_result::<Tag>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
             }
         }
@@ -1047,15 +1030,12 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
             let _id: i32 = *_id;
             let _item = items
                 .filter(schema::items::id.eq(_id))
-                .load::<Item>(&_connection)
-                .expect("E")
-                .into_iter()
-                .nth(0)
-                .unwrap();
+                .first::<Item>(&_connection)
+                .expect("E");
 
             diesel::update(&_item)
                 .set(schema::items::is_active.eq(true))
-                .get_result::<Item>(&_connection)
+                .execute(&_connection)
                 .expect("Error.");
 
             let _categories: Vec<Categories>;
@@ -1073,7 +1053,7 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
             for _category in _categories.iter() {
                 diesel::update(_category)
                     .set(schema::categories::count.eq(_category.count - 1))
-                    .get_result::<Categories>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
             }
             _tags = match tags_res {
@@ -1083,7 +1063,7 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
             for _tag in _tags.iter() {
                 diesel::update(_tag)
                     .set(schema::tags::count.eq(_tag.count - 1))
-                    .get_result::<Tag>(&_connection)
+                    .execute(&_connection)
                     .expect("Error.");
             }
         }

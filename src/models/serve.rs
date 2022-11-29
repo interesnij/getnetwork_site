@@ -133,11 +133,8 @@ impl ServeCategories {
         let _connection = establish_connection();
         return tech_categories
             .filter(schema::tech_categories::id.eq(self.tech_categories))
-            .load::<TechCategories>(&_connection)
-            .expect("E")
-            .into_iter()
-            .nth(0)
-            .unwrap();
+            .first::<TechCategories>(&_connection)
+            .expect("E");
     }
 }
 
@@ -237,20 +234,14 @@ impl Serve {
         let _serves = serve
             .filter(schema::serve::serve_id.eq(self.id))
             .filter(schema::serve::is_default.eq(true))
-            .limit(1)
-            .load::<Serve>(&_connection)
-            .expect("E");
-        if _serves.len() > 0 {
-            return _serves.into_iter().nth(0).unwrap();
+            .first::<Serve>(&_connection);
+        if _serves.is_ok() {
+            return _serves.expect("E");
         }
         else {
             return serve
-                .limit(1)
-                .load::<Serve>(&_connection)
-                .expect("E")
-                .into_iter()
-                .nth(0)
-                .unwrap();
+                .first::<Serve>(&_connection)
+                .expect("E");
         }
     }
     pub fn is_parent(&self) -> bool {
@@ -260,9 +251,8 @@ impl Serve {
         return serve
             .filter(schema::serve::serve_id.eq(self.id))
             .select(schema::serve::id)
-            .load::<i32>(&_connection)
-            .expect("E")
-            .len() > 0;
+            .fist::<i32>(&_connection)
+            .is_ok();
     }
     pub fn get_parent(&self) -> Serve {
         use crate::schema::serve::dsl::serve;
@@ -270,11 +260,8 @@ impl Serve {
         let _connection = establish_connection();
         return serve
             .filter(schema::serve::id.eq(self.serve_id.unwrap()))
-            .load::<Serve>(&_connection)
-            .expect("E")
-            .into_iter()
-            .nth(0)
-            .unwrap();
+            .first::<Serve>(&_connection)
+            .expect("E");
     }
     pub fn get_category(&self) -> ServeCategories {
         use crate::schema::serve_categories::dsl::serve_categories;
@@ -282,11 +269,8 @@ impl Serve {
         let _connection = establish_connection();
         return serve_categories
             .filter(schema::serve_categories::id.eq(self.serve_categories))
-            .load::<ServeCategories>(&_connection)
-            .expect("E")
-            .into_iter()
-            .nth(0)
-            .unwrap();
+            .first::<ServeCategories>(&_connection)
+            .expect("E");
     }
     pub fn get_100_description(&self) -> String {
         if self.description.is_some() {
