@@ -53,7 +53,7 @@ async fn main() -> std::io::Result<()> {
             .max_age(3600);
 
         App::new()
-            .app_data(AppState {
+            .data(AppState {
                 server_id: SERVER_COUNTER.fetch_add(1, Ordering::SeqCst),
                 request_count: Cell::new(0),
                 messages: messages.clone(),
@@ -62,7 +62,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(Compress::default())
             .wrap(cors)
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
-            .app_data(server.clone()) 
+            .data(server.clone()) 
             .service(_files)
             .service(_files2)
             .configure(routes)
