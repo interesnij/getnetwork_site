@@ -181,7 +181,7 @@ impl Categories {
             if item == &id {
                 if (i + 1) != _category_items_len {
                     let _next = Some(&_category_items[i + 1]);
-                    next = items
+                    next = (items
                         .filter(schema::items::id.eq(_next.unwrap()))
                         .filter(schema::items::types.eq(types))
                         .filter(schema::items::is_active.eq(true))
@@ -189,11 +189,12 @@ impl Categories {
                             schema::items::slug,
                             schema::items::title,
                         ))
-                        .first::<FeaturedItem>(&_connection);
+                        .first::<FeaturedItem>(&_connection)
+                        .expect("E."));
                 };
                 if i != 0 {
                     let _prev = Some(&_category_items[i - 1]);
-                    prev = items
+                    prev = Some(items
                         .filter(schema::items::id.eq(_prev.unwrap()))
                         .filter(schema::items::types.eq(types))
                         .filter(schema::items::is_active.eq(true))
@@ -201,7 +202,8 @@ impl Categories {
                             schema::items::slug,
                             schema::items::title,
                         ))
-                        .first::<FeaturedItem>(&_connection);
+                        .first::<FeaturedItem>(&_connection)
+                        .expect("E."));
                 };
                 break;
             }

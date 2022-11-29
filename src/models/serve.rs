@@ -251,7 +251,7 @@ impl Serve {
         return serve
             .filter(schema::serve::serve_id.eq(self.id))
             .select(schema::serve::id)
-            .fist::<i32>(&_connection)
+            .first::<i32>(&_connection)
             .is_ok();
     }
     pub fn get_parent(&self) -> Serve {
