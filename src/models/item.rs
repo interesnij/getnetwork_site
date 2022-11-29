@@ -181,7 +181,7 @@ impl Categories {
             if item == &id {
                 if (i + 1) != _category_items_len {
                     let _next = Some(&_category_items[i + 1]);
-                    next = (items
+                    next = Some(items
                         .filter(schema::items::id.eq(_next.unwrap()))
                         .filter(schema::items::types.eq(types))
                         .filter(schema::items::is_active.eq(true))
