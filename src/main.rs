@@ -62,9 +62,11 @@ async fn main() -> std::io::Result<()> {
             .wrap(Compress::default())
             .wrap(cors)
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
-            .data(server.clone()) 
+            .data(server.clone())
+            .default_service(web::route().to(utils::not_found))
             .service(_files)
             .service(_files2)
+
             .configure(routes)
     })
 

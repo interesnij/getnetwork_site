@@ -41,6 +41,7 @@ use crate::websocket::Server;
 
 pub fn pages_routes(config: &mut web::ServiceConfig) {
     config.route("/test/", web::get().to(test_page));
+    config.route("/test/", web::get().to(test_page));
     config.route("/", web::get().to(index_page));
     config.route("/info/", web::get().to(info_page));
     config.route("/history/", web::get().to(history_page));
@@ -64,6 +65,86 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
 
     config.route("/edit_file/{id}/", web::get().to(edit_file_page));
     config.route("/image/{id}/", web::get().to(image_page));
+}
+
+
+pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    // первая отрисовка страницы - организуем скрытие информации
+    if is_ajax == 0 {
+        get_first_load_page (
+            &session,
+            is_desctop,
+            "Страница не найдена".to_string(),
+            "вебсервисы.рф: Страница не найдена".to_string(),
+            "/not_found/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
+    }
+    else {
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/404.stpl")]
+                struct Template {
+                    request_user: User,
+                    is_ajax:      i32,
+
+                }
+                let body = Template {
+                    request_user: _request_user,
+                    is_ajax:      is_ajax,
+    
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/404.stpl")]
+                struct Template {
+                    is_ajax: i32,
+                }
+                let body = Template {
+                    is_ajax: is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/pages/anon_404.stpl")]
+                struct Template {
+                    is_ajax: i32,
+                }
+                let body = Template {
+                    is_ajax: is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/pages/anon_404.stpl")]
+                struct Template {
+                    is_ajax: i32,
+                }
+                let body = Template {
+                    is_ajax: is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
 }
 
 pub async fn test_page(state: web::Data<AppState>) -> Result<web::Json<IndexResponse>> {
