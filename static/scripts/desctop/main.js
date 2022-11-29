@@ -124,9 +124,8 @@ function get_custom_design() {
 
 function check_first_load() {
   span = document.body.querySelector(".span");
-  console.log(window.location.search.split('?').length);
-  if (window.location.search.split('?').length > 1) {
-    span.innerHTML = "Permission Denied";
+  if (document.location.href.indexOf('?') > -1) {
+    span.innerHTML = "Permission Denied"; 
   }
   else if (!span.firstChild) {
     url = window.location.href;
@@ -203,7 +202,6 @@ function ajax_get_reload(url, history_enable) {
 };
 
 window.addEventListener('popstate', function (e) {
-  console.log(history.state["url"]);
   ajax_get_reload(history.state["url"], false);
   //return false
 })

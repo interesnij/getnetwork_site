@@ -206,7 +206,7 @@ function send_post_data(form, url) {
   link.onreadystatechange = function () {
   if ( link.readyState == 4 && link.status == 200 ) {
     ajax_get_reload(url, true)
-  } else { console.log(link.responseText) }};
+  }};
   link.send(form_data);
 };
 function delete_item(url) {
@@ -383,7 +383,6 @@ on('body', 'click', '.show_user_history', function() {
 
 on('body', 'click', '.previous_click', function() {
   this.previousElementSibling.click();
-  console.log("previous click")
 });
 
 

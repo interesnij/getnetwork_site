@@ -62,7 +62,6 @@ $window_time_end = false;
 
 function get_window_view_timer(count) {
   // считаем время нахождения на странице, до 2х минут. При скролле перезапускаем.
-  console.log("Время окна работает");
   i = 0;
   intervalListener2 = setInterval(() => {
     if (i < count) {
@@ -78,10 +77,8 @@ function get_window_view_timer(count) {
 
 function get_page_view_time(count) {
   // считаем время нахождения на странице, до count секунд. При скролле перезапускаем.
-  console.log("Общее время страницы работает");
   i = 0;
   intervalListener = setInterval(() => {
-    //console.log($seconds);
     if (i < count) {
       $seconds += 1;
     }
@@ -143,7 +140,6 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       seconds: $seconds,
     }
   }
-  console.log(analyticsData);
   fetch("/create_history/",
     {
       headers: {
@@ -194,7 +190,6 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
       seconds: $seconds,
     }
   }
-  console.log(analyticsData);
   fetch("/create_history/",
     {
       headers: {
@@ -242,24 +237,16 @@ function getData() {
   return analyticsData;
 }
 function logVisit() {
-  console.log("logVisit!")
 
   const headers = {
     type: 'application/json',
   };
   const blob = new Blob([JSON.stringify(getData())], headers);
   let result = navigator.sendBeacon("/create_history/", blob);
-  if (result) {
-    console.log('Добавлено в очередь!');
-  } else {
-    console.log('Ошибка.');
-  }
 };
 window.onbeforeunload = function() {
-  console.log("Reload");
   logVisit()
 };
-//window.addEventListener('onbeforeunload', logVisit);
 
 ///////////////
 function get_or_create_cookie_user() {
@@ -279,7 +266,6 @@ function get_or_create_cookie_user() {
   ajax_link.onreadystatechange = function () {
     if ( this.readyState == 4 && this.status == 200 ) {
       data = JSON.parse(ajax_link.responseText);
-      console.log(data);
       if (data.device == 1) {
         _device = "Компьютер";
       }
@@ -312,12 +298,10 @@ function scrolled(_block) {
       //scrollStopper();
       // программа считает секунды для внесения в стат страницы и списка, если он есть.
       if ($page_time_end) {
-        console.log("перезапускаем счетчик страницы");
         get_page_view_time(120);
         $page_time_end = false;
       };
       if ($window_time_end) {
-        console.log("перезапускаем счетчик окна");
         get_window_view_timer(120);
         $window_time_end = false;
       };
@@ -421,7 +405,6 @@ function create_fullscreen(url, type_class, price) {
 
           $loader.onscroll = function() {
             if ($window_time_end) {
-              console.log("перезапускаем счетчик окна");
               get_window_view_timer(120);
               $window_time_end = false;
             };
@@ -460,7 +443,6 @@ function create_fullscreen(url, type_class, price) {
 };
 
 function create_order_form(price) {
-  console.log("create_order_form!");
   try {
     document.body.querySelector(".price_section_block").style.display = "none";
   } catch { null };
@@ -557,7 +539,6 @@ function change_this_fullscreen(_this, $loader) {
 
           $loader.onscroll = function() {
             if ($window_time_end) {
-              console.log("перезапускаем счетчик");
               get_window_view_timer(120);
               $window_time_end = false;
             };
@@ -935,7 +916,6 @@ on('body', 'click', '.anon_color_change', function() {
   color = "white";
 
   background = getCookie("background");
-  console.log(background);
   if (background != "") {
     color = background;
   }
@@ -1269,7 +1249,6 @@ function connect() {
   wsUri = ws_scheme + '://' + window.location.host + "/ws";
   //wsUri = ws_scheme + "://194.58.90.123:8082/ws";
 
-  console.log('Connecting...')
   socket = new WebSocket(wsUri)
 
   socket.onopen = () => {
@@ -1278,43 +1257,43 @@ function connect() {
 
   socket.onmessage = (ev) => {
     json_data = JSON.parse(ev.data)
-    console.log("types", json_data["types"]);
-    console.log("id", json_data["id"]);
-    console.log("data", json_data["data"]);
-    console.log("страница корректна...", json_data["types"] == "end_page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]);
+    //console.log("types", json_data["types"]);
+    //console.log("id", json_data["id"]);
+    //console.log("data", json_data["data"]);
+    //console.log("страница корректна...", json_data["types"] == "end_page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]);
     // обновляем статистику страницы - навый пользователь смотрит
     if (json_data["types"] == "page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]) {
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
-      console.log('Смотрит страницу: ' + json_data["id"]);
+      //console.log('Смотрит страницу: ' + json_data["id"]);
     }
     // обновляем статистику страницы - навый пользователь ушел
     else if (json_data["types"] == "end_page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]) {
       real_wiew = document.body.querySelector(".real_wiew");
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
-      console.log('Ушел со страницы: ' + json_data["id"]);
+      //console.log('Ушел со страницы: ' + json_data["id"]);
     }
     // обновляем статистику объекта - навый пользователь смотрит
     else if (json_data["types"] == "object_view" && document.body.querySelector(".doc_title").getAttribute("data-id") == json_data["id"]) {
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
-      console.log('Смотрит объект: ' + json_data["id"]);
+      //console.log('Смотрит объект: ' + json_data["id"]);
     }
     // обновляем статистику объекта - навый пользователь ушел
     else if (json_data["types"] == "end_object_view" && document.body.querySelector(".doc_title").getAttribute("data-id") == json_data["id"]) {
       real_wiew = document.body.querySelector(".real_wiew");
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
-      console.log('Ушел с объекта: ' + json_data["id"]);
+      //console.log('Ушел с объекта: ' + json_data["id"]);
     }
   }
 
   socket.onclose = () => {
-    console.log('Disconnected')
+    //console.log('Disconnected')
     socket = null
   }
 }
 
 function disconnect() {
   if (socket) {
-    console.log('Disconnecting...')
+    //console.log('Disconnecting...')
     socket.close()
     socket = null
   }
