@@ -137,7 +137,6 @@ function check_first_load() {
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
       if ( this.readyState == 4 && this.status == 200 ) {
-        if (!window.location.href.indexOf('ajax') > -1) {
           get_custom_design();
           elem_ = document.createElement('span');
           elem_.innerHTML = ajax_link.responseText;
@@ -147,10 +146,6 @@ function check_first_load() {
           get_page_view_time(120);
           scrolled(document.body.querySelector(".span"));
           window.history.pushState ({"url":url}, document.title, url);
-        }
-        else {
-          span.innerHTML = "Idi nahoy"; 
-        }
       }
     }
     ajax_link.send();
@@ -259,4 +254,9 @@ on('body', 'input', '.desctop_folder_search', function() {
     ajax_link.send();
 });
 
-check_first_load();
+if (window.location.href.indexOf('ajax') > -1) {
+  document.body.querySelector(".span").innerHTML = "Permission Denied"; 
+}
+else {
+  check_first_load();
+}
