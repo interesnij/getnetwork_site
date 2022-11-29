@@ -1155,7 +1155,7 @@ pub async fn delete_serve_category(session: Session, _id: web::Path<i32>) -> imp
                 .first::<TechCategories>(&_connection)
                 .expect("E");
             diesel::update(&_category)
-                .set(schema::tech_categories::count.eq(&_category[0].count - 1))
+                .set(schema::tech_categories::count.eq(&_category.count - 1))
                 .execute(&_connection)
                 .expect("E");
         }

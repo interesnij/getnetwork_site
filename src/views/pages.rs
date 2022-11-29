@@ -1475,19 +1475,19 @@ pub async fn image_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> 
         if obj == &_id {
             if (i + 1) != _images_len {
                 let _next = Some(&_images[i + 1]);
-                next = files
+                next = Some(files
                     .filter(schema::files::id.eq(_next.unwrap()))
                     .filter(schema::files::types.eq(_item.types))
                     .first::<File>(&_connection)
-                    .expect("E");
+                    .expect("E"));
             };
             if i != 0 {
                 let _prev = Some(&_images[i - 1]);
-                prev = files
+                prev = Some(files
                     .filter(schema::files::id.eq(_prev.unwrap()))
                     .filter(schema::files::types.eq(_item.types))
                     .first::<File>(&_connection)
-                    .expect("E");
+                    .expect("E"));
             };
             break;
         }
