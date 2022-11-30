@@ -32,8 +32,10 @@ use crate::views::not_found;
 
 
 pub fn help_routes(config: &mut web::ServiceConfig) {
-    config.default_service(web::route().to(not_found));
-    config.service(web::resource("/helps/{slug}/").route(web::get().to(help_category_page)));
+    config.service(
+        web::scope("/helps")
+            .default_service(web::route().to(not_found));
+            .service(web::resource("/{slug}/").route(web::get().to(help_category_page)));
 }
 
 
