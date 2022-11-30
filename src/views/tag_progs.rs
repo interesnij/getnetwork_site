@@ -165,7 +165,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
     }
     else {
         use schema::tags_items::dsl::tags_items;
-        use crate::models::{Item, Blog, Service, Store, Wiki, Work};
+        use crate::models::{Item, Blog, Service, Store, Wiki, Work, Help};
 
         let _tag_items = tags_items
             .filter(schema::tags_items::tag_id.eq(&_tag.id))
@@ -176,6 +176,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
         let mut store_stack = Vec::new();
         let mut wiki_stack = Vec::new();
         let mut work_stack = Vec::new();
+        let mut help_stack = Vec::new();
         for _tag_item in _tag_items.iter() {
             match _tag_item.types {
                 1 => blog_stack.push(_tag_item.item_id),
@@ -183,6 +184,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                 3 => store_stack.push(_tag_item.item_id),
                 4 => wiki_stack.push(_tag_item.item_id),
                 5 => work_stack.push(_tag_item.item_id),
+                6 => help_stack.push(_tag_item.item_id),
                 _ => println!("no value"),
             };
         };
@@ -196,12 +198,15 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
             let _stores = Item::get_stores_for_ids(3, 0, &store_stack, is_admin);
             let _wikis = Item::get_wikis_for_ids(3, 0, &wiki_stack, is_admin);
             let _works = Item::get_works_for_ids(3, 0, &work_stack, is_admin);
+            let _helps = Item::get_helps_for_ids(3, 0, &help_stack, is_admin);
 
             let blogs_count = _blogs.len();
             let services_count = _services.len();
             let stores_count = _stores.len();
             let wikis_count = _wikis.len();
             let works_count = _works.len();
+            let helps_count = _helps.len();
+
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/tag.stpl")]
@@ -213,12 +218,14 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     wikis_list:    Vec<Wiki>,
                     blogs_list:    Vec<Blog>,
                     stores_list:   Vec<Store>,
+                    helps_list:    Vec<Help>,
 
                     works_count:   usize,
                     services_count:usize,
                     wikis_count:   usize,
                     blogs_count:   usize,
                     stores_count:  usize,
+                    helps_count:   usize,
                     is_ajax:       i32,
                 }
                 let body = Template {
@@ -229,12 +236,14 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     wikis_list:    _wikis,
                     blogs_list:    _blogs,
                     stores_list:   _stores,
+                    helps_list:    _helps,
 
                     works_count:   works_count,
                     services_count:services_count,
                     wikis_count:   wikis_count,
                     blogs_count:   blogs_count,
                     stores_count:  stores_count,
+                    helps_count:   helps_count,
                     is_ajax:       is_ajax,
                 }
                 .render_once()
@@ -251,12 +260,14 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     wikis_list:    Vec<Wiki>,
                     blogs_list:    Vec<Blog>,
                     stores_list:   Vec<Store>,
+                    helps_list:    Vec<Help>,
 
                     works_count:   usize,
                     services_count:usize,
                     wikis_count:   usize,
                     blogs_count:   usize,
                     stores_count:  usize,
+                    helps_count:   usize,
                     is_ajax:       i32,
                 }
                 let body = Template {
@@ -266,12 +277,14 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     wikis_list:    _wikis,
                     blogs_list:    _blogs,
                     stores_list:   _stores,
+                    helps_list:    _helps,
 
                     works_count:   works_count,
                     services_count:services_count,
                     wikis_count:   wikis_count,
                     blogs_count:   blogs_count,
                     stores_count:  stores_count,
+                    helps_count:   helps_count,
                     is_ajax:       is_ajax,
                 }
                 .render_once()
@@ -285,12 +298,14 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
             let _stores = Item::get_stores_for_ids(3, 0, &store_stack, false);
             let _wikis = Item::get_wikis_for_ids(3, 0, &wiki_stack, false);
             let _works = Item::get_works_for_ids(3, 0, &work_stack, false);
+            let _helps = Item::get_helps_for_ids(3, 0, &help_stack, false);
 
             let blogs_count = _blogs.len();
             let services_count = _services.len();
             let stores_count = _stores.len();
             let wikis_count = _wikis.len();
             let works_count = _works.len();
+            let helps_count = _helps.len();
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -302,12 +317,14 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     wikis_list:    Vec<Wiki>,
                     blogs_list:    Vec<Blog>,
                     stores_list:   Vec<Store>,
+                    helps_list:    Vec<Help>,
 
                     works_count:   usize,
                     services_count:usize,
                     wikis_count:   usize,
                     blogs_count:   usize,
                     stores_count:  usize,
+                    helps_count:   usize,
                     is_ajax:       i32,
                 }
                 let body = Template {
@@ -317,12 +334,14 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     wikis_list:    _wikis,
                     blogs_list:    _blogs,
                     stores_list:   _stores,
+                    helps_list:    _helps,
 
                     works_count:   works_count,
                     services_count:services_count,
                     wikis_count:   wikis_count,
                     blogs_count:   blogs_count,
                     stores_count:  stores_count,
+                    helps_count:   helps_count,
                     is_ajax:       is_ajax,
                 }
                 .render_once()
@@ -339,12 +358,14 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     wikis_list:    Vec<Wiki>,
                     blogs_list:    Vec<Blog>,
                     stores_list:   Vec<Store>,
+                    helps_list:    Vec<Help>,
 
                     works_count:   usize,
                     services_count:usize,
                     wikis_count:   usize,
                     blogs_count:   usize,
                     stores_count:  usize,
+                    helps_count:   usize,
                     is_ajax:       i32,
                 }
                 let body = Template {
@@ -354,12 +375,14 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     wikis_list:    _wikis,
                     blogs_list:    _blogs,
                     stores_list:   _stores,
+                    helps_list:    _helps,
 
                     works_count:   works_count,
                     services_count:services_count,
                     wikis_count:   wikis_count,
                     blogs_count:   blogs_count,
                     stores_count:  stores_count,
+                    helps_count:   helps_count,
                     is_ajax:       is_ajax,
                 }
                 .render_once()
