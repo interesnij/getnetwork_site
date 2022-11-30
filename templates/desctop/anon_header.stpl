@@ -127,7 +127,7 @@
                       </li>
                       -->
                       <li>
-                          <a class="pointer anon_color_change" data-color="white">
+                          <a class="pointer anon_color_change" data-color="dark">
                               Фон
                           </a>
                       </li>

@@ -49,7 +49,7 @@
     <span class="icon-lifesaver"></span>
     <p>Помощь</p>
   </button>
-  <button class="mobile_icon border anon_color_change" data-color="white">
+  <button class="mobile_icon border anon_color_change" data-color="dark">
     <span class="icon-pencil"></span>
     <p>Фон</p>
   </button>
