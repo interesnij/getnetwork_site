@@ -53,6 +53,8 @@ async fn main() -> std::io::Result<()> {
             .allowed_origin("194.58.90.123:8082")
             .allowed_origin("127.0.0.1:6379")
             .allowed_methods(vec!["GET", "POST"])
+            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+            .allowed_header(http::header::CONTENT_TYPE)
             .max_age(3600);
 
         App::new() 
