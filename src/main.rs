@@ -20,6 +20,7 @@ use actix_web::{
     App,
     middleware::{Compress, Logger},
     web,
+    http,
 };
 use actix_redis::RedisSession;
 use actix_files::Files;
