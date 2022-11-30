@@ -28,10 +28,12 @@ use crate::models::{
     CatDetail,
 };
 use sailfish::TemplateOnce;
+use crate::views::not_found;
 
 
 pub fn help_routes(config: &mut web::ServiceConfig) {
     config.service(web::resource("/helps/{slug}/").route(web::get().to(help_category_page)));
+    config.default_service(web::route().to(not_found));
 }
 
 
