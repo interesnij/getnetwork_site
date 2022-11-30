@@ -686,7 +686,7 @@ impl Categories {
             _items = items
                 .filter(schema::items::id.eq_any(ids))
                 .filter(schema::items::is_active.eq(true))
-                .order(schema::items::created.desc())
+                .order(schema::items::position.asc())
                 .limit(limit)
                 .offset(offset)
                 .select((
