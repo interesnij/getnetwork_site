@@ -102,6 +102,24 @@
       </section>
       <hr class="mt-0 mb-0 " />
       <% } %>
+
+      <% if helps_count > 0 { %>
+      <section class="page-section">
+          <div class="container relative">
+              <h5 class="section-title font-alt align-left">
+                <a>
+                  Помощь (<%= helps_count %>)
+                </a>
+              </h5>
+              <div class="row multi-columns-row">
+                <% for object in helps_list.iter() { %>
+                  <% include!("../generic/help.stpl"); %>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } %>
     </div>
 </section>
 
