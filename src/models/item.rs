@@ -123,7 +123,7 @@ impl Help {
             categories::dsl::categories,
         };
         let _connection = establish_connection();
-        let ids = category
+        let _id = category
             .filter(schema::category::item_id.eq(self.id))
             .filter(schema::category::types.eq(6))
             .select(schema::category::categories_id)
@@ -131,7 +131,7 @@ impl Help {
             .expect("E");
 
         let _category = categories
-            .filter(schema::categories::id.eq_any(ids))
+            .filter(schema::categories::id.eq(_id))
             .select((
                 schema::categories::name,
                 schema::categories::slug,
