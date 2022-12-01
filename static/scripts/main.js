@@ -159,13 +159,13 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
 
 function get_window_stat_meta($link, $title, $object_id, $page_id) {
   //return
-  //ip_block = document.body.querySelector(".ip_span");
-  //if (document.body.querySelector("#is_superuser")
-  //    || ip_block.innerHTML == "91.239.184.81"
-  //    || ip_block.innerHTML == "176.59.23.228") {
-  //  return
-  //}
-  if (!$page_id) {
+  ip_block = document.body.querySelector(".ip_span");
+  if (document.body.querySelector("#is_superuser")
+      || ip_block.innerHTML == "91.239.184.81"
+      || ip_block.innerHTML == "176.59.23.228") {
+    return
+  }
+  else if (!$page_id) {
     return
   }
 
@@ -573,11 +573,6 @@ function change_this_fullscreen(_this, $loader) {
   link.send();
 };
 
-//window.addEventListener("unload", function() {
-//  navigator.sendBeacon("/analytics", JSON.stringify(analyticsData));
-//});
-
-
 class ToastManager {
     constructor() {
         this.id = 0;
@@ -875,11 +870,6 @@ function service_tab_action(_this, tab_class) {
 };
 
 function on(elSelector, eventName, selector, fn) {var element = document.querySelector(elSelector);element.addEventListener(eventName, function(event) {var possibleTargets = element.querySelectorAll(selector);var target = event.target;for (var i = 0, l = possibleTargets.length; i < l; i++) {var el = target;var p = possibleTargets[i];while (el && el !== element) {if (el === p) {return fn.call(p, event);}el = el.parentNode;}}});}
-
-//window.addEventListener("unload", function() {
-//  analyticsData = data;
-//  navigator.sendBeacon("/analytics", JSON.stringify(analyticsData));
-//});
 on('body', 'click', '.ajax', function(event) {
   event.preventDefault();
   //if (this.getAttribute("href") == window.location.pathname){
@@ -1257,10 +1247,6 @@ function connect() {
 
   socket.onmessage = (ev) => {
     json_data = JSON.parse(ev.data)
-    //console.log("types", json_data["types"]);
-    //console.log("id", json_data["id"]);
-    //console.log("data", json_data["data"]);
-    //console.log("страница корректна...", json_data["types"] == "end_page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]);
     // обновляем статистику страницы - навый пользователь смотрит
     if (json_data["types"] == "page_view" && document.body.querySelector(".doc_title").getAttribute("page-id") == json_data["id"]) {
       document.body.querySelector(".real_wiew").innerHTML = json_data["data"];
@@ -1299,4 +1285,5 @@ function disconnect() {
   }
 }
 
-connect()
+//пока сокеты оставим неактивными
+//connect()
