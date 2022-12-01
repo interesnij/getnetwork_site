@@ -116,6 +116,33 @@ pub struct Help {
     pub title:     String,
     pub content:   Option<String>,
 }
+impl Help {
+    pub fn get_category(&self) -> SmallCat {
+        use crate::schema::{
+            category::dsl::category,
+            categories::dsl::categories,
+        };
+        let _connection = establish_connection();
+        let ids = category
+            .filter(schema::category::item_id.eq(self.id))
+            .filter(schema::category::types.eq(6))
+            .select(schema::category::categories_id)
+            .first::<i32>(&_connection)
+            .expect("E");
+
+        let _category = categories
+            .filter(schema::categories::id.eq_any(ids))
+            .select((
+                schema::categories::name,
+                schema::categories::slug,
+                schema::categories::count
+            ))
+            .first::<SmallCat>(&_connection)
+            .expect("E");
+        return _category;
+    }
+}
+
 #[derive(Serialize, Queryable)]
 pub struct FeaturedItem {
     pub slug:  String,

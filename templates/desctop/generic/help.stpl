@@ -1,9 +1,4 @@
-<h4 class="font-alt"><%= object.title %></h4>
-<%= object.id %>
-<p>
-  <% if object.content.is_some() { %>
-      <%- object.content.as_deref().unwrap() %>
-  <% } else { %>
-      Без описания
-  <% } %>
-</p>
+<% let category = object.get_category() ;%>
+<a class="btn ajax" href="/helps/<%= category.slug %>/">
+  <h5 class="font-alt"><%= object.title %> - <%= category.name %> (<%= category.count %>)</h5>
+</a>>
