@@ -1,6 +1,6 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="9" data-title="<%= category.name %>| Категория помощи" data-description="вебсервисы.рф: <%= category.name %>| Категория помощи" data-uri="/helps/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
+<section page-id="9" data-title="<%= category.name %> | Категория помощи" data-description="вебсервисы.рф: <%= category.name %>| Категория помощи" data-uri="/helps/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
             <a class="ajax" href="/">Главная</a>
@@ -21,6 +21,7 @@
               <div class="content_block content">
                 <% for object in object_list.iter() { %>
                   <h4 class="font-alt"><%= object.title %></h4>
+                  <%= object.id %>
                   <p>
                     <% if object.content.is_some() { %>
                       <%- object.content.as_deref().unwrap() %>

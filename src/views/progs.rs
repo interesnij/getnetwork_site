@@ -823,9 +823,6 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
                 .expect("E");
             diesel::delete(&_item).execute(&_connection).expect("E");
 
-            let _categories: Vec<Categories>;
-            let _tags: Vec<Tag>;
-
             let _categories = _item.get_categories_obj().expect("E");
             //_categories = match cats_res {
             //    Ok(_ok) => _ok,

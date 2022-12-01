@@ -1,6 +1,6 @@
 <% include!("../header.stpl"); %>
 
-<section page-id="9" data-title="<%= category.name %>| Категория помощи" data-description="вебсервисы.рф: <%= category.name %>| Категория помощи" data-uri="/helps/<%= category.slug %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
+<section page-id="9" data-title="<%= category.name %> | Категория помощи" data-description="вебсервисы.рф: <%= category.name %>| Категория помощи" data-uri="/helps/<%= category.slug %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
             <a><%= category.name %></a>
