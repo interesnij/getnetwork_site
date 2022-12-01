@@ -23,7 +23,7 @@
         <div class="align-center">
             <h3 class="banner-heading font-alt">Хотите обсудить проект?</h3>
             <div>
-                <a class="btn btn-mod create_feedback_form btn-border btn-medium btn-round ajax">Напишите нам</a>
+                <a class="btn btn-mod create_feedback_form btn-border btn-medium btn-round">Напишите нам</a>
             </div>
         </div>
     </div>
