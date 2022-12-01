@@ -1912,8 +1912,8 @@ impl Item {
                     schema::items::id,
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::description.nullable()
-                ))
+                    schema::items::content.nullable()
+                )) 
                 .load::<Help>(&_connection)
                 .expect("E.");
         }

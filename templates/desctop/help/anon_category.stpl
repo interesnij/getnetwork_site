@@ -21,8 +21,8 @@
               <div class="content_block content">
                 <% for object in object_list.iter() { %>
                   <h4 class="font-alt"><%= object.title %></h4>
-                  <%= object.types %>
-                  <p>
+                  <%= object.id %>
+                  <p> 
                     <% if object.content.is_some() { %>
                       <%- object.content.as_deref().unwrap() %>
                     <% } else { %>
