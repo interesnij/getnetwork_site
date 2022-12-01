@@ -1161,8 +1161,8 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
             }
         }
         else {
-            let (_works, next_page_number) = Item::get_helps_list_for_ids(page, 20, &_tag_items, false);
-            let works_count = _works.len();
+            let (_helps, next_page_number) = Item::get_helps_list_for_ids(page, 20, &_tag_items, false);
+            let works_count = _helps.len();
 
             if is_desctop {
                 #[derive(TemplateOnce)]
