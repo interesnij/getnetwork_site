@@ -21,7 +21,7 @@ use actix_web::{
     middleware::{
         Compress, 
         Logger, 
-        NormalizePath,
+        //NormalizePath,
     },
     web,
     http,
@@ -70,7 +70,7 @@ async fn main() -> std::io::Result<()> {
             }) 
             .wrap(Logger::default())
             .wrap(Compress::default())
-            .wrap(NormalizePath::trim())
+            //.wrap(NormalizePath::trim())
             //.wrap(cors)
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .data(server.clone())
