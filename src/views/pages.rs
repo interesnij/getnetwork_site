@@ -449,7 +449,7 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
                 .expect("Error.");
         }
         let _help_cats: Vec<Cat>;
-        let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
+        let cats_res = block(move || Categories::get_categories_for_types(6)).await?;
         let _help_cats = match cats_res {
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
