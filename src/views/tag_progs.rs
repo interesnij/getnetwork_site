@@ -40,6 +40,7 @@ pub fn tag_routes(config: &mut web::ServiceConfig) {
     config.route("/tag_stores/{slug}/", web::get().to(tag_stores_page));
     config.route("/tag_wikis/{slug}/", web::get().to(tag_wikis_page));
     config.route("/tag_works/{slug}/", web::get().to(tag_works_page));
+    config.route("/tag_helps/{slug}/", web::get().to(tag_helps_page));
     config.service(web::resource("/create_tag/")
         .route(web::get().to(create_tag_page))
         .route(web::post().to(create_tag))
@@ -1062,6 +1063,142 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     tag:              _tag,
                     works_list:       _works,
                     works_count:      works_count,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+    }
+}
+
+pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
+    use schema::tags::dsl::tags;
+    use crate::utils::get_device_and_ajax;
+
+    let _connection = establish_connection();
+    let _tag_id: String = _id.clone();
+    let _tag = tags
+        .filter(schema::tags::name.eq(&_tag_id))
+        .first::<Tag>(&_connection)
+        .expect("E");
+    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+
+    if is_ajax == 0 {
+        get_first_load_page (
+            &session,
+            is_desctop,
+            _tag.name.clone() + &" | Справки тега".to_string(),
+            _tag.name.clone() + &" | вебсервисы.рф: Справки тега".to_string(),
+            "/tag_helps/".to_string() + &_tag_id.to_string() + &"/".to_string(),
+            "/static/images/dark/store.jpg".to_string(),
+        ).await
+    }
+    else {
+        use crate::schema::tags_items::dsl::tags_items;
+        use crate::models::{Item, Help};
+        use crate::utils::get_page;
+
+        let page = get_page(&req);
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::tag_id.eq(&_tag.id))
+            .filter(schema::tags_items::types.eq(6))
+            .select(schema::tags_items::item_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+
+        if is_signed_in(&session) {
+            let _request_user = get_request_user_data(&session);
+            let (_helps, next_page_number) = Item::get_helps_list_for_ids(page, 20, &_tag_items, _request_user.is_superuser());
+            let helps_count = _helps.len();
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/tags/tag_helps.stpl")]
+                struct Template {
+                    request_user:     User,
+                    tag:              Tag,
+                    helps_list:       Vec<Help>,
+                    helps_count:      usize,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    request_user:     _request_user,
+                    tag:              _tag,
+                    helps_list:       _helps,
+                    helps_count:      helps_count,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/tags/tag_helps.stpl")]
+                struct Template {
+                    tag:              Tag,
+                    helps_list:       Vec<Help>,
+                    helps_count:      usize,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    tag:              _tag,
+                    helps_list:       _helps,
+                    helps_count:      helps_count,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+        }
+        else {
+            let (_works, next_page_number) = Item::get_helps_list_for_ids(page, 20, &_tag_items, false);
+            let works_count = _works.len();
+
+            if is_desctop {
+                #[derive(TemplateOnce)]
+                #[template(path = "desctop/tags/anon_tag_helps.stpl")]
+                struct Template {
+                    tag:              Tag,
+                    helps_list:       Vec<Help>,
+                    helps_count:      usize,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    tag:              _tag,
+                    helps_list:       _helps,
+                    helps_count:      helps_count,
+                    next_page_number: next_page_number,
+                    is_ajax:          is_ajax,
+                }
+                .render_once()
+                .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
+                Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
+            }
+            else {
+                #[derive(TemplateOnce)]
+                #[template(path = "mobile/tags/anon_tag_helps.stpl")]
+                struct Template {
+                    tag:              Tag,
+                    helps_list:       Vec<Help>,
+                    helps_count:      usize,
+                    next_page_number: i32,
+                    is_ajax:          i32,
+                }
+                let body = Template {
+                    tag:              _tag,
+                    helps_list:       _helps,
+                    helps_count:      helps_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                 }

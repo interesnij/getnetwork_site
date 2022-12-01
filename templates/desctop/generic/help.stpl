@@ -1,4 +1,4 @@
 <% let category = object.get_category() ;%>
 <a class="btn ajax" href="/helps/<%= category.slug %>/">
   <h5 class="font-alt"><%= object.title %> - <%= category.name %> (<%= category.count %>)</h5>
-</a>>
+</a>

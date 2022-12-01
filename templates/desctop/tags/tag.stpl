@@ -107,7 +107,7 @@
       <section class="page-section">
           <div class="container relative">
               <h5 class="section-title font-alt align-left">
-                <a>
+                <a href="/tag_helps/<%= tag.name %>/" class="ajax">
                   Помощь (<%= helps_count %>)
                 </a>
               </h5>
