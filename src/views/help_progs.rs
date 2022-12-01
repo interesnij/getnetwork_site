@@ -35,7 +35,7 @@ pub fn help_routes(config: &mut web::ServiceConfig) {
     config.service(
         web::scope("/helps")
             .service(web::resource("/{slug}/").route(web::get().to(help_category_page)))
-            .default_service(web::route().to(not_found))
+            //.default_service(web::route().to(not_found))
     );
 }
 
