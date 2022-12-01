@@ -102,8 +102,7 @@
       </section>
       <hr class="mt-0 mb-0 " />
       <% } %>
-      
-      <%= helps_count %>
+
       <% if helps_count > 0 { %>
       <section class="page-section">
           <div class="container relative">
@@ -119,7 +118,6 @@
               </div>
           </div>
       </section>
-      <hr class="mt-0 mb-0 " />
       <% } %>
     </div>
 </section>
