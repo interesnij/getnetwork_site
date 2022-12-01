@@ -2,8 +2,8 @@
 <%= object.id %>
 <p>
   <% if object.content.is_some() { %>
-    <%- object.content.as_deref().unwrap() %>
+      <%- object.content.as_deref().unwrap() %>
   <% } else { %>
-    Без описания
+      Без описания
   <% } %>
 </p>
