@@ -21,7 +21,7 @@ use actix_web::{
     middleware::{
         Compress, 
         Logger, 
-        //NormalizePath,
+        NormalizePath,
     },
     web,
     http,
