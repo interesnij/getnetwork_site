@@ -130,8 +130,8 @@ hr{
 .btn-mod:focus,
 a.btn-mod:hover,
 a.btn-mod:focus{
-    color: rgba(0,0,0, .85) !important;
-    background: rgba(255,255,255, .7) !important;
+    color: white !important;
+    background: #2F4F4F !important;
 }
 .btn-mod.btn-border {
   color: rgba(255,255,255, .7) !important;
