@@ -62,18 +62,18 @@ async fn main() -> std::io::Result<()> {
         //    .allowed_header(http::header::CONTENT_TYPE)
         //    .max_age(3600);
 
-        App::new() 
-            .data(AppState {
-                server_id: SERVER_COUNTER.fetch_add(1, Ordering::SeqCst),
-                request_count: Cell::new(0),
-                messages: messages.clone(),
-            }) 
+        App::new()  
             .wrap(Logger::default())
             .wrap(Compress::default())
             //.wrap(NormalizePath::trim())
             //.wrap(cors)
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
-            .data(server.clone())
+            .app_data(AppState {
+                server_id: SERVER_COUNTER.fetch_add(1, Ordering::SeqCst),
+                request_count: Cell::new(0),
+                messages: messages.clone(),
+            })
+            .app_data(server.clone())
             .default_service(web::route().to(not_found))
             .service(_files)
             .service(_files2)
