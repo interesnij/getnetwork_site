@@ -134,17 +134,6 @@ a.btn-mod:focus{
     background: rgba(255,255,255, .7) !important;
 }
 
-.btn-mod.btn-border{
-    color: rgba(255,255,255, 0.8) !important;
-    border: 2px solid rgba(255,255,255, 0.8) !important;
-}
-
-.btn-mod.btn-border:hover,
-.btn-mod.btn-border:focus{
-  color: rgba(255,255,255, 1) !important;
-  border: 2px solid rgba(255,255,255, 1) !important;
-}
-
 .form input[type="text"],
 .form input[type="email"],
 .form input[type="number"],
