@@ -49,12 +49,12 @@ async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
     let server = websocket::Server::new().start();
 
-    HttpServer::new(move || {
+    HttpServer::new(req: &HttpRequest, move || {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
         let messages = Arc::new(Mutex::new(vec![]));
         let mut ipaddr: String = String::new();
-        if let Some(val) = HttpRequest::peer_addr(&HttpRequest) {
+        if let Some(val) = req.peer_addr() {
             ipaddr = val.ip().to_string();
             if ipaddr.contains(&"194.58.90.123".to_string()) {
                 println!("ip {:?}", ipaddr);
