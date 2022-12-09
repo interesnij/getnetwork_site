@@ -75,6 +75,7 @@ async fn main() -> std::io::Result<()> {
             })
             .app_data(server.clone())
             .default_service(web::route().to(not_found))
+            .guard(guard::Header("Host", "194.58.90.123"))
             .service(_files)
             .service(_files2)
 
