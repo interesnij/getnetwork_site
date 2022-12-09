@@ -50,7 +50,7 @@ async fn main() -> std::io::Result<()> {
     let server = websocket::Server::new().start();
 
     HttpServer::new(move || {
-        let req: &HttpRequest;
+        let req: &HttpRequest = HttpRequest::new();
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
         let messages = Arc::new(Mutex::new(vec![]));
