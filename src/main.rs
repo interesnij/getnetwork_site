@@ -24,7 +24,6 @@ use actix_web::{
     },
     web,
     http,
-    HttpRequest,
 };
 use actix_redis::RedisSession;
 use actix_files::Files;
@@ -50,17 +49,9 @@ async fn main() -> std::io::Result<()> {
     let server = websocket::Server::new().start();
 
     HttpServer::new(move || {
-        let req: &HttpRequest = &HttpRequest::new(actix_http::message::Message<RequestHead>);
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
         let messages = Arc::new(Mutex::new(vec![]));
-        let mut ipaddr: String = String::new();
-        if let Some(val) = req.peer_addr() {
-            ipaddr = val.ip().to_string();
-            if ipaddr.contains(&"194.58.90.123".to_string()) {
-                println!("ip {:?}", ipaddr);
-            }
-        }
         //let cors = Cors::default()
         //    .allowed_origin("194.58.90.123:8084")
         //    .allowed_origin("194.58.90.123:8082")
