@@ -54,7 +54,7 @@ async fn main() -> std::io::Result<()> {
         let _files2 = Files::new("/media", "media/").show_files_listing();
         let messages = Arc::new(Mutex::new(vec![]));
         let mut ipaddr: String = String::new();
-        if let Some(val) = HttpRequest::peer_addr() {
+        if let Some(val) = HttpRequest::peer_addr(&HttpRequest) {
             ipaddr = val.ip().to_string();
             if ipaddr.contains(&"194.58.90.123".to_string()) {
                 println!("ip {:?}", ipaddr);
