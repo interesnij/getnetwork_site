@@ -53,6 +53,13 @@ async fn main() -> std::io::Result<()> {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
         let messages = Arc::new(Mutex::new(vec![]));
+        let mut ipaddr: String = String::new();
+        if let Some(val) = HttpRequest::peer_addr() {
+            ipaddr = val.ip().to_string();
+            if ipaddr.contains(&"194.58.90.123".to_string()) {
+                println!("ip {:?}", ipaddr);
+            }
+        }
         //let cors = Cors::default()
         //    .allowed_origin("194.58.90.123:8084")
         //    .allowed_origin("194.58.90.123:8082")
@@ -75,10 +82,8 @@ async fn main() -> std::io::Result<()> {
             })
             .app_data(server.clone())
             .default_service(web::route().to(not_found))
-            .guard(actix_web::guard::Header("Host", "194.58.90.123"))
             .service(_files)
             .service(_files2)
-
             .configure(routes)
     })
 
