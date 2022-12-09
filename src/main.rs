@@ -49,7 +49,7 @@ async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
     let server = websocket::Server::new().start();
 
-    HttpServer::new(req: &HttpRequest, move || {
+    HttpServer::new(move || req: &HttpRequest {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
         let messages = Arc::new(Mutex::new(vec![]));
