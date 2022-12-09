@@ -21,10 +21,10 @@ use actix_web::{
     middleware::{
         Compress, 
         Logger, 
-        //NormalizePath,
     },
     web,
     http,
+    HttpRequest,
 };
 use actix_redis::RedisSession;
 use actix_files::Files;
@@ -72,7 +72,6 @@ async fn main() -> std::io::Result<()> {
         App::new()  
             .wrap(Logger::default())
             .wrap(Compress::default())
-            //.wrap(NormalizePath::trim())
             //.wrap(cors)
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .app_data(AppState {
