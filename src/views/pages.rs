@@ -208,10 +208,10 @@ pub async fn index_page (
                 .expect("Error.");
 
         }
-        if let Ok(res) = to_value(_stat.now_u.to_string()) {
-            let msg = MessageToClient::new("page_view", _stat.types.into(), res);
-            websocket_srv.do_send(msg);
-        }
+        //if let Ok(res) = to_value(_stat.now_u.to_string()) {
+        //    let msg = MessageToClient::new("page_view", _stat.types.into(), res);
+        //    websocket_srv.do_send(msg);
+        //}
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
