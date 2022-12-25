@@ -32,10 +32,6 @@ use std::cell::Cell;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 
-use actix_session::storage::CookieSessionStore;
-use actix_session::SessionMiddleware;
-use actix_web::cookie::Key;
-
 #[macro_use]
 mod utils;
 #[macro_use]
@@ -49,7 +45,6 @@ static SERVER_COUNTER: AtomicUsize = AtomicUsize::new(0);
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
-    let secret_key = Key::generate();
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
     let server = websocket::Server::new().start();
 
@@ -57,16 +52,19 @@ async fn main() -> std::io::Result<()> {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
         let messages = Arc::new(Mutex::new(vec![]));
+        //let cors = Cors::default()
+        //    .allowed_origin("194.58.90.123:8084")
+        //    .allowed_origin("194.58.90.123:8082")
+        //    .allowed_origin("127.0.0.1:6379")
+        //    .allowed_methods(vec!["GET", "POST"])
+        //    .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+        //    .allowed_header(http::header::CONTENT_TYPE)
+        //    .max_age(3600);
 
         App::new()  
             .wrap(Logger::default())
             .wrap(Compress::default())
-            //.wrap(SessionMiddleware::new(CookieSessionStore::default(),secret_key.clone()))
-            //.wrap(
-            //    SessionMiddleware::builder(CookieSessionStore::default(), secret_key.clone())
-            //        .cookie_secure(false)
-            //        .build(),
-            //)
+            //.wrap(cors)
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .app_data(AppState {
                 server_id: SERVER_COUNTER.fetch_add(1, Ordering::SeqCst),
