@@ -165,15 +165,15 @@ pub async fn index_page (
     websocket_srv: Data<Addr<Server>>) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-    use crate::utils::check_auth;
+    //use crate::utils::check_auth;
 
 
     if is_ajax == 0 {
-        let auth = check_auth(&session);
+        //let auth = check_auth(&session);
         get_first_load_page (
             &session,
             is_desctop,
-            "Главная страница ".to_owned() + &auth.to_string(),
+            "Главная страница ".to_string(),
             "вебсервисы - Комплексное, экспертное создание и развитие высоконагруженных веб-ресурсов".to_string(),
             "/".to_string(),
             "/static/images/dark/store.jpg".to_string()
