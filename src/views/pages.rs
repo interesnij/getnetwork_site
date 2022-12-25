@@ -69,30 +69,7 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
 
 
 pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
-    use cookie::Cookie; 
-    
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let cookie = Cookie::new("name", "1");
-    let cookie_nv = cookie.name_value();
-    let cookie_dom = cookie.domain();
-    let secure_cookie = Cookie::build("secure_name", "1")
-            .domain("https://вебсервисы.рф")
-            .path("/")
-            .secure(true)
-            .http_only(true)
-            .finish();
-
-    for header in req.headers().into_iter() {
-        if header.0 == "cookie" {
-            let str_cookie = header.1.to_str().unwrap();
-            let _cookie: Vec<&str> = str_cookie.split(";").collect();
-            for c in _cookie.iter() {
-                let split_c: Vec<&str> = c.split("=").collect();
-                println!("name {:?}", split_c[0].trim());
-                println!("value {:?}", split_c[1]);
-            } 
-        }
-    };
 
     // первая отрисовка страницы - организуем скрытие информации
     if is_ajax == 0 {
@@ -145,11 +122,9 @@ pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<
                 #[template(path = "desctop/pages/anon_404.stpl")]
                 struct Template {
                     is_ajax: i32,
-                    c_1: String,
                 }
                 let body = Template {
                     is_ajax: is_ajax,
-                    c_1: cookie_dom.unwrap().to_string(),
                 } 
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
