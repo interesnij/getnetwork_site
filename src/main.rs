@@ -61,7 +61,12 @@ async fn main() -> std::io::Result<()> {
             })
             .wrap(Logger::default())
             .wrap(Compress::default())
-            .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
+            //.wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
+            .wrap(
+                SessionMiddleware::builder(CookieSessionStore::default(), secret_key.clone())
+                    .cookie_secure(false)
+                    .build(),
+            )
             .data(server.clone())
             .default_service(web::route().to(not_found))
             .service(_files)
