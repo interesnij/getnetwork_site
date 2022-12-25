@@ -25,7 +25,7 @@ use actix_web::{
     web,
     http,
 };
-//use actix_redis::RedisSession;
+use actix_redis::RedisSession;
 use actix_files::Files;
 use crate::routes::routes;
 use std::cell::Cell;
@@ -51,7 +51,7 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
     let secret_key = Key::generate();
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
-    //let server = websocket::Server::new().start();
+    let server = websocket::Server::new().start();
 
     HttpServer::new(move || {
         let _files = Files::new("/static", "static/").show_files_listing();
@@ -62,13 +62,13 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .wrap(Compress::default())
             .wrap(SessionMiddleware::new(CookieSessionStore::default(),secret_key.clone()))
-            //.wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
+            .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .app_data(AppState {
                 server_id: SERVER_COUNTER.fetch_add(1, Ordering::SeqCst),
                 request_count: Cell::new(0),
                 messages: messages.clone(),
             })
-            //.app_data(server.clone())
+            .app_data(server.clone())
             .default_service(web::route().to(not_found))
             .service(_files)
             .service(_files2)
