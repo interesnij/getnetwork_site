@@ -53,10 +53,10 @@ pub fn set_current_user(session: &Session, user: &SessionUser) -> () {
 
 pub fn check_auth(session: &Session) -> bool {
     match session.get::<i32>("user").unwrap() {
-        Ok(_) => true,
-      _ => false,
+        Some(user) => true,
+        None => false,
     }
-}
+} 
  
 pub fn get_current_user(session: &Session) -> Result<SessionUser, AuthError> {
     let msg = "Не удалось извлечь пользователя из сеанса";
