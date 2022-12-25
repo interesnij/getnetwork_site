@@ -51,12 +51,19 @@ pub fn set_current_user(session: &Session, user: &SessionUser) -> () {
     session.insert("user", serde_json::to_string(user).unwrap()).unwrap();
 }
 
+pub fn check_auth(session: &Session) -> bool {
+    match session.get::<i32>("user").unwrap() {
+        Ok(_) => true,
+      _ => false,
+    }
+}
+ 
 pub fn get_current_user(session: &Session) -> Result<SessionUser, AuthError> {
     let msg = "Не удалось извлечь пользователя из сеанса";
 
     session.get::<String>("user")
         .map_err(|_| AuthError::AuthenticationError(String::from(msg)))
-        .unwrap()
+        .unwrap() 
         .map_or(
           Err(AuthError::AuthenticationError(String::from(msg))),
           |user| serde_json::from_str(&user).or_else(|_| Err(AuthError::AuthenticationError(String::from(msg))))
