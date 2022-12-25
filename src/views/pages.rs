@@ -73,6 +73,8 @@ pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<
     
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let cookie = Cookie::new("name", "1");
+    let cookie_nv = cookie.name_value();
+    let cookie_dom = cookie.domain();
     let secure_cookie = Cookie::build("secure_name", "1")
             .domain("https://вебсервисы.рф")
             .path("/")
