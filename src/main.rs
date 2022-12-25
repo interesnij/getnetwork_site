@@ -25,7 +25,10 @@ use actix_web::{
     web,
     http,
 };
-use actix_redis::RedisSession;
+//use actix_redis::RedisSession;
+use actix_session::{storage::CookieSessionStore, SessionMiddleware};
+use crate::vars::secret_key;
+
 use actix_files::Files;
 use crate::routes::routes;
 use std::cell::Cell;
