@@ -61,7 +61,8 @@ pub fn check_auth(session: &Session) -> bool {
 pub fn get_current_user(session: &Session) -> Result<SessionUser, AuthError> {
     let msg = "Не удалось извлечь пользователя из сеанса";
 
-    session.get::<String>("user")
+    session
+        .get::<String>("user")
         .map_err(|_| AuthError::AuthenticationError(String::from(msg)))
         .unwrap() 
         .map_or(

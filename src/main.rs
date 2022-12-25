@@ -26,7 +26,6 @@ use actix_web::{
     http,
     cookie::Key,
 };
-//use actix_redis::RedisSession;
 use actix_session::{storage::CookieSessionStore, SessionMiddleware};
 
 use actix_files::Files;
@@ -66,7 +65,13 @@ async fn main() -> std::io::Result<()> {
             })
             .wrap(Logger::default())
             .wrap(Compress::default())
-            //.wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
+
+            //это для https
+            //.wrap(SessionMiddleware::new(
+            //    CookieSessionStore::default(),
+            //    secret_key.clone(),
+            //))
+            // это для http
             .wrap(
                 SessionMiddleware::builder(CookieSessionStore::default(), secret_key.clone())
                     .cookie_secure(false)
