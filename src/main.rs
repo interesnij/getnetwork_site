@@ -51,7 +51,7 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
     let secret_key = Key::generate();
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
-    let server = websocket::Server::new().start();
+    //let server = websocket::Server::new().start();
 
     HttpServer::new(move || {
         let _files = Files::new("/static", "static/").show_files_listing();
@@ -68,7 +68,7 @@ async fn main() -> std::io::Result<()> {
                 request_count: Cell::new(0),
                 messages: messages.clone(),
             })
-            .app_data(server.clone())
+            //.app_data(server.clone())
             .default_service(web::route().to(not_found))
             .service(_files)
             .service(_files2)
