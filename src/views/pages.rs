@@ -149,7 +149,7 @@ pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<
                 }
                 let body = Template {
                     is_ajax: is_ajax,
-                    c_1: cookie_nv.unwrap().to_string(),
+                    c_1: cookie_dom.unwrap().to_string(),
                 } 
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
