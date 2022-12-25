@@ -52,7 +52,7 @@ pub fn set_current_user(session: &Session, user: &SessionUser) -> () {
 }
 
 pub fn check_auth(session: &Session) -> bool {
-    match session.get::<i32>("id").unwrap() {
+    match session.get::<String>("id").unwrap() {
         Some(_) => true,
         None => false,
     }
