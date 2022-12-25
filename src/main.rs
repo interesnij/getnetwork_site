@@ -62,11 +62,11 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .wrap(Compress::default())
             //.wrap(SessionMiddleware::new(CookieSessionStore::default(),secret_key.clone()))
-            .wrap(
-                SessionMiddleware::builder(CookieSessionStore::default(), secret_key.clone())
-                    .cookie_secure(false)
-                    .build(),
-            )
+            //.wrap(
+            //    SessionMiddleware::builder(CookieSessionStore::default(), secret_key.clone())
+            //        .cookie_secure(false)
+            //        .build(),
+            //)
             .wrap(RedisSession::new("127.0.0.1:6379", &[0; 32]))
             .app_data(AppState {
                 server_id: SERVER_COUNTER.fetch_add(1, Ordering::SeqCst),
