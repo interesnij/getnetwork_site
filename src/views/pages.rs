@@ -145,12 +145,12 @@ pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<
                 #[template(path = "desctop/pages/anon_404.stpl")]
                 struct Template {
                     is_ajax: i32,
-                    c_1: Cookie,
+                    c_1: String,
                 }
                 let body = Template {
                     is_ajax: is_ajax,
-                    c_1: cookie,
-                }
+                    c_1: cookie_nv.unwrap().to_string(),
+                } 
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
                 Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
