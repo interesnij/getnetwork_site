@@ -24,10 +24,10 @@ use actix_web::{
     },
     web,
     http,
+    cookie::Key,
 };
 //use actix_redis::RedisSession;
 use actix_session::{storage::CookieSessionStore, SessionMiddleware};
-use crate::vars::secret_key;
 
 use actix_files::Files;
 use crate::routes::routes;
@@ -50,11 +50,13 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
     let server = websocket::Server::new().start();
+    let secret_key = Key::generate();
 
     HttpServer::new(move || {
         let _files = Files::new("/static", "static/").show_files_listing();
         let _files2 = Files::new("/media", "media/").show_files_listing();
         let messages = Arc::new(Mutex::new(vec![]));
+
 
         App::new()  
             .data(AppState {
