@@ -21,7 +21,7 @@
     <% if template_types == 1 { %>
       <% include!("../../block/styles/1/d.stpl"); %>
     <% } %>  
-
+ 
   </head>
 
   <body >
