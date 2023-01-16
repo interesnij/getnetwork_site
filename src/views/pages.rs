@@ -1083,7 +1083,7 @@ pub async fn get_tech_objects_page(session: Session, _id: web::Path<i32>) -> act
     let body = Template {
         object:         _cat,
         is_admin:       is_admin,
-        template_types: i16,
+        template_types: template_types,
     }
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

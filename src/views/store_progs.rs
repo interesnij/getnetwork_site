@@ -143,6 +143,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     prev:           Option<FeaturedItem>,
                     next:           Option<FeaturedItem>,
                     is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
                     request_user:   _request_user,
