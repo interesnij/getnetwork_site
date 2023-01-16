@@ -18,8 +18,8 @@
   <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
   <title><%= title %></title>
   <% 
-    let style_src = "../../../block/styles/".to_owned() + &template_types + &"/d.stpl".to_string();
-    let script_src = "../../../block/scripts/".to_owned() + &template_types + &"/anon_d.stpl".to_string();  
+    let style_src = "../../../block/styles/".to_owned() + &template_types.to_string() + &"/d.stpl".to_string();
+    let script_src = "../../../block/scripts/".to_owned() + &template_types.to_string() + &"/anon_d.stpl".to_string();  
   %>
   <% include!(style_src); %>
 </head>
