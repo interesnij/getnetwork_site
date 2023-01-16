@@ -77,19 +77,46 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
             .expect(&format!("Error connecting to {}", database_url))
     }
 
-    pub fn is_desctop(req: &HttpRequest) -> bool {
-        let mut desctop = true;
-
-        for header in req.headers().into_iter() {
-            if header.0 == "user-agent" {
-                let _val = format!("{:?}", header.1);
-                if _val.contains("Mobile"){
-                    desctop = false;
-                }
+    pub fn get_template() -> i16 {
+        let template_res = web_local_storage_api::get_item("template");
+        if template_res.is_ok() {
+            let template_some = template_res.expect("E.");
+            if template_some.is_some() {
+                let template = template_some.unwrap();
+                return match template.as_str() {
+                    "rhythm" => 1,
+                    "eremia" => 2,
+                    _ => 1,
+                };
             }
-        };
-        desctop
+            else {
+                return 1;
+            }
+        }
+        else {
+            return 1;
+        }
     }
+
+    pub fn set_template(types: i16) -> () {
+        let value: &str = match types {
+            1 => "rhythm",
+            2 => "eremia",
+            _ => "rhythm",
+        }
+        web_local_storage_api::set_item("template", value);
+    }
+
+
+    fn get_content_type<'a>(req: &'a HttpRequest) -> Option<&'a str> {
+        return req.headers().get("user-agent")?.to_str().ok();
+    }
+    pub fn is_desctop(req: &HttpRequest) -> bool {
+        if get_content_type(req).unwrap().contains("Mobile") {
+            return false;
+        };
+        return true;
+    } 
 
     pub fn get_device_and_ajax(req: &HttpRequest) -> (bool, i32) {
         #[derive(Debug, Deserialize)]
@@ -98,7 +125,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
         }
         let params_some = web::Query::<Params>::from_query(&req.query_string());
         let mut is_ajax = 0;
-        let mut _type = true;
+        let _type = true;
 
         if params_some.is_ok() {
             let params = params_some.unwrap();
@@ -110,16 +137,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
             }
         }
 
-        for header in req.headers().into_iter() {
-            if header.0 == "user-agent" {
-                let _val = format!("{:?}", header.1);
-                if _val.contains("Mobile"){
-                    _type = false;
-                }
-            }
-        };
-
-        (_type, is_ajax)
+        (is_desctop(req), is_ajax)
     }
 
     pub fn get_categories_2() -> (
@@ -209,24 +227,27 @@ pub async fn get_first_load_page (
     uri:         String,
     image:       String,
 ) -> actix_web::Result<HttpResponse> {
+    let template_types = get_template();
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/generic/first_load.stpl")]
             struct Template {
-                request_user: User,
-                title:        String,
-                description:  String,
-                image:        String,
-                uri:          String,
+                request_user:   User,
+                title:          String,
+                description:    String,
+                image:          String,
+                uri:            String,
+                template_types: i16, 
             }
             let body = Template {
-                request_user: _request_user,
-                title:        title,
-                description:  description,
-                image:        image,
-                uri:          uri,
+                request_user:   _request_user,
+                title:          title,
+                description:    description,
+                image:          image,
+                uri:            uri,
+                template_types: template_types,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -236,18 +257,20 @@ pub async fn get_first_load_page (
             #[derive(TemplateOnce)]
             #[template(path = "mobile/generic/first_load.stpl")]
             struct Template {
-                request_user: User,
-                title:        String,
-                description:  String,
-                image:        String,
-                uri:          String,
+                request_user:   User,
+                title:          String,
+                description:    String,
+                image:          String,
+                uri:            String,
+                template_types: i16,
             }
             let body = Template {
-                request_user: _request_user,
-                title:        title,
-                description:  description,
-                image:        image,
-                uri:          uri,
+                request_user:   _request_user,
+                title:          title,
+                description:    description,
+                image:          image,
+                uri:            uri,
+                template_types: template_types,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -259,16 +282,18 @@ pub async fn get_first_load_page (
             #[derive(TemplateOnce)]
             #[template(path = "desctop/generic/anon_first_load.stpl")]
             struct Template {
-                title:        String,
-                description:  String,
-                image:        String,
-                uri:          String,
+                title:          String,
+                description:    String,
+                image:          String,
+                uri:            String,
+                template_types: i16,
             }
             let body = Template {
-                title:        title,
-                description:  description,
-                image:        image,
-                uri:          uri,
+                title:          title,
+                description:    description,
+                image:          image,
+                uri:            uri,
+                template_types: template_types,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -278,16 +303,18 @@ pub async fn get_first_load_page (
             #[derive(TemplateOnce)]
             #[template(path = "mobile/generic/anon_first_load.stpl")]
             struct Template {
-                title:        String,
-                description:  String,
-                image:        String,
-                uri:          String,
+                title:          String,
+                description:    String,
+                image:          String,
+                uri:            String,
+                template_types: i16,
             }
             let body = Template {
-                title:        title,
-                description:  description,
-                image:        image,
-                uri:          uri,
+                title:          title,
+                description:    description,
+                image:          image,
+                uri:            uri,
+                template_types: template_types,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

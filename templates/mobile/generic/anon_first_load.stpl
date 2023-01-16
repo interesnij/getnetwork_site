@@ -2,7 +2,6 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <meta property="og:type" content="website" />
     <meta name="url" property="og:url" content="http://вебсервисы.рф<%= uri %>" />
     <meta name="title" property="og:title" content="<%= title %>">
@@ -10,26 +9,33 @@
     <meta name="image" property="og:image" content="http://вебсервисы.рф<%= image %>">
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link name="canonical" rel="canonical" href="http://вебсервисы.рф<%= uri %>" />
     <title><%= title %></title>
-    <link type="text/css" media="all" rel="stylesheet" href="/static/styles/grid.css">
-    <link type="text/css" media="all" rel="stylesheet" href="/static/styles/style.css">
-
-    <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/dark.css?ver14">
-    <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/load.css?ver14">
-    <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/fonts.css">
     <link rel="shortcut icon" href="/static/images/favicon.png" type="image/x-icon" />
     <link rel="icon" href="/static/images/favicon.png" type="image/x-icon" />
     <meta name="yandex-verification" content="6990cfa2f76f8dca" />
     <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
+    
+    <% if template_types == 1 { %>
+      <link type="text/css" media="all" rel="stylesheet" href="/static/styles/grid.css">
+      <link type="text/css" media="all" rel="stylesheet" href="/static/styles/style.css">
+      <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/dark.css?ver14">
+      <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/load.css?ver14">
+      <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/fonts.css">
+    <% } else { %>
+      bbb
+    <% } %> 
   </head>
   <body>
     <span class="span"></span>
-    <script defer type="text/javascript" src="/static/scripts/mobile/func.js?ver14"></script>
-    <script defer type="text/javascript" src="/static/scripts/mobile/main.js?ver14"></script>
-    <script defer type="text/javascript" src="/static/scripts/main.js?ver14"></script>
-    <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
+    <% if template_types == 1 { %>
+      <script defer type="text/javascript" src="/static/scripts/mobile/func.js?ver14"></script>
+      <script defer type="text/javascript" src="/static/scripts/mobile/main.js?ver14"></script>
+      <script defer type="text/javascript" src="/static/scripts/main.js?ver14"></script>
+      <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
+    <% } else { %>
+      bbb
+    <% } %> 
   </body>
 </html>
