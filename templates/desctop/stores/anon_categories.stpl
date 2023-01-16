@@ -8,7 +8,7 @@
             </a>
             &nbsp;/&nbsp;
             <a>Категории товаров</a>
-            <% include!("../generic/page_stat.stpl"); %>
+            <% include!("../generic/items/1/page_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -33,7 +33,7 @@
                 %>
                 <% if get_6_stores.len() > 0 { %>
                     <% for object in get_6_stores.iter() { %>
-                      <% include!("../generic/store.stpl"); %>
+                      <% include!("../generic/items/1/store.stpl"); %>
                     <% } %>
                   <% } else { %>
                   <div style="margin-top: 40px;">

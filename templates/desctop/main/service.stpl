@@ -10,7 +10,7 @@
         </h5>
         <ul class="works-grid work-grid-3 work-grid-gut clearfix">
           <% for (i, object) in last_services.iter().enumerate() { %>
-            <% include!("../generic/default_service.stpl"); %>
+            <% include!("../generic/items/1/default_service.stpl"); %>
           <% } %>
         </ul>
     </div>

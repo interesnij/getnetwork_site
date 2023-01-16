@@ -6,7 +6,7 @@
             <a class="ajax" href="/blog_categories/">Блог</a>
             &nbsp;/&nbsp;
             <a><%= category.name %></a>
-            <% include!("../generic/category_stat.stpl"); %>
+            <% include!("../generic/items/1/category_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -19,7 +19,7 @@
                   <% if object_list.len() > 0 { %>
                   <div class="is_paginate">
                     <% for object in object_list.iter() { %>
-                      <% include!("../generic/blog.stpl"); %>
+                      <% include!("../generic/items/1/blog.stpl"); %>
                     <% } %>
                     <% if next_page_number > 0 { %>
                       <div class="load centered m-1 next_page_list" data-link="/blogs/<%= category.slug %>/?page=<%= next_page_number %>">

@@ -20,7 +20,7 @@
           <div class="container relative">
               <div class="row multi-columns-row is_paginate">
                 <% for (i, object) in services_list.iter().enumerate() { %>
-                  <% include!("../generic/default_service.stpl"); %>
+                  <% include!("../generic/items/1/default_service.stpl"); %>
                 <% } %>
                 <% if next_page_number > 0 { %>
                   <div class="load centered m-1 next_page_list" data-link="/search_services/<%=q%>/?page=<%= next_page_number %>">

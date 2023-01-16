@@ -8,7 +8,7 @@
             </a>
             &nbsp;/&nbsp;
             <a>Блог</a>
-            <% include!("../generic/page_stat.stpl"); %>
+            <% include!("../generic/items/1/page_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -37,7 +37,7 @@
                 <div class="row multi-columns-row">
                     <% for (i, object) in get_6_blogs.iter().enumerate() { %>
                       <% if i < 2 { %>
-                        <% include!("../generic/blog.stpl"); %>
+                        <% include!("../generic/items/1/blog.stpl"); %>
                       <% } %>
                     <% } %>
                 </div>

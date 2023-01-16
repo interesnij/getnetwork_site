@@ -8,7 +8,7 @@
             <a class="ajax" href="/service_categories/">Услуги</a>
             &nbsp;/&nbsp;
             <a><%= category.name %></a>
-            <% include!("../generic/category_stat.stpl"); %>
+            <% include!("../generic/items/1/category_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -17,7 +17,7 @@
 <% if object_list.len() > 0 { %>
 <div class="is_paginate">
   <% for (i, object) in object_list.iter().enumerate() { %>
-    <% include!("../generic/default_service.stpl"); %>
+    <% include!("../generic/items/1/default_service.stpl"); %>
   <% } %>
   <% if next_page_number > 0 { %>
     <div class="load centered m-1 next_page_list" data-link="/services/<%= category.slug %>/?page=<%= next_page_number %>">

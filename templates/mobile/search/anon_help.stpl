@@ -17,7 +17,7 @@
           <div class="container relative">
               <div class="row multi-columns-row is_paginate">
                 <% for object in items_list.iter() { %>
-                  <% include!("../generic/help.stpl"); %>
+                  <% include!("../generic/items/1/help.stpl"); %>
                 <% } %>
                 <% if next_page_number > 0 { %>
                   <div class="load centered m-1 next_page_list" data-link="/search_help/<%=q%>/?page=<%= next_page_number %>">

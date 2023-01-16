@@ -7,7 +7,7 @@
       <a class="ajax"href="/blog_categories/">Блог</a>
       &nbsp;/&nbsp;
       <a class="ajax"href="/blogs/<%= category.slug %>/"> <%= category.name %></a>
-      <% include!("../generic/object_stat.stpl"); %>
+      <% include!("../generic/items/1/object_stat.stpl"); %>
     </div>
   </div>
 </section>
@@ -31,7 +31,7 @@
                         <% } %>
                     </div>
 
-                    <% include!("../generic/anon_files.stpl"); %>
+                    <% include!("../generic/items/1/anon_files.stpl"); %>
 
                 </div>
 

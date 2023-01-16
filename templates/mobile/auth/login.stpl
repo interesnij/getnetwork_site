@@ -4,7 +4,7 @@
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
             <a>Вход</a>
-            <% include!("../generic/page_stat.stpl"); %>
+            <% include!("../generic/items/1/page_stat.stpl"); %>
         </div>
     </div>
 </section>

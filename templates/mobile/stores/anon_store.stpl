@@ -6,7 +6,7 @@
             <a class="ajax" href="/store_categories/">Магазин</a>
             &nbsp;/&nbsp;
             <a class="ajax" href="/stores/<%= category.slug %>/"><%= category.name %></a>
-            <% include!("../generic/object_stat.stpl"); %>
+            <% include!("../generic/items/1/object_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -74,7 +74,7 @@
             <a href="/stores/<%= category.slug %>/<%= _prev.slug %>/" class="border ajax blog-item-more right"><%= _prev.title %>&nbsp;&nbsp;⇢</a>
             <% } %>
         </div>
-        <% include!("../generic/anon_files.stpl"); %>
+        <% include!("../generic/items/1/anon_files.stpl"); %>
     </div>
 
     </div>

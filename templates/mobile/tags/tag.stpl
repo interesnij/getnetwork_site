@@ -21,7 +21,7 @@
               </h5>
               <div class="row multi-columns-row">
                 <% for object in services_list.iter() { %>
-                  <% include!("../generic/default_service.stpl"); %>
+                  <% include!("../generic/items/1/default_service.stpl"); %>
                 <% } %>
               </div>
           </div>
@@ -39,7 +39,7 @@
               </h5>
               <div class="row multi-columns-row">
                 <% for object in stores_list.iter() { %>
-                  <% include!("../generic/default_store.stpl"); %>
+                  <% include!("../generic/items/1/default_store.stpl"); %>
                 <% } %>
               </div>
           </div>
@@ -57,7 +57,7 @@
               </h5>
               <div class="row multi-columns-row">
                 <% for object in works_list.iter() { %>
-                  <% include!("../generic/default_work.stpl"); %>
+                  <% include!("../generic/items/1/default_work.stpl"); %>
                 <% } %>
               </div>
           </div>
@@ -75,7 +75,7 @@
               </h5>
               <div class="row multi-columns-row">
                 <% for object in blogs_list.iter() { %>
-                  <% include!("../generic/default_blog.stpl"); %>
+                  <% include!("../generic/items/1/default_blog.stpl"); %>
                 <% } %>
               </div>
           </div>
@@ -93,7 +93,7 @@
               </h5>
               <div class="row multi-columns-row">
                 <% for object in wikis_list.iter() { %>
-                  <% include!("../generic/default_wiki.stpl"); %>
+                  <% include!("../generic/items/1/default_wiki.stpl"); %>
                 <% } %>
               </div>
           </div>
@@ -111,7 +111,7 @@
               </h5>
               <div class="row multi-columns-row">
                 <% for object in helps_list.iter() { %>
-                  <% include!("../generic/help.stpl"); %>
+                  <% include!("../generic/items/1/help.stpl"); %>
                 <% } %>
               </div>
           </div>

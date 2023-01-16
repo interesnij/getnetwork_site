@@ -6,7 +6,7 @@
             <a class="ajax" href="/">Главная</a>
             &nbsp;/&nbsp;
             <a>Вход</a>
-            <% include!("../generic/page_stat.stpl"); %>
+            <% include!("../generic/items/1/page_stat.stpl"); %>
         </div>
     </div>
 </section>

@@ -21,7 +21,7 @@
               </h5>
               <div class="row multi-columns-row is_paginate">
                 <% for object in blogs_list.iter() { %>
-                  <% include!("../generic/default_blog.stpl"); %>
+                  <% include!("../generic/items/1/default_blog.stpl"); %>
                 <% } %>
                 <% if next_page_number > 0 { %>
                   <div class="load centered m-1 next_page_list" data-link="/tag_blogs/<%= tag.name %>/?page=<%= next_page_number %>">

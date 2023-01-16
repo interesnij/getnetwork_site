@@ -6,7 +6,7 @@
             <a class="ajax" href="/service_categories/">Услуги</a>
             &nbsp;/&nbsp;
             <a class="ajax" href="/services/<%= category.slug %>/"> <%= category.name %></a>
-            <% include!("../generic/object_stat.stpl"); %>
+            <% include!("../generic/items/1/object_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -34,7 +34,7 @@
                 <% let object_serve_ids = object.get_serves_ids(); %>
                 <% include!("../generic/form/serves_table.stpl"); %>
 
-                <% include!("../generic/files.stpl"); %>
+                <% include!("../generic/items/1/files.stpl"); %>
 
                 <div class="clearfix mt-40">
                   <% if next.is_some() { %>

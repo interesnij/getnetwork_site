@@ -7,7 +7,7 @@
                 <a class="ajax" href="/wiki_categories/">База знаний</a>
                 &nbsp;/&nbsp;
                 <a class="ajax" href="/wikis/<%= category.slug %>/"><%= category.name %></a>
-                <% include!("../generic/object_stat.stpl"); %>
+                <% include!("../generic/items/1/object_stat.stpl"); %>
             </div>
         </div>
     </div>
@@ -28,7 +28,7 @@
                 <% } %>
             </div>
 
-            <% include!("../generic/files.stpl"); %>
+            <% include!("../generic/items/1/files.stpl"); %>
         </div>
 
         <div class="clearfix mt-40">

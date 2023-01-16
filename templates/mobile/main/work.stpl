@@ -10,7 +10,7 @@
         </h5>
         <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
           <% for object in last_works.iter() { %>
-            <% include!("../generic/default_work.stpl"); %>
+            <% include!("../generic/items/1/default_work.stpl"); %>
           <% } %>
         </ul>
     </div>
