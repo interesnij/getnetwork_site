@@ -103,7 +103,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
             1 => "rhythm",
             2 => "eremia",
             _ => "rhythm",
-        }
+        };
         web_local_storage_api::set_item("template", value);
     }
 

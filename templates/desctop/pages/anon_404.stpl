@@ -10,7 +10,6 @@
                 </h1>
                 <h2 class="hs-line-8 no-transp font-alt mb-50 mb-xs-30">
                     Страница не найдена, удалена или перемещена.
-                     <%= c_1 %>
                 </h2>
                 <div class="local-scroll" style="position:relative">
                   <a href="/" class="btn btn-mod btn-border btn-medium btn-round ajax">В начало</a>
