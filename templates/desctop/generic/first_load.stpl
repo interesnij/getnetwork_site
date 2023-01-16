@@ -22,11 +22,15 @@
       let style_src = "../../../block/styles/".to_owned() + &template_types.to_string() + &"/d.stpl".to_string();
       let script_src = "../../../block/scripts/".to_owned() + &template_types.to_string() + &"/d.stpl".to_string();  
     %>
-    <% include!("../../../block/styles/".to_owned() + &template_types.to_string() + &"/d.stpl".to_string()); %>
+    <% if template_types == 1 { %>
+      <% include!("../../../block/styles/1/d.stpl".to_string()); %>
+    <% } %>
   </head>
 
   <body >
     <span class="span"></span>
-    <% include!(script_src); %>
+    <% if template_types == 1 { %>
+      <% include!("../../../block/scripts/1/d.stpl".to_string()); %>
+    <% } %>
   </body>
 </html>
