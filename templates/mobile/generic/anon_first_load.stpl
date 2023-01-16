@@ -16,11 +16,14 @@
     <link rel="icon" href="/static/images/favicon.png" type="image/x-icon" />
     <meta name="yandex-verification" content="6990cfa2f76f8dca" />
     <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
-    
-    <% include!("../../../block/styles/<%= template_types %>/m.stpl"); %> 
+    <% if template_types == 1 { %>
+      <% include!("../../block/styles/1/m.stpl"); %>
+    <% } %> 
   </head>
   <body>
     <span class="span"></span>
-    <% include!("../../../block/scripts/<%= template_types %>/anon_m.stpl"); %>
+    <% if template_types == 1 { %>
+      <% include!("../../block/scripts/1/anon_m.stpl"); %>
+    <% } %> 
   </body>
 </html>
