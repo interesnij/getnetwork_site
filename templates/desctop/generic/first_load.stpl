@@ -19,7 +19,7 @@
     <meta name="yandex-verification" content="6990cfa2f76f8dca" />
     <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
     <% if template_types == 1 { %>
-      <% include!("../../block/styles/1/d.stpl"); %>
+      <% include!("../../block/styles/1/d.stp" + "l"); %>
     <% } %> 
   </head>
 
