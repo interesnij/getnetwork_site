@@ -23,14 +23,14 @@
       let script_src = "../../../block/scripts/".to_owned() + &template_types.to_string() + &"/d.stpl".to_string();  
     %>
     <% if template_types == 1 { %>
-      <% include!("../../../block/styles/1/d.stpl".to_string()); %>
+      <% include!("../../../block/styles/1/d.stpl"); %>
     <% } %>
   </head>
 
   <body >
     <span class="span"></span>
     <% if template_types == 1 { %>
-      <% include!("../../../block/scripts/1/d.stpl".to_string()); %>
+      <% include!("../../../block/scripts/1/d.stpl"); %>
     <% } %>
   </body>
 </html>
