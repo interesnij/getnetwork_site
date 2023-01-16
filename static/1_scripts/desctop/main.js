@@ -119,7 +119,7 @@ function get_custom_design() {
   if (background != "" || background == "white_kletka") {
     color = background;
   }
-  addStyleSheets("/static/styles/color/" + color + ".css")
+  addStyleSheets("/static/1_styles/color/" + color + ".css")
 };
 
 function check_first_load() {

@@ -909,23 +909,23 @@ on('body', 'click', '.anon_color_change', function() {
     color = background;
   }
   if (color == "white") {
-    addStyleSheets("/static/styles/color/dark.css");
+    addStyleSheets("/static/1_styles/color/dark.css");
     this.setAttribute("data-color", "dark");
     new_color = "dark"
   } else if (color == "dark") {
-    addStyleSheets("/static/styles/color/yellow.css");
+    addStyleSheets("/static/1_styles/color/yellow.css");
     this.setAttribute("data-color", "yellow");
     new_color = "yellow"
   } else if (color == "yellow") {
-    addStyleSheets("/static/styles/color/old_paper.css");
+    addStyleSheets("/static/1_styles/color/old_paper.css");
     this.setAttribute("data-color", "old_paper");
     new_color = "old_paper"
   } else if (color == "old_paper") {
-    addStyleSheets("/static/styles/color/dark_wood.css");
+    addStyleSheets("/static/1_styles/color/dark_wood.css");
     this.setAttribute("data-color", "dark_wood");
     new_color = "dark_wood"
   } else if (color == "dark_wood") {
-    addStyleSheets("/static/styles/color/white.css");
+    addStyleSheets("/static/1_styles/color/white.css");
     this.setAttribute("data-color", "white");
     new_color = "white"
   }

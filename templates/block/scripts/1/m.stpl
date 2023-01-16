@@ -1,0 +1,7 @@
+<script defer type="text/javascript" src="/static/1_scripts/mobile/func.js?ver14"></script>
+<script defer type="text/javascript" src="/static/1_scripts/mobile/main.js?ver14"></script>
+<script defer type="text/javascript" src="/static/1_scripts/main.js?ver14"></script>
+<% if request_user.is_superuser() { %>
+    <script id="is_superuser" defer type="text/javascript" src="/static/1_scripts/admin.js?ver14"></script>
+<% } %>
+<script defer type="text/javascript" src="/static/1_scripts/progressive-image.js"></script>

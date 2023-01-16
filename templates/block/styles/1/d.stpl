@@ -1,0 +1,5 @@
+<link type="text/css" media="all" rel="stylesheet" href="/static/1_styles/grid.css">
+<link type="text/css" media="all" rel="stylesheet" href="/static/1_styles/style.css">
+<link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/1_styles/color/dark.css?ver14">
+<link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/1_styles/fonts.css">
+<link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/1_styles/load.css?ver14">

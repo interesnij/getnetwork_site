@@ -19,29 +19,11 @@
     <meta name="yandex-verification" content="6990cfa2f76f8dca" />
     <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
     
-    <% if template_types == 1 { %>
-      <link type="text/css" media="all" rel="stylesheet" href="/static/styles/grid.css">
-      <link type="text/css" media="all" rel="stylesheet" href="/static/styles/style.css">
-      <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/color/dark.css?ver14">
-      <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/load.css?ver14">
-      <link type="text/css" media="none" onload="if(media!='all')media='all'" rel="stylesheet" href="/static/styles/fonts.css">
-    <% } else { %>
-      bbb
-    <% } %> 
+    <% include!("../../../block/styles/<%= template_types %>/m.stpl"); %>
   </head>
 
   <body>
     <span class="span"></span>
-    <% if template_types == 1 { %>
-      <script defer type="text/javascript" src="/static/scripts/mobile/func.js?ver14"></script>
-      <script defer type="text/javascript" src="/static/scripts/mobile/main.js?ver14"></script>
-      <script defer type="text/javascript" src="/static/scripts/main.js?ver14"></script>
-      <% if request_user.is_superuser() { %>
-        <script id="is_superuser" defer type="text/javascript" src="/static/scripts/admin.js?ver14"></script>
-      <% } %>
-      <script defer type="text/javascript" src="/static/scripts/progressive-image.js"></script>
-    <% } else { %>
-      bbb
-    <% } %> 
+    <% include!("../../../block/scripts/<%= template_types %>/d.stpl"); %>
   </body>
 </html>
