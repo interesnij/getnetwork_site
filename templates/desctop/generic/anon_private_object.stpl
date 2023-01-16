@@ -1,0 +1,7 @@
+<% include!("../anon_header.stpl"); %>
+
+<% if template_types == 1 { %>
+    <% include!("generic/items/1/anon_private_object.stpl"); %>
+<% } %>
+
+<% include!("../anon_footer.stpl"); %>
