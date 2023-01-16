@@ -18,7 +18,7 @@
     <link rel="icon" href="/static/images/favicon.png" type="image/x-icon" />
     <meta name="yandex-verification" content="6990cfa2f76f8dca" />
     <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
-    <% let _in = "../../block/styles/1/d.stpl".to_string(); %>
+    <% let _in = "../../block/styles/1/d.stpl".as_str(); %>
     <% if template_types == 1 { %>
       <% include!(_in); %>
     <% } %> 
