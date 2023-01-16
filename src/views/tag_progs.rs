@@ -21,6 +21,7 @@ use crate::utils::{
     is_signed_in,
     get_request_user_data,
     get_first_load_page,
+    get_template,
 };
 use crate::schema;
 use crate::models::{
@@ -56,6 +57,7 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let template_types = get_template();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -64,6 +66,7 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
             "вебсервисы.рф: Создание тега".to_string(),
             "/create_tag/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -80,14 +83,16 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/create_tag.stpl")]
                 struct Template {
-                    request_user: User,
-                    all_tags:     Vec<Tag>,
-                    is_ajax:      i32,
+                    request_user:   User,
+                    all_tags:       Vec<Tag>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    request_user: _request_user,
-                    all_tags:     all_tags,
-                    is_ajax:      is_ajax,
+                    request_user:   _request_user,
+                    all_tags:       all_tags,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -97,12 +102,14 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/tags/create_tag.stpl")]
                 struct Template {
-                    all_tags: Vec<Tag>,
-                    is_ajax:  i32,
+                    all_tags:       Vec<Tag>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    all_tags: all_tags,
-                    is_ajax:  is_ajax,
+                    all_tags:       all_tags,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -147,6 +154,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
     use schema::tags::dsl::tags;
 
     let _connection = establish_connection();
+    let template_types = get_template();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _tag_id: String = _id.to_string();
     let _tag = tags
@@ -162,6 +170,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
             _tag.name.clone() + &" | вебсервисы.рф:Тег".to_string(),
             "/tag/".to_string() + &_tag_id.clone() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -212,40 +221,42 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/tag.stpl")]
                 struct Template {
-                    tag:           Tag,
-                    request_user:  User,
-                    works_list:    Vec<Work>,
-                    services_list: Vec<Service>,
-                    wikis_list:    Vec<Wiki>,
-                    blogs_list:    Vec<Blog>,
-                    stores_list:   Vec<Store>,
-                    helps_list:    Vec<Help>,
+                    tag:            Tag,
+                    request_user:   User,
+                    works_list:     Vec<Work>,
+                    services_list:  Vec<Service>,
+                    wikis_list:     Vec<Wiki>,
+                    blogs_list:     Vec<Blog>,
+                    stores_list:    Vec<Store>,
+                    helps_list:     Vec<Help>,
 
-                    works_count:   usize,
-                    services_count:usize,
-                    wikis_count:   usize,
-                    blogs_count:   usize,
-                    stores_count:  usize,
-                    helps_count:   usize,
-                    is_ajax:       i32,
+                    works_count:    usize,
+                    services_count: usize,
+                    wikis_count:    usize,
+                    blogs_count:    usize,
+                    stores_count:   usize,
+                    helps_count:    usize,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    tag:           _tag,
-                    request_user:  _request_user,
-                    works_list:    _works,
-                    services_list: _services,
-                    wikis_list:    _wikis,
-                    blogs_list:    _blogs,
-                    stores_list:   _stores,
-                    helps_list:    _helps,
+                    tag:            _tag,
+                    request_user:   _request_user,
+                    works_list:     _works,
+                    services_list:  _services,
+                    wikis_list:     _wikis,
+                    blogs_list:     _blogs,
+                    stores_list:    _stores,
+                    helps_list:     _helps,
 
-                    works_count:   works_count,
-                    services_count:services_count,
-                    wikis_count:   wikis_count,
-                    blogs_count:   blogs_count,
-                    stores_count:  stores_count,
-                    helps_count:   helps_count,
-                    is_ajax:       is_ajax,
+                    works_count:    works_count,
+                    services_count: services_count,
+                    wikis_count:    wikis_count,
+                    blogs_count:    blogs_count,
+                    stores_count:   stores_count,
+                    helps_count:    helps_count,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -255,38 +266,40 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/tags/tag.stpl")]
                 struct Template {
-                    tag:           Tag,
-                    works_list:    Vec<Work>,
-                    services_list: Vec<Service>,
-                    wikis_list:    Vec<Wiki>,
-                    blogs_list:    Vec<Blog>,
-                    stores_list:   Vec<Store>,
-                    helps_list:    Vec<Help>,
+                    tag:            Tag,
+                    works_list:     Vec<Work>,
+                    services_list:  Vec<Service>,
+                    wikis_list:     Vec<Wiki>,
+                    blogs_list:     Vec<Blog>,
+                    stores_list:    Vec<Store>,
+                    helps_list:     Vec<Help>,
 
-                    works_count:   usize,
-                    services_count:usize,
-                    wikis_count:   usize,
-                    blogs_count:   usize,
-                    stores_count:  usize,
-                    helps_count:   usize,
-                    is_ajax:       i32,
+                    works_count:    usize,
+                    services_count: usize,
+                    wikis_count:    usize,
+                    blogs_count:    usize,
+                    stores_count:   usize,
+                    helps_count:    usize,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    tag:           _tag,
-                    works_list:    _works,
-                    services_list: _services,
-                    wikis_list:    _wikis,
-                    blogs_list:    _blogs,
-                    stores_list:   _stores,
-                    helps_list:    _helps,
+                    tag:            _tag,
+                    works_list:     _works,
+                    services_list:  _services,
+                    wikis_list:     _wikis,
+                    blogs_list:     _blogs,
+                    stores_list:    _stores,
+                    helps_list:     _helps,
 
-                    works_count:   works_count,
-                    services_count:services_count,
-                    wikis_count:   wikis_count,
-                    blogs_count:   blogs_count,
-                    stores_count:  stores_count,
-                    helps_count:   helps_count,
-                    is_ajax:       is_ajax,
+                    works_count:    works_count,
+                    services_count: services_count,
+                    wikis_count:    wikis_count,
+                    blogs_count:    blogs_count,
+                    stores_count:   stores_count,
+                    helps_count:    helps_count,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -312,38 +325,40 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/anon_tag.stpl")]
                 struct Template {
-                    tag:           Tag,
-                    works_list:    Vec<Work>,
-                    services_list: Vec<Service>,
-                    wikis_list:    Vec<Wiki>,
-                    blogs_list:    Vec<Blog>,
-                    stores_list:   Vec<Store>,
-                    helps_list:    Vec<Help>,
+                    tag:            Tag,
+                    works_list:     Vec<Work>,
+                    services_list:  Vec<Service>,
+                    wikis_list:     Vec<Wiki>,
+                    blogs_list:     Vec<Blog>,
+                    stores_list:    Vec<Store>,
+                    helps_list:     Vec<Help>,
 
-                    works_count:   usize,
-                    services_count:usize,
-                    wikis_count:   usize,
-                    blogs_count:   usize,
-                    stores_count:  usize,
-                    helps_count:   usize,
-                    is_ajax:       i32,
+                    works_count:    usize,
+                    services_count: usize,
+                    wikis_count:    usize,
+                    blogs_count:    usize,
+                    stores_count:   usize,
+                    helps_count:    usize,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    tag:           _tag,
-                    works_list:    _works,
-                    services_list: _services,
-                    wikis_list:    _wikis,
-                    blogs_list:    _blogs,
-                    stores_list:   _stores,
-                    helps_list:    _helps,
+                    tag:            _tag,
+                    works_list:     _works,
+                    services_list:  _services,
+                    wikis_list:     _wikis,
+                    blogs_list:     _blogs,
+                    stores_list:    _stores,
+                    helps_list:     _helps,
 
-                    works_count:   works_count,
-                    services_count:services_count,
-                    wikis_count:   wikis_count,
-                    blogs_count:   blogs_count,
-                    stores_count:  stores_count,
-                    helps_count:   helps_count,
-                    is_ajax:       is_ajax,
+                    works_count:    works_count,
+                    services_count: services_count,
+                    wikis_count:    wikis_count,
+                    blogs_count:    blogs_count,
+                    stores_count:   stores_count,
+                    helps_count:    helps_count,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -353,38 +368,40 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/tags/anon_tag.stpl")]
                 struct Template {
-                    tag:           Tag,
-                    works_list:    Vec<Work>,
-                    services_list: Vec<Service>,
-                    wikis_list:    Vec<Wiki>,
-                    blogs_list:    Vec<Blog>,
-                    stores_list:   Vec<Store>,
-                    helps_list:    Vec<Help>,
+                    tag:            Tag,
+                    works_list:     Vec<Work>,
+                    services_list:  Vec<Service>,
+                    wikis_list:     Vec<Wiki>,
+                    blogs_list:     Vec<Blog>,
+                    stores_list:    Vec<Store>,
+                    helps_list:     Vec<Help>,
 
-                    works_count:   usize,
-                    services_count:usize,
-                    wikis_count:   usize,
-                    blogs_count:   usize,
-                    stores_count:  usize,
-                    helps_count:   usize,
-                    is_ajax:       i32,
+                    works_count:    usize,
+                    services_count: usize,
+                    wikis_count:    usize,
+                    blogs_count:    usize,
+                    stores_count:   usize,
+                    helps_count:    usize,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    tag:           _tag,
-                    works_list:    _works,
-                    services_list: _services,
-                    wikis_list:    _wikis,
-                    blogs_list:    _blogs,
-                    stores_list:   _stores,
-                    helps_list:    _helps,
+                    tag:            _tag,
+                    works_list:     _works,
+                    services_list:  _services,
+                    wikis_list:     _wikis,
+                    blogs_list:     _blogs,
+                    stores_list:    _stores,
+                    helps_list:     _helps,
 
-                    works_count:   works_count,
-                    services_count:services_count,
-                    wikis_count:   wikis_count,
-                    blogs_count:   blogs_count,
-                    stores_count:  stores_count,
-                    helps_count:   helps_count,
-                    is_ajax:       is_ajax,
+                    works_count:    works_count,
+                    services_count: services_count,
+                    wikis_count:    wikis_count,
+                    blogs_count:    blogs_count,
+                    stores_count:   stores_count,
+                    helps_count:    helps_count,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -400,6 +417,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
+    let template_types = get_template();
     let _tag_id: String = _id.to_string();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
@@ -414,6 +432,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
             _tag.name.clone() + &" | вебсервисы.рф: Статьи тега".to_string(),
             "/tag_blogs/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -446,6 +465,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -454,6 +474,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      blog_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -468,6 +489,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -475,6 +497,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      blog_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -494,6 +517,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -501,6 +525,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      blog_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -515,6 +540,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -522,6 +548,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      blog_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -537,6 +564,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
 
     let _connection = establish_connection();
     let _tag_id: String = _id.clone();
+    let template_types = get_template();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
         .first::<Tag>(&_connection)
@@ -551,6 +579,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             _tag.name.clone() + &" | вебсервисы.рф: Услуги тега".to_string(),
             "/tag_services/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -581,6 +610,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -589,6 +619,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   service_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -603,6 +634,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -610,6 +642,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   service_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -629,6 +662,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -636,6 +670,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   service_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -650,6 +685,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -657,6 +693,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   service_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -671,6 +708,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
+    let template_types = get_template();
     let _tag_id: String = _id.clone();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
@@ -686,6 +724,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             _tag.name.clone() + &" | вебсервисы.рф: Товары тега ".to_string(),
             "/tag_stores/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -717,6 +756,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -725,6 +765,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     stores_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -739,6 +780,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -746,6 +788,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     stores_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -765,6 +808,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -772,6 +816,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     stores_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -786,6 +831,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -793,6 +839,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     stores_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -807,6 +854,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
+    let template_types = get_template();
     let _tag_id: String = _id.clone();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
@@ -822,6 +870,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
             _tag.name.clone() + &" | вебсервисы.рф: Статьи тега".to_string(),
             "/tag_wikis/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -853,6 +902,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -861,6 +911,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      wikis_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -875,6 +926,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -882,6 +934,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      wikis_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -901,6 +954,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -908,6 +962,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      wikis_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -922,6 +977,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -929,6 +985,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      wikis_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -943,6 +1000,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
+    let template_types = get_template();
     let _tag_id: String = _id.clone();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
@@ -958,6 +1016,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
             _tag.name.clone() + &" | вебсервисы.рф: Работы тега".to_string(),
             "/tag_works/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -989,6 +1048,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -997,6 +1057,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      works_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1011,6 +1072,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1018,6 +1080,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      works_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1037,6 +1100,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1044,6 +1108,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      works_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1058,6 +1123,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1065,6 +1131,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      works_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1079,6 +1146,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
+    let template_types = get_template();
     let _tag_id: String = _id.clone();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
@@ -1094,6 +1162,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
             _tag.name.clone() + &" | вебсервисы.рф: Справки тега".to_string(),
             "/tag_helps/".to_string() + &_tag_id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -1125,6 +1194,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -1133,6 +1203,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      helps_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1147,6 +1218,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1154,6 +1226,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      helps_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1173,6 +1246,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1180,6 +1254,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      helps_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1194,6 +1269,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1201,6 +1277,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      helps_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1214,6 +1291,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let template_types = get_template();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -1222,6 +1300,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             "вебсервисы.рф: Ключевые слова".to_string(),
             "/tags/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -1269,6 +1348,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: i32,
                     is_ajax:          i32,
                     stat:             StatPage,
+                    template_types:   i16,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -1277,6 +1357,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                     stat:             _stat,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1291,6 +1372,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: i32,
                     is_ajax:          i32,
                     stat:             StatPage,
+                    template_types:   i16,
                 }
                 let body = Template {
                     all_tags:         all_tags,
@@ -1298,6 +1380,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                     stat:             _stat,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1314,6 +1397,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: i32,
                     is_ajax:          i32,
                     stat:             StatPage,
+                    template_types:   i16,
                 }
                 let body = Template {
                     all_tags:         all_tags,
@@ -1321,6 +1405,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                     stat:             _stat,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1335,6 +1420,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: i32,
                     is_ajax:          i32,
                     stat:             StatPage,
+                    template_types:   i16,
                 }
                 let body = Template {
                     all_tags:         all_tags,
@@ -1342,6 +1428,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                     stat:             _stat,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1356,6 +1443,7 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
     use schema::tags::dsl::tags;
 
     let _tag_id: i32 = *_id;
+    let template_types = get_template();
     let _connection = establish_connection();
     let _tag = tags
         .filter(schema::tags::id.eq(&_tag_id))
@@ -1372,6 +1460,7 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
             "вебсервисы.рф: Изменение тега ".to_string() + &_tag.name,
             "/edit_tag/".to_string() + &_tag.id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else if is_signed_in(&session) {
@@ -1381,14 +1470,16 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/tags/edit_tag.stpl")]
                 struct Template {
-                    request_user: User,
-                    tag:          Tag,
-                    is_ajax:      i32,
+                    request_user:   User,
+                    tag:            Tag,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    request_user: _request_user,
-                    tag:          _tag,
-                    is_ajax:      is_ajax,
+                    request_user:   _request_user,
+                    tag:            _tag,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1398,12 +1489,14 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/tags/edit_tag.stpl")]
                 struct Template {
-                    tag:          Tag,
-                    is_ajax:      i32,
+                    tag:            Tag,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    tag:          _tag,
-                    is_ajax:      is_ajax,
+                    tag:            _tag,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1460,10 +1553,6 @@ pub async fn delete_tag(session: Session, _id: web::Path<i32>) -> impl Responder
 
             let _connection = establish_connection();
             let _tag_id: i32 = *_id;
-            //let _tag = tags
-            //    .filter(schema::tags::id.eq(_tag_id))
-            //    .load::<Tag>(&_connection)
-            //    .expect("E");
             diesel::delete(tags_items.filter(schema::tags_items::tag_id.eq(_tag_id))).execute(&_connection).expect("E");
             diesel::delete(tags.filter(schema::tags::id.eq(_tag_id))).execute(&_connection).expect("E");
         }

@@ -12,6 +12,7 @@ use crate::utils::{
     is_signed_in,
     get_request_user_data,
     get_first_load_page,
+    get_template,
 };
 use actix_session::Session;
 use crate::schema;
@@ -44,6 +45,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
+    let template_types = get_template();
     let _item_id: String = param.1.clone();
     let _cat_id: String = param.0.clone();
 
@@ -59,6 +61,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             _item.title.clone() + &" | Обучающая статья: вебсервисы.рф".to_string(),
             "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
             _item.get_image(),
+            template_types,
         ).await
     }
     else {
@@ -66,10 +69,6 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
             categories::dsl::categories,
         };
         use crate::models::FeaturedItem;
-
-        //let _tech_categories = tech_categories
-        //    .load::<TechCategories>(&_connection)
-        //    .expect("E");
 
         let _category = categories
             .filter(schema::categories::slug.eq(&_cat_id))
@@ -104,30 +103,33 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                     _item.title.clone() + &" | Обучающая статья: вебсервисы.рф".to_string(),
                     "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
+                    template_types,
                 ).await
             }
             else if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/wiki.stpl")]
                 struct Template {
-                    request_user: User,
-                    object:   Item,
-                    category: Categories,
-                    cats:     Vec<Cat>,
-                    all_tags: Vec<SmallTag>,
-                    prev:     Option<FeaturedItem>,
-                    next:     Option<FeaturedItem>,
-                    is_ajax:  i32,
+                    request_user:   User,
+                    object:         Item,
+                    category:       Categories,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    prev:           Option<FeaturedItem>,
+                    next:           Option<FeaturedItem>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    request_user: _request_user,
-                    object:   _item,
-                    category: _category,
-                    cats:     _cats,
-                    all_tags: _tags,
-                    prev:     prev,
-                    next:     next,
-                    is_ajax:  is_ajax,
+                    request_user:   _request_user,
+                    object:         _item,
+                    category:       _category,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    prev:           prev,
+                    next:           next,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -137,24 +139,26 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/wiki.stpl")]
                 struct Template {
-                    request_user: User,
-                    object:   Item,
-                    category: Categories,
-                    cats:     Vec<Cat>,
-                    all_tags: Vec<SmallTag>,
-                    prev:     Option<FeaturedItem>,
-                    next:     Option<FeaturedItem>,
-                    is_ajax:  i32,
+                    request_user:   User,
+                    object:         Item,
+                    category:       Categories,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    prev:           Option<FeaturedItem>,
+                    next:           Option<FeaturedItem>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    request_user: _request_user,
-                    object:   _item,
-                    category: _category,
-                    cats:     _cats,
-                    all_tags: _tags,
-                    prev:     prev,
-                    next:     next,
-                    is_ajax:  is_ajax,
+                    request_user:   _request_user,
+                    object:         _item,
+                    category:       _category,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    prev:           prev,
+                    next:           next,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -171,28 +175,31 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                     _item.title.clone() + &" | Обучающая статья: вебсервисы.рф".to_string(),
                     "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
+                    template_types,
                 ).await
             }
             else if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/anon_wiki.stpl")]
                 struct Template {
-                    object:   Item,
-                    category: Categories,
-                    cats:     Vec<Cat>,
-                    all_tags: Vec<SmallTag>,
-                    prev:     Option<FeaturedItem>,
-                    next:     Option<FeaturedItem>,
-                    is_ajax:  i32,
+                    object:         Item,
+                    category:       Categories,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    prev:           Option<FeaturedItem>,
+                    next:           Option<FeaturedItem>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    object:   _item,
-                    category: _category,
-                    cats:     _cats,
-                    all_tags: _tags,
-                    prev:     prev,
-                    next:     next,
-                    is_ajax:  is_ajax,
+                    object:         _item,
+                    category:       _category,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    prev:           prev,
+                    next:           next,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -202,22 +209,24 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/anon_wiki.stpl")]
                 struct Template {
-                    object:   Item,
-                    category: Categories,
-                    cats:     Vec<Cat>,
-                    all_tags: Vec<SmallTag>,
-                    prev:     Option<FeaturedItem>,
-                    next:     Option<FeaturedItem>,
-                    is_ajax:  i32,
+                    object:         Item,
+                    category:       Categories,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    prev:           Option<FeaturedItem>,
+                    next:           Option<FeaturedItem>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    object:   _item,
-                    category: _category,
-                    cats:     _cats,
-                    all_tags: _tags,
-                    prev:     prev,
-                    next:     next,
-                    is_ajax:  is_ajax,
+                    object:         _item,
+                    category:       _category,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    prev:           prev,
+                    next:           next,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -233,6 +242,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
     let _cat_id: String = _id.clone();
     let _connection = establish_connection();
+    let template_types = get_template();
 
     let _category = categories
         .filter(schema::categories::slug.eq(&_cat_id))
@@ -268,6 +278,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
             _category.name.clone() + &" | Категория обучения - вебсервисы.рф".to_string(),
             "/wikis/".to_string() + &_category.slug.clone() + &"/".to_string(),
             cat_image,
+            template_types,
         ).await
     }
     else {
@@ -309,6 +320,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      Vec<Wiki>,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -318,6 +330,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -333,6 +346,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      Vec<Wiki>,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     all_tags:         _tags,
@@ -341,6 +355,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -364,6 +379,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      Vec<Wiki>,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     all_tags:         _tags,
@@ -372,6 +388,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -387,6 +404,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      Vec<Wiki>,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     all_tags:         _tags,
@@ -395,6 +413,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -408,6 +427,7 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let template_types = get_template();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -416,6 +436,7 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
             "вебсервисы.рф: Категории обучения".to_string(),
             "/wiki_categories/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -466,16 +487,18 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/categories.stpl")]
                 struct Template {
-                    request_user: User,
-                    is_ajax:      i32,
-                    cats:         Vec<Cat>,
-                    stat:         StatPage,
+                    request_user:   User,
+                    is_ajax:        i32,
+                    cats:           Vec<Cat>,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    request_user: _request_user,
-                    is_ajax:      is_ajax,
-                    cats:         _cats,
-                    stat:         _stat,
+                    request_user:   _request_user,
+                    is_ajax:        is_ajax,
+                    cats:           _cats,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -485,16 +508,18 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/categories.stpl")]
                 struct Template {
-                    is_ajax:      i32,
-                    cats:         Vec<Cat>,
-                    all_tags:     Vec<SmallTag>,
-                    stat:         StatPage,
+                    is_ajax:        i32,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    is_ajax:      is_ajax,
-                    cats:         _cats,
-                    all_tags:     _tags,
-                    stat:         _stat,
+                    is_ajax:        is_ajax,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -506,14 +531,16 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/wikis/anon_categories.stpl")]
                 struct Template {
-                    is_ajax:  i32,
-                    cats:     Vec<Cat>,
-                    stat:     StatPage,
+                    is_ajax:        i32,
+                    cats:           Vec<Cat>,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    is_ajax:  is_ajax,
-                    cats:     _cats,
-                    stat:     _stat,
+                    is_ajax:        is_ajax,
+                    cats:           _cats,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -523,16 +550,18 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/wikis/anon_categories.stpl")]
                 struct Template {
-                    is_ajax:  i32,
-                    cats:     Vec<Cat>,
-                    all_tags: Vec<SmallTag>,
-                    stat:     StatPage,
+                    is_ajax:        i32,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    is_ajax:  is_ajax,
-                    cats:     _cats,
-                    all_tags: _tags,
-                    stat:     _stat,
+                    is_ajax:        is_ajax,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

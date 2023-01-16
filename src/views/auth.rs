@@ -12,6 +12,7 @@ use crate::utils::{
     is_signed_in,
     verify,
     get_first_load_page,
+    get_template,
 };
 use crate::diesel::{
     RunQueryDsl,
@@ -50,14 +51,16 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
         use crate::utils::get_device_and_ajax;
 
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        let template_types = get_template();
         if is_ajax == 0 {
-            get_first_load_page (
+            get_first_load_page ( 
                 &session,
                 is_desctop,
                 "Регистрация".to_string(),
                 "вебсервисы.рф: Регистрация".to_string(),
                 "/signup/".to_string(),
                 "/static/images/dark/store.jpg".to_string(),
+                template_types,
             ).await
         }
         else {
@@ -94,12 +97,14 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/auth/signup.stpl")]
                 struct Template {
-                    is_ajax: i32,
-                    stat:    StatPage,
+                    is_ajax:        i32,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    is_ajax: is_ajax,
-                    stat:    _stat,
+                    is_ajax:        is_ajax,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -109,12 +114,14 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/auth/signup.stpl")]
                 struct Template {
-                    is_ajax: i32,
-                    stat:    StatPage,
+                    is_ajax:        i32,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    is_ajax: is_ajax,
-                    stat:    _stat,
+                    is_ajax:        is_ajax,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -131,6 +138,7 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
         use crate::utils::get_device_and_ajax;
 
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+        let template_types = get_template();
         if is_ajax == 0 {
             get_first_load_page (
                 &session,
@@ -139,6 +147,7 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
                 "вебсервисы.рф: Вход".to_string(),
                 "/login/".to_string(),
                 "/static/images/dark/store.jpg".to_string(),
+                template_types
             ).await
         }
         else {
@@ -173,12 +182,14 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/auth/login.stpl")]
                 struct Template {
-                    is_ajax: i32,
-                    stat:    StatPage,
+                    is_ajax:        i32,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    is_ajax: is_ajax,
-                    stat:    _stat,
+                    is_ajax:        is_ajax,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -188,12 +199,14 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/auth/login.stpl")]
                 struct Template {
-                    is_ajax: i32,
-                    stat:    StatPage,
+                    is_ajax:        i32,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    is_ajax: is_ajax,
-                    stat:    _stat,
+                    is_ajax:        is_ajax,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -237,17 +250,19 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
         }
 
         session.clear();
-
+        let template_types = get_template();
         if is_desctop(&req) {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/auth/logout.stpl")]
             struct Template {
-                is_ajax: i32,
-                stat:    StatPage,
+                is_ajax:        i32,
+                stat:           StatPage,
+                template_types: i16,
             }
             let body = Template {
-                is_ajax: 0,
-                stat:    _stat,
+                is_ajax:        0,
+                stat:           _stat,
+                template_types: template_types,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -257,12 +272,14 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
             #[derive(TemplateOnce)]
             #[template(path = "mobile/auth/logout.stpl")]
             struct Template {
-                is_ajax: i32,
-                stat:    StatPage,
+                is_ajax:        i32,
+                stat:           StatPage,
+                template_types: i16,
             }
             let body = Template {
-                is_ajax: 0,
-                stat:    _stat,
+                is_ajax:        0,
+                stat:           _stat,
+                template_types: template_types,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

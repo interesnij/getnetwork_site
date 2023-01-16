@@ -20,6 +20,7 @@ use crate::utils::{
     get_first_load_page,
     get_or_create_cookie_user_id,
     get_cookie_user_id,
+    get_template,
 };
 use crate::schema;
 use crate::models::{
@@ -54,6 +55,7 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let template_types = get_template();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -62,6 +64,7 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
             "вебсервисы.рф: Заказы".to_string(),
             "/orders/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else if !is_signed_in(&session) {
@@ -85,12 +88,14 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
                 is_ajax:          i32,
                 object_list:      Vec<Order>,
                 next_page_number: i32,
+                template_types:   i16,
             }
             let body = Template {
                 request_user:     _request_user,
                 is_ajax:          is_ajax,
                 object_list:      _orders,
                 next_page_number: next_page_number,
+                template_types:   template_types,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -103,11 +108,13 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
                 is_ajax:          i32,
                 object_list:      Vec<Order>,
                 next_page_number: i32,
+                template_types:   i16,
             }
             let body = Template {
                 is_ajax:          is_ajax,
                 object_list:      _orders,
                 next_page_number: next_page_number,
+                template_types:   template_types,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -120,6 +127,7 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
     use crate::utils::{get_device_and_ajax, get_page};
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let template_types = get_template();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -128,6 +136,7 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
             "вебсервисы.рф: Ваши заказы".to_string(),
             "/user_orders/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -146,12 +155,14 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                     object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     request_user:     _request_user,
                     object_list:      _orders,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -164,11 +175,13 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                     object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     object_list:      _orders,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -183,11 +196,13 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                     object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     object_list:      _orders,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -200,11 +215,13 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
                     object_list:      Vec<Order>,
                     is_ajax:          i32,
                     next_page_number: i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     object_list:      _orders,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -220,6 +237,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
     use schema::orders::dsl::orders;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let template_types = get_template();
     let _connection = establish_connection();
     let _order_id: i32 = *_id;
     let user_id = get_cookie_user_id(&req).await;
@@ -236,6 +254,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
             "вебсервисы.рф: Заказ ".to_string() + &_order.title,
             "/order/".to_string() + &_order.id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else if user_id != _order.user_id {
@@ -255,16 +274,18 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/pages/order.stpl")]
                 struct Template {
-                    request_user: User,
-                    object:       Order,
-                    files:        Vec<OrderFile>,
-                    is_ajax:      i32,
+                    request_user:   User,
+                    object:         Order,
+                    files:          Vec<OrderFile>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    request_user: _request_user,
-                    object:       _order,
-                    files:        _files,
-                    is_ajax:      is_ajax,
+                    request_user:   _request_user,
+                    object:         _order,
+                    files:          _files,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -274,14 +295,16 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/pages/order.stpl")]
                 struct Template {
-                    object:       Order,
-                    files:        Vec<OrderFile>,
-                    is_ajax:      i32,
+                    object:         Order,
+                    files:          Vec<OrderFile>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    object:       _order,
-                    files:        _files,
-                    is_ajax:      is_ajax,
+                    object:         _order,
+                    files:          _files,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -293,14 +316,16 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/pages/anon_order.stpl")]
                 struct Template {
-                    object:       Order,
-                    files:        Vec<OrderFile>,
-                    is_ajax:      i32,
+                    object:         Order,
+                    files:          Vec<OrderFile>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    object:       _order,
-                    files:        _files,
-                    is_ajax:      is_ajax,
+                    object:         _order,
+                    files:          _files,
+                    is_ajax:        is_ajax,
+                    template_types: i16,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -310,14 +335,16 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/pages/anon_order.stpl")]
                 struct Template {
-                    object:       Order,
-                    files:        Vec<OrderFile>,
-                    is_ajax:      i32,
+                    object:         Order,
+                    files:          Vec<OrderFile>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    object:       _order,
-                    files:        _files,
-                    is_ajax:      is_ajax,
+                    object:         _order,
+                    files:          _files,
+                    is_ajax:        is_ajax,
+                    template_types: i16,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -328,11 +355,14 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
 }
 
 pub async fn create_order_page() -> actix_web::Result<HttpResponse> {
+    let template_types = get_template();
     #[derive(TemplateOnce)]
     #[template(path = "desctop/pages/create_order.stpl")]
     struct Template {
+        template_types: i16,
     }
     let body = Template {
+        template_types: template_types,
     }
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

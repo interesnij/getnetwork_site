@@ -12,6 +12,7 @@ use crate::utils::{
     is_signed_in,
     get_request_user_data,
     get_first_load_page,
+    get_template,
 };
 use actix_session::Session;
 use crate::schema;
@@ -44,6 +45,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
+    let template_types = get_template();
     let _item_id: String = param.1.clone();
     let _cat_id: String = param.0.clone();
 
@@ -59,6 +61,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             _item.title.clone() + &" | Услуга: вебсервисы.рф".to_string(),
             "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
             _item.get_image(),
+            template_types,
         ).await
     }
     else {
@@ -104,30 +107,33 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                     _item.title.clone() + &" | Услуга: вебсервисы.рф".to_string(),
                     "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
+                    template_types,
                 ).await
             }
             else if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/service.stpl")]
                 struct Template {
-                    request_user: User,
-                    object:   Item,
-                    category: Categories,
-                    cats:     Vec<Cat>,
-                    all_tags: Vec<SmallTag>,
-                    prev:     Option<FeaturedItem>,
-                    next:     Option<FeaturedItem>,
-                    is_ajax:  i32,
+                    request_user:   User,
+                    object:         Item,
+                    category:       Categories,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    prev:           Option<FeaturedItem>,
+                    next:           Option<FeaturedItem>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    request_user: _request_user,
-                    object:   _item,
-                    category: _category,
-                    cats:     _cats,
-                    all_tags: _tags,
-                    prev:     prev,
-                    next:     next,
-                    is_ajax:  is_ajax,
+                    request_user:   _request_user,
+                    object:         _item,
+                    category:       _category,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    prev:           prev,
+                    next:           next,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -137,24 +143,26 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/services/service.stpl")]
                 struct Template {
-                    request_user: User,
-                    object:   Item,
-                    category: Categories,
-                    cats:     Vec<Cat>,
-                    all_tags: Vec<SmallTag>,
-                    prev:     Option<FeaturedItem>,
-                    next:     Option<FeaturedItem>,
-                    is_ajax:  i32,
+                    request_user:   User,
+                    object:         Item,
+                    category:       Categories,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    prev:           Option<FeaturedItem>,
+                    next:           Option<FeaturedItem>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    request_user: _request_user,
-                    object:   _item,
-                    category: _category,
-                    cats:     _cats,
-                    all_tags: _tags,
-                    prev:     prev,
-                    next:     next,
-                    is_ajax:  is_ajax,
+                    request_user:   _request_user,
+                    object:         _item,
+                    category:       _category,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    prev:           prev,
+                    next:           next,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -171,28 +179,31 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                     _item.title.clone() + &" | Услуга: вебсервисы.рф".to_string(),
                     "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
+                    template_types,
                 ).await
             }
             else if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/anon_service.stpl")]
                 struct Template {
-                    object:   Item,
-                    category: Categories,
-                    cats:     Vec<Cat>,
-                    all_tags: Vec<SmallTag>,
-                    prev:     Option<FeaturedItem>,
-                    next:     Option<FeaturedItem>,
-                    is_ajax:  i32,
+                    object:         Item,
+                    category:       Categories,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    prev:           Option<FeaturedItem>,
+                    next:           Option<FeaturedItem>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    object:   _item,
-                    category: _category,
-                    cats:     _cats,
-                    all_tags: _tags,
-                    prev:     prev,
-                    next:     next,
-                    is_ajax:  is_ajax,
+                    object:         _item,
+                    category:       _category,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    prev:           prev,
+                    next:           next,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -202,22 +213,24 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/services/anon_service.stpl")]
                 struct Template {
-                    object:   Item,
-                    category: Categories,
-                    cats:     Vec<Cat>,
-                    all_tags: Vec<SmallTag>,
-                    prev:     Option<FeaturedItem>,
-                    next:     Option<FeaturedItem>,
-                    is_ajax:  i32,
+                    object:         Item,
+                    category:       Categories,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    prev:           Option<FeaturedItem>,
+                    next:           Option<FeaturedItem>,
+                    is_ajax:        i32,
+                    template_types: i16,
                 }
                 let body = Template {
-                    object:   _item,
-                    category: _category,
-                    cats:     _cats,
-                    all_tags: _tags,
-                    prev:     prev,
-                    next:     next,
-                    is_ajax:  is_ajax,
+                    object:         _item,
+                    category:       _category,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    prev:           prev,
+                    next:           next,
+                    is_ajax:        is_ajax,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -233,6 +246,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
 
     let _cat_id: String = _id.clone();
     let _connection = establish_connection();
+    let template_types = get_template();
 
     let _category = categories
         .filter(schema::categories::slug.eq(&_cat_id))
@@ -268,6 +282,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             _category.name.clone() + &" | Категория услуг - вебсервисы.рф".to_string(),
             "/services/".to_string() + &_category.slug.clone() + &"/".to_string(),
             cat_image,
+            template_types,
         ).await
     }
     else {
@@ -307,6 +322,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                     object_list:      Vec<Service>,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -314,6 +330,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -329,6 +346,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                     object_list:      Vec<Service>,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     all_tags:         _tags,
@@ -337,6 +355,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -358,12 +377,14 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                     object_list:      Vec<Service>,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     category:         _category,
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -379,6 +400,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                     object_list:      Vec<Service>,
                     next_page_number: i32,
                     is_ajax:          i32,
+                    template_types:   i16,
                 }
                 let body = Template {
                     all_tags:         _tags,
@@ -387,6 +409,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
+                    template_types:   template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -399,6 +422,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
 pub async fn service_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_ajax;
 
+    let template_types = get_template();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
         get_first_load_page (
@@ -408,6 +432,7 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
             "вебсервисы.рф: Категории услуг".to_string(),
             "/service_categories/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
+            template_types,
         ).await
     }
     else {
@@ -457,16 +482,18 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/categories.stpl")]
                 struct Template {
-                    request_user: User,
-                    is_ajax:      i32,
-                    cats:         Vec<Cat>,
-                    stat:         StatPage,
+                    request_user:   User,
+                    is_ajax:        i32,
+                    cats:           Vec<Cat>,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    request_user: _request_user,
-                    is_ajax:      is_ajax,
-                    cats:         _cats,
-                    stat:         _stat,
+                    request_user:   _request_user,
+                    is_ajax:        is_ajax,
+                    cats:           _cats,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -476,16 +503,18 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/services/categories.stpl")]
                 struct Template {
-                    is_ajax:      i32,
-                    cats:         Vec<Cat>,
-                    all_tags:     Vec<SmallTag>,
-                    stat:         StatPage,
+                    is_ajax:        i32,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    is_ajax:      is_ajax,
-                    cats:         _cats,
-                    all_tags:     _tags,
-                    stat:         _stat,
+                    is_ajax:        is_ajax,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -497,14 +526,16 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/services/anon_categories.stpl")]
                 struct Template {
-                    is_ajax:  i32,
-                    cats:     Vec<Cat>,
-                    stat:     StatPage,
+                    is_ajax:        i32,
+                    cats:           Vec<Cat>,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    is_ajax:  is_ajax,
-                    cats:     _cats,
-                    stat:     _stat,
+                    is_ajax:        is_ajax,
+                    cats:           _cats,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -514,16 +545,18 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                 #[derive(TemplateOnce)]
                 #[template(path = "mobile/services/anon_categories.stpl")]
                 struct Template {
-                    is_ajax:  i32,
-                    cats:     Vec<Cat>,
-                    all_tags: Vec<SmallTag>,
-                    stat:     StatPage,
+                    is_ajax:        i32,
+                    cats:           Vec<Cat>,
+                    all_tags:       Vec<SmallTag>,
+                    stat:           StatPage,
+                    template_types: i16,
                 }
                 let body = Template {
-                    is_ajax:  is_ajax,
-                    cats:     _cats,
-                    all_tags: _tags,
-                    stat:     _stat,
+                    is_ajax:        is_ajax,
+                    cats:           _cats,
+                    all_tags:       _tags,
+                    stat:           _stat,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

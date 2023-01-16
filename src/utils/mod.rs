@@ -85,7 +85,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
                 let template = template_some.unwrap();
                 return match template.as_str() {
                     "rhythm" => 1,
-                    "eremia" => 2,
+                    "eremia" => 1,
                     _ => 1,
                 };
             }
@@ -101,7 +101,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
     pub fn set_template(types: i16) -> () {
         let value: &str = match types {
             1 => "rhythm",
-            2 => "eremia",
+            1 => "eremia",
             _ => "rhythm",
         };
         web_local_storage_api::set_item("template", value);
@@ -219,19 +219,20 @@ pub fn get_request_user_data(session: &Session) -> User {
     }
 }
 
-pub async fn get_first_load_page (
-    session:     &Session,
-    is_desctop:  bool,
-    title:       String,
-    description: String,
-    uri:         String,
-    image:       String,
+pub async fn get_first_load_page ( 
+    session:        &Session,
+    is_desctop:     bool,
+    title:          String,
+    description:    String,
+    uri:            String,
+    image:          String,
+    template_types: i16
 ) -> actix_web::Result<HttpResponse> {
-    let template_types = get_template();
+    let template_types = get_template();  
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
-            #[derive(TemplateOnce)]
+            #[derive(TemplateOnce)] 
             #[template(path = "desctop/generic/first_load.stpl")]
             struct Template {
                 request_user:   User,
@@ -324,32 +325,35 @@ pub async fn get_first_load_page (
 }
 
 pub async fn get_private_page (
-    is_ajax:     i32,
-    user:        User,
-    is_desctop:  bool,
-    title:       String,
-    description: String,
-    uri:         String,
-    image:       String,
+    is_ajax:        i32,
+    user:           User,
+    is_desctop:     bool,
+    title:          String,
+    description:    String,
+    uri:            String,
+    image:          String,
+    template_types: i16
 ) -> actix_web::Result<HttpResponse> {
     if is_desctop {
         #[derive(TemplateOnce)]
         #[template(path = "desctop/generic/private_object.stpl")]
         struct Template {
-            is_ajax:      i32,
-            request_user: User,
-            title:        String,
-            description:  String,
-            image:        String,
-            uri:          String,
+            is_ajax:        i32,
+            request_user:   User,
+            title:          String,
+            description:    String,
+            image:          String,
+            uri:            String,
+            template_types: i16,
         }
         let body = Template {
-            is_ajax:      is_ajax,
-            request_user: user,
-            title:        title,
-            description:  description,
-            image:        image,
-            uri:          uri,
+            is_ajax:        is_ajax,
+            request_user:   user,
+            title:          title,
+            description:    description,
+            image:          image,
+            uri:            uri,
+            template_types: template_types,
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -359,18 +363,20 @@ pub async fn get_private_page (
         #[derive(TemplateOnce)]
         #[template(path = "mobile/generic/private_object.stpl")]
         struct Template {
-            is_ajax:      i32,
-            title:        String,
-            description:  String,
-            image:        String,
-            uri:          String,
+            is_ajax:        i32,
+            title:          String,
+            description:    String,
+            image:          String,
+            uri:            String,
+            template_types: i16,
         }
         let body = Template {
-            is_ajax:      is_ajax,
-            title:        title,
-            description:  description,
-            image:        image,
-            uri:          uri,
+            is_ajax:        is_ajax,
+            title:          title,
+            description:    description,
+            image:          image,
+            uri:            uri,
+            template_types: template_types,
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -379,29 +385,32 @@ pub async fn get_private_page (
 }
 
 pub async fn get_anon_private_page (
-    is_ajax:     i32,
-    is_desctop:  bool,
-    title:       String,
-    description: String,
-    uri:         String,
-    image:       String,
+    is_ajax:        i32,
+    is_desctop:     bool,
+    title:          String,
+    description:    String,
+    uri:            String,
+    image:          String,
+    template_types: i16,
 ) -> actix_web::Result<HttpResponse> {
     if is_desctop {
         #[derive(TemplateOnce)]
         #[template(path = "desctop/generic/anon_private_object.stpl")]
         struct Template {
-            is_ajax:     i32,
-            title:       String,
-            description: String,
-            image:       String,
-            uri:         String,
+            is_ajax:        i32,
+            title:          String,
+            description:    String,
+            image:          String,
+            uri:            String,
+            template_types: i16,
         }
         let body = Template {
-            is_ajax:     is_ajax,
-            title:       title,
-            description: description,
-            image:       image,
-            uri:         uri,
+            is_ajax:        is_ajax,
+            title:          title,
+            description:    description,
+            image:          image,
+            uri:            uri,
+            template_types: template_types,
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -411,18 +420,20 @@ pub async fn get_anon_private_page (
         #[derive(TemplateOnce)]
         #[template(path = "mobile/generic/anon_private_object.stpl")]
         struct Template {
-            is_ajax:     i32,
-            title:       String,
-            description: String,
-            image:       String,
-            uri:         String,
+            is_ajax:        i32,
+            title:          String,
+            description:    String,
+            image:          String,
+            uri:            String,
+            template_types: i16,
         }
         let body = Template {
-            is_ajax:     is_ajax,
-            title:       title,
-            description: description,
-            image:       image,
-            uri:         uri,
+            is_ajax:        is_ajax,
+            title:          title,
+            description:    description,
+            image:          image,
+            uri:            uri,
+            template_types: template_types,
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
