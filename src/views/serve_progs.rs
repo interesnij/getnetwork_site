@@ -550,7 +550,7 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
                     tech_cats:      _tech_categories,
                     category:       _category,
                     is_ajax:        is_ajax,
-                    template_types: i16,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -569,7 +569,7 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
                     tech_cats:      _tech_categories,
                     category:       _category,
                     is_ajax:        is_ajax,
-                    template_types: i16,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

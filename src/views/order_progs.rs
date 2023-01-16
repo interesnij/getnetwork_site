@@ -325,7 +325,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
                     object:         _order,
                     files:          _files,
                     is_ajax:        is_ajax,
-                    template_types: i16,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -344,7 +344,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
                     object:         _order,
                     files:          _files,
                     is_ajax:        is_ajax,
-                    template_types: i16,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

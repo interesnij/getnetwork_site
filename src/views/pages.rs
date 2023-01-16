@@ -1082,7 +1082,7 @@ pub async fn get_tech_objects_page(session: Session, _id: web::Path<i32>) -> act
     }
     let body = Template {
         object:         _cat,
-        is_admin:       is_admin
+        is_admin:       is_admin,
         template_types: i16,
     }
     .render_once()
@@ -1120,7 +1120,7 @@ pub async fn unical_object_form_page(session: Session, _id: web::Path<i16>) -> a
             }
             let body = Template {
                 cats:           _cats,
-                biznes_mode:    biznes_mode
+                biznes_mode:    biznes_mode,
                 template_types: template_types,
             }
             .render_once()
@@ -1603,7 +1603,7 @@ pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i
                     request_user:   _request_user,
                     file:           _file,
                     is_ajax:        is_ajax,
-                    template_types: i16,
+                    template_types: template_types,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
