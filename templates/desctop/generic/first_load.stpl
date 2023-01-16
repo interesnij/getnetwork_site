@@ -18,15 +18,10 @@
     <link rel="icon" href="/static/images/favicon.png" type="image/x-icon" />
     <meta name="yandex-verification" content="6990cfa2f76f8dca" />
     <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
-    <% 
+    <%  
       let style_src = "../../../block/styles/".to_owned() + &template_types.to_string() + &"/d.stpl".to_string();
       let script_src = "../../../block/scripts/".to_owned() + &template_types.to_string() + &"/d.stpl".to_string();  
     %>
-    <% include!(<%= style_src %>); %>
-  </head> 
-
-  <body >
-    <span class="span"></span>
-    <% include!(<%= script_src %>); %>
+    
   </body>
 </html>
