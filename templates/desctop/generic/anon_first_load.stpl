@@ -17,8 +17,8 @@
   <meta name="yandex-verification" content="6990cfa2f76f8dca" />
   <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
   <title><%= title %></title>
-  
-  <% include!("../../../block/styles/<%= template_types %>/d.stpl"); %>
+  <% let style_src = "../../../block/styles/".to_owned() + &template_types.to_string() + &"/d.stpl".to_string(); %>
+  <% include!("../../../block/scripts/template_types/anon_d.stpl"); %>
 </head>
 
   <body>
