@@ -1,0 +1,31 @@
+</span>
+</span>
+
+<footer class="page-section footer pb-60">
+    <div class="container">
+        <div class="footer-social-links mb-110 mb-xs-60">
+            <a href="#" title="VK" target="_blank">VK</a>
+            <a href="#" title="Youtube" target="_blank">YT</a>
+            <a href="#" title="Dzen" target="_blank">DZ</a>
+        </div>
+
+        <div class="footer-text" style="margin-top: 10px">
+            <div class="footer-copy font-alt">
+                <a href="/" class="ajax">&copy; вебсервисы.рф 2022</a>.
+            </div>
+            <!--
+            <div class="footer-made">
+                Наша мета-вселенная.
+            </div>
+            -->
+            <p class="stat_meta">
+              <span class="device"></span>
+              &nbsp;-&nbsp;
+              <span class="city"></span>
+            </p>
+        </div>
+     </div>
+</footer>
+
+</div>
+<div class="body_overlay pointer"></div>

@@ -63,7 +63,7 @@ async fn main() -> std::io::Result<()> {
                 request_count: Cell::new(0),
                 messages: messages.clone(),
             })
-            .wrap(Logger::default())
+            //.wrap(Logger::default())
             .wrap(Compress::default())
 
             //это для https

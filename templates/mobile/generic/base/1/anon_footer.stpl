@@ -1,0 +1,106 @@
+</span>
+</span>
+<svg fill="currentColor" class="mob_menu" height="33" viewBox="0 0 24 24" width="33">
+<path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 18h13v-2H3v2zm0-5h10v-2H3v2zm0-7v2h13V6H3zm18 9.59L17.42 12 21 8.41 19.59 7l-5 5 5 5L21 15.59z"/>
+</svg>
+<br><br><br>
+
+<span class="menu_buttons">
+<span class="first_span" style="display:none">
+  <button href="/service_categories/" class="mobile_icon service border ajax">
+    <span class="icon-lightbulb"></span>
+    <p>Услуги</p>
+  </button>
+  <button href="/work_categories/" class="mobile_icon work border ajax">
+    <span class="icon-briefcase"></span>
+    <p>Работы</p>
+  </button>
+  <button href="/store_categories/" class="mobile_icon store border ajax">
+    <span class="icon-basket"></span>
+    <p>Товары</p>
+  </button>
+  <button href="/blog_categories/" class="mobile_icon blog border ajax">
+    <span class="icon-newspaper"></span>
+    <p>Блог</p>
+  </button>
+  <button href="/wiki_categories/" class="mobile_icon wiki border ajax">
+    <span class="icon-book-open"></span>
+    <p>Обучалка</p>
+  </button>
+</span>
+
+<span class="second_span" style="display:none">
+  <button href="/info/" class="mobile_icon infos border ajax">
+    <span class="icon-heart"></span>
+    <p>О нас</p>
+  </button>
+  <button href="/history/" class="mobile_icon border ajax history">
+    <span class="icon-profile-male"></span>
+    <p>О вас</p>
+  </button>
+  <button href="/tags/" class="mobile_icon tags border ajax">
+    <span class="icon-ribbon"></span>
+    <p>Теги</p>
+  </button>
+  <button href="/helps/how_to_order_a_project/" class="mobile_icon help border ajax">
+    <span class="icon-lifesaver"></span>
+    <p>Помощь</p>
+  </button>
+  <button class="mobile_icon border anon_color_change" data-color="dark">
+    <span class="icon-pencil"></span>
+    <p>Фон</p>
+  </button>
+</span>
+
+  <nav class="mobile_nav">
+    <button href="/" class="mobile_icon ajax border main main_btn">
+      <span class="icon-flag"></span>
+      <p>Главная</p>
+    </button>
+    <button class="mobile_icon border apps_btn">
+      <span class="icon-layers"></span>
+      <p>Разделы</p>
+    </button>
+    <button href="" class="mobile_icon border pages_btn">
+      <span class="icon-documents"></span>
+      <p>Страницы</p>
+    </button>
+    <button href="/search/" class="mobile_icon border search ajax search_btn">
+      <span class="icon-search"></span>
+      <p>Поиск</p>
+    </button>
+  </nav>
+</span>
+
+
+<div class="card mb-3 window_fullscreen border" style="display:none">
+<span class="window_fullscreen_hide">
+<svg style="width: 30px;" fill="currentColor" viewBox="0 0 24 24">
+<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+<path d="M0 0h24v24H0z" fill="none"/>
+</svg>
+</span>
+<div id="fixed_nav_block" style="margin-top:30px;position:relative;">
+
+<div class="container">
+<span class="banner_block border" style="width:100%;text-align:center;">
+<h3 class="hs-line-8 font-alt mb-xs-10">
+    Разработка соцсетей
+</h3>
+<h2 class="hs-line-14" style="margin-bottom: 0;">
+  <a href="/" class="ajax">
+    вебсервисы!
+  </a>
+</h2>
+</span>
+<p class="stat_meta" style="text-align: center;">
+  <span class="device"></span>
+  &nbsp;-&nbsp;
+  <span class="city"></span>
+</p>
+</div>
+</div>
+<div id="reload_nav_block" class="container" style="margin-top:20px;position:relative;"></div>
+</div>
+</div>
+<div class="body_overlay pointer"></div>

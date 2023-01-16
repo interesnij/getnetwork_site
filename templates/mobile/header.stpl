@@ -1,5 +1,5 @@
 <% if is_ajax == 1 { %>
-    <div class="page mobile_page" id="top">
-        <span id="ajax">
-            <span id="reload_block">
+    <% if template_types == 1 { %>
+      <% include!("generic/base/1/header.stpl"); %>
+    <% } %>
 <% } %>
