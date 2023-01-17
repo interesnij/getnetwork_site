@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section page-id="41" data-title="Блог" data-description="вебсервисы.рф: блог, статьи на тему программирования, стратегии, жизни компании" data-uri="/blog_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -8,7 +7,7 @@
             </a>
             &nbsp;/&nbsp;
             <a>Блог</a>
-            <% include!("../generic/items/1/page_stat.stpl"); %>
+            <% include!("../../generic/items/1/page_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -31,7 +30,7 @@
         </h5>
         <div class="row multi-columns-row">
             <% for object in get_6_blogs.iter() { %>
-            <% include!("../generic/items/1/blog.stpl"); %>
+            <% include!("../../generic/items/1/blog.stpl"); %>
             <% } %>
         </div>
 
@@ -60,7 +59,5 @@
     </div>
 </div>
 
-<% include!("../../block/tags_widget.stpl"); %>
+<% include!("../../../block/tags_widget.stpl"); %>
 </div>
-
-<% include!("../footer.stpl"); %>

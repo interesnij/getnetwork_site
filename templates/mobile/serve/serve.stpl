@@ -1,7 +1,7 @@
 <% include!("../header.stpl"); %>
 
-<%= category.name %>: <%= object.name %>
-<div class="sidebar hidden">
-    <% include!("sidebar.stpl"); %>
-</div>
+<% if template_types == 1 { %>
+    <% include!("1/serve.stpl"); %>
+<% } %>
+
 <% include!("../footer.stpl"); %>

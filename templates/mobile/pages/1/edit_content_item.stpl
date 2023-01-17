@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section data-title="Изменение текста объекта <%= item.title %>" data-description="вебсервисы.рф: Изменение текста объекта <%= item.title %>" data-uri="/edit_content_item/<%= item.id %>/" data-image="<%= item.get_image() %>" class="doc_title">
   <div class="relative container align-left">
@@ -30,6 +29,3 @@
         </form>
     </div>
 </section>
-
-
-<% include!("../footer.stpl"); %>

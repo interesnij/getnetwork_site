@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section page-id="53" class="doc_title">
     <div class="relative container align-left">
@@ -32,4 +31,3 @@
     <% include!("sidebar.stpl"); %>
 </div>
 
-<% include!("../footer.stpl"); %>

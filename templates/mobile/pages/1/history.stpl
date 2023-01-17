@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section page-id="13" data-title="История просмотров" data-description="вебсервисы.рф: История просмотров пользователя" data-uri="/history/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -140,4 +139,3 @@
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
-<% include!("../footer.stpl"); %>

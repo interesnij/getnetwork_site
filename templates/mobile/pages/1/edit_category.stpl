@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section data-title="Изменение категории <%= cat.name %>" data-description="вебсервисы.рф: Изменение категории <%= cat.name %>" data-uri="/edit_category/<%= cat.id %>/" data-image="<%= cat.get_image() %>" class="doc_title">
     <div class="relative container align-left">
@@ -52,4 +51,3 @@
     </div>
 </section>
 
-<% include!("../footer.stpl"); %>

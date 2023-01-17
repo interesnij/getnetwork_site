@@ -1,4 +1,3 @@
-<% include!("../anon_header.stpl"); %>
 
 <section page-id="71" data-title="Товары" data-description="вебсервисы.рф: Товары" data-uri="/store_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -8,7 +7,7 @@
             </a>
             &nbsp;/&nbsp;
             <a>Категории товаров</a>
-            <% include!("../generic/items/1/page_stat.stpl"); %>
+            <% include!("../../generic/items/1/page_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -30,7 +29,7 @@
             <% if get_6_stores.len() > 0 { %>
 
             <% for object in get_6_stores.iter() { %>
-            <% include!("../generic/items/1/store.stpl"); %>
+            <% include!("../../generic/items/1/store.stpl"); %>
             <% } %>
             <% } else { %>
             <div style="margin-top: 40px;">
@@ -64,7 +63,6 @@
     </div>
 </div>
 
-<% include!("../../block/tags_widget.stpl"); %>
+<% include!("../../../block/tags_widget.stpl"); %>
 </div>
 
-<% include!("../anon_footer.stpl"); %>

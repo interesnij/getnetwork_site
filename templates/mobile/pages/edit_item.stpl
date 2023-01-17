@@ -1,72 +1,7 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="Изменение объекта <%= object.title %>" data-description="вебсервисы.рф: Изменение объекта <%= object.title %>" data-uri="/edit_item/<%= object.id %>/" data-image="<%= object.get_image() %>" class="doc_title">
-  <div class="relative container align-left">
-    <div class="hs-line-4 font-alt">
-      <a class="ajax" href="/">Главная</a>
-        &nbsp;/&nbsp;
-      <a>Изменение объекта</a>
-    </div>
-  </div>
-</section>
-
-<section class="page-section">
-    <div class="row container relative">
-        <form class="form mb-20 col-md-8" enctype="multipart/form-data">
-            <div class="mb-20 mb-md-10">
-                <input value="<%= object.title %>" class="form_title input-md form-control" type="text" name="title" placeholder="Название" />
-            </div>
-            <div class="mb-20 mb-md-10">
-                <input value="<%= object.slug %>" class="form_title input-md form-control" type="text" name="slug" placeholder="Slug" />
-            </div>
-            <div class="mb-20 mb-md-10">
-                <input value="<%= object.position %>" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
-            </div>
-            <div class="mb-20 mb-md-10">
-              <% if object.description.is_some() { %>
-                <input value="<%= object.description.as_deref().unwrap() %>" class="input-md form-control" type="text" name="description" placeholder="Описание" />
-              <% } else { %>
-                <input value="" class="input-md form-control" type="text" name="description" placeholder="Описание" />
-              <% } %>
-            </div>
-            <div class="mb-20 mb-md-10">
-              <% if object.link.is_some() { %>
-                <input value="<%= object.link.as_deref().unwrap() %>" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
-              <% } else { %>
-                <input value="" class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
-              <% } %>
-            </div>
-            <div class="mb-20 mb-md-10">
-              <img style="height:50px" src="<%= object.get_image() %>" />
-              <label>Обложка</label>
-              <input class="input-md form-control" type="file" name="main_image" />
-            </div>
-            <div class="mb-20 mb-md-10">
-                <label>Категории</label>
-                <select class="form-control" name="category_list[]" multiple="">
-                  <% for category in cats.iter() { %>
-                    <option <% if item_cats.iter().any(|i| i.id==category.id) { %>selected=""<% } %> value="<%= category.id %>"><%= category.name %></option>
-                  <% } %>
-                </select>
-            </div>
-            <div class="mb-20 mb-md-10">
-                <label>Теги</label>
-                <select class="form-control" name="tags_list[]" multiple="">
-                  <% for tag in all_tags.iter() { %>
-                    <option <% if item_tags.iter().any(|i| i.id==tag.id) { %>selected=""<% } %> value="<%= tag.id %>"><%= tag.name %></option>
-                  <% } %>
-                </select>
-            </div>
-
-            <% if vec![2,3,5].iter().any(|i| i==&object.types) { %>
-              <% include!("../generic/form/1/edit_serves.stpl"); %>
-            <% } %>
-
-            <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_item_btn">Изменить</button>
-        </form>
-        <div class="col-md-4">
-        </div>
-    </div>
-</section>
+<% if template_types == 1 { %>
+    <% include!("1/edit_item.stpl"); %>
+<% } %>
 
 <% include!("../footer.stpl"); %>

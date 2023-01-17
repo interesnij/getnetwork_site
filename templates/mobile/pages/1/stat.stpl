@@ -1,4 +1,3 @@
-<% include!("../anon_header.stpl"); %>
 
 <section page-id="14" data-title="Статистика сайта" data-description="вебсервисы.рф: Статистика сайта" data-uri="/cookie_users_list/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -62,5 +61,3 @@
         </div>
     </div>
 </section>
-
-<% include!("../footer.stpl"); %>

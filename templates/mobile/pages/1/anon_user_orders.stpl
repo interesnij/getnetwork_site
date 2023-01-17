@@ -1,4 +1,3 @@
-<% include!("../anon_header.stpl"); %>
 
 <section page-id="12" data-title="Ваши заказы" data-description="вебсервисы.рф: Ваши заказы" data-uri="/user_orders/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -85,4 +84,4 @@
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
-<% include!("../anon_footer.stpl"); %>
+

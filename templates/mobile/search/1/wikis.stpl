@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section page-id="25" data-title="<%= q %> | Общий поиск статей по фрагменту" data-description="вебсервисы.рф: <%= q %> | Общий поиск статей по фрагменту" data-uri="/search_wikis/<%= q %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -18,7 +17,7 @@
           <div class="container relative">
               <div class="row multi-columns-row is_paginate">
                 <% for object in wikis_list.iter() { %>
-                  <% include!("../generic/items/1/default_wiki.stpl"); %>
+                  <% include!("../../generic/items/1/default_wiki.stpl"); %>
                 <% } %>
                 <% if next_page_number > 0 { %>
                   <div class="load centered m-1 next_page_list" data-link="/search_wikis/<%=q%>/?page=<%= next_page_number %>">
@@ -43,4 +42,3 @@
     <% include!("sidebar.stpl"); %>
 </div>
 
-<% include!("../footer.stpl"); %>

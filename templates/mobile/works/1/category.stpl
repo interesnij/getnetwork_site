@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section page-id="92" data-id="<%= category.id %>" data-title="<%= category.name %> | Категория работ" data-description="вебсервисы.рф: <%= category.name %> | Категория работ" data-uri="/works/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
   <div class="relative container align-left">
@@ -6,7 +5,7 @@
       <a class="ajax" href="/work_categories/">Работы</a>
       &nbsp;/&nbsp;
       <a><%= category.name %></a>
-      <% include!("../generic/items/1/category_stat.stpl"); %>
+      <% include!("../../generic/items/1/category_stat.stpl"); %>
     </div>
   </div>
 </section>
@@ -34,7 +33,7 @@
       <% if object_list.len() > 0 { %>
         <div class="is_paginate">
         <% for object in object_list.iter() { %>
-          <% include!("../generic/items/1/work.stpl"); %>
+          <% include!("../../generic/items/1/work.stpl"); %>
         <% } %>
         <% if next_page_number > 0 { %>
           <div class="load centered m-1 next_page_list" data-link="/works/<%= category.slug %>/?page=<%= next_page_number %>">
@@ -55,4 +54,4 @@
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
-<% include!("../footer.stpl"); %>
+

@@ -1,7 +1,6 @@
-<% include!("../header.stpl"); %>
 
 <%= category.name %>: <%= object.name %>
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
-<% include!("../footer.stpl"); %>
+

@@ -1,4 +1,3 @@
-<% include!("../anon_header.stpl"); %>
 
 <section page-id="21" data-title="Общий поиск | Начало" data-description="вебсервисы.рф: Общий поиск | Начало" data-uri="/search/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -25,4 +24,3 @@
     <% include!("sidebar.stpl"); %>
 </div>
 
-<% include!("../anon_footer.stpl"); %>

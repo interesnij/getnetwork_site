@@ -1,0 +1,4 @@
+
+<% if template_types == 1 { %>
+    <% include!("1/load_serve_categories.stpl"); %>
+<% } %>

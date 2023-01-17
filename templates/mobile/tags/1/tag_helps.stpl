@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section page-id="38" data-title="<%= tag.name %> | Помощь тега" data-description="вебсервисы.рф: <%= tag.name %> | Помощь тега" data-uri="/tag_helps/<%= tag.name %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -44,4 +43,4 @@
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
-<% include!("../footer.stpl"); %>
+

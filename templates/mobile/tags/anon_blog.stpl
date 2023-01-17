@@ -4,4 +4,4 @@
     <% include!("1/anon_categories.stpl"); %>
 <% } %>
 
-<% include!("../anon_footer.stpl"); %>
+<% include!("../anon_blog.stpl"); %>

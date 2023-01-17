@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<% include!("../../block/tags_widget.stpl"); %>
+<% include!("../../../block/tags_widget.stpl"); %>
 
 <!--
 <div class="widget">

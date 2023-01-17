@@ -1,4 +1,3 @@
-<% include!("../anon_header.stpl"); %>
 
 <section class="doc_title">
     <div class="relative container align-left">
@@ -18,4 +17,4 @@
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
-<% include!("../anon_footer.stpl"); %>
+

@@ -1,10 +1,9 @@
-<% include!("../anon_header.stpl"); %>
 
 <section page-id="91" data-title="Работы" data-description="вебсервисы.рф: Работы" data-uri="/work_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
                 <div class="hs-line-4 font-alt">
                     <a>Работы</a>
-                    <% include!("../generic/items/1/page_stat.stpl"); %>
+                    <% include!("../../generic/items/1/page_stat.stpl"); %>
                 </div>
     </div>
 </section>
@@ -49,6 +48,6 @@
     </div>
 </div>
 
-<% include!("../../block/tags_widget.stpl"); %>
+<% include!("../../../block/tags_widget.stpl"); %>
 </div>
-<% include!("../anon_footer.stpl"); %>
+

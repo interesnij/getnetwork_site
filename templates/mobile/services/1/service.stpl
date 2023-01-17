@@ -1,12 +1,11 @@
-<% include!("../header.stpl"); %>
-
+=
 <section page-id="63" data-id="<%= object.id %>" data-title="<%= object.title %> | Услуга" data-description="вебсервисы.рф: <%= object.title %> | Услуга" data-uri="/service/<%= category.slug %>/<%= object.slug %>/" data-image="<%= object.get_image() %>" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
             <a class="ajax" href="/service_categories/">Услуги</a>
             &nbsp;/&nbsp;
             <a class="ajax" href="/services/<%= category.slug %>/"> <%= category.name %></a>
-            <% include!("../generic/items/1/object_stat.stpl"); %>
+            <% include!("../../generic/items/1/object_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -16,7 +15,7 @@
         <div class="blog-item-body">
             <h1 class="mt-0 font-alt object_data" data-type="1" data-pk="<%= object.id %>"><%= object.title %></h1>
             <div class="blog-item-data">
-                <% include!("../../block/object_admin_panel.stpl"); %>
+                <% include!("../../../block/object_admin_panel.stpl"); %>
             </div>
         </div>
 
@@ -27,9 +26,9 @@
         <% } %>
 
         <% let object_serve_ids = object.get_serves_ids(); %>
-        <% include!("../generic/form/1/serves_table.stpl"); %>
+        <% include!("../../generic/form/1/serves_table.stpl"); %>
 
-        <% include!("../generic/items/1/files.stpl"); %>
+        <% include!("../../generic/items/1/files.stpl"); %>
 
         <div class="clearfix mt-40">
             <% if next.is_some() { %>
@@ -43,8 +42,7 @@
         </div>
 
 </section>
-<% include!("../generic/form/1/btn_block.stpl"); %>
+<% include!("../../generic/form/1/btn_block.stpl"); %>
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
-<% include!("../footer.stpl"); %>

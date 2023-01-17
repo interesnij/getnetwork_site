@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section data-title="Заказы" data-description="вебсервисы.рф: Заказы" data-uri="/orders/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -58,4 +57,4 @@
 <div class="sidebar hidden">
     <% include!("sidebar.stpl"); %>
 </div>
-<% include!("../footer.stpl"); %>
+

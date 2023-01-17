@@ -1,36 +1,7 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="Изменение файла" data-description="вебсервисы.рф: Изменение файла" data-uri="/edit_file/<%= file.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
-    <div class="relative container align-left">
-        <div class="hs-line-4 font-alt">
-            <a class="ajax" href="/">Главная</a>
-            &nbsp;/&nbsp;
-            <a>Изменение файла</a>
-        </div>
-    </div>
-</section>
-<section class="page-section">
-    <div class="container relative">
-        <form class="form mb-20 col-md-8 col-md-offset-2">
-            <div class="mb-20 mb-md-10">
-            <% if file.description.is_some() { %>
-              <% let unwrap = file.description.as_deref().unwrap(); %>
-              <p><%- unwrap.len() %></p>
-              <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
-                <%- unwrap %>
-              </div>
-            <% } else { %>
-              <p>0</p>
-              <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
-              </div>
-            <% } %>
-            </div>
-            <div class="mb-20 mb-md-10">
-                <input value="<%= file.position %>" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
-            </div>
-            <button data-pk="<%= file.id %>" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_file_btn">Изменить</button>
-        </form>
-    </div>
-</section>
+<% if template_types == 1 { %>
+    <% include!("1/edit_file.stpl"); %>
+<% } %>
 
 <% include!("../footer.stpl"); %>

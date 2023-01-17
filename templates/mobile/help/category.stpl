@@ -1,40 +1,7 @@
 <% include!("../header.stpl"); %>
 
-<section page-id="9" data-title="<%= category.name %> | Категория помощи" data-description="вебсервисы.рф: <%= category.name %>| Категория помощи" data-uri="/helps/<%= category.slug %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
-    <div class="relative container align-left">
-        <div class="hs-line-4 font-alt">
-            <a><%= category.name %></a>
-            <% include!("../generic/items/1/category_stat.stpl"); %>
-        </div>
-    </div>
-</section>
-<section class="page-section">
-  <div class="container relative">
-    <% let is_admin = request_user.is_superuser(); %>
-    <% for object in object_list.iter() { %>
-      <h4 class="font-alt"><%= object.title %></h4>
-      <div class="blog-item-data">
-        <% include!("../../block/help_admin_panel.stpl"); %>
-      </div>
-      <p>
-        <% if object.content.is_some() { %>
-          <%- object.content.as_deref().unwrap() %>
-        <% } else { %>
-          Без описания
-        <% } %>
-      </p>
-      <hr class="mb-30">
-    <% } %>
-    <% if next_page_number > 0 { %>
-      <div class="load centered m-1 next_page_list" data-link="/helps/<%= category.slug %>/?page=<%= next_page_number %>">
-        <img src="/static/images/preloader.gif">
-      </div>
-    <% } %>
-  </div>
-</section>
-
-<div class="sidebar hidden">
-  <% include!("sidebar.stpl"); %>
-</div>
+<% if template_types == 1 { %>
+    <% include!("1/anon_category.stpl"); %>
+<% } %>
 
 <% include!("../footer.stpl"); %>

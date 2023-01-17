@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section style="padding: 0;" data-title="" data-description="" class="doc_title home-section main_banner">
     <div class="js-height-full" style="height: 100vh">
@@ -19,5 +18,3 @@
         </div>
     </div>
 </section>
-
-<% include!("../footer.stpl"); %>

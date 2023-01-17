@@ -1,10 +1,9 @@
-<% include!("../anon_header.stpl"); %>
 
 <section page-id="81" data-title="База знаний" data-description="вебсервисы.рф: База знаний" data-uri="/wiki_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
         <div class="hs-line-4 font-alt">
             <a>База знаний</a>
-            <% include!("../generic/items/1/page_stat.stpl"); %>
+            <% include!("../../generic/items/1/page_stat.stpl"); %>
         </div>
     </div>
 </section>
@@ -112,7 +111,7 @@
           let get_6_wikis = Categories::get_wikis(category.id, 3, 0, false).expect("E");
         %>
           <% for object in get_6_wikis.iter() { %>
-            <% include!("../generic/items/1/wiki.stpl"); %>
+            <% include!("../../generic/items/1/wiki.stpl"); %>
           <% } %>
         </div>
     </div>
@@ -141,6 +140,6 @@
     </div>
 </div>
 
-<% include!("../../block/tags_widget.stpl"); %>
+<% include!("../../../block/tags_widget.stpl"); %>
 </div>
-<% include!("../anon_footer.stpl"); %>
+

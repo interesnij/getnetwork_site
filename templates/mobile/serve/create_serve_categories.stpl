@@ -1,59 +1,7 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="Создание категории опций" data-description="вебсервисы.рф: Создание категории опций" data-uri="/create_serve_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
-    <div class="relative container align-left">
-        <div class="hs-line-4 font-alt">
-            <a class="ajax" href="/tech_categories/">Категории опций</a>
-            &nbsp;/&nbsp;
-            <a>Создание категории опций</a>
-        </div>
-    </div>
-</section>
-<section class="page-section">
-    <div class="container relative">
-        <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
-            <div class="mb-20 mb-md-10">
-                <input class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
-            </div>
-            <div class="mb-20 mb-md-10">
-              <p>0</p>
-                <div style="display:inline-block" contenteditable="true" placeholder="Описание" class="input-md form-control content_1 smile_supported"></div>
-            </div>
-            <div class="mb-20 mb-md-10">
-                <input class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
-            </div>
-            <div class="mb-20 mb-md-10">
-              <label>Тех категория</label>
-              <select class="input-md form-control" name="tech_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
-                <% for category in tech_cats.iter() { %>
-                  <option value="<%= category.id %>">
-                    <%= category.name %> (<%= category.get_level_ru() %>)
-                  </option>
-                <% } %>
-              </select>
-            </div>
-            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_serve_category_btn">Создать</button>
-        </form>
-
-        <section style="padding-top: 50px">
-        <% for category in tech_cats.iter() { %>
-          <h4><%= category.name %> (<%= category.get_level_ru() %>)
-            | <a class="ajax" href="/edit_tech_category/<%= category.id %>/">~</a>
-            | <a class="pointer remove_tech_category" data-pk="<%= category.id %>">x</a>
-          </h4>
-          <% for object in category.get_serve_categories().iter() { %>
-            <p style="margin:0">
-              <%= object.name %>
-              | <a class="ajax" href="/edit_serve_category/<%= object.id %>/">~</a>
-              | <a class="pointer remove_serve_category" data-pk="<%= object.id %>">x</a>
-            </p>
-          <% } %>
-        <% } %>
-        </section>
-    </div>
-</section>
-<div class="sidebar hidden">
-
-</div>
+<% if template_types == 1 { %>
+    <% include!("1/create_serve_categories.stpl"); %>
+<% } %>
 
 <% include!("../footer.stpl"); %>

@@ -1,4 +1,3 @@
-<% include!("../header.stpl"); %>
 
 <section data-title="Изменение файла" data-description="вебсервисы.рф: Изменение файла" data-uri="/edit_file/<%= file.id %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
     <div class="relative container align-left">
@@ -33,4 +32,3 @@
     </div>
 </section>
 
-<% include!("../footer.stpl"); %>
