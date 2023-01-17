@@ -32,7 +32,7 @@
                 <% } %>
 
                 <% let object_serve_ids = object.get_serves_ids(); %>
-                <% include!("../generic/form/serves_table.stpl"); %>
+                <% include!("../generic/form/1/serves_table.stpl"); %>
 
                 <% include!("../generic/items/1/files.stpl"); %>
 
@@ -55,5 +55,5 @@
     </div>
 
 </section>
-<% include!("../generic/form/btn_block.stpl"); %>
+<% include!("../generic/form/1/btn_block.stpl"); %>
 <% include!("../footer.stpl"); %>

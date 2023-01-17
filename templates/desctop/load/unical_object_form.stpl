@@ -8,5 +8,5 @@
 </div>
 
 <% if biznes_mode { %>
-  <% include!("../generic/form/create_serves.stpl"); %>
+  <% include!("../generic/form/1/create_serves.stpl"); %>
 <% } %>

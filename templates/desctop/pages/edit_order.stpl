@@ -6,7 +6,7 @@
   </p>
 
   <% let object_serve_ids = order.get_serves_ids(); %>
-  <% include!("../generic/form/serves_table.stpl"); %>
+  <% include!("../generic/form/1/serves_table.stpl"); %>
 
   <hr class="mt-0 mb-0 " />
   <h3 style="margin-bottom:0">Примерная цена: <span class="total_price"><%= order.price %></span></h3>
