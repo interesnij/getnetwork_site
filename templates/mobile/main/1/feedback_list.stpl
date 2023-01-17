@@ -1,0 +1,21 @@
+
+<section data-title="Сообщения" data-description="вебсервисы.рф: Сообщения" data-uri="/feedback_list/" data-image="/static/images/dark/store.jpg" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a>Сообщения</a>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative is_paginate">
+    <% for object in feedback_list.iter() { %>
+      <p>
+        <%= object.username %> (<%= object.email %>): <%= object.message %>
+      </p>
+    <% } %>
+    </div>
+</section>
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>

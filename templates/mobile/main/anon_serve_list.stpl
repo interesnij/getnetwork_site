@@ -1,38 +1,7 @@
 <% include!("../anon_header.stpl"); %>
 
-<section data-title="Список опций и услуг" data-description="вебсервисы.рф: Список опций и услуг" data-uri="/serve_list/" data-image="/static/images/dark/store.jpg" class="doc_title">
-    <div class="relative container align-left">
-        <div class="hs-line-4 font-alt">
-            <a>Список опций</a>
-        </div>
-    </div>
-</section>
-
-<section class="page-section">
-    <div class="container relative">
-    <div class="css-treeview">
-      <ul>
-        <% for (i, tech_category) in tech_cats.iter().enumerate() { %>
-          <li>
-            <input class="load_tech_objects" data-pk="<%= tech_category.id %>" type="checkbox" id="tech<%= tech_category.id %>" />
-            <label for="tech<%= tech_category.id %>">
-              <%= tech_category.name %> <span style="font-size:80%;text-transform:lowercase;">(<%= tech_category.get_level_ru() %>)</span>
-            </label>
-            <a class="pointer get_tech_category_info" data-pk="<%= tech_category.id %>">
-              <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
-                <path d="M0 0h24v24H0V0z" fill="none"/><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
-              </svg>
-            </a>
-            <ul class="loader_ul <% if i % 2 == 0 { %>hover<% } %>" style="margin-left: 2%"></ul>
-          </li>
-        <% } %>
-      </ul>
-    </div>
-    </div>
-</section>
-
-<div class="sidebar hidden">
-    <% include!("sidebar.stpl"); %>
-</div>
+<% if template_types == 1 { %>
+    <% include!("1/anon_serve_list.stpl"); %>
+<% } %>
 
 <% include!("../anon_footer.stpl"); %>

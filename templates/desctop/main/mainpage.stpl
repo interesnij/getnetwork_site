@@ -1,28 +1,7 @@
 <% include!("../header.stpl"); %>
 
-<% include!("banner.stpl"); %>
-
-<% include!("sections.stpl"); %>
-
-<% include!("service.stpl"); %>
-
-<% include!("work.stpl"); %>
-
-<% include!("store.stpl"); %>
-
-<% include!("blog.stpl"); %>
-
-<% include!("wiki.stpl"); %>
-
-<section class="border small-section bg-dark">
-    <div class="container relative">
-        <div class="align-center">
-            <h3 class="banner-heading font-alt">Хотите обсудить проект?</h3>
-            <div>
-                <a class="btn btn-mod btn-border create_feedback_form btn-medium btn-round">Напишите нам</a>
-            </div>
-        </div>
-    </div>
-</section>
+<% if template_types == 1 { %>
+    <% include!("1/anon_mainpage.stpl"); %>
+<% } %>
 
 <% include!("../footer.stpl"); %>
