@@ -10,7 +10,7 @@
         </h5>
         <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
           <% for object in last_wikis.iter() { %>
-            <% include!("../generic/items/1/default_wiki.stpl"); %>
+            <% include!("../../generic/items/1/default_wiki.stpl"); %>
           <% } %>
         </ul>
     </div>

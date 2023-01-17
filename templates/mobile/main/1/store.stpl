@@ -10,7 +10,7 @@
         </h5>
         <div class="row multi-columns-row">
           <% for object in last_stores.iter() { %>
-            <% include!("../generic/items/1/default_store.stpl"); %>
+            <% include!("../../generic/items/1/default_store.stpl"); %>
           <% } %>
         </div>
     </div>

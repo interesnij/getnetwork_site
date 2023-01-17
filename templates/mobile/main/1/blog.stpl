@@ -10,7 +10,7 @@
         </h5>
         <div class="row multi-columns-row">
           <% for object in last_blogs.iter() { %>
-            <% include!("../generic/items/1/default_blog.stpl"); %>
+            <% include!("../../generic/items/1/default_blog.stpl"); %>
           <% } %>
         </div>
     </div>
