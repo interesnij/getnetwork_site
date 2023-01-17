@@ -1,12 +1,3 @@
-<div class="mb-20 mb-md-10">
-    <label>Категории</label>
-    <select class="form-control" name="category_list[]" multiple="">
-      <% for category in cats.iter() { %>
-        <option value="<%= category.id %>"><%= category.name %></option>
-      <% } %>
-    </select>
-</div>
-
-<% if biznes_mode { %>
-  <% include!("../generic/form/1/create_serves.stpl"); %>
+<% if template_types == 1 { %>
+    <% include!("1/unical_object_form.stpl"); %>
 <% } %>

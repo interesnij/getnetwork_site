@@ -1,0 +1,28 @@
+<% include!("../anon_header.stpl"); %>
+
+<section page-id="21" data-title="Общий поиск | Начало" data-description="вебсервисы.рф: Общий поиск | Начало" data-uri="/search/" data-image="/static/images/dark/store.jpg" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a>Поиск</a>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+      <form class="form mb-20" role="form">
+          <input type="text" class="input-md form-control general_search search_page" placeholder="Начните общий поиск">
+      </form>
+    <div class="search_section">
+      <div class="text-center">
+        <span class="widget-title font-alt">
+          Начните общий поиск...
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>
+
+<% include!("../anon_footer.stpl"); %>

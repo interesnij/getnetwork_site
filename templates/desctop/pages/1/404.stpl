@@ -1,0 +1,20 @@
+
+<section style="padding: 0;" data-title="" data-description="" class="doc_title home-section main_banner">
+    <div class="js-height-full" style="height: 100vh">
+        <div class="home-content container">
+            <div class="home-text">
+              <span class="banner_block border">
+                <h1 class="hs-line-14 font-alt mb-50 mb-xs-30">
+                    404
+                </h1>
+                <h2 class="hs-line-8 no-transp font-alt mb-50 mb-xs-30">
+                    Страница не найдена, удалена или перемещена.
+                </h2>
+                <div class="local-scroll" style="position:relative">
+                  <a href="/" class="btn btn-mod btn-border btn-medium btn-round ajax">В начало</a>
+                </div>
+              </span>
+            </div>
+        </div>
+    </div>
+</section>

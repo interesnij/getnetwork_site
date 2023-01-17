@@ -1,0 +1,21 @@
+<% include!("../header.stpl"); %>
+
+<section class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a class="ajax" href="/serve_categories/">Услуги</a>
+            &nbsp;/&nbsp;
+            <a><%= category.name %></a>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+    </div>
+</section>
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>
+
+<% include!("../footer.stpl"); %>

@@ -1,35 +1,7 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="7" data-title="Регистрация" data-description="вебсервисы.рф: Регистрация" data-uri="/signup/" class="doc_title">
-    <div class="relative container align-left">
-        <div class="hs-line-4 font-alt">
-            <a class="ajax" href="/">Главная</a>
-            &nbsp;/&nbsp;
-            <a>Регистрация</a>
-            <% include!("../generic/items/1/page_stat.stpl"); %>
-        </div>
-    </div>
-</section>
-<section class="page-section">
-    <div class="container relative">
-      <form class="col-md-8 col-md-offset-2 form mb-20">
-        <div>
-          <p class="api_response"></p>
-        </div>
-        <div class="mb-20 mb-md-10">
-          <label for="username">Логин:</label>
-          <input class="input-md form-control" id="id_username" type="text" name="username">
-        </div>
-        <div class="mb-20 mb-md-10">
-          <label for="email">Почта:</label>
-          <input class="input-md form-control" id="id_email" type="email" name="email">
-        </div>
-        <div class="mb-20 mb-md-10">
-          <label for="password">Пароль:</label>
-          <input class="input-md form-control" id="id_password" type="password" name="password">
-        </div>
-        <button class="btn btn-mod btn-border btn-medium" type="button" id="signup">Регистрация</button>
-      </form>
-    </div>
-</section>
+<% if template_types == 1 { %>
+    <% include!("1/signup.stpl"); %>
+<% } %>
+
 <% include!("../anon_footer.stpl"); %>

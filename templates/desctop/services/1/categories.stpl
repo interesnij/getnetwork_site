@@ -1,0 +1,101 @@
+
+<section page-id="61" data-title="Услуги" data-description="вебсервисы.рф: Услуги" data-uri="/service_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a>Услуги</a>
+            <% include!("../../generic/items/1/page_stat.stpl"); %>
+        </div>
+    </div>
+</section>
+
+<section class="page-section" style="padding-top: 45px;">
+    <div class="container relative">
+        <div class="section-text">
+            <div class="row">
+                <div class="mb-sm-50">
+                    <p>
+                        <strong>Компания "Вебсервисы"</strong> предоставляет услуги по разработке, доработке, поддержке больших,
+                        высоконагруженных проектов.<br>
+                        Мы считаем, что <strong>данная ниша бизнеса</strong>, как минимум, <strong>не освоена до конца</strong>. Сложности
+                        в данной проблематике создаёт и большое количество фирм, предлагающих подобные услуги,
+                        и <strong>вот почему</strong>:
+
+                    <ul class="my_ul">
+                        <li>Многие фирмы штампуют низкокачественные, ограниченные ресурсы, не достающие и до плинтуса сетей типа "Вконтакте"
+                            или "Фейсбук". Часто в ход идут даже CMS - готовые движки для обычных задач, пригодные для небольших проектов.
+                        </li>
+                        <li>За неинтересные программные варианты требуется много денег. Часто нет информации, о каких суммах идет речь.
+                            Понятно, что вопрос сложный и сколько финансов точно надо — сразу никто не скажет. Но рамки-то?
+                        </li>
+                        <li>Нет никакой дополнительной информации — на чём пишут код, где хранить собираются, как реализуют важные
+                            требования сетей. А ведь фирмы-то торгуют не пирожками, а сайтами за миллионы. Проблема доверия здесь особенно
+                            нужна и важна.
+                        </li>
+                        <li>Часто заказчик хочет, например, соцсеть, так как у него есть инвестиции и он знает, что с помощью идеи (не обязательно)
+                            и денег можно это сделать и потом получать неплохие дивиденды. И такие люди часто сами хотят обрести примерное
+                            понимание товара, который хотят купить. И видит он, например, «улучшенная геолокация» (это такая опция к сети).
+                            Что это такое, какие плюсы даёт? Почему прямо на сайте не добавить кнопочку «что это»?
+                        </li>
+                        <li>
+                            Портфолио если и присутствуют на сайтах фирм, то часто вызывают слезы. Даже в работах единственной замечательной
+                            фирмы, которую мы нашли в интернете, есть недопустимые нюансы. К примеру, отсутствие блочной подгрузки, котрая решает
+                            много важных задач сразу. То есть специалисты фирмы плохо понимают, что встречать их будут "по одёжке" (по качеству их собственного сайта)
+                        </li>
+                    </ul>
+                    <br>
+                    <strong>Мы</strong> постарались учесть многие нюансы в организации производства самых сложных сайтов в мире и
+                    <strong>умеем показывать полную и прозрачную картину всего цикла создания высоконагруженных проектов</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+        <h5 class="section-title font-alt mb-40">
+            Наши услуги
+        </h5>
+        <ul class="nav nav-tabs tpl-alt-tabs font-alt pt-30 pt-sm-0 pb-30 pb-sm-0">
+          <% for category in cats.iter() { %>
+            <li>
+              <a href="/services/<%= category.slug %>/" class="ajax">
+                <div class="alt-tabs-icon">
+                  <img class="image_fit_200" src="<% if category.image.is_some() { %>
+                    <%= category.image.as_deref().unwrap() %>
+                  <% } else { %>
+                    /static/images/img.jpg
+                  <% } %>" alt="img" />
+                </div>
+                <%= category.name %> (<%= category.count %>)
+              </a>
+            </li>
+          <% } %>
+        </ul>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+        <h5 class="section-title font-alt mb-70 mb-sm-40">
+            Почему мы?
+        </h5>
+
+        <% include!("../../../block/features.stpl"); %>
+    </div>
+</section>
+
+<section class="border small-section bg-dark">
+    <div class="container relative">
+        <div class="align-center">
+            <h3 class="banner-heading font-alt">Хотите обсудить проект?</h3>
+            <div>
+                <a class="btn btn-mod btn-border create_feedback_form btn-medium btn-round ajax">Напишите нам</a>
+            </div>
+        </div>
+    </div>
+</section>
+

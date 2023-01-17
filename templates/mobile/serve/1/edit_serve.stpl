@@ -1,0 +1,86 @@
+<% include!("../header.stpl"); %>
+
+<section data-title="Изменение опции <%= object.name %>" data-description="вебсервисы.рф: Изменение опции <%= object.name %>" data-uri="/edit_serve/<%= object.id %>/" data-image="" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a class="ajax" href="/serve_categories/">Категории опций</a>
+            &nbsp;/&nbsp;
+            <a>Изменение опции <%= object.name %></a>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+        <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
+            <div class="mb-20 mb-md-10">
+                <input value="<%= object.name %>" class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <% if object.serve_id.is_some() { %>
+                <input id="id_serve_id" value="<%= object.serve_id.unwrap() %>" class="input-md form-control" type="number" name="serve_id" placeholder="Опция-родитель" />
+              <% } else { %>
+                <input id="id_serve_id" class="input-md form-control" type="number" name="serve_id" placeholder="Опция-родитель" />
+              <% } %>
+            </div>
+            <div class="mb-20 mb-md-10">
+              <% if object.description.is_some() { %>
+                <% let unwrap = object.description.as_deref().unwrap(); %>
+                <p><%- unwrap.len() %></p>
+                <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
+                  <%- unwrap %>
+                </div>
+              <% } else { %>
+                <p>0</p>
+                <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
+                </div>
+              <% } %>
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input value="<%= object.position %>" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+            </div>
+
+            <div class="mb-20 mb-md-10">
+              <label>Уровень сложности</label>
+              <select data-level="<%= level %>" class="input-md form-control load_tech_categories_from_level" data-live-search="true" tabindex="-1" aria-hidden="true">
+              <option <% if level == 0 { %>selected=""<% } %> value="0">Бюджетно</option>
+              <option <% if level == 1 { %>selected=""<% } %> value="1">Обычно</option>
+              <option <% if level == 2 { %>selected=""<% } %> value="2">Средне</option>
+              <option <% if level == 3 { %>selected=""<% } %> value="3">Сложно</option>
+              <option <% if level == 4 { %>selected=""<% } %> value="4">Экспертно</option>
+              </select>
+            </div>
+            <div class="mb-20 mb-md-10">
+              <label>Категория</label>
+              <select class="input-md form-control" data-cat-id="<%= object.serve_categories %>" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
+                <% for cat in serve_cats.iter() { %>
+                  <option <% if cat.id == object.serve_categories { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
+                <% } %>
+              </select>
+            </div>
+
+            <div class="mb-20 mb-md-10">
+                <input value="<%= object.price %>" class="input-md form-control" type="number" name="price" placeholder="Цена" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <input value="<%= object.man_hours %>" class="input-md form-control" type="number" name="man_hours" placeholder="Человеко-часы" />
+            </div>
+            <div class="mb-20 mb-md-10">
+              <label class="checkbox-inline">
+                <input type="checkbox" name="is_default" <% if object.is_default { %>checked<% } %>>
+                Опция по умолчанию
+              </label>
+            </div>
+            <button data-pk="<%= object.id %>"
+                    class="btn btn-mod btn-border btn-medium btn-round"
+                    style="float: right;"
+                    type="button"
+                    id="edit_serve_btn">
+                    Изменить
+            </button>
+        </form>
+    </div>
+</section>
+<div class="sidebar hidden">
+
+</div>
+<% include!("../footer.stpl"); %>

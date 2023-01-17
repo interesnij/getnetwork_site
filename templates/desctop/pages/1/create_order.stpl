@@ -1,0 +1,59 @@
+<div page-id="" data-title="Создание заказа" class="doc_title order_window" style="margin-top:50px;margin-bottom:70px">
+  <h3 style="margin:0">1. Детали заказа</h3>
+  <p style="font-size: 80%;">Ознакомьтесь с выбранными веб-сервисами,
+  технологиями и опциями. При нажатии на каждую из них, Вы можете
+  получить подробную информацию.
+  </p>
+  <div class="serves_container">
+
+  </div>
+
+  <hr class="mt-0 mb-0 " />
+  <h3 style="margin-bottom:0">Примерная цена: <span class="total_price"></span></h3>
+  <p style="font-size: 80%;">Внимание! Цены на этом сайте не являются публичной офертой!
+    Стоимость услуг и опций, а также сам калькулятор, применяются только для
+    примерного ознакомления с ценами, временем работы, накопительными скидками.
+  </p>
+  <hr class="mt-0 mb-0 " />
+
+  <h3 style="margin-bottom:0">2. Сведения о заказчике</h3>
+  <p style="font-size: 80%;">Данные можно будет поменять в будущем.
+  </p>
+  <form class="form">
+  <div class="row relative" style="margin-left: 0;margin-right: 0;">
+    <div class="col-md-6 mb-20">
+      <div class="mb-20 mb-md-10">
+        <label for="id_username">Как к Вам обращаться:</label>
+        <input class="input-md form-control" id="id_username" type="text" name="username">
+      </div>
+      <div class="mb-20 mb-md-10">
+        <label for="id_email">Ваша почта:</label>
+        <input class="input-md form-control" id="id_email" type="email" name="email">
+      </div>
+    </div>
+    <div class="col-md-6 mb-20">
+      <div class="mb-20 mb-md-10">
+        <label for="id_description">Добавьте описание, если нужно:</label>
+        <textarea style="height: 117px;" class="input-md form-control" id="id_description" type="text" name="description"></textarea>
+      </div>
+    </div>
+    <div class="mb-20 mb-md-10">
+        <label>Прикрепите файлы</label>
+        <br />
+        <input type="file" multiple name="files[]" />
+    </div>
+  </div>
+
+  <hr class="mt-0 mb-0 " />
+
+  <h3 style="margin-bottom:0">3. Отправка заказа</h3>
+  <p style="font-size: 80%;">Нажимая на кнопку "Создать заказ",
+  Вы автоматически даете согласие на обработку Ваших персональных данных.
+  После создания, заказ будет доступен для просмотра и редактирования
+  <a class="underline" target="_blank" rel="nofollow" href="/user_orders/">вот здесь (открыть в новой вкладке)</a>
+  </p>
+  <button style="width: 100%;padding: 15px;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_order_btn">
+    Создать заказ
+  </button>
+  </form>
+</div>

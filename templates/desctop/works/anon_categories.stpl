@@ -1,34 +1,7 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="91" data-title="Работы" data-description="вебсервисы.рф: Работы" data-uri="/work_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
-    <div class="relative container align-left">
-                <div class="hs-line-4 font-alt">
-                    <a class="ajax" href="/">Главная</a>
-                    &nbsp;/&nbsp;
-                    <a>Работы</a>
-                    <% include!("../generic/items/1/page_stat.stpl"); %>
-                </div>
-    </div>
-</section>
-
-<% for object in cats.iter() { %>
-<section class="page-section need_darked_this fixed-height-small pt-0 pb-0 bg-dark-alfa-30" style="background-image: url(&quot;<% if object.image.is_some() { %>
-  <%= object.image.as_deref().unwrap() %>
-<% } else { %>
-  /static/images/img.jpg
-<% } %>&quot;); background-position: 50% -26px;">
-    <div class="" style="height: 100vh">
-        <div class="home-content container">
-            <div class="home-text">
-                <h2 class="hs-line-14 font-alt mb-50 mb-xs-30">
-                  <a class="ajax dark_target" href="/works/<%= object.slug %>/">
-                    <%= object.name %>
-                  </a>
-                </h2>
-            </div>
-        </div>
-    </div>
-</section>
+<% if template_types == 1 { %>
+    <% include!("1/anon_categories.stpl"); %>
 <% } %>
 
 <% include!("../anon_footer.stpl"); %>

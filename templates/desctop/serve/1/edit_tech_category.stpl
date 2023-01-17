@@ -1,0 +1,52 @@
+
+<section data-title="Изменение категории технологий <%= category.name %>" data-description="вебсервисы.рф: Изменение категории технологий <%= category.name %>" data-uri="/edit_tech_category/<%= category.id %>/" data-image="" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a class="ajax" href="/serve_categories/">Тех. категории</a>
+            &nbsp;/&nbsp;
+            <a>Изменение тех. категории</a>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="row container relative">
+        <form enctype="multipart/form-data" class="form mb-20 col-md-8">
+            <div class="mb-20 mb-md-10">
+                <input value="<%= category.name %>" class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
+            </div>
+
+            <div class="mb-20 mb-md-10">
+            <% if category.description.is_some() { %>
+              <% let unwrap = category.description.as_deref().unwrap(); %>
+              <p><%- unwrap.len() %></p>
+              <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
+                <%- unwrap %>
+              </div>
+            <% } else { %>
+              <p>0</p>
+              <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
+              </div>
+            <% } %>
+            </div>
+
+            <div class="mb-20 mb-md-10">
+                <input value="<%= category.position %>" class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input value="<%= category.level %>" class="input-md form-control" type="number" name="level" placeholder="Уровень сложности" />
+            </div>
+            <button data-pk="<%= category.id %>" class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="edit_tech_category_btn">Изменить</button>
+        </form>
+        <section class="col-md-4">
+          <% for category in tech_cats.iter() { %>
+            <p><%= category.name %> (<%= category.get_level_ru() %>)
+              | <a class="ajax" href="/edit_tech_category/<%= category.id %>/">~</a>
+              | <a class="pointer remove_tech_category" data-pk="<%= category.id %>">x</a>
+            </p>
+          <% } %>
+        </section>
+    </div>
+</section>
+

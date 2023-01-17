@@ -1,0 +1,56 @@
+
+<section page-id="83" data-id="<%= object.id %>" data-title="<%= object.title %> | Обучающая статья" data-description="вебсервисы.рф: <%= object.title %> | Обучающая статья" data-uri="/wiki/<%= category.slug %>/<%= object.slug %>/" data-image="<%= object.get_image() %>" class="doc_title small-section">
+  <div class="relative container align-left">
+      <div class="mt-30">
+        <div class="font-alt">
+          <a class="ajax" href="/wiki_categories/">База знаний</a>
+          &nbsp;/&nbsp;
+          <a class="ajax" href="/wikis/<%= category.slug %>/"><%= category.name %></a>
+          <% include!("../../generic/items/1/object_stat.stpl"); %>
+        </div>
+      </div>
+  </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+        <div class="row">
+            <div class="col-sm-8">
+              <div class="row search_result"></div>
+              <div class="content_block content">
+                <div class="blog-item mb-80 mb-xs-40">
+                    <div class="blog-item-body">
+                        <h1 class="mt-0 font-alt"><%= object.title %></h1>
+                        <div class="blog-item-data">
+
+                          <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+                          <span class="separator">&nbsp;</span>
+                        </div>
+                        <% if object.content.is_some() { %>
+                          <%- object.content.as_deref().unwrap() %>
+                        <% } else { %>
+                          Информация отсутствует.
+                        <% } %>
+                    </div>
+
+                    <% include!("../../generic/items/1/anon_files.stpl"); %>
+                </div>
+
+                <div class="clearfix mt-40">
+                  <% if next.is_some() { %>
+                    <% let _next = next.unwrap(); %>
+                    <a href="/wiki/<%= category.slug %>/<%= _next.slug %>/" class="ajax border blog-item-more left">⇠&nbsp;&nbsp;<%= _next.title %></a>
+                  <% } %>
+                  <% if prev.is_some() { %>
+                    <% let _prev = prev.unwrap(); %>
+                    <a href="/wiki/<%= category.slug %>/<%= _prev.slug %>/" class="ajax border blog-item-more right"><%= _prev.title %>&nbsp;&nbsp;⇢</a>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-4 col-md-3 col-md-offset-1 sidebar">
+                <% include!("sidebar.stpl"); %>
+            </div>
+        </div>
+    </div>
+</section>

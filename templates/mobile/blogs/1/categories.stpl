@@ -1,0 +1,66 @@
+<% include!("../header.stpl"); %>
+
+<section page-id="41" data-title="Блог" data-description="вебсервисы.рф: блог, статьи на тему программирования, стратегии, жизни компании" data-uri="/blog_categories/" data-image="/static/images/dark/store.jpg" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a class="ajax" href="/">
+                Главная
+            </a>
+            &nbsp;/&nbsp;
+            <a>Блог</a>
+            <% include!("../generic/items/1/page_stat.stpl"); %>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container align-center">
+        <h1 class="font-alt">Наш блог</h1>
+    </div>
+    <div class="container relative">
+        <% for category in cats.iter() { %>
+          <%
+            use crate::models::Categories;
+            let get_6_blogs = Categories::get_blogs(category.id, 3, 0, request_user.is_superuser()).expect("E");
+          %>
+
+        <h5 class="font-alt mb-10">
+            <a class="ajax" href="/blogs/<%= category.slug %>/">
+                <%= category.name %> (<%= category.count %>)
+            </a>
+        </h5>
+        <div class="row multi-columns-row">
+            <% for object in get_6_blogs.iter() { %>
+            <% include!("../generic/items/1/blog.stpl"); %>
+            <% } %>
+        </div>
+
+        <% } %>
+    </div>
+</section>
+
+<div class="sidebar hidden">
+<div class="widget">
+    <form class="form-inline form" role="form">
+        <div class="search-wrap">
+            <input data-folder="_blogs" type="text" class="form-control search-field desctop_folder_search" placeholder="Поиск от 3х букв">
+        </div>
+    </form>
+</div>
+<div class="widget">
+    <h5 class="widget-title font-alt">Категории</h5>
+    <div class="widget-body">
+        <ul class="clearlist widget-menu">
+          <% for cat in cats.iter() { %>
+            <li>
+              <a class="ajax" href="/blogs/<%= cat.slug %>/"><%= cat.name %></a>
+            </li>
+          <% } %>
+        </ul>
+    </div>
+</div>
+
+<% include!("../../block/tags_widget.stpl"); %>
+</div>
+
+<% include!("../footer.stpl"); %>

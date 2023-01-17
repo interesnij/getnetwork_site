@@ -1,0 +1,44 @@
+<div class="mb-20 mb-md-10">
+    <label>Закрытые тех. категории</label>
+    <select class="form-control close_tech_categories" name="close_tech_cats_list[]" multiple="">
+      <% for cat in tech_cats.iter() { %>
+        <option value="<%= cat.id %>"><%= cat.name %> (<%= cat.get_level_ru() %>)</option>
+      <% } %>
+    </select>
+</div>
+
+<div class="">
+<% for tech_category in tech_cats.iter() { %>
+<div class="open_tech_category" data-pk="<%= tech_category.id %>">
+<h4 class="show_next_element pointer"><%= tech_category.name %> (<%= tech_category.get_level_ru() %>)</h4>
+<div class="hidden">
+  <% for category in tech_category.get_serve_categories().iter() { %>
+
+    <div class="mb-20 mb-md-10">
+      <label><%= category.name %></label>
+      <select class="form-control" name="serve_list[]" multiple="" style="height:200px">
+        <% for object in category.get_serves().iter() { %>
+          <% if object.is_parent() { %>
+            <option></option>
+            <option><%= object.name %> ↓↓↓ </option>
+            <% for child in object.get_variables().iter() { %>
+              <option value="<%= child.id %>">
+                <%= child.name %> <% if child.is_default { %>- по умолчанию<% } %>
+              </option>
+            <% } %>
+            <option></option>
+          <% } else { %>
+            <option value="<%= object.id %>">
+              <%= object.name %> <% if object.is_default { %>- по умолчанию<% } %>
+            </option>
+          <% } %>
+        <% } %>
+      </select>
+    </div>
+  <% } %>
+  </div>
+  </div>
+<% } %>
+</div>
+<hr class="mt-0 mb-0 " />
+</div>

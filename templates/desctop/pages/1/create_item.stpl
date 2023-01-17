@@ -1,0 +1,65 @@
+
+<section data-title="Создание объекта" data-description="вебсервисы.рф: Создание объекта" data-uri="/create_item/" data-image="/static/images/dark/store.jpg" class="doc_title">
+  <div class="relative container align-left">
+    <div class="hs-line-4 font-alt">
+      <a class="ajax" href="/">Главная</a>
+        &nbsp;/&nbsp;
+      <a>Создание объекта</a>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+    <div class="row container relative">
+        <form class="col-md-8 form" enctype="multipart/form-data">
+            <div class="mb-20 mb-md-10">
+                <input class="form_title input-md form-control" type="text" name="title" placeholder="Название" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="form_title input-md form-control" type="text" name="slug" placeholder="Slug" />
+            </div>
+
+            <div class="mb-20 mb-md-10">
+              <label>Выберите тип объекта</label>
+              <select name="types" class="input-md form-control load_unical_object_form" data-live-search="true" tabindex="-1" aria-hidden="true">
+                <option value="">Не выбрано</option>
+                <option value="1">Статья блога</option>
+                <option value="2">Услуга</option>
+                <option value="3">Товар</option>
+                <option value="4">Обучающая статья</option>
+                <option value="5">Работа</option>
+                <option value="6">Помощь</option>
+              </select>
+            </div>
+            <span></span>
+
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="text" name="description" placeholder="Описание" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="text" name="link" placeholder="Ссылка" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <input class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
+            </div>
+            <div class="mb-20 mb-md-10">
+                <label>Обложка</label>
+                <input class="input-md form-control" type="file" name="main_image" />
+            </div>
+
+            <div class="mb-20 mb-md-10">
+                <label>Теги</label>
+                <select class="form-control" name="tags_list[]" multiple="">
+                  <% for tag in all_tags.iter() { %>
+                    <option value="<%= tag.id %>"><%= tag.name %></option>
+                  <% } %>
+                </select>
+            </div>
+
+            <button style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_item_btn">Создать</button>
+        </form>
+        <div class="col-md-4">
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,23 @@
+
+<section page-id="6" data-title="Выход" data-description="вебсервисы.рф: Выход" data-uri="/logout/" data-image="/static/images/dark/store.jpg" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a>Выход</a>
+            <% include!("../../generic/items/1/page_stat.stpl"); %>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+  <div class="container relative">
+  <div style="margin-top: 40px;">
+    <div class="border align-center" style="padding: 10px 15px;">
+      <span>
+        Вы успешно вышли из аккаунта
+      </span>
+    </div>
+  </div>
+  </div>
+</section>
+

@@ -1,5 +1,7 @@
 <% include!("../anon_header.stpl"); %>
 
-<%= category.name %>: <%= object.name %>
+<% if template_types == 1 { %>
+    <% include!("1/anon_serve.stpl"); %>
+<% } %>
 
 <% include!("../anon_footer.stpl"); %>

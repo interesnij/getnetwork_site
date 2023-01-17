@@ -1,21 +1,3 @@
-<div data-title="Создание сообщения" class="doc_title" style="padding: 0;">
-
-<form class="form">
-    <div class="mb-20 mb-md-10">
-      <label for="id_username">Как к Вам обращаться:</label>
-      <input class="input-md form-control" id="id_username" type="text" name="username">
-    </div>
-    <div class="mb-20 mb-md-10">
-      <label for="id_email">Ваша почта:</label>
-      <input class="input-md form-control" id="id_email" type="email" name="email">
-    </div>
-    <div class="mb-20 mb-md-10">
-      <label for="id_message">Сообщение:</label>
-      <textarea style="height: 117px;" class="input-md form-control" id="id_message" type="text" name="message"></textarea>
-    </div>
-
-<button style="width: 100%;padding: 15px;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="create_feedback_btn">
-  Отправить!
-</button>
-</form>
-</div>
+<% if template_types == 1 { %>
+    <% include!("1/feedback.stpl"); %>
+<% } %>

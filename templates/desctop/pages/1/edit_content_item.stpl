@@ -1,0 +1,32 @@
+
+<section data-title="Изменение текста объекта <%= item.title %>" data-description="вебсервисы.рф: Изменение текста объекта <%= item.title %>" data-uri="/edit_content_item/<%= item.id %>/" data-image="<%= item.get_image() %>" class="doc_title">
+  <div class="relative container align-left">
+    <div class="hs-line-4 font-alt">
+      <a class="ajax" href="/">Главная</a>
+        &nbsp;/&nbsp;
+      <a>Изменение текста объекта</a>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+    <div class="container relative">
+        <form class="col-md-8 col-md-offset-2 form" enctype="multipart/form-data">
+          <div class="mb-20 mb-md-10">
+            <% if item.content.is_some() { %>
+              <% let item_unwrap = item.content.unwrap(); %>
+              <p><%- item_unwrap.len() %></p>
+              <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
+                <%- item_unwrap %>
+              </div>
+            <% } else { %>
+              <p>0</p>
+              <div style="display:inline-block" contenteditable="true" placeholder="Содержимое" class="input-md form-control content_1 smile_supported">
+              </div>
+            <% } %>
+          </div>
+          <button data-pk="<%= item.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_object_content_btn">Изменить</button>
+        </form>
+    </div>
+</section>
+

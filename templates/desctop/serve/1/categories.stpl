@@ -1,0 +1,31 @@
+
+<section page-id="53" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a class="ajax" href="/">Главная</a>
+            &nbsp;/&nbsp;
+            <a>Калькулятор стоимости</a>
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+  <div class="container relative">
+    <div class="section-text">
+      <div class="row">
+        <div class="col-8 col-offset-2">
+        <ul class="clearlist widget-menu">
+          <% for category in serve_cats.iter() { %>
+            <li>
+                <a class="ajax" href=""><%= category.name %></a>
+                <small>
+                    - <%= category.count %>
+                </small>
+            </li>
+            <% } %>
+        </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

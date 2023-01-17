@@ -1,34 +1,7 @@
 <% include!("../header.stpl"); %>
 
-<section data-title="Создание тега" data-description="вебсервисы.рф: Создание тега" data-uri="/create_tag/" data-image="/static/images/dark/store.jpg" class="doc_title">
-    <div class="relative container align-left">
-        <div class="hs-line-4 font-alt">
-            <a class="ajax" href="/">Главная</a>
-            &nbsp;/&nbsp;
-            <a>Создание тега</a>
-        </div>
-    </div>
-</section>
-<section class="page-section">
-    <div class="container relative">
-        <form enctype="multipart/form-data" class="form mb-20 col-md-8 col-md-offset-2">
-            <div class="mb-20 mb-md-10">
-                <input class="form_title input-md form-control" type="text" name="name" placeholder="Название" />
-            </div>
-            <div class="mb-20 mb-md-10">
-                <input class="input-md form-control" type="number" name="position" placeholder="Порядок следования" />
-            </div>
-            <button class="btn btn-mod btn-border btn-medium btn-round" style="float: right;" type="button" id="create_tag_btn">Создать</button>
-        </form>
-        <div class="container">
-            <% for tag in all_tags.iter() { %>
-            <p><%= tag.name %>
-                | <a class="ajax" href="/edit_tag/<%= tag.id %>/">~</a>
-                | <a class="pointer remove_tag" data-pk="<%= tag.id %>">x</a>
-            </p>
-            <% } %>
-        </div>
-    </div>
-</section>
+<% if template_types == 1 { %>
+    <% include!("1/create_tag.stpl"); %>
+<% } %>
 
 <% include!("../footer.stpl"); %>

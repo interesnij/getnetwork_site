@@ -1,0 +1,33 @@
+<div page-id="" object-id="<%= object.id %>" data-link="/load_serve/<%= object.id %>/" data-title="<%= object.name %> | Опция" class="doc_title" style="padding: 0;">
+  <% let s_cat = object.get_category(); %>
+  <% let t_cat = s_cat.get_category(); %>
+
+  <% if object.serve_id.is_some() { %>
+    <% let parent = object.get_parent(); %>
+    <h4 style="margin-bottom: 0 !important">
+      <%= parent.name %> → <%= object.name %>
+    </h4>
+  <% } else { %>
+    <h4 style="margin-bottom: 0 !important"><%= object.name %></h4>
+  <% } %>
+
+    <p class="solid_bottom" style="font-size: 80%;">
+      Веб-сервис:
+      <span class="pointer get_tech_category_info underline" data-pk="<%= t_cat.id %>">
+        <%= t_cat.name %> (сложность: <%= t_cat.get_level_ru() %>)
+      </span>
+      <br />
+      Язык / технология:
+      <span class="pointer get_serve_category_info underline" data-pk="<%= s_cat.id %>">
+        <%= s_cat.name %>
+      </span>
+    </p>
+
+  <div style="margin-top:10px">
+    <% if object.description.is_some() { %>
+      <%- object.description.as_deref().unwrap() %>
+    <% } else { %>
+      Описание отсутствует
+    <% } %>
+  <div>
+</div>

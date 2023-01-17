@@ -1,0 +1,39 @@
+<% include!("../header.stpl"); %>
+
+<section page-id="36" data-title="<%= tag.name %> | Статьи тега" data-description="вебсервисы.рф: <%= tag.name %> | Статьи тега" data-uri="/tag_wikis/<%= tag.name %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+          <a class="ajax" href="/tags/">Ключевые слова</a>
+            &nbsp;/&nbsp;
+          <a class="ajax" href="/tag/<%= tag.name %>/"><%= tag.name %></a>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+      <% if wikis_count > 0 { %>
+      <section class="page-section">
+          <div class="container relative">
+            <h5 class="section-title font-alt align-left">
+              Обучающие статьи (<%= wikis_count %>)
+            </h5>
+              <div class="row multi-columns-row is_paginate">
+                <% for object in wikis_list.iter() { %>
+                  <% include!("../generic/items/1/default_wiki.stpl"); %>
+                <% } %>
+                <% if next_page_number > 0 { %>
+                  <div class="load centered m-1 next_page_list" data-link="/tag_wikis/<%= tag.name %>/?page=<%= next_page_number %>">
+                    <img src="/static/images/preloader.gif">
+                  </div>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <% } %>
+    </div>
+</section>
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>
+
+<% include!("../footer.stpl"); %>

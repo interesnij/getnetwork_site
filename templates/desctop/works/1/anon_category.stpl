@@ -1,0 +1,55 @@
+
+<section page-id="92" data-id="<%= category.id %>" data-title="<%= category.name %> | Категория работ" data-description="вебсервисы.рф: <%= category.name %> | Категория работ" data-uri="/works/<%= category.slug %>/" data-image="<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>" class="doc_title">
+  <div class="relative container align-left">
+    <div class="hs-line-4 font-alt">
+      <a class="ajax" href="/">Главная</a>
+      &nbsp;/&nbsp;
+      <a class="ajax" href="/work_categories/">Работы</a>
+      &nbsp;/&nbsp;
+      <a><%= category.name %></a>
+      <% include!("../../generic/items/1/category_stat.stpl"); %>
+    </div>
+  </div>
+</section>
+<section class="home-section need_darked_this" style='background-image: url("<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>"); background-position: 50% -26px;'>
+    <div class="" style="height: 100vh">
+        <div class="home-content container">
+            <div class="home-text">
+                <h4 class="hs-line-8 no-transp font-alt mb-50 mb-xs-30">
+                <% let tags_count = all_tags.len(); %>
+                  <% for (i, tag) in all_tags.iter().enumerate() { %>
+                      <a class="ajax dark_target" href="/tag/<%= tag.name %>/"><%= tag.name %> (<%= tag.count %>)</a>
+                    <% if i != tags_count { %>, <% } %>
+                  <% } %>
+                </h4>
+                <h1 class="dark_target hs-line-14 font-alt mb-50 mb-xs-30">
+                    <%= category.name %>
+                </h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+  <div class="container relative">
+    <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
+      <% if object_list.len() > 0 { %>
+        <div class="is_paginate">
+        <% for object in object_list.iter() { %>
+          <% include!("../../generic/items/1/work.stpl"); %>
+        <% } %>
+        <% if next_page_number > 0 { %>
+          <div class="load centered m-1 next_page_list" data-link="/works/<%= category.slug %>/?page=<%= next_page_number %>">
+            <img src="/static/images/preloader.gif">
+          </div>
+        <% } %>
+        </div>
+      <% } else { %>
+      <div style="margin-top: 40px;">
+          <div class="align-center">
+              <span class="border" style="padding: 10px 15px;">Список пока пустой.</span>
+          </div>
+      </div>
+      <% } %>
+    <ul>
+  </div>
+</section>

@@ -1,0 +1,85 @@
+<% include!("../anon_header.stpl"); %>
+
+<section page-id="93" data-id="<%= object.id %>" data-title="<%= object.title %> | Работа" data-description="вебсервисы.рф: <%= object.title %> | Работа" data-uri="/work/<%= category.slug %>/<%= object.slug %>/" data-image="<%= object.get_image() %>" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a class="ajax" href="/work_categories/">Портфолио</a>
+            &nbsp;/&nbsp;
+            <a class="ajax" href="/works/<%= category.slug %>/"><%= category.name %></a>
+            <% include!("../generic/items/1/object_stat.stpl"); %>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+        <div class="blog-item mb-80 mb-xs-40">
+            <div class="blog-item-body">
+                <h1 class="mt-0 font-alt object_data" data-type="3" data-pk="<%= object.id %>"><%= object.title %></h1>
+                <div class="blog-item-data">
+
+                </div>
+                <hr class="mt-0 mb-0 " />
+
+                <div class="work-detail mt-20 mb-20">
+                    <h5 class="font-alt mb-20">Информация</h5>
+                    <div class="work-full-detail">
+                        <p>
+                            <strong>Дата:</strong>
+                            <%= object.created.format("%d-%m-%Y в %H:%M").to_string() %>
+                        </p>
+                        <p>
+                            <strong>Категории:</strong>
+                            <% let _work_categories = object.get_categories().expect("E"); %>
+                            <% for (i, category) in _work_categories.iter().enumerate() { %>
+                              <a href="/works/<%= category.slug %>/" class="ajax"><%= category.name %> - <%= category.count %></a><% if i != _work_categories.len() { %>, <% } %>
+                            <% } %>
+                        </p>
+                        <% let _work_tags = object.get_tags().expect("E"); %>
+                        <% if _work_tags.len() > 0 { %>
+                        <p>
+                            <strong>Теги:</strong>
+                            <% for (i, tag) in _work_tags.iter().enumerate() { %>
+                              <a class="ajax border" href="/tag/<%= tag.name %>/"><%= tag.name %> (<%= tag.count %>)</a><% if i != _work_tags.len() { %>, <% } %>
+                            <% } %>
+                        </p>
+                        <% } %>
+                        <% if object.link.is_some() { %>
+                        <% let work_link = object.link.as_deref().unwrap(); %>
+                        <p>
+                            <strong>Ссылка:</strong>
+                            <a href="<%= work_link %>" target="_blank" rel="nofollow"><%= work_link %></a>
+                        </p>
+                        <% } %>
+                    </div>
+                </div>
+                <% if object.content.is_some() { %>
+                <%- object.content.as_deref().unwrap() %>
+                <% } else { %>
+                Информация отсутствует.
+                <% } %>
+
+                <% let object_serve_ids = object.get_serves_ids(); %>
+                <% include!("../generic/form/1/serves_table.stpl"); %>
+            </div>
+        </div>
+        <div class="clearfix mt-40">
+            <% if next.is_some() { %>
+            <% let _next = next.unwrap(); %>
+            <a href="/works/<%= category.slug %>/<%= _next.slug %>/" class="border ajax blog-item-more left">⇠&nbsp;&nbsp;<%= _next.title %></a>
+            <% } %>
+            <% if prev.is_some() { %>
+            <% let _prev = prev.unwrap(); %>
+            <a href="/works/<%= category.slug %>/<%= _prev.slug %>/" class="border ajax blog-item-more right"><%= _prev.title %>&nbsp;&nbsp;⇢</a>
+            <% } %>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <% include!("../generic/items/1/anon_files.stpl"); %>
+    </div>
+    <% include!("../generic/form/1/btn_block.stpl"); %>
+
+</section>
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>
+<% include!("../anon_footer.stpl"); %>

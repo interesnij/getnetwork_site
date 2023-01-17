@@ -1,0 +1,16 @@
+<div page-id="" object-id="<%= object.id %>" data-link="/load_serve_category/<%= object.id %>/" data-title="<%= object.name %> | Технология опций" class="doc_title" style="padding: 0;">
+  <h4 style="margin-bottom: 0 !important"><%= object.name %></h4>
+  <p class="solid_bottom" style="font-size: 80%;">
+    <% let category = object.get_category(); %>
+    Язык / технология приложения
+      <a class="pointer get_tech_category_info" data-pk="<%= category.id %>" style="font-weight: bold">"<%= category.name %> (сложность: <%= category.get_level_ru() %>)"</a>.
+  </p>
+
+  <div style="margin-top:10px">
+    <% if object.description.is_some() { %>
+      <%- object.description.as_deref().unwrap() %>
+    <% } else { %>
+      Описание отсутствует
+    <% } %>
+  </div>
+</div>

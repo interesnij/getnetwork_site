@@ -1,13 +1,3 @@
-<div page-id="" object-id="<%= object.id %>" data-link="/load_tech_category/<%= object.id %>/" data-title="<%= object.name %> | Веб-сервис" class="doc_title" style="padding: 0;">
-  <h4 style="margin-bottom: 0 !important"><%= object.name %> (сложность: <%= object.get_level_ru() %>)</h4>
-  <p class="solid_bottom" style="font-size: 80%;">Это приложениe - большая структурная единица.
-  </p>
-
-  <div style="margin-top:10px">
-    <% if object.description.is_some() { %>
-      <%- object.description.as_deref().unwrap() %>
-    <% } else { %>
-      Описание отсутствует
-    <% } %>
-  </div>
-</div>
+<% if template_types == 1 { %>
+    <% include!("1/tech_category.stpl"); %>
+<% } %>

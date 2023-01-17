@@ -1,43 +1,7 @@
 <% include!("../anon_header.stpl"); %>
 
-<section page-id="22" data-title="<%= q %> | Общий поиск помощи по фрагменту" data-description="вебсервисы.рф: <%= q %> | Общий поиск помощи по фрагменту" data-uri="/search_help/<%= q %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
-    <div class="relative container align-left">
-        <div class="hs-line-4 font-alt">
-            <a class="ajax" href="/">Главная</a>
-            &nbsp;/&nbsp;
-            <a href="/search/<%= q %>/" class="ajax">Общий поиск</a>
-        </div>
-    </div>
-</section>
-<section class="page-section">
-    <div class="container relative">
-      <form class="form mb-20" role="form">
-          <input data-folder="_help" value="<%= q %>" type="text" class="input-md form-control general_search search_page" placeholder="Поиск от 3х букв">
-      </form>
-    <div class="search_section">
-      <% if items_count > 0 { %>
-          <div style='margin-left:10px; margin-right:10px'>
-              <div class="multi-columns-row is_paginate">
-                <% for object in items_list.iter() { %>
-                  <% include!("../generic/items/1/help.stpl"); %>
-                <% } %>
-                <% if next_page_number > 0 { %>
-                  <div class="load centered m-1 next_page_list" data-link="/search_help/<%=q%>/?page=<%= next_page_number %>">
-                    <img src="/static/images/preloader.gif">
-                  </div>
-                <% } %>
-              </div>
-          </div>
-      <hr class="mt-0 mb-0 " />
-      <% } else { %>
-          <div class="text-center">
-            <span class="widget-title font-alt">
-              По запросу "<%= q %>" ничего не найдено...
-            </span>
-          </div>
-        <% } %>
-    </div>
-  </div>
-</section>
+<% if template_types == 1 { %>
+    <% include!("1/anon_help.stpl"); %>
+<% } %>
 
 <% include!("../anon_footer.stpl"); %>

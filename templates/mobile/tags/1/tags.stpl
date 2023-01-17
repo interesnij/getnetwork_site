@@ -1,0 +1,32 @@
+<% include!("../header.stpl"); %>
+
+<section page-id="31" data-title="Теги" data-description="вебсервисы.рф: Теги" data-uri="/tags/" data-image="/static/images/dark/store.jpg" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a>Ключевые слова</a>
+            <% include!("../generic/items/1/page_stat.stpl"); %>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+        <h5 class="widget-title font-alt">Теги (<%= tags_count %>)</h5>
+        <div class="widget-body">
+            <div class="tags is_paginate">
+                <% for tag in all_tags.iter() { %>
+                  <a class="ajax border" href="/tag/<%= tag.name %>/"><%= tag.name %> (<%= tag.count %>)</a>
+                <% } %>
+                <% if next_page_number > 0 { %>
+                  <div class="load centered m-1 next_page_list" data-link="/tags/?page=<%= next_page_number %>">
+                    <img src="/static/images/preloader.gif">
+                  </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>
+
+<% include!("../footer.stpl"); %>

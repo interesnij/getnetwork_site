@@ -1,0 +1,80 @@
+
+<% for category in object.get_serve_categories().iter() { %>
+  <li>
+    <input checked type="checkbox" id="cat<%= category.id %>" />
+    <label class="selected" for="cat<%= category.id %>">
+      <%= category.name %>
+    </label>
+    <span>
+      <% if is_admin { %>
+        <a target="_blank" rel="nofollow" href="/edit_serve_category/<%= category.id %>/">~</a>
+        <a class="pointer remove_serve_category" data-pk="<%= category.id %>">x</a>
+        &nbsp;
+      <% } %>
+      <a class="pointer get_serve_category_info" data-pk="<%= category.id %>">
+        <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0V0z" fill="none"/><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+        </svg>
+      </a>
+    </span>
+    <ul style="margin-left: 2%">
+      <% for object in category.get_serves().iter() { %>
+      <li>
+
+        <% if object.is_parent() { %>
+          <span style="font-weight: bold">
+            <% if object.is_default { %>* <% } %>
+            <%= object.name %>
+          </span> <% if is_admin { %>(<%= object.id %>)<% } %>
+        <% if is_admin { %>
+          <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
+          <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
+          &nbsp;
+        <% } %>
+        <a class="pointer get_serve_info" data-pk="<%= object.id %>">
+          <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0V0z" fill="none"/><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+          </svg>
+        </a>
+        <ul style="margin-left: 2%">
+          <% for child in object.get_variables().iter() { %>
+          <li>
+            <span>
+              - <% if child.is_default { %>* <% } %>
+              <%= child.name %>: <%= child.price %> руб. (<%= child.man_hours %> час.)
+            </span>
+            <% if is_admin { %>
+              <a target="_blank" rel="nofollow" href="/edit_serve/<%= child.id %>/">~</a>
+              <a class="pointer remove_serve" data-pk="<%= child.id %>">x</a>
+              &nbsp;
+            <% } %>
+            <a class="pointer get_serve_info" data-pk="<%= child.id %>">
+              <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0V0z" fill="none"/><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+              </svg>
+            </a>
+          </li>
+          <% } %>
+        </ul>
+        <% } else { %>
+          <span>
+            <% if object.is_default { %>* <% } %>
+            <%= object.name %>: <%= object.price %> руб. (<%= object.get_hours() %>)
+          </span>
+          <% if is_admin { %>
+            <a target="_blank" rel="nofollow" href="/edit_serve/<%= object.id %>/">~</a>
+            <a class="pointer remove_serve" data-pk="<%= object.id %>">x</a>
+            &nbsp;
+          <% } %>
+          <a class="pointer get_serve_info" data-pk="<%= object.id %>">
+            <svg fill="currentColor" style="vertical-align: text-bottom;width:17px" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0V0z" fill="none"/><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+            </svg>
+          </a>
+        <% } %>
+      </li>
+      <% } %>
+    </ul>
+  </li>
+<% } %>
+<hr class="mt-0 mb-0 " />

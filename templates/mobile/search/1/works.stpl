@@ -1,0 +1,46 @@
+<% include!("../header.stpl"); %>
+
+<section page-id="26" data-title="<%= q %> | Общий поиск работ по фрагменту" data-description="вебсервисы.рф: <%= q %> | Общий поиск работ по фрагменту" data-uri="/search_works/<%= q %>/" data-image="/static/images/dark/store.jpg" class="doc_title">
+    <div class="relative container align-left">
+        <div class="hs-line-4 font-alt">
+            <a href="/search/<%= q %>/" class="ajax">Общий поиск</a>
+        </div>
+    </div>
+</section>
+<section class="page-section">
+    <div class="container relative">
+      <form class="form mb-20" role="form">
+          <input data-folder="_works" value="<%= q %>" type="text" class="input-md form-control general_search search_page" placeholder="Поиск от 3х букв">
+      </form>
+    <div class="search_section">
+      <% if works_count > 0 { %>
+      <section class="page-section">
+          <div class="container relative">
+              <div class="row multi-columns-row is_paginate">
+                <% for object in works_list.iter() { %>
+                  <% include!("../generic/items/1/default_work.stpl"); %>
+                <% } %>
+                <% if next_page_number > 0 { %>
+                  <div class="load centered m-1 next_page_list" data-link="/search_works/<%=q%>/?page=<%= next_page_number %>">
+                    <img src="/static/images/preloader.gif">
+                  </div>
+                <% } %>
+              </div>
+          </div>
+      </section>
+      <hr class="mt-0 mb-0 " />
+      <% } else { %>
+          <div class="text-center">
+            <span class="widget-title font-alt">
+              По запросу "<%= q %>" работ не найдено...
+            </span>
+          </div>
+        <% } %>
+    </div>
+  </div>
+</section>
+<div class="sidebar hidden">
+    <% include!("sidebar.stpl"); %>
+</div>
+
+<% include!("../footer.stpl"); %>
