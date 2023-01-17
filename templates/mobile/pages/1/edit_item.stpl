@@ -58,7 +58,7 @@
             </div>
 
             <% if vec![2,3,5].iter().any(|i| i==&object.types) { %>
-              <% include!("../generic/form/1/edit_serves.stpl"); %>
+              <% include!("../../generic/form/1/edit_serves.stpl"); %>
             <% } %>
 
             <button data-pk="<%= object.id %>" style="float: right;" class="btn btn-mod btn-border btn-medium btn-round" type="button" id="edit_item_btn">Изменить</button>

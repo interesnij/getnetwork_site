@@ -1,7 +1,7 @@
 <% include!("../anon_header.stpl"); %>
 
 <% if template_types == 1 { %>
-    <% include!("1/anon_user_order.stpl"); %>
+    <% include!("1/anon_user_orders.stpl"); %>
 <% } %>
 
 <% include!("../anon_footer.stpl"); %>
