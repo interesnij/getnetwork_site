@@ -12,8 +12,7 @@
 <section class="page-section">
     <div class="container relative">
       <div class="is_paginate">
-      <% for object in object_list.iter() { %>
-        <div class="row solid_bottom" style="padding: 8px 0;">
+      <div class="row solid_bottom" style="padding: 8px 0;">
           <div class="col-md-6">
             <p style="font-weight: bold">Страница</p>
           </div>
@@ -26,6 +25,8 @@
           <div class="col-md-2">
             <p style="font-weight: bold">Девайс</p>
           </div>
+      </div>
+      <% for object in object_list.iter() { %>
         <div class="row solid_bottom" style="padding: 8px 0;">
           <div class="col-md-6">
             <% if object.country_ru.is_some() { %>
