@@ -112,7 +112,7 @@
       <% if object_list.len() > 0 { %>
       <div class="row solid_bottom" style="padding: 8px 0;">
           <div class="col-md-4">
-            <span style="font-weight: bold">Откуда пользователь</span>
+            <span style="font-weight: bold">Страница</span>
           </div> 
           <div class="col-md-2">
             <span style="font-weight: bold">Метры</span>
