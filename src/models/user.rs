@@ -214,15 +214,17 @@ pub struct CookieStat {
     pub height:   f64,
     pub seconds:  i32,
     pub created:  chrono::NaiveDateTime,
+    pub template: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct HistoryResponse {
-    pub id:      i32,
-    pub link:    String,
-    pub title:   String,
-    pub height:  f64,
-    pub seconds: i32,
+    pub id:       i32,
+    pub link:     String,
+    pub title:    String,
+    pub height:   f64,
+    pub seconds:  i32,
+    pub template: String,
 }
 
 impl CookieStat {
@@ -259,19 +261,27 @@ impl CookieStat {
             .expect("E");
         Ok(list)
     }
-    pub fn create(user_id: i32, page: i16, link: String,
-        title: String, height: f64, seconds: i32) -> Result<CookieStat, Error> {
+    pub fn create (
+        user_id:  i32, 
+        page:     i16, 
+        link:     String,
+        title:    String, 
+        height:   f64, 
+        seconds:  i32,
+        template: String
+    ) -> Result<CookieStat, Error> {
         use chrono::Duration;
 
         let _connection = establish_connection();
         let _h = NewCookieStat {
-            user_id: user_id,
-            page:    page,
-            link:    link.clone(),
-            title:   title.clone(),
-            height:  height,
-            seconds: seconds,
-            created: chrono::Local::now().naive_utc() + Duration::hours(3),
+            user_id:  user_id,
+            page:     page,
+            link:     link.clone(),
+            title:    title.clone(),
+            height:   height,
+            seconds:  seconds,
+            created:  chrono::Local::now().naive_utc() + Duration::hours(3),
+            template: template.clone(),
         };
         let new = diesel::insert_into(schema::cookie_stats::table)
             .values(&_h)
@@ -290,6 +300,7 @@ pub struct NewCookieStat {
     pub height:   f64,
     pub seconds:  i32,
     pub created:  chrono::NaiveDateTime,
+    pub template: String,
 }
 
 

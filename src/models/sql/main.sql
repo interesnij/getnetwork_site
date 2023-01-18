@@ -109,6 +109,7 @@ CREATE TABLE cookie_stats (
     height     FLOAT NOT NULL,        -- высота просмотра страницы
     seconds    INT NOT NULL,          -- секунды нахождения страницы
     created    TIMESTAMP NOT NULL,    -- когда создана запись
+    template   VARCHAR(100) NOT NULL DEFAULT "rhythm", -- вид шаблона
 
     CONSTRAINT fk_cookie_stat_user
         FOREIGN KEY(user_id)

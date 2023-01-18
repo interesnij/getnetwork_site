@@ -89,16 +89,6 @@ function get_page_view_time(count) {
     i += 1;
   }, 1000);
 };
-function get_stat_form($link, $title, $object_id, $page_id) {
-  formData = new FormData();
-  formData.append('user_id', $user_id);
-  formData.append('object_id', $object_id);
-  formData.append('page_id', $page_id);
-  formData.append('link', $link);
-  formData.append('title', $title);
-  formData.append('height', $height);
-  formData.append('seconds', $seconds);
-}
 
 function get_stat_meta($link, $title, $object_id, $page_id) {
   ip_block = document.body.querySelector(".ip_span");
@@ -127,6 +117,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       title: $title,
       height: $height*1.0,
       seconds: $seconds,
+      template: "rhythm",
     }
   } else {
     analyticsData = {
@@ -137,6 +128,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       title: $title,
       height: $height*1.0,
       seconds: $seconds,
+      template: "rhythm",
     }
   }
   fetch("/create_history/",
@@ -177,6 +169,7 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
       title: $title,
       height: $height*1.0,
       seconds: $seconds,
+      template: "rhythm",
     }
   } else {
     analyticsData = {
@@ -187,6 +180,7 @@ function get_window_stat_meta($link, $title, $object_id, $page_id) {
       title: $title,
       height: $height*1.0,
       seconds: $seconds,
+      template: "rhythm",
     }
   }
   fetch("/create_history/",
@@ -211,6 +205,7 @@ function getData() {
   title = meta.getAttribute("data-title");
   page_id = meta.getAttribute("page-id");
   object_id = meta.getAttribute("data-id");
+  template = meta.getAttribute("data-template");
 
   if (object_id) {
     analyticsData = {
@@ -221,6 +216,7 @@ function getData() {
       title: title,
       height: $height*1.0,
       seconds: $seconds,
+      template: "rhythm",
     }
   } else {
     analyticsData = {
@@ -231,6 +227,7 @@ function getData() {
       title: title,
       height: $height*1.0,
       seconds: $seconds,
+      template: "rhythm",
     };
   }
   return analyticsData;

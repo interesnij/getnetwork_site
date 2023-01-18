@@ -163,6 +163,7 @@ pub struct HistoryData {
     pub title:     String,
     pub height:    f64,
     pub seconds:   i32,
+    pub template:  String,
 }
 pub async fn create_history (
     conn: ConnectionInfo,
@@ -183,6 +184,7 @@ pub async fn create_history (
     let p_seconds = data.seconds;
     let p_link = data.link.clone();
     let p_title = data.title.clone();
+    let p_template = data.template.clone();
 
     let _connection = establish_connection();
     let is_cookie_stats_exists = cookie_stats
@@ -264,6 +266,7 @@ pub async fn create_history (
         p_title,
         p_height,
         p_seconds,
+        p_template
     )).await?;
     let res = _res?;
 
