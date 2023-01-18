@@ -14,7 +14,23 @@
       <div class="is_paginate">
       <% for object in object_list.iter() { %>
         <div class="row solid_bottom" style="padding: 8px 0;">
-          <div class="col-md-6">
+          <div class="col-md-5">
+            <p style="font-weight: bold">Страница</p>
+          </div>
+          <div class="col-md-2">
+            <p style="font-weight: bold">Метры</p>
+          </div>
+          <div class="col-md-2">
+            <p style="font-weight: bold">Секунды</p>
+          </div>
+          <div class="col-md-1">
+            <p style="font-weight: bold">Девайс</p>
+          </div>
+          <div class="col-md-2">
+            <p style="font-weight: bold">Шаблон</p>
+          </div>
+        <div class="row solid_bottom" style="padding: 8px 0;">
+          <div class="col-md-5">
             <% if object.country_ru.is_some() { %>
               <%= object.country_ru.as_deref().unwrap() %>,
             <% } else if object.country_en.is_some() { %>
@@ -35,21 +51,20 @@
           </div>
 
           <div class="col-md-2">
-              <svg fill="currentColor" style="vertical-align: text-bottom;width:20px" viewBox="0 0 24 24">
-                <g><rect fill="none" height="24" width="24"/></g><g><g/><polygon points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/></g>
-              </svg><%= object.height %>
+              <%= object.height %>
           </div>
           <div class="col-md-2">
-              <svg fill="currentColor" style="width:20px;vertical-align: text-bottom;" viewBox="0 0 24 24">
-                <path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"/>
-              </svg> <%= object.seconds %>
+              <%= object.seconds %>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-1">
               <% if object.device == 1 { %>
                 <span class="icon-desktop" style="font-size: 20px;vertical-align: middle;"></span>
               <% } else { %>
                 <span class="icon-mobile" style="font-size: 20px;vertical-align: middle;"></span>
               <% } %>
+          </div>
+          <div class="col-md-2">
+              <%= object.template %>
           </div>
         </div>
       <% } %>
