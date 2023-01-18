@@ -9,7 +9,13 @@
 
 <section class="page-section">
     <div class="container relative">
-
+      <div class="solid_bottom" style="padding: 5px 0;">
+        <p style="font-weight: bold;">Откуда пользователь</p>
+        <br />
+        <p style="font-weight: bold;font-size:80%">
+        метры, секунды, девайс
+        </p>
+      </div>
       <div class="is_paginate">
       <% for object in object_list.iter() { %>
         <div class="solid_bottom" style="padding: 5px 0;">

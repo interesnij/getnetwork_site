@@ -24,7 +24,7 @@
 
       <div class="row solid_bottom" style="padding: 8px 0;">
           <div class="col-md-6">
-            <p style="font-weight: bold">Страница</p>
+            <p style="font-weight: bold">Откуда пользователь</p>
           </div>
           <div class="col-md-2">
             <p style="font-weight: bold">Метры</p>
