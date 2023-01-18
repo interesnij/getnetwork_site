@@ -9,7 +9,7 @@
 
 <section class="page-section">
     <div class="container relative">
-      <span class="solid_top solid_bottom" style="padding: 5px 0;">
+      <span style="padding: 5px 0;">
         <span style="font-weight: bold;">Откуда пользователь</span>
         <br />
         <span style="font-weight: bold;font-size:80%">
@@ -18,7 +18,7 @@
       </span>
       <div class="is_paginate">
       <% for object in object_list.iter() { %>
-        <div class="solid_bottom" style="padding: 5px 0;">
+        <div class="solid_top" style="padding: 5px 0;">
             <span>
             <% if object.country_ru.is_some() { %>
               <%= object.country_ru.as_deref().unwrap() %>
