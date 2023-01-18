@@ -14,7 +14,7 @@
       <div class="is_paginate">
       <% for object in object_list.iter() { %>
         <div class="row solid_bottom" style="padding: 8px 0;">
-          <div class="col-md-5">
+          <div class="col-md-6">
             <p style="font-weight: bold">Страница</p>
           </div>
           <div class="col-md-2">
@@ -23,14 +23,11 @@
           <div class="col-md-2">
             <p style="font-weight: bold">Секунды</p>
           </div>
-          <div class="col-md-1">
+          <div class="col-md-2">
             <p style="font-weight: bold">Девайс</p>
           </div>
-          <div class="col-md-2">
-            <p style="font-weight: bold">Шаблон</p>
-          </div>
         <div class="row solid_bottom" style="padding: 8px 0;">
-          <div class="col-md-5">
+          <div class="col-md-6">
             <% if object.country_ru.is_some() { %>
               <%= object.country_ru.as_deref().unwrap() %>,
             <% } else if object.country_en.is_some() { %>
@@ -56,15 +53,12 @@
           <div class="col-md-2">
               <%= object.seconds %>
           </div>
-          <div class="col-md-1">
+          <div class="col-md-2">
               <% if object.device == 1 { %>
                 <span class="icon-desktop" style="font-size: 20px;vertical-align: middle;"></span>
               <% } else { %>
                 <span class="icon-mobile" style="font-size: 20px;vertical-align: middle;"></span>
               <% } %>
-          </div>
-          <div class="col-md-2">
-              <%= object.template %>
           </div>
         </div>
       <% } %>
