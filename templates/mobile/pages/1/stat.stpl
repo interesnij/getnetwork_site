@@ -22,10 +22,11 @@
     %>
 
       <span class="solid_top solid_bottom" style="padding: 5px 0;">
-        <p style="font-weight: bold;">Откуда пользователь</p>
-        <p style="font-weight: bold;font-size:80%">
+        <span style="font-weight: bold;">Откуда пользователь</span>
+        <br />
+        <span style="font-weight: bold;font-size:80%">
         метры, секунды, девайс
-        </p>
+        </span>
       </span>
       <div class="is_paginate">
       <% for object in object_list.iter() { %>
