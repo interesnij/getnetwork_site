@@ -3,7 +3,7 @@
 <% if template_types == 1 { %>
     <% include!("1/edit_serve_category.stpl"); %>
 <% } else if template_types == 2 { %>
-    <% include!("2/edit_serve_categories.stpl"); %>
+    <% include!("2/edit_serve_category.stpl"); %>
 <% } %>
 
 <% include!("../footer.stpl"); %>
