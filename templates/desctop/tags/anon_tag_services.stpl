@@ -2,6 +2,8 @@
 
 <% if template_types == 1 { %>
     <% include!("1/anon_tag_services.stpl"); %>
+<% } else if template_types == 2 { %>
+    <% include!("2/anon_tag_services.stpl"); %>
 <% } %>
 
 <% include!("../anon_footer.stpl"); %>

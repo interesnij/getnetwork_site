@@ -1,3 +1,5 @@
 <% if template_types == 1 { %>
     <% include!("1/unical_object_form.stpl"); %>
+<% } else if template_types == 2 { %>
+    <% include!("2/unical_object_form.stpl"); %>
 <% } %>

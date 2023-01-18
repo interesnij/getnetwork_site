@@ -1,7 +1,9 @@
 <div id="fullscreens_container"></div>
 
 <% if is_ajax == 1 { %>
-  <% if template_types == 1 { %>
+    <% if template_types == 1 { %>
       <% include!("generic/base/1/anon_footer.stpl"); %>
-  <% } %>
+    <% } else if template_types == 2 { %>
+        <% include!("generic/base/2/anon_footer.stpl"); %>
+    <% } %> 
 <% } %>

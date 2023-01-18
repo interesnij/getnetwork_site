@@ -107,7 +107,7 @@ CREATE TABLE cookie_stats (
     link       VARCHAR(200) NOT NULL, -- ссылка страницы
     title      VARCHAR(200) NOT NULL, -- название страницы
     height     FLOAT NOT NULL,        -- высота просмотра страницы
-    seconds    INT NOT NULL,     -- секунды нахождения страницы
+    seconds    INT NOT NULL,          -- секунды нахождения страницы
     created    TIMESTAMP NOT NULL,    -- когда создана запись
 
     CONSTRAINT fk_cookie_stat_user

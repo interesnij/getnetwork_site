@@ -1,7 +1,7 @@
 <% if is_ajax == 1 { %>
-
-<% if template_types == 1 { %>
-    <% include!("generic/base/1/anon_header.stpl"); %>
-<% } %>
-
+    <% if template_types == 1 { %>
+        <% include!("generic/base/1/anon_header.stpl"); %>
+    <% } else if template_types == 2 { %>
+        <% include!("generic/base/2/anon_header.stpl"); %>
+    <% } %>  
 <% } %>

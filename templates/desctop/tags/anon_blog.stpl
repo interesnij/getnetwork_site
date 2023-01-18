@@ -1,7 +1,0 @@
-<% include!("../anon_header.stpl"); %>
-
-<% if template_types == 1 { %>
-    <% include!("1/anon_categories.stpl"); %>
-<% } %>
-
-<% include!("../anon_blog.stpl"); %>

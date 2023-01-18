@@ -20,13 +20,17 @@
     <meta name="google-site-verification" content="axmP3VnhfYXqgbrLSbM341rNRdGAHxEjZkTdhkzV7yY" />
     <% if template_types == 1 { %>
       <% include!("../../block/styles/1/m.stpl"); %>
+    <%} else if template_types == 2 { %>
+      <% include!("../../block/styles/2/m.stpl"); %>
     <% } %>
   </head>
 
   <body>
     <span class="span"></span>
     <% if template_types == 1 { %>
-      <% include!("../../block/scripts/1/d.stpl"); %>
+      <% include!("../../block/scripts/1/m.stpl"); %>
+    <%} else if template_types == 2 { %>
+      <% include!("../../block/scripts/2/m.stpl"); %>
     <% } %>
   </body>
 </html>

@@ -2,6 +2,8 @@
 
 <% if template_types == 1 { %>
     <% include!("items/1/anon_private_object.stpl"); %>
+<% } else if template_types == 2 { %>
+    <% include!("items/2/anon_private_object.stpl"); %>
 <% } %>
 
 <% include!("../anon_footer.stpl"); %>

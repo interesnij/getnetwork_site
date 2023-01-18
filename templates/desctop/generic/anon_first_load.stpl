@@ -19,6 +19,8 @@
   <title><%= title %></title>
   <% if template_types == 1 { %>
     <% include!("../../block/styles/1/d.stpl"); %>
+  <%} else if template_types == 2 { %>
+    <% include!("../../block/styles/2/d.stpl"); %>
   <% } %>
 </head>
 
@@ -26,6 +28,8 @@
     <span class="span"></span>
     <% if template_types == 1 { %>
       <% include!("../../block/scripts/1/anon_d.stpl"); %>
+    <%} else if template_types == 2 { %>
+      <% include!("../../block/scripts/2/anon_d.stpl"); %>
     <% } %>
   </body>
 </html>

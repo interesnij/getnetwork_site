@@ -2,6 +2,8 @@
 
 <% if template_types == 1 { %>
     <% include!("1/create_serve.stpl"); %>
+<% } else if template_types == 2 { %>
+    <% include!("2/create_serve.stpl"); %>
 <% } %>
 
 <% include!("../footer.stpl"); %>

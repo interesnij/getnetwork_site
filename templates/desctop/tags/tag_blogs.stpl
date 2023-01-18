@@ -2,6 +2,8 @@
 
 <% if template_types == 1 { %>
     <% include!("1/tag_blogs.stpl"); %>
+<% } else if template_types == 2 { %>
+    <% include!("2/tag_blogs.stpl"); %>
 <% } %>
 
 <% include!("../footer.stpl"); %>

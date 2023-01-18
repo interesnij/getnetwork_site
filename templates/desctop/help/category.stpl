@@ -1,7 +1,9 @@
 <% include!("../header.stpl"); %>
 
 <% if template_types == 1 { %>
-    <% include!("1/anon_category.stpl"); %>
+    <% include!("1/category.stpl"); %>
+<% } else if template_types == 2 { %>
+    <% include!("2/category.stpl"); %>
 <% } %>
 
 <% include!("../footer.stpl"); %>
