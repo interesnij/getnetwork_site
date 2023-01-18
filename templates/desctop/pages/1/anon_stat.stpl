@@ -13,16 +13,16 @@
     <div class="container relative">
       <div class="row solid_bottom" style="padding: 8px 0;">
           <div class="col-md-6">
-            <p style="font-weight: bold">Откуда пользователь</p>
+            <span style="font-weight: bold">Откуда пользователь</span>
           </div> 
           <div class="col-md-2">
-            <p style="font-weight: bold">Метры</p>
+            <span style="font-weight: bold">Метры</span>
           </div>
           <div class="col-md-2">
-            <p style="font-weight: bold">Секунды</p>
+            <span style="font-weight: bold">Секунды</span>
           </div>
           <div class="col-md-2">
-            <p style="font-weight: bold">Девайс</p>
+            <span style="font-weight: bold">Девайс</span>
           </div>
       </div>
       <div class="is_paginate">

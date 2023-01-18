@@ -110,6 +110,23 @@
     <hr class="mt-0 mb-0 " />
     <h5 class="font-alt mb-20">История просмотров</h5>
       <% if object_list.len() > 0 { %>
+      <div class="row solid_bottom" style="padding: 8px 0;">
+          <div class="col-md-4">
+            <span style="font-weight: bold">Откуда пользователь</span>
+          </div> 
+          <div class="col-md-2">
+            <span style="font-weight: bold">Метры</span>
+          </div>
+          <div class="col-md-2">
+            <span style="font-weight: bold">Секунды</span>
+          </div>
+          <div class="col-md-2">
+            <span style="font-weight: bold">Время</span>
+          </div>
+          <div class="col-md-2">
+            <span style="font-weight: bold">Шаблон</span>
+          </div>
+      </div>
       <div class="is_paginate">
         <% for (i, object) in object_list.iter().enumerate() { %>
           <div class="row <% if i % 2 == 0 { %>hover<% } %>" style="padding: 5px 0;">
