@@ -28,6 +28,9 @@
                                 рабочих моментов. Такой вид работает моментально, экономит трафик, 
                                 позволяет менять цвет фона.
                             </p>
+                            <div>
+                                <a disabled class="btn btn-mod btn-border btn-medium btn-round">Используется</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -47,6 +50,9 @@
                                 объема информации. Слайдеры, анимация tweenmax и pixi.js, подгрузка объектов гарантированно 
                                 подарят Вам приятные эмоции. 
                             </p>
+                            <div>
+                                <a href="/?template=2" class="btn btn-mod btn-border btn-medium btn-round">Выбрать</a>
+                            </div>
                         </div>
                     </div>
                 </div>
