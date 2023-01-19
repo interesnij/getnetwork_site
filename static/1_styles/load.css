@@ -3301,8 +3301,7 @@ img:not([draggable]), embed, object, video {
 .desctop_version .team-item:hover .team-item-image:after {
     background: rgba(255,255,255, .93);
 }
-.desctop_version .team-item:hover h4,
-.desctop_version .team-item:hover p {
+.desctop_version .team-item:hover .team-item-detail {
     opacity: 1;
 }
 .team-item-image:after {
