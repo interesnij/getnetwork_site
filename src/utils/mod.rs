@@ -265,7 +265,6 @@ pub fn get_request_user_data(session: &Session) -> User {
 }
 
 pub async fn get_first_load_page (
-    req:            &HttpRequest,
     session:        &Session,
     is_desctop:     bool,
     title:          String,
@@ -370,7 +369,6 @@ pub async fn get_first_load_page (
 }
 
 pub async fn get_private_page (
-    req:            &HttpRequest
     is_ajax:        i32,
     user:           User,
     is_desctop:     bool,
