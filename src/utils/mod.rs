@@ -80,7 +80,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
     pub fn get_template(req: &HttpRequest) -> i16 {
         #[derive(Deserialize)]
         struct TemplateParams {
-            pub template: Option<i32>,
+            pub template: Option<i16>,
         }
         let params_some = web::Query::<TemplateParams>::from_query(&req.query_string());
         if params_some.is_ok() {

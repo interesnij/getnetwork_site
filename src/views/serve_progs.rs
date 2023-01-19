@@ -375,7 +375,7 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
     }
 }
 
-pub async fn load_serve_categories_from_level(session: Session, level: web::Path<i16>) -> actix_web::Result<HttpResponse> {
+pub async fn load_serve_categories_from_level(req: HttpRequest, session: Session, level: web::Path<i16>) -> actix_web::Result<HttpResponse> {
     if !is_signed_in(&session) {
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
