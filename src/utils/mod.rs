@@ -87,8 +87,13 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
             let params = params_some.unwrap();
             if params.template.is_some() {
                 let template = params.template.unwrap();
-                set_template(template);
-                return template;
+                if template > 0 && template < 3 {
+                    set_template(template);
+                    return template;
+                }
+                else {
+                    return 1;
+                }
             }
             else {
                 return get_template_storage();
