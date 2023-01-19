@@ -36,8 +36,8 @@
   background: inherit !important;
 }
 .desctop_version .team-item:hover .team-item-image:after {
-  background: inherit !important;
-}
+  background: black !important;
+} 
 .mn-sub {
   background-color: black !important;
 }
