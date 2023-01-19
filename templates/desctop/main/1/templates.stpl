@@ -19,10 +19,10 @@
                     <div class="team-item-image">
                         <img src="/static/images/rhythm.jpg" alt="">
                         <div class="team-item-detail">
-                            <h4 class="font-alt normal" style="color: black !important">
+                            <h4 class="font-alt normal">
                                 Rhythm
                             </h4>
-                            <p style="color: black !important">
+                            <p>
                                 Дефолтный, упрощенный вид пользовательского интерфейса. Удобен для 
                                 работы с контентом сайта: чтением статей, просмотром заметок, помощи, 
                                 рабочих моментов. Такой вид работает моментально, экономит трафик, 
@@ -42,11 +42,11 @@
                         <img src="/static/images/eremia.jpg" alt="">
                         <div class="team-item-detail">
                             <h4 class="font-alt normal">
-                                <a href="/?template=2" style="color: black !important">
+                                <a href="/?template=2">
                                 Eremia
                                 </a>
                             </h4>
-                            <p style="color: black !important">
+                            <p>
                                 Улучшенный вариант сайта для комфортного просмотра среднего
                                 объема информации. Слайдеры, анимация tweenmax и pixi.js, подгрузка объектов гарантированно 
                                 подарят Вам приятные эмоции. 

@@ -12,6 +12,9 @@
 .js-height-full, .small-section, .mob_menu, .mn-sub {
   background: #F4E0E3 !important;
 }
+.desctop_version .team-item:hover .team-item-image:after {
+  background: #F4E0E3 !important;
+}
 .hs-line-14 {
   text-shadow: 0px 5px 3px rgb(0 0 0 / 30%);
 }

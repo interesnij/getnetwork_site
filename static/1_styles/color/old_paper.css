@@ -32,7 +32,9 @@
 .mn-sub {
   background-color: #DDD1C5 !important;
 }
-
+.desctop_version .team-item:hover .team-item-image:after {
+  background: #DDD1C5 !important;
+}
 .mobile_icon span {
   color: rgb(0, 0, 0, 0.7) !important;
 }

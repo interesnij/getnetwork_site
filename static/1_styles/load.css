@@ -3281,7 +3281,6 @@ img:not([draggable]), embed, object, video {
     padding: 20px 23px 55px;
     font-size: 14px;
     font-weight: 300;
-    color: #777;
     text-align: center;
     z-index: 2;
     -webkit-transform: translateY(-50%);
@@ -3298,9 +3297,7 @@ img:not([draggable]), embed, object, video {
     transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
 }
 
-.desctop_version .team-item:hover .team-item-image:after {
-    background: rgba(255,255,255, .93);
-}
+
 .desctop_version .team-item:hover .team-item-detail {
     opacity: 1;
 }
