@@ -30,9 +30,8 @@
                             </p>
                             <br />
                             <div>
-                                <a disabled class="btn btn-mod btn-border btn-medium btn-round">Используется</a>
+                                <a style="pointer-events: none;" class="btn btn-mod btn-border btn-medium btn-round">Используется</a>
                             </div>
-                            <input class="input-md form-control" type="text" placeholder="Используется" disabled="">
                         </div>
                     </div>
                 </div>
