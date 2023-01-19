@@ -1,7 +1,7 @@
 <section class="page-section">
     <div class="container relative">
 
-        <h2 class="section-title font-alt mb-70 mb-sm-40">
+        <h2 class="section-title font-alt">
             Выберите шаблон
         </h2>
 
@@ -28,9 +28,11 @@
                                 рабочих моментов. Такой вид работает моментально, экономит трафик, 
                                 позволяет менять цвет фона.
                             </p>
+                            <br />
                             <div>
                                 <a disabled class="btn btn-mod btn-border btn-medium btn-round">Используется</a>
                             </div>
+                            <input class="input-md form-control" type="text" placeholder="Используется" disabled="">
                         </div>
                     </div>
                 </div>
@@ -50,6 +52,7 @@
                                 объема информации. Слайдеры, анимация tweenmax и pixi.js, подгрузка объектов гарантированно 
                                 подарят Вам приятные эмоции. 
                             </p>
+                            <br />
                             <div>
                                 <a href="/?template=2" class="btn btn-mod btn-border btn-medium btn-round">Выбрать</a>
                             </div>
