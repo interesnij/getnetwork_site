@@ -11,6 +11,9 @@
                       <li>
                           <a href="/" class="ajax mn-has-sub folder main">Главная</a>
                           <ul class="border mn-sub">
+                            <li>
+                              <a style="cursor:default;font-weight:bold;">Шаблоны:</a>
+                            </li>
                               <li>
                                   <a class="mn-group-title">Rhythm - выбрано</a>
                               </li>
