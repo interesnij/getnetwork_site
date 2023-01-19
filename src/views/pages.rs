@@ -71,7 +71,7 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
 pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -173,7 +173,7 @@ pub async fn index_page (
     session: Session,
     websocket_srv: Data<Addr<Server>>) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -360,7 +360,7 @@ pub async fn index_page (
 
 pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -523,7 +523,7 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
 pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -660,7 +660,7 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
             use crate::models::Feedback;
 
             let _connection = establish_connection();
-            let template_types = get_template();
+            let template_types = get_template(&req);
             let _feedbacks = feedbacks
                 .load::<Feedback>(&_connection)
                 .expect("E");
@@ -714,7 +714,7 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let all_tech_categories = tech_categories
         .order(schema::tech_categories::level.asc())
         .load::<TechCategories>(&_connection)
@@ -816,7 +816,7 @@ pub async fn get_tech_category_page(_id: web::Path<i32>) -> actix_web::Result<Ht
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let tech_category = tech_categories
         .filter(schema::tech_categories::id.eq(*_id))
         .first::<TechCategories>(&_connection)
@@ -842,7 +842,7 @@ pub async fn get_serve_category_page(_id: web::Path<i32>) -> actix_web::Result<H
     use crate::schema::serve_categories::dsl::serve_categories;
 
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let serve_category = serve_categories
         .filter(schema::serve_categories::id.eq(*_id))
         .first::<ServeCategories>(&_connection)
@@ -868,7 +868,7 @@ pub async fn get_serve_page(_id: web::Path<i32>) -> actix_web::Result<HttpRespon
     use crate::schema::serve::dsl::serve;
 
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _serve = serve
         .filter(schema::serve::id.eq(*_id))
         .first::<Serve>(&_connection)
@@ -890,7 +890,7 @@ pub async fn get_serve_page(_id: web::Path<i32>) -> actix_web::Result<HttpRespon
 }
 
 pub async fn get_feedback_page() -> actix_web::Result<HttpResponse> {
-    let template_types = get_template();
+    let template_types = get_template(&req);
     #[derive(TemplateOnce)]
     #[template(path = "desctop/load/feedback.stpl")]
     struct Template {
@@ -909,7 +909,7 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
     use crate::models::CookieUser;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _connection = establish_connection();
     if is_ajax == 0 {
         get_first_load_page (
@@ -1016,7 +1016,7 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
 pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        let template_types = get_template();
+        let template_types = get_template(&req);
         if _request_user.is_superuser() {
             use crate::utils::get_page;
             use crate::models::CookieStat;
@@ -1060,7 +1060,7 @@ pub async fn get_tech_objects_page(session: Session, _id: web::Path<i32>) -> act
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let mut is_admin = false;
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.is_superuser() {
@@ -1091,7 +1091,7 @@ pub async fn get_tech_objects_page(session: Session, _id: web::Path<i32>) -> act
 }
 
 pub async fn unical_object_form_page(session: Session, _id: web::Path<i16>) -> actix_web::Result<HttpResponse> {
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if !_request_user.is_superuser() {
@@ -1135,7 +1135,7 @@ pub async fn unical_object_form_page(session: Session, _id: web::Path<i16>) -> a
 
 pub async fn create_category_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -1205,7 +1205,7 @@ pub async fn create_category_page(session: Session, req: HttpRequest) -> actix_w
 
 pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let cat_id: i32 = *_id;
     let _connection = establish_connection();
     let _cats = schema::categories::table
@@ -1284,7 +1284,7 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
 pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -1363,7 +1363,7 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
     use schema::items::dsl::items;
 
     let _item_id: i32 = *_id;
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _connection = establish_connection();
     let _item = items
         .filter(schema::items::id.eq(&_item_id))
@@ -1495,7 +1495,7 @@ pub async fn edit_content_item_page(session: Session, req: HttpRequest, _id: web
     use crate::schema::items::dsl::items;
 
     let _item_id: i32 = *_id;
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _connection = establish_connection();
     let _item = items
         .filter(schema::items::id.eq(&_item_id))
@@ -1568,7 +1568,7 @@ pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i
     use crate::models::File;
 
     let _file_id: i32 = *_id;
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _connection = establish_connection();
     let _file = files
         .filter(schema::files::id.eq(&_file_id))
@@ -1644,7 +1644,7 @@ pub async fn image_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> 
     use crate::models::File;
 
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _id: i32 = *_id;
     let _file = files
         .filter(schema::files::id.eq(_id))

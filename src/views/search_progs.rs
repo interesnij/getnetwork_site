@@ -36,7 +36,7 @@ pub async fn empty_search_page(req: HttpRequest, session: Session) -> actix_web:
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -124,7 +124,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
     let _q_standalone = "%".to_owned() + &_q + "%";
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -339,7 +339,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -495,7 +495,7 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -651,7 +651,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -809,7 +809,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -965,7 +965,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -1121,7 +1121,7 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
     use crate::utils::{get_device_and_ajax, get_page};
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _q = q.clone();
 
     if is_ajax == 0 {

@@ -46,7 +46,7 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
     let _cat_id: String = _id.clone();
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     let _category = categories
         .filter(schema::categories::slug.eq(&_cat_id))

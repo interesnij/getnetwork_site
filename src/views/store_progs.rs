@@ -47,7 +47,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
     let _connection = establish_connection();
     let _item_id: String = param.1.clone();
     let _cat_id: String = param.0.clone();
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     let _item = items
         .filter(schema::items::slug.eq(&_item_id))
@@ -234,7 +234,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
 
     let _cat_id: String = _id.clone();
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     let _category = categories
         .filter(schema::categories::slug.eq(&_cat_id))
@@ -418,7 +418,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
 pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_ajax;
 
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
         get_first_load_page (

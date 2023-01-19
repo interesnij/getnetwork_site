@@ -78,7 +78,7 @@ pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -152,7 +152,7 @@ pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i
     use schema::serve::dsl::serve;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     let _connection = establish_connection();
     let _serve_id: i32 = *_id;
@@ -237,7 +237,7 @@ pub async fn create_tech_categories_page(session: Session, req: HttpRequest) -> 
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -308,7 +308,7 @@ pub async fn create_serve_categories_page(session: Session, req: HttpRequest) ->
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -380,7 +380,7 @@ pub async fn load_serve_categories_from_level(session: Session, level: web::Path
         Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
     }
     else {
-        let template_types = get_template();
+        let template_types = get_template(&req);
         let _request_user = get_request_user_data(&session);
         if _request_user.perm != 60 {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
@@ -412,7 +412,7 @@ pub async fn load_form_from_level(session: Session, level: web::Path<i16>) -> ac
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(""))
         }
         else {
-            let template_types = get_template();
+            let template_types = get_template(&req);
             use crate::schema::tech_categories::dsl::tech_categories;
             let _connection = establish_connection();
             let _tech_categories = tech_categories
@@ -441,7 +441,7 @@ pub async fn create_serve_page(session: Session, req: HttpRequest) -> actix_web:
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -506,7 +506,7 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
 
     let _cat_id: i32 = *_id;
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _category = tech_categories
         .filter(schema::tech_categories::id.eq(&_cat_id))
         .first::<TechCategories>(&_connection)
@@ -585,7 +585,7 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
 
     let _cat_id: i32 = *_id;
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _category = serve_categories
         .filter(schema::serve_categories::id.eq(&_cat_id))
         .first::<ServeCategories>(&_connection)
@@ -667,7 +667,7 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
     let _serve_id: i32 = *_id;
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _serve = serve
         .filter(schema::serve::id.eq(&_serve_id))
         .first::<Serve>(&_connection)

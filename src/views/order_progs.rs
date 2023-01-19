@@ -55,7 +55,7 @@ pub async fn get_orders_page(req: HttpRequest, session: Session) -> actix_web::R
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -127,7 +127,7 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
     use crate::utils::{get_device_and_ajax, get_page};
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -237,7 +237,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
     use schema::orders::dsl::orders;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _connection = establish_connection();
     let _order_id: i32 = *_id;
     let user_id = get_cookie_user_id(&req).await;
@@ -355,7 +355,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
 }
 
 pub async fn create_order_page() -> actix_web::Result<HttpResponse> {
-    let template_types = get_template();
+    let template_types = get_template(&req);
     #[derive(TemplateOnce)]
     #[template(path = "desctop/pages/create_order.stpl")]
     struct Template {

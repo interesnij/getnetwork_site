@@ -45,7 +45,7 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _item_id: String = param.1.clone();
     let _cat_id: String = param.0.clone();
 
@@ -242,7 +242,7 @@ pub async fn wiki_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
     let _cat_id: String = _id.clone();
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
 
     let _category = categories
         .filter(schema::categories::slug.eq(&_cat_id))
@@ -427,7 +427,7 @@ pub async fn wiki_categories_page(session: Session, req: HttpRequest) -> actix_w
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,

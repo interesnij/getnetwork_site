@@ -77,7 +77,51 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
             .expect(&format!("Error connecting to {}", database_url))
     }
 
-    pub fn get_template() -> i16 {
+    pub fn get_page(req: &HttpRequest) -> i32 {
+        #[derive(Debug, Deserialize)]
+        struct Params {
+            pub page: Option<i32>,
+        }
+        let params_some = web::Query::<Params>::from_query(&req.query_string());
+        let page: i32;
+        if params_some.is_ok() {
+            let params = params_some.unwrap();
+            if params.page.is_some() {
+                page = params.page.unwrap();
+            }
+            else {
+                page = 1;
+            }
+        }
+        else {
+            page = 1;
+        }
+        page
+    }
+
+    pub fn get_template(req: &HttpRequest) -> i16 {
+        #[derive(Deserialize)]
+        struct TemplateParams {
+            pub template: Option<i32>,
+        }
+        let params_some = web::Query::<TemplateParams>::from_query(&req.query_string());
+        if params_some.is_ok() {
+            let params = params_some.unwrap();
+            if params.template.is_some() {
+                template = params.template.unwrap();
+                set_template(template);
+                return template;
+            }
+            else {
+                return get_template_storage();
+            }
+        }
+        else {
+            return get_template_storage();
+        }
+    }
+
+    pub fn get_template_storage() -> i16 {
         let template_res = web_local_storage_api::get_item("template");
         if template_res.is_ok() {
             let template_some = template_res.expect("E.");
@@ -85,7 +129,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
                 let template = template_some.unwrap();
                 return match template.as_str() {
                     "rhythm" => 1,
-                    "eremia" => 1,
+                    "eremia" => 2,
                     _ => 1,
                 };
             }
@@ -101,7 +145,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
     pub fn set_template(types: i16) -> () {
         let value: &str = match types {
             1 => "rhythm",
-            1 => "eremia",
+            2 => "eremia",
             _ => "rhythm",
         };
         web_local_storage_api::set_item("template", value);
@@ -188,6 +232,7 @@ pub fn get_page(req: &HttpRequest) -> i32 {
     page
 }
 
+
 pub fn get_request_user_data(session: &Session) -> User {
     use crate::models::SessionUser;
     use crate::schema::users::dsl::users;
@@ -219,7 +264,8 @@ pub fn get_request_user_data(session: &Session) -> User {
     }
 }
 
-pub async fn get_first_load_page ( 
+pub async fn get_first_load_page (
+    req:            &HttpRequest,
     session:        &Session,
     is_desctop:     bool,
     title:          String,
@@ -228,7 +274,6 @@ pub async fn get_first_load_page (
     image:          String,
     template_types: i16
 ) -> actix_web::Result<HttpResponse> {
-    let template_types = get_template();  
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
@@ -325,6 +370,7 @@ pub async fn get_first_load_page (
 }
 
 pub async fn get_private_page (
+    req:            &HttpRequest
     is_ajax:        i32,
     user:           User,
     is_desctop:     bool,

@@ -51,9 +51,9 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
         use crate::utils::get_device_and_ajax;
 
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-        let template_types = get_template();
+        let template_types = get_template(&req);
         if is_ajax == 0 {
-            get_first_load_page ( 
+            get_first_load_page (
                 &session,
                 is_desctop,
                 "Регистрация".to_string(),
@@ -138,7 +138,7 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
         use crate::utils::get_device_and_ajax;
 
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-        let template_types = get_template();
+        let template_types = get_template(&req);
         if is_ajax == 0 {
             get_first_load_page (
                 &session,
@@ -250,7 +250,7 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
         }
 
         session.clear();
-        let template_types = get_template();
+        let template_types = get_template(&req);
         if is_desctop(&req) {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/auth/logout.stpl")]

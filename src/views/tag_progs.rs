@@ -57,7 +57,7 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -154,7 +154,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
     use schema::tags::dsl::tags;
 
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _tag_id: String = _id.to_string();
     let _tag = tags
@@ -417,7 +417,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _tag_id: String = _id.to_string();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
@@ -564,7 +564,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
 
     let _connection = establish_connection();
     let _tag_id: String = _id.clone();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
         .first::<Tag>(&_connection)
@@ -708,7 +708,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _tag_id: String = _id.clone();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
@@ -854,7 +854,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _tag_id: String = _id.clone();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
@@ -1000,7 +1000,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _tag_id: String = _id.clone();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
@@ -1146,7 +1146,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _tag_id: String = _id.clone();
     let _tag = tags
         .filter(schema::tags::name.eq(&_tag_id))
@@ -1291,7 +1291,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template();
+    let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -1443,7 +1443,7 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
     use schema::tags::dsl::tags;
 
     let _tag_id: i32 = *_id;
-    let template_types = get_template();
+    let template_types = get_template(&req);
     let _connection = establish_connection();
     let _tag = tags
         .filter(schema::tags::id.eq(&_tag_id))
