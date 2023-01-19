@@ -9,7 +9,15 @@
               <div class="inner-nav desktop-nav">
                       <ul class="clearlist">
                       <li>
-                          <a href="/" class="ajax folder main">Главная</a>
+                          <a href="/" class="ajax mn-has-sub folder main">Главная</a>
+                          <ul class="border mn-sub">
+                              <% for object in service_cats.iter() { %>
+                              <li>
+                                  <a class="mn-group-title">Rhythm - выбрано</a>
+                                  <a href="/?template=2" class="mn-group-title">Eremia</a>
+                              </li>
+                              <% } %>
+                          </ul>
                       </li>
                       <%
                         use crate::utils::get_categories_2;
