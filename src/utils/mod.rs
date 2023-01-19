@@ -77,28 +77,6 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
             .expect(&format!("Error connecting to {}", database_url))
     }
 
-    pub fn get_page(req: &HttpRequest) -> i32 {
-        #[derive(Debug, Deserialize)]
-        struct Params {
-            pub page: Option<i32>,
-        }
-        let params_some = web::Query::<Params>::from_query(&req.query_string());
-        let page: i32;
-        if params_some.is_ok() {
-            let params = params_some.unwrap();
-            if params.page.is_some() {
-                page = params.page.unwrap();
-            }
-            else {
-                page = 1;
-            }
-        }
-        else {
-            page = 1;
-        }
-        page
-    }
-
     pub fn get_template(req: &HttpRequest) -> i16 {
         #[derive(Deserialize)]
         struct TemplateParams {
@@ -108,7 +86,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
         if params_some.is_ok() {
             let params = params_some.unwrap();
             if params.template.is_some() {
-                template = params.template.unwrap();
+                let template = params.template.unwrap();
                 set_template(template);
                 return template;
             }

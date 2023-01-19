@@ -811,7 +811,7 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
     }
 }
 
-pub async fn get_tech_category_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn get_tech_category_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::TechCategories;
     use crate::schema::tech_categories::dsl::tech_categories;
 
@@ -837,7 +837,7 @@ pub async fn get_tech_category_page(_id: web::Path<i32>) -> actix_web::Result<Ht
     Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
 }
 
-pub async fn get_serve_category_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn get_serve_category_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::ServeCategories;
     use crate::schema::serve_categories::dsl::serve_categories;
 
@@ -863,7 +863,7 @@ pub async fn get_serve_category_page(_id: web::Path<i32>) -> actix_web::Result<H
     Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
 }
 
-pub async fn get_serve_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn get_serve_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::Serve;
     use crate::schema::serve::dsl::serve;
 
@@ -889,7 +889,7 @@ pub async fn get_serve_page(_id: web::Path<i32>) -> actix_web::Result<HttpRespon
     Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
 }
 
-pub async fn get_feedback_page() -> actix_web::Result<HttpResponse> {
+pub async fn get_feedback_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
     let template_types = get_template(&req);
     #[derive(TemplateOnce)]
     #[template(path = "desctop/load/feedback.stpl")]
@@ -1055,7 +1055,7 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
     }
 }
 
-pub async fn get_tech_objects_page(session: Session, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn get_tech_objects_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::TechCategories;
     use crate::schema::tech_categories::dsl::tech_categories;
 
@@ -1090,7 +1090,7 @@ pub async fn get_tech_objects_page(session: Session, _id: web::Path<i32>) -> act
     Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
 }
 
-pub async fn unical_object_form_page(session: Session, _id: web::Path<i16>) -> actix_web::Result<HttpResponse> {
+pub async fn unical_object_form_page(req: HttpRequest, session: Session, _id: web::Path<i16>) -> actix_web::Result<HttpResponse> {
     let template_types = get_template(&req);
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -1636,7 +1636,7 @@ pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i
     }
 }
 
-pub async fn image_page(_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
+pub async fn image_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::schema::{
         files::dsl::files,
         items::dsl::items,

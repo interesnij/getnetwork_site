@@ -354,7 +354,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
     }
 }
 
-pub async fn create_order_page() -> actix_web::Result<HttpResponse> {
+pub async fn create_order_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
     let template_types = get_template(&req);
     #[derive(TemplateOnce)]
     #[template(path = "desctop/pages/create_order.stpl")]
