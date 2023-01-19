@@ -11,12 +11,12 @@
                       <li>
                           <a href="/" class="ajax mn-has-sub folder main">Главная</a>
                           <ul class="border mn-sub">
-                              <% for object in service_cats.iter() { %>
                               <li>
                                   <a class="mn-group-title">Rhythm - выбрано</a>
+                              </li>
+                              <li>
                                   <a href="/?template=2" class="mn-group-title">Eremia</a>
                               </li>
-                              <% } %>
                           </ul>
                       </li>
                       <%
