@@ -14,7 +14,7 @@
         </div>
 
         <div class="row multi-columns-row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="team-item">
                     <div class="team-item-image">
                         <img src="/static/images/rhythm.jpg" alt="">
@@ -32,7 +32,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="team-item">
                     <div class="team-item-image">
                         <img src="/static/images/eremia.jpg" alt="">
