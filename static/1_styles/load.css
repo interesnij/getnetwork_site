@@ -3298,7 +3298,7 @@ img:not([draggable]), embed, object, video {
     transition: all 0.27s cubic-bezier(0.000, 0.000, 0.580, 1.000);
 }
 
-.no-mobile .team-item:hover .team-item-image:after {
+.desctop_version .team-item:hover .team-item-image:after {
     background: rgba(255,255,255, .93);
 }
 .team-item-image:after {
