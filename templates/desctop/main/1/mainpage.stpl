@@ -1,6 +1,8 @@
 
 <% include!("banner.stpl"); %>
 
+<% include!("templates.stpl"); %>
+
 <% include!("sections.stpl"); %>
 
 <% include!("service.stpl"); %>

@@ -1,0 +1,60 @@
+<section class="page-section">
+    <div class="container relative">
+
+        <h2 class="section-title font-alt mb-70 mb-sm-40">
+            Выберите шаблон
+        </h2>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="section-text align-center mb-70 mb-xs-40">
+                    Это непростой сайт. Используя его, Вы можете подстраивать "под себя" не только
+                    цвет фона, а даже полностью весь внешний вид. Вам нужно ознакомиться с 
+                    информацией сайта, не отвлекаясь на эффекты и анимацию? Вы хотите 
+                    оценить наши возможности по качеству пользовательских интерфейсов? 
+                    Сайт в такое может.
+                </div>
+            </div>
+        </div>
+
+        <div class="row multi-columns-row">
+            <div class="col-sm-6 col-md-3 col-lg-3 mb-md-30">
+                <div class="team-item">
+                    <div class="team-item-image">
+                        <img src="/static/images/rhythm.jpg" alt="">
+                        <div class="team-item-detail">
+                            <h4 class="font-alt normal">
+                                Rhythm
+                            </h4>
+                            <p>
+                                Дефолтный, упрощенный вид пользовательского интерфейса. Удобен для 
+                                работы с контентом сайта: чтением статей, просмотром заметок, помощи, 
+                                рабочих моментов. Такой вид работает моментально, экономит трафик, 
+                                позволяет менять цвет фона.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3 mb-md-30">
+                <div class="team-item">
+                    <div class="team-item-image">
+                        <img src="/static/images/eremia.jpg" alt="">
+                        <div class="team-item-detail">
+                            <h4 class="font-alt normal">
+                                <a href="/?template=2" >
+                                Eremia
+                                </a>
+                            </h4>
+                            <p>
+                                Улучшенный вариант сайта для комфортного просмотра среднего
+                                объема информации. Слайдеры, анимация, подгрузка объектов гарантированно 
+                                подарят Вам приятные эмоции. 
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
