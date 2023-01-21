@@ -1,17 +1,8 @@
 function xxx() {
-
-
         "use strict";
         preloader();
         mouseCirMove();
-
-
-        /**
-         * Execute data after ajax
-         */
         async function reloadAjax( $off ) {
-
-
             await dsnGrid.destoryBuild();
             await loadData( "poster" );
             await loadData( "src" );
@@ -2656,9 +2647,6 @@ function loadScripts( src ) {
     span.appendChild( script );
 }; 
 
-function load_prev(ajax_link, elem_) {
-    
-}
 function check_first_load() {
       url = window.location.href;
       ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
@@ -2669,9 +2657,10 @@ function check_first_load() {
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
-            get_custom_script();
+            
             loadScripts('/static/1_scripts/progressive-image.js');
             window.history.pushState ({"url":url}, document.title, url);
+            xxx();
         }
       }
       ajax_link.send();
