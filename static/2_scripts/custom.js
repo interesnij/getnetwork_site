@@ -1,4 +1,4 @@
-let xxx = function ( $ ) {
+let xxx = ( function ( $ ) {
     "use strict";
         preloader();
         mouseCirMove();
@@ -2600,8 +2600,8 @@ let xxx = function ( $ ) {
 
         }
         console.log("xxx worked!")
-};
-//)( jQuery );
+}
+)( jQuery );
 
 function loadScripts( src ) {
     var script = document.createElement("SCRIPT"),
