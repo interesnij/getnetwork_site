@@ -1,6 +1,7 @@
 function loadScripts( src ) {
     var script = document.createElement("SCRIPT"),
         head = document.getElementsByTagName( "head" )[ 0 ],
+        span = document.getElementsByTagName( "span" )[ 0 ],
         error = false;
     script.type = "text/javascript";
     script.onload = script.onreadystatechange = function( e ){
@@ -38,7 +39,8 @@ function loadScripts( src ) {
         window.attachEvent("onerror", errorHandle );
     }
     script.src = src;
-    head.appendChild( script );
+    //head.appendChild( script );
+    span.appendChild( script );
 };
 
 function load_prev(ajax_link, elem_) {
