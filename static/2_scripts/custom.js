@@ -2602,7 +2602,7 @@ let xxx = ( function ( $ ) {
         console.log("xxx worked!");
 
         const url = window.location.href;
-        ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+        const ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
         ajax_link.open( 'GET', url + "?ajax=1", true );
         ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         ajax_link.onreadystatechange = function () {
