@@ -24,7 +24,7 @@
   <% } %>
 </head>
 
-  <body>
+  <body class="page-template-default page page-id-319 wp-custom-logo wp-embed-responsive theme-eremia xt_atc_override_spinner woocommerce-no-js hamburger-menu dsn-ajax dsn-cursor-effect v-dark dsn-line-style xt_wooqv-default xt_wooqv-is-light-bg xt_wooqv-is-dark-overlay xt_wooqv-mobile-nav-pos-left elementor-default elementor-kit-5 elementor-page elementor-page-319">
     <span class="span"></span>
     <% if template_types == 1 { %>
       <% include!("../../block/scripts/1/anon_d.stpl"); %>
