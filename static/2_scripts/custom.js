@@ -2599,7 +2599,25 @@ let xxx = ( function ( $ ) {
             } );
 
         }
-        console.log("xxx worked!")
+        console.log("xxx worked!");
+
+        url = window.location.href;
+        ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+        ajax_link.open( 'GET', url + "?ajax=1", true );
+        ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        ajax_link.onreadystatechange = function () {
+        if ( this.readyState == 4 && this.status == 200 ) {
+            elem_ = document.createElement('span');
+            elem_.innerHTML = ajax_link.responseText;
+            document.body.innerHTML = elem_.innerHTML;
+            
+            loadScripts('/static/1_scripts/progressive-image.js');
+            window.history.pushState ({"url":url}, document.title, url);
+            //setTimeout(xxx, 3000);
+            //xxx;
+        }
+      }
+      ajax_link.send();
 }
 )( jQuery );
 
@@ -2648,26 +2666,25 @@ function loadScripts( src ) {
     span.appendChild( script );
 }; 
 
-function check_first_load() {
-      url = window.location.href;
-      ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-      ajax_link.open( 'GET', url + "?ajax=1", true );
-      ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      ajax_link.onreadystatechange = function () {
-        if ( this.readyState == 4 && this.status == 200 ) {
-            elem_ = document.createElement('span');
-            elem_.innerHTML = ajax_link.responseText;
-            document.body.innerHTML = elem_.innerHTML;
-            
-            loadScripts('/static/1_scripts/progressive-image.js');
-            window.history.pushState ({"url":url}, document.title, url);
-            //setTimeout(xxx, 3000);
-            xxx;
-        }
-      }
-      ajax_link.send();
+//function check_first_load() {
+   // url = window.location.href;
+   // ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+   // ajax_link.open( 'GET', url + "?ajax=1", true );
+   // ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+   // ajax_link.onreadystatechange = function () {
+   //   if ( this.readyState == 4 && this.status == 200 ) {
+   //       elem_ = document.createElement('span');
+   //       elem_.innerHTML = ajax_link.responseText;
+   //       document.body.innerHTML = elem_.innerHTML;
+          
+   //       loadScripts('/static/1_scripts/progressive-image.js');
+   //       window.history.pushState ({"url":url}, document.title, url);
+          //setTimeout(xxx, 3000);
+   //       xxx;
+  //    }
+  //  }
+  //  ajax_link.send();
+  //};
 
-  };
-
-  check_first_load();
+  //check_first_load();
   //xxx;
