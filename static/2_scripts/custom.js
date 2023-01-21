@@ -1,23 +1,13 @@
 ( function ( $ ) {
-
-
     "use strict";
     preloader();
     mouseCirMove();
 
-
-    /**
-     * Execute data after ajax
-     */
     async function reloadAjax( $off ) {
-
-
         await dsnGrid.destoryBuild();
         await loadData( "poster" );
         await loadData( "src" );
         await loadData( "srcset" );
-
-
         if ( !$off ) {
             window.$effectScroll = await effectScroller();
             window.$animate = await effectAnimate();
@@ -29,11 +19,8 @@
         if ( $off ) {
             await mouseCirMove( $off );
         }
-
-
         $( "a.vid" ).YouTubePopUp();
         await ContactModel();
-
         await $effectScroll.start();
         await effctStickyNavBar();
         await $animate.allInt();
@@ -47,45 +34,31 @@
         await justifiedGallery();
         await hoverReveal();
         await contactValidator();
-
         await dsnAjax().ajaxLoad();
         await dropHash();
         await $( ".twentytwenty" ).twentytwenty();
 
     }
-
-
-    /**
-     *
-     */
     function preloader() {
-
         let preloader = $( ".preloader" ),
             progress_number = preloader.find( ".percent" ),
             progress_title = preloader.find( ".title .text-fill" ),
             persent = { value: 0 },
             preloader_bar = preloader.find( ".preloader-bar" ),
             preloader_progress = preloader_bar.find( ".preloader-progress" );
-
-
         let timer = dsnGrid.pageLoad( 0, 100, 1000, function ( val ) {
             progress_number.text( val );
             persent.value = val;
             progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
             preloader_progress.css( "width", val + "%" );
-
         } );
-
         if ( !preloader.length ) {
             effectBackForward();
             reloadAjax().catch( $err => {
                 console.log( $err );
             } );
         }
-
-
         $wind.on( "load", function () {
-
             clearInterval( timer );
             gsap.timeline()
                 .to( persent, 1, {
@@ -111,40 +84,28 @@
                     },
                     ease: Power2.easeInOut,
                 }, "+=0.5" )
-
                 .call( function () {
                     preloader.remove();
                     timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
                 } );
-
         } );
-
-
     }
-
-
-    /**
-     * Validation Contact form
-     */
     function contactValidator() {
         const contact_form = $( "#contact-form" );
         if ( contact_form < 1 ) {
             return;
         }
-        // when the form is submitted
+
         contact_form.off( "submit" );
         contact_form.on( "submit", function ( e ) {
-            // if the validator does not prevent form submit
+
             if ( !e.isDefaultPrevented() ) {
                 contact_form.validator();
-
-                // POST values in the background the the script URL
                 $.ajax( {
                     type: "POST",
                     url: "contact.php",
                     data: $( this ).serialize(),
                     success: function ( data ) {
-                        // data = JSON object that contact.php returns
 
                         // we recieve the type of the message: success x danger and apply it to the
                         var messageAlert = "alert-" + data.type;
