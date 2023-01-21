@@ -58,10 +58,10 @@ function check_first_load() {
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
             //get_custom_design();
-            
-            //setTimeout(load_prev, 2000);
+        
             loadScripts('/static/2_scripts/custom.js?ver1');
             loadScripts('/static/1_scripts/progressive-image.js');
+
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             span.innerHTML = elem_.innerHTML;
