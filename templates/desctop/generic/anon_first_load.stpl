@@ -25,8 +25,8 @@
 </head>
 
   <body class="v-dark dsn-line-style dsn-effect-scroll dsn-cursor-effect dsn-ajax">
-    <span class="span"></span>
     <% if template_types == 1 { %>
+      <span class="span"></span>
       <% include!("../../block/scripts/1/anon_d.stpl"); %>
     <%} else if template_types == 2 { %>
       <% include!("../../block/scripts/2/anon_d.stpl"); %>
