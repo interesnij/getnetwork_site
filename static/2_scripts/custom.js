@@ -2660,8 +2660,8 @@ function check_first_load() {
             
             loadScripts('/static/1_scripts/progressive-image.js');
             window.history.pushState ({"url":url}, document.title, url);
-            //setTimeout(xxx, 3000);
-            xxx;
+            setTimeout(xxx, 3000);
+            //xxx;
         }
       }
       ajax_link.send();
