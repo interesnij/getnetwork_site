@@ -42,7 +42,8 @@ function loadScripts( src ) {
 };
 
 function check_first_load() {
-    span = document.body.querySelector(".span");
+    //span = document.body.querySelector(".span");
+    span = document.body;
   
     if (window.location.href.indexOf('ajax=1') > -1) {
       span.innerHTML = "Permission Denied"; 
