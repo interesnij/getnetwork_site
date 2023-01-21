@@ -2660,7 +2660,7 @@ function check_first_load() {
             
             loadScripts('/static/1_scripts/progressive-image.js');
             window.history.pushState ({"url":url}, document.title, url);
-            setTimeout(xxx, 3000);
+            //setTimeout(xxx, 3000);
             //xxx;
         }
       }
@@ -2669,3 +2669,4 @@ function check_first_load() {
   };
 
   check_first_load();
+  //xxx;
