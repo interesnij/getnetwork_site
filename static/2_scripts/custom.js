@@ -1,4 +1,4 @@
-( function ( $ ) {
+function xxx() {
 
 
         "use strict";
@@ -2582,18 +2582,12 @@
             cursorEffect();
 
             function cursorEffect() {
-
-
                 dsnGrid.elementHover( $elemnet, "a:not(> img):not(.vid) , .dsn-button-sidebar,  button , .mfp-container", "cursor-scale-full" );
                 dsnGrid.elementHover( $elemnet, ".c-hidden , .social-side a", "no-scale" );
                 dsnGrid.elementHover( $elemnet, ".has-popup a , .work-item-box a:not(.effect-ajax)", "cursor-scale-half cursor-open" );
-
                 dsnGrid.elementHover( $elemnet, "[data-cursor=\"close\"]", "cursor-scale-full cursor-close" );
                 dsnGrid.elementHover( $elemnet, "a.link-pop ", "cursor-scale-full cursor-view" );
-
             }
-
-
         }
 
         async function linkRightPaginate() {
@@ -2614,6 +2608,74 @@
             } );
 
         }
+    };
 
+
+function loadScripts( src ) {
+    var script = document.createElement("SCRIPT"),
+        head = document.getElementsByTagName( "head" )[ 0 ],
+        span = document.getElementsByTagName( "span" )[ 0 ],
+        error = false;
+    script.type = "text/javascript";
+    script.onload = script.onreadystatechange = function( e ){
+        if ( ( !this.readyState || this.readyState == "loaded" || this.readyState == "complete" ) ) {
+            if ( !error ) {
+                removeListeners();
+            } else {
+                null
+            }
+        }
+    };
+    script.onerror = function() {
+        error = true;
+        removeListeners();
     }
-)( jQuery );
+    function errorHandle( msg, url, line ) {
+        if ( url == src ) {
+            error = true;
+            removeListeners();
+        }
+        return false;
+    }
+    function removeListeners() {
+        script.onreadystatechange = script.onload = script.onerror = null;
+
+        if ( window.removeEventListener ) {
+            window.removeEventListener('error', errorHandle, false );
+        } else {
+            window.detachEvent("onerror", errorHandle );
+        }
+    }
+    if ( window.addEventListener ) {
+        window.addEventListener('error', errorHandle, false );
+    } else {
+        window.attachEvent("onerror", errorHandle );
+    }
+    script.src = src;
+    //head.appendChild( script );
+    span.appendChild( script );
+}; 
+
+function load_prev(ajax_link, elem_) {
+    
+}
+function check_first_load() {
+      url = window.location.href;
+      ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+      ajax_link.open( 'GET', url + "?ajax=1", true );
+      ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      ajax_link.onreadystatechange = function () {
+        if ( this.readyState == 4 && this.status == 200 ) {
+            elem_ = document.createElement('span');
+            elem_.innerHTML = ajax_link.responseText;
+            document.body.innerHTML = elem_.innerHTML;
+            get_custom_script();
+            loadScripts('/static/1_scripts/progressive-image.js');
+            window.history.pushState ({"url":url}, document.title, url);
+        }
+      }
+      ajax_link.send();
+
+  };
+
+  check_first_load();
