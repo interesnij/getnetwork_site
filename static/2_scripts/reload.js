@@ -55,12 +55,12 @@ function check_first_load() {
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
             //get_custom_design();
+            loadScripts('/static/2_scripts/plugins.min.js?ver1');
+            loadScripts('/static/2_scripts/dsn-grid.min.js?ver1');
+            loadScripts('/static/1_scripts/progressive-image.js');
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             span.innerHTML = elem_.innerHTML;
-            //loadScripts('/static/2_scripts/plugins.min.js?ver1');
-            //loadScripts('/static/2_scripts/dsn-grid.min.js?ver1');
-            //loadScripts('/static/1_scripts/progressive-image.js');
             //get_or_create_cookie_user(); 
             //get_active_button();
             //get_page_view_time(120);
