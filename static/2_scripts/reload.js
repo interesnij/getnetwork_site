@@ -54,7 +54,7 @@ function check_first_load() {
       ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
-            get_custom_design();
+            //get_custom_design();
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             span.innerHTML = elem_.innerHTML;
