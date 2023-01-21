@@ -2601,13 +2601,13 @@ let xxx = ( function ( $ ) {
         }
         console.log("xxx worked!");
 
-        url = window.location.href;
+        const url = window.location.href;
         ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
         ajax_link.open( 'GET', url + "?ajax=1", true );
         ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
-            elem_ = document.createElement('span');
+            const elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
             
