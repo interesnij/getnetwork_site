@@ -1,12 +1,22 @@
 ( function ( $ ) {
+
+
         "use strict";
         preloader();
         mouseCirMove();
+
+
+        /**
+         * Execute data after ajax
+         */
         async function reloadAjax( $off ) {
+
+
             await dsnGrid.destoryBuild();
             await loadData( "poster" );
             await loadData( "src" );
             await loadData( "srcset" );
+
 
             if ( !$off ) {
                 window.$effectScroll = await effectScroller();
@@ -20,8 +30,10 @@
                 await mouseCirMove( $off );
             }
 
+
             $( "a.vid" ).YouTubePopUp();
             await ContactModel();
+
             await $effectScroll.start();
             await effctStickyNavBar();
             await $animate.allInt();
@@ -35,12 +47,19 @@
             await justifiedGallery();
             await hoverReveal();
             await contactValidator();
+
             await dsnAjax().ajaxLoad();
             await dropHash();
             await $( ".twentytwenty" ).twentytwenty();
+
         }
-  
+
+
+        /**
+         *
+         */
         function preloader() {
+
             let preloader = $( ".preloader" ),
                 progress_number = preloader.find( ".percent" ),
                 progress_title = preloader.find( ".title .text-fill" ),
@@ -48,19 +67,25 @@
                 preloader_bar = preloader.find( ".preloader-bar" ),
                 preloader_progress = preloader_bar.find( ".preloader-progress" );
 
+
             let timer = dsnGrid.pageLoad( 0, 100, 1000, function ( val ) {
                 progress_number.text( val );
                 persent.value = val;
                 progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
                 preloader_progress.css( "width", val + "%" );
+
             } );
+
             if ( !preloader.length ) {
                 effectBackForward();
                 reloadAjax().catch( $err => {
                     console.log( $err );
                 } );
             }
+
+
             $wind.on( "load", function () {
+
                 clearInterval( timer );
                 gsap.timeline()
                     .to( persent, 1, {
@@ -93,31 +118,52 @@
                     } );
 
             } );
+
+
         }
+
+
+        /**
+         * Validation Contact form
+         */
         function contactValidator() {
             const contact_form = $( "#contact-form" );
             if ( contact_form < 1 ) {
                 return;
             }
+            // when the form is submitted
             contact_form.off( "submit" );
             contact_form.on( "submit", function ( e ) {
+                // if the validator does not prevent form submit
                 if ( !e.isDefaultPrevented() ) {
                     contact_form.validator();
+
+                    // POST values in the background the the script URL
                     $.ajax( {
                         type: "POST",
                         url: "contact.php",
                         data: $( this ).serialize(),
                         success: function ( data ) {
+                            // data = JSON object that contact.php returns
+
+                            // we recieve the type of the message: success x danger and apply it to the
                             var messageAlert = "alert-" + data.type;
                             var messageText = data.message;
+
+                            // let's compose Bootstrap alert box HTML
                             var alertBox = "<div class=\"alert " + messageAlert + " alert-dismissable\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>" + messageText + "</div>";
+
+                            // If we have messageAlert and messageText
                             if ( messageAlert && messageText ) {
+                                // inject the alert to .messages div in our form
                                 contact_form.find( ".messages" ).html( alertBox );
+                                // empty the form
                                 contact_form[ 0 ].reset();
                             }
                             setTimeout( function () {
                                 contact_form.find( ".messages" ).html( "" );
                             }, 3000 );
+
                         },
                         error: function ( error ) {
                             console.log( error );
@@ -128,25 +174,36 @@
             } );
         }
 
+
+        /**
+         * Sticky Bar When Down & Up PAge
+         */
         function effctStickyNavBar() {
             $wind.off( "scroll" );
             const wrapper = $( '.wrapper' );
+
             let bodyScroll = 0;
+
             var $ofContent = wrapper.offset();
             var header = wrapper.find( '> *:first-child' );
             var scrDown = 0;
+
             if ( header.length ) {
                 $ofContent = header.get( 0 ).nodeName === 'HEADER' ? header.outerHeight() : ( $ofContent !== undefined ) ? $ofContent.top : 70;
             }
+
             $effectScroll.getListener( function ( e ) {
+
                 if ( e.type === "scroll" ) {
                     bodyScroll = $wind.scrollTop();
                 } else {
                     bodyScroll = e.offset.y;
                 }
+
                 if ( $ofContent > 170 ) {
                     $ofContent = $ofContent - 100;
                 }
+
 
                 if ( bodyScroll > $ofContent ) {
 
@@ -159,14 +216,18 @@
                     $body.removeClass( 'nav-bg' ).removeClass( 'hide-nav' );
 
                 }
+
+
                 scrDown = bodyScroll;
             } );
         }
 
         function dropHash() {
+
             $( "a[href=\"#\"]" ).on( "click", function ( e ) {
                 e.preventDefault();
             } );
+
             $( "[href*=\"#\"]:not([href=\"#\"])" ).on( "click", function ( e ) {
                 e.preventDefault();
                 let href = $( $( this ).attr( "href" ) );
@@ -174,78 +235,118 @@
                     href = null;
                     return false;
                 }
+
                 dsnGrid.scrollTop( href.get( 0 ).offsetTop, 1, -100 );
                 href = null;
+
             } );
+
             if ( window.location.hash.length ) {
                 $wind.scrollTop( 0 );
                 dsnGrid.scrollTop( window.location.hash, 1, -100 );
             }
+
+
         }
 
+        /**
+         * Option Style Pages
+         */
         function changeStyle() {
             const options = $( '.box-options' );
             options.find( '.title-mode' ).each( function () {
                 dsnGrid.convertTextLine( this );
             } );
+
             options.find( '.day-night' ).on( 'click', function () {
                 const _dark = $( '.v-dark' );
                 const _light = $( '.v-light' );
                 $body.toggleClass( 'v-dark' );
+
                 _dark.removeClass( 'v-dark' ).addClass( 'v-light' );
                 _light.addClass( 'v-dark' ).removeClass( 'v-light' );
+
             } );
+
             options.find( '.mode-layout' ).on( 'click', function () {
                 $body.toggleClass( 'dsn-line-style' );
                 for ( let s of $build.swiper ) {
                     s.update();
                 }
                 Isotope();
+
             } );
         }
-        // @returns {{dsnCreateElement: dsnCreateElement, ajaxWork: ajaxWork, backAnimate: (function(*=): undefined), mainRoot: (*|jQuery|HTMLElement), ajaxClick: (*|jQuery|HTMLElement), ajaxLoad: (function(): undefined), effectAjax: (function(*=): *), ajaxSlider: ajaxSlider, completeElement: (function(*): undefined), ajaxNormal: ajaxNormal, ajaxNextProject: ajaxNextProject, addElement: (function(*, *=, *=): (undefined)), animateAjaxStart: animateAjaxStart, animateAjaxEnd: animateAjaxEnd}}
+
+        /**
+         *
+         * @returns {{dsnCreateElement: dsnCreateElement, ajaxWork: ajaxWork, backAnimate: (function(*=): undefined), mainRoot: (*|jQuery|HTMLElement), ajaxClick: (*|jQuery|HTMLElement), ajaxLoad: (function(): undefined), effectAjax: (function(*=): *), ajaxSlider: ajaxSlider, completeElement: (function(*): undefined), ajaxNormal: ajaxNormal, ajaxNextProject: ajaxNextProject, addElement: (function(*, *=, *=): (undefined)), animateAjaxStart: animateAjaxStart, animateAjaxEnd: animateAjaxEnd}}
+         */
         function dsnAjax() {
+
             const main_root = "main.main-root",
                 text_e_img = "[data-dsn-ajax=\"img\"]",
                 text_e_title = "[data-dsn-ajax=\"title\"]";
             var img_move, title_move,
                 tl = gsap.timeline();
+
+
             return {
                 ajaxLoad: function () {
                     if ( !$body.hasClass( "dsn-ajax" ) ) return;
                     let $parent = this;
                     this.ajaxClick.off( "click" );
                     this.ajaxClick.on( "click", function ( e ) {
+
                         e.preventDefault();
                         let _that = $( this ),
                             url = _that.attr( "href" ),
                             _type = _that.data( "dsn-ajax" );
+
                         if ( url.indexOf( "#" ) >= 0 || url === undefined ) {
                             _that = url = _type = null;
                             return;
                         }
+
+
                         if ( $parent.effectAjax() ) return;
+
+
                         $parent.effectAjax( true );
+
                         $.ajax( {
                             url: url,
                             dataType: "html",
                             beforeSend: $parent.animateAjaxStart.bind( $parent, _type, _that ),
                             success: function ( data ) {
+
                                 try {
                                     history.pushState( null, "", url );
                                     tl.call( $parent.animateAjaxEnd.bind( $parent, data ), null, null, "+=0.2" );
                                 } catch ( e ) {
                                     window.location = url;
                                 }
+
                             }, error: function ( error ) {
                                 window.location = url;
                                 // tl.call( $parent.animateAjaxEnd.bind( $parent, error.responseText || "" ), null, null, "+=0.2" );
                             },
                         } );
+
                     } );
+
                 },
                 mainRoot: $( main_root ),
+                /**
+                 *  get elements ajax
+                 */
                 ajaxClick: $( "a.effect-ajax " ),
+                /**
+                 *
+                 * @param $add
+                 * Check is Anjax is Run Or not
+                 * @returns {*}
+                 */
                 effectAjax: function ( $add ) {
                     if ( $add )
                         $body.addClass( "dsn-ajax-effect" );
@@ -259,6 +360,8 @@
                     tl.addLabel( 'beforeSend' );
                     if ( dsnGrid.isMobile() && _type === 'next' )
                         _type = undefined;
+
+
                     switch ( _type ) {
                         case 'slider' :
                             this.ajaxSlider( _that );
@@ -289,6 +392,7 @@
                             dsnGrid.scrollTop( 0, 0.01 );
                         } );
                     }
+
                 },
                 ajaxNormal: function () {
                     let elemnt_ajax = $( "<div class=\"dsn-ajax-loader dsn-ajax-normal\"></div>" );
@@ -296,30 +400,42 @@
                     tl.to( elemnt_ajax, 1, { autoAlpha: 1, ease: Expo.easeOut }, 0 );
                     elemnt_ajax = null;
                 },
+
+
                 ajaxSlider: function ( $e ) {
+
                     let
                         active = $e.parents( ".slide-content" ),
                         id = active.data( "dsn-id" ),
                         img = active.parents( '.main-slider' ).find( ".slide-item[data-dsn-id=\"" + id + "\"] .cover-bg" ).first(),
                         title = active.find( ".title" );
+
                     let bg_con = active.parents( '.main-slider' ).find( '.bg-container' );
+
+
                     img.removeClass( "hidden" );
                     if ( active.data( 'webgel-src' ) )
                         img = $( "<div class='cover-bg'></div>" ).attr( {
                             'data-overlay': bg_con.find( '.dsn-webgl' ).data( 'overlay' ),
                             'style': 'background-image:url("' + active.data( 'webgel-src' ) + '")'
                         } );
+
                     this.dsnCreateElement( img, bg_con, title, title );
+
                 },
                 ajaxNextProject: function ( $e ) {
+
                     let
                         active = $e.parents( '.next-project' ),
                         img = active.find( ".bg" ),
                         title = $e;
+
                     const effectS = window.Scrollbar.get( document.querySelector( "#dsn-scrollbar" ) );
+
                     tl.to( effectS || $wind, 1, {
                         scrollTo: { y: effectS ? $effectScroll.getScrollbar().limit.y : document.body.scrollHeight },
                     } );
+
                     // title.find('.title').html( title.find( 'span.title-stroke' ).html() );
                     // dsnGrid.convertTextLine(title.find('.title'));
                     tl.call( this.dsnCreateElement.bind( this, img, active, title.find( '.title' ), title, {
@@ -333,31 +449,47 @@
                             dsnGrid.scrollTop( 0, 0.01 );
                         } );
                     } )
+
+
                     active = img = title = null;
+
                 },
                 ajaxWork: function ( $e ) {
+
                     let
                         active = $e.parents( ".work-item" ),
                         img = active.find( ".box-img" ),
                         title = active.find( ".sec-title" );
+
                     this.dsnCreateElement( img, img, title, title );
                     tl.to( img_move.find( "img" ), 0.5, { height: "100%", top: "0%", y: "0" } );
+
                     active = img = title = null;
+
                 },
                 ajaxWorkHover: function ( $e ) {
+
                     let
                         active = $e,
                         img = active.find( ".hover-reveal" ),
                         title = active.find( ".work__item-text" );
+
+
                     this.dsnCreateElement( img.find( '.hover-reveal__img' ), img, title, title );
+
                     active = img = title = null;
+
                 },
                 addElement: function ( container, $e, $target ) {
                     if ( $e === undefined || $e.length <= 0 ) return undefined;
+
+
                     if ( $target === undefined || $target.length <= 0 ) {
                         $target = $e;
                     }
+
                     $e.removeClass( "line-after" ).removeClass( "line-before" );
+
                     let $section = $e.clone();
                     let position = $target[ 0 ].getBoundingClientRect();
                     if ( position === undefined ) {
@@ -375,20 +507,29 @@
                     } );
                     $section.css( dsnGrid.getBoundingClientRect( $target[ 0 ] ) );
                     $section.css( $e.dsnGridStyleObject() );
+
                     container.append( $section );
                     return $section;
                 },
                 dsnCreateElement: function ( $e, $target, $letter, $targetLtter, $object = {} ) {
+
                     let container = $( "<div class=\"dsn-ajax-loader\"></div>" );
+
                     img_move = this.addElement( container, $e, $target );
+
                     title_move = this.addElement( container, $letter, $targetLtter );
                     if ( !title_move.find( ".dsn-chars-wrapper" ).length ) dsnGrid.convertTextLine( title_move );
+
+
                     if ( $object.before !== undefined )
                         $object.before( container, img_move, title_move );
+
                     $body.append( container );
                     tl.to( container, 1, { autoAlpha: 1, ease: Power4.easeInOut }, '-=0.8' );
+
                     if ( $object.after !== undefined )
                         $object.after( container, img_move, title_move );
+
                 },
                 completeElement: function ( elAjax ) {
                     let img = $( text_e_img );
@@ -407,7 +548,10 @@
                         } );
                         return;
                     }
+
                     img = img.first();
+
+
                     let position = {
                         top: 0,
                         left: 0,
@@ -415,9 +559,14 @@
                         height: "100%",
                         transform: "none",
                     };
+
+
                     if ( title_move.length ) {
+
                         title = title.first();
+
                         if ( !title.find( ".dsn-chars-wrapper" ).length ) dsnGrid.convertTextLine( title );
+
                         position = title.offset();
                         if ( position === undefined ) {
                             position = {
@@ -429,10 +578,13 @@
                             x: title_move.offset().left - position.left,
                             y: title_move.offset().top - position.top,
                         }, "-=1" );
+
                         let trans_title = title_move.find( ".dsn-chars-wrapper" ).toArray();
                         if ( title_move.offset().left < position.left )
                             trans_title.reverse();
+
                         tl.set( title_move, { top: position.top, left: position.left }, "-=0.8" );
+
                         tl.to( title_move, 0.4, {
                             padding: "0", borderWidth: 0, yoyo: true
                         } );
@@ -441,6 +593,7 @@
                         }, "-=0.8" );
                         title_move.css( "width", title.outerWidth() );
                         tl.set( trans_title, { color: title_move.css( 'color' ) } );
+
                         tl.staggerTo(
                             trans_title,
                             0.8,
@@ -453,6 +606,8 @@
                                 // ease: Expo.easeIn,
                                 yoyo: true
                             }, 0.02, "-=0.35" );
+
+
                     }
                     if ( img.length )
                         position = {
@@ -465,6 +620,7 @@
                     if ( img_move.length )
                         tl.to( img_move, {
                             duration: 1,
+
                             top: position.top,
                             left: position.left,
                             width: position.width,
@@ -473,7 +629,10 @@
                             borderRadius: 0,
                             ease: Expo.easeIn,
                             // transform: position.transform,
+
                         }, '-=1.4' );
+
+
                     let webkitClipPath = { value: "0%" };
                     tl.to( webkitClipPath, 0.5, {
                         value: "100%",
@@ -485,8 +644,12 @@
                         },
                         ease: Circ.easeIn,
                     } );
+
+
                 },
                 animateAjaxEnd: function ( data ) {
+
+
                     tl.call( function () {
                         dsnGrid.initAjax( data );
                         this.mainRoot.html( $( data ).filter( main_root ).html() );
@@ -494,16 +657,26 @@
                             console.error( $err );
                         } );
                     }.bind( this ), null, '+=1' );
+
+
                     let elAjax = $( ".dsn-ajax-loader" );
+
+
                     if ( elAjax.hasClass( "dsn-ajax-normal" ) )
                         tl.to( elAjax, 1, { autoAlpha: 0, ease: Expo.easeIn } );
                     else
                         tl.call( this.completeElement.bind( this, elAjax ) );
+
+
                     tl.eventCallback( "onComplete", function () {
                         elAjax.remove();
                         this.effectAjax( false );
                     }.bind( this ) );
+
+
                 },
+
+
                 backAnimate: function ( url ) {
                     if ( !url ) return;
                     let $parent = this;
@@ -518,11 +691,18 @@
                             // tl.call( $parent.animateAjaxEnd.bind( $parent, error.responseText || "" ), null, null, "+=0.2" );
                         },
                     } );
+
                 },
+
+
             };
         }
 
+        /**
+         * Hover Image Work
+         */
         function hoverReveal() {
+
             const getMousePos = ( e ) => {
                 var posx = 0;
                 var posy = 0;
@@ -541,6 +721,7 @@
             };
             // Generate a random float.
             const getRandomFloat = ( min, max ) => ( Math.random() * ( max - min ) + min ).toFixed( 2 );
+
             // Effect 1
             class HoverImgFx13 {
                 constructor( el ) {
@@ -551,11 +732,17 @@
                     this.DOM.el.appendChild( this.DOM.reveal );
                     this.DOM.revealImg = this.DOM.reveal.querySelector( '.hover-reveal__img' );
                     dsnGrid.convertTextLine( this.DOM.el.querySelectorAll( '.work__item-text' ) )
+
                     this.DOM.letters = [ ...this.DOM.el.querySelectorAll( '.work__item-text span' ) ];
+
+
                     this.initEvents();
                 }
+
+
                 initEvents() {
                     this.positionElement = ( ev ) => {
+
                         if ( $body.hasClass( 'dsn-ajax-effect' ) ) {
                             return;
                         }
@@ -572,6 +759,7 @@
                             this.DOM.reveal.style.top = `${ mousePos.y + 20 - ( docScrolls.top / 150 ) }px`;
                             this.DOM.reveal.style.left = `${ mousePos.x + 20 - docScrolls.left }px`
                         }
+
                     };
                     this.mouseenterFn = ( ev ) => {
                         if ( $body.hasClass( 'dsn-ajax-effect' ) ) return;
@@ -581,18 +769,22 @@
                     };
                     this.mousemoveFn = ev => requestAnimationFrame( () => {
                         if ( $body.hasClass( 'dsn-ajax-effect' ) ) return;
+
                         this.positionElement( ev );
                     } );
                     this.mouseleaveFn = () => {
                         if ( $body.hasClass( 'dsn-ajax-effect' ) ) return;
                         this.hideImage();
                     };
+
                     this.DOM.el.addEventListener( 'mouseenter', this.mouseenterFn );
                     this.DOM.el.addEventListener( 'mousemove', this.mousemoveFn );
                     this.DOM.el.addEventListener( 'mouseleave', this.mouseleaveFn );
                 }
+
                 showImage() {
                     TweenMax.killTweensOf( this.DOM.revealImg );
+
                     this.tl = new TimelineMax( {
                         onStart: () => {
                             this.DOM.reveal.style.opacity = 1;
@@ -626,8 +818,10 @@
                             x: '0%'
                         } ), 'begin+=0.2' )
                 }
+
                 hideImage() {
                     TweenMax.killTweensOf( this.DOM.revealImg );
+
                     this.tl = new TimelineMax( {
                         onStart: () => {
                             TweenMax.set( this.DOM.el, { zIndex: 999 } );
@@ -644,6 +838,7 @@
                             x: '-20%'
                         } ), 'begin' );
                 }
+
                 animateLetters() {
                     TweenMax.killTweensOf( this.DOM.letters );
                     this.DOM.letters.forEach( letter => TweenMax.set( letter, {
@@ -657,9 +852,16 @@
                     } );
                 }
             }
+
             Array.from( document.querySelectorAll( "[data-fx=\"1\"] > .work__item a, a[data-fx=\"1\"]" ) ).forEach( link => new HoverImgFx13( link ) );
+
+
         }
 
+
+        /**
+         * Popup Image
+         */
         function magnificPopup() {
             let option = {
                 delegate: "a:not(.effect-ajax)",
@@ -667,6 +869,7 @@
                 closeOnContentClick: false,
                 closeBtnInside: false,
                 mainClass: "mfp-with-zoom", // this class is for CSS animation below
+
                 gallery: {
                     enabled: true,
                 },
@@ -677,6 +880,7 @@
                     opener: function ( element ) {
                         return element.find( "img" );
                     },
+
                 },
                 callbacks: {
                     open: function () {
@@ -685,23 +889,39 @@
                         $( "html" ).css( { margin: 0 } );
                     }
                 },
+
             };
             $( ".gallery-portfolio" ).each( function () {
                 $( this ).magnificPopup( option );
             } );
+
             if ( $( ".has-popup .pop-up" ).length ) option.delegate = "a.pop-up";
             $( ".has-popup" ).magnificPopup( option );
+
         }
 
+        /**
+         *
+         *  - Create an high quality justified gallery
+         *    of image
+         *
+         */
         function justifiedGallery() {
+
             $( ".gallery-portfolio" ).each( function () {
                 $( this ).justifiedGallery( {
                     rowHeight: 250,
                     margins: 15,
                 } );
             } );
+
         }
 
+
+        /**
+         *  -   event will be triggered by doing browser action such as
+         *  a click on the back or forward button
+         */
         function effectBackForward() {
             $wind.on( "popstate", function ( e ) {
                 if ( window.location.hash.length ) {
@@ -718,29 +938,43 @@
             } );
         }
 
+
         function ContactModel( $off ) {
             const btn = $( '.contact-btn' );
             if ( $off )
                 btn.off( 'click' );
+
             btn.on( 'click', () => {
                 $body.toggleClass( 'dsn-show-contact' );
             } )
         }
 
+        /**
+         * t is using translate3d to perform a momentum based scrolling
+         * (aka inertial scrolling) on modern browsers.
+         *
+         */
         function effectScroller() {
             const Scrollbar = window.Scrollbar;
             const locked_scroll = "locked-scroll";
             var myScrollbar = document.querySelector( "#dsn-scrollbar" );
+
+
             return {
+                /**
+                 *  Init Smooth ScrollBar
+                 */
                 start: function () {
                     $body.removeClass( locked_scroll );
                     $( '.box-view-item .box-img .dsn-scroll-box' ).each( function () {
                         Scrollbar.init( this, {
                             damping: 0.06,
+
                         } );
                     } );
 
                     if ( !this.isScroller( true ) ) return;
+
                     // Scrollbar.use( window.OverscrollPlugin );
                     Scrollbar.init( myScrollbar, {
                         damping: 0.06,
@@ -751,6 +985,8 @@
                         },
                     } );
                     this.contactForm();
+
+
                 },
                 contactForm: function () {
                     const form = $( '.contact-modal .contact-container' );
@@ -760,16 +996,25 @@
                         } );
                 },
 
+                /**
+                 *
+                 * @param $print
+                 * @returns {boolean}
+                 * Check smooth scroll is enable or not
+                 */
                 isScroller: function ( $print ) {
                     if ( $print )
                         myScrollbar = document.querySelector( "#dsn-scrollbar" );
+
                     let hasSc = !$body.hasClass( "dsn-effect-scroll" ) || dsnGrid.isMobile() || myScrollbar === null;
                     if ( hasSc && $print ) {
                         $body.addClass( "dsn-mobile" );
                     }
                     return !hasSc;
                 },
-
+                /**
+                 *  locked smooth scrollbar
+                 */
                 locked: function () {
                     $body.addClass( locked_scroll );
                     if ( this.isScroller() ) {
@@ -781,6 +1026,12 @@
                     }
                 },
 
+                /**
+                 *
+                 * @param $id
+                 * @returns {*}
+                 * Gets scrollbar on the given element. If no scrollbar instance exsits, returns undefined:
+                 */
                 getScrollbar: function ( $id ) {
                     if ( $id === undefined ) {
                         return Scrollbar.get( myScrollbar );
@@ -788,6 +1039,13 @@
                     return Scrollbar.get( document.querySelector( $id ) );
                 },
 
+                /**
+                 *
+                 * @param $obj
+                 * @param $useWin
+                 *
+                 * Since scrollbars will not fire a native scroll event
+                 */
                 getListener: function ( $obj, $useWin = true ) {
                     if ( $obj === undefined ) return;
                     let $this = this;
@@ -800,24 +1058,36 @@
                     $this = null;
                 },
 
+                /**
+                 *  set scroll bar position
+                 */
                 scrollNavigate: function () {
                     let top = $( ".wrapper" ).offset();
                     top = top ? top.top : 0;
                     $( ".scroll-top , .scroll-to-top" ).on( "click", function () {
                         dsnGrid.scrollTop( 0, 2 );
                     } );
+
                     $( ".scroll-d" ).on( "click", function () {
                         dsnGrid.scrollTop( top, 2,
                             ( $( ".scrollmagic-pin-spacer" ).height() * -1 ) - 200 || -200 );
                     } );
+
                 },
             };
+
         }
 
+        /**
+         *
+         * The GreenSock Animation Platform (GSAP) animates anything JavaScript
+         */
         function effectAnimate() {
             const easeAnimate = Linear.easeNone;
+
             return {
                 allInt: function () {
+
                     this.clearControl()
                         .then( () => {
                             this.headerPages();
@@ -858,8 +1128,13 @@
 
                         } )
                     ;
-                },
 
+
+                },
+                /**
+                 * Remove All ScrollMagic
+                 * @returns {Promise<void>}
+                 */
                 clearControl: async function () {
                     $controller.destroy( true );
                     $controller = new ScrollMagic.Controller( {
@@ -871,6 +1146,7 @@
                     }
                     $scene = [];
                 },
+
 
                 nextProject: function () {
                     const _next = $( '.next-project' ),
@@ -884,39 +1160,49 @@
                         tween.to( _nextProject, { rotation: 360 }, 0 );
                     if ( _img.length )
                         tween.to( _img, { scale: 1 }, 0 );
+
                     const parallaxIt1 = dsnGrid.tweenMaxParallax( $controller ).addParrlax( {
                         id: _next,
                         triggerHook: 1,
                         duration: "95%",
                         tween: gsap.timeline( { yoyo: true } ).fromTo( _img, {
                             y: -100, scale: 1, yoyo: true, overwrite: "none",
+
                         }, {
                             y: 0,
                             scale: 1.2
                         }, 0 )
                             .fromTo( _next.find( '.project-number , .metas' ), {
                                 y: -100, yoyo: true, overwrite: "none",
+
                             }, { y: 0 }, 0 )
                     } );
                     if ( parallaxIt1 )
                         $scene.push( parallaxIt1 );
+
                     if ( dsnGrid.isMobile() )
                         return;
+
                     parallaxIt1.on( 'progress', function ( $s ) {
                         _img.css( {
                             filter: "blur(" + ( ( $s.progress * 10 ) ) + "px)"
                         } )
                     } );
+
                     //--> Hero Title
                     if ( heroTitle.length ) {
+
                         tween.to(
                             heroTitle.find( "span.d-none" ),
                             {
                                 yoyo: true,
                                 overwrite: "none",
+
                                 width: "100%",
                             }, 0 );
                     }
+
+
                     const parallaxIt = dsnGrid.tweenMaxParallax( $controller ).addParrlax( {
                         id: _next,
                         triggerHook: 0,
@@ -924,32 +1210,44 @@
                         tween: tween,
                         _fixed: true
                     } );
+
                     parallaxIt.on( 'progress', function ( $s ) {
                         _next.find( '.case .number' ).text( ( ( $s.progress ) * 100 ).toFixed( 0 ) + "%" );
                         _img.css( {
                             filter: "blur(" + ( 10 - ( $s.progress * 10 ) ) + "px)"
                         } )
+
                         if ( $s.progress > 0.998 ) {
                             _next.find( 'a' ).click();
                         }
                     } );
+
+
                     if ( parallaxIt )
                         $scene.push( parallaxIt );
-                },
 
+                },
+                /**
+                 * parallaxImg
+                 */
                 parallaxImg: async function () {
                     let _parent = this;
                     $( "[data-dsn-grid=\"move-up\"]" ).each( function () {
                         const tl = gsap.timeline( { yoyo: true } );
                         _parent.tweenImage( $( this ), tl );
+
                         let parallaxIt = dsnGrid.tweenMaxParallax( $controller ).addParrlax( {
                             id: this,
                             triggerHook: dsnGrid.getData( this, "triggerhook", 1 ),
                             duration: dsnGrid.getData( this, "duration", "200%" ),
                             tween: tl,
                         } );
+
+
                         if ( parallaxIt )
                             $scene.push( parallaxIt );
+
+
                         parallaxIt = null;
                     } );
                 },
@@ -957,6 +1255,7 @@
                     let
                         img = _that.find( "img:not(.hidden) , video" );
                     _that.attr( "data-dsn-grid", "moveUp" );
+
                     if ( img.length > 0 ) {
                         let
                             speed = dsnGrid.getData( img, "speed", '180' ),
@@ -968,15 +1267,22 @@
                                 overwrite: "none",
 
                             };
+
                         gsap.set( img, {
                             height: '+='+speed,
                             y:  img.hasClass( "has-opposite-direction" ) ? '+='+speed : '-='+speed ,
+
                         }, 0 );
+
                         if ( img.hasClass( "has-scale" ) ) {
                             obj[ 'scale' ] = 1.1;
                         }
+
                         img.css( "perspective", _that.width() > 1000 ? 1000 : _that.width() );
+
                         _gsap.to( img, 1, obj, 0 )
+
+
                     }
                 },
 
@@ -989,22 +1295,28 @@
                         } );
                         $( this ).find( "[data-dsn-grid=\"move-up\"]" ).each( function () {
                             _parent.tweenImage( $( this ), tl );
+
                         } );
                         $( this ).find( "[data-dsn-grid=\"move-section\"]" ).each( function () {
                             _parent.tweenMoveSection.bind( this, tl )();
                         } );
+
                         let duration = dsnGrid.getData( this, "duration", "200%" );
                         let triggerHook = dsnGrid.getData( this, "triggerhook", 1 );
                         if ( duration == 0 )
                             duration = $( this ).outerHeight() * ( triggerHook + 1 );
+
                         let parallaxIt = dsnGrid.tweenMaxParallax( $controller ).addParrlax( {
                             id: this,
                             triggerHook: triggerHook,
                             duration: duration,
                             tween: tl,
                         } );
+
+
                         if ( parallaxIt )
                             $scene.push( parallaxIt );
+
                         parallaxIt = null;
                     } );
                 },
@@ -1013,6 +1325,7 @@
                     let _parent = this;
                     $( "[data-dsn-animate=\"section\"]" ).each( function () {
                         dsnGrid.getData( this, "animate" );
+
                         const _target = {
                             $this: $( this ),
                             gsap: gsap.timeline( {
@@ -1042,38 +1355,58 @@
                                     duration: 0,
                                     tween: _target.gsap,
                                 } );
+
+
                                 if ( _target.$this.find( '.circular-item .circle' ).length ) {
                                     _target.$this.find( '.circular-item .circle' ).circleProgress( {
                                         size: 160,
                                         lineCap: "round",
                                         startAngle: -Math.PI,
+
                                         fill: {
                                             gradient: [ "#11468b", "#14bfb5" ]
                                         },
                                     } );
                                     parallax.on( 'start', function () {
+
+
                                         _target.$this.find( '.circular-item .circle' ).circleProgress( {} ).on( 'circle-animation-progress', function ( event, progress ) {
                                             $( this ).find( 'h4' ).html( Math.round( ( event.target.dataset.value * progress ) * 100 ) + "%" );
                                         } );
                                     } );
                                 }
+
+
                             } )
                         ;
                     } );
                 },
-
+                /**
+                 *
+                 * @param _target
+                 * @param delay
+                 */
                 animateFade: async function ( _target, _a, delay = 0 ) {
+
                     if ( _a.length ) {
                         _target.gsap.staggerFromTo( _a, 0.8, { y: 20, opacity: 0 }, {
                             y: 0,
                             opacity: 1,
                             delay: delay,
                             overwrite: "none",
+
                             ease: Back.easeOut.config( 1.7 ),
+
+
                         }, 0.2, 0 );
                     }
-                },
 
+                },
+                /**
+                 *
+                 * @param _target
+                 * @param text
+                 */
                 animateText: function ( _target, text ) {
                     if ( text.length ) {
                         text.each( function () {
@@ -1090,8 +1423,13 @@
                         } );
                     }
                 },
-
+                /**
+                 *
+                 * @param _target
+                 * @param _line
+                 */
                 animateLine: function ( _target, _line ) {
+
                     _target.gsap.addLabel( 'line', 0 );
                     if ( _target.$this.find( '.line.line-top' ).length )
                         _target.gsap.from( _target.$this.find( '.line.line-top' ).toArray(), 1, {
@@ -1113,8 +1451,14 @@
                             scaleY: 0,
                             transformOrigin: 'bottom'
                         }, 'line+=3' );
+
+
                 },
- 
+                /**
+                 *
+                 * @param _target
+                 * @param skills
+                 */
                 animateSkills: function ( _target, skills ) {
                     skills.each( function ( $index ) {
                         let c = $( this );
@@ -1131,6 +1475,7 @@
                     } );
                 },
 
+
                 animateNumbers: function ( _target, _numbers ) {
                     _target.gsap.addLabel( 'number', 0 );
                     _numbers.each( function ( $index ) {
@@ -1138,6 +1483,7 @@
                         let numbers = { value: 0 };
                         _target.gsap.to( numbers, 4, {
                             value: c.text(), ease: Back.easeOut.config( 1.2 ),
+
                             onUpdate: function () {
                                 c.text( dsnGrid.numberText( numbers.value.toFixed( 0 ) ) );
                             },
@@ -1146,18 +1492,24 @@
                             },
                         }, 'number+=' + $index * 0.2 );
                     } );
+
                 },
+
                 headerPages: function () {
                     $( '.dsn-header-animation' ).each( function () {
                         let $this = $( this ),
                             heroImg = $this.find( ".dsn-hero-parallax-img" ),
                             heroTitle = $this.find( ".dsn-hero-parallax-title" );
+
                         const parallax = gsap.timeline();
+
                         if ( heroImg.length ) {
                             parallax.to( heroImg, {
                                 y: "30%", yoyo: true, ease: easeAnimate, overwrite: "none",
+
                             }, 0 );
                         }
+
                         if ( heroTitle.length ) {
                             parallax.to( heroTitle, {
                                 y: "-15%",
@@ -1165,20 +1517,27 @@
                                 yoyo: true,
                                 ease: easeAnimate,
                                 overwrite: "none",
+
                             }, 0 );
                         }
+
                         let parallaxPage = dsnGrid.tweenMaxParallax( $controller ).addParrlax( {
                             id: this,
                             triggerHook: 0,
                             duration: '100%',
                             tween: parallax
                         } );
+
                         if ( parallaxPage ) {
                             $scene.push( parallaxPage );
                         }
+
                         parallaxPage = heroImg = $this = undefined;
+
                     } );
+
                 },
+
                 moveSection: function () {
                     let _parent = this;
                     $( "[data-dsn-grid=\"move-section\"]" ).each( function () {
@@ -1194,9 +1553,12 @@
                         $scene.push( parallaxIt );
                         _that = null;
                     } );
+
                 },
                 tweenMoveSection: function ( _gsap ) {
                     let _that = $( this );
+
+
                     dsnGrid.getData( this, "grid" );
                     _that.addClass( "dsn-move-section" );
                     if ( dsnGrid.getData( this, "responsive" ) === "tablet" && dsnGrid.isMobile() ) return;
@@ -1206,24 +1568,33 @@
                         ease: easeAnimate,
                         yoyo: true,
                         overwrite: "none",
+
                     }, 0 )
                 },
                 parallaxImgHover: function () {
+
                     if ( dsnGrid.isMobile() )
                         return;
+
+
                     $( "[data-dsn=\"parallax\"]" ).each( function () {
                         let _that = $( this );
                         _that.removeAttr( "data-dsn" );
+
                         dsnGrid.parallaxMoveElement( _that, dsnGrid.getData( _that, "move", 20 ), dsnGrid.getData( _that, "speed", 0.5 ), _that.find( ".dsn-parallax-rev" ).get( 0 ), _that.hasClass( "image-zoom" ) );
                         _that = null;
+
                     } );
                 },
                 dsnScrollTop: function () {
+
                     const wrap = $( ".wrapper" );
                     if ( !wrap.length || !$( ".scroll-to-top" ).length ) {
                         return;
                     }
+
                     gsap.to( ".scroll-to-top", 1, { right: -100, autoAlpha: 0 } );
+
                     const parallaxIt = dsnGrid.tweenMaxParallax( $controller ).addParrlax( {
                         id: wrap,
                         triggerHook: wrap.offset().top > 50 ? 0.5 : 0,
@@ -1231,24 +1602,31 @@
                         duration: ( wrap.height() - ( $wind.height() * 0.5 ) ) + ( $( ".next-project" ).outerHeight() || 0 ) - ( wrap.offset().top > 50 ? 0 : 300 ),
                         tween: gsap.to( ".scroll-to-top > img", 0.3, { rotation: wrap.height() / 2 } ),
                     } );
+
                     parallaxIt.on( "progress", function ( $s ) {
                         $( ".scroll-to-top .box-numper span" ).text( ( ( $s.progress ) * 100 ).toFixed( 0 ) + "%" );
                     } );
+
                     parallaxIt.on( "enter", function () {
                         gsap.to( ".scroll-to-top", 1, { right: 10, autoAlpha: 1 } );
 
                     } );
+
                     parallaxIt.on( "leave", function () {
                         gsap.to( ".scroll-to-top", 1, { right: -100, autoAlpha: 0 } );
 
                     } );
+
                     if ( parallaxIt )
                         $scene.push( parallaxIt );
+
+
                 },
                 translateSection: function () {
                     $( '.section-image.section-move-image .transform-move-section' ).each( function () {
                         const tl = gsap.timeline();
                         let width = 0;
+
                         $( this ).find( '.swiper-slide' ).each( function () {
                             width += $( this ).outerWidth();
                         } );
@@ -1259,19 +1637,31 @@
                             tl.to( this, { x: width * -1 } );
                         else
                             tl.from( this, { x: width * -1 } );
+
                         let parallaxIt = dsnGrid.tweenMaxParallax( $controller ).addParrlax( {
                             id: this,
                             triggerHook: dsnGrid.getData( this, "triggerhook", 1 ),
                             duration: dsnGrid.getData( this, "duration", "200%" ),
                             tween: tl,
                         } );
+
                         if ( parallaxIt )
                             $scene.push( parallaxIt );
+
+
                     } );
                 }
+
             };
+
+
         }
 
+
+        /**
+         *
+         * @returns {Object}
+         */
         function navMenu() {
             const siteHeader = $( ".site-header" );
             return {
@@ -1287,6 +1677,7 @@
                     let text_button = text_menu.find( ".text-button" );
                     let text_open = text_menu.find( ".text-open" );
                     let text_close = text_menu.find( ".text-close" );
+
                     dsnGrid.convertTextLine( text_button );
                     dsnGrid.convertTextLine( text_open );
                     dsnGrid.convertTextLine( text_close );
@@ -1298,21 +1689,32 @@
                 hamburgerOpen: function () {
                     const mainIcon = siteHeader.find( ".menu-icon" );
                     const mainNav = siteHeader.find( ".main-navigation" );
+
+
                     let tl = gsap.timeline( {
                         paused: true, onReverseComplete: function () {
                             setTimeout( function () {
                                 mainIcon.find( ".icon-top , .icon-bottom" ).css( "transform", "" ).css( "display", "" );
                             }, 50 );
+
                             console.log( 'onReverseComplete : tl' );
+
+
                         },
                     } );
+
+
                     var menuClick = gsap.timeline( {
                         onReverseComplete: function () {
                             menuClick = gsap.timeline();
                             console.log( 'onReverseComplete : menuClick' );
+
                         }
                     } );
                     let Ease = Power3.easeOut;
+
+                    //--> Open Menu
+
                     tl.set( mainIcon.find( ".icon-center" ), { display: "none" } );
                     tl.to( mainIcon.find( ".icon-top" ), 0.5, { width: 23, rotation: 45, top: 0, ease: Ease } );
                     tl.to( mainIcon.find( ".icon-bottom" ), 0.5, {
@@ -1324,25 +1726,32 @@
                     tl.call( function () {
                         mainIcon.toggleClass( 'nav-active' );
                     }, 0 );
+
                     tl.to( mainNav, 0.5, { y: "0%", autoAlpha: 1, ease: Ease }, 0 );
                     tl.fromTo( mainNav, 0.5, { y: "-100%", autoAlpha: 0 }, {
                         y: "0%",
                         autoAlpha: 1,
                         ease: Expo.easeInOut,
                     }, 0 );
+
                     tl.staggerTo( mainNav.find( "ul.extend-container > li > a .dsn-title-menu" ), 0.5, {
                         autoAlpha: 1,
                         y: 0,
                         ease: Back.easeOut.config( 1.7 ),
                     }, 0.05 );
+
+
                     tl.set( mainNav.find( "ul.extend-container > li > a .dsn-meta-menu" ), {
                         autoAlpha: 1,
                         ease: Ease,
                     } );
                     tl.to( mainNav.find( ".container-content" ), 1, { autoAlpha: 1 }, "-=1" );
                     tl.reverse();
+
+
                     mainNav.find( "ul.extend-container > li.dsn-drop-down" ).on( "click", function ( e ) {
                         e.stopPropagation();
+
                         if ( menuClick._tDur > 0 ) return;
                         menuClick = gsap.timeline( {
                             onReverseComplete: function () {
@@ -1358,15 +1767,21 @@
                             autoAlpha: 1,
                             ease: Back.easeOut.config( 1.7 ),
                         }, 0.1 );
+
+
                     } );
+
                     mainIcon.off( "click" );
                     mainIcon.on( "click", function () {
                         console.log( 'mainIcon:click' );
+
                         if ( !tl.isActive() ) {
                             menuClick.reverse( -1 );
                             tl.reversed( !tl.reversed() );
                             menuClick = gsap.timeline();
                         }
+
+
                     } );
                     let backMenu = $( ".dsn-back-menu" );
                     backMenu.off( "click" );
@@ -1376,9 +1791,14 @@
                         menuClick.reverse();
 
                     } );
+                    // backMenu = null;
+
                 },
             };
+
+
         }
+
 
         function slider() {
             const dsn_slider = $( ".main-slider" );
@@ -1390,6 +1810,8 @@
                         let $this = $( this ),
                             horizontal = $this.hasClass( "has-horizontal" ),
                             inner = $this.find( ".slide-inner" );
+
+
                         if ( inner.hasClass( 'dsn-webgl' ) ) {
                             $slidObject.initWebgel( $( this ) ).then( ( $obj ) => {
                                 dsn_slider.find( ".control-nav .slider-total-index" ).html( dsnGrid.numberText( $obj.imgs.length ) );
@@ -1399,11 +1821,13 @@
                                     nextEl: dsn_slider.find( ".next-container" ),
                                     prevEl: dsn_slider.find( ".prev-container" ),
                                     onComplete: function () {
+
                                     },
                                     onStart: function ( current, oldIndex ) {
                                         $slidObject.slideChangeWeb( dsn_slider, horizontal ? "x" : "y", current, oldIndex, this.mat.uniforms.effectFactor.value < 0 );
                                     },
                                 } );
+
                             } );
                         } else if ( inner.find( ".slide-item" ).length ) {
                             $slidObject.initSlider( $this ).then( function ( $d ) {
@@ -1411,6 +1835,8 @@
                                 $slidObject.slideChange( swiper, $this, horizontal ? "x" : "y" );
                                 dsnGrid.addSwiper( swiper );
                                 console.log( swiper.getTranslate() );
+
+
                                 $this.find( '.next-container' ).on( "click", function () {
                                     if ( tl.isActive() ) return;
                                     swiper.slideNext();
@@ -1419,11 +1845,23 @@
                                     if ( tl.isActive() ) return;
                                     swiper.slidePrev();
                                 } );
+
                             } );
+
                         }
+
+
                     } );
+
+
                 },
 
+
+                /**
+                 *
+                 * @param dsn_slider
+                 *
+                 */
                 initSlider: async function ( dsn_slider ) {
                     dsn_slider.find( ".slide-item" ).each( function ( $index ) {
                         let $this = $( this );
@@ -1432,14 +1870,26 @@
                         slide_content.attr( "data-dsn-id", $index );
                         if ( $index === 0 ) slide_content.addClass( "dsn-active dsn-active-cat" );
                         dsn_slider.find( ".dsn-slider-content > .dsn-container" ).append( slide_content );
+
                         let title = slide_content.find( ".title" );
                         if ( title.find( "a" ).length )
                             title = title.find( "a" );
+
                         dsnGrid.convertTextLine( title );
                         $this = slide_content = title = null;
                     } );
                 },
 
+                /**
+                 *
+                 * @param dsn_slider
+                 * @param isDemo
+                 * @param $isVertical
+                 * @returns Swiper Slider
+                 *
+                 *  Cerate Slider Swiper
+                 *
+                 */
                 swiperObject: function ( dsn_slider, $isVertical = true ) {
                     return new Swiper( dsn_slider.find( ".slide-inner" ).get( 0 ), {
                         speed: 1000,
@@ -1450,8 +1900,10 @@
                         parallax: true,
                         loop: true,
                         loopAdditionalSlides: 10,
+
                         watchSlidesProgress: true,
                         watchSlidesVisibility: true,
+
                         pagination: {
                             el: dsn_slider.find( ".slider-current-index" ).get( 0 ),
                             type: "custom",
@@ -1461,22 +1913,28 @@
                                 return dsnGrid.numberText( current );
                             },
                         },
+
                         on: {
                             init: function () {
                                 this.autoplay.stop();
                                 let swiper = this;
+
                                 dsn_slider.find( "[data-dsn=\"video\"] video" ).each( function () {
                                     this.pause();
                                 } );
                                 this.touchEventsData.formElements = "*";
+
                                 dsn_slider.find( '[data-swiper-parallax]' ).each( function () {
                                     let num = $( this ).attr( 'data-swiper-parallax' ).replace( '%', '' );
+
                                     $( this ).attr( {
                                         'data-swiper-parallax': ( num / 100 ) * ( $isVertical ? swiper.height : swiper.width )
                                     } )
                                 } );
                             },
+
                             touchStart: function () {
+
                                 $( this.slides ).css( "transition", "" );
                                 if ( !dsnGrid.isMobile() && $body.hasClass( 'dsn-cursor-effect' ) ) {
                                     if ( !$( this.slides ).parents( '.main-slider' ).hasClass( 'has-horizontal' ) ) {
@@ -1487,6 +1945,7 @@
                                 }
                             },
                             touchEnd: function () {
+
                                 if ( !dsnGrid.isMobile() && $body.hasClass( 'dsn-cursor-effect' ) ) {
                                     if ( !$( this.slides ).hasClass( 'has-horizontal' ) ) {
                                         $( '.cursor' ).removeClass( 'cursor-scale-half cursor-up-down cursor-drag cursor-next cursor-prev' );
@@ -1495,19 +1954,30 @@
                                     }
                                 }
                             }
+
+
                         },
                     } );
                 },
- 
+                /**
+                 *
+                 * @param swiper
+                 * @param dsn_slider
+                 * Change To current Slider
+                 */
                 slideChange: function ( swiper, dsn_slider, $dir ) {
                     let $this = this;
                     swiper.on( "slideChange", start );
+
                     async function start() {
+
                         //--> Slider before change
                         let contentOld = dsn_slider.find( ".dsn-slider-content .dsn-active" );
                         let numOld = contentOld.data( "dsn-id" );
+
                         //--> Slider current change
                         let slider = $( swiper.slides[ swiper.activeIndex ] );
+
                         let id = slider.data( "dsn-id" );
                         if ( numOld === id ) return;
                         dsn_slider.find( "[data-dsn=\"video\"] video" ).each( function () {
@@ -1515,17 +1985,25 @@
                         } );
                         let v = $( this.slides[ this.activeIndex ] ).find( "[data-dsn=\"video\"] video" );
                         if ( v.length ) v.get( 0 ).play();
+
+
                         //--> Content Old
                         let content_letterOld = contentOld.find( ".dsn-chars-wrapper" );
                         contentOld.removeClass( "dsn-active-cat" );
+
                         //--> Content New
                         let contentNew = dsn_slider.find( ".dsn-slider-content [data-dsn-id=\"" + id + "\"]" );
                         let content_letterNew = contentNew.find( ".dsn-chars-wrapper" );
+
+
                         let $isRight = numOld > id;
+
                         tl.progress( 1 );
                         tl = new gsap.timeline();
+
                         tl.staggerFromTo(
                             $isRight ? content_letterOld.toArray().reverse() : content_letterOld,
+
                             0.3,
                             $this.showText( $dir ).title,
                             $this.hideText( $isRight, $dir ).title,
@@ -1537,30 +2015,48 @@
                                 contentNew.addClass( "dsn-active-cat" );
                             },
                         );
+
                         tl.staggerFromTo(
                             $isRight ? content_letterNew.toArray().reverse() : content_letterNew,
+
                             0.8,
                             $this.hideText( !$isRight, $dir ).title,
+
                             $this.showText( $dir ).title,
                             0.05,
                             "-=.1",
                         );
+
                         contentOld = numOld = slider = id = v = content_letterOld = content_letterNew = $isRight = null;
+
                     }
                 },
- 
+                /**
+                 *
+                 * @param dsn_slider
+                 * @param $dir
+                 * @param current
+                 * @param oldIndex
+                 * @param $isRight
+                 */
                 slideChangeWeb: function ( dsn_slider, $dir, current, oldIndex, $isRight ) {
                     let $this = this;
+
+
                     dsn_slider.find( ".control-nav .slider-current-index" ).html( dsnGrid.numberText( current + 1 ) );
                     let contentOld = dsn_slider.find( ".dsn-slider-content .dsn-active" );
                     let content_letterOld = contentOld.find( ".dsn-chars-wrapper" );
+
                     let contentNew = dsn_slider.find( ".dsn-slider-content [data-dsn-id=\"" + current + "\"]" );
                     let content_letterNew = contentNew.find( ".dsn-chars-wrapper" );
                     dsn_slider.find( ".slide-inner" ).attr( "data-overlay", contentNew.data( "overlay" ) );
+
                     tl.progress( 1 );
                     tl = new gsap.timeline();
+
                     tl.staggerFromTo(
                         $isRight ? content_letterOld.toArray().reverse() : content_letterOld,
+
                         0.3,
                         $this.showText( $dir ).title,
                         $this.hideText( $isRight, $dir ).title,
@@ -1575,14 +2071,20 @@
 
                     tl.staggerFromTo(
                         $isRight ? content_letterNew.toArray().reverse() : content_letterNew,
+
                         0.8,
                         $this.hideText( !$isRight, $dir ).title,
+
                         $this.showText( $dir ).title,
                         0.05,
                         "-=.1",
                     );
                 },
-
+                /**
+                 *
+                 * @param $dir
+                 * @returns {{title: {ease: string, autoAlpha: number, yoyo: boolean, rotation: number, scale: number}}}
+                 */
                 showText: function ( $dir ) {
                     let $obj = {
                         title: {
@@ -1593,9 +2095,15 @@
                         },
                     };
                     $obj.title[ $dir ] = "0%";
+
                     return $obj;
                 },
-
+                /**
+                 *
+                 * @param $isRigth
+                 * @param $dir
+                 * @returns {{title: {ease: string, autoAlpha: number, yoyo: boolean, rotation: number}}}
+                 */
                 hideText: function ( $isRigth, $dir ) {
                     let $obj = {
                         title: {
@@ -1608,7 +2116,13 @@
                     return $obj;
                 },
 
+                /**
+                 *
+                 * @param dsn_slider
+                 * @returns {Promise<{intensity: *, imgs: [], overlay: [], speedIn: *, displacement: *, easing: *, speedOut: *}>}
+                 */
                 initWebgel: async function ( dsn_slider ) {
+
                     let imgs = [],
                         overlady = [];
                     dsn_slider.find( ".dsn-slider-content .slide-content" ).each( function ( $index ) {
@@ -1626,15 +2140,19 @@
                     return {
                         imgs: imgs,
                         overlay: overlady,
-                        displacement: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "displacement", "/static/2_images/displacement/8.jpg" ),
+                        displacement: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "displacement", "assets/img/displacement/8.jpg" ),
                         intensity: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "intensity", -2 ),
                         speedIn: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "speedIn", 1.2 ),
                         speedOut: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "speedOut", 1.2 ),
                         easing: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "easing", "Expo.easeInOut" ),
                     };
+
                 },
+
+
             };
         }
+
 
         function loadData( $type ) {
             setTimeout( function () {
@@ -1653,24 +2171,34 @@
                 } );
             } )
 
+
             $( '.dsn-filter' ).each( function () {
                 const $button = $( this ).find( '.filtering-t ' ),
                     $item = $( this ).find( '.dsn-item-filter' );
+
                 if ( !$button.length || !$item.length ) return;
+
+
                 $item.isotope();
                 $button.find( "button" ).off( "click" );
                 $button.find( "button" ).on( "click", function () {
                     $( this ).addClass( 'active' ).siblings().removeClass( "active" );
+
                     $item.isotope( {
                         filter: $( this ).attr( "data-filter" ),
                     } );
                 } );
+
+
             } );
+
         }
 
         function projectSlider() {
             return {
+
                 swiper: function ( $id, $obj ) {
+
                     $id = dsnGrid.convertToJQuery( $id );
                     $obj = $.extend( true, {
                         slidesPerView: 1,
@@ -1694,11 +2222,15 @@
 
                     let $s = new Swiper( $id.find( ".swiper-container" ).get( 0 ), $obj );
                     dsnGrid.addSwiper( $s );
+
                 },
+
                 run: function () {
                     let $this = this;
                     $( ".dsn-swiper" ).each( function () {
+
                         let option = dsnGrid.getData( this, "option", {} );
+
                         let syn = $( this ).parent().find( dsnGrid.getData( this, "controller" ) );
                         if ( syn.length ) {
                             option[ 'thumbs' ] = {
@@ -1711,7 +2243,9 @@
                                     autoHeight: true
                                 }
                             };
+
                         }
+
 
                         option[ "breakpoints" ] = {
                             768: {
@@ -1725,8 +2259,10 @@
                             575: {
                                 slidesPerView: 1,
                                 spaceBetween: 0,
+
                             },
                         };
+
 
                         if ( syn.length ) {
                             option[ 'thumbs' ] = {
@@ -1744,17 +2280,24 @@
                                 slidesPerView: 1,
                                 spaceBetween: 0,
                             }
+
                         }
 
                         option[ 'slidesPerView' ] = 1;
                         option[ 'spaceBetween' ] = 0;
+
                         $this.swiper( this, option );
                     } );
+
+
                 },
             };
+
         }
 
         function accordion() {
+
+
             $( ".dsn-accordion" ).each( function () {
                 let $this = $( this ),
                     acc_q = $this.find( ".accordion__question" );
@@ -1767,9 +2310,11 @@
                     content = null;
                 } );
             } );
+
         }
 
         function initMap() {
+
             let map_att = $( ".map-custom" );
             if ( !map_att.length ) {
                 map_att = null;
@@ -1777,9 +2322,11 @@
             }
             let mapScriptId = $( "#map_api" );
 
+
             // Styles a map in night mode.
             if ( !mapScriptId.length ) {
                 let GOOGLE_MAP_KEY = "AIzaSyA5bpEs3xlB8vhxNFErwoo3MXR64uavf6Y";
+
                 let script = document.createElement( "script" );
                 script.type = "text/javascript";
                 script.id = "map_api";
@@ -1991,7 +2538,7 @@
                     new google.maps.Marker( {
                         position: letLeng,
                         animation: google.maps.Animation.BOUNCE,
-                        icon: "/static/2_images/map-marker.png",
+                        icon: "assets/img/map-marker.png",
                         title: "ASL",
                         map: map,
                     } );
@@ -2002,8 +2549,16 @@
                     console.log( e );
                 }
             }, 500 );
+
         }
 
+        /**
+         *  - the function that move the cursor of an input element to the end
+         *
+         * @param $off
+         *      $off is true stop event listener
+         *
+         */
         async function mouseCirMove( $off ) {
             const $elemnet = $( ".cursor" );
             if ( dsnGrid.isMobile() || !$body.hasClass( "dsn-cursor-effect" ) ) {
@@ -2014,23 +2569,31 @@
                 return;
             }
 
+
             if ( $off === true ) {
                 $elemnet.attr( "class", "cursor" );
                 cursorEffect();
                 return;
             }
+
             dsnGrid.mouseMove( $elemnet, {
                 speed: 0.5
             } );
             cursorEffect();
 
             function cursorEffect() {
+
+
                 dsnGrid.elementHover( $elemnet, "a:not(> img):not(.vid) , .dsn-button-sidebar,  button , .mfp-container", "cursor-scale-full" );
                 dsnGrid.elementHover( $elemnet, ".c-hidden , .social-side a", "no-scale" );
                 dsnGrid.elementHover( $elemnet, ".has-popup a , .work-item-box a:not(.effect-ajax)", "cursor-scale-half cursor-open" );
+
                 dsnGrid.elementHover( $elemnet, "[data-cursor=\"close\"]", "cursor-scale-full cursor-close" );
                 dsnGrid.elementHover( $elemnet, "a.link-pop ", "cursor-scale-full cursor-view" );
+
             }
+
+
         }
 
         async function linkRightPaginate() {
@@ -2044,9 +2607,13 @@
                 _element.html( $title );
                 $cont.append( _element );
                 _element.on( 'click', function () {
+
                     dsnGrid.scrollTop( _target, 1, -150 );
                 } );
+
             } );
+
         }
+
     }
 )( jQuery );
