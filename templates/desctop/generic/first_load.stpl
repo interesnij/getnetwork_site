@@ -28,7 +28,7 @@
 
   <body >
     <span class="span">
-      <% include!("../main/anon_mainpage.stpl"); %>
+      
     </span> 
     <% if template_types == 1 { %>
       <% include!("../../block/scripts/1/d.stpl"); %>
