@@ -1626,7 +1626,7 @@
                     return {
                         imgs: imgs,
                         overlay: overlady,
-                        displacement: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "displacement", "assets/img/displacement/8.jpg" ),
+                        displacement: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "displacement", "/static/2_images/displacement/8.jpg" ),
                         intensity: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "intensity", -2 ),
                         speedIn: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "speedIn", 1.2 ),
                         speedOut: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "speedOut", 1.2 ),
@@ -1991,7 +1991,7 @@
                     new google.maps.Marker( {
                         position: letLeng,
                         animation: google.maps.Animation.BOUNCE,
-                        icon: "assets/img/map-marker.png",
+                        icon: "/static/2_images/map-marker.png",
                         title: "ASL",
                         map: map,
                     } );
