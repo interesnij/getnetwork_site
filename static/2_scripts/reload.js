@@ -41,9 +41,8 @@ function loadScripts( src ) {
     head.appendChild( script );
 };
 
-function load_prev() {
-    loadScripts('/static/2_scripts/custom.js?ver1');
-    loadScripts('/static/1_scripts/progressive-image.js')
+function load_prev(ajax_link, elem_) {
+    
 }
 function check_first_load() {
     span = document.body.querySelector(".span");
@@ -59,12 +58,13 @@ function check_first_load() {
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
             //get_custom_design();
+            
+            //setTimeout(load_prev, 2000);
+            loadScripts('/static/2_scripts/custom.js?ver1');
+            loadScripts('/static/1_scripts/progressive-image.js');
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             span.innerHTML = elem_.innerHTML;
-            setTimeout(load_prev, 2000);
-            //loadScripts('/static/2_scripts/custom.js?ver1');
-            //loadScripts('/static/1_scripts/progressive-image.js');
             //get_or_create_cookie_user(); 
             //get_active_button();
             //get_page_view_time(120);
