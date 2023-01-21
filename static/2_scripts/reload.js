@@ -41,18 +41,12 @@ function loadScripts( src ) {
     script.src = src;
     //head.appendChild( script );
     span.appendChild( script );
-};
+}; 
 
 function load_prev(ajax_link, elem_) {
     
 }
 function check_first_load() {
-    span = document.body.querySelector(".span");
-  
-    if (window.location.href.indexOf('ajax=1') > -1) {
-      span.innerHTML = "Permission Denied"; 
-    }
-    else if (!span.firstChild) {
       url = window.location.href;
       ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
       ajax_link.open( 'GET', url + "?ajax=1", true );
@@ -62,7 +56,7 @@ function check_first_load() {
             //get_custom_design();
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
-            span.innerHTML = elem_.innerHTML;
+            document.body.innerHTML = elem_.innerHTML;
             loadScripts('/static/2_scripts/custom.js?ver1');
             loadScripts('/static/1_scripts/progressive-image.js');
             //get_or_create_cookie_user(); 
@@ -73,7 +67,7 @@ function check_first_load() {
         }
       }
       ajax_link.send();
-    }
+
   };
 
   check_first_load();
