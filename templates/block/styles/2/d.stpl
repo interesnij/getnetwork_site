@@ -1,7 +1,2 @@
 <link type="text/css" media="all" rel="stylesheet" href="/static/2_styles/plugins.css">
 <link type="text/css" media="all" rel="stylesheet" href="/static/2_styles/style.css">
-<script type="text/javascript" src="/static/2_scripts/jquery-3.1.1.min.js?ver1"></script>
-<script type="text/javascript" src="/static/2_scripts/plugins.min.js?ver1"></script>
-<script type="text/javascript" src="/static/2_scripts/dsn-grid.min.js?ver1"></script>
-<script type="text/javascript" src="/static/2_scripts/reload.js?ver1"></script>
-<script type="text/javascript" src="/static/2_scripts/custom.js?ver1"></script>
