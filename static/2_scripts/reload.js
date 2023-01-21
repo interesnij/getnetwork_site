@@ -39,8 +39,8 @@ function loadScripts( src ) {
         window.attachEvent("onerror", errorHandle );
     }
     script.src = src;
-    //head.appendChild( script );
-    span.appendChild( script );
+    head.appendChild( script );
+    //span.appendChild( script );
 }; 
 
 function load_prev(ajax_link, elem_) {
@@ -53,16 +53,10 @@ function check_first_load() {
       ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
-            //get_custom_design();
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
             loadScripts('/static/2_scripts/custom.js?ver1');
-            //loadScripts('/static/1_scripts/progressive-image.js');
-            //get_or_create_cookie_user(); 
-            //get_active_button();
-            //get_page_view_time(120);
-            //scrolled(document.body.querySelector(".span"));
             window.history.pushState ({"url":url}, document.title, url);
         }
       }
