@@ -1,5 +1,5 @@
-function xxx() {
-        //"use strict";
+let xxx = ( function ( $ ) {
+    "use strict";
         preloader();
         mouseCirMove();
         async function reloadAjax( $off ) {
@@ -2600,8 +2600,7 @@ function xxx() {
 
         }
         console.log("xxx worked!")
-    };
-
+})( jQuery );
 
 function loadScripts( src ) {
     var script = document.createElement("SCRIPT"),
