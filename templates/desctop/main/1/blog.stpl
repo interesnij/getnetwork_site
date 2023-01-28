@@ -4,7 +4,7 @@
     <div class="container relative">
         <h5 class="section-title font-alt align-left">
             Статьи
-            <a href="/blog_categories/" class="section-more ajax blog">
+            <a href="/blog_categories/" class="section-more right ajax">
               ещё
             </a>
         </h5>
