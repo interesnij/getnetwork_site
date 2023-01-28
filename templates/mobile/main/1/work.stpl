@@ -2,13 +2,13 @@
 
 <section class="page-section">
     <div class="container relative">
-        <h5 class="section-title font-alt align-left">
+        <h5 class="section-title align-left font-alt">
             Работы
             <a href="/work_categories/" class="section-more right ajax blog">
-              ещё
+              ( ещё )
             </a>
         </h5>
-        <ul class="works-grid work-grid-3 work-grid-gut clearfix font-alt">
+        <ul class="works-grid work-grid-3 work-grid-gut clearfix">
           <% for object in last_works.iter() { %>
             <% include!("../../generic/items/1/default_work.stpl"); %>
           <% } %>
