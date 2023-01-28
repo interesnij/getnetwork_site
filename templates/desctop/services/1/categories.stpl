@@ -64,7 +64,7 @@
             <li>
               <a href="/services/<%= category.slug %>/" class="ajax">
                 <div class="alt-tabs-icon">
-                  <img class="image_fit_200" src="<%= object.get_image() %>>" alt="img" />
+                  <img class="image_fit_200" src="<%= category.get_image() %>>" alt="img" />
                 </div>
                 <%= category.name %> (<%= category.count %>)
               </a>
