@@ -6,7 +6,7 @@
       <% } else { %>
         /static/images/img.jpg
       <% } %>">
-        <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
+        <img class="preview image_fit_300" src="/static/images/i_gorizontal.webp" alt="img" />
       </div>
     </div>
     <div class="work-intro">
