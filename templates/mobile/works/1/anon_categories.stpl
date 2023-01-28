@@ -9,11 +9,7 @@
 </section>
 
 <% for object in cats.iter() { %>
-<section class="page-section need_darked_this fixed-height-small pt-0 pb-0 bg-dark-alfa-30" style="background-image: url(&quot;<% if object.image.is_some() { %>
-  <%= object.image.as_deref().unwrap() %>
-<% } else { %>
-  /static/images/img.jpg
-<% } %>&quot;); background-position: 50% -26px;">
+<section class="page-section need_darked_this fixed-height-small pt-0 pb-0 bg-dark-alfa-30" style="background-image: url('<%= object.get_image() %>'); background-position: 50% -26px;">
     <div class="" style="height: 100vh">
         <div class="home-content container">
             <div class="home-text">

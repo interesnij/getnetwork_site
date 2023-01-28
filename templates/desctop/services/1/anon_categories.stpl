@@ -64,11 +64,7 @@
             <li>
               <a href="/services/<%= category.slug %>/" class="ajax">
                 <div class="alt-tabs-icon">
-                  <img class="image_fit_200" src="<% if category.image.is_some() { %>
-                    <%= category.image.as_deref().unwrap() %>
-                  <% } else { %>
-                    /static/images/img.jpg
-                  <% } %>" alt="img" />
+                  <img class="image_fit_200" src="<%= object.get_image() %>" alt="img" />
                 </div>
                 <%= category.name %> (<%= category.count %>)
               </a>

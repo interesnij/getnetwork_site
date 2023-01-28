@@ -11,7 +11,7 @@
     </div>
   </div>
 </section>
-<section class="home-section need_darked_this" style='background-image: url("<% if category.image.is_some() { %><%= category.image.as_deref().unwrap() %><% } else { %>/static/images/img.jpg<% } %>"); background-position: 50% -26px;'>
+<section class="home-section need_darked_this" style='background-image: url("<%= object.get_image() %>"); background-position: 50% -26px;'>
     <div class="" style="height: 100vh">
         <div class="home-content container">
             <div class="home-text">

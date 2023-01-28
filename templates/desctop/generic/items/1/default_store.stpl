@@ -1,11 +1,7 @@
 <div class="col-lg-4 col-md-6 mb-60 mb-xs-40">
   <div class="post-prev-img">
     <a class="ajax" href="/store/all-stores/<%= object.slug %>/">
-      <div class="progressive replace" data-href="<% if object.image.is_some() { %>
-        <%= object.image.as_deref().unwrap() %>
-      <% } else { %>
-        /static/images/img.jpg
-      <% } %>">
+      <div class="progressive replace" data-href="<%= object.get_image() %>">
         <img class="preview image_fit_300" src="/static/images/i.webp" alt="img" />
       </div>
     </a>
