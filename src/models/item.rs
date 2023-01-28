@@ -58,6 +58,16 @@ pub struct Cat {
     pub id:    i32,
     pub image: Option<String>,
 }
+impl Cat {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
+}
 
 #[derive(Serialize, Queryable)]
 pub struct SmallCat {
@@ -74,6 +84,17 @@ pub struct Blog {
     pub created:     chrono::NaiveDateTime,
     pub description: Option<String>,
 }
+impl Blog {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
+}
+
 #[derive(Serialize, Queryable)]
 pub struct Service {
     pub slug:        String,
@@ -82,6 +103,17 @@ pub struct Service {
     pub title:       String,
     pub description: Option<String>,
 }
+impl Service {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
+}
+
 #[derive(Serialize, Queryable)]
 pub struct Store {
     pub slug:        String,
@@ -92,6 +124,17 @@ pub struct Store {
     pub price:       i32,
     pub price_acc:   Option<i32>,
 }
+impl Store {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
+}
+
 #[derive(Serialize, Queryable)]
 pub struct Wiki {
     pub slug:        String,
@@ -101,6 +144,17 @@ pub struct Wiki {
     pub description: Option<String>,
     pub created:     chrono::NaiveDateTime,
 }
+impl Wiki {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
+}
+
 #[derive(Serialize, Queryable)]
 pub struct Work {
     pub slug:        String,
@@ -109,6 +163,17 @@ pub struct Work {
     pub title:       String,
     pub description: Option<String>,
 }
+impl Work {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
+}
+
 #[derive(Serialize, Queryable)]
 pub struct Help {
     pub id:        i32,
