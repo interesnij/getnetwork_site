@@ -50,6 +50,17 @@ pub struct CatDetail {
     pub seconds: i32,
     pub now_u:   i16,
 }
+impl CatDetail {
+    pub fn get_image(&self) -> String {
+        if self.image.is_some() {
+            return self.image.as_deref().unwrap().to_string();
+        }
+        else {
+            return "/static/images/img.jpg".to_string();
+        }
+    }
+}
+
 #[derive(Serialize, Queryable)]
 pub struct Cat {
     pub name:  String,
