@@ -1364,16 +1364,8 @@ function preloader() {
         persent.value = val;
         progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
         preloader_progress.css( "width", val + "%" );
-        console.log(val)
-    } );
-    if ( !preloader.length ) {
-        effectBackForward();
-        reloadAjax().catch( $err => {
-            console.log( $err );
-        } );
-    }
-    const loaded = function () {
-        clearInterval( timer );
+        if (val == 100) {
+            clearInterval( timer );
         gsap.timeline()
             .to( persent, 1, {
                 value: 100, onUpdate: function () {
@@ -1402,9 +1394,14 @@ function preloader() {
                 preloader.remove();
                 timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
             } );
-    };
-    
-    //if () loaded;
+        }
+    } );
+    if ( !preloader.length ) {
+        effectBackForward();
+        reloadAjax().catch( $err => {
+            console.log( $err );
+        } );
+    }
 }
 function contactValidator() {
     const contact_form = $( "#contact-form" );
