@@ -1364,6 +1364,7 @@ function preloader() {
         persent.value = val;
         progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
         preloader_progress.css( "width", val + "%" );
+        console.log(val)
     } );
     if ( !preloader.length ) {
         effectBackForward();
@@ -1402,7 +1403,7 @@ function preloader() {
                 timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
             } );
     };
-    console.log(timer)
+    
     //if () loaded;
 }
 function contactValidator() {
