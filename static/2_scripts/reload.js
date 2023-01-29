@@ -1411,7 +1411,7 @@ function preloader() {
     }
     $wind.on("load", function () {
         preloader_hide()
-    }
+    })
 }
 function contactValidator() {
     const contact_form = $( "#contact-form" );
