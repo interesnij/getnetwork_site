@@ -59,784 +59,8 @@ function check_first_load() {
             //loadScripts('/static/2_scripts/c.js?ver1');
             //( function ( $ ) {
              //   "use strict";
-                preloader();
-                mouseCirMove();
-                async function reloadAjax( $off ) {
-                    await dsnGrid.destoryBuild();
-                    await loadData( "poster" );
-                    await loadData( "src" );
-                    await loadData( "srcset" );
-                    if ( !$off ) {
-                        window.$effectScroll = await effectScroller();
-                        window.$animate = await effectAnimate();
-                        await navMenu().init();
-                        await dsnGrid.removeWhiteSpace( ".site-header ul.extend-container li > a" );
-                        await changeStyle();
-                    }
-                    if ( $off ) {
-                        await mouseCirMove( $off );
-                    }
-                    $( "a.vid" ).YouTubePopUp();
-                    await ContactModel();
-                    await $effectScroll.start();
-                    await effctStickyNavBar();
-                    await $animate.allInt();
-                    await slider().run();
-                    await Isotope();
-                    await projectSlider().run();
-                    await accordion();
-                    await linkRightPaginate();
-                    await magnificPopup();
-                    await justifiedGallery();
-                    await hoverReveal();
-                    await contactValidator();
-                    await dsnAjax().ajaxLoad();
-                    await dropHash();
-                    await $( ".twentytwenty" ).twentytwenty();
-                }
-                function preloader() {
-                    let preloader = $( ".preloader" ),
-                        progress_number = preloader.find( ".percent" ),
-                        progress_title = preloader.find( ".title .text-fill" ),
-                        persent = { value: 0 },
-                        preloader_bar = preloader.find( ".preloader-bar" ),
-                        preloader_progress = preloader_bar.find( ".preloader-progress" );
-                    let timer = dsnGrid.pageLoad( 0, 100, 1000, function ( val ) {
-                        progress_number.text( val );
-                        persent.value = val;
-                        progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
-                        preloader_progress.css( "width", val + "%" );
-                    } );
-                    if ( !preloader.length ) {
-                        effectBackForward();
-                        reloadAjax().catch( $err => {
-                            console.log( $err );
-                        } );
-                    }
-                    $wind.on( "load", function () {
-                        clearInterval( timer );
-                        gsap.timeline()
-                            .to( persent, 1, {
-                                value: 100, onUpdate: function () {
-                                    progress_number.text( persent.value.toFixed( 0 ) );
-                                    progress_title.css( "clip-path", "inset(" + ( 100 - persent.value ) + "% 0% 0% 0%)" );
-                                    preloader_progress.css( "width", persent.value + "%" );
-                                },
-                            } )
-                            .to( preloader.find( '> *' ), { y: -30, autoAlpha: 0 } )
-                            .call( function () {
-                                if ( preloader.length ) {
-                                    effectBackForward();
-                                    reloadAjax().catch( $err => {
-                                        console.log( $err );
-                                    } );
-                                }
-                            } )
-                            .set( persent, { value: 0 } )
-                            .to( persent, 0.8, {
-                                value: 100, onUpdate: function () {
-                                    preloader.css( "clip-path", "inset(" + ( persent.value ) + "% 0% 0% 0%)" );
-                                },
-                                ease: Power2.easeInOut,
-                            }, "+=0.5" )
-                            .call( function () {
-                                preloader.remove();
-                                timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
-                            } );
-                    } );
-                }
-                function contactValidator() {
-                    const contact_form = $( "#contact-form" );
-                    if ( contact_form < 1 ) {
-                        return;
-                    }
-                    contact_form.off( "submit" );
-                    contact_form.on( "submit", function ( e ) {
-                        if ( !e.isDefaultPrevented() ) {
-                            contact_form.validator();
-                            $.ajax( {
-                                type: "POST",
-                                url: "contact.php",
-                                data: $( this ).serialize(),
-                                success: function ( data ) {
-                                    var messageAlert = "alert-" + data.type;
-                                    var messageText = data.message;
-                                    var alertBox = "<div class=\"alert " + messageAlert + " alert-dismissable\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>" + messageText + "</div>";
-                                    if ( messageAlert && messageText ) {
-                                        contact_form.find( ".messages" ).html( alertBox );
-                                        contact_form[ 0 ].reset();
-                                    }
-                                    setTimeout( function () {
-                                        contact_form.find( ".messages" ).html( "" );
-                                    }, 3000 );
-                                },
-                                error: function ( error ) {
-                                    console.log( error );
-                                },
-                            } );
-                            return false;
-                        }
-                    } );
-                }
-                function effctStickyNavBar() {
-                    $wind.off( "scroll" );
-                    const wrapper = $( '.wrapper' );
-                    let bodyScroll = 0;
-                    var $ofContent = wrapper.offset();
-                    var header = wrapper.find( '> *:first-child' );
-                    var scrDown = 0;
-                    if ( header.length ) {
-                        $ofContent = header.get( 0 ).nodeName === 'HEADER' ? header.outerHeight() : ( $ofContent !== undefined ) ? $ofContent.top : 70;
-                    }
-                    $effectScroll.getListener( function ( e ) {
-                        if ( e.type === "scroll" ) {
-                            bodyScroll = $wind.scrollTop();
-                        } else {
-                            bodyScroll = e.offset.y;
-                        }
-                        if ( $ofContent > 170 ) {
-                            $ofContent = $ofContent - 100;
-                        }
-                        if ( bodyScroll > $ofContent ) {
-                            if ( scrDown < bodyScroll ) {
-                                $body.addClass( 'nav-bg' ).addClass( 'hide-nav' )
-                            } else {
-                                $body.removeClass( 'hide-nav' )
-                            }
-                        } else {
-                            $body.removeClass( 'nav-bg' ).removeClass( 'hide-nav' );
-                        }
-                        scrDown = bodyScroll;
-                    } );
-                }
-                function dropHash() {
-                    $( "a[href=\"#\"]" ).on( "click", function ( e ) {
-                        e.preventDefault();
-                    } );
-                    $( "[href*=\"#\"]:not([href=\"#\"])" ).on( "click", function ( e ) {
-                        e.preventDefault();
-                        let href = $( $( this ).attr( "href" ) );
-                        if ( !href.length ) {
-                            href = null;
-                            return false;
-                        }
-                        dsnGrid.scrollTop( href.get( 0 ).offsetTop, 1, -100 );
-                        href = null;
-                    } );
-                    if ( window.location.hash.length ) {
-                        $wind.scrollTop( 0 );
-                        dsnGrid.scrollTop( window.location.hash, 1, -100 );
-                    }
-            
-            
-                }
-                function changeStyle() {
-                    const options = $( '.box-options' );
-                    options.find( '.title-mode' ).each( function () {
-                        dsnGrid.convertTextLine( this );
-                    } );
-                    options.find( '.day-night' ).on( 'click', function () {
-                        const _dark = $( '.v-dark' );
-                        const _light = $( '.v-light' );
-                        $body.toggleClass( 'v-dark' );
-                        _dark.removeClass( 'v-dark' ).addClass( 'v-light' );
-                        _light.addClass( 'v-dark' ).removeClass( 'v-light' );
-                    } );
-                    options.find( '.mode-layout' ).on( 'click', function () {
-                        $body.toggleClass( 'dsn-line-style' );
-                        for ( let s of $build.swiper ) {
-                            s.update();
-                        }
-                        Isotope();
-                    } );
-                }
-                function dsnAjax() {
-                    const main_root = "main.main-root",
-                        text_e_img = "[data-dsn-ajax=\"img\"]",
-                        text_e_title = "[data-dsn-ajax=\"title\"]";
-                    var img_move, title_move,
-                        tl = gsap.timeline();
-                    return {
-                        ajaxLoad: function () {
-                            if ( !$body.hasClass( "dsn-ajax" ) ) return;
-                            let $parent = this;
-                            this.ajaxClick.off( "click" );
-                            this.ajaxClick.on( "click", function ( e ) {
-                                e.preventDefault();
-                                let _that = $( this ),
-                                    url = _that.attr( "href" ),
-                                    _type = _that.data( "dsn-ajax" );
-                                if ( url.indexOf( "#" ) >= 0 || url === undefined ) {
-                                    _that = url = _type = null;
-                                    return;
-                                }
-                                if ( $parent.effectAjax() ) return;
-                                $parent.effectAjax( true );
-                                $.ajax( {
-                                    url: url,
-                                    dataType: "html",
-                                    beforeSend: $parent.animateAjaxStart.bind( $parent, _type, _that ),
-                                    success: function ( data ) {
-                                        try {
-                                            history.pushState( null, "", url );
-                                            tl.call( $parent.animateAjaxEnd.bind( $parent, data ), null, null, "+=0.2" );
-                                        } catch ( e ) {
-                                            window.location = url;
-                                        }
-                                    }, error: function ( error ) {
-                                        window.location = url;
-                                    },
-                                } );
-                            } );
-                        },
-                        mainRoot: $( main_root ),
-                        ajaxClick: $( "a.effect-ajax " ),
-                        effectAjax: function ( $add ) {
-                            if ( $add )
-                                $body.addClass( "dsn-ajax-effect" );
-                            else if ( $add === false )
-                                $body.removeClass( "dsn-ajax-effect" );
-                            else
-                                return $body.hasClass( "dsn-ajax-effect" );
-                        },
-                        animateAjaxStart: function ( _type, _that ) {
-                            tl.clear();
-                            tl.addLabel( 'beforeSend' );
-                            if ( dsnGrid.isMobile() && _type === 'next' )
-                                _type = undefined;
-            
-            
-                            switch ( _type ) {
-                                case 'slider' :
-                                    this.ajaxSlider( _that );
-                                    break;
-                                case 'next' :
-                                    this.ajaxNextProject( _that );
-                                    break;
-                                case 'work' :
-                                    this.ajaxWork( _that );
-                                    break;
-                                case 'work-hover' :
-                                    this.ajaxWorkHover( _that );
-                                    break;
-                                default :
-                                    this.ajaxNormal();
-                            }
-                            if ( _type !== 'next' ) {
-                                $effectScroll.locked();
-                                tl.call( function () {
-                                    dsnGrid.scrollTop( 0, 0.01 );
-                                } );
-                            }
-                        },
-                        ajaxNormal: function () {
-                            let elemnt_ajax = $( "<div class=\"dsn-ajax-loader dsn-ajax-normal\"></div>" );
-                            $body.append( elemnt_ajax );
-                            tl.to( elemnt_ajax, 1, { autoAlpha: 1, ease: Expo.easeOut }, 0 );
-                            elemnt_ajax = null;
-                        },
-                        ajaxSlider: function ( $e ) {
-                            let
-                                active = $e.parents( ".slide-content" ),
-                                id = active.data( "dsn-id" ),
-                                img = active.parents( '.main-slider' ).find( ".slide-item[data-dsn-id=\"" + id + "\"] .cover-bg" ).first(),
-                                title = active.find( ".title" );
-                            let bg_con = active.parents( '.main-slider' ).find( '.bg-container' );
-                            img.removeClass( "hidden" );
-                            if ( active.data( 'webgel-src' ) )
-                                img = $( "<div class='cover-bg'></div>" ).attr( {
-                                    'data-overlay': bg_con.find( '.dsn-webgl' ).data( 'overlay' ),
-                                    'style': 'background-image:url("' + active.data( 'webgel-src' ) + '")'
-                                } );
-                            this.dsnCreateElement( img, bg_con, title, title );
-                        },
-                        ajaxNextProject: function ( $e ) {
-                            let
-                                active = $e.parents( '.next-project' ),
-                                img = active.find( ".bg" ),
-                                title = $e;
-                            const effectS = window.Scrollbar.get( document.querySelector( "#dsn-scrollbar" ) );
-            
-                            tl.to( effectS || $wind, 1, {
-                                scrollTo: { y: effectS ? $effectScroll.getScrollbar().limit.y : document.body.scrollHeight },
-                            } );
-                            tl.call( this.dsnCreateElement.bind( this, img, active, title.find( '.title' ), title, {
-                                before: function ( container, img_move, title_move ) {
-                                    title_move.removeClass( 'border-top' ).removeClass( 'border-bottom' );
-                                }
-                            } ) );
-                            tl.call( function () {
-                                $effectScroll.locked();
-                                tl.call( function () {
-                                    dsnGrid.scrollTop( 0, 0.01 );
-                                } );
-                            } )
-                            active = img = title = null;
-                        },
-                        ajaxWork: function ( $e ) {
-                            let
-                                active = $e.parents( ".work-item" ),
-                                img = active.find( ".box-img" ),
-                                title = active.find( ".sec-title" );
-                            this.dsnCreateElement( img, img, title, title );
-                            tl.to( img_move.find( "img" ), 0.5, { height: "100%", top: "0%", y: "0" } );
-                            active = img = title = null;
-                        },
-                        ajaxWorkHover: function ( $e ) {
-                            let
-                                active = $e,
-                                img = active.find( ".hover-reveal" ),
-                                title = active.find( ".work__item-text" );
-                            this.dsnCreateElement( img.find( '.hover-reveal__img' ), img, title, title );
-                            active = img = title = null;
-                        },
-                        addElement: function ( container, $e, $target ) {
-                            if ( $e === undefined || $e.length <= 0 ) return undefined;
-                            if ( $target === undefined || $target.length <= 0 ) {
-                                $target = $e;
-                            }
-                            $e.removeClass( "line-after" ).removeClass( "line-before" );
-                            let $section = $e.clone();
-                            let position = $target[ 0 ].getBoundingClientRect();
-                            if ( position === undefined ) {
-                                position = {
-                                    left: 0,
-                                    top: 0,
-                                };
-                            }
-                            $section.css( {
-                                position: "fix",
-                                display: "block",
-                                transform: "",
-                                transition: "",
-                                objectFit: "cover",
-                            } );
-                            $section.css( dsnGrid.getBoundingClientRect( $target[ 0 ] ) );
-                            $section.css( $e.dsnGridStyleObject() );
-                            container.append( $section );
-                            return $section;
-                        },
-                        dsnCreateElement: function ( $e, $target, $letter, $targetLtter, $object = {} ) {
-                            let container = $( "<div class=\"dsn-ajax-loader\"></div>" );
-                            img_move = this.addElement( container, $e, $target );
-                            title_move = this.addElement( container, $letter, $targetLtter );
-                            if ( !title_move.find( ".dsn-chars-wrapper" ).length ) dsnGrid.convertTextLine( title_move );
-                            if ( $object.before !== undefined )
-                                $object.before( container, img_move, title_move );
-                            $body.append( container );
-                            tl.to( container, 1, { autoAlpha: 1, ease: Power4.easeInOut }, '-=0.8' );
-                            if ( $object.after !== undefined )
-                                $object.after( container, img_move, title_move );
-                        },
-                        completeElement: function ( elAjax ) {
-                            let img = $( text_e_img );
-                            let title = $( text_e_title );
-                            if ( !img.length && !title.length ) {
-                                let webkitClipPath = { value: "0%" };
-                                tl.to( webkitClipPath, 1, {
-                                    value: "100%",
-                                    onUpdate: function () {
-                                        elAjax.css( "clip-path", "inset(0% 0% " + webkitClipPath.value + " 0%)" );
-                                    },
-                                    onComplete: function () {
-                                        webkitClipPath = null;
-                                    },
-                                    ease: Circ.easeIn,
-                                } );
-                                return;
-                            }
-                            img = img.first();
-                            let position = {
-                                top: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                                transform: "none",
-                            };
-                            if ( title_move.length ) {
-                                title = title.first();
-                                if ( !title.find( ".dsn-chars-wrapper" ).length ) dsnGrid.convertTextLine( title );
-                                position = title.offset();
-                                if ( position === undefined ) {
-                                    position = {
-                                        top: 0,
-                                        left: 0,
-                                    };
-                                }
-                                tl.set( title_move.find( ".dsn-chars-wrapper" ), {
-                                    x: title_move.offset().left - position.left,
-                                    y: title_move.offset().top - position.top,
-                                }, "-=1" );
-            
-                                let trans_title = title_move.find( ".dsn-chars-wrapper" ).toArray();
-                                if ( title_move.offset().left < position.left )
-                                    trans_title.reverse();
-                                tl.set( title_move, { top: position.top, left: position.left }, "-=0.8" );
-                                tl.to( title_move, 0.4, {
-                                    padding: "0", borderWidth: 0, yoyo: true
-                                } );
-                                tl.to( title_move, 0.8, {
-                                    css: title.dsnGridStyleObject(), yoyo: true
-                                }, "-=0.8" );
-                                title_move.css( "width", title.outerWidth() );
-                                tl.set( trans_title, { color: title_move.css( 'color' ) } );
-                                tl.staggerTo(
-                                    trans_title,
-                                    0.8,
-                                    {
-                                        y: "0",
-                                        x: "0",
-                                        ease: Back.easeOut.config( 1 ),
-                                        color: title.css( 'color' ),
-                                        yoyo: true
-                                    }, 0.02, "-=0.35" );
-                            }
-                            if ( img.length )
-                                position = {
-                                    top: img.get( 0 ).offsetTop,
-                                    left: img.get( 0 ).offsetLeft,
-                                    width: img.width(),
-                                    height: img.height(),
-                                };
-                            if ( img_move.length )
-                                tl.to( img_move, {
-                                    duration: 1,
-                                    top: position.top,
-                                    left: position.left,
-                                    width: position.width,
-                                    height: position.height,
-                                    objectFit: "cover",
-                                    borderRadius: 0,
-                                    ease: Expo.easeIn,
-                                }, '-=1.4' );
-                            let webkitClipPath = { value: "0%" };
-                            tl.to( webkitClipPath, 0.5, {
-                                value: "100%",
-                                onUpdate: function () {
-                                    elAjax.css( "clip-path", "inset(0% 0% " + webkitClipPath.value + " 0%)" );
-                                },
-                                onComplete: function () {
-                                    webkitClipPath = null;
-                                },
-                                ease: Circ.easeIn,
-                            } );
-                        },
-                        animateAjaxEnd: function ( data ) {
-                            tl.call( function () {
-                                dsnGrid.initAjax( data );
-                                this.mainRoot.html( $( data ).filter( main_root ).html() );
-                                reloadAjax( true ).catch( $err => {
-                                    console.error( $err );
-                                } );
-                            }.bind( this ), null, '+=1' );
-                            let elAjax = $( ".dsn-ajax-loader" );
-                            if ( elAjax.hasClass( "dsn-ajax-normal" ) )
-                                tl.to( elAjax, 1, { autoAlpha: 0, ease: Expo.easeIn } );
-                            else
-                                tl.call( this.completeElement.bind( this, elAjax ) );
-                            tl.eventCallback( "onComplete", function () {
-                                elAjax.remove();
-                                this.effectAjax( false );
-                            }.bind( this ) );
-                        },
-                        backAnimate: function ( url ) {
-                            if ( !url ) return;
-                            let $parent = this;
-                            $.ajax( {
-                                url: url,
-                                dataType: "html",
-                                beforeSend: $parent.animateAjaxStart.bind( $parent ),
-                                success: function ( data ) {
-                                    tl.call( $parent.animateAjaxEnd.bind( $parent, data ), null, null, "+=0.2" );
-                                }, error: function ( error ) {
-                                    window.location = url;
-                                },
-                            } );
-                        },
-                    };
-                }
-                function hoverReveal() {
-                    const getMousePos = ( e ) => {
-                        var posx = 0;
-                        var posy = 0;
-                        if ( !e ) e = window.event;
-                        if ( e.pageX || e.pageY ) {
-                            posx = e.pageX;
-                            posy = e.pageY;
-                        } else if ( e.clientX || e.clientY ) {
-                            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-                            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-                        }
-                        return {
-                            x: posx,
-                            y: posy
-                        }
-                    };
-                    const getRandomFloat = ( min, max ) => ( Math.random() * ( max - min ) + min ).toFixed( 2 );
-                    class HoverImgFx13 {
-                        constructor( el ) {
-                            this.DOM = { el: el };
-                            this.DOM.reveal = document.createElement( 'div' );
-                            this.DOM.reveal.className = 'hover-reveal';
-                            this.DOM.reveal.innerHTML = `<div class="hover-reveal__img" style="background-image:url(${ this.DOM.el.dataset.img })"></div>`;
-                            this.DOM.el.appendChild( this.DOM.reveal );
-                            this.DOM.revealImg = this.DOM.reveal.querySelector( '.hover-reveal__img' );
-                            dsnGrid.convertTextLine( this.DOM.el.querySelectorAll( '.work__item-text' ) )
-                            this.DOM.letters = [ ...this.DOM.el.querySelectorAll( '.work__item-text span' ) ];
-                            this.initEvents();
-                        }
-                        initEvents() {
-                            this.positionElement = ( ev ) => {
-                                if ( $body.hasClass( 'dsn-ajax-effect' ) ) {
-                                    return;
-                                }
-                                const mousePos = getMousePos( ev );
-                                if ( $effectScroll.isScroller() ) {
-                                    const scrollbar = $effectScroll.getScrollbar();
-                                    this.DOM.reveal.style.top = `${ mousePos.y - ( this.DOM.reveal.offsetHeight / 2 ) + ( scrollbar.offset.y ) }px`;
-                                    this.DOM.reveal.style.left = `${ mousePos.x - ( this.DOM.reveal.offsetHeight / 2 - 60 ) - scrollbar.offset.x }px`;
-                                } else {
-                                    const docScrolls = {
-                                        left: document.body.scrollLeft + document.documentElement.scrollLeft,
-                                        top: document.body.scrollTop + document.documentElement.scrollTop
-                                    };
-                                    this.DOM.reveal.style.top = `${ mousePos.y + 20 - ( docScrolls.top / 150 ) }px`;
-                                    this.DOM.reveal.style.left = `${ mousePos.x + 20 - docScrolls.left }px`
-                                }
-                            };
-                            this.mouseenterFn = ( ev ) => {
-                                if ( $body.hasClass( 'dsn-ajax-effect' ) ) return;
-                                this.positionElement( ev );
-                                this.animateLetters();
-                                this.showImage();
-                            };
-                            this.mousemoveFn = ev => requestAnimationFrame( () => {
-                                if ( $body.hasClass( 'dsn-ajax-effect' ) ) return;
-            
-                                this.positionElement( ev );
-                            } );
-                            this.mouseleaveFn = () => {
-                                if ( $body.hasClass( 'dsn-ajax-effect' ) ) return;
-                                this.hideImage();
-                            };
-                            this.DOM.el.addEventListener( 'mouseenter', this.mouseenterFn );
-                            this.DOM.el.addEventListener( 'mousemove', this.mousemoveFn );
-                            this.DOM.el.addEventListener( 'mouseleave', this.mouseleaveFn );
-                        }
-                        showImage() {
-                            TweenMax.killTweensOf( this.DOM.revealImg );
-                            this.tl = new TimelineMax( {
-                                onStart: () => {
-                                    this.DOM.reveal.style.opacity = 1;
-                                    TweenMax.set( this.DOM.el, { zIndex: 1000 } );
-                                }
-                            } )
-                                .add( 'begin' )
-                                .set( this.DOM.revealImg, { transformOrigin: '95% 50%', x: '100%' } )
-                                .add( new TweenMax( this.DOM.revealImg, 0.2, {
-                                    ease: Sine.easeOut,
-                                    startAt: { scaleX: 0.5, scaleY: 1 },
-                                    scaleX: 1.5,
-                                    scaleY: 0.7
-                                } ), 'begin' )
-                                .add( new TweenMax( this.DOM.revealImg, 0.8, {
-                                    ease: Expo.easeOut,
-                                    startAt: { rotation: 10, y: '5%', opacity: 0 },
-                                    rotation: 0,
-                                    y: '0%',
-                                    opacity: 1
-                                } ), 'begin' )
-                                .set( this.DOM.revealImg, { transformOrigin: '0% 50%' } )
-                                .add( new TweenMax( this.DOM.revealImg, 0.6, {
-                                    ease: Expo.easeOut,
-                                    scaleX: 1,
-                                    scaleY: 1,
-                                    opacity: 1
-                                } ), 'begin+=0.2' )
-                                .add( new TweenMax( this.DOM.revealImg, 0.6, {
-                                    ease: Expo.easeOut,
-                                    x: '0%'
-                                } ), 'begin+=0.2' )
-                        }
-                        hideImage() {
-                            TweenMax.killTweensOf( this.DOM.revealImg );
-                            this.tl = new TimelineMax( {
-                                onStart: () => {
-                                    TweenMax.set( this.DOM.el, { zIndex: 999 } );
-                                },
-                                onComplete: () => {
-                                    TweenMax.set( this.DOM.el, { zIndex: '' } );
-                                    TweenMax.set( this.DOM.reveal, { opacity: 0 } );
-                                }
-                            } )
-                                .add( 'begin' )
-                                .add( new TweenMax( this.DOM.revealImg, 0.2, {
-                                    ease: Sine.easeOut,
-                                    opacity: 0,
-                                    x: '-20%'
-                                } ), 'begin' );
-                        }
-                        animateLetters() {
-                            TweenMax.killTweensOf( this.DOM.letters );
-                            this.DOM.letters.forEach( letter => TweenMax.set( letter, {
-                                y: Math.round( Math.random() ) === 0 ? '50%' : '0%',
-                                opacity: 0
-                            } ) );
-                            TweenMax.to( this.DOM.letters, 1, {
-                                ease: Expo.easeOut,
-                                y: '0%',
-                                opacity: 1
-                            } );
-                        }
-                    }
-                    Array.from( document.querySelectorAll( "[data-fx=\"1\"] > .work__item a, a[data-fx=\"1\"]" ) ).forEach( link => new HoverImgFx13( link ) );
-            
-            
-                }
-                function magnificPopup() {
-                    let option = {
-                        delegate: "a:not(.effect-ajax)",
-                        type: "image",
-                        closeOnContentClick: false,
-                        closeBtnInside: false,
-                        mainClass: "mfp-with-zoom", // this class is for CSS animation below
-                        gallery: {
-                            enabled: true,
-                        },
-                        zoom: {
-                            enabled: true,
-                            duration: 400, // don't foget to change the duration also in CSS
-                            easing: "cubic-bezier(0.36, 0, 0.66, -0.56)", // CSS transition easing function
-                            opener: function ( element ) {
-                                return element.find( "img" );
-                            },
-                        },
-                        callbacks: {
-                            open: function () {
-                                $( "html" ).css( { margin: 0 } );
-                            }
-                        },
-                    };
-                    $( ".gallery-portfolio" ).each( function () {
-                        $( this ).magnificPopup( option );
-                    } );
-            
-                    if ( $( ".has-popup .pop-up" ).length ) option.delegate = "a.pop-up";
-                    $( ".has-popup" ).magnificPopup( option );
-            
-                }
-                function justifiedGallery() {
-                    $( ".gallery-portfolio" ).each( function () {
-                        $( this ).justifiedGallery( {
-                            rowHeight: 250,
-                            margins: 15,
-                        } );
-                    } );
-                }
-                function effectBackForward() {
-                    $wind.on( "popstate", function ( e ) {
-                        if ( window.location.hash.length ) {
-                            $wind.scrollTop( 0 );
-                            dsnGrid.scrollTop( window.location.hash, 1, -100 );
-                            return;
-                        }
-                        if ( document.location.href.indexOf( "#" ) > -1 ) {
-                            return;
-                        }
-                        setTimeout( function () {
-                            dsnAjax().backAnimate( document.location );
-                        }, 100 );
-                    } );
-                }
-                function ContactModel( $off ) {
-                    const btn = $( '.contact-btn' );
-                    if ( $off )
-                        btn.off( 'click' );
-                    btn.on( 'click', () => {
-                        $body.toggleClass( 'dsn-show-contact' );
-                    } )
-                }
-                function effectScroller() {
-                    const Scrollbar = window.Scrollbar;
-                    const locked_scroll = "locked-scroll";
-                    var myScrollbar = document.querySelector( "#dsn-scrollbar" );
-                    return {
-                        start: function () {
-                            $body.removeClass( locked_scroll );
-                            $( '.box-view-item .box-img .dsn-scroll-box' ).each( function () {
-                                Scrollbar.init( this, {
-                                    damping: 0.06,
-                                } );
-                            } );
-                            if ( !this.isScroller( true ) ) return;
-                            Scrollbar.init( myScrollbar, {
-                                damping: 0.06,
-                                renderByPixels: true,
-                                continuousScrolling: false,
-                                plugins: {
-                                    overscroll: true
-                                },
-                            } );
-                            this.contactForm();
-                        },
-                        contactForm: function () {
-                            const form = $( '.contact-modal .contact-container' );
-                            if ( form.length )
-                                Scrollbar.init( form.get( 0 ), {
-                                    damping: 0.06,
-                                } );
-                        },
-                        isScroller: function ( $print ) {
-                            if ( $print )
-                                myScrollbar = document.querySelector( "#dsn-scrollbar" );
-                            let hasSc = !$body.hasClass( "dsn-effect-scroll" ) || dsnGrid.isMobile() || myScrollbar === null;
-                            if ( hasSc && $print ) {
-                                $body.addClass( "dsn-mobile" );
-                            }
-                            return !hasSc;
-                        },
-                        locked: function () {
-                            $body.addClass( locked_scroll );
-                            if ( this.isScroller() ) {
-                                let scroll = this.getScrollbar();
-                                if ( scroll !== undefined ) {
-                                    scroll.destroy();
-                                }
-                                scroll = null;
-                            }
-                        },
-                        getScrollbar: function ( $id ) {
-                            if ( $id === undefined ) {
-                                return Scrollbar.get( myScrollbar );
-                            }
-                            return Scrollbar.get( document.querySelector( $id ) );
-                        },
-                        getListener: function ( $obj, $useWin = true ) {
-                            if ( $obj === undefined ) return;
-                            let $this = this;
-                            if ( $this.isScroller() ) {
-                                $this.getScrollbar().addListener( $obj );
-                            } else {
-                                if ( $useWin )
-                                    $wind.on( "scroll", $obj );
-                            }
-                            $this = null;
-                        },
-                        scrollNavigate: function () {
-                            let top = $( ".wrapper" ).offset();
-                            top = top ? top.top : 0;
-                            $( ".scroll-top , .scroll-to-top" ).on( "click", function () {
-                                dsnGrid.scrollTop( 0, 2 );
-                            } );
-            
-                            $( ".scroll-d" ).on( "click", function () {
-                                dsnGrid.scrollTop( top, 2,
-                                    ( $( ".scrollmagic-pin-spacer" ).height() * -1 ) - 200 || -200 );
-                            } );
-            
-                        },
-                    };
-                }             
+            preloader();
+            mouseCirMove();             
             //}
             //)( jQuery );
             
@@ -846,6 +70,322 @@ function check_first_load() {
       ajax_link.send();
   };
 
+  async function reloadAjax( $off ) {
+    await dsnGrid.destoryBuild();
+    await loadData( "poster" );
+    await loadData( "src" );
+    await loadData( "srcset" );
+    if ( !$off ) {
+        window.$effectScroll = await effectScroller();
+        window.$animate = await effectAnimate();
+        await navMenu().init();
+        await dsnGrid.removeWhiteSpace( ".site-header ul.extend-container li > a" );
+        await changeStyle();
+    }
+    if ( $off ) {
+        await mouseCirMove( $off );
+    }
+    $( "a.vid" ).YouTubePopUp();
+    await ContactModel();
+    await $effectScroll.start();
+    await effctStickyNavBar();
+    await $animate.allInt();
+    await slider().run();
+    await Isotope();
+    await projectSlider().run();
+    await accordion();
+    await linkRightPaginate();
+    await magnificPopup();
+    await justifiedGallery();
+    await hoverReveal();
+    await contactValidator();
+    await dsnAjax().ajaxLoad();
+    await dropHash();
+    await $( ".twentytwenty" ).twentytwenty();
+}
+
+  function hoverReveal() {
+    const getMousePos = ( e ) => {
+        var posx = 0;
+        var posy = 0;
+        if ( !e ) e = window.event;
+        if ( e.pageX || e.pageY ) {
+            posx = e.pageX;
+            posy = e.pageY;
+        } else if ( e.clientX || e.clientY ) {
+            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+        return {
+            x: posx,
+            y: posy
+        }
+    };
+    const getRandomFloat = ( min, max ) => ( Math.random() * ( max - min ) + min ).toFixed( 2 );
+    class HoverImgFx13 {
+        constructor( el ) {
+            this.DOM = { el: el };
+            this.DOM.reveal = document.createElement( 'div' );
+            this.DOM.reveal.className = 'hover-reveal';
+            this.DOM.reveal.innerHTML = `<div class="hover-reveal__img" style="background-image:url(${ this.DOM.el.dataset.img })"></div>`;
+            this.DOM.el.appendChild( this.DOM.reveal );
+            this.DOM.revealImg = this.DOM.reveal.querySelector( '.hover-reveal__img' );
+            dsnGrid.convertTextLine( this.DOM.el.querySelectorAll( '.work__item-text' ) )
+            this.DOM.letters = [ ...this.DOM.el.querySelectorAll( '.work__item-text span' ) ];
+            this.initEvents();
+        }
+        initEvents() {
+            this.positionElement = ( ev ) => {
+                if ( $body.hasClass( 'dsn-ajax-effect' ) ) {
+                    return;
+                }
+                const mousePos = getMousePos( ev );
+                if ( $effectScroll.isScroller() ) {
+                    const scrollbar = $effectScroll.getScrollbar();
+                    this.DOM.reveal.style.top = `${ mousePos.y - ( this.DOM.reveal.offsetHeight / 2 ) + ( scrollbar.offset.y ) }px`;
+                    this.DOM.reveal.style.left = `${ mousePos.x - ( this.DOM.reveal.offsetHeight / 2 - 60 ) - scrollbar.offset.x }px`;
+                } else {
+                    const docScrolls = {
+                        left: document.body.scrollLeft + document.documentElement.scrollLeft,
+                        top: document.body.scrollTop + document.documentElement.scrollTop
+                    };
+                    this.DOM.reveal.style.top = `${ mousePos.y + 20 - ( docScrolls.top / 150 ) }px`;
+                    this.DOM.reveal.style.left = `${ mousePos.x + 20 - docScrolls.left }px`
+                }
+            };
+            this.mouseenterFn = ( ev ) => {
+                if ( $body.hasClass( 'dsn-ajax-effect' ) ) return;
+                this.positionElement( ev );
+                this.animateLetters();
+                this.showImage();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame( () => {
+                if ( $body.hasClass( 'dsn-ajax-effect' ) ) return;
+
+                this.positionElement( ev );
+            } );
+            this.mouseleaveFn = () => {
+                if ( $body.hasClass( 'dsn-ajax-effect' ) ) return;
+                this.hideImage();
+            };
+            this.DOM.el.addEventListener( 'mouseenter', this.mouseenterFn );
+            this.DOM.el.addEventListener( 'mousemove', this.mousemoveFn );
+            this.DOM.el.addEventListener( 'mouseleave', this.mouseleaveFn );
+        }
+        showImage() {
+            TweenMax.killTweensOf( this.DOM.revealImg );
+            this.tl = new TimelineMax( {
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                    TweenMax.set( this.DOM.el, { zIndex: 1000 } );
+                }
+            } )
+                .add( 'begin' )
+                .set( this.DOM.revealImg, { transformOrigin: '95% 50%', x: '100%' } )
+                .add( new TweenMax( this.DOM.revealImg, 0.2, {
+                    ease: Sine.easeOut,
+                    startAt: { scaleX: 0.5, scaleY: 1 },
+                    scaleX: 1.5,
+                    scaleY: 0.7
+                } ), 'begin' )
+                .add( new TweenMax( this.DOM.revealImg, 0.8, {
+                    ease: Expo.easeOut,
+                    startAt: { rotation: 10, y: '5%', opacity: 0 },
+                    rotation: 0,
+                    y: '0%',
+                    opacity: 1
+                } ), 'begin' )
+                .set( this.DOM.revealImg, { transformOrigin: '0% 50%' } )
+                .add( new TweenMax( this.DOM.revealImg, 0.6, {
+                    ease: Expo.easeOut,
+                    scaleX: 1,
+                    scaleY: 1,
+                    opacity: 1
+                } ), 'begin+=0.2' )
+                .add( new TweenMax( this.DOM.revealImg, 0.6, {
+                    ease: Expo.easeOut,
+                    x: '0%'
+                } ), 'begin+=0.2' )
+        }
+        hideImage() {
+            TweenMax.killTweensOf( this.DOM.revealImg );
+            this.tl = new TimelineMax( {
+                onStart: () => {
+                    TweenMax.set( this.DOM.el, { zIndex: 999 } );
+                },
+                onComplete: () => {
+                    TweenMax.set( this.DOM.el, { zIndex: '' } );
+                    TweenMax.set( this.DOM.reveal, { opacity: 0 } );
+                }
+            } )
+                .add( 'begin' )
+                .add( new TweenMax( this.DOM.revealImg, 0.2, {
+                    ease: Sine.easeOut,
+                    opacity: 0,
+                    x: '-20%'
+                } ), 'begin' );
+        }
+        animateLetters() {
+            TweenMax.killTweensOf( this.DOM.letters );
+            this.DOM.letters.forEach( letter => TweenMax.set( letter, {
+                y: Math.round( Math.random() ) === 0 ? '50%' : '0%',
+                opacity: 0
+            } ) );
+            TweenMax.to( this.DOM.letters, 1, {
+                ease: Expo.easeOut,
+                y: '0%',
+                opacity: 1
+            } );
+        }
+    }
+    Array.from( document.querySelectorAll( "[data-fx=\"1\"] > .work__item a, a[data-fx=\"1\"]" ) ).forEach( link => new HoverImgFx13( link ) );
+
+
+}
+function magnificPopup() {
+    let option = {
+        delegate: "a:not(.effect-ajax)",
+        type: "image",
+        closeOnContentClick: false,
+        closeBtnInside: false,
+        mainClass: "mfp-with-zoom", // this class is for CSS animation below
+        gallery: {
+            enabled: true,
+        },
+        zoom: {
+            enabled: true,
+            duration: 400, // don't foget to change the duration also in CSS
+            easing: "cubic-bezier(0.36, 0, 0.66, -0.56)", // CSS transition easing function
+            opener: function ( element ) {
+                return element.find( "img" );
+            },
+        },
+        callbacks: {
+            open: function () {
+                $( "html" ).css( { margin: 0 } );
+            }
+        },
+    };
+    $( ".gallery-portfolio" ).each( function () {
+        $( this ).magnificPopup( option );
+    } );
+
+    if ( $( ".has-popup .pop-up" ).length ) option.delegate = "a.pop-up";
+    $( ".has-popup" ).magnificPopup( option );
+
+}
+function justifiedGallery() {
+    $( ".gallery-portfolio" ).each( function () {
+        $( this ).justifiedGallery( {
+            rowHeight: 250,
+            margins: 15,
+        } );
+    } );
+}
+function effectBackForward() {
+    $wind.on( "popstate", function ( e ) {
+        if ( window.location.hash.length ) {
+            $wind.scrollTop( 0 );
+            dsnGrid.scrollTop( window.location.hash, 1, -100 );
+            return;
+        }
+        if ( document.location.href.indexOf( "#" ) > -1 ) {
+            return;
+        }
+        setTimeout( function () {
+            dsnAjax().backAnimate( document.location );
+        }, 100 );
+    } );
+}
+function ContactModel( $off ) {
+    const btn = $( '.contact-btn' );
+    if ( $off )
+        btn.off( 'click' );
+    btn.on( 'click', () => {
+        $body.toggleClass( 'dsn-show-contact' );
+    } )
+}
+function effectScroller() {
+    const Scrollbar = window.Scrollbar;
+    const locked_scroll = "locked-scroll";
+    var myScrollbar = document.querySelector( "#dsn-scrollbar" );
+    return {
+        start: function () {
+            $body.removeClass( locked_scroll );
+            $( '.box-view-item .box-img .dsn-scroll-box' ).each( function () {
+                Scrollbar.init( this, {
+                    damping: 0.06,
+                } );
+            } );
+            if ( !this.isScroller( true ) ) return;
+            Scrollbar.init( myScrollbar, {
+                damping: 0.06,
+                renderByPixels: true,
+                continuousScrolling: false,
+                plugins: {
+                    overscroll: true
+                },
+            } );
+            this.contactForm();
+        },
+        contactForm: function () {
+            const form = $( '.contact-modal .contact-container' );
+            if ( form.length )
+                Scrollbar.init( form.get( 0 ), {
+                    damping: 0.06,
+                } );
+        },
+        isScroller: function ( $print ) {
+            if ( $print )
+                myScrollbar = document.querySelector( "#dsn-scrollbar" );
+            let hasSc = !$body.hasClass( "dsn-effect-scroll" ) || dsnGrid.isMobile() || myScrollbar === null;
+            if ( hasSc && $print ) {
+                $body.addClass( "dsn-mobile" );
+            }
+            return !hasSc;
+        },
+        locked: function () {
+            $body.addClass( locked_scroll );
+            if ( this.isScroller() ) {
+                let scroll = this.getScrollbar();
+                if ( scroll !== undefined ) {
+                    scroll.destroy();
+                }
+                scroll = null;
+            }
+        },
+        getScrollbar: function ( $id ) {
+            if ( $id === undefined ) {
+                return Scrollbar.get( myScrollbar );
+            }
+            return Scrollbar.get( document.querySelector( $id ) );
+        },
+        getListener: function ( $obj, $useWin = true ) {
+            if ( $obj === undefined ) return;
+            let $this = this;
+            if ( $this.isScroller() ) {
+                $this.getScrollbar().addListener( $obj );
+            } else {
+                if ( $useWin )
+                    $wind.on( "scroll", $obj );
+            }
+            $this = null;
+        },
+        scrollNavigate: function () {
+            let top = $( ".wrapper" ).offset();
+            top = top ? top.top : 0;
+            $( ".scroll-top , .scroll-to-top" ).on( "click", function () {
+                dsnGrid.scrollTop( 0, 2 );
+            } );
+
+            $( ".scroll-d" ).on( "click", function () {
+                dsnGrid.scrollTop( top, 2,
+                    ( $( ".scrollmagic-pin-spacer" ).height() * -1 ) - 200 || -200 );
+            } );
+
+        },
+    };
+}
 
   function effectAnimate() {
     const easeAnimate = Linear.easeNone;
@@ -1816,5 +1356,468 @@ async function linkRightPaginate() {
         } );     
     } );   
 }
+
+function preloader() {
+    let preloader = $( ".preloader" ),
+        progress_number = preloader.find( ".percent" ),
+        progress_title = preloader.find( ".title .text-fill" ),
+        persent = { value: 0 },
+        preloader_bar = preloader.find( ".preloader-bar" ),
+        preloader_progress = preloader_bar.find( ".preloader-progress" );
+    let timer = dsnGrid.pageLoad( 0, 100, 1000, function ( val ) {
+        progress_number.text( val );
+        persent.value = val;
+        progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
+        preloader_progress.css( "width", val + "%" );
+    } );
+    if ( !preloader.length ) {
+        effectBackForward();
+        reloadAjax().catch( $err => {
+            console.log( $err );
+        } );
+    }
+    $wind.on( "load", function () {
+        clearInterval( timer );
+        gsap.timeline()
+            .to( persent, 1, {
+                value: 100, onUpdate: function () {
+                    progress_number.text( persent.value.toFixed( 0 ) );
+                    progress_title.css( "clip-path", "inset(" + ( 100 - persent.value ) + "% 0% 0% 0%)" );
+                    preloader_progress.css( "width", persent.value + "%" );
+                },
+            } )
+            .to( preloader.find( '> *' ), { y: -30, autoAlpha: 0 } )
+            .call( function () {
+                if ( preloader.length ) {
+                    effectBackForward();
+                    reloadAjax().catch( $err => {
+                        console.log( $err );
+                    } );
+                }
+            } )
+            .set( persent, { value: 0 } )
+            .to( persent, 0.8, {
+                value: 100, onUpdate: function () {
+                    preloader.css( "clip-path", "inset(" + ( persent.value ) + "% 0% 0% 0%)" );
+                },
+                ease: Power2.easeInOut,
+            }, "+=0.5" )
+            .call( function () {
+                preloader.remove();
+                timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
+            } );
+    } );
+}
+function contactValidator() {
+    const contact_form = $( "#contact-form" );
+    if ( contact_form < 1 ) {
+        return;
+    }
+    contact_form.off( "submit" );
+    contact_form.on( "submit", function ( e ) {
+        if ( !e.isDefaultPrevented() ) {
+            contact_form.validator();
+            $.ajax( {
+                type: "POST",
+                url: "contact.php",
+                data: $( this ).serialize(),
+                success: function ( data ) {
+                    var messageAlert = "alert-" + data.type;
+                    var messageText = data.message;
+                    var alertBox = "<div class=\"alert " + messageAlert + " alert-dismissable\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>" + messageText + "</div>";
+                    if ( messageAlert && messageText ) {
+                        contact_form.find( ".messages" ).html( alertBox );
+                        contact_form[ 0 ].reset();
+                    }
+                    setTimeout( function () {
+                        contact_form.find( ".messages" ).html( "" );
+                    }, 3000 );
+                },
+                error: function ( error ) {
+                    console.log( error );
+                },
+            } );
+            return false;
+        }
+    } );
+}
+function effctStickyNavBar() {
+    $wind.off( "scroll" );
+    const wrapper = $( '.wrapper' );
+    let bodyScroll = 0;
+    var $ofContent = wrapper.offset();
+    var header = wrapper.find( '> *:first-child' );
+    var scrDown = 0;
+    if ( header.length ) {
+        $ofContent = header.get( 0 ).nodeName === 'HEADER' ? header.outerHeight() : ( $ofContent !== undefined ) ? $ofContent.top : 70;
+    }
+    $effectScroll.getListener( function ( e ) {
+        if ( e.type === "scroll" ) {
+            bodyScroll = $wind.scrollTop();
+        } else {
+            bodyScroll = e.offset.y;
+        }
+        if ( $ofContent > 170 ) {
+            $ofContent = $ofContent - 100;
+        }
+        if ( bodyScroll > $ofContent ) {
+            if ( scrDown < bodyScroll ) {
+                $body.addClass( 'nav-bg' ).addClass( 'hide-nav' )
+            } else {
+                $body.removeClass( 'hide-nav' )
+            }
+        } else {
+            $body.removeClass( 'nav-bg' ).removeClass( 'hide-nav' );
+        }
+        scrDown = bodyScroll;
+    } );
+}
+function dropHash() {
+    $( "a[href=\"#\"]" ).on( "click", function ( e ) {
+        e.preventDefault();
+    } );
+    $( "[href*=\"#\"]:not([href=\"#\"])" ).on( "click", function ( e ) {
+        e.preventDefault();
+        let href = $( $( this ).attr( "href" ) );
+        if ( !href.length ) {
+            href = null;
+            return false;
+        }
+        dsnGrid.scrollTop( href.get( 0 ).offsetTop, 1, -100 );
+        href = null;
+    } );
+    if ( window.location.hash.length ) {
+        $wind.scrollTop( 0 );
+        dsnGrid.scrollTop( window.location.hash, 1, -100 );
+    }
+
+
+}
+function changeStyle() {
+    const options = $( '.box-options' );
+    options.find( '.title-mode' ).each( function () {
+        dsnGrid.convertTextLine( this );
+    } );
+    options.find( '.day-night' ).on( 'click', function () {
+        const _dark = $( '.v-dark' );
+        const _light = $( '.v-light' );
+        $body.toggleClass( 'v-dark' );
+        _dark.removeClass( 'v-dark' ).addClass( 'v-light' );
+        _light.addClass( 'v-dark' ).removeClass( 'v-light' );
+    } );
+    options.find( '.mode-layout' ).on( 'click', function () {
+        $body.toggleClass( 'dsn-line-style' );
+        for ( let s of $build.swiper ) {
+            s.update();
+        }
+        Isotope();
+    } );
+}
+function dsnAjax() {
+    const main_root = "main.main-root",
+        text_e_img = "[data-dsn-ajax=\"img\"]",
+        text_e_title = "[data-dsn-ajax=\"title\"]";
+    var img_move, title_move,
+        tl = gsap.timeline();
+    return {
+        ajaxLoad: function () {
+            if ( !$body.hasClass( "dsn-ajax" ) ) return;
+            let $parent = this;
+            this.ajaxClick.off( "click" );
+            this.ajaxClick.on( "click", function ( e ) {
+                e.preventDefault();
+                let _that = $( this ),
+                    url = _that.attr( "href" ),
+                    _type = _that.data( "dsn-ajax" );
+                if ( url.indexOf( "#" ) >= 0 || url === undefined ) {
+                    _that = url = _type = null;
+                    return;
+                }
+                if ( $parent.effectAjax() ) return;
+                $parent.effectAjax( true );
+                $.ajax( {
+                    url: url,
+                    dataType: "html",
+                    beforeSend: $parent.animateAjaxStart.bind( $parent, _type, _that ),
+                    success: function ( data ) {
+                        try {
+                            history.pushState( null, "", url );
+                            tl.call( $parent.animateAjaxEnd.bind( $parent, data ), null, null, "+=0.2" );
+                        } catch ( e ) {
+                            window.location = url;
+                        }
+                    }, error: function ( error ) {
+                        window.location = url;
+                    },
+                } );
+            } );
+        },
+        mainRoot: $( main_root ),
+        ajaxClick: $( "a.effect-ajax " ),
+        effectAjax: function ( $add ) {
+            if ( $add )
+                $body.addClass( "dsn-ajax-effect" );
+            else if ( $add === false )
+                $body.removeClass( "dsn-ajax-effect" );
+            else
+                return $body.hasClass( "dsn-ajax-effect" );
+        },
+        animateAjaxStart: function ( _type, _that ) {
+            tl.clear();
+            tl.addLabel( 'beforeSend' );
+            if ( dsnGrid.isMobile() && _type === 'next' )
+                _type = undefined;
+
+
+            switch ( _type ) {
+                case 'slider' :
+                    this.ajaxSlider( _that );
+                    break;
+                case 'next' :
+                    this.ajaxNextProject( _that );
+                    break;
+                case 'work' :
+                    this.ajaxWork( _that );
+                    break;
+                case 'work-hover' :
+                    this.ajaxWorkHover( _that );
+                    break;
+                default :
+                    this.ajaxNormal();
+            }
+            if ( _type !== 'next' ) {
+                $effectScroll.locked();
+                tl.call( function () {
+                    dsnGrid.scrollTop( 0, 0.01 );
+                } );
+            }
+        },
+        ajaxNormal: function () {
+            let elemnt_ajax = $( "<div class=\"dsn-ajax-loader dsn-ajax-normal\"></div>" );
+            $body.append( elemnt_ajax );
+            tl.to( elemnt_ajax, 1, { autoAlpha: 1, ease: Expo.easeOut }, 0 );
+            elemnt_ajax = null;
+        },
+        ajaxSlider: function ( $e ) {
+            let
+                active = $e.parents( ".slide-content" ),
+                id = active.data( "dsn-id" ),
+                img = active.parents( '.main-slider' ).find( ".slide-item[data-dsn-id=\"" + id + "\"] .cover-bg" ).first(),
+                title = active.find( ".title" );
+            let bg_con = active.parents( '.main-slider' ).find( '.bg-container' );
+            img.removeClass( "hidden" );
+            if ( active.data( 'webgel-src' ) )
+                img = $( "<div class='cover-bg'></div>" ).attr( {
+                    'data-overlay': bg_con.find( '.dsn-webgl' ).data( 'overlay' ),
+                    'style': 'background-image:url("' + active.data( 'webgel-src' ) + '")'
+                } );
+            this.dsnCreateElement( img, bg_con, title, title );
+        },
+        ajaxNextProject: function ( $e ) {
+            let
+                active = $e.parents( '.next-project' ),
+                img = active.find( ".bg" ),
+                title = $e;
+            const effectS = window.Scrollbar.get( document.querySelector( "#dsn-scrollbar" ) );
+
+            tl.to( effectS || $wind, 1, {
+                scrollTo: { y: effectS ? $effectScroll.getScrollbar().limit.y : document.body.scrollHeight },
+            } );
+            tl.call( this.dsnCreateElement.bind( this, img, active, title.find( '.title' ), title, {
+                before: function ( container, img_move, title_move ) {
+                    title_move.removeClass( 'border-top' ).removeClass( 'border-bottom' );
+                }
+            } ) );
+            tl.call( function () {
+                $effectScroll.locked();
+                tl.call( function () {
+                    dsnGrid.scrollTop( 0, 0.01 );
+                } );
+            } )
+            active = img = title = null;
+        },
+        ajaxWork: function ( $e ) {
+            let
+                active = $e.parents( ".work-item" ),
+                img = active.find( ".box-img" ),
+                title = active.find( ".sec-title" );
+            this.dsnCreateElement( img, img, title, title );
+            tl.to( img_move.find( "img" ), 0.5, { height: "100%", top: "0%", y: "0" } );
+            active = img = title = null;
+        },
+        ajaxWorkHover: function ( $e ) {
+            let
+                active = $e,
+                img = active.find( ".hover-reveal" ),
+                title = active.find( ".work__item-text" );
+            this.dsnCreateElement( img.find( '.hover-reveal__img' ), img, title, title );
+            active = img = title = null;
+        },
+        addElement: function ( container, $e, $target ) {
+            if ( $e === undefined || $e.length <= 0 ) return undefined;
+            if ( $target === undefined || $target.length <= 0 ) {
+                $target = $e;
+            }
+            $e.removeClass( "line-after" ).removeClass( "line-before" );
+            let $section = $e.clone();
+            let position = $target[ 0 ].getBoundingClientRect();
+            if ( position === undefined ) {
+                position = {
+                    left: 0,
+                    top: 0,
+                };
+            }
+            $section.css( {
+                position: "fix",
+                display: "block",
+                transform: "",
+                transition: "",
+                objectFit: "cover",
+            } );
+            $section.css( dsnGrid.getBoundingClientRect( $target[ 0 ] ) );
+            $section.css( $e.dsnGridStyleObject() );
+            container.append( $section );
+            return $section;
+        },
+        dsnCreateElement: function ( $e, $target, $letter, $targetLtter, $object = {} ) {
+            let container = $( "<div class=\"dsn-ajax-loader\"></div>" );
+            img_move = this.addElement( container, $e, $target );
+            title_move = this.addElement( container, $letter, $targetLtter );
+            if ( !title_move.find( ".dsn-chars-wrapper" ).length ) dsnGrid.convertTextLine( title_move );
+            if ( $object.before !== undefined )
+                $object.before( container, img_move, title_move );
+            $body.append( container );
+            tl.to( container, 1, { autoAlpha: 1, ease: Power4.easeInOut }, '-=0.8' );
+            if ( $object.after !== undefined )
+                $object.after( container, img_move, title_move );
+        },
+        completeElement: function ( elAjax ) {
+            let img = $( text_e_img );
+            let title = $( text_e_title );
+            if ( !img.length && !title.length ) {
+                let webkitClipPath = { value: "0%" };
+                tl.to( webkitClipPath, 1, {
+                    value: "100%",
+                    onUpdate: function () {
+                        elAjax.css( "clip-path", "inset(0% 0% " + webkitClipPath.value + " 0%)" );
+                    },
+                    onComplete: function () {
+                        webkitClipPath = null;
+                    },
+                    ease: Circ.easeIn,
+                } );
+                return;
+            }
+            img = img.first();
+            let position = {
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                transform: "none",
+            };
+            if ( title_move.length ) {
+                title = title.first();
+                if ( !title.find( ".dsn-chars-wrapper" ).length ) dsnGrid.convertTextLine( title );
+                position = title.offset();
+                if ( position === undefined ) {
+                    position = {
+                        top: 0,
+                        left: 0,
+                    };
+                }
+                tl.set( title_move.find( ".dsn-chars-wrapper" ), {
+                    x: title_move.offset().left - position.left,
+                    y: title_move.offset().top - position.top,
+                }, "-=1" );
+
+                let trans_title = title_move.find( ".dsn-chars-wrapper" ).toArray();
+                if ( title_move.offset().left < position.left )
+                    trans_title.reverse();
+                tl.set( title_move, { top: position.top, left: position.left }, "-=0.8" );
+                tl.to( title_move, 0.4, {
+                    padding: "0", borderWidth: 0, yoyo: true
+                } );
+                tl.to( title_move, 0.8, {
+                    css: title.dsnGridStyleObject(), yoyo: true
+                }, "-=0.8" );
+                title_move.css( "width", title.outerWidth() );
+                tl.set( trans_title, { color: title_move.css( 'color' ) } );
+                tl.staggerTo(
+                    trans_title,
+                    0.8,
+                    {
+                        y: "0",
+                        x: "0",
+                        ease: Back.easeOut.config( 1 ),
+                        color: title.css( 'color' ),
+                        yoyo: true
+                    }, 0.02, "-=0.35" );
+            }
+            if ( img.length )
+                position = {
+                    top: img.get( 0 ).offsetTop,
+                    left: img.get( 0 ).offsetLeft,
+                    width: img.width(),
+                    height: img.height(),
+                };
+            if ( img_move.length )
+                tl.to( img_move, {
+                    duration: 1,
+                    top: position.top,
+                    left: position.left,
+                    width: position.width,
+                    height: position.height,
+                    objectFit: "cover",
+                    borderRadius: 0,
+                    ease: Expo.easeIn,
+                }, '-=1.4' );
+            let webkitClipPath = { value: "0%" };
+            tl.to( webkitClipPath, 0.5, {
+                value: "100%",
+                onUpdate: function () {
+                    elAjax.css( "clip-path", "inset(0% 0% " + webkitClipPath.value + " 0%)" );
+                },
+                onComplete: function () {
+                    webkitClipPath = null;
+                },
+                ease: Circ.easeIn,
+            } );
+        },
+        animateAjaxEnd: function ( data ) {
+            tl.call( function () {
+                dsnGrid.initAjax( data );
+                this.mainRoot.html( $( data ).filter( main_root ).html() );
+                reloadAjax( true ).catch( $err => {
+                    console.error( $err );
+                } );
+            }.bind( this ), null, '+=1' );
+            let elAjax = $( ".dsn-ajax-loader" );
+            if ( elAjax.hasClass( "dsn-ajax-normal" ) )
+                tl.to( elAjax, 1, { autoAlpha: 0, ease: Expo.easeIn } );
+            else
+                tl.call( this.completeElement.bind( this, elAjax ) );
+            tl.eventCallback( "onComplete", function () {
+                elAjax.remove();
+                this.effectAjax( false );
+            }.bind( this ) );
+        },
+        backAnimate: function ( url ) {
+            if ( !url ) return;
+            let $parent = this;
+            $.ajax( {
+                url: url,
+                dataType: "html",
+                beforeSend: $parent.animateAjaxStart.bind( $parent ),
+                success: function ( data ) {
+                    tl.call( $parent.animateAjaxEnd.bind( $parent, data ), null, null, "+=0.2" );
+                }, error: function ( error ) {
+                    window.location = url;
+                },
+            } );
+        },
+    };
+}
+
 
   check_first_load();
