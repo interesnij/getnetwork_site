@@ -170,9 +170,9 @@ function preloader() {
                         timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
                     } );
         };
-        //if (val == 100) { 
-        //    setTimeout (preloader_hide, 2000);
-        //}
+        if (val == 100) { 
+            setTimeout (preloader_hide, 2000);
+        }
     } );
 
     if ( !preloader.length ) {
@@ -181,9 +181,9 @@ function preloader() {
             console.log( $err );
         } );
     }
-    jQuery(window).on("load", function () {
-        preloader_hide()
-    })
+    //jQuery(window).on("load", function () {
+    //    preloader_hide()
+    //})
 }
 
   async function reloadAjax( $off ) {
