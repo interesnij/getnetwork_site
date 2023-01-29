@@ -64,7 +64,7 @@ function check_first_load() {
             preloader();
             reloadAjax();
             preloader_hide()
-            $( ".preloader" ).remove();
+            //$( ".preloader" ).remove();
             effectBackForward();
             window.history.pushState ({"url":url}, document.title, url);
         }
