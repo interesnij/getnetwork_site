@@ -47,7 +47,7 @@ function load_prev(ajax_link, elem_) {
 
 }
 
-async function check_first_load() {
+function check_first_load() {
       url = window.location.href;
       ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
       ajax_link.open( 'GET', url + "?ajax=1", true );
@@ -61,29 +61,29 @@ async function check_first_load() {
             mouseCirMove();
             //reloadAjax();   
 
-            window.$effectScroll = await effectScroller();
-            window.$animate = await effectAnimate();
-            await navMenu().init();
-            await dsnGrid.removeWhiteSpace( ".site-header ul.extend-container li > a" );
-            await changeStyle();
+            window.$effectScroll = effectScroller();
+            window.$animate = effectAnimate();
+            navMenu().init();
+            dsnGrid.removeWhiteSpace( ".site-header ul.extend-container li > a" );
+            changeStyle();
 
             $( "a.vid" ).YouTubePopUp();
-            await ContactModel();
-            await $effectScroll.start();
-            await effctStickyNavBar();
-            await $animate.allInt();
-            await slider().run();
-            await Isotope();
-            await projectSlider().run();
-            await accordion();
-            await linkRightPaginate();
-            await magnificPopup();
-            await justifiedGallery();
-            await hoverReveal();
-            await contactValidator();
-            await dsnAjax().ajaxLoad();
-            await dropHash();
-            await $( ".twentytwenty" ).twentytwenty();
+            ContactModel();
+            $effectScroll.start();
+            effctStickyNavBar();
+            $animate.allInt();
+            slider().run();
+            Isotope();
+            projectSlider().run();
+            accordion();
+            linkRightPaginate();
+            magnificPopup();
+            justifiedGallery();
+            hoverReveal();
+            contactValidator();
+            //dsnAjax().ajaxLoad();
+            dropHash();
+            $( ".twentytwenty" ).twentytwenty();
             
             window.history.pushState ({"url":url}, document.title, url);
         }
