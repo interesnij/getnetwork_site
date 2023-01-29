@@ -127,7 +127,7 @@ function preloader_hide() {
 }
 
 function preloader() {
-    let preloader = $( ".preloader" ),
+    let preloader = $( ".preloader" ), 
         progress_number = preloader.find( ".percent" ),
         progress_title = preloader.find( ".title .text-fill" ),
         persent = { value: 0 },
@@ -170,9 +170,9 @@ function preloader() {
                         timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
                     } );
         };
-        if (val == 100) { 
-            setTimeout (preloader_hide, 2000);
-        }
+        //if (val == 100) { 
+        //    setTimeout (preloader_hide, 2000);
+        //}
     } );
 
     if ( !preloader.length ) {
@@ -181,9 +181,9 @@ function preloader() {
             console.log( $err );
         } );
     }
-    //jQuery(window).on("load", function () {
-    //    preloader_hide()
-    //})
+    $wind.on( "load", function () {
+        preloader_hide()
+    })
 }
 
   async function reloadAjax( $off ) {
