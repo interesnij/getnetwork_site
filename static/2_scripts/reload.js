@@ -1370,8 +1370,8 @@ function preloader() {
         reloadAjax().catch( $err => {
             console.log( $err );
         } );
-    }   
-    $wind.on( "load", function () {
+    }
+    const loaded = function () {
         clearInterval( timer );
         gsap.timeline()
             .to( persent, 1, {
@@ -1401,7 +1401,9 @@ function preloader() {
                 preloader.remove();
                 timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
             } );
-    } );
+    };
+
+    window.onload = loaded;
 }
 function contactValidator() {
     const contact_form = $( "#contact-form" );
