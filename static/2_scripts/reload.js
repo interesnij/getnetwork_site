@@ -1352,20 +1352,11 @@ async function linkRightPaginate() {
     } );   
 }
 
-function preloader() {
-    let preloader = $( ".preloader" ),
-        progress_number = preloader.find( ".percent" ),
-        progress_title = preloader.find( ".title .text-fill" ),
-        persent = { value: 0 },
-        preloader_bar = preloader.find( ".preloader-bar" ),
-        preloader_progress = preloader_bar.find( ".preloader-progress" );
-    let timer = dsnGrid.pageLoad( 0, 100, 1000, function ( val ) {
-        progress_number.text( val );
-        persent.value = val;
-        progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
-        preloader_progress.css( "width", val + "%" );
-        if (val == 100) {
-            clearInterval( timer );
+function start_show() {
+    effectBackForward()
+}
+function preloader_hide() {
+    clearInterval( timer );
         gsap.timeline()
             .to( persent, 1, {
                 value: 100, onUpdate: function () {
@@ -1394,13 +1385,32 @@ function preloader() {
                 preloader.remove();
                 timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
             } );
-        }
+}
+
+function preloader() {
+    let preloader = $( ".preloader" ),
+        progress_number = preloader.find( ".percent" ),
+        progress_title = preloader.find( ".title .text-fill" ),
+        persent = { value: 0 },
+        preloader_bar = preloader.find( ".preloader-bar" ),
+        preloader_progress = preloader_bar.find( ".preloader-progress" );
+    let timer = dsnGrid.pageLoad( 0, 100, 1000, function ( val ) {
+        progress_number.text( val );
+        persent.value = val;
+        progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
+        preloader_progress.css( "width", val + "%" );
+        //if (val == 100) {
+        //    preloader_hide()
+        //}
     } );
     if ( !preloader.length ) {
         effectBackForward();
         reloadAjax().catch( $err => {
             console.log( $err );
         } );
+    }
+    $wind.on("load", function () {
+        preloader_hide()
     }
 }
 function contactValidator() {
