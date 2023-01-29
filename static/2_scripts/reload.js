@@ -63,6 +63,7 @@ function check_first_load() {
 
             preloader();
             reloadAjax();
+            $( ".preloader" ).remove();
             //window.$effectScroll = effectScroller();
             //window.$animate = effectAnimate();
             //navMenu().init();
