@@ -181,7 +181,7 @@ function preloader() {
             console.log( $err );
         } );
     }
-    window.on("load", function () {
+    jQuery(window).on("load", function () {
         preloader_hide()
     })
 }
