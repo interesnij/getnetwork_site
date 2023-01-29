@@ -87,6 +87,7 @@ function check_first_load() {
             dropHash();
             $( ".twentytwenty" ).twentytwenty();
             $( ".preloader" ).remove();
+            effectAnimate()
             window.history.pushState ({"url":url}, document.title, url);
         }
       }
