@@ -59,7 +59,9 @@ function check_first_load() {
             document.body.innerHTML = elem_.innerHTML;
             
             mouseCirMove();
-            //reloadAjax();   
+            //reloadAjax(); 
+
+            preloader();
 
             window.$effectScroll = effectScroller();
             window.$animate = effectAnimate();
@@ -84,7 +86,7 @@ function check_first_load() {
             //dsnAjax().ajaxLoad();
             dropHash();
             $( ".twentytwenty" ).twentytwenty();
-            preloader();
+            $( ".preloader" ).remove();
             window.history.pushState ({"url":url}, document.title, url);
         }
       }
