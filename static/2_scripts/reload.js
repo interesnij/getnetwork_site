@@ -57,7 +57,7 @@ function check_first_load() {
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
-            preloader();
+            
             mouseCirMove();
             //reloadAjax();   
 
@@ -84,7 +84,7 @@ function check_first_load() {
             //dsnAjax().ajaxLoad();
             dropHash();
             $( ".twentytwenty" ).twentytwenty();
-            
+            preloader();
             window.history.pushState ({"url":url}, document.title, url);
         }
       }
@@ -181,7 +181,7 @@ function preloader() {
                     timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
                 } );
     };
-    
+
     $wind.on( "load", function () {
         preloader_hide()
     })
