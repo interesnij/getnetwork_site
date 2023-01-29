@@ -56,9 +56,34 @@ function check_first_load() {
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
-            //preloader();
+            preloader();
             mouseCirMove();
-            reloadAjax();            
+            //reloadAjax();   
+
+            window.$effectScroll = await effectScroller();
+            window.$animate = await effectAnimate();
+            await navMenu().init();
+            await dsnGrid.removeWhiteSpace( ".site-header ul.extend-container li > a" );
+            await changeStyle();
+
+            $( "a.vid" ).YouTubePopUp();
+            await ContactModel();
+            await $effectScroll.start();
+            await effctStickyNavBar();
+            await $animate.allInt();
+            await slider().run();
+            await Isotope();
+            await projectSlider().run();
+            await accordion();
+            await linkRightPaginate();
+            await magnificPopup();
+            await justifiedGallery();
+            await hoverReveal();
+            await contactValidator();
+            await dsnAjax().ajaxLoad();
+            await dropHash();
+            await $( ".twentytwenty" ).twentytwenty();
+            
             window.history.pushState ({"url":url}, document.title, url);
         }
       }
