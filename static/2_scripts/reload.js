@@ -85,7 +85,6 @@ function check_first_load() {
                     await Isotope();
                     await projectSlider().run();
                     await accordion();
-                    await initMap();
                     await linkRightPaginate();
                     await magnificPopup();
                     await justifiedGallery();
@@ -1761,278 +1760,6 @@ function check_first_load() {
                             content = null;
                         } );
                     } );  
-                }
-            
-                function initMap() {  
-                    let map_att = $( ".map-custom" );
-                    if ( !map_att.length ) {
-                        map_att = null;
-                        return;
-                    }
-                    let mapScriptId = $( "#map_api" );
-                    if ( !mapScriptId.length ) {
-                        let GOOGLE_MAP_KEY = "AIzaSyA5bpEs3xlB8vhxNFErwoo3MXR64uavf6Y";
-                        let script = document.createElement( "script" );
-                        script.type = "text/javascript";
-                        script.id = "map_api";
-                        script.src = "https://maps.googleapis.com/maps/api/js?key=" + GOOGLE_MAP_KEY; //& needed
-                        document.body.appendChild( script );
-                        GOOGLE_MAP_KEY = script = null;
-                    }
-                    setTimeout( function () {
-                        try {
-                            let lat = map_att.data( "dsn-lat" ),
-                                leg = map_att.data( "dsn-len" ),
-                                zoom = map_att.data( "dsn-zoom" ),
-                                letLeng = new google.maps.LatLng( lat, leg );
-                            let map = new google.maps.Map( map_att.get( 0 ), {
-                                center: {
-                                    lat: lat,
-                                    lng: leg,
-                                },
-                                mapTypeControl: false,
-                                scrollwheel: false,
-                                draggable: true,
-                                streetViewControl: false,
-                                navigationControl: false,
-                                zoom: zoom,
-                                styles: [
-                                    {
-                                        "featureType": "water",
-                                        "elementType": "geometry",
-                                        "stylers": [
-                                            {
-                                                "color": "#e9e9e9",
-                                            },
-                                            {
-                                                "lightness": 17,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "featureType": "landscape",
-                                        "elementType": "geometry",
-                                        "stylers": [
-                                            {
-                                                "color": "#f5f5f5",
-                                            },
-                                            {
-                                                "lightness": 20,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "featureType": "road.highway",
-                                        "elementType": "geometry.fill",
-                                        "stylers": [
-                                            {
-                                                "color": "#ffffff",
-                                            },
-                                            {
-                                                "lightness": 17,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "featureType": "road.highway",
-                                        "elementType": "geometry.stroke",
-                                        "stylers": [
-                                            {
-                                                "color": "#ffffff",
-                                            },
-                                            {
-                                                "lightness": 29,
-                                            },
-                                            {
-                                                "weight": 0.2,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "featureType": "road.arterial",
-                                        "elementType": "geometry",
-                                        "stylers": [
-                                            {
-                                                "color": "#ffffff",
-                                            },
-                                            {
-                                                "lightness": 18,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "featureType": "road.local",
-                                        "elementType": "geometry",
-                                        "stylers": [
-                                            {
-                                                "color": "#ffffff",
-                                            },
-                                            {
-                                                "lightness": 16,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "featureType": "poi",
-                                        "elementType": "geometry",
-                                        "stylers": [
-                                            {
-                                                "color": "#f5f5f5",
-                                            },
-                                            {
-                                                "lightness": 21,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "featureType": "poi.park",
-                                        "elementType": "geometry",
-                                        "stylers": [
-                                            {
-                                                "color": "#dedede",
-                                            },
-                                            {
-                                                "lightness": 21,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "elementType": "labels.text.stroke",
-                                        "stylers": [
-                                            {
-                                                "visibility": "on",
-                                            },
-                                            {
-                                                "color": "#ffffff",
-                                            },
-                                            {
-                                                "lightness": 16,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "elementType": "labels.text.fill",
-                                        "stylers": [
-                                            {
-                                                "saturation": 36,
-                                            },
-                                            {
-                                                "color": "#333333",
-                                            },
-                                            {
-                                                "lightness": 40,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "elementType": "labels.icon",
-                                        "stylers": [
-                                            {
-                                                "visibility": "off",
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "featureType": "transit",
-                                        "elementType": "geometry",
-                                        "stylers": [
-                                            {
-                                                "color": "#f2f2f2",
-                                            },
-                                            {
-                                                "lightness": 19,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "featureType": "administrative",
-                                        "elementType": "geometry.fill",
-                                        "stylers": [
-                                            {
-                                                "color": "#fefefe",
-                                            },
-                                            {
-                                                "lightness": 20,
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        "featureType": "administrative",
-                                        "elementType": "geometry.stroke",
-                                        "stylers": [
-                                            {
-                                                "color": "#fefefe",
-                                            },
-                                            {
-                                                "lightness": 17,
-                                            },
-                                            {
-                                                "weight": 1.2,
-                                            },
-                                        ],
-                                    },
-                                ],
-                            } );
-                            google.maps.event.addDomListener( window, "resize", function () {
-                                let center = map.getCenter();
-                                google.maps.event.trigger( map, "resize" );
-                                map.setCenter( center );
-                                center = null;
-                            } );
-                            new google.maps.Marker( {
-                                position: letLeng,
-                                animation: google.maps.Animation.BOUNCE,
-                                icon: "assets/img/map-marker.png",
-                                title: "ASL",
-                                map: map,
-                            } );        
-                            lat = leg = zoom = letLeng = null;  
-                        } catch ( e ) {
-                            console.log( e );
-                        }
-                    }, 500 );
-            
-                }
-                async function mouseCirMove( $off ) {
-                    const $elemnet = $( ".cursor" );
-                    if ( dsnGrid.isMobile() || !$body.hasClass( "dsn-cursor-effect" ) ) {
-                        if ( $elemnet.length ) {
-                            $elemnet.css( "display", "none" );
-                            $body.removeClass( "dsn-cursor-effect" );
-                        }
-                        return;
-                    } 
-                    if ( $off === true ) {
-                        $elemnet.attr( "class", "cursor" );
-                        cursorEffect();
-                        return;
-                    }
-                    dsnGrid.mouseMove( $elemnet, {
-                        speed: 0.5
-                    } );
-                    cursorEffect(); 
-                    function cursorEffect() {
-                        dsnGrid.elementHover( $elemnet, "a:not(> img):not(.vid) , .dsn-button-sidebar,  button , .mfp-container", "cursor-scale-full" );
-                        dsnGrid.elementHover( $elemnet, ".c-hidden , .social-side a", "no-scale" );
-                        dsnGrid.elementHover( $elemnet, ".has-popup a , .work-item-box a:not(.effect-ajax)", "cursor-scale-half cursor-open" );
-                        dsnGrid.elementHover( $elemnet, "[data-cursor=\"close\"]", "cursor-scale-full cursor-close" );
-                        dsnGrid.elementHover( $elemnet, "a.link-pop ", "cursor-scale-full cursor-view" );
-                    }
-                }
-                async function linkRightPaginate() {
-                    const $cont = $( '.dsn-paginate-right-page' );
-                    if ( !$cont.length ) return;
-                    $cont.empty();
-                    $( '[data-dsn-title]' ).each( function () {
-                        const $title = dsnGrid.getData( this, 'title' );
-                        const _target = $( this ).offset().top;
-                        const _element = $( '<div class="dsn-link-paginate text-transform-upper"></div>' );
-                        _element.html( $title );
-                        $cont.append( _element );
-                        _element.on( 'click', function () {   
-                            dsnGrid.scrollTop( _target, 1, -150 );
-                        } );     
-                    } );   
                 }     
             //}
             //)( jQuery );
@@ -2042,5 +1769,47 @@ function check_first_load() {
       }
       ajax_link.send();
   };
+
+  async function mouseCirMove( $off ) {
+    const $elemnet = $( ".cursor" );
+    if ( dsnGrid.isMobile() || !$body.hasClass( "dsn-cursor-effect" ) ) {
+        if ( $elemnet.length ) {
+            $elemnet.css( "display", "none" );
+            $body.removeClass( "dsn-cursor-effect" );
+        }
+        return;
+    } 
+    if ( $off === true ) {
+        $elemnet.attr( "class", "cursor" );
+        cursorEffect();
+        return;
+    }
+    dsnGrid.mouseMove( $elemnet, {
+        speed: 0.5
+    } );
+    cursorEffect(); 
+    function cursorEffect() {
+        dsnGrid.elementHover( $elemnet, "a:not(> img):not(.vid) , .dsn-button-sidebar,  button , .mfp-container", "cursor-scale-full" );
+        dsnGrid.elementHover( $elemnet, ".c-hidden , .social-side a", "no-scale" );
+        dsnGrid.elementHover( $elemnet, ".has-popup a , .work-item-box a:not(.effect-ajax)", "cursor-scale-half cursor-open" );
+        dsnGrid.elementHover( $elemnet, "[data-cursor=\"close\"]", "cursor-scale-full cursor-close" );
+        dsnGrid.elementHover( $elemnet, "a.link-pop ", "cursor-scale-full cursor-view" );
+    }
+}
+async function linkRightPaginate() {
+    const $cont = $( '.dsn-paginate-right-page' );
+    if ( !$cont.length ) return;
+    $cont.empty();
+    $( '[data-dsn-title]' ).each( function () {
+        const $title = dsnGrid.getData( this, 'title' );
+        const _target = $( this ).offset().top;
+        const _element = $( '<div class="dsn-link-paginate text-transform-upper"></div>' );
+        _element.html( $title );
+        $cont.append( _element );
+        _element.on( 'click', function () {   
+            dsnGrid.scrollTop( _target, 1, -150 );
+        } );     
+    } );   
+}
 
   check_first_load();
