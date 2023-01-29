@@ -138,38 +138,6 @@ function preloader() {
         persent.value = val;
         progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
         preloader_progress.css( "width", val + "%" );
-
-    function preloader_hide() {
-            clearInterval( timer );
-                gsap.timeline()
-                    .to( persent, 1, {
-                        value: 100, onUpdate: function () {
-                            progress_number.text( persent.value.toFixed( 0 ) );
-                            progress_title.css( "clip-path", "inset(" + ( 100 - persent.value ) + "% 0% 0% 0%)" );
-                            preloader_progress.css( "width", persent.value + "%" );
-                        },
-                    } )
-                    .to( preloader.find( '> *' ), { y: -30, autoAlpha: 0 } )
-                    .call( function () {
-                        if ( preloader.length ) {
-                            effectBackForward();
-                            reloadAjax().catch( $err => {
-                                console.log( $err );
-                            } );
-                        }
-                    } )
-                    .set( persent, { value: 0 } )
-                    .to( persent, 0.8, {
-                        value: 100, onUpdate: function () {
-                            preloader.css( "clip-path", "inset(" + ( persent.value ) + "% 0% 0% 0%)" );
-                        },
-                        ease: Power2.easeInOut,
-                    }, "+=0.5" )
-                    .call( function () {
-                        preloader.remove();
-                        timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
-                    } );
-        };
         //if (val == 100) { 
         //    setTimeout (preloader_hide, 2000);
         //}
@@ -181,6 +149,39 @@ function preloader() {
             console.log( $err );
         } );
     }
+
+    function preloader_hide() {
+        clearInterval( timer );
+            gsap.timeline()
+                .to( persent, 1, {
+                    value: 100, onUpdate: function () {
+                        progress_number.text( persent.value.toFixed( 0 ) );
+                        progress_title.css( "clip-path", "inset(" + ( 100 - persent.value ) + "% 0% 0% 0%)" );
+                        preloader_progress.css( "width", persent.value + "%" );
+                    },
+                } )
+                .to( preloader.find( '> *' ), { y: -30, autoAlpha: 0 } )
+                .call( function () {
+                    if ( preloader.length ) {
+                        effectBackForward();
+                        reloadAjax().catch( $err => {
+                            console.log( $err );
+                        } );
+                    }
+                } )
+                .set( persent, { value: 0 } )
+                .to( persent, 0.8, {
+                    value: 100, onUpdate: function () {
+                        preloader.css( "clip-path", "inset(" + ( persent.value ) + "% 0% 0% 0%)" );
+                    },
+                    ease: Power2.easeInOut,
+                }, "+=0.5" )
+                .call( function () {
+                    preloader.remove();
+                    timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
+                } );
+    };
+    
     $wind.on( "load", function () {
         preloader_hide()
     })
