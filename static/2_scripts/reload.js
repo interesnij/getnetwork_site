@@ -1355,7 +1355,7 @@ async function linkRightPaginate() {
 function start_show() {
     effectBackForward()
 }
-function preloader_hide() {
+function preloader_hide(timer) {
     clearInterval( timer );
         gsap.timeline()
             .to( persent, 1, {
@@ -1400,7 +1400,7 @@ function preloader() {
         progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
         preloader_progress.css( "width", val + "%" );
         if (val == 100) { 
-            setTimeout(preloader_hide, 2000);
+            setTimeout(preloader_hide(timer), 2000);
         }
     } );
     if ( !preloader.length ) {
