@@ -56,7 +56,7 @@ function check_first_load() {
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
-            loadScripts('/static/2_scripts/c.js?ver1');
+            //loadScripts('/static/2_scripts/c.js?ver1');
             ( function ( $ ) {
                 "use strict";
                 preloader();
