@@ -63,7 +63,7 @@ function check_first_load() {
 
             preloader();
             reloadAjax();
-
+            preloader_hide()
             $( ".preloader" ).remove();
             effectBackForward();
             window.history.pushState ({"url":url}, document.title, url);
@@ -76,6 +76,18 @@ function check_first_load() {
     effectBackForward()
 }
 function preloader_hide() {
+    let preloader = $( ".preloader" ), 
+    progress_number = preloader.find( ".percent" ),
+    progress_title = preloader.find( ".title .text-fill" ),
+    persent = { value: 0 },
+    preloader_bar = preloader.find( ".preloader-bar" ),
+    preloader_progress = preloader_bar.find( ".preloader-progress" );
+    let timer = dsnGrid.pageLoad( 0, 100, 1000, function ( val ) {
+        progress_number.text( val );
+        persent.value = val;
+        progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
+        preloader_progress.css( "width", val + "%" );
+    } );
     clearInterval( timer );
         gsap.timeline()
             .to( persent, 1, {
@@ -109,11 +121,11 @@ function preloader_hide() {
 
 function preloader() {
     let preloader = $( ".preloader" ), 
-        progress_number = preloader.find( ".percent" ),
-        progress_title = preloader.find( ".title .text-fill" ),
-        persent = { value: 0 },
-        preloader_bar = preloader.find( ".preloader-bar" ),
-        preloader_progress = preloader_bar.find( ".preloader-progress" );
+    progress_number = preloader.find( ".percent" ),
+    progress_title = preloader.find( ".title .text-fill" ),
+    persent = { value: 0 },
+    preloader_bar = preloader.find( ".preloader-bar" ),
+    preloader_progress = preloader_bar.find( ".preloader-progress" );
     let timer = dsnGrid.pageLoad( 0, 100, 1000, function ( val ) {
         progress_number.text( val );
         persent.value = val;
