@@ -46,7 +46,8 @@ function loadScripts( src ) {
 function load_prev(ajax_link, elem_) {
 
 }
-function check_first_load() {
+
+async function check_first_load() {
       url = window.location.href;
       ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
       ajax_link.open( 'GET', url + "?ajax=1", true );
