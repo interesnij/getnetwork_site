@@ -1399,9 +1399,9 @@ function preloader() {
         persent.value = val;
         progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
         preloader_progress.css( "width", val + "%" );
-        //if (val == 100) {
-        //    preloader_hide()
-        //}
+        if (val == 100) { 
+            setTimeout(preloader_hide, 2000);
+        }
     } );
     if ( !preloader.length ) {
         effectBackForward();
@@ -1409,9 +1409,9 @@ function preloader() {
             console.log( $err );
         } );
     }
-    $wind.on("load", function () {
-        preloader_hide()
-    })
+    //$wind.on("load", function () {
+    //    preloader_hide()
+    //})
 }
 function contactValidator() {
     const contact_form = $( "#contact-form" );
