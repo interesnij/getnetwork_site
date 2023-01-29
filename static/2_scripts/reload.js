@@ -56,7 +56,7 @@ function check_first_load() {
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
-            //loadScripts('/static/2_scripts/custom.js?ver1');
+            loadScripts('/static/2_scripts/c.js?ver1');
             ( function ( $ ) {
                 "use strict";
                 preloader();
@@ -1263,8 +1263,7 @@ function check_first_load() {
                         translateSection: function () {
                             $( '.section-image.section-move-image .transform-move-section' ).each( function () {
                                 const tl = gsap.timeline();
-                                let width = 0;
-            
+                                let width = 0;  
                                 $( this ).find( '.swiper-slide' ).each( function () {
                                     width += $( this ).outerWidth();
                                 } );
@@ -1275,31 +1274,18 @@ function check_first_load() {
                                     tl.to( this, { x: width * -1 } );
                                 else
                                     tl.from( this, { x: width * -1 } );
-            
                                 let parallaxIt = dsnGrid.tweenMaxParallax( $controller ).addParrlax( {
                                     id: this,
                                     triggerHook: dsnGrid.getData( this, "triggerhook", 1 ),
                                     duration: dsnGrid.getData( this, "duration", "200%" ),
                                     tween: tl,
-                                } );
-            
+                                } );   
                                 if ( parallaxIt )
                                     $scene.push( parallaxIt );
-            
-            
                             } );
                         }
-            
                     };
-            
-            
                 }
-            
-            
-                /**
-                 *
-                 * @returns {Object}
-                 */
                 function navMenu() {
                     const siteHeader = $( ".site-header" );
                     return {
@@ -1314,8 +1300,7 @@ function check_first_load() {
                             if ( text_menu.length <= 0 ) return;
                             let text_button = text_menu.find( ".text-button" );
                             let text_open = text_menu.find( ".text-open" );
-                            let text_close = text_menu.find( ".text-close" );
-            
+                            let text_close = text_menu.find( ".text-close" );  
                             dsnGrid.convertTextLine( text_button );
                             dsnGrid.convertTextLine( text_open );
                             dsnGrid.convertTextLine( text_close );
@@ -1327,32 +1312,21 @@ function check_first_load() {
                         hamburgerOpen: function () {
                             const mainIcon = siteHeader.find( ".menu-icon" );
                             const mainNav = siteHeader.find( ".main-navigation" );
-            
-            
                             let tl = gsap.timeline( {
                                 paused: true, onReverseComplete: function () {
                                     setTimeout( function () {
                                         mainIcon.find( ".icon-top , .icon-bottom" ).css( "transform", "" ).css( "display", "" );
-                                    }, 50 );
-            
+                                    }, 50 ); 
                                     console.log( 'onReverseComplete : tl' );
-            
-            
                                 },
                             } );
-            
-            
                             var menuClick = gsap.timeline( {
                                 onReverseComplete: function () {
                                     menuClick = gsap.timeline();
                                     console.log( 'onReverseComplete : menuClick' );
-            
                                 }
                             } );
                             let Ease = Power3.easeOut;
-            
-                            //--> Open Menu
-            
                             tl.set( mainIcon.find( ".icon-center" ), { display: "none" } );
                             tl.to( mainIcon.find( ".icon-top" ), 0.5, { width: 23, rotation: 45, top: 0, ease: Ease } );
                             tl.to( mainIcon.find( ".icon-bottom" ), 0.5, {
@@ -1363,33 +1337,26 @@ function check_first_load() {
                             }, 0 );
                             tl.call( function () {
                                 mainIcon.toggleClass( 'nav-active' );
-                            }, 0 );
-            
+                            }, 0 );      
                             tl.to( mainNav, 0.5, { y: "0%", autoAlpha: 1, ease: Ease }, 0 );
                             tl.fromTo( mainNav, 0.5, { y: "-100%", autoAlpha: 0 }, {
                                 y: "0%",
                                 autoAlpha: 1,
                                 ease: Expo.easeInOut,
-                            }, 0 );
-            
+                            }, 0 );       
                             tl.staggerTo( mainNav.find( "ul.extend-container > li > a .dsn-title-menu" ), 0.5, {
                                 autoAlpha: 1,
                                 y: 0,
                                 ease: Back.easeOut.config( 1.7 ),
-                            }, 0.05 );
-            
-            
+                            }, 0.05 );       
                             tl.set( mainNav.find( "ul.extend-container > li > a .dsn-meta-menu" ), {
                                 autoAlpha: 1,
                                 ease: Ease,
                             } );
                             tl.to( mainNav.find( ".container-content" ), 1, { autoAlpha: 1 }, "-=1" );
-                            tl.reverse();
-            
-            
+                            tl.reverse();        
                             mainNav.find( "ul.extend-container > li.dsn-drop-down" ).on( "click", function ( e ) {
-                                e.stopPropagation();
-            
+                                e.stopPropagation();       
                                 if ( menuClick._tDur > 0 ) return;
                                 menuClick = gsap.timeline( {
                                     onReverseComplete: function () {
@@ -1404,22 +1371,16 @@ function check_first_load() {
                                     x: 0,
                                     autoAlpha: 1,
                                     ease: Back.easeOut.config( 1.7 ),
-                                }, 0.1 );
-            
-            
-                            } );
-            
+                                }, 0.1 );      
+                            } );        
                             mainIcon.off( "click" );
                             mainIcon.on( "click", function () {
-                                console.log( 'mainIcon:click' );
-            
+                                console.log( 'mainIcon:click' );    
                                 if ( !tl.isActive() ) {
                                     menuClick.reverse( -1 );
                                     tl.reversed( !tl.reversed() );
                                     menuClick = gsap.timeline();
                                 }
-            
-            
                             } );
                             let backMenu = $( ".dsn-back-menu" );
                             backMenu.off( "click" );
@@ -1429,15 +1390,9 @@ function check_first_load() {
                                 menuClick.reverse();
             
                             } );
-                            // backMenu = null;
-            
                         },
                     };
-            
-            
                 }
-            
-            
                 function slider() {
                     const dsn_slider = $( ".main-slider" );
                     let tl = gsap.timeline();
@@ -1448,8 +1403,6 @@ function check_first_load() {
                                 let $this = $( this ),
                                     horizontal = $this.hasClass( "has-horizontal" ),
                                     inner = $this.find( ".slide-inner" );
-            
-            
                                 if ( inner.hasClass( 'dsn-webgl' ) ) {
                                     $slidObject.initWebgel( $( this ) ).then( ( $obj ) => {
                                         dsn_slider.find( ".control-nav .slider-total-index" ).html( dsnGrid.numberText( $obj.imgs.length ) );
@@ -1465,7 +1418,6 @@ function check_first_load() {
                                                 $slidObject.slideChangeWeb( dsn_slider, horizontal ? "x" : "y", current, oldIndex, this.mat.uniforms.effectFactor.value < 0 );
                                             },
                                         } );
-            
                                     } );
                                 } else if ( inner.find( ".slide-item" ).length ) {
                                     $slidObject.initSlider( $this ).then( function ( $d ) {
@@ -1473,8 +1425,6 @@ function check_first_load() {
                                         $slidObject.slideChange( swiper, $this, horizontal ? "x" : "y" );
                                         dsnGrid.addSwiper( swiper );
                                         console.log( swiper.getTranslate() );
-            
-            
                                         $this.find( '.next-container' ).on( "click", function () {
                                             if ( tl.isActive() ) return;
                                             swiper.slideNext();
@@ -1483,23 +1433,10 @@ function check_first_load() {
                                             if ( tl.isActive() ) return;
                                             swiper.slidePrev();
                                         } );
-            
-                                    } );
-            
+                                    } );  
                                 }
-            
-            
                             } );
-            
-            
                         },
-            
-            
-                        /**
-                         *
-                         * @param dsn_slider
-                         *
-                         */
                         initSlider: async function ( dsn_slider ) {
                             dsn_slider.find( ".slide-item" ).each( function ( $index ) {
                                 let $this = $( this );
@@ -1517,17 +1454,6 @@ function check_first_load() {
                                 $this = slide_content = title = null;
                             } );
                         },
-            
-                        /**
-                         *
-                         * @param dsn_slider
-                         * @param isDemo
-                         * @param $isVertical
-                         * @returns Swiper Slider
-                         *
-                         *  Cerate Slider Swiper
-                         *
-                         */
                         swiperObject: function ( dsn_slider, $isVertical = true ) {
                             return new Swiper( dsn_slider.find( ".slide-inner" ).get( 0 ), {
                                 speed: 1000,
@@ -1538,10 +1464,8 @@ function check_first_load() {
                                 parallax: true,
                                 loop: true,
                                 loopAdditionalSlides: 10,
-            
                                 watchSlidesProgress: true,
                                 watchSlidesVisibility: true,
-            
                                 pagination: {
                                     el: dsn_slider.find( ".slider-current-index" ).get( 0 ),
                                     type: "custom",
@@ -1551,28 +1475,22 @@ function check_first_load() {
                                         return dsnGrid.numberText( current );
                                     },
                                 },
-            
                                 on: {
                                     init: function () {
                                         this.autoplay.stop();
                                         let swiper = this;
-            
                                         dsn_slider.find( "[data-dsn=\"video\"] video" ).each( function () {
                                             this.pause();
                                         } );
                                         this.touchEventsData.formElements = "*";
-            
                                         dsn_slider.find( '[data-swiper-parallax]' ).each( function () {
                                             let num = $( this ).attr( 'data-swiper-parallax' ).replace( '%', '' );
-            
                                             $( this ).attr( {
                                                 'data-swiper-parallax': ( num / 100 ) * ( $isVertical ? swiper.height : swiper.width )
                                             } )
                                         } );
                                     },
-            
                                     touchStart: function () {
-            
                                         $( this.slides ).css( "transition", "" );
                                         if ( !dsnGrid.isMobile() && $body.hasClass( 'dsn-cursor-effect' ) ) {
                                             if ( !$( this.slides ).parents( '.main-slider' ).hasClass( 'has-horizontal' ) ) {
@@ -1583,7 +1501,6 @@ function check_first_load() {
                                         }
                                     },
                                     touchEnd: function () {
-            
                                         if ( !dsnGrid.isMobile() && $body.hasClass( 'dsn-cursor-effect' ) ) {
                                             if ( !$( this.slides ).hasClass( 'has-horizontal' ) ) {
                                                 $( '.cursor' ).removeClass( 'cursor-scale-half cursor-up-down cursor-drag cursor-next cursor-prev' );
@@ -1592,30 +1509,17 @@ function check_first_load() {
                                             }
                                         }
                                     }
-            
-            
                                 },
                             } );
                         },
-                        /**
-                         *
-                         * @param swiper
-                         * @param dsn_slider
-                         * Change To current Slider
-                         */
+
                         slideChange: function ( swiper, dsn_slider, $dir ) {
                             let $this = this;
                             swiper.on( "slideChange", start );
-            
                             async function start() {
-            
-                                //--> Slider before change
                                 let contentOld = dsn_slider.find( ".dsn-slider-content .dsn-active" );
                                 let numOld = contentOld.data( "dsn-id" );
-            
-                                //--> Slider current change
                                 let slider = $( swiper.slides[ swiper.activeIndex ] );
-            
                                 let id = slider.data( "dsn-id" );
                                 if ( numOld === id ) return;
                                 dsn_slider.find( "[data-dsn=\"video\"] video" ).each( function () {
@@ -1623,25 +1527,15 @@ function check_first_load() {
                                 } );
                                 let v = $( this.slides[ this.activeIndex ] ).find( "[data-dsn=\"video\"] video" );
                                 if ( v.length ) v.get( 0 ).play();
-            
-            
-                                //--> Content Old
                                 let content_letterOld = contentOld.find( ".dsn-chars-wrapper" );
                                 contentOld.removeClass( "dsn-active-cat" );
-            
-                                //--> Content New
                                 let contentNew = dsn_slider.find( ".dsn-slider-content [data-dsn-id=\"" + id + "\"]" );
                                 let content_letterNew = contentNew.find( ".dsn-chars-wrapper" );
-            
-            
                                 let $isRight = numOld > id;
-            
                                 tl.progress( 1 );
                                 tl = new gsap.timeline();
-            
                                 tl.staggerFromTo(
                                     $isRight ? content_letterOld.toArray().reverse() : content_letterOld,
-            
                                     0.3,
                                     $this.showText( $dir ).title,
                                     $this.hideText( $isRight, $dir ).title,
@@ -1653,48 +1547,29 @@ function check_first_load() {
                                         contentNew.addClass( "dsn-active-cat" );
                                     },
                                 );
-            
                                 tl.staggerFromTo(
                                     $isRight ? content_letterNew.toArray().reverse() : content_letterNew,
-            
                                     0.8,
                                     $this.hideText( !$isRight, $dir ).title,
-            
                                     $this.showText( $dir ).title,
                                     0.05,
                                     "-=.1",
                                 );
-            
                                 contentOld = numOld = slider = id = v = content_letterOld = content_letterNew = $isRight = null;
-            
                             }
                         },
-                        /**
-                         *
-                         * @param dsn_slider
-                         * @param $dir
-                         * @param current
-                         * @param oldIndex
-                         * @param $isRight
-                         */
                         slideChangeWeb: function ( dsn_slider, $dir, current, oldIndex, $isRight ) {
                             let $this = this;
-            
-            
                             dsn_slider.find( ".control-nav .slider-current-index" ).html( dsnGrid.numberText( current + 1 ) );
                             let contentOld = dsn_slider.find( ".dsn-slider-content .dsn-active" );
                             let content_letterOld = contentOld.find( ".dsn-chars-wrapper" );
-            
                             let contentNew = dsn_slider.find( ".dsn-slider-content [data-dsn-id=\"" + current + "\"]" );
                             let content_letterNew = contentNew.find( ".dsn-chars-wrapper" );
                             dsn_slider.find( ".slide-inner" ).attr( "data-overlay", contentNew.data( "overlay" ) );
-            
                             tl.progress( 1 );
                             tl = new gsap.timeline();
-            
                             tl.staggerFromTo(
                                 $isRight ? content_letterOld.toArray().reverse() : content_letterOld,
-            
                                 0.3,
                                 $this.showText( $dir ).title,
                                 $this.hideText( $isRight, $dir ).title,
@@ -1706,23 +1581,15 @@ function check_first_load() {
                                     contentNew.addClass( "dsn-active-cat" );
                                 },
                             );
-            
                             tl.staggerFromTo(
                                 $isRight ? content_letterNew.toArray().reverse() : content_letterNew,
-            
                                 0.8,
                                 $this.hideText( !$isRight, $dir ).title,
-            
                                 $this.showText( $dir ).title,
                                 0.05,
                                 "-=.1",
                             );
                         },
-                        /**
-                         *
-                         * @param $dir
-                         * @returns {{title: {ease: string, autoAlpha: number, yoyo: boolean, rotation: number, scale: number}}}
-                         */
                         showText: function ( $dir ) {
                             let $obj = {
                                 title: {
@@ -1733,15 +1600,8 @@ function check_first_load() {
                                 },
                             };
                             $obj.title[ $dir ] = "0%";
-            
                             return $obj;
                         },
-                        /**
-                         *
-                         * @param $isRigth
-                         * @param $dir
-                         * @returns {{title: {ease: string, autoAlpha: number, yoyo: boolean, rotation: number}}}
-                         */
                         hideText: function ( $isRigth, $dir ) {
                             let $obj = {
                                 title: {
@@ -1753,14 +1613,7 @@ function check_first_load() {
                             $obj.title[ $dir ] = ( $isRigth ) ? "40%" : "-40%";
                             return $obj;
                         },
-            
-                        /**
-                         *
-                         * @param dsn_slider
-                         * @returns {Promise<{intensity: *, imgs: [], overlay: [], speedIn: *, displacement: *, easing: *, speedOut: *}>}
-                         */
                         initWebgel: async function ( dsn_slider ) {
-            
                             let imgs = [],
                                 overlady = [];
                             dsn_slider.find( ".dsn-slider-content .slide-content" ).each( function ( $index ) {
@@ -1774,7 +1627,6 @@ function check_first_load() {
                                 slide_content = title = null;
                             } );
                             dsn_slider.find( ".slide-inner" ).attr( "data-overlay", overlady[ 0 ] );
-            
                             return {
                                 imgs: imgs,
                                 overlay: overlady,
@@ -1784,14 +1636,9 @@ function check_first_load() {
                                 speedOut: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "speedOut", 1.2 ),
                                 easing: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "easing", "Expo.easeInOut" ),
                             };
-            
                         },
-            
-            
                     };
-                }
-            
-            
+                }  
                 function loadData( $type ) {
                     setTimeout( function () {
                         $( "[data-dsn-" + $type + "]" ).each( function () {
@@ -1799,7 +1646,6 @@ function check_first_load() {
                         } );
                     }, 100 );
                 }
-            
                 function Isotope() {
                     $( ".dsn-isotope" ).each( ( $key, $item ) => {
                         $( $item ).masonry( {
@@ -1808,35 +1654,23 @@ function check_first_load() {
                             fitWidth: dsnGrid.getData( $item, 'fitWidth', false ),
                         } );
                     } )
-            
-            
                     $( '.dsn-filter' ).each( function () {
                         const $button = $( this ).find( '.filtering-t ' ),
                             $item = $( this ).find( '.dsn-item-filter' );
-            
                         if ( !$button.length || !$item.length ) return;
-            
-            
                         $item.isotope();
                         $button.find( "button" ).off( "click" );
                         $button.find( "button" ).on( "click", function () {
                             $( this ).addClass( 'active' ).siblings().removeClass( "active" );
-            
                             $item.isotope( {
                                 filter: $( this ).attr( "data-filter" ),
                             } );
                         } );
-            
-            
                     } );
-            
                 }
-            
                 function projectSlider() {
                     return {
-            
                         swiper: function ( $id, $obj ) {
-            
                             $id = dsnGrid.convertToJQuery( $id );
                             $obj = $.extend( true, {
                                 slidesPerView: 1,
@@ -1847,7 +1681,6 @@ function check_first_load() {
                                 parallax: true,
                                 loop: true,
                                 slideToClickedSlide: true,
-            
                                 pagination: {
                                     el: $id.find( ".swiper-pagination" ).get( 0 ),
                                     clickable: true,
@@ -1857,18 +1690,13 @@ function check_first_load() {
                                     prevEl: $id.find( ".swiper-prev" ).get( 0 ),
                                 },
                             }, $obj );
-            
                             let $s = new Swiper( $id.find( ".swiper-container" ).get( 0 ), $obj );
                             dsnGrid.addSwiper( $s );
-            
                         },
-            
                         run: function () {
                             let $this = this;
                             $( ".dsn-swiper" ).each( function () {
-            
                                 let option = dsnGrid.getData( this, "option", {} );
-            
                                 let syn = $( this ).parent().find( dsnGrid.getData( this, "controller" ) );
                                 if ( syn.length ) {
                                     option[ 'thumbs' ] = {
@@ -1880,11 +1708,8 @@ function check_first_load() {
                                             parallax: true,
                                             autoHeight: true
                                         }
-                                    };
-            
+                                    };      
                                 }
-            
-            
                                 option[ "breakpoints" ] = {
                                     768: {
                                         slidesPerView: option.slidesPerView >= 1 ? ( option.slidesPerView > 1.5 ? 2 : 1.30 ) : 1,
@@ -1896,12 +1721,9 @@ function check_first_load() {
                                     },
                                     575: {
                                         slidesPerView: 1,
-                                        spaceBetween: 0,
-            
+                                        spaceBetween: 0,           
                                     },
                                 };
-            
-            
                                 if ( syn.length ) {
                                     option[ 'thumbs' ] = {
                                         swiper: {
@@ -1912,30 +1734,21 @@ function check_first_load() {
                                             parallax: true,
                                             autoHeight: true
                                         }
-                                    };
-            
+                                    };  
                                     option.breakpoints[ '768' ] = {
                                         slidesPerView: 1,
                                         spaceBetween: 0,
                                     }
-            
                                 }
-            
                                 option[ 'slidesPerView' ] = 1;
                                 option[ 'spaceBetween' ] = 0;
-            
                                 $this.swiper( this, option );
                             } );
-            
-            
                         },
                     };
-            
                 }
             
-                function accordion() {
-            
-            
+                function accordion() {    
                     $( ".dsn-accordion" ).each( function () {
                         let $this = $( this ),
                             acc_q = $this.find( ".accordion__question" );
@@ -1947,24 +1760,18 @@ function check_first_load() {
                             content.slideToggle( 400 );
                             content = null;
                         } );
-                    } );
-            
+                    } );  
                 }
             
-                function initMap() {
-            
+                function initMap() {  
                     let map_att = $( ".map-custom" );
                     if ( !map_att.length ) {
                         map_att = null;
                         return;
                     }
                     let mapScriptId = $( "#map_api" );
-            
-            
-                    // Styles a map in night mode.
                     if ( !mapScriptId.length ) {
                         let GOOGLE_MAP_KEY = "AIzaSyA5bpEs3xlB8vhxNFErwoo3MXR64uavf6Y";
-            
                         let script = document.createElement( "script" );
                         script.type = "text/javascript";
                         script.id = "map_api";
@@ -1972,7 +1779,6 @@ function check_first_load() {
                         document.body.appendChild( script );
                         GOOGLE_MAP_KEY = script = null;
                     }
-            
                     setTimeout( function () {
                         try {
                             let lat = map_att.data( "dsn-lat" ),
@@ -2179,24 +1985,14 @@ function check_first_load() {
                                 icon: "assets/img/map-marker.png",
                                 title: "ASL",
                                 map: map,
-                            } );
-            
-                            lat = leg = zoom = letLeng = null;
-            
+                            } );        
+                            lat = leg = zoom = letLeng = null;  
                         } catch ( e ) {
                             console.log( e );
                         }
                     }, 500 );
             
                 }
-            
-                /**
-                 *  - the function that move the cursor of an input element to the end
-                 *
-                 * @param $off
-                 *      $off is true stop event listener
-                 *
-                 */
                 async function mouseCirMove( $off ) {
                     const $elemnet = $( ".cursor" );
                     if ( dsnGrid.isMobile() || !$body.hasClass( "dsn-cursor-effect" ) ) {
@@ -2205,35 +2001,24 @@ function check_first_load() {
                             $body.removeClass( "dsn-cursor-effect" );
                         }
                         return;
-                    }
-            
-            
+                    } 
                     if ( $off === true ) {
                         $elemnet.attr( "class", "cursor" );
                         cursorEffect();
                         return;
                     }
-            
                     dsnGrid.mouseMove( $elemnet, {
                         speed: 0.5
                     } );
-                    cursorEffect();
-            
+                    cursorEffect(); 
                     function cursorEffect() {
-            
-            
                         dsnGrid.elementHover( $elemnet, "a:not(> img):not(.vid) , .dsn-button-sidebar,  button , .mfp-container", "cursor-scale-full" );
                         dsnGrid.elementHover( $elemnet, ".c-hidden , .social-side a", "no-scale" );
                         dsnGrid.elementHover( $elemnet, ".has-popup a , .work-item-box a:not(.effect-ajax)", "cursor-scale-half cursor-open" );
-            
                         dsnGrid.elementHover( $elemnet, "[data-cursor=\"close\"]", "cursor-scale-full cursor-close" );
                         dsnGrid.elementHover( $elemnet, "a.link-pop ", "cursor-scale-full cursor-view" );
-            
                     }
-            
-            
                 }
-            
                 async function linkRightPaginate() {
                     const $cont = $( '.dsn-paginate-right-page' );
                     if ( !$cont.length ) return;
@@ -2244,15 +2029,11 @@ function check_first_load() {
                         const _element = $( '<div class="dsn-link-paginate text-transform-upper"></div>' );
                         _element.html( $title );
                         $cont.append( _element );
-                        _element.on( 'click', function () {
-            
+                        _element.on( 'click', function () {   
                             dsnGrid.scrollTop( _target, 1, -150 );
-                        } );
-            
-                    } );
-            
-                }
-            
+                        } );     
+                    } );   
+                }     
             }
             )( jQuery );
             
@@ -2260,7 +2041,6 @@ function check_first_load() {
         }
       }
       ajax_link.send();
-
   };
 
   check_first_load();
