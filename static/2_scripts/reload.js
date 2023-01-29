@@ -63,34 +63,9 @@ function check_first_load() {
 
             preloader();
             reloadAjax();
-            $( ".preloader" ).remove();
-            //window.$effectScroll = effectScroller();
-            //window.$animate = effectAnimate();
-            //navMenu().init();
-            //dsnGrid.removeWhiteSpace( ".site-header ul.extend-container li > a" );
-            //changeStyle();
 
-           // $( "a.vid" ).YouTubePopUp();
-           //ContactModel();
-           // $effectScroll.start();
-           // effctStickyNavBar();
-           // $animate.allInt();
-           // slider().run();
-           // Isotope();
-           // projectSlider().run();
-           // accordion();
-           // linkRightPaginate();
-           // magnificPopup();
-           // justifiedGallery();
-           // hoverReveal();
-           // contactValidator();
-            //dsnAjax().ajaxLoad();
-           // dropHash();
-           // $( ".twentytwenty" ).twentytwenty();
-           // $( ".preloader" ).remove();
-           // effectAnimate();
-           // hoverReveal();
-           // $effectScroll.start();
+            $( ".preloader" ).remove();
+            effectBackForward();
             window.history.pushState ({"url":url}, document.title, url);
         }
       }
