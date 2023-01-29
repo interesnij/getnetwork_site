@@ -1402,8 +1402,8 @@ function preloader() {
                 timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
             } );
     };
-
-    window.onload = loaded;
+    console.log(timer)
+    //if () loaded;
 }
 function contactValidator() {
     const contact_form = $( "#contact-form" );
