@@ -57,8 +57,8 @@ function check_first_load() {
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
             //loadScripts('/static/2_scripts/c.js?ver1');
-            ( function ( $ ) {
-                "use strict";
+            //( function ( $ ) {
+             //   "use strict";
                 preloader();
                 mouseCirMove();
                 async function reloadAjax( $off ) {
@@ -2034,8 +2034,8 @@ function check_first_load() {
                         } );     
                     } );   
                 }     
-            }
-            )( jQuery );
+            //}
+            //)( jQuery );
             
             window.history.pushState ({"url":url}, document.title, url);
         }
