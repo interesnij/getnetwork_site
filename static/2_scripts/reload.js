@@ -60,7 +60,8 @@ function check_first_load() {
             //( function ( $ ) {
              //   "use strict";
             preloader();
-            mouseCirMove();             
+            mouseCirMove();
+            reloadAjax();            
             //}
             //)( jQuery );
             
