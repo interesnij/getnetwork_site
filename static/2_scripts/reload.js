@@ -56,15 +56,9 @@ function check_first_load() {
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
-            //loadScripts('/static/2_scripts/c.js?ver1');
-            //( function ( $ ) {
-             //   "use strict";
             preloader();
             mouseCirMove();
             reloadAjax();            
-            //}
-            //)( jQuery );
-            
             window.history.pushState ({"url":url}, document.title, url);
         }
       }
@@ -1376,8 +1370,8 @@ function preloader() {
         reloadAjax().catch( $err => {
             console.log( $err );
         } );
-    }
-    $wind.on( "load", function () {
+    }  
+    document.on( "load", function () {
         clearInterval( timer );
         gsap.timeline()
             .to( persent, 1, {
