@@ -1370,8 +1370,8 @@ function preloader() {
         reloadAjax().catch( $err => {
             console.log( $err );
         } );
-    }  
-    document.on( "load", function () {
+    }   
+    window.on( "load", function () {
         clearInterval( timer );
         gsap.timeline()
             .to( persent, 1, {
