@@ -1371,7 +1371,7 @@ function preloader() {
             console.log( $err );
         } );
     }   
-    window.on( "load", function () {
+    $wind.on( "load", function () {
         clearInterval( timer );
         gsap.timeline()
             .to( persent, 1, {
