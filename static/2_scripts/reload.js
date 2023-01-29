@@ -57,15 +57,10 @@ function check_first_load() {
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
-            
-            mouseCirMove();
-            //reloadAjax(); 
-
             preloader();
+            mouseCirMove();
             reloadAjax();
-            preloader_hide()
-            //$( ".preloader" ).remove();
-            effectBackForward();
+            $( ".preloader" ).remove();
             window.history.pushState ({"url":url}, document.title, url);
         }
       }
