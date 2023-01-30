@@ -50,23 +50,24 @@ function load_prev(ajax_link, elem_) {
 }
 
 function check_first_load() {
-      url = window.location.href;
-      ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-      ajax_link.open( 'GET', url + "?ajax=1", true );
-      ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      ajax_link.onreadystatechange = function () {
+    window.history.pushState({}, document.title, window.location.href);
+    url = window.location.href; 
+    ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+    ajax_link.open( 'GET', url + "?ajax=1", true );
+    ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
-            preloader();
+            //preloader();
             mouseCirMove();
             reloadAjax();
             $( ".preloader" ).remove();
             window.history.pushState ({"url":url}, document.title, url);
         }
-      }
-      ajax_link.send();
+    }
+    ajax_link.send();
   };
 
   function start_show() {

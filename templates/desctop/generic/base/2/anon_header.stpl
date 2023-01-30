@@ -1,4 +1,4 @@
-<!-- ========== Loading Page ========== -->
+<!-- 
 <div class="preloader">
     <span class="percent ">0</span>
     <span class="loading-text text-uppercase">Loading ...</span>
@@ -11,7 +11,7 @@
         <span class="text-fill">Eremia</span>
     </h1>
 </div>
-<!-- ========== End Loading Page ========== -->
+-->
 
 <!-- ========== Menu ========== -->
 <div class="site-header dsn-container dsn-load-animate">
