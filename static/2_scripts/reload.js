@@ -60,8 +60,12 @@ function check_first_load() {
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
-            //preloader();
-            mouseCirMove();
+
+            loadScripts('/static/2_scripts/jquery-3.1.1.min.js?ver1');
+            loadScripts('/static/2_scripts/plugins.min.js?ver1');
+            loadScripts('/static/2_scripts/dsn-grid.min.js?ver1');
+            loadScripts('/static/2_scripts/progressive-image.js?ver1');
+            mouseCirMove(); 
             reloadAjax();
             $( ".preloader" ).remove();
             window.history.pushState ({"url":url}, document.title, url);
