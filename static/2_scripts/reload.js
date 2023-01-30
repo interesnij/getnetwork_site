@@ -60,7 +60,7 @@ function check_first_load() {
             elem_ = document.createElement('span');
             elem_.innerHTML = ajax_link.responseText;
             document.body.innerHTML = elem_.innerHTML;
-            loadScripts('/static/2_scripts/progressive-image.js?ver1');
+            loadScripts('/static/1_scripts/progressive-image.js?ver1');
             mouseCirMove(); 
             reloadAjax();
             $( ".preloader" ).remove();
