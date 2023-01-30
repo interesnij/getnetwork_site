@@ -27,11 +27,14 @@
                         </div>
                         <div class="service-description">
                             <h4 class="title-block mb-15">
-                                <% if !object.is_active { %>
+                                <a class="ajax" href="/service/all-services/<%= object.slug %>/">
+                                    <% if !object.is_active { %>
                                     <span style="color: red">🛇</span>
-                                <% } %>
-                                <%= object.title %>
+                                    <% } %>
+                                    <%= object.title %>
+                                </a>
                             </h4>
+                            
                             <p>
                                 <% if object.description.is_some() { %>
                                     <%= object.description.as_deref().unwrap() %>
