@@ -88,6 +88,7 @@ pub struct SmallCat {
 }
 #[derive(Serialize, Queryable)]
 pub struct Blog {
+    pub id:          i32,
     pub slug:        String,
     pub image:       Option<String>,
     pub is_active:   bool,
@@ -112,7 +113,7 @@ impl Blog {
         let _connection = establish_connection();
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(1))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
@@ -128,6 +129,7 @@ impl Blog {
 
 #[derive(Serialize, Queryable)]
 pub struct Service {
+    pub id:          i32,
     pub slug:        String,
     pub image:       Option<String>,
     pub is_active:   bool,
@@ -151,7 +153,7 @@ impl Service {
         let _connection = establish_connection();
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(2))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
@@ -167,6 +169,7 @@ impl Service {
 
 #[derive(Serialize, Queryable)]
 pub struct Store {
+    pub id:          i32,
     pub slug:        String,
     pub image:       Option<String>,
     pub is_active:   bool,
@@ -192,7 +195,7 @@ impl Store {
         let _connection = establish_connection();
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(3))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
@@ -208,6 +211,7 @@ impl Store {
 
 #[derive(Serialize, Queryable)]
 pub struct Wiki {
+    pub id:          i32,
     pub slug:        String,
     pub image:       Option<String>,
     pub is_active:   bool,
@@ -232,7 +236,7 @@ impl Wiki {
         let _connection = establish_connection();
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(4))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
@@ -248,6 +252,7 @@ impl Wiki {
 
 #[derive(Serialize, Queryable)]
 pub struct Work {
+    pub id:          i32,
     pub slug:        String,
     pub image:       Option<String>,
     pub is_active:   bool,
@@ -271,7 +276,7 @@ impl Work {
         let _connection = establish_connection();
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(5))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
@@ -325,7 +330,7 @@ impl Help {
         let _connection = establish_connection();
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(6))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
@@ -496,6 +501,7 @@ impl Categories {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -513,6 +519,7 @@ impl Categories {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -576,6 +583,7 @@ impl Categories {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -592,6 +600,7 @@ impl Categories {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -655,6 +664,7 @@ impl Categories {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -673,6 +683,7 @@ impl Categories {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -738,6 +749,7 @@ impl Categories {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -755,6 +767,7 @@ impl Categories {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -819,6 +832,7 @@ impl Categories {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -835,6 +849,7 @@ impl Categories {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1201,6 +1216,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1218,6 +1234,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1248,6 +1265,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1268,6 +1286,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1295,6 +1314,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1311,6 +1331,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1340,6 +1361,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1359,6 +1381,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1385,6 +1408,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                        schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1403,6 +1427,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1434,6 +1459,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1455,6 +1481,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1483,6 +1510,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1499,6 +1527,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1528,6 +1557,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1547,6 +1577,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1573,6 +1604,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1590,6 +1622,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1620,6 +1653,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1640,6 +1674,7 @@ impl Item {
                   .limit(limit)
                   .offset(offset)
                   .select((
+                      schema::items::id,
                       schema::items::slug,
                       schema::items::image.nullable(),
                       schema::items::is_active,
@@ -1779,6 +1814,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1797,6 +1833,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1850,6 +1887,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1867,6 +1905,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1919,6 +1958,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1938,6 +1978,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -1992,6 +2033,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -2010,6 +2052,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -2063,6 +2106,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
@@ -2080,6 +2124,7 @@ impl Item {
                 .limit(limit)
                 .offset(offset)
                 .select((
+                    schema::items::id,
                     schema::items::slug,
                     schema::items::image.nullable(),
                     schema::items::is_active,
