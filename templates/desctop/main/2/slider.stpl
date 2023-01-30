@@ -11,7 +11,7 @@
                         <div class="slide-content p-absolute ">
                             <div class="content p-relative">
                                 <div class="metas d-inline-block mb-20">
-                                    <% for tag in object.get_tags_2().iter() { %>
+                                    <% for tag in object.get_tags().iter() { %>
                                         <a href="/tag/<%= tag.name %>/" class="mb-5 ajax"><%= tag.name %> (<%= tag.count %>)</a>
                                     <% } %>
                                 </div>

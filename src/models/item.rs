@@ -59,6 +59,26 @@ impl CatDetail {
             return "/static/images/img.jpg".to_string();
         }
     }
+    pub fn get_tags(&self) -> Vec<SmallTag> {
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+        };
+        let _connection = establish_connection();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::types.eq(self.types))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
+            .expect("E");
+        return _tags;
+    }
 }
 
 #[derive(Serialize, Queryable)]
@@ -104,6 +124,26 @@ impl Blog {
             return "/static/images/img.jpg".to_string();
         }
     }
+    pub fn get_tags(&self) -> Vec<SmallTag> {
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+        };
+        let _connection = establish_connection();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::types.eq(self.types))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
+            .expect("E");
+        return _tags;
+    }
 }
 
 #[derive(Serialize, Queryable)]
@@ -122,6 +162,26 @@ impl Service {
         else {
             return "/static/images/img.jpg".to_string();
         }
+    }
+    pub fn get_tags(&self) -> Vec<SmallTag> {
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+        };
+        let _connection = establish_connection();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::types.eq(self.types))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
+            .expect("E");
+        return _tags;
     }
 }
 
@@ -144,6 +204,26 @@ impl Store {
             return "/static/images/img.jpg".to_string();
         }
     }
+    pub fn get_tags(&self) -> Vec<SmallTag> {
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+        };
+        let _connection = establish_connection();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::types.eq(self.types))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
+            .expect("E");
+        return _tags;
+    }
 }
 
 #[derive(Serialize, Queryable)]
@@ -164,6 +244,26 @@ impl Wiki {
             return "/static/images/img.jpg".to_string();
         }
     }
+    pub fn get_tags(&self) -> Vec<SmallTag> {
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+        };
+        let _connection = establish_connection();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::types.eq(self.types))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
+            .expect("E");
+        return _tags;
+    }
 }
 
 #[derive(Serialize, Queryable)]
@@ -182,6 +282,26 @@ impl Work {
         else {
             return "/static/images/img.jpg".to_string();
         }
+    }
+    pub fn get_tags(&self) -> Vec<SmallTag> {
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+        };
+        let _connection = establish_connection();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::types.eq(self.types))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
+            .expect("E");
+        return _tags;
     }
 }
 
@@ -216,6 +336,26 @@ impl Help {
             .first::<SmallCat>(&_connection)
             .expect("E");
         return _category;
+    }
+    pub fn get_tags(&self) -> Vec<SmallTag> {
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+        };
+        let _connection = establish_connection();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::types.eq(self.types))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
+            .expect("E");
+        return _tags;
     }
 }
 
@@ -1045,27 +1185,6 @@ impl Item {
             .load::<SmallTag>(&_connection)
             .expect("E");
         return Ok(_tags);
-    }
-
-    pub fn get_tags_2(&self) -> Vec<SmallTag> {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-        };
-        let _connection = establish_connection();
-
-        let _tag_items = tags_items
-            .filter(schema::tags_items::item_id.eq(&self.id))
-            .filter(schema::tags_items::types.eq(self.types))
-            .select(schema::tags_items::tag_id)
-            .load::<i32>(&_connection)
-            .expect("E");
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(_tag_items))
-            .select((schema::tags::name, schema::tags::count))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
-        return _tags;
     }
     pub fn get_tags_obj(&self) -> Result<Vec<Tag>, Error> {
         use crate::schema::{
