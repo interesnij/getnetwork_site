@@ -57,7 +57,7 @@
                     <div class="next-container">
                         <div class="container-inner">
                             <div class="triangle"></div>
-                            <svg class="circle" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <svg class="circle" width="24" height="24" viewBox="0 0 24 24">
                                 <g class="circle-wrap" fill="none" stroke-width="1" stroke-linejoin="round" stroke-miterlimit="10">
                                     <circle cx="12" cy="12" r="10.5"></circle>
                                 </g>
@@ -70,7 +70,7 @@
                     <div class="prev-container">
                         <div class="container-inner">
                             <div class="triangle"></div>
-                            <svg class="circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <svg class="circle" viewBox="0 0 24 24">
                                 <g class="circle-wrap" fill="none" stroke-width="1" stroke-linejoin="round" stroke-miterlimit="10">
                                     <circle cx="12" cy="12" r="10.5"></circle>
                                 </g>
