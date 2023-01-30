@@ -6,8 +6,6 @@
 
 <% include!("store.stpl"); %>
 
-<% include!("guestbook.stpl"); %>
-
 <% include!("template.stpl"); %>
 
 <% include!("blog.stpl"); %>

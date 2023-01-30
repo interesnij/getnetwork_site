@@ -1046,6 +1046,27 @@ impl Item {
             .expect("E");
         return Ok(_tags);
     }
+
+    pub fn get_tags_2(&self) -> Vec<SmallTag> {
+        use crate::schema::{
+            tags_items::dsl::tags_items,
+            tags::dsl::tags,
+        };
+        let _connection = establish_connection();
+
+        let _tag_items = tags_items
+            .filter(schema::tags_items::item_id.eq(&self.id))
+            .filter(schema::tags_items::types.eq(self.types))
+            .select(schema::tags_items::tag_id)
+            .load::<i32>(&_connection)
+            .expect("E");
+        let _tags = tags
+            .filter(schema::tags::id.eq_any(_tag_items))
+            .select((schema::tags::name, schema::tags::count))
+            .load::<SmallTag>(&_connection)
+            .expect("E");
+        return _tags;
+    }
     pub fn get_tags_obj(&self) -> Result<Vec<Tag>, Error> {
         use crate::schema::{
             tags_items::dsl::tags_items,
