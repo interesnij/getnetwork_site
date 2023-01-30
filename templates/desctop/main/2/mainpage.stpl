@@ -1,0 +1,17 @@
+<% include!("slider.stpl"); %>
+
+<% include!("about.stpl"); %>
+
+<% include!("service.stpl"); %>
+
+<% include!("store.stpl"); %>
+
+<% include!("template.stpl"); %>
+
+<% include!("blog.stpl"); %>
+
+<% include!("wiki.stpl"); %>
+
+<% include!("client.stpl"); %>
+
+<% include!("next.stpl"); %>

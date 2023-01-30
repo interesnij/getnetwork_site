@@ -33,7 +33,7 @@
                             <div class="box-content-body">
                                 <div class="metas">
                                     <% for tag in object.get_tags_2().iter() { %>
-                                        <a href="/tag/<%= object.name %>/" class="mb-5 ajax"><%= object.name %> (<%= object.count %>)</a>
+                                        <a href="/tag/<%= tag.name %>/" class="mb-5 ajax"><%= tag.name %> (<%= tag.count %>)</a>
                                     <% } %>
                                 </div>
                                 <h4 class="title-block mb-20 ">
