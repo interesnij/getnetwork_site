@@ -59,26 +59,6 @@ impl CatDetail {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self) -> Vec<SmallTag> {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-        };
-        let _connection = establish_connection();
-
-        let _tag_items = tags_items
-            .filter(schema::tags_items::item_id.eq(&self.id))
-            .filter(schema::tags_items::types.eq(self.types))
-            .select(schema::tags_items::tag_id)
-            .load::<i32>(&_connection)
-            .expect("E");
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(_tag_items))
-            .select((schema::tags::name, schema::tags::count))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
-        return _tags;
-    }
 }
 
 #[derive(Serialize, Queryable)]
@@ -133,7 +113,7 @@ impl Blog {
 
         let _tag_items = tags_items
             .filter(schema::tags_items::item_id.eq(&self.id))
-            .filter(schema::tags_items::types.eq(self.types))
+            .filter(schema::tags_items::types.eq(1))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
@@ -172,7 +152,7 @@ impl Service {
 
         let _tag_items = tags_items
             .filter(schema::tags_items::item_id.eq(&self.id))
-            .filter(schema::tags_items::types.eq(self.types))
+            .filter(schema::tags_items::types.eq(2))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
@@ -213,7 +193,7 @@ impl Store {
 
         let _tag_items = tags_items
             .filter(schema::tags_items::item_id.eq(&self.id))
-            .filter(schema::tags_items::types.eq(self.types))
+            .filter(schema::tags_items::types.eq(3))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
@@ -253,7 +233,7 @@ impl Wiki {
 
         let _tag_items = tags_items
             .filter(schema::tags_items::item_id.eq(&self.id))
-            .filter(schema::tags_items::types.eq(self.types))
+            .filter(schema::tags_items::types.eq(4))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
@@ -292,7 +272,7 @@ impl Work {
 
         let _tag_items = tags_items
             .filter(schema::tags_items::item_id.eq(&self.id))
-            .filter(schema::tags_items::types.eq(self.types))
+            .filter(schema::tags_items::types.eq(5))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
@@ -346,7 +326,7 @@ impl Help {
 
         let _tag_items = tags_items
             .filter(schema::tags_items::item_id.eq(&self.id))
-            .filter(schema::tags_items::types.eq(self.types))
+            .filter(schema::tags_items::types.eq(6))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
