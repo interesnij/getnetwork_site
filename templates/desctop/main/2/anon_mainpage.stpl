@@ -2081,7 +2081,7 @@
 
     <!-- ========== Scroll Right Page To Top Page ========== -->
     <div class="scroll-to-top">
-        <img src="assets/img/scroll_top.svg" alt="">
+        <img src="/static/2_images/scroll_top.svg">
         <div class="box-numper">
             <span>10%</span>
         </div>
@@ -2093,11 +2093,11 @@
     <div class="cursor">
 
         <div class="cursor-helper">
-            <span class="cursor-drag">Drag</span>
-            <span class="cursor-view">View</span>
+            <span class="cursor-drag">Двигать</span>
+            <span class="cursor-view">Смотреть</span>
             <span class="cursor-open"><i class="fas fa-plus"></i></span>
-            <span class="cursor-close">Close</span>
-            <span class="cursor-play">play</span>
+            <span class="cursor-close">Закрыть</span>
+            <span class="cursor-play">Смотреть</span>
             <span class="cursor-next"><i class="fas fa-chevron-right"></i></span>
             <span class="cursor-prev"><i class="fas fa-chevron-left"></i></span>
         </div>
@@ -2118,7 +2118,7 @@
         </div>
         <div class="box-inner-option p-absolute">
             <div class="day-night ">
-                <span class="title-mode text-center">Style Color</span>
+                <span class="title-mode text-center">Фон</span>
                 <div class="night active" data-dsn-theme="dark">
 
                     <svg width="48" height="48" viewBox="0 0 48 48">
@@ -2150,7 +2150,7 @@
                 </div>
             </div>
             <div class="mode-layout">
-                <span class="title-mode text-center">Style Layout</span>
+                <span class="title-mode text-center">Расположение</span>
                 <div class="icon d-flex align-items-center justify-content-center">
 
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
