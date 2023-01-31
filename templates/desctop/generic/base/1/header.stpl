@@ -98,6 +98,9 @@
                                 <a class="mn-group-title" style="cursor:default;font-weight:bold;">Страницы:</a>
                                 <ul>
                                   <li>
+                                    <a class="history ajax" href="/tags/">Теги</a>
+                                  </li>
+                                  <li>
                                     <a class="history ajax" href="/history/">История просмотров</a>
                                   </li>
                                   <li>

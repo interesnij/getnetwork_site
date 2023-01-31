@@ -1287,7 +1287,7 @@ body:not(.v-dark) .site-header .main-logo .dark-logo {
   color: var(--theme-color);
 }
 .site-header .extend-container .main-navigation ul.extend-container li.dsn-active .dsn-meta-menu, .site-header .extend-container .main-navigation ul.extend-container li:hover .dsn-meta-menu {
-  color: var(--assistant-color);
+  color: var(--heading-color);
 }
 .site-header .extend-container .main-navigation ul.extend-container li .dsn-back-menu {
   display: -webkit-box;
