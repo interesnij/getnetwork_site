@@ -3,17 +3,18 @@
     <div class="extend-container d-flex w-100 align-items-baseline justify-content-between align-items-end">
         <div class="inner-header p-relative">
             <div class="main-logo">
-                <a href="index.html" data-dsn="parallax">
-                    <img class="light-logo" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-dsn-src="assets/img/logo.png" alt="" />
-                    <img class="dark-logo" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-dsn-src="assets/img/logo-dark.png" alt="" />
+                <a href="/" data-dsn="parallax">
+                В <br />
+                Е <br />
+                Б <br />
                 </a>
             </div>
         </div>
         <div class="menu-icon d-flex align-items-baseline">
             <div class="text-menu p-relative  font-heading text-transform-upper">
-                <div class="p-absolute text-button">Menu</div>
-                <div class="p-absolute text-open">Open</div>
-                <div class="p-absolute text-close">Close</div>
+                <div class="p-absolute text-button">Меню</div>
+                <div class="p-absolute text-open">Открыто</div>
+                <div class="p-absolute text-close">Закрыто</div>
             </div>
             <div class="icon-m" data-dsn="parallax" data-dsn-move="10">
                 <span class="menu-icon-line p-relative d-inline-block icon-top"></span>
@@ -22,325 +23,46 @@
             </div>
         </div>
         <nav class="accent-menu dsn-container main-navigation p-absolute  w-100  d-flex align-items-baseline ">
-            <div class="menu-cover-title">Menu</div>
+            <div class="menu-cover-title">Меню</div>
             <ul class="extend-container p-relative d-flex flex-column justify-content-center h-100">
-
-                <li class="dsn-active dsn-drop-down">
-                    <a href="#" class="user-no-selection">
-
-                        <span class="dsn-title-menu">Demos</span>
+                <li>
+                    <a href="/">
+                        <span class="dsn-title-menu">Главная</span>
                         <span class="dsn-meta-menu">01</span>
                         <span class="dsn-bg-arrow"></span>
                     </a>
-
-
-                    <ul>
-                        <li class="dsn-back-menu">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-dsn-src="assets/img/left-chevron.svg" alt="">
-                            <span class="dsn-title-menu">Demos</span>
-                        </li>
-                        <li>
-                            <a href="index.html">
-                                <span class="dsn-title-menu">Main Demos</span>
-                                <span class="dsn-meta-menu">01</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="demo-2.html">
-                                <span class="dsn-title-menu">Demo 2</span>
-                                <span class="dsn-meta-menu">02</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="demo-3.html">
-                                <span class="dsn-title-menu">Demo 3</span>
-                                <span class="dsn-meta-menu">03</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="corprate.html">
-                                <span class="dsn-title-menu">corprate</span>
-                                <span class="dsn-meta-menu">04</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="corprate-2.html">
-                                <span class="dsn-title-menu">corprate 2</span>
-                                <span class="dsn-meta-menu">05</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="personal.html">
-                                <span class="dsn-title-menu">personal</span>
-                                <span class="dsn-meta-menu">06</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="personal-2.html">
-                                <span class="dsn-title-menu">personal 2</span>
-                                <span class="dsn-meta-menu">07</span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
-
-                <li class="dsn-drop-down">
+                <%
+                    use crate::utils::get_categories_2;
+                    let (service_cats, store_cats, blog_cats, wiki_cats, work_cats, help_cats) = get_categories_2();
+                %>
+                <li class="dsn-active dsn-drop-down">
                     <a href="#" class="user-no-selection">
-
-                        <span class="dsn-title-menu">Sliders parallax</span>
+                        <span class="dsn-title-menu">Услуги</span>
                         <span class="dsn-meta-menu">02</span>
                         <span class="dsn-bg-arrow"></span>
                     </a>
-
-
                     <ul>
                         <li class="dsn-back-menu">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-dsn-src="assets/img/left-chevron.svg" alt="">
-                            <span class="dsn-title-menu">Sliders</span>
+                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-dsn-src="/static/2_images/left-chevron.svg" alt="img">
+                            <span class="dsn-title-menu">Назад</span>
                         </li>
 
                         <li>
-                            <a href="slider-parallax-horizontal.html">
-                                <span class="dsn-title-menu">slider parallax horizontal</span>
-                                <span class="dsn-meta-menu">01</span>
+                            <a href="/service_categories/" class="ajax">
+                                <span class="dsn-title-menu">Раздел услуг</span>
+                                <span class="dsn-meta-menu">Перейти</span>
                             </a>
                         </li>
-
-                        <li>
-                            <a href="slider-parallax-horizontal-2.html">
-                                <span class="dsn-title-menu">slider parallax horizontal 2</span>
-                                <span class="dsn-meta-menu">02</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="slider-parallax-horizontal-3.html">
-                                <span class="dsn-title-menu">slider parallax horizontal 3</span>
-                                <span class="dsn-meta-menu">03</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="slider-parallax-vertical.html">
-                                <span class="dsn-title-menu">slider parallax vertical</span>
-                                <span class="dsn-meta-menu">04</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="slider-parallax-vertical-2.html">
-                                <span class="dsn-title-menu">slider parallax vertical 2</span>
-                                <span class="dsn-meta-menu">05</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="slider-parallax-vertical-3.html">
-                                <span class="dsn-title-menu">slider parallax vertical 3</span>
-                                <span class="dsn-meta-menu">06</span>
-                            </a>
-                        </li>
+                        <% for object in service_cats.iter() { %>
+                            <li>
+                                <a href="/services/<%= object.slug %>/">
+                                    <span class="dsn-title-menu"><%= object.name %></span>
+                                    <span class="dsn-meta-menu"><%= object.count %></span>
+                                </a>
+                            </li>
+                        <% } %>
                     </ul>
-
-                </li>
-
-                <li class="dsn-drop-down">
-                    <a href="#" class="user-no-selection">
-
-                        <span class="dsn-title-menu">Sliders webgel</span>
-                        <span class="dsn-meta-menu">03</span>
-                        <span class="dsn-bg-arrow"></span>
-                    </a>
-
-
-                    <ul>
-                        <li class="dsn-back-menu">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-dsn-src="assets/img/left-chevron.svg" alt="">
-                            <span class="dsn-title-menu">Sliders webgel</span>
-                        </li>
-
-                        <li>
-                            <a href="slider-webgel-horizontal.html">
-                                <span class="dsn-title-menu">slider webgel horizontal</span>
-                                <span class="dsn-meta-menu">01</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="slider-webgel-horizontal-2.html">
-                                <span class="dsn-title-menu">slider webgel horizontal 2</span>
-                                <span class="dsn-meta-menu">02</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="slider-webgel-horizontal-3.html">
-                                <span class="dsn-title-menu">slider webgel horizontal 3</span>
-                                <span class="dsn-meta-menu">03</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="slider-webgel-vertical.html">
-                                <span class="dsn-title-menu">slider webgel vertical</span>
-                                <span class="dsn-meta-menu">04</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="slider-webgel-vertical-2.html">
-                                <span class="dsn-title-menu">slider webgel vertical 2</span>
-                                <span class="dsn-meta-menu">05</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="slider-webgel-vertical-3.html">
-                                <span class="dsn-title-menu">slider webgel vertical 3</span>
-                                <span class="dsn-meta-menu">06</span>
-                            </a>
-                        </li>
-                    </ul>
-
-                </li>
-
-                <li>
-                    <a href="about.html">
-
-                        <span class="dsn-title-menu">About</span>
-                        <span class="dsn-meta-menu">04</span>
-                        <span class="dsn-bg-arrow"></span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="services.html">
-
-                        <span class="dsn-title-menu">services</span>
-                        <span class="dsn-meta-menu">05</span>
-                        <span class="dsn-bg-arrow"></span>
-                    </a>
-                </li>
-
-                <li class="dsn-drop-down">
-                    <a href="#" class="user-no-selection">
-
-                        <span class="dsn-title-menu">Portfolio</span>
-                        <span class="dsn-meta-menu">06</span>
-                        <span class="dsn-bg-arrow"></span>
-                    </a>
-
-
-                    <ul>
-                        <li class="dsn-back-menu">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-dsn-src="assets/img/left-chevron.svg" alt="">
-                            <span class="dsn-title-menu">Portfolio</span>
-                        </li>
-
-                        <li>
-                            <a href="work.html">
-                                <span class="dsn-title-menu">Work Hover</span>
-                                <span class="dsn-meta-menu">01</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="work-2.html">
-                                <span class="dsn-title-menu">Work 2 Colum</span>
-                                <span class="dsn-meta-menu">02</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="work-3.html">
-                                <span class="dsn-title-menu">Work 3 Colum</span>
-                                <span class="dsn-meta-menu">03</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="work-grid.html">
-                                <span class="dsn-title-menu">Work grid</span>
-                                <span class="dsn-meta-menu">04</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="work-masonry.html">
-                                <span class="dsn-title-menu">Work masonry</span>
-                                <span class="dsn-meta-menu">05</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="work-masonry-2.html">
-                                <span class="dsn-title-menu">Work masonry 2</span>
-                                <span class="dsn-meta-menu">06</span>
-                            </a>
-                        </li>
-                    </ul>
-
-                </li>
-
-                <li class="dsn-drop-down">
-                    <a href="#" class="user-no-selection">
-
-                        <span class="dsn-title-menu">Blog</span>
-                        <span class="dsn-meta-menu">07</span>
-                        <span class="dsn-bg-arrow"></span>
-                    </a>
-
-
-                    <ul>
-                        <li class="dsn-back-menu">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-dsn-src="assets/img/left-chevron.svg" alt="">
-                            <span class="dsn-title-menu">Blog</span>
-                        </li>
-
-                        <li>
-                            <a href="blog.html">
-                                <span class="dsn-title-menu">Blog </span>
-                                <span class="dsn-meta-menu">01</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="blog-2.html">
-                                <span class="dsn-title-menu">Blog Style 2</span>
-                                <span class="dsn-meta-menu">02</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="blog-3.html">
-                                <span class="dsn-title-menu">Blog Style 3</span>
-                                <span class="dsn-meta-menu">03</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="post.html">
-                                <span class="dsn-title-menu">Single Post</span>
-                                <span class="dsn-meta-menu">04</span>
-                            </a>
-                        </li>
-
-                    </ul>
-
-                </li>
-
-                <li>
-                    <a href="contact.html" class="user-no-selection">
-
-                        <span class="dsn-title-menu">Contact</span>
-                        <span class="dsn-meta-menu">08</span>
-                        <span class="dsn-bg-arrow"></span>
-                    </a>
                 </li>
             </ul>
             <div class="container-content  p-absolute h-100 left-60 d-flex flex-column justify-content-center">
