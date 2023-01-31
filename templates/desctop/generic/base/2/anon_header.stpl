@@ -149,7 +149,7 @@
                                 <span class="dsn-meta-menu">Перейти</span>
                             </a>
                         </li>
-                        <% for object in store_cats.iter() { %>
+                        <% for object in wiki_cats.iter() { %>
                             <li>
                                 <a href="/wikis/<%= object.slug %>/">
                                     <span class="dsn-title-menu"><%= object.name %></span>
@@ -262,7 +262,7 @@
                     </ul>
                 </li>
 
-            </ul>
+            </ul> 
             <div class="container-content p-absolute h-100 left-60 d-flex flex-column justify-content-center">
                 <div class="nav__info">
                     <div class="nav-content">
