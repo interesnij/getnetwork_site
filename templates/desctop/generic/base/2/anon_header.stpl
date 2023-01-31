@@ -4,8 +4,9 @@
         <div class="inner-header p-relative">
             <div class="main-logo">
                 <a href="/" data-dsn="parallax" class="ajax">
-                в <br />
-                е <br />
+                Веб <br />
+                сервисы <br />
+                <!--
                 б <br />
                 с <br />
                 е <br />
@@ -14,6 +15,7 @@
                 и <br />
                 с <br />
                 ы <br />
+                -->
                 </a>
             </div>
         </div>
