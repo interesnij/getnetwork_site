@@ -4,8 +4,8 @@
         <div class="inner-header p-relative">
             <div class="main-logo">
                 <a href="/" data-dsn="parallax" class="ajax">
-                    <p>ВЕБ<p>
-                    <p>сервисы<p>
+                    <p style="letter-spacing: 12px;">ВЕБ</p>
+                    <p>сервисы</p>
                 </a>
             </div>
         </div>
