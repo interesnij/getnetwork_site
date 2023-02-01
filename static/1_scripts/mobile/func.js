@@ -41,7 +41,9 @@ function get_custom_design() {
 };
 function check_first_load() {
   span = document.body.querySelector(".span");
-  window.history.pushState({}, document.title, window.location.href);
+  url = new URL(window.location.href);
+  params = new URLSearchParams(url.search);
+  params.delete('foo');
   if (window.location.search.split('?').length > 1) {
     span.innerHTML = "Permission Denied";
   }
