@@ -41,12 +41,13 @@ function get_custom_design() {
 };
 function check_first_load() {
   span = document.body.querySelector(".span");
-  url = new URL(window.location.href);
+  loc = window.location.href;
+  url = new URL(loc);
   params = new URLSearchParams(url.search);
   params.delete('template');
   params.append('ajax', 1);
-  if (window.location.search.split('?').length > 1) {
-    span.innerHTML = "Permission Denied";
+  if (window.location.search.indexOf('ajax=1') > -1) {
+    span.innerHTML = "Permission Denied"; 
   }
   else if (!span.firstChild) {
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
@@ -63,7 +64,7 @@ function check_first_load() {
           sidebar.innerHTML = "";
         } catch { null };
 
-        window.history.pushState ({"url":url}, document.title, url);
+        window.history.pushState ({"url":url}, document.title, loc);
         get_custom_design();
         get_or_create_cookie_user();
         get_page_view_time(120);

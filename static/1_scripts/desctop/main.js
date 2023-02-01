@@ -124,12 +124,12 @@ function get_custom_design() {
 
 function check_first_load() {
   span = document.body.querySelector(".span");
-  
-  url = new URL(window.location.href);
+  loc = window.location.href;
+  url = new URL(loc);
   params = new URLSearchParams(url.search);
   params.delete('template');
   params.append('ajax', 1);
-  if (window.location.href.indexOf('ajax=1') > -1) {
+  if (window.location.search.indexOf('ajax=1') > -1) {
     span.innerHTML = "Permission Denied"; 
   }
   else if (!span.firstChild) {
@@ -146,7 +146,7 @@ function check_first_load() {
           get_active_button();
           get_page_view_time(120);
           scrolled(document.body.querySelector(".span"));
-          window.history.pushState ({"url":url}, document.title, url);
+          window.history.pushState ({"url":url}, document.title, loc);
       }
     }
     ajax_link.send();
