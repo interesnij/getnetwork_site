@@ -45,12 +45,36 @@ function loadScripts( src ) {
     //span.appendChild( script );
 }; 
 
-function load_prev(ajax_link, elem_) {
+function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        let c = cookies[i].trim().split('=');
+        if (c[0] === name) {
+            return c[1];
+        }
+    }
+    return "";
+}
+function setCookie(name, value, days) {
+    let cookie = `${name}=${encodeURIComponent(value)}`;
+    if (days) {
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + days);
+        cookie += `; expires=${expiry.toUTCString()}`;
+    }
+    document.cookie = cookie + "; path=/";
+};
 
+function get_background_color() {
+  background = getCookie("background");
+  if (background == "dark_wood" || background == "dark") {
+    document.body.classList.add("v-dark");
+  }
 }
 
 function check_first_load() {
     window.history.pushState({}, document.title, window.location.href);
+    get_background_color();
     url = window.location.href; 
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url + "?ajax=1", true );
@@ -63,126 +87,78 @@ function check_first_load() {
             loadScripts('/static/1_scripts/progressive-image.js?ver1');
             mouseCirMove(); 
             reloadAjax();
-            $( ".preloader" ).remove();
             window.history.pushState ({"url":url}, document.title, url);
         }
     }
     ajax_link.send();
   };
 
-  function start_show() {
-    effectBackForward()
-}
-function preloader_hide() {
-    let preloader = $( ".preloader" ), 
-    progress_number = preloader.find( ".percent" ),
-    progress_title = preloader.find( ".title .text-fill" ),
-    persent = { value: 0 },
-    preloader_bar = preloader.find( ".preloader-bar" ),
-    preloader_progress = preloader_bar.find( ".preloader-progress" );
-    let timer = dsnGrid.pageLoad( 0, 100, 1000, function ( val ) {
-        progress_number.text( val );
-        persent.value = val;
-        progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
-        preloader_progress.css( "width", val + "%" );
-    } );
-    clearInterval( timer );
-        gsap.timeline()
-            .to( persent, 1, {
-                value: 100, onUpdate: function () {
-                    progress_number.text( persent.value.toFixed( 0 ) );
-                    progress_title.css( "clip-path", "inset(" + ( 100 - persent.value ) + "% 0% 0% 0%)" );
-                    preloader_progress.css( "width", persent.value + "%" );
-                },
-            } )
-            .to( preloader.find( '> *' ), { y: -30, autoAlpha: 0 } )
-            .call( function () {
-                if ( preloader.length ) {
-                    effectBackForward();
-                    reloadAjax().catch( $err => {
-                        console.log( $err );
-                    } );
-                }
-            } )
-            .set( persent, { value: 0 } )
-            .to( persent, 0.8, {
-                value: 100, onUpdate: function () {
-                    preloader.css( "clip-path", "inset(" + ( persent.value ) + "% 0% 0% 0%)" );
-                },
-                ease: Power2.easeInOut,
-            }, "+=0.5" )
-            .call( function () {
-                preloader.remove();
-                timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
-            } );
-}
+  function ajax_get_reload(url, history_enable) {
+    var ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
+      ajax_link.open( 'GET', url + "?ajax=2", true );
+      ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      ajax_link.onreadystatechange = function () {
+        if ( this.readyState == 4 && this.status == 200 ) {
+          rtr = document.getElementById('ajax');
+          // статистика
+          $link = document.location.pathname;
+          meta_block = rtr.querySelector(".doc_title");
+          if (meta_block.getAttribute("data-id")) {
+            $object_id = meta_block.getAttribute("data-id");
+          }
+          else {
+            $object_id = ""
+          }
+          $page_id = meta_block.getAttribute("page-id");
+          $title = meta_block.getAttribute("data-title");
+          //
+          elem_ = document.createElement('span');
+          elem_.innerHTML = ajax_link.responseText;
+          //sidebar = elem_.querySelector(".sidebar");
+  
+          rtr.innerHTML = elem_.innerHTML;
+  
+          _meta = rtr.querySelector(".doc_title");
+          _title = _meta.getAttribute("data-title");
+          _uri = "https://вебсервисы.рф" + _meta.getAttribute("data-uri");
+          _description = _meta.getAttribute("data-description");
+          _image = "https://вебсервисы.рф" + _meta.getAttribute("data-image");
+          document.title = _title;
+          document.querySelector('meta[name="url"]').setAttribute("content", _uri);
+          document.querySelector('meta[name="title"]').setAttribute("content", _title);
+          document.querySelector('meta[name="description"]').setAttribute("content", _description);
+          document.querySelector('meta[name="image"]').setAttribute("content", _image);
+          document.querySelector('link[rel="canonical"]').setAttribute("href", _uri);
+  
+          window.scrollTo(0,0);
+          if (history_enable) {
+            window.history.pushState ({"url":url}, $title, url);
+          }
+          get_active_button();
+          get_page_view_time(120);
+          scrolled(rtr);
+          get_stat_meta($link, $title, $object_id, $page_id);
+          get_document_opacity_1();
+        }
+      }
+      ajax_link.send();
+  };
 
-function preloader() {
-    let preloader = $( ".preloader" ), 
-    progress_number = preloader.find( ".percent" ),
-    progress_title = preloader.find( ".title .text-fill" ),
-    persent = { value: 0 },
-    preloader_bar = preloader.find( ".preloader-bar" ),
-    preloader_progress = preloader_bar.find( ".preloader-progress" );
-    let timer = dsnGrid.pageLoad( 0, 100, 1000, function ( val ) {
-        progress_number.text( val );
-        persent.value = val;
-        progress_title.css( "clip-path", "inset(" + ( 100 - val ) + "% 0% 0% 0%)" );
-        preloader_progress.css( "width", val + "%" );
-        //if (val == 100) { 
-        //    setTimeout (preloader_hide, 2000);
-        //}
-    } );
+  window.addEventListener('popstate', function (e) {
+    ajax_get_reload(history.state["url"], false);
+    //return false
+  })
 
-    if ( !preloader.length ) {
-        effectBackForward();
-        reloadAjax().catch( $err => {
-            console.log( $err );
-        } );
-    }
-
-    function preloader_hide() {
-        clearInterval( timer );
-            gsap.timeline()
-                .to( persent, 1, {
-                    value: 100, onUpdate: function () {
-                        progress_number.text( persent.value.toFixed( 0 ) );
-                        progress_title.css( "clip-path", "inset(" + ( 100 - persent.value ) + "% 0% 0% 0%)" );
-                        preloader_progress.css( "width", persent.value + "%" );
-                    },
-                } )
-                .to( preloader.find( '> *' ), { y: -30, autoAlpha: 0 } )
-                .call( function () {
-                    if ( preloader.length ) {
-                        effectBackForward();
-                        reloadAjax().catch( $err => {
-                            console.log( $err );
-                        } );
-                    }
-                } )
-                .set( persent, { value: 0 } )
-                .to( persent, 0.8, {
-                    value: 100, onUpdate: function () {
-                        preloader.css( "clip-path", "inset(" + ( persent.value ) + "% 0% 0% 0%)" );
-                    },
-                    ease: Power2.easeInOut,
-                }, "+=0.5" )
-                .call( function () {
-                    preloader.remove();
-                    timer = preloader = progress_number = progress_title = persent = preloader_bar = preloader_progress = null;
-                } );
-    };
-
-    $wind.on( "load", function () {
-        preloader_hide()
-    })
-}
+  on('body', 'click', '.ajax', function(event) {
+    event.preventDefault();
+    ajax_get_reload(this.getAttribute("href"), true)
+  });
 
   async function reloadAjax( $off ) {
     await dsnGrid.destoryBuild();
-    await loadData( "poster" );
-    await loadData( "src" );
-    await loadData( "srcset" );
+    //await loadData( "poster" );
+    //await loadData( "src" );
+    //await loadData( "srcset" );
     if ( !$off ) {
         window.$effectScroll = await effectScroller();
         window.$animate = await effectAnimate();

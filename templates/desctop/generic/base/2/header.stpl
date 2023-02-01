@@ -4,16 +4,16 @@
         <div class="inner-header p-relative">
             <div class="main-logo">
                 <a href="/" data-dsn="parallax" class="ajax">
-                в <br />
-                е <br />
-                б <br />
-                с <br />
-                е <br />
-                р <br />
-                в <br />
-                и <br />
-                с <br />
-                ы <br />
+                    <span style="line-height: 15px;">
+                        <span style="letter-spacing: 12px;">
+                            В
+                        </span>
+                        <span style="letter-spacing: 12px;">
+                            Е
+                        </span>
+                        Б
+                    </span>
+                    <span style="padding-right: 2px;">сервисы</span>
                 </a>
             </div>
         </div>

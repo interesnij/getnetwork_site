@@ -31,7 +31,7 @@
     <span class="span"></span>
     <% include!("../../block/scripts/1/anon_d.stpl"); %>
 <%} else if template_types == 2 { %>
-  <body class="v-dark dsn-line-style dsn-effect-scroll dsn-cursor-effect dsn-ajax">
+  <body class="dsn-line-style dsn-effect-scroll dsn-cursor-effect dsn-ajax">
 
     <% include!("../../block/scripts/2/anon_d.stpl"); %>
 <% } %>

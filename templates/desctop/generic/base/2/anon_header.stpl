@@ -4,7 +4,7 @@
         <div class="inner-header p-relative">
             <div class="main-logo">
                 <a href="/" data-dsn="parallax" class="ajax">
-                    <span>
+                    <span style="line-height: 15px;">
                         <span style="letter-spacing: 12px;">
                             В
                         </span>
@@ -13,7 +13,7 @@
                         </span>
                         Б
                     </span>
-                    <span>сервисы</span>
+                    <span style="padding-right: 2px;">сервисы</span>
                 </a>
             </div>
         </div>
