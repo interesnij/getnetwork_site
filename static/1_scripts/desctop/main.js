@@ -129,6 +129,8 @@ function check_first_load() {
   params = new URLSearchParams(url.search);
   params.delete('template');
   params.append('ajax', 1);
+  console.log(url);
+  console.log(params.toString());
   if (window.location.search.indexOf('ajax=1') > -1) {
     span.innerHTML = "Permission Denied"; 
   }
