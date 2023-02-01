@@ -1,1 +1,1 @@
-<% include!("../../../main/mainpage.stpl"); %>
+<% include!("../../../desctop/main/mainpage.stpl"); %>

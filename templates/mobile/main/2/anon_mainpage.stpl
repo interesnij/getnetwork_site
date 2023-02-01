@@ -1,1 +1,1 @@
- <% include!("../../../main/anon_mainpage.stpl"); %>
+ <% include!("../../../desctop/main/anon_mainpage.stpl"); %>
