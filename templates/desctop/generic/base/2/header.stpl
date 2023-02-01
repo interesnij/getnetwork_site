@@ -33,7 +33,7 @@
             <div class="menu-cover-title">Меню</div>
             <ul class="extend-container p-relative d-flex flex-column justify-content-center h-100">
                 <li>
-                    <a href="/">
+                    <a class="ajax" href="/">
                         <span class="dsn-title-menu">Главная</span>
                         <span class="dsn-meta-menu">01</span>
                         <span class="dsn-bg-arrow"></span>
@@ -64,7 +64,7 @@
                         </li>
                         <% for object in service_cats.iter() { %>
                             <li>
-                                <a href="/services/<%= object.slug %>/">
+                                <a class="ajax" href="/services/<%= object.slug %>/">
                                     <span class="dsn-title-menu"><%= object.name %></span>
                                     <span class="dsn-meta-menu"><%= object.count %></span>
                                 </a>
@@ -93,7 +93,7 @@
                         </li>
                         <% for object in work_cats.iter() { %>
                             <li>
-                                <a href="/works/<%= object.slug %>/">
+                                <a class="ajax" href="/works/<%= object.slug %>/">
                                     <span class="dsn-title-menu"><%= object.name %></span>
                                     <span class="dsn-meta-menu"><%= object.count %></span>
                                 </a>
@@ -122,7 +122,7 @@
                         </li>
                         <% for object in store_cats.iter() { %>
                             <li>
-                                <a href="/stores/<%= object.slug %>/">
+                                <a class="ajax" href="/stores/<%= object.slug %>/">
                                     <span class="dsn-title-menu"><%= object.name %></span>
                                     <span class="dsn-meta-menu"><%= object.count %></span>
                                 </a>
@@ -151,7 +151,7 @@
                         </li>
                         <% for object in wiki_cats.iter() { %>
                             <li>
-                                <a href="/wikis/<%= object.slug %>/">
+                                <a class="ajax" href="/wikis/<%= object.slug %>/">
                                     <span class="dsn-title-menu"><%= object.name %></span>
                                     <span class="dsn-meta-menu"><%= object.count %></span>
                                 </a>
@@ -180,7 +180,7 @@
                         </li>
                         <% for object in store_cats.iter() { %>
                             <li>
-                                <a href="/blogs/<%= object.slug %>/">
+                                <a class="ajax" href="/blogs/<%= object.slug %>/">
                                     <span class="dsn-title-menu"><%= object.name %></span>
                                     <span class="dsn-meta-menu"><%= object.count %></span>
                                 </a>
@@ -253,7 +253,7 @@
                         </li> 
                         <% for object in help_cats.iter() { %>
                             <li>
-                                <a href="/helps/<%= object.slug %>/">
+                                <a class="ajax" href="/helps/<%= object.slug %>/">
                                     <span class="dsn-title-menu"><%= object.name %></span>
                                     <span class="dsn-meta-menu"><%= object.count %></span>
                                 </a>
@@ -312,7 +312,7 @@
         </nav>
     </div>
 </div>
-
+            
 <main class="main-root">
     <div id="dsn-scrollbar">
         <div class="main-content">

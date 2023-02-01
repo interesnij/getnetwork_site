@@ -2,10 +2,11 @@
     page-id="1" 
     data-title="Главная страница" 
     data-description="вебсервисы.рф - Комплексное, экспертное создание и развитие веб-ресурсов" 
-    data-uri="/" data-image="/static/images/dark/store.jpg" 
-    class="doc_title main-slider  has-horizontal p-relative w-100 h-100-v dsn-header-animation">
+    data-uri="/" 
+    data-image="/static/images/dark/store.jpg" 
+    class="doc_title main-slider has-horizontal p-relative w-100 h-100-v dsn-header-animation">
     <div class="content-slider p-relative w-100 h-100 over-hidden v-dark-head">
-        <div class="bg-container  dsn-hero-parallax-img p-relative w-100 h-100">
+        <div class="bg-container dsn-hero-parallax-img p-relative w-100 h-100">
             <div class="slide-inner h-100">
                 <div class="swiper-wrapper">
                     <% for object in last_works.iter() { %>
