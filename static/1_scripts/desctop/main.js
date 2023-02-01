@@ -125,7 +125,6 @@ function get_custom_design() {
 function check_first_load() {
   span = document.body.querySelector(".span");
   loc = window.location.href;
-  params.append('ajax', 1);
   if (loc.indexOf('template') > -1) {
     url = loc + "&ajax=1"; 
   }
