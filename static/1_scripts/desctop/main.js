@@ -146,7 +146,7 @@ function check_first_load() {
           get_active_button();
           get_page_view_time(120);
           scrolled(document.body.querySelector(".span"));
-          window.history.pushState ({"url":url}, document.title, loc);
+          window.history.pushState ({"url":loc}, document.title, loc);
       }
     }
     ajax_link.send();

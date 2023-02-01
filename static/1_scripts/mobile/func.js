@@ -64,7 +64,7 @@ function check_first_load() {
           sidebar.innerHTML = "";
         } catch { null };
 
-        window.history.pushState ({"url":url}, document.title, loc);
+        window.history.pushState ({"url":loc}, document.title, loc);
         get_custom_design();
         get_or_create_cookie_user();
         get_page_view_time(120);
