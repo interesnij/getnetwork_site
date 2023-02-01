@@ -73,11 +73,17 @@ function get_background_color() {
 }
 
 function check_first_load() {
-    window.history.pushState({}, document.title, window.location.href);
+  loc = window.location.href;
+  if (loc.indexOf('template') > -1) {
+    url = loc + "&ajax=1"; 
+  }
+  else {
+    url = loc + "?ajax=1"; 
+  }
     get_background_color();
     url = window.location.href; 
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-    ajax_link.open( 'GET', url + "?ajax=1", true );
+    ajax_link.open( 'GET', url, true );
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
