@@ -125,16 +125,14 @@ function get_custom_design() {
 function check_first_load() {
   span = document.body.querySelector(".span");
   loc = window.location.href;
-  url = new URL(loc);
-  params = new URLSearchParams(url.search);
-  params.delete('template');
   params.append('ajax', 1);
-  console.log(url);
-  console.log(params.toString());
-  if (window.location.search.indexOf('ajax=1') > -1) {
-    span.innerHTML = "Permission Denied"; 
+  if (loc.indexOf('template') > -1) {
+    url = loc + "&ajax=1"; 
   }
-  else if (!span.firstChild) {
+  else {
+    url = loc + "?ajax=1"; 
+  }
+
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url, true );
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -152,7 +150,6 @@ function check_first_load() {
       }
     }
     ajax_link.send();
-  }
 }
 
 function ajax_get_reload(url, history_enable) {
