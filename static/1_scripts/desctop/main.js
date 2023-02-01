@@ -133,7 +133,6 @@ function check_first_load() {
     span.innerHTML = "Permission Denied"; 
   }
   else if (!span.firstChild) {
-    url = window.location.href; 
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url, true );
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
