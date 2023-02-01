@@ -99,7 +99,7 @@ function check_first_load() {
       ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       ajax_link.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
-          rtr = document.getElementById('ajax');
+          rtr = document.querySelector('.ajax_1');
           // статистика
           $link = document.location.pathname;
           meta_block = rtr.querySelector(".doc_title");
@@ -111,7 +111,7 @@ function check_first_load() {
           }
           $page_id = meta_block.getAttribute("page-id");
           $title = meta_block.getAttribute("data-title");
-          //
+          // 
           elem_ = document.createElement('span');
           elem_.innerHTML = ajax_link.responseText;
           //sidebar = elem_.querySelector(".sidebar");

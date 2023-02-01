@@ -316,4 +316,4 @@
 <main class="main-root">
     <div id="dsn-scrollbar">
         <div class="main-content">
-            <div id="ajax" class="wrapper">
+            <div class="wrapper ajax_1">
