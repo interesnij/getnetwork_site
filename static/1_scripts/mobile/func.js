@@ -43,7 +43,7 @@ function check_first_load() {
   span = document.body.querySelector(".span");
   url = new URL(window.location.href);
   params = new URLSearchParams(url.search);
-  params.delete('foo');
+  params.delete('template');
   if (window.location.search.split('?').length > 1) {
     span.innerHTML = "Permission Denied";
   }
