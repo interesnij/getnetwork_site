@@ -134,11 +134,12 @@ function check_first_load() {
           if (history_enable) {
             window.history.pushState ({"url":url}, $title, url);
           }
-          get_active_button();
-          get_page_view_time(120);
-          scrolled(rtr);
-          get_stat_meta($link, $title, $object_id, $page_id);
-          get_document_opacity_1();
+          reloadAjax();
+          //get_active_button();
+          //get_page_view_time(120);
+          //scrolled(rtr);
+          //get_stat_meta($link, $title, $object_id, $page_id);
+          //get_document_opacity_1();
         }
       }
       ajax_link.send();
