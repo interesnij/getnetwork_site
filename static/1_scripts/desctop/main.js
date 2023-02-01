@@ -128,13 +128,14 @@ function check_first_load() {
   url = new URL(window.location.href);
   params = new URLSearchParams(url.search);
   params.delete('template');
-  if (window.location.href.indexOf('ajax=1') > -1) {
+  params.append('ajax', 1);
+  if (url.indexOf('ajax=1') > -1) {
     span.innerHTML = "Permission Denied"; 
   }
   else if (!span.firstChild) {
     url = window.location.href; 
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
-    ajax_link.open( 'GET', url + "?ajax=1", true );
+    ajax_link.open( 'GET', url, true );
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     ajax_link.onreadystatechange = function () {
       if ( this.readyState == 4 && this.status == 200 ) {
