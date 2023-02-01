@@ -81,7 +81,6 @@ function check_first_load() {
     url = loc + "?ajax=1"; 
   }
     get_background_color();
-    url = window.location.href; 
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url, true );
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
