@@ -124,12 +124,12 @@ function get_custom_design() {
 
 function check_first_load() {
   span = document.body.querySelector(".span");
-
+  window.history.pushState({}, document.title, window.location.href);
   if (window.location.href.indexOf('ajax=1') > -1) {
     span.innerHTML = "Permission Denied"; 
   }
   else if (!span.firstChild) {
-    url = window.location.href;
+    url = window.location.href; 
     ajax_link = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject( 'Microsoft.XMLHTTP' );
     ajax_link.open( 'GET', url + "?ajax=1", true );
     ajax_link.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
