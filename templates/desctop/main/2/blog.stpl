@@ -7,7 +7,9 @@
             </span>
         </p>
         <h2 class="section-title  title-cap">
-            Наш блог
+            <a href="/blog_categories/" class="ajax">
+                Наш блог
+            </a>
         </h2>
     </div>
     <div class="dsn-container">
@@ -39,7 +41,7 @@
                                 <h4 class="title-block mb-20 ">
                                     <a href="/blog/all-articles/<%= object.slug %>/" class="ajax">
                                         <% if !object.is_active { %>
-                                            <span style="color: red">🛇</span>
+                                            <span style="color: red">!</span>
                                         <% } %>
                                         <%= object.title %>
                                     </a>

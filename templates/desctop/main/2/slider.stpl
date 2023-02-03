@@ -25,7 +25,7 @@
                                 <h1 class="title user-no-selection d-inline-block ">
                                     <a href="/work/all-works/<%= object.slug %>/" class="effect-ajax" data-dsn-ajax="slider">
                                         <% if !object.is_active { %>
-                                            <span style="color: red">🛇</span>
+                                            <span style="color: red">!</span>
                                         <% } %>
                                         <%= object.title %>
                                     </a>
@@ -65,7 +65,7 @@
         <div class="slider-counter d-flex align-items-center">
             <span class="slider-current-index">01</span>
             <span class="slider-counter-delimiter"></span>
-            <span class="slider-total-index">05</span>
+            <span class="slider-total-index"><%= last_works.len() %></span>
         </div>
         <div class="next-container">
             <div class="container-inner">

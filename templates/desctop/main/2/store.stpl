@@ -2,33 +2,43 @@
     <div class="container mb-70 d-flex text-center flex-column align-items-center">
         <p class="sub-heading line-shap line-shap-before mb-15">
             <span class="line-bg-right">
-                Our Works
+                Иногда проще купить готовое
             </span>
         </p>
         <h2 class="section-title  title-cap">
-            Creative Portfolio <br>Designs
+            <a href="/store_categories/" class="ajax">
+                Наши товары
+            </a>
         </h2>
     </div>
 
     <div class="swiper-container">
         <div class="swiper-wrapper v-dark-head">
-
+            <% for object in last_stores.iter() { %>
             <div class="swiper-slide over-hidden work-item">
                 <div class="box-img p-relative over-hidden before-z-index" data-overlay="5" data-swiper-parallax-scale="0.85">
-                    <img class="cover-bg-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-dsn-src="assets/img/project/project5/1.jpg" alt="">
+                    <img class="cover-bg-img" 
+                         src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" 
+                         data-dsn-src="<%= object.get_image() %>" 
+                         alt="img">
                 </div>
                 <div class="box-content" data-swiper-parallax-opacity="0">
                     <div class="metas d-inline-block mb-15">
-                        <span>Photography</span> <span> car</span>
+                        <% for tag in object.get_tags().iter() { %>
+                            <a href="/tag/<%= tag.name %>/" class="mb-5 ajax"><%= tag.name %> (<%= tag.count %>)</a>
+                        <% } %>
                     </div>
                     <h4 class="sec-title">
-                        <a class="effect-ajax" data-dsn-ajax="work" href="project5.html">
-                            Small Silver Car
+                        <a class="effect-ajax" data-dsn-ajax="work" href="store/all-stores/<%= object.slug %>/">
+                            <% if !object.is_active { %>
+                                <span style="color: red">!</span>
+                            <% } %>
+                            <%= object.title %>
                         </a>
                     </h4>
                 </div>
             </div>
-
+            <% } %>
         </div>
         <div class="dsn-pagination mt-30 dsn-container d-flex justify-content-between">
             <div class="swiper-next">

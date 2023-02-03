@@ -1270,7 +1270,7 @@ function navMenu() {
             return {
                 imgs: imgs,
                 overlay: overlady,
-                displacement: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "displacement", "assets/img/displacement/8.jpg" ),
+                displacement: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "displacement", "/static/2_images/8.jpg" ),
                 intensity: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "intensity", -2 ),
                 speedIn: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "speedIn", 1.2 ),
                 speedOut: dsnGrid.getData( dsn_slider.find( ".slide-inner" ), "speedOut", 1.2 ),

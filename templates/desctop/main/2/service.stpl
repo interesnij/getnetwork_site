@@ -7,7 +7,11 @@
                 Мы профессионалы, влюбленные в свою работу
             </span>
         </p>
-        <h2 class="section-title  title-cap">Наши услуги</h2>
+        <h2 class="section-title  title-cap">
+            <a href="/service_categories/" class="ajax">
+                Наши услуги
+            </a>
+        </h2>
     </div>
 
     <div class="container">
@@ -21,15 +25,13 @@
                     <div class="line line-right"></div>
                     <div class="services-content background-section">
                         <div class="icon">
-                            <div class="progressive replace" data-href="<%= object.get_image() %>">
-                                <img class="preview image_fit_300" src="/static/images/i_gorizontal.webp" alt="img" />
-                            </div>
+                            <img class="preview image_fit_300" src="<%= object.get_image() %>" alt="img" />
                         </div>
                         <div class="service-description">
                             <h4 class="title-block mb-15">
                                 <a class="ajax" href="/service/all-services/<%= object.slug %>/">
                                     <% if !object.is_active { %>
-                                    <span style="color: red">🛇</span>
+                                    <span style="color: red">!</span>
                                     <% } %>
                                     <%= object.title %>
                                 </a>
