@@ -11,6 +11,7 @@ table! {
         seconds -> Int4,
         types -> Int2,
         slug -> Varchar,
+        now_u -> Int2,
     }
 }
 
@@ -41,6 +42,7 @@ table! {
         height -> Float8,
         seconds -> Int4,
         created -> Timestamp,
+        template -> Varchar,
     }
 }
 
@@ -115,6 +117,7 @@ table! {
         price_acc -> Nullable<Int4>,
         types -> Int2,
         slug -> Varchar,
+        now_u -> Int2,
     }
 }
 
@@ -205,6 +208,7 @@ table! {
         view -> Int4,
         height -> Float8,
         seconds -> Int4,
+        now_u -> Int2,
     }
 }
 
@@ -218,6 +222,7 @@ table! {
         view -> Int4,
         height -> Float8,
         seconds -> Int4,
+        now_u -> Int2,
     }
 }
 

@@ -1,0 +1,3780 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.11 (Ubuntu 12.11-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.11 (Ubuntu 12.11-0ubuntu0.20.04.1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: diesel_manage_updated_at(regclass); Type: FUNCTION; Schema: public; Owner: serg
+--
+
+CREATE FUNCTION public.diesel_manage_updated_at(_tbl regclass) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    EXECUTE format('CREATE TRIGGER set_updated_at BEFORE UPDATE ON %s
+                    FOR EACH ROW EXECUTE PROCEDURE diesel_set_updated_at()', _tbl);
+END;
+$$;
+
+
+ALTER FUNCTION public.diesel_manage_updated_at(_tbl regclass) OWNER TO serg;
+
+--
+-- Name: diesel_set_updated_at(); Type: FUNCTION; Schema: public; Owner: serg
+--
+
+CREATE FUNCTION public.diesel_set_updated_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    IF (
+        NEW IS DISTINCT FROM OLD AND
+        NEW.updated_at IS NOT DISTINCT FROM OLD.updated_at
+    ) THEN
+        NEW.updated_at := current_timestamp;
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.diesel_set_updated_at() OWNER TO serg;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: __diesel_schema_migrations; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.__diesel_schema_migrations (
+    version character varying(50) NOT NULL,
+    run_on timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.__diesel_schema_migrations OWNER TO serg;
+
+--
+-- Name: blog_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.blog_categories (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    description character varying(500),
+    "position" smallint NOT NULL,
+    image character varying(500),
+    count smallint NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.blog_categories OWNER TO serg;
+
+--
+-- Name: blog_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.blog_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.blog_categories_id_seq OWNER TO serg;
+
+--
+-- Name: blog_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.blog_categories_id_seq OWNED BY public.blog_categories.id;
+
+
+--
+-- Name: blog_category; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.blog_category (
+    id integer NOT NULL,
+    blog_categories_id integer NOT NULL,
+    blog_id integer NOT NULL
+);
+
+
+ALTER TABLE public.blog_category OWNER TO serg;
+
+--
+-- Name: blog_category_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.blog_category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.blog_category_id_seq OWNER TO serg;
+
+--
+-- Name: blog_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.blog_category_id_seq OWNED BY public.blog_category.id;
+
+
+--
+-- Name: blog_comments; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.blog_comments (
+    id integer NOT NULL,
+    comment character varying(1000) NOT NULL,
+    blog_id integer NOT NULL,
+    user_id integer NOT NULL,
+    parent_id integer,
+    created timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.blog_comments OWNER TO serg;
+
+--
+-- Name: blog_comments_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.blog_comments_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.blog_comments_id_seq OWNER TO serg;
+
+--
+-- Name: blog_comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.blog_comments_id_seq OWNED BY public.blog_comments.id;
+
+
+--
+-- Name: blog_images; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.blog_images (
+    id integer NOT NULL,
+    blog integer NOT NULL,
+    src character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.blog_images OWNER TO serg;
+
+--
+-- Name: blog_images_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.blog_images_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.blog_images_id_seq OWNER TO serg;
+
+--
+-- Name: blog_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.blog_images_id_seq OWNED BY public.blog_images.id;
+
+
+--
+-- Name: blog_videos; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.blog_videos (
+    id integer NOT NULL,
+    blog integer NOT NULL,
+    src character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.blog_videos OWNER TO serg;
+
+--
+-- Name: blog_videos_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.blog_videos_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.blog_videos_id_seq OWNER TO serg;
+
+--
+-- Name: blog_videos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.blog_videos_id_seq OWNED BY public.blog_videos.id;
+
+
+--
+-- Name: blogs; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.blogs (
+    id integer NOT NULL,
+    title character varying(100) NOT NULL,
+    description character varying(500),
+    content character varying(30000),
+    link character varying(500),
+    image character varying(500),
+    is_active boolean NOT NULL,
+    user_id integer NOT NULL,
+    created timestamp without time zone NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.blogs OWNER TO serg;
+
+--
+-- Name: blogs_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.blogs_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.blogs_id_seq OWNER TO serg;
+
+--
+-- Name: blogs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.blogs_id_seq OWNED BY public.blogs.id;
+
+
+--
+-- Name: cookie_stats; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.cookie_stats (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    page smallint NOT NULL,
+    link character varying(200) NOT NULL,
+    title character varying(200) NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL,
+    created timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.cookie_stats OWNER TO serg;
+
+--
+-- Name: cookie_stats_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.cookie_stats_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cookie_stats_id_seq OWNER TO serg;
+
+--
+-- Name: cookie_stats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.cookie_stats_id_seq OWNED BY public.cookie_stats.id;
+
+
+--
+-- Name: cookie_users; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.cookie_users (
+    id integer NOT NULL,
+    ip character varying(100) NOT NULL,
+    device smallint NOT NULL,
+    city_ru character varying(150),
+    city_en character varying(150),
+    region_ru character varying(150),
+    region_en character varying(150),
+    country_ru character varying(150),
+    country_en character varying(150),
+    height double precision NOT NULL,
+    seconds integer NOT NULL,
+    created timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.cookie_users OWNER TO serg;
+
+--
+-- Name: cookie_users_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.cookie_users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cookie_users_id_seq OWNER TO serg;
+
+--
+-- Name: cookie_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.cookie_users_id_seq OWNED BY public.cookie_users.id;
+
+
+--
+-- Name: feedbacks; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.feedbacks (
+    id integer NOT NULL,
+    username character varying(100) NOT NULL,
+    email character varying(200) NOT NULL,
+    message character varying(1000) NOT NULL
+);
+
+
+ALTER TABLE public.feedbacks OWNER TO serg;
+
+--
+-- Name: feedbacks_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.feedbacks_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.feedbacks_id_seq OWNER TO serg;
+
+--
+-- Name: feedbacks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.feedbacks_id_seq OWNED BY public.feedbacks.id;
+
+
+--
+-- Name: help_item_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.help_item_categories (
+    id integer NOT NULL,
+    title character varying(200) NOT NULL
+);
+
+
+ALTER TABLE public.help_item_categories OWNER TO serg;
+
+--
+-- Name: help_item_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.help_item_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.help_item_categories_id_seq OWNER TO serg;
+
+--
+-- Name: help_item_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.help_item_categories_id_seq OWNED BY public.help_item_categories.id;
+
+
+--
+-- Name: help_items; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.help_items (
+    id integer NOT NULL,
+    category_id integer NOT NULL,
+    title character varying(200) NOT NULL,
+    content character varying(1000) NOT NULL
+);
+
+
+ALTER TABLE public.help_items OWNER TO serg;
+
+--
+-- Name: help_items_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.help_items_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.help_items_id_seq OWNER TO serg;
+
+--
+-- Name: help_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.help_items_id_seq OWNED BY public.help_items.id;
+
+
+--
+-- Name: serve; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.serve (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    cat_name character varying(100) NOT NULL,
+    description character varying(10000),
+    "position" smallint NOT NULL,
+    serve_categories integer NOT NULL,
+    price integer NOT NULL,
+    man_hours smallint NOT NULL,
+    is_default boolean NOT NULL,
+    user_id integer NOT NULL,
+    tech_cat_id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL,
+    serve_id integer
+);
+
+
+ALTER TABLE public.serve OWNER TO serg;
+
+--
+-- Name: serve_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.serve_categories (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    description character varying(3000),
+    cat_name character varying(100) NOT NULL,
+    tech_categories integer NOT NULL,
+    "position" smallint NOT NULL,
+    count smallint NOT NULL,
+    default_price integer NOT NULL,
+    user_id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.serve_categories OWNER TO serg;
+
+--
+-- Name: serve_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.serve_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.serve_categories_id_seq OWNER TO serg;
+
+--
+-- Name: serve_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.serve_categories_id_seq OWNED BY public.serve_categories.id;
+
+
+--
+-- Name: serve_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.serve_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.serve_id_seq OWNER TO serg;
+
+--
+-- Name: serve_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.serve_id_seq OWNED BY public.serve.id;
+
+
+--
+-- Name: serve_items; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.serve_items (
+    id integer NOT NULL,
+    serve_id integer NOT NULL,
+    service_id integer NOT NULL,
+    store_id integer NOT NULL,
+    work_id integer NOT NULL
+);
+
+
+ALTER TABLE public.serve_items OWNER TO serg;
+
+--
+-- Name: serve_items_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.serve_items_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.serve_items_id_seq OWNER TO serg;
+
+--
+-- Name: serve_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.serve_items_id_seq OWNED BY public.serve_items.id;
+
+
+--
+-- Name: service_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.service_categories (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    description character varying(500),
+    "position" smallint NOT NULL,
+    image character varying(500),
+    count smallint NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.service_categories OWNER TO serg;
+
+--
+-- Name: service_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.service_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.service_categories_id_seq OWNER TO serg;
+
+--
+-- Name: service_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.service_categories_id_seq OWNED BY public.service_categories.id;
+
+
+--
+-- Name: service_category; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.service_category (
+    id integer NOT NULL,
+    service_categories_id integer NOT NULL,
+    service_id integer NOT NULL
+);
+
+
+ALTER TABLE public.service_category OWNER TO serg;
+
+--
+-- Name: service_category_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.service_category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.service_category_id_seq OWNER TO serg;
+
+--
+-- Name: service_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.service_category_id_seq OWNED BY public.service_category.id;
+
+
+--
+-- Name: service_images; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.service_images (
+    id integer NOT NULL,
+    service integer NOT NULL,
+    src character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.service_images OWNER TO serg;
+
+--
+-- Name: service_images_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.service_images_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.service_images_id_seq OWNER TO serg;
+
+--
+-- Name: service_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.service_images_id_seq OWNED BY public.service_images.id;
+
+
+--
+-- Name: service_videos; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.service_videos (
+    id integer NOT NULL,
+    service integer NOT NULL,
+    src character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.service_videos OWNER TO serg;
+
+--
+-- Name: service_videos_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.service_videos_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.service_videos_id_seq OWNER TO serg;
+
+--
+-- Name: service_videos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.service_videos_id_seq OWNED BY public.service_videos.id;
+
+
+--
+-- Name: services; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.services (
+    id integer NOT NULL,
+    title character varying(100) NOT NULL,
+    description character varying,
+    content character varying(30000),
+    link character varying(500),
+    image character varying(500),
+    is_active boolean NOT NULL,
+    price integer NOT NULL,
+    user_id integer NOT NULL,
+    created timestamp without time zone NOT NULL,
+    "position" smallint NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL,
+    price_acc integer
+);
+
+
+ALTER TABLE public.services OWNER TO serg;
+
+--
+-- Name: services_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.services_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.services_id_seq OWNER TO serg;
+
+--
+-- Name: services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.services_id_seq OWNED BY public.services.id;
+
+
+--
+-- Name: stat_blog_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.stat_blog_categories (
+    id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.stat_blog_categories OWNER TO serg;
+
+--
+-- Name: stat_blog_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.stat_blog_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stat_blog_categories_id_seq OWNER TO serg;
+
+--
+-- Name: stat_blog_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.stat_blog_categories_id_seq OWNED BY public.stat_blog_categories.id;
+
+
+--
+-- Name: stat_helps; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.stat_helps (
+    id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.stat_helps OWNER TO serg;
+
+--
+-- Name: stat_helps_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.stat_helps_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stat_helps_id_seq OWNER TO serg;
+
+--
+-- Name: stat_helps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.stat_helps_id_seq OWNED BY public.stat_helps.id;
+
+
+--
+-- Name: stat_infos; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.stat_infos (
+    id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.stat_infos OWNER TO serg;
+
+--
+-- Name: stat_infos_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.stat_infos_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stat_infos_id_seq OWNER TO serg;
+
+--
+-- Name: stat_infos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.stat_infos_id_seq OWNED BY public.stat_infos.id;
+
+
+--
+-- Name: stat_mainpages; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.stat_mainpages (
+    id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.stat_mainpages OWNER TO serg;
+
+--
+-- Name: stat_mainpages_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.stat_mainpages_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stat_mainpages_id_seq OWNER TO serg;
+
+--
+-- Name: stat_mainpages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.stat_mainpages_id_seq OWNED BY public.stat_mainpages.id;
+
+
+--
+-- Name: stat_service_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.stat_service_categories (
+    id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.stat_service_categories OWNER TO serg;
+
+--
+-- Name: stat_service_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.stat_service_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stat_service_categories_id_seq OWNER TO serg;
+
+--
+-- Name: stat_service_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.stat_service_categories_id_seq OWNED BY public.stat_service_categories.id;
+
+
+--
+-- Name: stat_store_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.stat_store_categories (
+    id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.stat_store_categories OWNER TO serg;
+
+--
+-- Name: stat_store_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.stat_store_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stat_store_categories_id_seq OWNER TO serg;
+
+--
+-- Name: stat_store_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.stat_store_categories_id_seq OWNED BY public.stat_store_categories.id;
+
+
+--
+-- Name: stat_tags; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.stat_tags (
+    id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.stat_tags OWNER TO serg;
+
+--
+-- Name: stat_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.stat_tags_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stat_tags_id_seq OWNER TO serg;
+
+--
+-- Name: stat_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.stat_tags_id_seq OWNED BY public.stat_tags.id;
+
+
+--
+-- Name: stat_wiki_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.stat_wiki_categories (
+    id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.stat_wiki_categories OWNER TO serg;
+
+--
+-- Name: stat_wiki_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.stat_wiki_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stat_wiki_categories_id_seq OWNER TO serg;
+
+--
+-- Name: stat_wiki_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.stat_wiki_categories_id_seq OWNED BY public.stat_wiki_categories.id;
+
+
+--
+-- Name: stat_work_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.stat_work_categories (
+    id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.stat_work_categories OWNER TO serg;
+
+--
+-- Name: stat_work_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.stat_work_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stat_work_categories_id_seq OWNER TO serg;
+
+--
+-- Name: stat_work_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.stat_work_categories_id_seq OWNED BY public.stat_work_categories.id;
+
+
+--
+-- Name: store_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.store_categories (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    description character varying(1000),
+    "position" smallint NOT NULL,
+    image character varying(500),
+    count smallint NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.store_categories OWNER TO serg;
+
+--
+-- Name: store_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.store_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.store_categories_id_seq OWNER TO serg;
+
+--
+-- Name: store_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.store_categories_id_seq OWNED BY public.store_categories.id;
+
+
+--
+-- Name: store_category; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.store_category (
+    id integer NOT NULL,
+    store_categories_id integer NOT NULL,
+    store_id integer NOT NULL
+);
+
+
+ALTER TABLE public.store_category OWNER TO serg;
+
+--
+-- Name: store_category_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.store_category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.store_category_id_seq OWNER TO serg;
+
+--
+-- Name: store_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.store_category_id_seq OWNED BY public.store_category.id;
+
+
+--
+-- Name: store_images; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.store_images (
+    id integer NOT NULL,
+    store integer NOT NULL,
+    src character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.store_images OWNER TO serg;
+
+--
+-- Name: store_images_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.store_images_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.store_images_id_seq OWNER TO serg;
+
+--
+-- Name: store_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.store_images_id_seq OWNED BY public.store_images.id;
+
+
+--
+-- Name: store_videos; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.store_videos (
+    id integer NOT NULL,
+    store integer NOT NULL,
+    src character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.store_videos OWNER TO serg;
+
+--
+-- Name: store_videos_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.store_videos_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.store_videos_id_seq OWNER TO serg;
+
+--
+-- Name: store_videos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.store_videos_id_seq OWNED BY public.store_videos.id;
+
+
+--
+-- Name: stores; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.stores (
+    id integer NOT NULL,
+    title character varying(100) NOT NULL,
+    description character varying,
+    content character varying(30000),
+    link character varying(500),
+    image character varying(500),
+    is_active boolean NOT NULL,
+    price integer NOT NULL,
+    user_id integer NOT NULL,
+    created timestamp without time zone NOT NULL,
+    "position" smallint NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL,
+    price_acc integer
+);
+
+
+ALTER TABLE public.stores OWNER TO serg;
+
+--
+-- Name: stores_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.stores_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stores_id_seq OWNER TO serg;
+
+--
+-- Name: stores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.stores_id_seq OWNED BY public.stores.id;
+
+
+--
+-- Name: tags; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.tags (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    "position" smallint NOT NULL,
+    count smallint NOT NULL,
+    blog_count smallint NOT NULL,
+    service_count smallint NOT NULL,
+    store_count smallint NOT NULL,
+    wiki_count smallint NOT NULL,
+    work_count smallint NOT NULL,
+    user_id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.tags OWNER TO serg;
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.tags_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tags_id_seq OWNER TO serg;
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
+
+
+--
+-- Name: tags_items; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.tags_items (
+    id integer NOT NULL,
+    tag_id integer NOT NULL,
+    service_id integer NOT NULL,
+    store_id integer NOT NULL,
+    blog_id integer NOT NULL,
+    wiki_id integer NOT NULL,
+    work_id integer NOT NULL,
+    created timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.tags_items OWNER TO serg;
+
+--
+-- Name: tags_items_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.tags_items_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tags_items_id_seq OWNER TO serg;
+
+--
+-- Name: tags_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.tags_items_id_seq OWNED BY public.tags_items.id;
+
+
+--
+-- Name: tech_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.tech_categories (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    description character varying(3000),
+    "position" smallint NOT NULL,
+    count smallint NOT NULL,
+    level smallint NOT NULL,
+    user_id integer NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.tech_categories OWNER TO serg;
+
+--
+-- Name: tech_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.tech_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tech_categories_id_seq OWNER TO serg;
+
+--
+-- Name: tech_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.tech_categories_id_seq OWNED BY public.tech_categories.id;
+
+
+--
+-- Name: tech_categories_items; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.tech_categories_items (
+    id integer NOT NULL,
+    category_id integer NOT NULL,
+    service_id integer NOT NULL,
+    store_id integer NOT NULL,
+    work_id integer NOT NULL,
+    types smallint NOT NULL
+);
+
+
+ALTER TABLE public.tech_categories_items OWNER TO serg;
+
+--
+-- Name: tech_categories_items_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.tech_categories_items_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tech_categories_items_id_seq OWNER TO serg;
+
+--
+-- Name: tech_categories_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.tech_categories_items_id_seq OWNED BY public.tech_categories_items.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    username character varying(100) NOT NULL,
+    email character varying(100) NOT NULL,
+    password character varying(1000) NOT NULL,
+    bio character varying(500),
+    image character varying(500),
+    perm smallint NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO serg;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO serg;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: wiki_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.wiki_categories (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    description character varying(1000),
+    "position" smallint NOT NULL,
+    image character varying(500),
+    count smallint NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.wiki_categories OWNER TO serg;
+
+--
+-- Name: wiki_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.wiki_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wiki_categories_id_seq OWNER TO serg;
+
+--
+-- Name: wiki_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.wiki_categories_id_seq OWNED BY public.wiki_categories.id;
+
+
+--
+-- Name: wiki_category; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.wiki_category (
+    id integer NOT NULL,
+    wiki_categories_id integer NOT NULL,
+    wiki_id integer NOT NULL
+);
+
+
+ALTER TABLE public.wiki_category OWNER TO serg;
+
+--
+-- Name: wiki_category_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.wiki_category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wiki_category_id_seq OWNER TO serg;
+
+--
+-- Name: wiki_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.wiki_category_id_seq OWNED BY public.wiki_category.id;
+
+
+--
+-- Name: wiki_images; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.wiki_images (
+    id integer NOT NULL,
+    wiki integer NOT NULL,
+    src character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.wiki_images OWNER TO serg;
+
+--
+-- Name: wiki_images_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.wiki_images_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wiki_images_id_seq OWNER TO serg;
+
+--
+-- Name: wiki_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.wiki_images_id_seq OWNED BY public.wiki_images.id;
+
+
+--
+-- Name: wiki_videos; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.wiki_videos (
+    id integer NOT NULL,
+    wiki integer NOT NULL,
+    src character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.wiki_videos OWNER TO serg;
+
+--
+-- Name: wiki_videos_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.wiki_videos_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wiki_videos_id_seq OWNER TO serg;
+
+--
+-- Name: wiki_videos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.wiki_videos_id_seq OWNED BY public.wiki_videos.id;
+
+
+--
+-- Name: wikis; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.wikis (
+    id integer NOT NULL,
+    title character varying(100) NOT NULL,
+    description character varying,
+    content character varying(30000),
+    link character varying(500),
+    image character varying(500),
+    is_active boolean NOT NULL,
+    user_id integer NOT NULL,
+    created timestamp without time zone NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.wikis OWNER TO serg;
+
+--
+-- Name: wikis_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.wikis_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wikis_id_seq OWNER TO serg;
+
+--
+-- Name: wikis_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.wikis_id_seq OWNED BY public.wikis.id;
+
+
+--
+-- Name: work_categories; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.work_categories (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    description character varying(500),
+    "position" smallint NOT NULL,
+    image character varying(500),
+    count smallint NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL
+);
+
+
+ALTER TABLE public.work_categories OWNER TO serg;
+
+--
+-- Name: work_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.work_categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.work_categories_id_seq OWNER TO serg;
+
+--
+-- Name: work_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.work_categories_id_seq OWNED BY public.work_categories.id;
+
+
+--
+-- Name: work_category; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.work_category (
+    id integer NOT NULL,
+    work_categories_id integer NOT NULL,
+    work_id integer NOT NULL
+);
+
+
+ALTER TABLE public.work_category OWNER TO serg;
+
+--
+-- Name: work_category_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.work_category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.work_category_id_seq OWNER TO serg;
+
+--
+-- Name: work_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.work_category_id_seq OWNED BY public.work_category.id;
+
+
+--
+-- Name: work_images; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.work_images (
+    id integer NOT NULL,
+    work integer NOT NULL,
+    src character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.work_images OWNER TO serg;
+
+--
+-- Name: work_images_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.work_images_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.work_images_id_seq OWNER TO serg;
+
+--
+-- Name: work_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.work_images_id_seq OWNED BY public.work_images.id;
+
+
+--
+-- Name: work_videos; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.work_videos (
+    id integer NOT NULL,
+    work integer NOT NULL,
+    src character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.work_videos OWNER TO serg;
+
+--
+-- Name: work_videos_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.work_videos_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.work_videos_id_seq OWNER TO serg;
+
+--
+-- Name: work_videos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.work_videos_id_seq OWNED BY public.work_videos.id;
+
+
+--
+-- Name: works; Type: TABLE; Schema: public; Owner: serg
+--
+
+CREATE TABLE public.works (
+    id integer NOT NULL,
+    title character varying(100) NOT NULL,
+    description character varying,
+    content character varying(30000),
+    link character varying(500),
+    image character varying(500),
+    is_active boolean NOT NULL,
+    price integer NOT NULL,
+    user_id integer NOT NULL,
+    created timestamp without time zone NOT NULL,
+    "position" smallint NOT NULL,
+    view integer NOT NULL,
+    height double precision NOT NULL,
+    seconds integer NOT NULL,
+    price_acc integer
+);
+
+
+ALTER TABLE public.works OWNER TO serg;
+
+--
+-- Name: works_id_seq; Type: SEQUENCE; Schema: public; Owner: serg
+--
+
+CREATE SEQUENCE public.works_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.works_id_seq OWNER TO serg;
+
+--
+-- Name: works_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: serg
+--
+
+ALTER SEQUENCE public.works_id_seq OWNED BY public.works.id;
+
+
+--
+-- Name: blog_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_categories ALTER COLUMN id SET DEFAULT nextval('public.blog_categories_id_seq'::regclass);
+
+
+--
+-- Name: blog_category id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_category ALTER COLUMN id SET DEFAULT nextval('public.blog_category_id_seq'::regclass);
+
+
+--
+-- Name: blog_comments id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_comments ALTER COLUMN id SET DEFAULT nextval('public.blog_comments_id_seq'::regclass);
+
+
+--
+-- Name: blog_images id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_images ALTER COLUMN id SET DEFAULT nextval('public.blog_images_id_seq'::regclass);
+
+
+--
+-- Name: blog_videos id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_videos ALTER COLUMN id SET DEFAULT nextval('public.blog_videos_id_seq'::regclass);
+
+
+--
+-- Name: blogs id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blogs ALTER COLUMN id SET DEFAULT nextval('public.blogs_id_seq'::regclass);
+
+
+--
+-- Name: cookie_stats id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.cookie_stats ALTER COLUMN id SET DEFAULT nextval('public.cookie_stats_id_seq'::regclass);
+
+
+--
+-- Name: cookie_users id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.cookie_users ALTER COLUMN id SET DEFAULT nextval('public.cookie_users_id_seq'::regclass);
+
+
+--
+-- Name: feedbacks id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.feedbacks ALTER COLUMN id SET DEFAULT nextval('public.feedbacks_id_seq'::regclass);
+
+
+--
+-- Name: help_item_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.help_item_categories ALTER COLUMN id SET DEFAULT nextval('public.help_item_categories_id_seq'::regclass);
+
+
+--
+-- Name: help_items id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.help_items ALTER COLUMN id SET DEFAULT nextval('public.help_items_id_seq'::regclass);
+
+
+--
+-- Name: serve id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.serve ALTER COLUMN id SET DEFAULT nextval('public.serve_id_seq'::regclass);
+
+
+--
+-- Name: serve_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.serve_categories ALTER COLUMN id SET DEFAULT nextval('public.serve_categories_id_seq'::regclass);
+
+
+--
+-- Name: serve_items id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.serve_items ALTER COLUMN id SET DEFAULT nextval('public.serve_items_id_seq'::regclass);
+
+
+--
+-- Name: service_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_categories ALTER COLUMN id SET DEFAULT nextval('public.service_categories_id_seq'::regclass);
+
+
+--
+-- Name: service_category id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_category ALTER COLUMN id SET DEFAULT nextval('public.service_category_id_seq'::regclass);
+
+
+--
+-- Name: service_images id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_images ALTER COLUMN id SET DEFAULT nextval('public.service_images_id_seq'::regclass);
+
+
+--
+-- Name: service_videos id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_videos ALTER COLUMN id SET DEFAULT nextval('public.service_videos_id_seq'::regclass);
+
+
+--
+-- Name: services id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.services ALTER COLUMN id SET DEFAULT nextval('public.services_id_seq'::regclass);
+
+
+--
+-- Name: stat_blog_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_blog_categories ALTER COLUMN id SET DEFAULT nextval('public.stat_blog_categories_id_seq'::regclass);
+
+
+--
+-- Name: stat_helps id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_helps ALTER COLUMN id SET DEFAULT nextval('public.stat_helps_id_seq'::regclass);
+
+
+--
+-- Name: stat_infos id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_infos ALTER COLUMN id SET DEFAULT nextval('public.stat_infos_id_seq'::regclass);
+
+
+--
+-- Name: stat_mainpages id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_mainpages ALTER COLUMN id SET DEFAULT nextval('public.stat_mainpages_id_seq'::regclass);
+
+
+--
+-- Name: stat_service_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_service_categories ALTER COLUMN id SET DEFAULT nextval('public.stat_service_categories_id_seq'::regclass);
+
+
+--
+-- Name: stat_store_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_store_categories ALTER COLUMN id SET DEFAULT nextval('public.stat_store_categories_id_seq'::regclass);
+
+
+--
+-- Name: stat_tags id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_tags ALTER COLUMN id SET DEFAULT nextval('public.stat_tags_id_seq'::regclass);
+
+
+--
+-- Name: stat_wiki_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_wiki_categories ALTER COLUMN id SET DEFAULT nextval('public.stat_wiki_categories_id_seq'::regclass);
+
+
+--
+-- Name: stat_work_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_work_categories ALTER COLUMN id SET DEFAULT nextval('public.stat_work_categories_id_seq'::regclass);
+
+
+--
+-- Name: store_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_categories ALTER COLUMN id SET DEFAULT nextval('public.store_categories_id_seq'::regclass);
+
+
+--
+-- Name: store_category id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_category ALTER COLUMN id SET DEFAULT nextval('public.store_category_id_seq'::regclass);
+
+
+--
+-- Name: store_images id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_images ALTER COLUMN id SET DEFAULT nextval('public.store_images_id_seq'::regclass);
+
+
+--
+-- Name: store_videos id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_videos ALTER COLUMN id SET DEFAULT nextval('public.store_videos_id_seq'::regclass);
+
+
+--
+-- Name: stores id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stores ALTER COLUMN id SET DEFAULT nextval('public.stores_id_seq'::regclass);
+
+
+--
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id_seq'::regclass);
+
+
+--
+-- Name: tags_items id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.tags_items ALTER COLUMN id SET DEFAULT nextval('public.tags_items_id_seq'::regclass);
+
+
+--
+-- Name: tech_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.tech_categories ALTER COLUMN id SET DEFAULT nextval('public.tech_categories_id_seq'::regclass);
+
+
+--
+-- Name: tech_categories_items id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.tech_categories_items ALTER COLUMN id SET DEFAULT nextval('public.tech_categories_items_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: wiki_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_categories ALTER COLUMN id SET DEFAULT nextval('public.wiki_categories_id_seq'::regclass);
+
+
+--
+-- Name: wiki_category id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_category ALTER COLUMN id SET DEFAULT nextval('public.wiki_category_id_seq'::regclass);
+
+
+--
+-- Name: wiki_images id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_images ALTER COLUMN id SET DEFAULT nextval('public.wiki_images_id_seq'::regclass);
+
+
+--
+-- Name: wiki_videos id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_videos ALTER COLUMN id SET DEFAULT nextval('public.wiki_videos_id_seq'::regclass);
+
+
+--
+-- Name: wikis id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wikis ALTER COLUMN id SET DEFAULT nextval('public.wikis_id_seq'::regclass);
+
+
+--
+-- Name: work_categories id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_categories ALTER COLUMN id SET DEFAULT nextval('public.work_categories_id_seq'::regclass);
+
+
+--
+-- Name: work_category id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_category ALTER COLUMN id SET DEFAULT nextval('public.work_category_id_seq'::regclass);
+
+
+--
+-- Name: work_images id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_images ALTER COLUMN id SET DEFAULT nextval('public.work_images_id_seq'::regclass);
+
+
+--
+-- Name: work_videos id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_videos ALTER COLUMN id SET DEFAULT nextval('public.work_videos_id_seq'::regclass);
+
+
+--
+-- Name: works id; Type: DEFAULT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.works ALTER COLUMN id SET DEFAULT nextval('public.works_id_seq'::regclass);
+
+
+--
+-- Data for Name: __diesel_schema_migrations; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.__diesel_schema_migrations (version, run_on) FROM stdin;
+00000000000000	2022-08-17 12:20:12.784501
+20220809100309	2022-08-17 12:20:12.789011
+20220809100336	2022-08-17 12:20:13.105361
+20220809100523	2022-08-17 12:20:13.147881
+20220815083614	2022-08-17 12:20:13.159784
+20220815110749	2022-08-17 12:20:13.162632
+\.
+
+
+--
+-- Data for Name: blog_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.blog_categories (id, name, description, "position", image, count, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: blog_category; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.blog_category (id, blog_categories_id, blog_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: blog_comments; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.blog_comments (id, comment, blog_id, user_id, parent_id, created) FROM stdin;
+\.
+
+
+--
+-- Data for Name: blog_images; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.blog_images (id, blog, src) FROM stdin;
+\.
+
+
+--
+-- Data for Name: blog_videos; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.blog_videos (id, blog, src) FROM stdin;
+\.
+
+
+--
+-- Data for Name: blogs; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.blogs (id, title, description, content, link, image, is_active, user_id, created, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cookie_stats; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.cookie_stats (id, user_id, page, link, title, height, seconds, created) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cookie_users; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.cookie_users (id, ip, device, city_ru, city_en, region_ru, region_en, country_ru, country_en, height, seconds, created) FROM stdin;
+1	91.239.184.81	1	Микунь	Mikun'	Коми	Komi	Россия	Russia	0	0	2022-08-20 08:33:47.658568
+\.
+
+
+--
+-- Data for Name: feedbacks; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.feedbacks (id, username, email, message) FROM stdin;
+\.
+
+
+--
+-- Data for Name: help_item_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.help_item_categories (id, title) FROM stdin;
+\.
+
+
+--
+-- Data for Name: help_items; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.help_items (id, category_id, title, content) FROM stdin;
+\.
+
+
+--
+-- Data for Name: serve; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.serve (id, name, cat_name, description, "position", serve_categories, price, man_hours, is_default, user_id, tech_cat_id, view, height, seconds, serve_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: serve_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.serve_categories (id, name, description, cat_name, tech_categories, "position", count, default_price, user_id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: serve_items; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.serve_items (id, serve_id, service_id, store_id, work_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: service_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.service_categories (id, name, description, "position", image, count, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: service_category; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.service_category (id, service_categories_id, service_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: service_images; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.service_images (id, service, src) FROM stdin;
+\.
+
+
+--
+-- Data for Name: service_videos; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.service_videos (id, service, src) FROM stdin;
+\.
+
+
+--
+-- Data for Name: services; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.services (id, title, description, content, link, image, is_active, price, user_id, created, "position", view, height, seconds, price_acc) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stat_blog_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.stat_blog_categories (id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stat_helps; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.stat_helps (id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stat_infos; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.stat_infos (id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stat_mainpages; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.stat_mainpages (id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stat_service_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.stat_service_categories (id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stat_store_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.stat_store_categories (id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stat_tags; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.stat_tags (id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stat_wiki_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.stat_wiki_categories (id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stat_work_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.stat_work_categories (id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: store_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.store_categories (id, name, description, "position", image, count, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: store_category; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.store_category (id, store_categories_id, store_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: store_images; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.store_images (id, store, src) FROM stdin;
+\.
+
+
+--
+-- Data for Name: store_videos; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.store_videos (id, store, src) FROM stdin;
+\.
+
+
+--
+-- Data for Name: stores; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.stores (id, title, description, content, link, image, is_active, price, user_id, created, "position", view, height, seconds, price_acc) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tags; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.tags (id, name, "position", count, blog_count, service_count, store_count, wiki_count, work_count, user_id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tags_items; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.tags_items (id, tag_id, service_id, store_id, blog_id, wiki_id, work_id, created) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tech_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.tech_categories (id, name, description, "position", count, level, user_id, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tech_categories_items; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.tech_categories_items (id, category_id, service_id, store_id, work_id, types) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.users (id, username, email, password, bio, image, perm) FROM stdin;
+\.
+
+
+--
+-- Data for Name: wiki_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.wiki_categories (id, name, description, "position", image, count, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: wiki_category; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.wiki_category (id, wiki_categories_id, wiki_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: wiki_images; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.wiki_images (id, wiki, src) FROM stdin;
+\.
+
+
+--
+-- Data for Name: wiki_videos; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.wiki_videos (id, wiki, src) FROM stdin;
+\.
+
+
+--
+-- Data for Name: wikis; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.wikis (id, title, description, content, link, image, is_active, user_id, created, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: work_categories; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.work_categories (id, name, description, "position", image, count, view, height, seconds) FROM stdin;
+\.
+
+
+--
+-- Data for Name: work_category; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.work_category (id, work_categories_id, work_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: work_images; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.work_images (id, work, src) FROM stdin;
+\.
+
+
+--
+-- Data for Name: work_videos; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.work_videos (id, work, src) FROM stdin;
+\.
+
+
+--
+-- Data for Name: works; Type: TABLE DATA; Schema: public; Owner: serg
+--
+
+COPY public.works (id, title, description, content, link, image, is_active, price, user_id, created, "position", view, height, seconds, price_acc) FROM stdin;
+\.
+
+
+--
+-- Name: blog_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.blog_categories_id_seq', 1, false);
+
+
+--
+-- Name: blog_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.blog_category_id_seq', 1, false);
+
+
+--
+-- Name: blog_comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.blog_comments_id_seq', 1, false);
+
+
+--
+-- Name: blog_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.blog_images_id_seq', 1, false);
+
+
+--
+-- Name: blog_videos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.blog_videos_id_seq', 1, false);
+
+
+--
+-- Name: blogs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.blogs_id_seq', 1, false);
+
+
+--
+-- Name: cookie_stats_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.cookie_stats_id_seq', 1, false);
+
+
+--
+-- Name: cookie_users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.cookie_users_id_seq', 1, true);
+
+
+--
+-- Name: feedbacks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.feedbacks_id_seq', 1, false);
+
+
+--
+-- Name: help_item_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.help_item_categories_id_seq', 1, false);
+
+
+--
+-- Name: help_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.help_items_id_seq', 1, false);
+
+
+--
+-- Name: serve_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.serve_categories_id_seq', 1, false);
+
+
+--
+-- Name: serve_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.serve_id_seq', 1, false);
+
+
+--
+-- Name: serve_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.serve_items_id_seq', 1, false);
+
+
+--
+-- Name: service_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.service_categories_id_seq', 1, false);
+
+
+--
+-- Name: service_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.service_category_id_seq', 1, false);
+
+
+--
+-- Name: service_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.service_images_id_seq', 1, false);
+
+
+--
+-- Name: service_videos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.service_videos_id_seq', 1, false);
+
+
+--
+-- Name: services_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.services_id_seq', 1, false);
+
+
+--
+-- Name: stat_blog_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.stat_blog_categories_id_seq', 1, false);
+
+
+--
+-- Name: stat_helps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.stat_helps_id_seq', 1, false);
+
+
+--
+-- Name: stat_infos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.stat_infos_id_seq', 1, false);
+
+
+--
+-- Name: stat_mainpages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.stat_mainpages_id_seq', 1, false);
+
+
+--
+-- Name: stat_service_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.stat_service_categories_id_seq', 1, false);
+
+
+--
+-- Name: stat_store_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.stat_store_categories_id_seq', 1, false);
+
+
+--
+-- Name: stat_tags_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.stat_tags_id_seq', 1, false);
+
+
+--
+-- Name: stat_wiki_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.stat_wiki_categories_id_seq', 1, false);
+
+
+--
+-- Name: stat_work_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.stat_work_categories_id_seq', 1, false);
+
+
+--
+-- Name: store_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.store_categories_id_seq', 1, false);
+
+
+--
+-- Name: store_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.store_category_id_seq', 1, false);
+
+
+--
+-- Name: store_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.store_images_id_seq', 1, false);
+
+
+--
+-- Name: store_videos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.store_videos_id_seq', 1, false);
+
+
+--
+-- Name: stores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.stores_id_seq', 1, false);
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.tags_id_seq', 1, false);
+
+
+--
+-- Name: tags_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.tags_items_id_seq', 1, false);
+
+
+--
+-- Name: tech_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.tech_categories_id_seq', 1, false);
+
+
+--
+-- Name: tech_categories_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.tech_categories_items_id_seq', 1, false);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 1, false);
+
+
+--
+-- Name: wiki_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.wiki_categories_id_seq', 1, false);
+
+
+--
+-- Name: wiki_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.wiki_category_id_seq', 1, false);
+
+
+--
+-- Name: wiki_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.wiki_images_id_seq', 1, false);
+
+
+--
+-- Name: wiki_videos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.wiki_videos_id_seq', 1, false);
+
+
+--
+-- Name: wikis_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.wikis_id_seq', 1, false);
+
+
+--
+-- Name: work_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.work_categories_id_seq', 1, false);
+
+
+--
+-- Name: work_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.work_category_id_seq', 1, false);
+
+
+--
+-- Name: work_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.work_images_id_seq', 1, false);
+
+
+--
+-- Name: work_videos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.work_videos_id_seq', 1, false);
+
+
+--
+-- Name: works_id_seq; Type: SEQUENCE SET; Schema: public; Owner: serg
+--
+
+SELECT pg_catalog.setval('public.works_id_seq', 1, false);
+
+
+--
+-- Name: __diesel_schema_migrations __diesel_schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.__diesel_schema_migrations
+    ADD CONSTRAINT __diesel_schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: blog_categories blog_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_categories
+    ADD CONSTRAINT blog_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: blog_category blog_category_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_category
+    ADD CONSTRAINT blog_category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: blog_comments blog_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_comments
+    ADD CONSTRAINT blog_comments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: blog_images blog_images_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_images
+    ADD CONSTRAINT blog_images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: blog_videos blog_videos_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_videos
+    ADD CONSTRAINT blog_videos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: blogs blogs_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blogs
+    ADD CONSTRAINT blogs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cookie_stats cookie_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.cookie_stats
+    ADD CONSTRAINT cookie_stats_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cookie_users cookie_users_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.cookie_users
+    ADD CONSTRAINT cookie_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feedbacks feedbacks_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.feedbacks
+    ADD CONSTRAINT feedbacks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: help_item_categories help_item_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.help_item_categories
+    ADD CONSTRAINT help_item_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: help_items help_items_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.help_items
+    ADD CONSTRAINT help_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: serve_categories serve_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.serve_categories
+    ADD CONSTRAINT serve_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: serve_items serve_items_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.serve_items
+    ADD CONSTRAINT serve_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: serve serve_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.serve
+    ADD CONSTRAINT serve_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: service_categories service_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_categories
+    ADD CONSTRAINT service_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: service_category service_category_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_category
+    ADD CONSTRAINT service_category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: service_images service_images_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_images
+    ADD CONSTRAINT service_images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: service_videos service_videos_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_videos
+    ADD CONSTRAINT service_videos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: services services_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.services
+    ADD CONSTRAINT services_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stat_blog_categories stat_blog_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_blog_categories
+    ADD CONSTRAINT stat_blog_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stat_helps stat_helps_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_helps
+    ADD CONSTRAINT stat_helps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stat_infos stat_infos_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_infos
+    ADD CONSTRAINT stat_infos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stat_mainpages stat_mainpages_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_mainpages
+    ADD CONSTRAINT stat_mainpages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stat_service_categories stat_service_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_service_categories
+    ADD CONSTRAINT stat_service_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stat_store_categories stat_store_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_store_categories
+    ADD CONSTRAINT stat_store_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stat_tags stat_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_tags
+    ADD CONSTRAINT stat_tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stat_wiki_categories stat_wiki_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_wiki_categories
+    ADD CONSTRAINT stat_wiki_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stat_work_categories stat_work_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stat_work_categories
+    ADD CONSTRAINT stat_work_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: store_categories store_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_categories
+    ADD CONSTRAINT store_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: store_category store_category_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_category
+    ADD CONSTRAINT store_category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: store_images store_images_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_images
+    ADD CONSTRAINT store_images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: store_videos store_videos_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_videos
+    ADD CONSTRAINT store_videos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stores stores_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stores
+    ADD CONSTRAINT stores_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tags_items tags_items_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.tags_items
+    ADD CONSTRAINT tags_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tech_categories_items tech_categories_items_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.tech_categories_items
+    ADD CONSTRAINT tech_categories_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tech_categories tech_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.tech_categories
+    ADD CONSTRAINT tech_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- Name: wiki_categories wiki_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_categories
+    ADD CONSTRAINT wiki_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wiki_category wiki_category_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_category
+    ADD CONSTRAINT wiki_category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wiki_images wiki_images_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_images
+    ADD CONSTRAINT wiki_images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wiki_videos wiki_videos_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_videos
+    ADD CONSTRAINT wiki_videos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wikis wikis_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wikis
+    ADD CONSTRAINT wikis_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: work_categories work_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_categories
+    ADD CONSTRAINT work_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: work_category work_category_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_category
+    ADD CONSTRAINT work_category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: work_images work_images_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_images
+    ADD CONSTRAINT work_images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: work_videos work_videos_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_videos
+    ADD CONSTRAINT work_videos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: works works_pkey; Type: CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.works
+    ADD CONSTRAINT works_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: blog_comments_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX blog_comments_id_idx ON public.blog_comments USING btree (blog_id);
+
+
+--
+-- Name: blog_comments_user_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX blog_comments_user_id_idx ON public.blog_comments USING btree (user_id);
+
+
+--
+-- Name: blog_images_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX blog_images_id_idx ON public.blog_images USING btree (blog);
+
+
+--
+-- Name: blog_videos_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX blog_videos_id_idx ON public.blog_videos USING btree (blog);
+
+
+--
+-- Name: blogs_creator_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX blogs_creator_idx ON public.blogs USING btree (user_id);
+
+
+--
+-- Name: service_images_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX service_images_id_idx ON public.service_images USING btree (service);
+
+
+--
+-- Name: service_videos_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX service_videos_id_idx ON public.service_videos USING btree (service);
+
+
+--
+-- Name: services_creator_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX services_creator_idx ON public.services USING btree (user_id);
+
+
+--
+-- Name: store_images_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX store_images_id_idx ON public.store_images USING btree (store);
+
+
+--
+-- Name: store_videos_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX store_videos_id_idx ON public.store_videos USING btree (store);
+
+
+--
+-- Name: stores_creator_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX stores_creator_idx ON public.stores USING btree (user_id);
+
+
+--
+-- Name: wiki_images_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX wiki_images_id_idx ON public.wiki_images USING btree (wiki);
+
+
+--
+-- Name: wiki_videos_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX wiki_videos_id_idx ON public.wiki_videos USING btree (wiki);
+
+
+--
+-- Name: wikis_creator_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX wikis_creator_idx ON public.wikis USING btree (user_id);
+
+
+--
+-- Name: work_images_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX work_images_id_idx ON public.work_images USING btree (work);
+
+
+--
+-- Name: work_videos_id_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX work_videos_id_idx ON public.work_videos USING btree (work);
+
+
+--
+-- Name: works_creator_idx; Type: INDEX; Schema: public; Owner: serg
+--
+
+CREATE INDEX works_creator_idx ON public.works USING btree (user_id);
+
+
+--
+-- Name: blog_category fk_blog_category_blog; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_category
+    ADD CONSTRAINT fk_blog_category_blog FOREIGN KEY (blog_id) REFERENCES public.blogs(id);
+
+
+--
+-- Name: blog_category fk_blog_category_cat; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_category
+    ADD CONSTRAINT fk_blog_category_cat FOREIGN KEY (blog_categories_id) REFERENCES public.blog_categories(id);
+
+
+--
+-- Name: blog_comments fk_blog_comment; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_comments
+    ADD CONSTRAINT fk_blog_comment FOREIGN KEY (blog_id) REFERENCES public.blogs(id);
+
+
+--
+-- Name: blogs fk_blog_creator_2; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blogs
+    ADD CONSTRAINT fk_blog_creator_2 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: blog_images fk_blog_images; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_images
+    ADD CONSTRAINT fk_blog_images FOREIGN KEY (blog) REFERENCES public.blogs(id);
+
+
+--
+-- Name: blog_comments fk_blog_parent_comment; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_comments
+    ADD CONSTRAINT fk_blog_parent_comment FOREIGN KEY (parent_id) REFERENCES public.blog_comments(id);
+
+
+--
+-- Name: blog_videos fk_blog_videos; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_videos
+    ADD CONSTRAINT fk_blog_videos FOREIGN KEY (blog) REFERENCES public.blogs(id);
+
+
+--
+-- Name: cookie_stats fk_cookie_stat_user; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.cookie_stats
+    ADD CONSTRAINT fk_cookie_stat_user FOREIGN KEY (user_id) REFERENCES public.cookie_users(id);
+
+
+--
+-- Name: serve fk_serve_category; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.serve
+    ADD CONSTRAINT fk_serve_category FOREIGN KEY (serve_categories) REFERENCES public.serve_categories(id);
+
+
+--
+-- Name: serve fk_serve_creator; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.serve
+    ADD CONSTRAINT fk_serve_creator FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: service_category fk_service_category_cat; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_category
+    ADD CONSTRAINT fk_service_category_cat FOREIGN KEY (service_categories_id) REFERENCES public.service_categories(id);
+
+
+--
+-- Name: service_category fk_service_category_service; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_category
+    ADD CONSTRAINT fk_service_category_service FOREIGN KEY (service_id) REFERENCES public.services(id);
+
+
+--
+-- Name: services fk_service_creator; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.services
+    ADD CONSTRAINT fk_service_creator FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: service_images fk_service_images; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_images
+    ADD CONSTRAINT fk_service_images FOREIGN KEY (service) REFERENCES public.services(id);
+
+
+--
+-- Name: service_videos fk_service_videos; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.service_videos
+    ADD CONSTRAINT fk_service_videos FOREIGN KEY (service) REFERENCES public.services(id);
+
+
+--
+-- Name: store_category fk_store_category_cat; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_category
+    ADD CONSTRAINT fk_store_category_cat FOREIGN KEY (store_categories_id) REFERENCES public.store_categories(id);
+
+
+--
+-- Name: store_category fk_store_category_store; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_category
+    ADD CONSTRAINT fk_store_category_store FOREIGN KEY (store_id) REFERENCES public.stores(id);
+
+
+--
+-- Name: stores fk_store_creator; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.stores
+    ADD CONSTRAINT fk_store_creator FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: store_images fk_store_images; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_images
+    ADD CONSTRAINT fk_store_images FOREIGN KEY (store) REFERENCES public.stores(id);
+
+
+--
+-- Name: store_videos fk_store_videos; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.store_videos
+    ADD CONSTRAINT fk_store_videos FOREIGN KEY (store) REFERENCES public.stores(id);
+
+
+--
+-- Name: tags fk_tag_creator; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.tags
+    ADD CONSTRAINT fk_tag_creator FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: serve_categories fk_tech_category; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.serve_categories
+    ADD CONSTRAINT fk_tech_category FOREIGN KEY (tech_categories) REFERENCES public.tech_categories(id);
+
+
+--
+-- Name: blog_comments fk_user_blog_comment; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.blog_comments
+    ADD CONSTRAINT fk_user_blog_comment FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: wiki_category fk_wiki_category_cat; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_category
+    ADD CONSTRAINT fk_wiki_category_cat FOREIGN KEY (wiki_categories_id) REFERENCES public.wiki_categories(id);
+
+
+--
+-- Name: wiki_category fk_wiki_category_wiki; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_category
+    ADD CONSTRAINT fk_wiki_category_wiki FOREIGN KEY (wiki_id) REFERENCES public.wikis(id);
+
+
+--
+-- Name: wikis fk_wiki_creator; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wikis
+    ADD CONSTRAINT fk_wiki_creator FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: wiki_images fk_wiki_images; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_images
+    ADD CONSTRAINT fk_wiki_images FOREIGN KEY (wiki) REFERENCES public.wikis(id);
+
+
+--
+-- Name: wiki_videos fk_wiki_videos; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.wiki_videos
+    ADD CONSTRAINT fk_wiki_videos FOREIGN KEY (wiki) REFERENCES public.wikis(id);
+
+
+--
+-- Name: work_category fk_work_category_cat; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_category
+    ADD CONSTRAINT fk_work_category_cat FOREIGN KEY (work_categories_id) REFERENCES public.work_categories(id);
+
+
+--
+-- Name: work_category fk_work_category_work; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_category
+    ADD CONSTRAINT fk_work_category_work FOREIGN KEY (work_id) REFERENCES public.works(id);
+
+
+--
+-- Name: works fk_work_creator; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.works
+    ADD CONSTRAINT fk_work_creator FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: work_images fk_work_images; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_images
+    ADD CONSTRAINT fk_work_images FOREIGN KEY (work) REFERENCES public.works(id);
+
+
+--
+-- Name: work_videos fk_work_videos; Type: FK CONSTRAINT; Schema: public; Owner: serg
+--
+
+ALTER TABLE ONLY public.work_videos
+    ADD CONSTRAINT fk_work_videos FOREIGN KEY (work) REFERENCES public.works(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
