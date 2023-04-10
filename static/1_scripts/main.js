@@ -1233,7 +1233,7 @@ function connect() {
 
   ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
   wsUri = ws_scheme + '://' + window.location.host + "/ws";
-  //wsUri = ws_scheme + "://194.58.90.123:8082/ws";
+  //wsUri = ws_scheme + "://89.108.110.98:8082/ws";
 
   socket = new WebSocket(wsUri)
 

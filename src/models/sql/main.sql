@@ -333,5 +333,5 @@ CREATE TABLE stat_pages (
     view    INT NOT NULL,
     height  FLOAT NOT NULL,
     seconds INT NOT NULL,
-    now_u   SMALLINT NOT NULL DEFAULT 0,
+    now_u   SMALLINT NOT NULL DEFAULT 0
 );
