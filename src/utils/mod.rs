@@ -105,6 +105,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
     }
 
     pub fn get_template_storage() -> i16 {
+        return 1;
         let template_res = web_local_storage_api::get_item("template");
         if template_res.is_ok() {
             let template_some = template_res.expect("E.");
