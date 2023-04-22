@@ -78,6 +78,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
     }
 
     pub fn get_template(req: &HttpRequest) -> i16 {
+        return 1;
         #[derive(Deserialize)]
         struct TemplateParams {
             pub template: Option<i16>,
