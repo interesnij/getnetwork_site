@@ -40,7 +40,7 @@ use crate::websocket::Server;
 
 
 pub fn pages_routes(config: &mut web::ServiceConfig) {
-    config.route("/test/", web::get().to(test_page));
+    //config.route("/test/", web::get().to(test_page));
     config.route("/test/", web::get().to(test_page));
     config.route("/", web::get().to(index_page));
     config.route("/info/", web::get().to(info_page));
