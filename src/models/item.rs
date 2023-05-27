@@ -1336,11 +1336,11 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::description.nullable(),
+                    None,
                 ))
                 .load::<Service>(&_connection)
                 .expect("E.");
-        }
+        } 
     }
     pub fn search_services (
         q:        &String,
