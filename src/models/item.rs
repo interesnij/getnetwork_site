@@ -1336,7 +1336,7 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
-                    //None,
+                    schema::items::description.nullable(),
                 ))
                 
                 .load::<Service>(&_connection)
