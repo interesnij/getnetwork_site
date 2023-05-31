@@ -800,7 +800,7 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
                 .expect("E");
 
             for f in _src_list.iter() {
-                std::fs::remove_file(f).expect("E");
+                std::fs::remove_file(f);
             }
 
             diesel::delete (
