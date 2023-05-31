@@ -42,3 +42,15 @@ sailfish-macros = "0.4.0"
 external-ip = "4.1.0"
 tokio = { version = "1.13.1", features = ["full"] }
 web-local-storage-api = "*"
+
+[profile.release]
+opt-level = 3
+debug = false
+split-debuginfo = '...'  # Platform-specific.
+debug-assertions = false
+overflow-checks = false
+lto = false
+panic = 'unwind'
+incremental = false
+codegen-units = 16
+rpath = false
