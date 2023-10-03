@@ -23,9 +23,8 @@ use crate::utils::{
     get_request_user_data,
     is_signed_in,
     get_first_load_page,
-    get_template,
-    IndexResponse,
-    AppState,
+    get_template, get_auth_template,
+    IndexResponse, AppState,
 };
 use crate::diesel::{
     RunQueryDsl,
@@ -40,7 +39,6 @@ use crate::websocket::Server;
 
 
 pub fn pages_routes(config: &mut web::ServiceConfig) {
-    //config.route("/test/", web::get().to(test_page));
     config.route("/test/", web::get().to(test_page));
     config.route("/", web::get().to(index_page));
     config.route("/info/", web::get().to(info_page));
@@ -171,7 +169,8 @@ pub async fn test_page(state: web::Data<AppState>) -> Result<web::Json<IndexResp
 pub async fn index_page (
     req: HttpRequest,
     session: Session,
-    websocket_srv: Data<Addr<Server>>) -> actix_web::Result<HttpResponse> {
+    websocket_srv: Data<Addr<Server>>
+) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let template_types = get_template(&req);
 
@@ -226,6 +225,7 @@ pub async fn index_page (
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
+            let template_types = get_auth_template(&req);
             let is_admin = _request_user.is_superuser();
             //User::create_superuser(_request_user.id);
             let _last_works = Item::get_works(3, 0, is_admin);

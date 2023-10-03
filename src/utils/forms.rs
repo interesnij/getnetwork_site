@@ -10,7 +10,7 @@ use std::{
 
 #[derive(Debug, Clone)]
 pub struct UploadedFiles {
-    pub name: String,
+    pub name: String, 
     pub path: String,
 }
 impl UploadedFiles {

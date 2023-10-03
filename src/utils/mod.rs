@@ -105,6 +105,34 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
         }
     }
 
+    pub fn get_auth_template(req: &HttpRequest) -> i16 {
+        //return 1;
+        #[derive(Deserialize)]
+        struct TemplateParams {
+            pub template: Option<i16>,
+        }
+        let params_some = web::Query::<TemplateParams>::from_query(&req.query_string());
+        if params_some.is_ok() {
+            let params = params_some.unwrap();
+            if params.template.is_some() {
+                let template = params.template.unwrap();
+                if template > 0 && template < 3 {
+                    set_template(template);
+                    return template;
+                }
+                else {
+                    return 1;
+                }
+            }
+            else {
+                return get_template_storage();
+            }
+        }
+        else {
+            return get_template_storage();
+        }
+    }
+
     pub fn get_template_storage() -> i16 {
         let template_res = web_local_storage_api::get_item("template");
         if template_res.is_ok() {
