@@ -538,7 +538,7 @@ pub async fn serve_category_form(payload: &mut Multipart, _owner_id: i32) -> Ser
         name:           "".to_string(),
         name_en:        "".to_string(),
         description:    "".to_string(),
-        description_ru: "".to_string(),
+        description_en: "".to_string(),
         category_id:    0,
         position:       0,
         default_price:  0,

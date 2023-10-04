@@ -236,7 +236,7 @@ pub async fn create_history (
             9 => {
                 crate::utils::plus_category_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
-            _ => 0,
+            _ => (),
         };
     }
     else {

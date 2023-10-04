@@ -798,7 +798,7 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
                 name_en:         form.name_en.clone(),
                 description:     Some(form.description.clone()),
                 description_en:  Some(form.description_en.clone()),
-                tech_categories: form.category_id,
+                category_id:     form.category_id,
                 position:        form.position,
                 count:           0,
                 default_price:   0,
