@@ -18,10 +18,7 @@ mod vars;
 use actix_web::{
     HttpServer,
     App,
-    middleware::{
-        Compress, 
-        Logger, 
-    },
+    middleware::Compress,
     web,
     http,
     cookie::Key,
@@ -63,15 +60,7 @@ async fn main() -> std::io::Result<()> {
                 request_count: Cell::new(0),
                 messages: messages.clone(),
             })
-            //.wrap(Logger::default())
             .wrap(Compress::default())
-
-            //это для https
-            //.wrap(SessionMiddleware::new(
-            //    CookieSessionStore::default(),
-            //    secret_key.clone(),
-            //))
-            // это для http
             .wrap(
                 SessionMiddleware::builder(CookieSessionStore::default(), secret_key.clone())
                     .cookie_secure(false)
@@ -84,8 +73,8 @@ async fn main() -> std::io::Result<()> {
             .configure(routes)
     })
 
-    //.bind("176.99.2.88:8085")?       // порт для разработки
-    .bind("176.99.2.88:8082")?     // порт для автоматической доставки
+    //.bind("69.167.186.207:9001")?   // порт для разработки
+    .bind("69.167.186.207:9002")?     // порт для автоматической доставки
     .run()
     .await
 }

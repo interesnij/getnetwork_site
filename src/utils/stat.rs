@@ -13,7 +13,7 @@ pub fn plus_page_stat (
     types: i16,
     height: f64,
     seconds: i32,
-    websocket_srv: Data<Addr<Server>>,
+    //websocket_srv: Data<Addr<Server>>,
     is_update_needed: bool // нужно ли обновлять статистику страницы
 ) -> () {
     // статистика страницы главной
@@ -21,42 +21,19 @@ pub fn plus_page_stat (
 
     let _items = stat_pages
         .filter(schema::stat_pages::types.eq(types))
-        .limit(1)
-        .load::<StatPage>(&_connection)
-        .expect("E");
-
-    let _item: StatPage;
-
-    if _items.len() > 0 {
-        _item = _items.into_iter().nth(0).unwrap();
+        .first::<StatPage>(&_connection);
+    if _items.is_ok() {
+        _item = _items.expect("E");
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
-        if _item.now_u > 0 {
-            if is_update_needed {
-                diesel::update(&_item)
-                .set ((
-                    schema::stat_pages::view.eq(_item.view + 1),
-                    schema::stat_pages::height.eq(_height + height),
-                    schema::stat_pages::seconds.eq(_item.seconds + seconds),
-                    schema::stat_pages::now_u.eq(_item.now_u - 1),
-                ))
-                .get_result::<StatPage>(&_connection)
-                .expect("Error.");
-            } else {
-                diesel::update(&_item)
-                    .set(schema::stat_pages::now_u.eq(_item.now_u - 1))
-                    .get_result::<StatPage>(&_connection)
-                    .expect("Error.");
-            }
-        }
-        else if is_update_needed {
+        if is_update_needed {
             diesel::update(&_item)
                 .set ((
                     schema::stat_pages::view.eq(_item.view + 1),
                     schema::stat_pages::height.eq(_height + height),
                     schema::stat_pages::seconds.eq(_item.seconds + seconds),
                 ))
-                .get_result::<StatPage>(&_connection)
+                .execute(&_connection)
                 .expect("Error.");
         }
     }
@@ -66,25 +43,23 @@ pub fn plus_page_stat (
             view:    1,
             height:  height,
             seconds: seconds,
-            now_u:   0,
         };
-        _item = diesel::insert_into(schema::stat_pages::table)
+        diesel::insert_into(schema::stat_pages::table)
             .values(&_new_item)
-            .get_result::<StatPage>(&_connection)
+            .execute(&_connection)
             .expect("Error.");
     }
-    if let Ok(history_page) = to_value(_item.now_u.to_string()) {
-        let msg = MessageToClient::new("end_page_view", types.into(), history_page);
-        websocket_srv.do_send(msg);
-    }
-    println!("{:?}", _item.now_u);
+    //if let Ok(history_page) = to_value(_item.now_u.to_string()) {
+    //    let msg = MessageToClient::new("end_page_view", types.into(), history_page);
+    //    websocket_srv.do_send(msg);
+    //}
 }
 
 pub fn plus_category_stat (
     id: i32,
     height: f64,
     seconds: i32,
-    websocket_srv: Data<Addr<Server>>,
+    //websocket_srv: Data<Addr<Server>>,
     is_update_needed: bool
 ) -> () {
     // статистика страницы категории блога
@@ -94,45 +69,21 @@ pub fn plus_category_stat (
     let _connection = establish_connection();
     let _items = categories
         .filter(schema::categories::id.eq(id))
-        .load::<Categories>(&_connection)
-        .expect("E");
+        .first::<Categories>(&_connection);
 
-    if _items.len() > 0 {
-        let _item = _items.into_iter().nth(0).unwrap();
+    if _items.is_ok() {
+        let _item = _items.expect("E");
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
-        if _item.now_u > 0 {
-            if is_update_needed {
-                diesel::update(&_item)
-                    .set ((
-                        schema::categories::view.eq(_item.view + 1),
-                        schema::categories::height.eq(_height + height),
-                        schema::categories::seconds.eq(_item.seconds + seconds),
-                        schema::categories::now_u.eq(_item.now_u - 1),
-                    ))
-                    .get_result::<Categories>(&_connection)
-                    .expect("Error.");
-            } else {
-                diesel::update(&_item)
-                    .set ((
-                        schema::categories::now_u.eq(_item.now_u - 1),
-                    ))
-                    .get_result::<Categories>(&_connection)
-                    .expect("Error.");
-            }
-        } else if is_update_needed {
+        if is_update_needed {
             diesel::update(&_item)
                 .set ((
                     schema::categories::view.eq(_item.view + 1),
                     schema::categories::height.eq(_height + height),
                     schema::categories::seconds.eq(_item.seconds + seconds),
                 ))
-                .get_result::<Categories>(&_connection)
+                .execute(&_connection)
                 .expect("Error.");
-        }
-        if let Ok(history_page) = to_value(_item.now_u.to_string()) {
-            let msg = MessageToClient::new("end_object_view", _item.types.into(), history_page);
-            websocket_srv.do_send(msg);
         }
     }
 }
@@ -140,7 +91,6 @@ pub fn plus_item_stat (
     id: i32,
     height: f64,
     seconds: i32,
-    websocket_srv: Data<Addr<Server>>,
     is_update_needed: bool
 ) -> () {
     // статистика страницы блога
@@ -150,43 +100,21 @@ pub fn plus_item_stat (
     let _connection = establish_connection();
     let _items = items
         .filter(schema::items::id.eq(id))
-        .load::<Item>(&_connection)
-        .expect("E");
+        .first::<Item>(&_connection);
 
-    if _items.len() > 0 {
-        let _item = _items.into_iter().nth(0).unwrap();
+    if _items.is_ok() {
+        let _item = _items.expect("E");
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
-        if _item.now_u > 0 {
-            if is_update_needed {
-                diesel::update(&_item)
-                    .set ((
-                        schema::items::view.eq(_item.view + 1),
-                        schema::items::height.eq(_height + height),
-                        schema::items::seconds.eq(_item.seconds + seconds),
-                        schema::items::now_u.eq(_item.now_u - 1),
-                    ))
-                    .get_result::<Item>(&_connection)
-                    .expect("Error.");
-            } else {
-                diesel::update(&_item)
-                    .set(schema::items::now_u.eq(_item.now_u - 1))
-                    .get_result::<Item>(&_connection)
-                    .expect("Error.");
-            }
-        } else if is_update_needed {
+        if is_update_needed {
             diesel::update(&_item)
                 .set ((
                     schema::items::view.eq(_item.view + 1),
                     schema::items::height.eq(_height + height),
                     schema::items::seconds.eq(_item.seconds + seconds),
                 ))
-                .get_result::<Item>(&_connection)
+                .execute(&_connection)
                 .expect("Error.");
-        }
-        if let Ok(history_page) = to_value(_item.now_u.to_string()) {
-            let msg = MessageToClient::new("end_object_view", _item.types.into(), history_page);
-            websocket_srv.do_send(msg);
         }
     }
 }
@@ -195,7 +123,6 @@ pub fn plus_tag_stat (
     id: i32,
     height: f64,
     seconds: i32,
-    websocket_srv: Data<Addr<Server>>,
     is_update_needed: bool
 ) -> () {
     // статистика страницы работы
@@ -205,43 +132,21 @@ pub fn plus_tag_stat (
     let _connection = establish_connection();
     let _items = tags
         .filter(schema::tags::id.eq(id))
-        .load::<Tag>(&_connection)
-        .expect("E");
+        .first::<Tag>(&_connection);
 
-    if _items.len() > 0 {
-        let _item = _items.into_iter().nth(0).unwrap();
+    if _items.is_ok() {
+        let _item = _items.expect("E");
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
-        if _item.now_u > 0 {
-            if is_update_needed {
-                diesel::update(&_item)
-                    .set ((
-                        schema::tags::view.eq(_item.view + 1),
-                        schema::tags::height.eq(_height + height),
-                        schema::tags::seconds.eq(_item.seconds + seconds),
-                        schema::tags::now_u.eq(_item.now_u - 1),
-                    ))
-                    .get_result::<Tag>(&_connection)
-                    .expect("Error.");
-            } else {
-                diesel::update(&_item)
-                    .set(schema::tags::now_u.eq(_item.now_u - 1))
-                    .get_result::<Tag>(&_connection)
-                    .expect("Error.");
-            }
-        } else if is_update_needed {
+        if is_update_needed {
             diesel::update(&_item)
                 .set ((
                     schema::tags::view.eq(_item.view + 1),
                     schema::tags::height.eq(_height + height),
                     schema::tags::seconds.eq(_item.seconds + seconds),
                 ))
-                .get_result::<Tag>(&_connection)
+                .execute(&_connection)
                 .expect("Error.");
-        }
-        if let Ok(history_page) = to_value(_item.now_u.to_string()) {
-            let msg = MessageToClient::new("end_object_view", _item.id, history_page);
-            websocket_srv.do_send(msg);
         }
     }
 }

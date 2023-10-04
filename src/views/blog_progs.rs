@@ -40,16 +40,13 @@ pub fn blog_routes(config: &mut web::ServiceConfig) {
 
 
 pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<(String,String)>) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-    use schema::items::dsl::items;
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     let _connection = establish_connection();
     let _item_id: String = param.1.clone();
     let _cat_id: String = param.0.clone();
     let template_types = get_template(&req);
 
-    let _item = items
+    let _item = schema::items::table
         .filter(schema::items::slug.eq(&_item_id))
         .first::<Item>(&_connection)
         .expect("E");
@@ -65,10 +62,9 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
         ).await
     }
     else {
-        use schema::categories::dsl::categories;
         use crate::models::FeaturedItem;
 
-        let _category = categories
+        let _category = schema::categories::table
             .filter(schema::categories::slug.eq(&_cat_id))
             .filter(schema::categories::types.eq(_item.types))
             .first::<Categories>(&_connection)
@@ -91,9 +87,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            if _item.is_active == false && _request_user.perm < 10 {
-                use crate::utils::get_private_page;
-                get_private_page (
+            if !_item.is_active && _request_user.perm < 10 {
+                crate::utils::get_private_pageget_private_page (
                     is_ajax,
                     _request_user,
                     is_desctop,
@@ -164,9 +159,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             }
         }
         else {
-            if _item.is_active == false {
-                use crate::utils::get_anon_private_page;
-                get_anon_private_page (
+            if !_item.is_active {
+                crate::utils::get_anon_private_page (
                     is_ajax,
                     is_desctop,
                     _item.title.clone() + &" | Статья ".to_string(),
@@ -235,19 +229,16 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 }
 
 pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
-    use crate::schema::categories::dsl::categories;
-    use crate::utils::get_device_and_ajax;
-    use crate::models::Blog;
-
     let _cat_id: String = _id.clone();
     let _connection = establish_connection();
     let template_types = get_template(&req);
 
-    let _category = categories
+    let _category = schema::categories::table
         .filter(schema::categories::slug.eq(&_cat_id))
         .filter(schema::categories::types.eq(1))
         .select((
             schema::categories::name,
+            schema::categories::name_en,
             schema::categories::slug,
             schema::categories::count,
             schema::categories::id,
@@ -255,7 +246,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             schema::categories::view,
             schema::categories::height,
             schema::categories::seconds,
-            schema::categories::now_u,
         ))
         .first::<CatDetail>(&_connection)
         .expect("E");
@@ -267,7 +257,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         cat_image = "/static/images/dark/store.jpg".to_string();
     }
 
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -280,10 +270,9 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         ).await
     }
     else {
-        use crate::utils::get_page;
+        use crate::models::Blog;
 
-        let page = get_page(&req);
-
+        let page = crate::utils::get_page(&req);
         let _cats: Vec<Cat>;
         let _tags: Vec<SmallTag>;
 
@@ -424,9 +413,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
 }
 
 pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
@@ -440,29 +427,24 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
         ).await
     }
     else {
-        use crate::schema::stat_pages::dsl::stat_pages;
-        use crate::models::StatPage;
-
         let _connection = establish_connection();
         let _stat: StatPage;
-        let _stats = stat_pages
+        let _stats = schema::stat_pages::table
             .filter(schema::stat_pages::types.eq(41))
             .first::<StatPage>(&_connection);
         if _stats.is_ok() {
             _stat = _stats.expect("E");
         }
         else {
-            use crate::models::NewStatPage;
-            let form = NewStatPage {
+            let form = crate::models::NewStatPage {
                 types:   41,
                 view:    0,
                 height:  0.0,
                 seconds: 0,
-                now_u:   0,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
-                .get_result::<StatPage>(&_connection)
+                .get_result::<crate::models::StatPage>(&_connection)
                 .expect("Error.");
         }
 

@@ -29,7 +29,6 @@ use crate::models::{
     CatDetail,
 };
 use sailfish::TemplateOnce;
-use crate::views::not_found;
 
 
 pub fn help_routes(config: &mut web::ServiceConfig) {
@@ -41,18 +40,17 @@ pub fn help_routes(config: &mut web::ServiceConfig) {
 
 
 pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
-    use crate::schema::categories::dsl::categories;
     use crate::utils::get_device_and_ajax;
 
-    let _cat_id: String = _id.clone();
     let _connection = establish_connection();
     let template_types = get_template(&req);
 
-    let _category = categories
-        .filter(schema::categories::slug.eq(&_cat_id))
+    let _category = schema::categories::table
+        .filter(schema::categories::slug.eq(*_id))
         .filter(schema::categories::types.eq(6))
         .select((
             schema::categories::name,
+            schema::categories::name_en,
             schema::categories::slug,
             schema::categories::count,
             schema::categories::id,
@@ -60,7 +58,6 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
             schema::categories::view,
             schema::categories::height,
             schema::categories::seconds,
-            schema::categories::now_u,
         ))
         .first::<CatDetail>(&_connection)
         .expect("E");

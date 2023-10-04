@@ -13,17 +13,19 @@ CREATE TABLE feedbacks (
 ---------------
 ---------------
 CREATE TABLE orders (
-    id          SERIAL PRIMARY KEY,
-    title       VARCHAR(100) NOT NULL,
-    types       SMALLINT NOT NULL, -- 1 услуга, 2 товар, 3 работа
-    object_id   INT NOT NULL,
-    username    VARCHAR(200) NOT NULL,
-    email       VARCHAR(200) NOT NULL,
-    description VARCHAR(1000),
-    created     TIMESTAMP NOT NULL,
-    user_id     INT NOT NULL,
-    price       INT NOT NULL,
-    price_acc   INT
+    id             SERIAL PRIMARY KEY,
+    title          VARCHAR(100) NOT NULL,
+    title_en       VARCHAR(100) NOT NULL,
+    types          SMALLINT NOT NULL, -- 1 услуга, 2 товар, 3 работа
+    object_id      INT NOT NULL,
+    username       VARCHAR(200) NOT NULL,
+    email          VARCHAR(200) NOT NULL,
+    description    VARCHAR(1000),
+    description_en VARCHAR(1000),
+    created        TIMESTAMP NOT NULL,
+    user_id        INT NOT NULL,
+    price          INT NOT NULL,
+    price_acc      INT
 );
 
 CREATE TABLE order_files (
@@ -106,6 +108,7 @@ CREATE TABLE cookie_stats (
     page       SMALLINT NOT NULL,     -- номер страницы, которая просматривается
     link       VARCHAR(200) NOT NULL, -- ссылка страницы
     title      VARCHAR(200) NOT NULL, -- название страницы
+    title_en   VARCHAR(200) NOT NULL, -- название страницы
     height     FLOAT NOT NULL,        -- высота просмотра страницы
     seconds    INT NOT NULL,          -- секунды нахождения страницы
     created    TIMESTAMP NOT NULL,    -- когда создана запись
@@ -122,13 +125,13 @@ CREATE TABLE cookie_stats (
 CREATE TABLE tags (
     id        SERIAL PRIMARY KEY,
     name      VARCHAR(100) NOT NULL,
+    name_en   VARCHAR(100) NOT NULL,
     position  SMALLINT NOT NULL,
     count     SMALLINT NOT NULL,
     user_id   INT NOT NULL,
     view      INT NOT NULL,
     height    FLOAT NOT NULL,
     seconds   INT NOT NULL,
-    now_u     SMALLINT NOT NULL DEFAULT 0,
 
     CONSTRAINT fk_tag_creator
         FOREIGN KEY(user_id)
@@ -149,42 +152,66 @@ CREATE TABLE tags_items (
 ---------------
 ---------------
 
-CREATE TABLE categories (
-    id          SERIAL PRIMARY KEY,
-    name        VARCHAR(100) NOT NULL,
-    description VARCHAR(500),
-    position    SMALLINT NOT NULL,
-    image       VARCHAR(500),
-    count       SMALLINT NOT NULL,
-    view        INT NOT NULL,
-    height      FLOAT NOT NULL,
-    seconds     INT NOT NULL,
-    types       SMALLINT NOT NULL, -- категория блога, категория услуги ......
-    slug        VARCHAR(100) NOT NULL,
-    now_u       SMALLINT NOT NULL DEFAULT 0,
+CREATE TABLE categories ( 
+    id             SERIAL PRIMARY KEY,
+    name           VARCHAR(100) NOT NULL,
+    name_en        VARCHAR(100) NOT NULL,
+    description    VARCHAR(500),
+    description_en VARCHAR(500),
+    position       SMALLINT NOT NULL,
+    image          VARCHAR(500),
+    count          SMALLINT NOT NULL,
+    view           INT NOT NULL,
+    height         FLOAT NOT NULL,
+    seconds        INT NOT NULL,
+    types          SMALLINT NOT NULL, -- категория блога, категория услуги ......
+    slug           VARCHAR(100) NOT NULL,
 
     UNIQUE(slug)
-);
+);  
+INSERT INTO categories (id,name,name_en,description,description_en,position,image,count,view,height,seconds,types,slug)
+VALUES (1,'Как заказать проект','How to order a project','','',1,'',0,0,0.0,0,6,'how_to_order_a_project') ON CONFLICT DO NOTHING;
+INSERT INTO categories (id,name,name_en,description,description_en,position,image,count,view,height,seconds,types,slug)
+VALUES (2,'Что мы о Вас знаем','What do we know abou you','','',2,'',0,0,0.0,0,6,'what_do_we_know_abou_you') ON CONFLICT DO NOTHING;
+INSERT INTO categories (id,name,name_en,description,description_en,position,image,count,view,height,seconds,types,slug)
+VALUES (3,'Этапы создания проектов','Stages of project creation','','',3,'',0,0,0.0,0,6,'stages_of_project_creation') ON CONFLICT DO NOTHING;
+INSERT INTO categories (id,name,name_en,description,description_en,position,image,count,view,height,seconds,types,slug)
+VALUES (4,'Все услуги','All services','','',1,'',0,0,0.0,0,2,'all-services') ON CONFLICT DO NOTHING;
+INSERT INTO categories (id,name,name_en,description,description_en,position,image,count,view,height,seconds,types,slug)
+VALUES (5,'Веб-разработка','Service of web','','',2,'',0,0,0.0,0,2,'service-web') ON CONFLICT DO NOTHING;
+INSERT INTO categories (id,name,name_en,description,description_en,position,image,count,view,height,seconds,types,slug)
+VALUES (6,'Все работы','All works','','',1,'',0,0,0.0,0,5,'all-works') ON CONFLICT DO NOTHING;
+INSERT INTO categories (id,name,name_en,description,description_en,position,image,count,view,height,seconds,types,slug)
+VALUES (7,'Веб-разработка','Web development','','',2,'',0,0,0.0,0,5,'web-development') ON CONFLICT DO NOTHING;
+INSERT INTO categories (id,name,name_en,description,description_en,position,image,count,view,height,seconds,types,slug)
+VALUES (8,'Все статьи','All articles','','',1,'',0,0,0.0,0,1,'all-articles') ON CONFLICT DO NOTHING;
+INSERT INTO categories (id,name,name_en,description,description_en,position,image,count,view,height,seconds,types,slug)
+VALUES (9,'Все статьи','All wikis','','',1,'',0,0,0.0,0,4,'all-wikis') ON CONFLICT DO NOTHING;
+INSERT INTO categories (id,name,name_en,description,description_en,position,image,count,view,height,seconds,types,slug)
+VALUES (10,'Все товары','All stores','','',1,'',0,0,0.0,0,3,'all-stores') ON CONFLICT DO NOTHING;
+
 
 CREATE TABLE items (
-    id          SERIAL PRIMARY KEY,
-    title       VARCHAR(100) NOT NULL,
-    description VARCHAR,
-    content     VARCHAR(30000),
-    link        VARCHAR(500),
-    image       VARCHAR(500),
-    is_active   boolean NOT NULL,
-    price       INT NOT NULL,
-    user_id     INT NOT NULL,
-    created     TIMESTAMP NOT NULL,
-    position    SMALLINT NOT NULL,
-    view        INT NOT NULL,
-    height      FLOAT NOT NULL,
-    seconds     INT NOT NULL,
-    price_acc   INT,
-    types       SMALLINT NOT NULL, -- блог, услуга, товар ......
-    slug        VARCHAR(100) NOT NULL,
-    now_u       SMALLINT NOT NULL DEFAULT 0,
+    id             SERIAL PRIMARY KEY,
+    title          VARCHAR(100) NOT NULL,
+    title_en       VARCHAR(100) NOT NULL,
+    description    VARCHAR(500),
+    description_en VARCHAR(500),
+    content        VARCHAR(30000),
+    content_en     VARCHAR(30000),
+    link           VARCHAR(500),
+    image          VARCHAR(500),
+    is_active      boolean NOT NULL,
+    price          INT NOT NULL,
+    user_id        INT NOT NULL,
+    created        TIMESTAMP NOT NULL,
+    position       SMALLINT NOT NULL,
+    view           INT NOT NULL,
+    height         FLOAT NOT NULL,
+    seconds        INT NOT NULL,
+    price_acc      INT,
+    types          SMALLINT NOT NULL, -- блог, услуга, товар ......
+    slug           VARCHAR(100) NOT NULL,
 
     UNIQUE(slug),
 
@@ -218,14 +245,14 @@ CREATE TABLE item_comments (
 CREATE INDEX item_comments_id_idx ON item_comments (item_id);
 CREATE INDEX item_comments_user_id_idx ON item_comments (user_id);
 
-CREATE TABLE category (
-    id            SERIAL PRIMARY KEY,
-    categories_id INT NOT NULL,
-    item_id       INT NOT NULL,
-    types         SMALLINT NOT NULL, -- блог, услуга, товар ......
+CREATE TABLE category ( 
+    id          SERIAL PRIMARY KEY,
+    category_id INT NOT NULL,
+    item_id     INT NOT NULL,
+    types       SMALLINT NOT NULL, -- блог, услуга, товар ......
 
    CONSTRAINT fk_category_cat
-        FOREIGN KEY(categories_id)
+        FOREIGN KEY(category_id)
             REFERENCES categories(id),
 
    CONSTRAINT fk_category_item
@@ -234,16 +261,17 @@ CREATE TABLE category (
 );
 
 CREATE TABLE files (
-    id          SERIAL PRIMARY KEY,
-    user_id     INT NOT NULL,
-    item_id     INT NOT NULL,
-    item_types  SMALLINT NOT NULL, -- блог, услуга, товар ......
-    types       SMALLINT NOT NULL, -- фото, видео, документ  ......
-    src         VARCHAR(500) NOT NULL,
-    description VARCHAR,
-    position    SMALLINT NOT NULL,
-    view        INT NOT NULL,
-    seconds     INT NOT NULL,
+    id             SERIAL PRIMARY KEY,
+    user_id        INT NOT NULL,
+    item_id        INT NOT NULL,
+    item_types     SMALLINT NOT NULL, -- блог, услуга, товар ......
+    types          SMALLINT NOT NULL, -- фото, видео, документ  ......
+    src            VARCHAR(500) NOT NULL,
+    description    VARCHAR(500),
+    description_en VARCHAR(500),
+    position       SMALLINT NOT NULL,
+    view           INT NOT NULL,
+    seconds        INT NOT NULL,
 
     UNIQUE(src)
 );
@@ -253,56 +281,62 @@ CREATE TABLE files (
 ---------------
 -- это технические категории опций (например, большой магазин или моб приложение ресторана)
 CREATE TABLE tech_categories (
-    id          SERIAL PRIMARY KEY,
-    name        VARCHAR(100) NOT NULL,
-    description VARCHAR(10000),
-    position    SMALLINT NOT NULL,
-    count       SMALLINT NOT NULL,
-    level       SMALLINT NOT NULL,
-    user_id     INT NOT NULL,
-    view        INT NOT NULL,
-    height      FLOAT NOT NULL,
-    seconds     INT NOT NULL
+    id             SERIAL PRIMARY KEY,
+    name           VARCHAR(100) NOT NULL,
+    name_en        VARCHAR(100) NOT NULL,
+    description    VARCHAR(10000),
+    description_en VARCHAR(10000),
+    position       SMALLINT NOT NULL,
+    count          SMALLINT NOT NULL,
+    level          SMALLINT NOT NULL,
+    user_id        INT NOT NULL,
+    view           INT NOT NULL,
+    height         FLOAT NOT NULL,
+    seconds        INT NOT NULL
 );
 
 -- это категория опции (например, rust, python, react native)
-CREATE TABLE serve_categories (
-    id              SERIAL PRIMARY KEY,
-    name            VARCHAR(100) NOT NULL,
-    description     VARCHAR(10000),
-    tech_categories INT NOT NULL,
-    position        SMALLINT NOT NULL,
-    count           SMALLINT NOT NULL,
-    default_price   INT NOT NULL, -- сумма всех опуий по умолчанию.
-    user_id         INT NOT NULL,
-    view            INT NOT NULL,
-    height          FLOAT NOT NULL,
-    seconds         INT NOT NULL,
+CREATE TABLE serve_categories ( 
+    id             SERIAL PRIMARY KEY,
+    name           VARCHAR(100) NOT NULL,
+    name_en        VARCHAR(100) NOT NULL,
+    description    VARCHAR(10000),
+    description_en VARCHAR(10000),
+    category_id    INT NOT NULL,
+    position       SMALLINT NOT NULL,
+    count          SMALLINT NOT NULL,
+    default_price  INT NOT NULL, -- сумма всех опуий по умолчанию.
+    user_id        INT NOT NULL,
+    view           INT NOT NULL,
+    height         FLOAT NOT NULL,
+    seconds        INT NOT NULL,
 
     CONSTRAINT fk_tech_category
-        FOREIGN KEY(tech_categories)
+        FOREIGN KEY(category_id)
             REFERENCES tech_categories(id)
 );
 
 -- это опции (например, продвинутая админка)
-CREATE TABLE serve (
-    id               SERIAL PRIMARY KEY,
-    name             VARCHAR(100) NOT NULL,
-    description      VARCHAR(10000),
-    position         SMALLINT NOT NULL,
-    serve_categories INT NOT NULL,
-    price            INT NOT NULL,
-    man_hours        SMALLINT NOT NULL,
-    is_default       BOOLEAN NOT NULL, -- опция по умолчанию, т.е. без которой работа невозможна (например, админка)
-    user_id          INT NOT NULL,
-    tech_cat_id      INT NOT NULL,
-    height           FLOAT NOT NULL,
-    seconds          INT NOT NULL,
-    serve_id         INT,
-    view             INT NOT NULL,
+CREATE TABLE serve ( 
+    id             SERIAL PRIMARY KEY,
+    name           VARCHAR(100) NOT NULL,
+    name_en        VARCHAR(100) NOT NULL,
+    description    VARCHAR(10000),
+    description_en VARCHAR(10000),
+    position       SMALLINT NOT NULL,
+    category_id    INT NOT NULL,
+    price          INT NOT NULL,
+    man_hours      SMALLINT NOT NULL,
+    is_default     BOOLEAN NOT NULL, -- опция по умолчанию, т.е. без которой работа невозможна (например, админка)
+    user_id        INT NOT NULL,
+    tech_cat_id    INT NOT NULL,
+    height         FLOAT NOT NULL,
+    seconds        INT NOT NULL,
+    serve_id       INT,
+    view           INT NOT NULL,
 
     CONSTRAINT fk_serve_category
-        FOREIGN KEY(serve_categories)
+        FOREIGN KEY(category_id)
             REFERENCES serve_categories(id),
     CONSTRAINT fk_serve_creator
         FOREIGN KEY(user_id)
@@ -333,5 +367,4 @@ CREATE TABLE stat_pages (
     view    INT NOT NULL,
     height  FLOAT NOT NULL,
     seconds INT NOT NULL,
-    now_u   SMALLINT NOT NULL DEFAULT 0
 );

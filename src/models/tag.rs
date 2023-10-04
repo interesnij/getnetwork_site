@@ -16,22 +16,23 @@ use crate::utils::establish_connection;
 
 #[derive(Serialize, Queryable)]
 pub struct SmallTag {
-    pub name:  String,
-    pub count: i16,
+    pub name:    String,
+    pub name_en: String,
+    pub count:   i16,
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Queryable, Identifiable)]
 #[table_name="tags"]
 pub struct Tag {
     pub id:       i32,
     pub name:     String,
+    pub name_en:  String,
     pub position: i16,
     pub count:    i16,
     pub user_id:  i32,
     pub view:     i32,
     pub height:   f64,
     pub seconds:  i32,
-    pub now_u:    i16,
 }
 impl Tag {
     pub fn get_tags_list(page: i32, limit: i32) -> (Vec<SmallTag>, i32) {
@@ -64,6 +65,7 @@ impl Tag {
             .offset(offset)
             .select((
                 schema::tags::name,
+                schema::tags::name_en,
                 schema::tags::count
             ))
             .load::<SmallTag>(&_connection)
@@ -75,19 +77,20 @@ impl Tag {
 #[table_name="tags"]
 pub struct NewTag {
     pub name:     String,
+    pub name_en:  String,
     pub position: i16,
     pub count:    i16,
     pub user_id:  i32,
     pub view:     i32,
     pub height:   f64,
     pub seconds:  i32,
-    pub now_u:    i16,
 }
 
-#[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
+#[derive(Queryable, Serialize, Deserialize, AsChangeset)]
 #[table_name="tags"]
 pub struct EditTag {
     pub name:     String,
+    pub name_en:  String,
     pub position: i16,
 }
 
@@ -102,8 +105,8 @@ pub struct EditTag {
 // 7. заказ
 // 8. веб-сервис
 // 9. язык / технология
-// 10. опция
-#[derive(Identifiable, Serialize, Queryable, Associations)]
+// 10. опция 
+#[derive(Identifiable, Serialize, Queryable)]
 #[table_name="tags_items"]
 pub struct TagItems {
     pub id:      i32,

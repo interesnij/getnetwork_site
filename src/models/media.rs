@@ -33,37 +33,40 @@ use crate::schema::files;
 
 #[derive(Serialize, Queryable)]
 pub struct SmallFile {
-    pub id:          i32,
-    pub src:         String,
-    pub description: Option<String>,
+    pub id:             i32,
+    pub src:            String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
 }
 
-#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, Identifiable, Queryable)]
 #[table_name="files"]
 pub struct File {
-    pub id:          i32,
-    pub user_id:     i32,
-    pub item_id:     i32,
-    pub item_types:  i16,
-    pub types:       i16,
-    pub src:         String,
-    pub description: Option<String>,
-    pub position:    i16,
-    pub view:        i32,
-    pub seconds:     i32,
+    pub id:             i32,
+    pub user_id:        i32,
+    pub item_id:        i32,
+    pub item_types:     i16,
+    pub types:          i16,
+    pub src:            String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub position:       i16,
+    pub view:           i32,
+    pub seconds:        i32,
 }
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="files"]
 pub struct NewFile {
-    pub item_id:     i32,
-    pub user_id:     i32,
-    pub item_types:  i16,
-    pub types:       i16,
-    pub src:         String,
-    pub description: Option<String>,
-    pub position:    i16,
-    pub view:        i32,
-    pub seconds:     i32,
+    pub user_id:        i32,
+    pub item_id:        i32,
+    pub item_types:     i16,
+    pub types:          i16,
+    pub src:            String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub position:       i16,
+    pub view:           i32,
+    pub seconds:        i32,
 }
 
 impl NewFile {
@@ -75,15 +78,16 @@ impl NewFile {
         src:         String
     ) -> Self {
         NewFile {
-            user_id:     user_id,
-            item_id:     item_id,
-            item_types:  item_types,
-            types:       types,
-            src:         src,
-            description: None,
-            position:    0,
-            view:        0,
-            seconds:     0,
+            user_id:        user_id,
+            item_id:        item_id,
+            item_types:     item_types,
+            types:          types,
+            src:            src,
+            description:    None,
+            description_en: None,
+            position:       0,
+            view:           0,
+            seconds:        0,
         }
     }
 }
@@ -91,6 +95,7 @@ impl NewFile {
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="files"]
 pub struct EditFile {
-    pub description: Option<String>,
-    pub position:    i16,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub position:       i16,
 }

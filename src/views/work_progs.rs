@@ -243,6 +243,7 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
         .filter(schema::categories::types.eq(5))
         .select((
             schema::categories::name,
+            schema::categories::name_en,
             schema::categories::slug,
             schema::categories::count,
             schema::categories::id,
@@ -250,7 +251,6 @@ pub async fn work_category_page(session: Session, req: HttpRequest, _id: web::Pa
             schema::categories::view,
             schema::categories::height,
             schema::categories::seconds,
-            schema::categories::now_u,
         ))
         .first::<CatDetail>(&_connection)
         .expect("E");
@@ -448,7 +448,6 @@ pub async fn work_categories_page(session: Session, req: HttpRequest) -> actix_w
                 view:    0,
                 height:  0.0,
                 seconds: 0,
-                now_u:   0,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)

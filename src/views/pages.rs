@@ -1,4 +1,4 @@
-use actix::Addr;
+//use actix::Addr;
 use actix_web::{
     HttpRequest,
     HttpResponse,
@@ -34,8 +34,8 @@ use crate::diesel::{
 use actix_session::Session;
 use sailfish::TemplateOnce;
 use actix_web::dev::ConnectionInfo;
-use serde_json::to_value;
-use crate::websocket::Server;
+//use serde_json::to_value;
+//use crate::websocket::Server;
 
 
 pub fn pages_routes(config: &mut web::ServiceConfig) {
@@ -169,7 +169,6 @@ pub async fn test_page(state: web::Data<AppState>) -> Result<web::Json<IndexResp
 pub async fn index_page (
     req: HttpRequest,
     session: Session,
-    websocket_srv: Data<Addr<Server>>
 ) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let template_types = get_template(&req);
@@ -186,22 +185,16 @@ pub async fn index_page (
         ).await
     }
     else {
-        use crate::schema::stat_pages::dsl::stat_pages;
         use crate::models::{Blog, Service, Store, Wiki, Work};
-        use crate::websocket::MessageToClient;
 
         let _connection = establish_connection();
         let _stat: StatPage;
 
-        let _stats = stat_pages
+        let _stats = schema::stat_pages::table
             .filter(schema::stat_pages::types.eq(1))
             .first::<StatPage>(&_connection);
         if _stats.is_ok() {
             _stat = _stats.expect("E");
-            diesel::update(&_stat)
-                .set(schema::stat_pages::now_u.eq(_stat.now_u + 1))
-                .get_result::<StatPage>(&_connection)
-                .expect("Error.");
         }
         else {
             use crate::models::NewStatPage;
@@ -210,7 +203,6 @@ pub async fn index_page (
                 view:    0,
                 height:  0.0,
                 seconds: 0,
-                now_u:   1,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
@@ -218,10 +210,6 @@ pub async fn index_page (
                 .expect("Error.");
 
         }
-        //if let Ok(res) = to_value(_stat.now_u.to_string()) {
-        //    let msg = MessageToClient::new("page_view", _stat.types.into(), res);
-        //    websocket_srv.do_send(msg);
-        //}
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -391,7 +379,6 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
                 view:    0,
                 height:  0.0,
                 seconds: 0,
-                now_u:   0,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
@@ -448,11 +435,9 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         }
     }
     else {
-        use schema::stat_pages::dsl::stat_pages;
-
         let _connection = establish_connection();
         let _stat: StatPage;
-        let _stats = stat_pages
+        let _stats = schema::stat_pages::table
             .filter(schema::stat_pages::types.eq(10))
             .first::<StatPage>(&_connection);
         if _stats.is_ok() {
@@ -465,7 +450,6 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
                 view:    0,
                 height:  0.0,
                 seconds: 0,
-                now_u:   0,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
@@ -536,13 +520,12 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
         ).await
     }
     else {
-        use schema::cookie_users::dsl::cookie_users;
         use crate::models::{CookieUser, CookieStat};
         use crate::utils::{get_page, get_or_create_cookie_user_id};
 
         let user_id = get_or_create_cookie_user_id(conn, &req).await;
         let _connection = establish_connection();
-        let _cookie_user = cookie_users
+        let _cookie_user = schema::cookie_users::table
             .filter(schema::cookie_users::id.eq(&user_id))
             .first::<CookieUser>(&_connection)
             .expect("Error");
@@ -656,13 +639,10 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
         }
         else {
-            use crate::schema::feedbacks::dsl::feedbacks;
-            use crate::models::Feedback;
-
             let _connection = establish_connection();
             let template_types = get_template(&req);
-            let _feedbacks = feedbacks
-                .load::<Feedback>(&_connection)
+            let _feedbacks = schema::feedbacks::table
+                .load::<crate::models::Feedback>(&_connection)
                 .expect("E");
 
             let _request_user = get_request_user_data(&session);
@@ -711,11 +691,10 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
 
 pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     use crate::models::TechCategories;
-    use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
     let template_types = get_template(&req);
-    let all_tech_categories = tech_categories
+    let all_tech_categories = schema::tech_categories::table
         .order(schema::tech_categories::level.asc())
         .load::<TechCategories>(&_connection)
         .expect("E.");
@@ -813,11 +792,10 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
 
 pub async fn get_tech_category_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::TechCategories;
-    use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
     let template_types = get_template(&req);
-    let tech_category = tech_categories
+    let tech_category = schema::tech_categories::table
         .filter(schema::tech_categories::id.eq(*_id))
         .first::<TechCategories>(&_connection)
         .expect("E.");
@@ -839,11 +817,10 @@ pub async fn get_tech_category_page(req: HttpRequest, _id: web::Path<i32>) -> ac
 
 pub async fn get_serve_category_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::ServeCategories;
-    use crate::schema::serve_categories::dsl::serve_categories;
 
     let _connection = establish_connection();
     let template_types = get_template(&req);
-    let serve_category = serve_categories
+    let serve_category = schema::serve_categories::table
         .filter(schema::serve_categories::id.eq(*_id))
         .first::<ServeCategories>(&_connection)
         .expect("E.");
@@ -865,11 +842,10 @@ pub async fn get_serve_category_page(req: HttpRequest, _id: web::Path<i32>) -> a
 
 pub async fn get_serve_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::Serve;
-    use crate::schema::serve::dsl::serve;
 
     let _connection = establish_connection();
     let template_types = get_template(&req);
-    let _serve = serve
+    let _serve = schema::serve::table
         .filter(schema::serve::id.eq(*_id))
         .first::<Serve>(&_connection)
         .expect("E.");
@@ -1057,7 +1033,6 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
 
 pub async fn get_tech_objects_page(req: HttpRequest, session: Session, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::TechCategories;
-    use crate::schema::tech_categories::dsl::tech_categories;
 
     let mut is_admin = false;
     let template_types = get_template(&req);
@@ -1068,7 +1043,7 @@ pub async fn get_tech_objects_page(req: HttpRequest, session: Session, _id: web:
         }
     }
     let _connection = establish_connection();
-    let _cat = tech_categories
+    let _cat = schema::tech_categories::table
         .filter(schema::tech_categories::id.eq(*_id))
         .first::<TechCategories>(&_connection)
         .expect("E.");
@@ -1150,10 +1125,8 @@ pub async fn create_category_page(session: Session, req: HttpRequest) -> actix_w
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use schema::categories::dsl::categories;
-
             let _connection = establish_connection();
-            let _cats = categories
+            let _cats = schema::categories::table
                 .load::<Categories>(&_connection)
                 .expect("Error");
 
@@ -1299,18 +1272,14 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use schema::{
-                tags::dsl::tags,
-                tech_categories::dsl::tech_categories,
-            };
             use crate::models::TechCategories;
 
             let _connection = establish_connection();
-            let all_tags = tags
+            let all_tags = schema::tags::tags
                 .load::<Tag>(&_connection)
                 .expect("Error.");
 
-            let _tech_categories = tech_categories
+            let _tech_categories = schema::tech_categories::table
                 .load::<TechCategories>(&_connection)
                 .expect("E");
 
@@ -1360,13 +1329,10 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
     }
 }
 pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use schema::items::dsl::items;
-
-    let _item_id: i32 = *_id;
     let template_types = get_template(&req);
     let _connection = establish_connection();
-    let _item = items
-        .filter(schema::items::id.eq(&_item_id))
+    let _item = schema::items::table
+        .filter(schema::items::id.eq(*_id))
         .first::<Item>(&_connection)
         .expect("E");
 
@@ -1385,21 +1351,16 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
     else if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 || _item.user_id == _request_user.id {
-            use schema::{
-                tags::dsl::tags,
-                categories::dsl::categories,
-                tech_categories::dsl::tech_categories,
-            };
-            use crate::models:: TechCategories;
+            use crate::models::TechCategories;
 
             let item_cats = _item.get_categories_obj().expect("E");
             let item_tags = _item.get_tags_obj().expect("E");
 
-            let _all_tags = tags
+            let _all_tags = schema::tags::table
                 .load::<Tag>(&_connection)
                 .expect("Error.");
 
-            let _cats = categories
+            let _cats = schema::categories::table
                 .filter(schema::categories::types.eq(_item.types))
                 .load::<Categories>(&_connection)
                 .expect("Error");
@@ -1409,13 +1370,13 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
             let _serve = _item.get_serves();
             if _serve.len() > 0 {
                 let tech_id = _serve[0].tech_cat_id;
-                let _tech_categories = tech_categories
+                let _tech_categories = schema::tech_categories::table
                     .filter(schema::tech_categories::id.eq(tech_id))
                     .load::<TechCategories>(&_connection)
                     .expect("E");
 
                 level = _tech_categories[0].level;
-                let _tech_categories = tech_categories
+                let _tech_categories = schema::tech_categories::table
                     .filter(schema::tech_categories::level.eq(level))
                     .load::<TechCategories>(&_connection)
                     .expect("E");
@@ -1492,13 +1453,10 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
 }
 
 pub async fn edit_content_item_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use crate::schema::items::dsl::items;
-
-    let _item_id: i32 = *_id;
     let template_types = get_template(&req);
     let _connection = establish_connection();
-    let _item = items
-        .filter(schema::items::id.eq(&_item_id))
+    let _item = schema::items::table
+        .filter(schema::items::id.eq(&*_id))
         .first::<Item>(&_connection)
         .expect("E");
 
@@ -1564,14 +1522,12 @@ pub async fn edit_content_item_page(session: Session, req: HttpRequest, _id: web
 }
 
 pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use crate::schema::files::dsl::files;
     use crate::models::File;
 
-    let _file_id: i32 = *_id;
     let template_types = get_template(&req);
     let _connection = establish_connection();
-    let _file = files
-        .filter(schema::files::id.eq(&_file_id))
+    let _file = schema::files::table
+        .filter(schema::files::id.eq(*_id))
         .first::<File>(&_connection)
         .expect("E");
 
@@ -1645,13 +1601,12 @@ pub async fn image_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Res
 
     let _connection = establish_connection();
     let template_types = get_template(&req);
-    let _id: i32 = *_id;
-    let _file = files
-        .filter(schema::files::id.eq(_id))
+    let _file = schema::files::table
+        .filter(schema::files::id.eq(*_id))
         .first::<File>(&_connection)
         .expect("E.");
 
-    let _item = items
+    let _item = schema::items::table
         .filter(schema::items::id.eq(_file.item_id))
         .filter(schema::items::types.eq(_file.item_types))
         .first::<Item>(&_connection)
@@ -1666,7 +1621,7 @@ pub async fn image_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Res
         if obj == &_id {
             if (i + 1) != _images_len {
                 let _next = Some(&_images[i + 1]);
-                next = Some(files
+                next = Some(schema::files::table
                     .filter(schema::files::id.eq(_next.unwrap()))
                     .filter(schema::files::types.eq(_item.types))
                     .first::<File>(&_connection)
@@ -1674,7 +1629,7 @@ pub async fn image_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Res
             };
             if i != 0 {
                 let _prev = Some(&_images[i - 1]);
-                prev = Some(files
+                prev = Some(schema::files::table
                     .filter(schema::files::id.eq(_prev.unwrap()))
                     .filter(schema::files::types.eq(_item.types))
                     .first::<File>(&_connection)

@@ -75,9 +75,7 @@ pub fn serve_routes(config: &mut web::ServiceConfig) {
 }
 
 pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     let template_types = get_template(&req);
 
     if is_ajax == 0 {
@@ -148,17 +146,15 @@ pub async fn serve_categories_page(session: Session, req: HttpRequest) -> actix_
 }
 
 pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
     use schema::serve::dsl::serve;
 
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     let template_types = get_template(&req);
 
     let _connection = establish_connection();
-    let _serve_id: i32 = *_id;
 
     let _serve = serve
-        .filter(schema::serve::id.eq(&_serve_id))
+        .filter(schema::serve::id.eq(*_id))
         .first::<Serve>(&_connection)
         .expect("E");
 
@@ -185,7 +181,7 @@ pub async fn get_serve_page(session: Session, req: HttpRequest, _id: web::Path<i
             use schema::serve_categories::dsl::serve_categories;
 
             let _s_category = serve_categories
-                .filter(schema::serve_categories::id.eq(&_serve.serve_categories))
+                .filter(schema::serve_categories::id.eq(&_serve.category_id))
                 .first::<ServeCategories>(&_connection)
                 .expect("E");
 
@@ -504,11 +500,10 @@ pub async fn edit_tech_category_page(session: Session, req: HttpRequest, _id: we
     use crate::utils::get_device_and_ajax;
     use crate::schema::tech_categories::dsl::tech_categories;
 
-    let _cat_id: i32 = *_id;
     let _connection = establish_connection();
     let template_types = get_template(&req);
     let _category = tech_categories
-        .filter(schema::tech_categories::id.eq(&_cat_id))
+        .filter(schema::tech_categories::id.eq(*_id))
         .first::<TechCategories>(&_connection)
         .expect("E");
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -583,11 +578,10 @@ pub async fn edit_serve_category_page(session: Session, req: HttpRequest, _id: w
     use crate::utils::get_device_and_ajax;
     use crate::schema::serve_categories::dsl::serve_categories;
 
-    let _cat_id: i32 = *_id;
     let _connection = establish_connection();
     let template_types = get_template(&req);
     let _category = serve_categories
-        .filter(schema::serve_categories::id.eq(&_cat_id))
+        .filter(schema::serve_categories::id.eq(*_id))
         .first::<ServeCategories>(&_connection)
         .expect("E");
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -666,10 +660,9 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
-    let _serve_id: i32 = *_id;
     let template_types = get_template(&req);
     let _serve = serve
-        .filter(schema::serve::id.eq(&_serve_id))
+        .filter(schema::serve::id.eq(*_id))
         .first::<Serve>(&_connection)
         .expect("E");
 
@@ -696,11 +689,11 @@ pub async fn edit_serve_page(session: Session, req: HttpRequest, _id: web::Path<
         let _request_user = get_request_user_data(&session);
 
         let _serve_cat = serve_categories
-            .filter(schema::serve_categories::id.eq(&_serve.serve_categories))
+            .filter(schema::serve_categories::id.eq(&_serve.category_id))
             .first::<ServeCategories>(&_connection)
             .expect("E");
         let _tech_category = tech_categories
-            .filter(schema::tech_categories::id.eq(_serve_cat.tech_categories))
+            .filter(schema::tech_categories::id.eq(_serve_cat.category_id))
             .first::<TechCategories>(&_connection)
             .expect("E.");
 
@@ -770,15 +763,17 @@ pub async fn create_tech_categories(session: Session, mut payload: Multipart) ->
             let _connection = establish_connection();
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewTechCategories {
-                name:        form.name.clone(),
-                description: Some(form.description.clone()),
-                position:    form.position,
-                count:       0,
-                level:       form.level,
-                user_id:     _request_user.id,
-                view:        0,
-                height:      0.0,
-                seconds:     0,
+                name:           form.name.clone(),
+                name_en:        form.name_en.clone(),
+                description:    Some(form.description.clone()),
+                description_en: Some(form.description_en.clone()),
+                position:       form.position,
+                count:          0,
+                level:          form.level,
+                user_id:        _request_user.id,
+                view:           0,
+                height:         0.0,
+                seconds:        0,
             };
             let _new_tech = diesel::insert_into(tech_categories::table)
                 .values(&new_cat)
@@ -799,9 +794,11 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
             let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;
 
             let new_cat = NewServeCategories {
-                name: form.name.clone(),
+                name:            form.name.clone(),
+                name_en:         form.name_en.clone(),
                 description:     Some(form.description.clone()),
-                tech_categories: form.tech_categories,
+                description_en:  Some(form.description_en.clone()),
+                tech_categories: form.category_id,
                 position:        form.position,
                 count:           0,
                 default_price:   0,
@@ -825,9 +822,8 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
     };
 
     let _connection = establish_connection();
-    let _cat_id: i32 = *_id;
     let _category = tech_categories
-        .filter(schema::tech_categories::id.eq(_cat_id))
+        .filter(schema::tech_categories::id.eq(*_id))
         .first::<TechCategories>(&_connection)
         .expect("E");
 
@@ -838,15 +834,17 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
 
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewTechCategories {
-                name:        form.name.clone(),
-                description: Some(form.description.clone()),
-                position:    form.position,
-                count:       0,
-                level:       form.level,
-                user_id:     _request_user.id,
-                view:        0,
-                height:      0.0,
-                seconds:     0,
+                name:            form.name.clone(),
+                name_en:         form.name_en.clone(),
+                description:     Some(form.description.clone()),
+                description_en:  Some(form.description_en.clone()),
+                position:        form.position,
+                count:           0,
+                level:           form.level,
+                user_id:         _request_user.id,
+                view:            0,
+                height:          0.0,
+                seconds:         0,
             };
             diesel::update(&_category)
                 .set(new_cat)
@@ -863,10 +861,9 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
     };
 
     let _connection = establish_connection();
-    let _cat_id: i32 = *_id;
 
     let s_category = serve_categories
-        .filter(schema::serve_categories::id.eq(_cat_id))
+        .filter(schema::serve_categories::id.eq(*_id))
         .first::<ServeCategories>(&_connection)
         .expect("E");
 
@@ -877,16 +874,18 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
 
             let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;
             let new_cat = NewServeCategories {
-                name:            form.name.clone(),
-                description:     Some(form.description.clone()),
-                tech_categories: form.tech_categories,
-                position:        form.position,
-                count:           s_category.count,
-                default_price:   form.default_price,
-                user_id:         _request_user.id,
-                view:            0,
-                height:          0.0,
-                seconds:         0,
+                name:           form.name.clone(),
+                name_en:        form.name_en.clone(),
+                description:    Some(form.description.clone()),
+                description_en: Some(form.description_en.clone()),
+                category_id:    form.category_id,
+                position:       form.position,
+                count:          s_category.count,
+                default_price:  form.default_price,
+                user_id:        _request_user.id,
+                view:           0,
+                height:         0.0,
+                seconds:        0,
             };
             diesel::update(&s_category)
                 .set(new_cat)
@@ -899,26 +898,30 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ServeForm {
-    pub name:             String,
-    pub description:      String,
-    pub position:         i16,
-    pub serve_categories: i32,
-    pub price:            i32,
-    pub man_hours:        i16,
-    pub is_default:       bool,
-    pub serve_id:         Option<i32>,
+    pub name:           String,
+    pub name_en:        String,
+    pub description:    String,
+    pub description_en: String,
+    pub position:       i16,
+    pub category_id:    i32,
+    pub price:          i32,
+    pub man_hours:      i16,
+    pub is_default:     bool,
+    pub serve_id:       Option<i32>,
 }
 
 pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
     let mut form: ServeForm = ServeForm {
-        name:             "".to_string(),
-        description:      "".to_string(),
-        position:         0,
-        serve_categories: 0,
-        price:            0,
-        man_hours:        0,
-        is_default:       true,
-        serve_id:         None,
+        name:           "".to_string(),
+        name_en:        "".to_string(),
+        description:    "".to_string(),
+        description_en: "".to_string(),
+        position:       0,
+        category_id:    0,
+        price:          0,
+        man_hours:      0,
+        is_default:     true,
+        serve_id:       None,
     };
 
     let mut is_default = false;
@@ -935,12 +938,12 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                 }
             }
         }
-        else if name == "serve_categories" {
+        else if name == "category_id" {
             while let Some(chunk) = field.next().await {
                 let data = chunk.expect("split_payload err chunk");
                 if let Ok(s) = str::from_utf8(&data) {
                     let _int: i32 = s.parse().unwrap();
-                    form.serve_categories = _int;
+                    form.category_id = _int;
                 }
             }
         }
@@ -988,8 +991,12 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                     let data_string = s.to_string();
                     if field.name() == "name" {
                         form.name = data_string
+                    } else if field.name() == "name_en" {
+                        form.name_en = data_string
                     } else if field.name() == "description" {
                         form.description = data_string
+                    } else if field.name() == "description_en" {
+                        form.description_en = data_string
                     };
                 }
             }
@@ -1007,30 +1014,28 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
         if _request_user.perm == 60 {
             let _connection = establish_connection();
             let form = serve_split_payload(payload.borrow_mut()).await;
-            let _cat_id = form.serve_categories.clone();
+            let _cat_id = form.category_id;
             let _category = serve_categories
                 .filter(schema::serve_categories::id.eq(_cat_id))
                 .first::<ServeCategories>(&_connection)
                 .expect("E");
 
-            let mut is_default = false;
-            if form.is_default.clone() == true {
-                is_default = true;
-            };
             let _new_serve = NewServe {
-                name:             form.name.clone(),
-                description:      Some(form.description.clone()),
-                position:         form.position,
-                serve_categories: _cat_id,
-                price:            form.price,
-                man_hours:        form.man_hours,
-                is_default:       is_default,
-                user_id:          _request_user.id,
-                tech_cat_id:      _category.tech_categories,
-                height:           0.0,
-                seconds:          0,
-                serve_id:         form.serve_id,
-                view:             0,
+                name:           form.name.clone(),
+                name_en:        form.name_en.clone(),
+                description:    Some(form.description.clone()),
+                description_en: Some(form.description_en.clone()),
+                position:       form.position,
+                category_id:    _cat_id,
+                price:          form.price,
+                man_hours:      form.man_hours,
+                is_default:     form.is_default,
+                user_id:        _request_user.id,
+                tech_cat_id:    _category.category_id,
+                height:         0.0,
+                seconds:        0,
+                serve_id:       form.serve_id,
+                view:           0,
             };
 
             let _serve = diesel::insert_into(schema::serve::table)
@@ -1038,7 +1043,7 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
                 .get_result::<Serve>(&_connection)
                 .expect("E.");
 
-            if is_default == true {
+            if _new_serve.is_default {
                 diesel::update(&_category)
                     .set(schema::serve_categories::default_price.eq(_category.default_price + _serve.price))
                     .execute(&_connection)
@@ -1059,10 +1064,9 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
         serve_categories::dsl::serve_categories,
     };
 
-    let _serve_id: i32 = *_id;
     let _connection = establish_connection();
     let _serve = serve
-        .filter(schema::serve::id.eq(&_serve_id))
+        .filter(schema::serve::id.eq(*_id))
         .first::<Serve>(&_connection)
         .expect("E");
 
@@ -1070,7 +1074,7 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 || _serve.user_id == _request_user.id {
             let _category = serve_categories
-                .filter(schema::serve_categories::id.eq(_serve.serve_categories))
+                .filter(schema::serve_categories::id.eq(_serve.category_id))
                 .first::<ServeCategories>(&_connection)
                 .expect("E");
             let form = serve_split_payload(payload.borrow_mut()).await;
@@ -1102,19 +1106,21 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
             }
 
             let _new_serve = NewServe {
-                name:             form.name.clone(),
-                description:      Some(form.description.clone()),
-                position:         form.position,
-                serve_categories: _serve.serve_categories,
-                price:            form.price,
-                man_hours:        form.man_hours,
-                is_default:       is_default,
-                user_id:          _request_user.id,
-                tech_cat_id:      _category.tech_categories,
-                height:           0.0,
-                seconds:          0,
-                serve_id:         form.serve_id,
-                view:             0,
+                name:           form.name.clone(),
+                name_en:        form.name_en.clone(),
+                description:    Some(form.description.clone()),
+                description_en: Some(form.description_en.clone()),
+                position:       form.position,
+                category_id:    _serve.category_id,
+                price:          form.price,
+                man_hours:      form.man_hours,
+                is_default:     is_default,
+                user_id:        _request_user.id,
+                tech_cat_id:    _category.category_id,
+                height:         0.0,
+                seconds:        0,
+                serve_id:       form.serve_id,
+                view:           0,
             };
 
             diesel::update(&_serve)
@@ -1128,27 +1134,25 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
 
 
 pub async fn delete_serve(session: Session, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::serve::dsl::serve;
-    use crate::schema::serve_categories::dsl::serve_categories;
-
-    let _connection = establish_connection();
-    let _serve_id: i32 = *_id;
-    let _serve = serve
-        .filter(schema::serve::id.eq(_serve_id))
-        .first::<Serve>(&_connection)
-        .expect("E");
-
     if is_signed_in(&session) {
+        use crate::schema::serve::dsl::serve;
+        use crate::schema::serve_categories::dsl::serve_categories;
+
+        let _connection = establish_connection();
+        let _serve = serve
+            .filter(schema::serve::id.eq(*_id))
+            .first::<Serve>(&_connection)
+            .expect("E");
+
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 || _serve.user_id == _request_user.id {
-            let _cat_id: i32 = _serve.serve_categories;
             let _category = serve_categories
-                .filter(schema::serve_categories::id.eq(_cat_id))
+                .filter(schema::serve_categories::id.eq(_serve.category_id))
                 .first::<ServeCategories>(&_connection)
                 .expect("E");
             diesel::update(&_category)
-                .set(schema::serve_categories::count.eq(&_category.count - 1))
-                .get_result::<ServeCategories>(&_connection)
+                .set(schema::serve_categories::count.eq(_category.count - 1))
+                .execute(&_connection)
                 .expect("Error.");
 
             diesel::delete(&_serve).execute(&_connection).expect("E");
@@ -1161,42 +1165,46 @@ pub async fn delete_tech_category(session: Session, _id: web::Path<i32>) -> impl
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
-    let _cat_id: i32 = *_id;
     let _category = tech_categories
-        .filter(schema::tech_categories::id.eq(_cat_id))
+        .filter(schema::tech_categories::id.eq(*_id))
         .first::<TechCategories>(&_connection)
         .expect("E");
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 || _category.user_id == _request_user.id {
-            diesel::delete(tech_categories.filter(schema::tech_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
+            diesel::delete(
+                tech_categories
+                    .filter(
+                        schema::tech_categories::id.eq(*_id)
+                    )
+                )
+                .execute(&_connection)
+                .expect("E");
         }
     }
     HttpResponse::Ok()
 }
 pub async fn delete_serve_category(session: Session, _id: web::Path<i32>) -> impl Responder {
-
     use crate::schema::serve_categories::dsl::serve_categories;
     use crate::schema::tech_categories::dsl::tech_categories;
 
     let _connection = establish_connection();
-    let _cat_id: i32 = *_id;
     let s_category = serve_categories
-        .filter(schema::serve_categories::id.eq(_cat_id))
+        .filter(schema::serve_categories::id.eq(*_id))
         .first::<ServeCategories>(&_connection)
         .expect("E");
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 || s_category.user_id == _request_user.id {
-            diesel::delete(serve_categories.filter(schema::serve_categories::id.eq(_cat_id))).execute(&_connection).expect("E");
+            diesel::delete(serve_categories.filter(schema::serve_categories::id.eq(*_id))).execute(&_connection).expect("E");
 
             let _category = tech_categories
-                .filter(schema::tech_categories::id.eq(_cat_id))
+                .filter(schema::tech_categories::id.eq(*_id))
                 .first::<TechCategories>(&_connection)
                 .expect("E");
             diesel::update(&_category)
-                .set(schema::tech_categories::count.eq(&_category.count - 1))
+                .set(schema::tech_categories::count.eq(_category.count - 1))
                 .execute(&_connection)
                 .expect("E");
         }

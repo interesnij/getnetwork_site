@@ -78,7 +78,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
     }
 
     pub fn get_template(req: &HttpRequest) -> i16 {
-        return 1;
+        //return 1;
         #[derive(Deserialize)]
         struct TemplateParams {
             pub template: Option<i16>,
@@ -203,7 +203,7 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
         Vec<Cat>,
         Vec<Cat>,
         Vec<Cat>
-    ) {
+    ) { 
         let _service_cats = Categories::get_categories_for_types(2).expect("E.");
         let _store_cats = Categories::get_categories_for_types(3).expect("E.");
         let _blog_cats = Categories::get_categories_for_types(1).expect("E.");
@@ -260,19 +260,13 @@ pub fn get_request_user_data(session: &Session) -> User {
     if user_id != 0 {
         users
             .filter(schema::users::id.eq(user_id))
-            .load::<User>(&_connection)
+            .first::<User>(&_connection)
             .expect("E")
-            .into_iter()
-            .nth(0)
-            .unwrap()
     } else {
         users
             .filter(schema::users::id.eq(1))
-            .load::<User>(&_connection)
+            .first::<User>(&_connection)
             .expect("E")
-            .into_iter()
-            .nth(0)
-            .unwrap()
     }
 }
 

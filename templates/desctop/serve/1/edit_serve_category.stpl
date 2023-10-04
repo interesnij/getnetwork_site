@@ -39,7 +39,7 @@
               <label>Категория</label>
               <select class="input-md form-control" name="tech_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
                 <% for cat in tech_cats.iter() { %>
-                  <option <% if cat.id == category.tech_categories { %>selected=""<% } %> value="<%= cat.id %>">
+                  <option <% if cat.id == category.category_id { %>selected=""<% } %> value="<%= cat.id %>">
                     <%= cat.name %> (<%= cat.get_level_ru() %>)
                   </option>
                 <% } %>
