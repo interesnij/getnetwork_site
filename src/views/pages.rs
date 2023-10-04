@@ -1277,7 +1277,7 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
             use crate::models::TechCategories;
 
             let _connection = establish_connection();
-            let all_tags = schema::tags::tags
+            let all_tags = schema::tags::table
                 .load::<Tag>(&_connection)
                 .expect("Error.");
 

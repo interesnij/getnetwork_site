@@ -181,7 +181,7 @@ pub async fn create_history (
     }
     let p_link = data.link.clone();
     let p_title = data.title.clone();
-    let p_title = data.title_en.clone();
+    let p_title_en = data.title_en.clone();
     let p_template = data.template.clone();
 
     let _connection = establish_connection();

@@ -150,8 +150,9 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
     let _connection = establish_connection();
     let template_types = get_template(&req);
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let slug = _id.to_string();
     let _tag = tags
-        .filter(schema::tags::name.eq(_id.to_string()))
+        .filter(schema::tags::name.eq(&slug))
         .first::<Tag>(&_connection)
         .expect("E");
 
@@ -161,7 +162,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
             is_desctop,
             _tag.name.clone() + &" | Тег".to_string(),
             _tag.name.clone() + &" | вебсервисы.рф:Тег".to_string(),
-            "/tag/".to_string() + &_tag_id.clone() + &"/".to_string(),
+            "/tag/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
             template_types,
         ).await
@@ -171,7 +172,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
         use crate::models::{Item, Blog, Service, Store, Wiki, Work, Help};
 
         let _tag_items = tags_items
-            .filter(schema::tags_items::tag_id.eq(&_tag.id))
+            .filter(schema::tags_items::tag_id.eq(_tag.id))
             .load::<TagItems>(&_connection)
             .expect("E");
         let mut blog_stack = Vec::new();
@@ -411,8 +412,9 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
     let template_types = get_template(&req);
+    let slug = _id.to_string();
     let _tag = tags
-        .filter(schema::tags::name.eq(_id.to_string()))
+        .filter(schema::tags::name.eq(&slug))
         .first::<Tag>(&_connection)
         .expect("E");
 
@@ -422,7 +424,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
             is_desctop,
             _tag.name.clone() + &" | Статьи тега".to_string(),
             _tag.name.clone() + &" | вебсервисы.рф: Статьи тега".to_string(),
-            "/tag_blogs/".to_string() + &_tag_id.to_string() + &"/".to_string(),
+            "/tag_blogs/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
             template_types,
         ).await
@@ -556,8 +558,9 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
 
     let _connection = establish_connection();
     let template_types = get_template(&req);
+    let slug = _id.to_string();
     let _tag = tags
-        .filter(schema::tags::name.eq(_id.clone()))
+        .filter(schema::tags::name.eq(&slug))
         .first::<Tag>(&_connection)
         .expect("E");
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -568,7 +571,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             is_desctop,
             _tag.name.clone() + &" | Услуги тега".to_string(),
             _tag.name.clone() + &" | вебсервисы.рф: Услуги тега".to_string(),
-            "/tag_services/".to_string() + &_tag_id.to_string() + &"/".to_string(),
+            "/tag_services/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
             template_types,
         ).await
@@ -700,9 +703,9 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
 
     let _connection = establish_connection();
     let template_types = get_template(&req);
-    let _tag_id: String = _id.clone();
+    let slug = _id.to_string();
     let _tag = tags
-        .filter(schema::tags::name.eq(&_tag_id))
+        .filter(schema::tags::name.eq(&slug))
         .first::<Tag>(&_connection)
         .expect("E");
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -713,7 +716,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             is_desctop,
             _tag.name.clone() + &" | Товары тега ".to_string(),
             _tag.name.clone() + &" | вебсервисы.рф: Товары тега ".to_string(),
-            "/tag_stores/".to_string() + &_tag_id.to_string() + &"/".to_string(),
+            "/tag_stores/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
             template_types,
         ).await
@@ -846,9 +849,9 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
 
     let _connection = establish_connection();
     let template_types = get_template(&req);
-    let _tag_id: String = _id.clone();
+    let slug = _id.to_string();
     let _tag = tags
-        .filter(schema::tags::name.eq(&_tag_id))
+        .filter(schema::tags::name.eq(&slug))
         .first::<Tag>(&_connection)
         .expect("E");
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -859,7 +862,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
             is_desctop,
             _tag.name.clone() + &" | Статьи тега".to_string(),
             _tag.name.clone() + &" | вебсервисы.рф: Статьи тега".to_string(),
-            "/tag_wikis/".to_string() + &_tag_id.to_string() + &"/".to_string(),
+            "/tag_wikis/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
             template_types,
         ).await
@@ -992,9 +995,9 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
 
     let _connection = establish_connection();
     let template_types = get_template(&req);
-    let _tag_id: String = _id.clone();
+    let slug = _id.to_string();
     let _tag = tags
-        .filter(schema::tags::name.eq(&_tag_id))
+        .filter(schema::tags::name.eq(&slug))
         .first::<Tag>(&_connection)
         .expect("E");
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -1005,7 +1008,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
             is_desctop,
             _tag.name.clone() + &" | Работы тега".to_string(),
             _tag.name.clone() + &" | вебсервисы.рф: Работы тега".to_string(),
-            "/tag_works/".to_string() + &_tag_id.to_string() + &"/".to_string(),
+            "/tag_works/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
             template_types,
         ).await
@@ -1138,9 +1141,9 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
 
     let _connection = establish_connection();
     let template_types = get_template(&req);
-    let _tag_id: String = _id.clone();
+    let slug = _id.to_string();
     let _tag = tags
-        .filter(schema::tags::name.eq(&_tag_id))
+        .filter(schema::tags::name.eq(&slug))
         .first::<Tag>(&_connection)
         .expect("E");
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -1151,7 +1154,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
             is_desctop,
             _tag.name.clone() + &" | Справки тега".to_string(),
             _tag.name.clone() + &" | вебсервисы.рф: Справки тега".to_string(),
-            "/tag_helps/".to_string() + &_tag_id.to_string() + &"/".to_string(),
+            "/tag_helps/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
             template_types,
         ).await
