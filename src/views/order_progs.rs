@@ -140,7 +140,7 @@ pub async fn get_user_orders_page(session: Session, req: HttpRequest) -> actix_w
         ).await
     }
     else {
-        let user_id = get_cookie_user_id(&req).await;
+        let user_id = get_cookie_user_id(&req);
         let (_orders, next_page_number) = Order::get_user_orders_list(user_id, get_page(&req), 20);
         if user_id == 0 {
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Информация о заказчике не найдена"))
@@ -239,7 +239,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let template_types = get_template(&req);
     let _connection = establish_connection();
-    let user_id = get_cookie_user_id(&req).await;
+    let user_id = get_cookie_user_id(&req);
 
     let _order = orders
         .filter(schema::orders::id.eq(*_id))
@@ -438,7 +438,7 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
         let mut tech_cat_ids = Vec::new();
         let mut order_price = 0;
         for _serve in _serves.iter() {
-            if !tech_cat_ids.into_iter().any(|i| i==_serve.tech_cat_id) {
+            if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
                 tech_cat_ids.push(_serve.tech_cat_id);
             }
             order_price += _serve.price;
@@ -479,7 +479,7 @@ pub async fn delete_order(req: HttpRequest, _id: web::Path<i32>) -> impl Respond
         .first::<Order>(&_connection)
         .expect("E");
 
-    let user_id = get_cookie_user_id(&req).await;
+    let user_id = get_cookie_user_id(&req);
 
     if user_id == _order.user_id {
         use crate::schema::{
