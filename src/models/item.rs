@@ -1075,6 +1075,7 @@ pub struct Item {
     pub description:    Option<String>,
     pub description_en: Option<String>,
     pub content:        Option<String>,
+    pub content_en:     Option<String>,
     pub link:           Option<String>,
     pub image:          Option<String>,
     pub is_active:      bool,
@@ -2502,8 +2503,8 @@ impl Item {
 
 #[derive(Serialize, Insertable)]
 #[table_name="items"] 
-pub struct NewItem {
-    pub title:          String,
+pub struct NewItem { 
+    pub title:          String, 
     pub title_en:       String,
     pub description:    Option<String>,
     pub description_en: Option<String>,
