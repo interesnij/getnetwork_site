@@ -10,7 +10,6 @@ use crate::diesel::{
 };
 use serde::{Serialize,Deserialize};
 use crate::models::{
-    User,
     Tag,
     TechCategories,
     Serve,

@@ -4,7 +4,7 @@ use actix_web::{
     HttpResponse,
     Responder,
     web,
-    web::{block, Data, Json},
+    web::{block, Json},
 };
 use crate::schema;
 use crate::models::{
@@ -34,7 +34,7 @@ use actix_web::dev::ConnectionInfo;
 use crate::errors::Error;
 use crate::websocket::{
     //MessageToClient, 
-    Server, 
+    //Server, 
     ws_index
 };
 
@@ -177,7 +177,7 @@ pub async fn create_history (
 
     let p_seconds = data.seconds;
     if p_seconds < 3 {
-        Err(Error::BadRequest("Permission Denied".to_string()))
+        return Err(Error::BadRequest("Permission Denied".to_string()));
     }
     let p_link = data.link.clone();
     let p_title = data.title.clone();

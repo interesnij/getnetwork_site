@@ -66,7 +66,7 @@ async fn main() -> std::io::Result<()> {
                     .cookie_secure(false)
                     .build(),
             )
-            .data(server.clone())
+            //.data(server.clone())
             .default_service(web::route().to(not_found))
             .service(_files)
             .service(_files2)

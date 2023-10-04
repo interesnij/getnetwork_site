@@ -5,7 +5,7 @@ use actix_web::{
     web,
     error::InternalError,
     http::StatusCode,
-    web::{block, Data},
+    web::block,
     Result,
 };
 use crate::schema;
@@ -1595,10 +1595,6 @@ pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i
 }
 
 pub async fn image_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    use crate::schema::{
-        files::dsl::files,
-        items::dsl::items,
-    };
     use crate::models::File;
 
     let _connection = establish_connection();
