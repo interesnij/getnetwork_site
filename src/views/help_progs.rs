@@ -46,7 +46,7 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
     let template_types = get_template(&req);
 
     let _category = schema::categories::table
-        .filter(schema::categories::slug.eq(*_id.clone()))
+        .filter(schema::categories::slug.eq(_id.clone()))
         .filter(schema::categories::types.eq(6))
         .select((
             schema::categories::name,

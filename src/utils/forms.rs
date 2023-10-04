@@ -69,7 +69,7 @@ pub async fn category_form(payload: &mut Multipart, owner_id: i32) -> Categories
     let mut form: CategoriesForm = CategoriesForm {
         name:           "".to_string(),
         name_en:        "".to_string(),
-        name:           "".to_string(),
+        description:    "".to_string(),
         description_en: "".to_string(),
         position:       0,
         image:          "".to_string(),
@@ -228,9 +228,9 @@ pub async fn item_form(payload: &mut Multipart, owner_id: i32) -> ItemForms {
                     if field.name() == "title" {
                         form.title = data_string;
                     } else if field.name() == "title_en" {
-                        form.title_en = Some(data_string);
+                        form.title_en = data_string; 
                     } else if field.name() == "description" {
-                        form.description = data_string;
+                        form.description = Some(data_string);
                     } else if field.name() == "description_en" {
                         form.description_en = Some(data_string);
                     } else if field.name() == "link" {
@@ -397,9 +397,9 @@ pub async fn order_form(payload: &mut Multipart, owner_id: i32) -> OrderForms {
                     if field.name() == "title" {
                         form.title = data_string;
                     } else if field.name() == "title_en" {
-                        form.title_en = Some(data_string);
+                        form.title_en = data_string;
                     } else if field.name() == "description" {
-                        form.description = data_string;
+                        form.description = Some(data_string);
                     } else if field.name() == "description_en" {
                         form.description_en = Some(data_string);
                     } else if field.name() == "email" {

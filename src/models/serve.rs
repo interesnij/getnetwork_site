@@ -160,8 +160,9 @@ pub struct NewServeCategories {
     pub seconds:        i32,
 }
 
-/////// Serve ////// 
-#[derive(Debug, Serialize, Clone, Identifiable)] 
+/////// Serve //////
+#[derive(Debug, Serialize, Clone, Identifiable)]
+#[table_name="serve"]
 pub struct Serve { 
     pub id:             i32,
     pub name:           String,
