@@ -161,7 +161,7 @@ pub struct NewServeCategories {
 }
 
 /////// Serve //////
-#[derive(Debug, Serialize, Clone, Identifiable)]
+#[derive(Serialize, Clone, Identifiable, Queryable)]
 #[table_name="serve"]
 pub struct Serve { 
     pub id:             i32,
@@ -273,7 +273,7 @@ impl Serve {
         return serve
             .filter(schema::serve::id.eq(self.serve_id.unwrap()))
             .first::<Serve>(&_connection)
-            .expect("E");
+            .expect("E");  
     }
     pub fn get_category(&self) -> ServeCategories {
         use crate::schema::serve_categories::dsl::serve_categories;

@@ -177,7 +177,7 @@ pub async fn create_history (
 
     let p_seconds = data.seconds;
     if p_seconds < 3 {
-        Err(error::InternalError("res"))
+        Err(InternalError("res"))
     }
     let p_link = data.link.clone();
     let p_title = data.title.clone();
@@ -769,23 +769,23 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
 
             diesel::delete (
                 files
-                    .filter(schema::files::item_id.eq(_item_id))
+                    .filter(schema::files::item_id.eq(*_id))
                     .filter(schema::files::item_types.eq(_item.types))
                 )
                 .execute(&_connection)
                 .expect("E");
             diesel::delete (
                 tags_items
-                    .filter(schema::tags_items::item_id.eq(_item_id))
+                    .filter(schema::tags_items::item_id.eq(*_id))
                     .filter(schema::tags_items::types.eq(_item.types))
                 )
                 .execute(&_connection)
                 .expect("E");
             diesel::delete (
                 category
-                    .filter(schema::category::item_id.eq(_item_id))
+                    .filter(schema::category::item_id.eq(*_id))
                     .filter(schema::category::types.eq(_item.types))
-                )
+                ) 
                 .execute(&_connection)
                 .expect("E");
             diesel::delete(&_item).execute(&_connection).expect("E");
@@ -898,7 +898,7 @@ pub async fn delete_file(session: Session, _id: web::Path<i32>) -> impl Responde
                 .expect("E");
             std::fs::remove_file(_file.src).expect("E");
 
-            diesel::delete(files.filter(schema::files::id.eq(*_id)))
+            diesel::delete(schema::files::table.filter(schema::files::id.eq(*_id)))
                 .execute(&_connection)
                 .expect("E");
         }
