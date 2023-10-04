@@ -88,7 +88,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
             if !_item.is_active && _request_user.perm < 10 {
-                crate::utils::get_private_pageget_private_page (
+                crate::utils::get_private_page (
                     is_ajax,
                     _request_user,
                     is_desctop,
@@ -427,6 +427,8 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
         ).await
     }
     else {
+        use crate::models::StatPage;
+
         let _connection = establish_connection();
         let _stat: StatPage;
         let _stats = schema::stat_pages::table

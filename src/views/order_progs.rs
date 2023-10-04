@@ -489,14 +489,14 @@ pub async fn delete_order(req: HttpRequest, _id: web::Path<i32>) -> impl Respond
 
         diesel::delete (
             serve_items
-                .filter(schema::serve_items::item_id.eq(_order_id))
+                .filter(schema::serve_items::item_id.eq(*_id))
                 .filter(schema::serve_items::types.eq(7))
             )
             .execute(&_connection)
             .expect("E");
         diesel::delete(
             tech_categories_items
-                .filter(schema::tech_categories_items::item_id.eq(_order_id))
+                .filter(schema::tech_categories_items::item_id.eq(*_id))
                 .filter(schema::tech_categories_items::types.eq(7))
             )
             .execute(&_connection)

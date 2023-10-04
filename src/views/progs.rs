@@ -176,6 +176,9 @@ pub async fn create_history (
     let p_height = data.height;
 
     let p_seconds = data.seconds;
+    if p_seconds < 3 {
+        Err(error::InternalError("res"))
+    }
     let p_link = data.link.clone();
     let p_title = data.title.clone();
     let p_title = data.title_en.clone();

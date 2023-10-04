@@ -23,7 +23,7 @@ pub fn plus_page_stat (
         .filter(schema::stat_pages::types.eq(types))
         .first::<StatPage>(&_connection);
     if _items.is_ok() {
-        _item = _items.expect("E");
+        let _item = _items.expect("E");
         let item_height = format!("{:.2}", _item.height);
         let _height: f64 = item_height.parse().unwrap();
         if is_update_needed {

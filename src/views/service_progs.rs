@@ -46,7 +46,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
     let _item_id: String = param.1.clone();
     let _cat_id: String = param.0.clone();
 
-    let _item = items::items::table
+    let _item = schema::items::table
         .filter(schema::items::slug.eq(&_item_id))
         .first::<Item>(&_connection)
         .expect("E");
@@ -243,7 +243,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
     let template_types = get_template(&req);
 
     let _category = categories
-        .filter(schema::categories::slug.eq(*_id))
+        .filter(schema::categories::slug.eq(*_id.clone()))
         .filter(schema::categories::types.eq(2))
         .select((
             schema::categories::name,
