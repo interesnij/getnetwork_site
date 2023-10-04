@@ -188,7 +188,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                 4 => wiki_stack.push(_tag_item.item_id),
                 5 => work_stack.push(_tag_item.item_id),
                 6 => help_stack.push(_tag_item.item_id),
-                _ => 0,
+                _ => (),
             };
         };
 

@@ -72,8 +72,8 @@ pub fn get_current_user(session: &Session) -> Result<SessionUser, AuthError> {
 }
 
 
-fn get_cookie_user_id(req: &'a HttpRequest) -> i32 {
-    let cookie = req.headers().get("cookie").to_str().ok();
+fn get_cookie_user_id(req: &HttpRequest) -> i32 {
+    let cookie = req.headers().get("cookie").expect("E.").to_str().ok();
     let mut user_id = 0;
     for c in _cookie.iter() {
         let split_c: Vec<&str> = c.split("=").collect();

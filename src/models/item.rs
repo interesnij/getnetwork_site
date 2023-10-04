@@ -2546,6 +2546,7 @@ impl NewItem {
             description:    description,
             description_en: description_en,
             content:        None,
+            content_en:     None,
             link:           link,
             image:          image,
             is_active:      false,

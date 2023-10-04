@@ -639,10 +639,12 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
             Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body("Permission Denied"))
         }
         else {
+            use crate::models::Feedback;
+
             let _connection = establish_connection();
             let template_types = get_template(&req);
             let _feedbacks = schema::feedbacks::table
-                .load::<crate::models::Feedback>(&_connection)
+                .load::<Feedback>(&_connection)
                 .expect("E");
 
             let _request_user = get_request_user_data(&session);
@@ -653,7 +655,7 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
             else if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/main/feedback_list.stpl")]
-                struct Template {
+                struct Template { 
                     request_user:   User,
                     is_ajax:        i32,
                     feedback_list:  Vec<Feedback>,
