@@ -1620,7 +1620,7 @@ pub async fn image_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Res
     let mut next: Option<File> = None;
 
     for (i, obj) in _images.iter().enumerate().rev() {
-        if obj == *_id {
+        if obj == &*_id { 
             if (i + 1) != _images_len {
                 let _next = Some(&_images[i + 1]);
                 next = Some(schema::files::table

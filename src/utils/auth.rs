@@ -72,7 +72,7 @@ pub fn get_current_user(session: &Session) -> Result<SessionUser, AuthError> {
 }
 
 
-fn get_cookie_user_id(req: &HttpRequest) -> i32 {
+pub fn get_cookie_user_id(req: &HttpRequest) -> i32 {
     let _cookie = req.headers().get("cookie").expect("E.").to_str().ok();
     let mut user_id = 0;
     for c in _cookie.iter() {

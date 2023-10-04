@@ -1067,7 +1067,6 @@ pub struct EditCategories {
 }
 
 #[derive(Debug, Serialize, Clone, Queryable, Identifiable)]
-#[belongs_to(User)]
 pub struct Item {
     pub id:             i32,
     pub title:          String,
