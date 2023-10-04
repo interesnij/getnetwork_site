@@ -181,7 +181,7 @@ impl NewOrder {
 
         NewOrder {
             title:          title,
-            title_en:       title,
+            title_en:       title_en,
             types:          types,
             object_id:      object_id,
             username:       username,

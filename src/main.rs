@@ -45,7 +45,7 @@ static SERVER_COUNTER: AtomicUsize = AtomicUsize::new(0);
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
     env_logger::init_from_env(env_logger::Env::default().default_filter_or("debug"));
-    let server = websocket::Server::new().start();
+    //let server = websocket::Server::new().start();
     let secret_key = Key::generate();
 
     HttpServer::new(move || {
