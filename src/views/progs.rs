@@ -177,7 +177,7 @@ pub async fn create_history (
 
     let p_seconds = data.seconds;
     if p_seconds < 3 {
-        Err(InternalError("res"))
+        Err(Error::BadRequest("Permission Denied".to_string()))
     }
     let p_link = data.link.clone();
     let p_title = data.title.clone();
