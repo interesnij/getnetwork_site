@@ -196,7 +196,7 @@ CREATE TABLE items (
     title          VARCHAR(100) NOT NULL,
     title_en       VARCHAR(100) NOT NULL,
     description    VARCHAR(500),
-    description_en VARCHAR(500),
+    description_en VARCHAR(500), 
     content        VARCHAR(30000),
     content_en     VARCHAR(30000),
     link           VARCHAR(500),
@@ -326,7 +326,7 @@ CREATE TABLE serve (
     position       SMALLINT NOT NULL,
     category_id    INT NOT NULL,
     price          INT NOT NULL,
-    man_hours      SMALLINT NOT NULL,
+    man_hours      SMALLINT NOT NULL, 
     is_default     BOOLEAN NOT NULL, -- опция по умолчанию, т.е. без которой работа невозможна (например, админка)
     user_id        INT NOT NULL,
     tech_cat_id    INT NOT NULL,
