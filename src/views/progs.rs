@@ -63,7 +63,6 @@ pub fn progs_routes(config: &mut web::ServiceConfig) {
 
 pub async fn create_c_user(conn: ConnectionInfo, req: &HttpRequest) -> CookieUser {
     use crate::models::NewCookieUser;
-    use chrono::Duration;
 
     #[derive(Debug, Deserialize)]
     pub struct UserLoc {
@@ -124,7 +123,7 @@ pub async fn create_c_user(conn: ConnectionInfo, req: &HttpRequest) -> CookieUse
         country_en: Some(location200.country.name_en),
         height:     0.0,
         seconds:    0,
-        created:    chrono::Local::now().naive_utc() + Duration::hours(3),
+        created:    chrono::Local::now().naive_utc() + chrono::Duration::hours(3),
     };
     let _new_user = diesel::insert_into(schema::cookie_users::table)
         .values(&_user)
@@ -135,10 +134,8 @@ pub async fn create_c_user(conn: ConnectionInfo, req: &HttpRequest) -> CookieUse
 
 pub async fn get_c_user(conn: ConnectionInfo, id: i32, req: &HttpRequest) -> CookieUser {
     if id > 0 {
-        use crate::schema::cookie_users::dsl::cookie_users;
-
         let _connection = establish_connection();
-        let _user = cookie_users
+        let _user = schema::cookie_users::table
             .filter(schema::cookie_users::id.eq(id))
             .first::<CookieUser>(&_connection);
 
@@ -156,11 +153,12 @@ pub async fn get_c_user(conn: ConnectionInfo, id: i32, req: &HttpRequest) -> Coo
 
 #[derive(Debug, Deserialize)]
 pub struct HistoryData {
-    pub user_id:   i32,
+    pub user_id:   i32, 
     pub object_id: i32,
     pub page_id:   i16,
     pub link:      String,
     pub title:     String,
+    pub title_en:  String,
     pub height:    f64,
     pub seconds:   i32,
     pub template:  String,
@@ -169,11 +167,7 @@ pub async fn create_history (
     conn: ConnectionInfo,
     data: Json<HistoryData>,
     req: HttpRequest,
-    websocket_srv: Data<Addr<Server>>
 ) -> Result<Json<CookieStat>, Error> {
-    use crate::schema::cookie_stats::dsl::cookie_stats;
-    use crate::utils::plus_page_stat;
-
     let p_id = data.user_id;
     let user = get_c_user(conn, p_id, &req).await;
 
@@ -184,10 +178,11 @@ pub async fn create_history (
     let p_seconds = data.seconds;
     let p_link = data.link.clone();
     let p_title = data.title.clone();
+    let p_title = data.title_en.clone();
     let p_template = data.template.clone();
 
     let _connection = establish_connection();
-    let is_cookie_stats_exists = cookie_stats
+    let is_cookie_stats_exists = schema::cookie_stats::table
         .filter(schema::cookie_stats::user_id.eq(p_id))
         .filter(schema::cookie_stats::link.eq(p_link.clone()))
         .select(schema::cookie_stats::id)
@@ -206,64 +201,53 @@ pub async fn create_history (
     if p_object_id > 0 {
         match p_page_id {
             42 => {
-                use crate::utils::plus_category_stat;
-                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_category_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             43 => {
-                use crate::utils::plus_item_stat;
-                plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_item_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             62 => {
-                use crate::utils::plus_category_stat;
-                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_category_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             63 => {
-                use crate::utils::plus_item_stat;
-                plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_item_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             72 => {
-                use crate::utils::plus_category_stat;
-                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_category_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             73 => {
-                use crate::utils::plus_item_stat;
-                plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_item_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             82 => {
-                use crate::utils::plus_category_stat;
-                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_category_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             83 => {
-                use crate::utils::plus_item_stat;
-                plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_item_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             92 => {
-                use crate::utils::plus_category_stat;
-                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_category_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             93 => {
-                use crate::utils::plus_item_stat;
-                plus_item_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_item_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             32 => {
-                use crate::utils::plus_tag_stat;
-                plus_tag_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_tag_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
             9 => {
-                use crate::utils::plus_category_stat;
-                plus_category_stat(p_object_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+                crate::utils::plus_category_stat(p_object_id, p_height, p_seconds, is_cookie_stats_exists)
             },
-            _ => println!("no value"),
+            _ => 0,
         };
     }
     else {
-        plus_page_stat(p_page_id, p_height, p_seconds, websocket_srv, is_cookie_stats_exists)
+        crate::utils::plus_page_stat(p_page_id, p_height, p_seconds, is_cookie_stats_exists)
     }
     let _res = block(move || CookieStat::create (
         user.id,
         p_page_id,
         p_link,
         p_title,
+        p_title_en,
         p_height,
         p_seconds,
         p_template
@@ -301,18 +285,14 @@ pub async fn object_history(conn: ConnectionInfo, req: HttpRequest, id: web::Pat
 }
 
 pub async fn create_feedback(mut payload: actix_multipart::Multipart) -> impl Responder {
-    use crate::schema::feedbacks;
-    use crate::models::NewFeedback;
-    use crate::utils::feedback_form;
-
     let _connection = establish_connection();
-    let form = feedback_form(payload.borrow_mut()).await;
-    let new_feedback = NewFeedback {
+    let form = crate::utils::feedback_form(payload.borrow_mut()).await;
+    let new_feedback = crate::models::NewFeedback {
         username: form.username.clone(),
         email:    form.email.clone(),
         message:  form.message.clone()
     };
-    let _new_feedback = diesel::insert_into(feedbacks::table)
+    let _new_feedback = diesel::insert_into(schema::feedbacks::table)
         .values(&new_feedback)
         .execute(&_connection)
         .expect("E.");
@@ -332,18 +312,16 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
                 NewItem,
                 NewTagItems,
             };
-            use crate::utils::{
-                item_form,
-                get_price_acc_values,
-            };
 
             let _connection = establish_connection();
 
-            let form = item_form(payload.borrow_mut(), _request_user.id).await;
+            let form = crate::utils::item_form(payload.borrow_mut(), _request_user.id).await;
             let types = form.types;
             let new_item = NewItem::create (
                 form.title.clone(),
+                form.title_en.clone(),
                 form.description.clone(),
+                form.description_en.clone(),
                 form.link.clone(),
                 form.main_image.clone(),
                 _request_user.id,
@@ -357,20 +335,20 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
                 .get_result::<Item>(&_connection)
                 .expect("E.");
 
-            for category_id in form.category_list.iter() {
+            for category_id in form.category_list.into_iter() {
                 let new_category = NewCategory {
-                    categories_id: *category_id,
-                    item_id:       _item.id,
-                    types:         types,
+                    category_id: category_id,
+                    item_id:     _item.id,
+                    types:       types,
                 };
                 diesel::insert_into(schema::category::table)
                     .values(&new_category)
                     .execute(&_connection)
                     .expect("E.");
             };
-            for tag_id in form.tags_list.iter() {
+            for tag_id in form.tags_list.into_iter() {
                 let new_tag = NewTagItems {
-                    tag_id: *tag_id,
+                    tag_id:  tag_id,
                     item_id: _item.id,
                     types:   types,
                     created: chrono::Local::now().naive_utc(),
@@ -383,9 +361,9 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
 
             // создаем связь с тех категориями, которые будут
             // расширять списки опций, предлагая доп возможности и услуги
-            for cat_id in form.close_tech_cats_list.iter() {
+            for cat_id in form.close_tech_cats_list.into_iter() {
                 let new_cat = NewTechCategoriesItem {
-                    category_id: *cat_id,
+                    category_id: cat_id,
                     item_id:     _item.id,
                     types:       types,
                     is_active:   2,
@@ -398,9 +376,9 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
 
             // создаем опции услуги и записываем id опций в вектор.
             let mut serve_ids = Vec::new();
-            for serve_id in form.serve_list.iter() {
+            for serve_id in form.serve_list.into_iter() {
                 let new_serve_form = NewServeItems {
-                    serve_id: *serve_id,
+                    serve_id: serve_id,
                     item_id:  _item.id,
                     types:    types,
                 };
@@ -408,7 +386,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
                     .values(&new_serve_form)
                     .execute(&_connection)
                     .expect("Error.");
-                serve_ids.push(*serve_id);
+                serve_ids.push(serve_id);
             }
 
             // получаем опции, чтобы создать связи с их тех. категорией.
@@ -427,9 +405,9 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
                 item_price += _serve.price;
             }
 
-            for id in tech_cat_ids.iter() {
+            for id in tech_cat_ids.into_iter() {
                 let new_cat = NewTechCategoriesItem {
-                    category_id: *id,
+                    category_id: id,
                     item_id:     _item.id,
                     types:       types,
                     is_active:   1,
@@ -443,7 +421,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
             // фух. Связи созданы все, но надо еще посчитать цену
             // услуги для калькулятора. Как? А  это будет сумма всех
             // цен выбранных опций.
-            let price_acc = get_price_acc_values(&item_price);
+            let price_acc = crate::utils::get_price_acc_values(&item_price);
             diesel::update(&_item)
                 .set((
                     schema::items::price.eq(item_price),
@@ -479,10 +457,6 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 NewTagItems,
                 EditItem,
             };
-            use crate::utils::{
-                item_form,
-                get_price_acc_values,
-            };
 
             let _connection = establish_connection();
             let _item_id: i32 = *_id;
@@ -496,15 +470,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 let _tags: Vec<Tag>;
 
                 let _categories = _item.get_categories_obj().expect("E");
-                //_categories = match cats_res {
-                //    Ok(_ok) => _ok,
-                //    Err(_error) => Vec::new(),
-                //};
                 let _tags = _item.get_tags_obj().expect("E");
-                //_tags = match tags_res {
-                //    Ok(_list) => _list,
-                //    Err(_error) => Vec::new(),
-                //};
 
                 for _category in _categories.iter() {
                     diesel::update(_category)
@@ -549,14 +515,16 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 .execute(&_connection)
                 .expect("E");
 
-            let form = item_form(payload.borrow_mut(), _request_user.id).await;
+            let form = crate::utils::item_form(payload.borrow_mut(), _request_user.id).await;
             let _new_item = EditItem {
-                title:       form.title.clone(),
-                description: form.description.clone(),
-                link:        form.link.clone(),
-                image:       form.main_image.clone(),
-                position:    form.position,
-                slug:        form.slug.clone(),
+                title:          form.title.clone(),
+                title_en:       form.title_en.clone(),
+                description:    form.description.clone(),
+                description_en: form.description_en.clone(),
+                link:           form.link.clone(),
+                image:          form.main_image.clone(),
+                position:       form.position,
+                slug:           form.slug.clone(),
             };
 
             diesel::update(&_item)
@@ -564,11 +532,11 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 .execute(&_connection)
                 .expect("E");
 
-            for category_id in form.category_list.iter() {
+            for category_id in form.category_list.into_iter() {
                 let new_category = NewCategory {
-                    categories_id: *category_id,
-                    item_id:       _item.id,
-                    types:         _item.types,
+                    category_id: category_id,
+                    item_id:     _item.id,
+                    types:       _item.types,
                 };
                 diesel::insert_into(schema::category::table)
                     .values(&new_category)
@@ -579,17 +547,17 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                     let _category = categories
                         .filter(schema::categories::id.eq(category_id))
                         .filter(schema::categories::types.eq(_item.types))
-                        .load::<Categories>(&_connection)
+                        .first::<Categories>(&_connection)
                         .expect("E");
-                    diesel::update(&_category[0])
-                        .set(schema::categories::count.eq(_category[0].count + 1))
+                    diesel::update(&_category)
+                        .set(schema::categories::count.eq(_category.count + 1))
                         .execute(&_connection)
                         .expect("Error.");
                 }
             };
-            for tag_id in form.tags_list.iter() {
+            for tag_id in form.tags_list.into_iter() {
                 let new_tag = NewTagItems {
-                    tag_id: *tag_id,
+                    tag_id:  tag_id,
                     item_id: _item.id,
                     types:   _item.types,
                     created: chrono::Local::now().naive_utc(),
@@ -600,10 +568,13 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                     .expect("Error.");
 
                 if _item.is_active {
-                    let _tag = tags.filter(schema::tags::id.eq(tag_id)).load::<Tag>(&_connection).expect("E");
+                    let _tag = tags
+                        .filter(schema::tags::id.eq(tag_id))
+                        .first::<Tag>(&_connection)
+                        .expect("E");
 
-                    diesel::update(&_tag[0])
-                        .set(schema::tags::count.eq(_tag[0].count + 1))
+                    diesel::update(&_tag)
+                        .set(schema::tags::count.eq(_tag.count + 1))
                         .execute(&_connection)
                         .expect("Error.");
                 }
@@ -611,9 +582,9 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
 
             // создаем связь с тех категориями, которые будут
             // расширять списки опций, предлагая доп возможности и услуги
-            for cat_id in form.close_tech_cats_list.iter() {
+            for cat_id in form.close_tech_cats_list.into_iter() {
                 let new_cat = NewTechCategoriesItem {
-                    category_id: *cat_id,
+                    category_id: cat_id,
                     item_id:     _item.id,
                     types:       _item.types,
                     is_active:   2,
@@ -626,9 +597,9 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
 
             // создаем опции услуги и записываем id опций в вектор.
             let mut serve_ids = Vec::new();
-            for serve_id in form.serve_list.iter() {
+            for serve_id in form.serve_list.into_iter() {
                 let new_serve_form = NewServeItems {
-                    serve_id: *serve_id,
+                    serve_id: serve_id,
                     item_id:  _item.id,
                     types:    _item.types,
                 };
@@ -636,7 +607,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                     .values(&new_serve_form)
                     .execute(&_connection)
                     .expect("Error.");
-                serve_ids.push(*serve_id);
+                serve_ids.push(serve_id);
             }
 
             // получаем опции, чтобы создать связи с их тех. категорией.
@@ -655,9 +626,9 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 item_price += _serve.price;
             }
 
-            for id in tech_cat_ids.iter() {
+            for id in tech_cat_ids.into_iter() {
                 let new_cat = NewTechCategoriesItem {
-                    category_id: *id,
+                    category_id: id,
                     item_id:     _item.id,
                     types:       _item.types,
                     is_active:   1,
@@ -671,7 +642,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
             // фух. Связи созданы все, но надо еще посчитать цену
             // услуги для калькулятора. Как? А  это будет сумма всех
             // цен выбранных опций.
-            let price_acc = get_price_acc_values(&item_price);
+            let price_acc = crate::utils::get_price_acc_values(&item_price);
             diesel::update(&_item)
                 .set((
                     schema::items::price.eq(item_price),
@@ -688,23 +659,21 @@ pub async fn create_category(session: Session, mut payload: Multipart) -> impl R
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::utils::category_form;
-            use crate::models::NewCategories;
-
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
-            let new_cat = NewCategories {
-                name:        form.name.clone(),
-                description: Some(form.description.clone()),
-                position:    form.position,
-                image:       Some(form.image.clone()),
-                count:       0,
-                view:        0,
-                height:      0.0,
-                seconds:     0,
-                types:       form.types,
-                slug:        form.slug,
-                now_u:       0,
+            let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
+            let new_cat = crate::models::NewCategories {
+                name:           form.name.clone(),
+                name_en:        form.name_en.clone(),
+                description:    Some(form.description.clone()),
+                description_en: Some(form.description_en.clone()),
+                position:       form.position,
+                image:          Some(form.image.clone()),
+                count:          0,
+                view:           0,
+                height:         0.0,
+                seconds:        0,
+                types:          form.types,
+                slug:           form.slug,
             };
             diesel::insert_into(schema::categories::table)
                 .values(&new_cat)
@@ -716,31 +685,26 @@ pub async fn create_category(session: Session, mut payload: Multipart) -> impl R
 }
 
 pub async fn edit_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::EditCategories;
-    use crate::schema::categories::dsl::categories;
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::utils::category_form;
-
             let _connection = establish_connection();
-            let _cat_id: i32 = *_id;
-            let _category = categories
-                .filter(schema::categories::id.eq(_cat_id))
-                .load::<Categories>(&_connection)
+            let _category = schema::categories::table
+                .filter(schema::categories::id.eq(*_id))
+                .first::<Categories>(&_connection)
                 .expect("E");
 
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
-            let _new_cat = EditCategories {
-                name:        form.name.clone(),
-                description: Some(form.description.clone()),
-                position:    form.position,
-                image:       Some(form.image.clone()),
-                slug:        form.slug,
+            let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
+            let _new_cat = crate::models::EditCategories {
+                name:           form.name.clone(),
+                name_en:        form.name_en.clone(),
+                description:    Some(form.description.clone()),
+                description_en: Some(form.description_en.clone()),
+                position:       form.position,
+                image:          Some(form.image.clone()),
+                slug:           form.slug,
             };
-
-            diesel::update(&_category[0])
+            diesel::update(&_category)
                 .set(_new_cat)
                 .execute(&_connection)
                 .expect("E");
@@ -750,25 +714,23 @@ pub async fn edit_category(session: Session, mut payload: Multipart, _id: web::P
 }
 
 pub async fn edit_content_item(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::items::dsl::items;
-
-    let _item_id: i32 = *_id;
     let _connection = establish_connection();
-    let _item = items
-        .filter(schema::items::id.eq(&_item_id))
+    let _item = schema::items::table
+        .filter(schema::items::id.eq(*_id))
         .first::<Item>(&_connection)
         .expect("E");
 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 || _request_user.id == _item.user_id {
-            use crate::utils::content_form;
-
-            let form = content_form(payload.borrow_mut()).await;
+            let form = crate::utils::content_form(payload.borrow_mut()).await;
             diesel::update(&_item)
-            .set(schema::items::content.eq(form.content.clone()))
-            .execute(&_connection)
-            .expect("E");
+                .set((
+                    schema::items::content.eq(form.content.clone()),
+                    schema::items::content_en.eq(form.content_en.clone()),
+                ))
+                .execute(&_connection)
+                .expect("E");
         }
     }
     HttpResponse::Ok().body("")
@@ -786,14 +748,13 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let _connection = establish_connection();
-            let _item_id: i32 = *_id;
             let _item = items
-                .filter(schema::items::id.eq(_item_id))
+                .filter(schema::items::id.eq(*_id))
                 .first::<Item>(&_connection)
                 .expect("E");
 
             let _src_list = files
-                .filter(schema::files::item_id.eq(_item_id))
+                .filter(schema::files::item_id.eq(*_id))
                 .filter(schema::files::item_types.eq(_item.types))
                 .select(schema::files::src)
                 .load::<String>(&_connection)
@@ -827,15 +788,7 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
             diesel::delete(&_item).execute(&_connection).expect("E");
 
             let _categories = _item.get_categories_obj().expect("E");
-            //_categories = match cats_res {
-            //    Ok(_ok) => _ok,
-            //    Err(_error) => Vec::new(),
-            //};
             let _tags = _item.get_tags_obj().expect("E");
-            //_tags = match tags_res {
-            //    Ok(_list) => _list,
-            //    Err(_error) => Vec::new(),
-            //};
 
             for _category in _categories.iter() {
                 diesel::update(_category)
@@ -856,15 +809,11 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
 }
 
 pub async fn delete_category(session: Session, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::categories::dsl::categories;
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let _connection = establish_connection();
-            let _cat_id: i32 = *_id;
-
-            diesel::delete(categories.filter(schema::categories::id.eq(_cat_id)))
+            diesel::delete(schema::categories::table.filter(schema::categories::id.eq(*_id)))
                 .execute(&_connection)
                 .expect("E");
         }
@@ -910,25 +859,20 @@ pub async fn create_files(session: Session, mut payload: Multipart, id: web::Pat
 }
 
 pub async fn edit_file(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::models::{EditFile, File};
-    use crate::schema::files::dsl::files;
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::utils::category_form;
-
             let _connection = establish_connection();
-            let _file_id: i32 = *_id;
-            let _file = files
-                .filter(schema::files::id.eq(_file_id))
-                .first::<File>(&_connection)
+            let _file = schema::files::table
+                .filter(schema::files::id.eq(*_id))
+                .first::<crate::models::File>(&_connection)
                 .expect("E");
 
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
-            let _new_file = EditFile {
-                description: Some(form.description.clone()),
-                position:    form.position,
+            let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
+            let _new_file = crate::models::EditFile {
+                description:    Some(form.description.clone()),
+                description_en: Some(form.description_en.clone()),
+                position:       form.position,
             };
 
             diesel::update(&_file)
@@ -941,21 +885,17 @@ pub async fn edit_file(session: Session, mut payload: Multipart, _id: web::Path<
 }
 
 pub async fn delete_file(session: Session, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::files::dsl::files;
-    use crate::models::File;
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
             let _connection = establish_connection();
-            let _file_id: i32 = *_id;
-            let _file = files
-                .filter(schema::files::id.eq(_file_id))
-                .first::<File>(&_connection)
+            let _file = schema::files::table
+                .filter(schema::files::id.eq(*_id))
+                .first::<crate::models::File>(&_connection)
                 .expect("E");
             std::fs::remove_file(_file.src).expect("E");
 
-            diesel::delete(files.filter(schema::files::id.eq(_file_id)))
+            diesel::delete(files.filter(schema::files::id.eq(*_id)))
                 .execute(&_connection)
                 .expect("E");
         }
@@ -967,12 +907,9 @@ pub async fn publish_item(session: Session, _id: web::Path<i32>) -> impl Respond
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::schema::items::dsl::items;
-
             let _connection = establish_connection();
-            let _id: i32 = *_id;
-            let _item = items
-                .filter(schema::items::id.eq(_id))
+            let _item = schema::items::table
+                .filter(schema::items::id.eq(*_id))
                 .first::<Item>(&_connection)
                 .expect("E");
 
@@ -1016,12 +953,9 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::schema::items::dsl::items;
-
             let _connection = establish_connection();
-            let _id: i32 = *_id;
-            let _item = items
-                .filter(schema::items::id.eq(_id))
+            let _item = schema::items::table
+                .filter(schema::items::id.eq(*_id))
                 .first::<Item>(&_connection)
                 .expect("E");
 

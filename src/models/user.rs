@@ -205,12 +205,13 @@ pub struct NewCookieUser {
 ////////////////////
 
 #[derive(Debug, Queryable, Serialize, Identifiable)]
-pub struct CookieStat {
+pub struct CookieStat { 
     pub id:       i32,
     pub user_id:  i32,
     pub page:     i16,
     pub link:     String,
     pub title:    String,
+    pub title_en: String,
     pub height:   f64,
     pub seconds:  i32,
     pub created:  chrono::NaiveDateTime,
@@ -222,6 +223,7 @@ pub struct HistoryResponse {
     pub id:       i32,
     pub link:     String,
     pub title:    String,
+    pub title_en: String,
     pub height:   f64,
     pub seconds:  i32,
     pub template: String,
@@ -262,11 +264,12 @@ impl CookieStat {
         Ok(list)
     }
     pub fn create (
-        user_id:  i32, 
-        page:     i16, 
+        user_id:  i32,
+        page:     i16,
         link:     String,
-        title:    String, 
-        height:   f64, 
+        title:    String,
+        title_en: String,
+        height:   f64,
         seconds:  i32,
         template: String
     ) -> Result<CookieStat, Error> {
@@ -276,12 +279,13 @@ impl CookieStat {
         let _h = NewCookieStat {
             user_id:  user_id,
             page:     page,
-            link:     link.clone(),
-            title:    title.clone(),
+            link:     link,
+            title:    title,
+            title_en: title_en,
             height:   height,
             seconds:  seconds,
             created:  chrono::Local::now().naive_utc() + Duration::hours(3),
-            template: template.clone(),
+            template: template,
         };
         let new = diesel::insert_into(schema::cookie_stats::table)
             .values(&_h)
@@ -297,6 +301,7 @@ pub struct NewCookieStat {
     pub page:     i16,
     pub link:     String,
     pub title:    String,
+    pub title_en: String,
     pub height:   f64,
     pub seconds:  i32,
     pub created:  chrono::NaiveDateTime,
@@ -352,7 +357,6 @@ pub struct StatPage {
     pub view:    i32,
     pub height:  f64,
     pub seconds: i32,
-    pub now_u:   i16,
 }
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
@@ -362,5 +366,4 @@ pub struct NewStatPage {
     pub view:    i32,
     pub height:  f64,
     pub seconds: i32,
-    pub now_u:   i16,
 }

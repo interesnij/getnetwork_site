@@ -34,13 +34,14 @@ use crate::errors::Error;
 // 2. услуга
 // 3. товар
 // 4. wiki
-// 5. работа
+// 5. работа 
 // 6. помощь
 // 7. заказ
 
 #[derive(Serialize, Queryable)]
-pub struct CatDetail {
+pub struct CatDetail { 
     pub name:    String,
+    pub name_en: String,
     pub slug:    String,
     pub count:   i16,
     pub id:      i32,
@@ -48,7 +49,6 @@ pub struct CatDetail {
     pub view:    i32,
     pub height:  f64,
     pub seconds: i32,
-    pub now_u:   i16,
 }
 impl CatDetail {
     pub fn get_image(&self) -> String {
@@ -63,11 +63,12 @@ impl CatDetail {
 
 #[derive(Serialize, Queryable)]
 pub struct Cat {
-    pub name:  String,
-    pub slug:  String,
-    pub count: i16,
-    pub id:    i32,
-    pub image: Option<String>,
+    pub name:    String,
+    pub name_en: String,
+    pub slug:    String,
+    pub count:   i16,
+    pub id:      i32,
+    pub image:   Option<String>,
 }
 impl Cat {
     pub fn get_image(&self) -> String {
@@ -82,19 +83,22 @@ impl Cat {
 
 #[derive(Serialize, Queryable)]
 pub struct SmallCat {
-    pub name:  String,
-    pub slug:  String,
-    pub count: i16,
+    pub name:    String,
+    pub name_en: String,
+    pub slug:    String,
+    pub count:   i16,
 }
 #[derive(Serialize, Queryable)]
 pub struct Blog {
-    pub id:          i32,
-    pub slug:        String,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub title:       String,
-    pub created:     chrono::NaiveDateTime,
-    pub description: Option<String>,
+    pub id:             i32,
+    pub slug:           String,
+    pub image:          Option<String>,
+    pub is_active:      bool,
+    pub title:          String,
+    pub title_en:       String,
+    pub created:        chrono::NaiveDateTime,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
 }
 impl Blog {
     pub fn get_image(&self) -> String {
@@ -120,7 +124,11 @@ impl Blog {
             .expect("E");
         let _tags = tags
             .filter(schema::tags::id.eq_any(_tag_items))
-            .select((schema::tags::name, schema::tags::count))
+            .select((
+                schema::tags::name,
+                schema::tags::name_en,
+                schema::tags::count,
+            ))
             .load::<SmallTag>(&_connection)
             .expect("E");
         return _tags;
@@ -129,12 +137,14 @@ impl Blog {
 
 #[derive(Serialize, Queryable)]
 pub struct Service {
-    pub id:          i32,
-    pub slug:        String,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub title:       String,
-    pub description: Option<String>,
+    pub id:             i32,
+    pub slug:           String,
+    pub image:          Option<String>,
+    pub is_active:      bool,
+    pub title:          String,
+    pub title_en:       String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
 }
 impl Service {
     pub fn get_image(&self) -> String {
@@ -160,7 +170,11 @@ impl Service {
             .expect("E");
         let _tags = tags
             .filter(schema::tags::id.eq_any(_tag_items))
-            .select((schema::tags::name, schema::tags::count))
+            .select((
+                schema::tags::name,
+                schema::tags::name_en,
+                schema::tags::count,
+            ))
             .load::<SmallTag>(&_connection)
             .expect("E");
         return _tags;
@@ -169,14 +183,16 @@ impl Service {
 
 #[derive(Serialize, Queryable)]
 pub struct Store {
-    pub id:          i32,
-    pub slug:        String,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub title:       String,
-    pub description: Option<String>,
-    pub price:       i32,
-    pub price_acc:   Option<i32>,
+    pub id:             i32,
+    pub slug:           String,
+    pub image:          Option<String>,
+    pub is_active:      bool,
+    pub title:          String,
+    pub title_en:       String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub price:          i32,
+    pub price_acc:      Option<i32>,
 }
 impl Store {
     pub fn get_image(&self) -> String {
@@ -202,7 +218,11 @@ impl Store {
             .expect("E");
         let _tags = tags
             .filter(schema::tags::id.eq_any(_tag_items))
-            .select((schema::tags::name, schema::tags::count))
+            .select((
+                schema::tags::name,
+                schema::tags::name_en,
+                schema::tags::count,
+            ))
             .load::<SmallTag>(&_connection)
             .expect("E");
         return _tags;
@@ -211,13 +231,15 @@ impl Store {
 
 #[derive(Serialize, Queryable)]
 pub struct Wiki {
-    pub id:          i32,
-    pub slug:        String,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub title:       String,
-    pub description: Option<String>,
-    pub created:     chrono::NaiveDateTime,
+    pub id:             i32,
+    pub slug:           String,
+    pub image:          Option<String>,
+    pub is_active:      bool,
+    pub title:          String,
+    pub title_en:       String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub created:        chrono::NaiveDateTime,
 }
 impl Wiki {
     pub fn get_image(&self) -> String {
@@ -243,7 +265,11 @@ impl Wiki {
             .expect("E");
         let _tags = tags
             .filter(schema::tags::id.eq_any(_tag_items))
-            .select((schema::tags::name, schema::tags::count))
+            .select((
+                schema::tags::name,
+                schema::tags::name_en,
+                schema::tags::count,
+            ))
             .load::<SmallTag>(&_connection)
             .expect("E");
         return _tags;
@@ -252,12 +278,14 @@ impl Wiki {
 
 #[derive(Serialize, Queryable)]
 pub struct Work {
-    pub id:          i32,
-    pub slug:        String,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub title:       String,
-    pub description: Option<String>,
+    pub id:             i32,
+    pub slug:           String,
+    pub image:          Option<String>,
+    pub is_active:      bool,
+    pub title:          String,
+    pub title_en:       String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
 }
 impl Work {
     pub fn get_image(&self) -> String {
@@ -283,7 +311,11 @@ impl Work {
             .expect("E");
         let _tags = tags
             .filter(schema::tags::id.eq_any(_tag_items))
-            .select((schema::tags::name, schema::tags::count))
+            .select((
+                schema::tags::name,
+                schema::tags::name_en,
+                schema::tags::count,
+            ))
             .load::<SmallTag>(&_connection)
             .expect("E");
         return _tags;
@@ -292,10 +324,12 @@ impl Work {
 
 #[derive(Serialize, Queryable)]
 pub struct Help {
-    pub id:        i32,
-    pub is_active: bool,
-    pub title:     String,
-    pub content:   Option<String>,
+    pub id:         i32,
+    pub is_active:  bool,
+    pub title:      String,
+    pub title_en:   String,
+    pub content:    Option<String>,
+    pub content_en: Option<String>,
 }
 impl Help {
     pub fn get_category(&self) -> SmallCat {
@@ -307,7 +341,7 @@ impl Help {
         let _id = category
             .filter(schema::category::item_id.eq(self.id))
             .filter(schema::category::types.eq(6))
-            .select(schema::category::categories_id)
+            .select(schema::category::category_id)
             .first::<i32>(&_connection)
             .expect("E");
 
@@ -315,6 +349,7 @@ impl Help {
             .filter(schema::categories::id.eq(_id))
             .select((
                 schema::categories::name,
+                schema::categories::name_en,
                 schema::categories::slug,
                 schema::categories::count
             ))
@@ -337,7 +372,11 @@ impl Help {
             .expect("E");
         let _tags = tags
             .filter(schema::tags::id.eq_any(_tag_items))
-            .select((schema::tags::name, schema::tags::count))
+            .select((
+                schema::tags::name,
+                schema::tags::name_en,
+                schema::tags::count,
+            ))
             .load::<SmallTag>(&_connection)
             .expect("E");
         return _tags;
@@ -346,25 +385,27 @@ impl Help {
 
 #[derive(Serialize, Queryable)]
 pub struct FeaturedItem {
-    pub slug:  String,
-    pub title: String,
+    pub slug:     String,
+    pub title:    String,
+    pub title_en: String,
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Queryable, Identifiable)]
 #[table_name="categories"]
 pub struct Categories {
-    pub id:          i32,
-    pub name:        String,
-    pub description: Option<String>,
-    pub position:    i16,
-    pub image:       Option<String>,
-    pub count:       i16,
-    pub view:        i32,
-    pub height:      f64,
-    pub seconds:     i32,
-    pub types:       i16,
-    pub slug:        String,
-    pub now_u:       i16,
+    pub id:             i32,
+    pub name:           String,
+    pub name_en:        String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub position:       i16,
+    pub image:          Option<String>,
+    pub count:          i16,
+    pub view:           i32,
+    pub height:         f64,
+    pub seconds:        i32,
+    pub types:          i16,
+    pub slug:           String,
 }
 
 impl Categories {
@@ -382,7 +423,11 @@ impl Categories {
             .expect("E");
         let _tags = tags
             .filter(schema::tags::id.eq_any(_tag_items))
-            .select((schema::tags::name, schema::tags::count))
+            .select((
+                schema::tags::name,
+                schema::tags::name_en,
+                schema::tags::count,
+            ))
             .load::<SmallTag>(&_connection)
             .expect("E");
         return Ok(_tags);
@@ -399,7 +444,7 @@ impl Categories {
         let mut next: Option<FeaturedItem> = None;
 
         let _category_items = category
-            .filter(schema::category::categories_id.eq(self.id))
+            .filter(schema::category::category_id.eq(self.id))
             .filter(schema::category::types.eq(types))
             .select(schema::category::item_id)
             .load::<i32>(&_connection)
@@ -416,6 +461,7 @@ impl Categories {
                         .select((
                             schema::items::slug,
                             schema::items::title,
+                            schema::items::title_en,
                         ))
                         .first::<FeaturedItem>(&_connection)
                         .expect("E."));
@@ -429,6 +475,7 @@ impl Categories {
                         .select((
                             schema::items::slug,
                             schema::items::title,
+                            schema::items::title_en,
                         ))
                         .first::<FeaturedItem>(&_connection)
                         .expect("E."));
@@ -489,7 +536,7 @@ impl Categories {
         let _connection = establish_connection();
         let _items: Vec<Blog>;
         let ids = category
-            .filter(schema::category::categories_id.eq(cat_id))
+            .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(1))
             .select(schema::category::item_id)
             .load::<i32>(&_connection)
@@ -506,8 +553,10 @@ impl Categories {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::created,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Blog>(&_connection)
                 .expect("E.");
@@ -524,8 +573,10 @@ impl Categories {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::created,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Blog>(&_connection)
                 .expect("E.");
@@ -571,7 +622,7 @@ impl Categories {
         let _connection = establish_connection();
         let _items: Vec<Service>;
         let ids = category
-            .filter(schema::category::categories_id.eq(cat_id))
+            .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(2))
             .select(schema::category::item_id)
             .load::<i32>(&_connection)
@@ -588,7 +639,9 @@ impl Categories {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Service>(&_connection)
                 .expect("E.");
@@ -605,7 +658,9 @@ impl Categories {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Service>(&_connection)
                 .expect("E.");
@@ -652,7 +707,7 @@ impl Categories {
         let _connection = establish_connection();
         let _items: Vec<Store>;
         let ids = category
-            .filter(schema::category::categories_id.eq(cat_id))
+            .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(3))
             .select(schema::category::item_id)
             .load::<i32>(&_connection)
@@ -669,7 +724,9 @@ impl Categories {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                     schema::items::price,
                     schema::items::price_acc.nullable(),
                 ))
@@ -688,7 +745,9 @@ impl Categories {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                     schema::items::price,
                     schema::items::price_acc.nullable(),
                 ))
@@ -737,7 +796,7 @@ impl Categories {
         let _connection = establish_connection();
         let _items: Vec<Wiki>;
         let ids = category
-            .filter(schema::category::categories_id.eq(cat_id))
+            .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(4))
             .select(schema::category::item_id)
             .load::<i32>(&_connection)
@@ -754,7 +813,9 @@ impl Categories {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                     schema::items::created
                 ))
                 .load::<Wiki>(&_connection)
@@ -772,7 +833,9 @@ impl Categories {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                     schema::items::created
                 ))
                 .load::<Wiki>(&_connection)
@@ -820,7 +883,7 @@ impl Categories {
         let _connection = establish_connection();
         let _items: Vec<Work>;
         let ids = category
-            .filter(schema::category::categories_id.eq(cat_id))
+            .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(5))
             .select(schema::category::item_id)
             .load::<i32>(&_connection)
@@ -837,7 +900,9 @@ impl Categories {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::description.nullable()
+                    schema::items::title_en,
+                    schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Work>(&_connection)
                 .expect("E.");
@@ -854,7 +919,9 @@ impl Categories {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::description.nullable()
+                    schema::items::title_en,
+                    schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Work>(&_connection)
                 .expect("E.");
@@ -901,7 +968,7 @@ impl Categories {
         let _connection = establish_connection();
         let _items: Vec<Help>;
         let ids = category
-            .filter(schema::category::categories_id.eq(cat_id))
+            .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(6))
             .select(schema::category::item_id)
             .load::<i32>(&_connection)
@@ -916,7 +983,9 @@ impl Categories {
                     schema::items::id,
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::content
+                    schema::items::title_en,
+                    schema::items::content,
+                    schema::items::content_en,
                 ))
                 .load::<Help>(&_connection)
                 .expect("E.");
@@ -931,7 +1000,9 @@ impl Categories {
                     schema::items::id,
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::content
+                    schema::items::title_en,
+                    schema::items::content,
+                    schema::items::content_en,
                 ))
                 .load::<Help>(&_connection)
                 .expect("E.");
@@ -954,6 +1025,7 @@ impl Categories {
             .filter(schema::categories::types.eq(types))
             .select((
                 schema::categories::name,
+                schema::categories::name_en,
                 schema::categories::slug,
                 schema::categories::count,
                 schema::categories::id,
@@ -968,50 +1040,54 @@ impl Categories {
 #[derive(Insertable)]
 #[table_name="categories"]
 pub struct NewCategories {
-    pub name:        String,
-    pub description: Option<String>,
-    pub position:    i16,
-    pub image:       Option<String>,
-    pub count:       i16,
-    pub view:        i32,
-    pub height:      f64,
-    pub seconds:     i32,
-    pub types:       i16,
-    pub slug:        String,
-    pub now_u:       i16,
+    pub name:           String,
+    pub name_en:        String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub position:       i16,
+    pub image:          Option<String>,
+    pub count:          i16,
+    pub view:           i32,
+    pub height:         f64,
+    pub seconds:        i32,
+    pub types:          i16,
+    pub slug:           String,
 }
 
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="categories"]
 pub struct EditCategories {
-    pub name:        String,
-    pub description: Option<String>,
-    pub position:    i16,
-    pub image:       Option<String>,
-    pub slug:        String,
+    pub name:           String,
+    pub name_en:        String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub position:       i16,
+    pub image:          Option<String>,
+    pub slug:           String,
 }
 
-#[derive(Debug, Serialize, Clone, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Clone, Queryable, Identifiable)]
 #[belongs_to(User)]
 pub struct Item {
-    pub id:          i32,
-    pub title:       String,
-    pub description: Option<String>,
-    pub content:     Option<String>,
-    pub link:        Option<String>,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub price:       i32,
-    pub user_id:     i32,
-    pub created:     chrono::NaiveDateTime,
-    pub position:    i16,
-    pub view:        i32,
-    pub height:      f64,
-    pub seconds:     i32,
-    pub price_acc:   Option<i32>,
-    pub types:       i16,
-    pub slug:        String,
-    pub now_u:       i16,
+    pub id:             i32,
+    pub title:          String,
+    pub title_en:       String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub content:        Option<String>,
+    pub link:           Option<String>,
+    pub image:          Option<String>,
+    pub is_active:      bool,
+    pub price:          i32,
+    pub user_id:        i32,
+    pub created:        chrono::NaiveDateTime,
+    pub position:       i16,
+    pub view:           i32,
+    pub height:         f64,
+    pub seconds:        i32,
+    pub price_acc:      Option<i32>,
+    pub types:          i16,
+    pub slug:           String,
 }
 
 impl Item {
@@ -1050,7 +1126,8 @@ impl Item {
             .select((
                 schema::files::id, 
                 schema::files::src, 
-                schema::files::description.nullable()
+                schema::files::description.nullable(),
+                schema::files::description_en.nullable()
             ))
             .load::<SmallFile>(&_connection)
             .expect("E");
@@ -1061,7 +1138,8 @@ impl Item {
             .select((
                 schema::files::id, 
                 schema::files::src, 
-                schema::files::description.nullable()
+                schema::files::description.nullable(),
+                schema::files::description_en.nullable()
             ))
             .load::<SmallFile>(&_connection)
             .expect("E");
@@ -1072,7 +1150,8 @@ impl Item {
             .select((
                 schema::files::id, 
                 schema::files::src, 
-                schema::files::description.nullable()
+                schema::files::description.nullable(),
+                schema::files::description_en.nullable()
             ))
             .load::<SmallFile>(&_connection)
             .expect("E");
@@ -1083,7 +1162,8 @@ impl Item {
             .select((
                 schema::files::id, 
                 schema::files::src, 
-                schema::files::description.nullable()
+                schema::files::description.nullable(),
+                schema::files::description_en.nullable()
             ))
             .load::<SmallFile>(&_connection)
             .expect("E");
@@ -1101,19 +1181,34 @@ impl Item {
             .load::<i32>(&_connection)
             .expect("E");
     }
-    pub fn get_100_description(&self) -> String {
+    pub fn get_100_description(&self) -> (String, String) {
+        let description: String;
+        let description_en: String;
         if self.description.is_some() {
             let _content = self.description.as_deref().unwrap();
             if _content.len() > 100 {
-                return _content[..100].to_string();
+                description = _content[..100].to_string();
             }
             else {
-                return _content.to_string();
+                description = _content.to_string();
             }
         }
         else {
-            return "".to_string();
+            description = "".to_string();
         }
+        if self.description_en.is_some() {
+            let _content = self.description_en.as_deref().unwrap();
+            if _content.len() > 100 {
+                description_en = _content[..100].to_string();
+            }
+            else {
+                description_en = _content.to_string();
+            }
+        }
+        else {
+            description_en = "".to_string();
+        }
+        return (description, description_en);
     }
 
     pub fn get_categories(&self) -> Result<Vec<SmallCat>, Error> {
@@ -1125,7 +1220,7 @@ impl Item {
         let ids = category
             .filter(schema::category::item_id.eq(self.id))
             .filter(schema::category::types.eq(self.types))
-            .select(schema::category::categories_id)
+            .select(schema::category::category_id)
             .load::<i32>(&_connection)
             .expect("E");
 
@@ -1133,6 +1228,7 @@ impl Item {
             .filter(schema::categories::id.eq_any(ids))
             .select((
                 schema::categories::name,
+                schema::categories::name_en,
                 schema::categories::slug,
                 schema::categories::count
             ))
@@ -1150,7 +1246,7 @@ impl Item {
         let ids = category
             .filter(schema::category::item_id.eq(self.id))
             .filter(schema::category::types.eq(self.types))
-            .select(schema::category::categories_id)
+            .select(schema::category::category_id)
             .load::<i32>(&_connection)
             .expect("E");
 
@@ -1176,7 +1272,11 @@ impl Item {
             .expect("E");
         let _tags = tags
             .filter(schema::tags::id.eq_any(_tag_items))
-            .select((schema::tags::name, schema::tags::count))
+            .select((
+                schema::tags::name,
+                schema::tags::name_en,
+                schema::tags::count
+            ))
             .load::<SmallTag>(&_connection)
             .expect("E");
         return Ok(_tags);
@@ -1221,8 +1321,10 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::created,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Blog>(&_connection)
                 .expect("E.");
@@ -1239,8 +1341,10 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::created,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Blog>(&_connection)
                 .expect("E.");
@@ -1258,8 +1362,11 @@ impl Item {
         if is_admin {
              return items
                 .filter(schema::items::title.ilike(&q))
+                .or_filter(schema::items::title_en.ilike(&q))
                 .or_filter(schema::items::description.ilike(&q))
+                .or_filter(schema::items::description_en.ilike(&q))
                 .or_filter(schema::items::content.ilike(&q))
+                .or_filter(schema::items::content_en.ilike(&q))
                 .filter(schema::items::types.eq(1))
                 .order(schema::items::created.desc())
                 .limit(limit)
@@ -1270,16 +1377,21 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::created,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Blog>(&_connection)
                 .expect("E.");
         } else {
             return items
                 .filter(schema::items::title.ilike(&q))
+                .or_filter(schema::items::title_en.ilike(&q))
                 .or_filter(schema::items::description.ilike(&q))
+                .or_filter(schema::items::description_en.ilike(&q))
                 .or_filter(schema::items::content.ilike(&q))
+                .or_filter(schema::items::content_en.ilike(&q))
                 .filter(schema::items::types.eq(1))
                 .filter(schema::items::is_active.eq(true))
                 .order(schema::items::created.desc())
@@ -1291,8 +1403,10 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::created,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Blog>(&_connection)
                 .expect("E.");
@@ -1319,7 +1433,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Service>(&_connection)
                 .expect("E.");
@@ -1336,7 +1452,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 
                 .load::<Service>(&_connection)
@@ -1355,8 +1473,11 @@ impl Item {
         if is_admin {
              return items
                 .filter(schema::items::title.ilike(&q))
+                .or_filter(schema::items::title_en.ilike(&q))
                 .or_filter(schema::items::description.ilike(&q))
+                .or_filter(schema::items::description_en.ilike(&q))
                 .or_filter(schema::items::content.ilike(&q))
+                .or_filter(schema::items::content_en.ilike(&q))
                 .filter(schema::items::types.eq(2))
                 .order(schema::items::created.desc())
                 .limit(limit)
@@ -1367,15 +1488,20 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Service>(&_connection)
                 .expect("E.");
         } else {
             return items
                 .filter(schema::items::title.ilike(&q))
+                .or_filter(schema::items::title_en.ilike(&q))
                 .or_filter(schema::items::description.ilike(&q))
+                .or_filter(schema::items::description_en.ilike(&q))
                 .or_filter(schema::items::content.ilike(&q))
+                .or_filter(schema::items::content_en.ilike(&q))
                 .filter(schema::items::types.eq(2))
                 .filter(schema::items::is_active.eq(true))
                 .order(schema::items::created.desc())
@@ -1387,7 +1513,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Service>(&_connection)
                 .expect("E.");
@@ -1410,13 +1538,15 @@ impl Item {
                   .offset(offset)
                   .select((
                         schema::items::id,
-                      schema::items::slug,
-                      schema::items::image.nullable(),
-                      schema::items::is_active,
-                      schema::items::title,
-                      schema::items::description.nullable(),
-                      schema::items::price,
-                      schema::items::price_acc.nullable(),
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::title_en,
+                        schema::items::description.nullable(),
+                        schema::items::description_en.nullable(),
+                        schema::items::price,
+                        schema::items::price_acc.nullable(),
                   ))
                   .load::<Store>(&_connection)
                   .expect("E.");
@@ -1433,7 +1563,9 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
+                      schema::items::title_en,
                       schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                       schema::items::price,
                       schema::items::price_acc.nullable(),
                   ))
@@ -1453,8 +1585,11 @@ impl Item {
           if is_admin {
                return items
                   .filter(schema::items::title.ilike(&q))
+                  .or_filter(schema::items::title_en.ilike(&q))
                   .or_filter(schema::items::description.ilike(&q))
+                  .or_filter(schema::items::description_en.ilike(&q))
                   .or_filter(schema::items::content.ilike(&q))
+                  .or_filter(schema::items::content_en.ilike(&q))
                   .filter(schema::items::types.eq(3))
                   .order(schema::items::created.desc())
                   .limit(limit)
@@ -1465,7 +1600,9 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
+                      schema::items::title_en,
                       schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                       schema::items::price,
                       schema::items::price_acc.nullable(),
                   ))
@@ -1474,8 +1611,11 @@ impl Item {
           } else {
               return items
                   .filter(schema::items::title.ilike(&q))
+                  .or_filter(schema::items::title_en.ilike(&q))
                   .or_filter(schema::items::description.ilike(&q))
+                  .or_filter(schema::items::description_en.ilike(&q))
                   .or_filter(schema::items::content.ilike(&q))
+                  .or_filter(schema::items::content_en.ilike(&q))
                   .filter(schema::items::types.eq(3))
                   .filter(schema::items::is_active.eq(true))
                   .order(schema::items::created.desc())
@@ -1487,7 +1627,9 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
+                      schema::items::title_en,
                       schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                       schema::items::price,
                       schema::items::price_acc.nullable(),
                   ))
@@ -1516,7 +1658,9 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
-                      schema::items::description.nullable()
+                      schema::items::title_en,
+                      schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                   ))
                   .load::<Work>(&_connection)
                   .expect("E.");
@@ -1533,7 +1677,9 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
-                      schema::items::description.nullable()
+                      schema::items::title_en,
+                      schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                   ))
                   .load::<Work>(&_connection)
                   .expect("E.");
@@ -1551,8 +1697,11 @@ impl Item {
           if is_admin {
                return items
                   .filter(schema::items::title.ilike(&q))
+                  .or_filter(schema::items::title_en.ilike(&q))
                   .or_filter(schema::items::description.ilike(&q))
+                  .or_filter(schema::items::description_en.ilike(&q))
                   .or_filter(schema::items::content.ilike(&q))
+                  .or_filter(schema::items::content_en.ilike(&q))
                   .filter(schema::items::types.eq(5))
                   .order(schema::items::created.desc())
                   .limit(limit)
@@ -1563,15 +1712,20 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
-                      schema::items::description.nullable()
+                      schema::items::title_en,
+                      schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                   ))
                   .load::<Work>(&_connection)
                   .expect("E.");
           } else {
               return items
                   .filter(schema::items::title.ilike(&q))
+                  .or_filter(schema::items::title_en.ilike(&q))
                   .or_filter(schema::items::description.ilike(&q))
+                  .or_filter(schema::items::description_en.ilike(&q))
                   .or_filter(schema::items::content.ilike(&q))
+                  .or_filter(schema::items::content_en.ilike(&q))
                   .filter(schema::items::types.eq(5))
                   .filter(schema::items::is_active.eq(true))
                   .order(schema::items::created.desc())
@@ -1583,7 +1737,9 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
-                      schema::items::description.nullable()
+                      schema::items::title_en,
+                      schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                   ))
                   .load::<Work>(&_connection)
                   .expect("E.");
@@ -1610,7 +1766,9 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
+                      schema::items::title_en,
                       schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                       schema::items::created,
                   ))
                   .load::<Wiki>(&_connection)
@@ -1628,7 +1786,9 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
+                      schema::items::title_en,
                       schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                       schema::items::created
                   ))
                   .load::<Wiki>(&_connection)
@@ -1647,8 +1807,11 @@ impl Item {
           if is_admin {
                return items
                   .filter(schema::items::title.ilike(&q))
+                  .or_filter(schema::items::title_en.ilike(&q))
                   .or_filter(schema::items::description.ilike(&q))
+                  .or_filter(schema::items::description_en.ilike(&q))
                   .or_filter(schema::items::content.ilike(&q))
+                  .or_filter(schema::items::content_en.ilike(&q))
                   .filter(schema::items::types.eq(4))
                   .order(schema::items::created.desc())
                   .limit(limit)
@@ -1659,7 +1822,9 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
+                      schema::items::title_en,
                       schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                       schema::items::created
                   ))
                   .load::<Wiki>(&_connection)
@@ -1667,8 +1832,11 @@ impl Item {
           } else {
               return items
                   .filter(schema::items::title.ilike(&q))
+                  .or_filter(schema::items::title_en.ilike(&q))
                   .or_filter(schema::items::description.ilike(&q))
+                  .or_filter(schema::items::description_en.ilike(&q))
                   .or_filter(schema::items::content.ilike(&q))
+                  .or_filter(schema::items::content_en.ilike(&q))
                   .filter(schema::items::types.eq(4))
                   .filter(schema::items::is_active.eq(true))
                   .order(schema::items::created.desc())
@@ -1680,7 +1848,9 @@ impl Item {
                       schema::items::image.nullable(),
                       schema::items::is_active,
                       schema::items::title,
+                      schema::items::title_en,
                       schema::items::description.nullable(),
+                      schema::items::description_en.nullable(),
                       schema::items::created,
                   ))
                   .load::<Wiki>(&_connection)
@@ -1706,7 +1876,9 @@ impl Item {
                     schema::items::id,
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::content
+                    schema::items::title_en,
+                    schema::items::content,
+                    schema::items::content_en,
                 ))
                 .load::<Help>(&_connection)
                 .expect("E.");
@@ -1721,7 +1893,9 @@ impl Item {
                     schema::items::id,
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::content
+                    schema::items::title_en,
+                    schema::items::content,
+                    schema::items::content_en,
                 ))
                 .load::<Help>(&_connection)
                 .expect("E.");
@@ -1740,8 +1914,11 @@ impl Item {
         if is_admin {
              return items
                 .filter(schema::items::title.ilike(&q))
+                .or_filter(schema::items::title_en.ilike(&q))
                 .or_filter(schema::items::description.ilike(&q))
+                .or_filter(schema::items::description_en.ilike(&q))
                 .or_filter(schema::items::content.ilike(&q))
+                .or_filter(schema::items::content_en.ilike(&q))
                 .filter(schema::items::types.eq(6))
                 .order(schema::items::created.desc())
                 .limit(limit)
@@ -1750,15 +1927,20 @@ impl Item {
                     schema::items::id,
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::content,
+                    schema::items::content_en,
                 ))
                 .load::<Help>(&_connection)
                 .expect("E.");
         } else {
             return items
                 .filter(schema::items::title.ilike(&q))
+                .or_filter(schema::items::title_en.ilike(&q))
                 .or_filter(schema::items::description.ilike(&q))
+                .or_filter(schema::items::description_en.ilike(&q))
                 .or_filter(schema::items::content.ilike(&q))
+                .or_filter(schema::items::content_en.ilike(&q))
                 .filter(schema::items::is_active.eq(true))
                 .order(schema::items::created.desc())
                 .limit(limit)
@@ -1767,7 +1949,9 @@ impl Item {
                     schema::items::id,
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::content
+                    schema::items::title_en,
+                    schema::items::content,
+                    schema::items::content_en,
                 ))
                 .load::<Help>(&_connection)
                 .expect("E.");
@@ -1820,8 +2004,10 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::created,
-                    schema::items::description.nullable()
+                    schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Blog>(&_connection)
                 .expect("E.");
@@ -1839,8 +2025,10 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::created,
-                    schema::items::description.nullable()
+                    schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Blog>(&_connection)
                 .expect("E.");
@@ -1893,7 +2081,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::description.nullable()
+                    schema::items::title_en,
+                    schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Service>(&_connection)
                 .expect("E.");
@@ -1911,7 +2101,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::description.nullable()
+                    schema::items::title_en,
+                    schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Service>(&_connection)
                 .expect("E.");
@@ -1964,7 +2156,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                     schema::items::price,
                     schema::items::price_acc.nullable()
                 ))
@@ -1984,7 +2178,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                     schema::items::price,
                     schema::items::price_acc.nullable()
                 ))
@@ -2039,7 +2235,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                     schema::items::created,
                 ))
                 .load::<Wiki>(&_connection)
@@ -2058,7 +2256,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
+                    schema::items::title_en,
                     schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                     schema::items::created,
                 ))
                 .load::<Wiki>(&_connection)
@@ -2112,7 +2312,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::description.nullable()
+                    schema::items::title_en,
+                    schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Work>(&_connection)
                 .expect("E.");
@@ -2130,7 +2332,9 @@ impl Item {
                     schema::items::image.nullable(),
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::description.nullable()
+                    schema::items::title_en,
+                    schema::items::description.nullable(),
+                    schema::items::description_en.nullable(),
                 ))
                 .load::<Work>(&_connection)
                 .expect("E.");
@@ -2181,7 +2385,9 @@ impl Item {
                     schema::items::id,
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::content.nullable()
+                    schema::items::title_en,
+                    schema::items::content.nullable(),
+                    schema::items::content_en.nullable(),
                 )) 
                 .load::<Help>(&_connection)
                 .expect("E.");
@@ -2197,7 +2403,9 @@ impl Item {
                     schema::items::id,
                     schema::items::is_active,
                     schema::items::title,
-                    schema::items::content.nullable()
+                    schema::items::title_en,
+                    schema::items::content.nullable(),
+                    schema::items::content_en.nullable(),
                 ))
                 .load::<Help>(&_connection)
                 .expect("E.");
@@ -2293,58 +2501,63 @@ impl Item {
 }
 
 #[derive(Serialize, Insertable)]
-#[table_name="items"]
+#[table_name="items"] 
 pub struct NewItem {
-    pub title:       String,
-    pub description: Option<String>,
-    pub content:     Option<String>,
-    pub link:        Option<String>,
-    pub image:       Option<String>,
-    pub is_active:   bool,
-    pub price:       i32,
-    pub user_id:     i32,
-    pub created:     chrono::NaiveDateTime,
-    pub position:    i16,
-    pub view:        i32,
-    pub height:      f64,
-    pub seconds:     i32,
-    pub price_acc:   Option<i32>,
-    pub types:       i16,
-    pub slug:        String,
-    pub now_u:       i16,
+    pub title:          String,
+    pub title_en:       String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub content:        Option<String>,
+    pub content_en:     Option<String>,
+    pub link:           Option<String>,
+    pub image:          Option<String>,
+    pub is_active:      bool,
+    pub price:          i32,
+    pub user_id:        i32,
+    pub created:        chrono::NaiveDateTime,
+    pub position:       i16,
+    pub view:           i32,
+    pub height:         f64,
+    pub seconds:        i32,
+    pub price_acc:      Option<i32>,
+    pub types:          i16,
+    pub slug:           String,
 }
 
 impl NewItem {
     pub fn create (
-        title:       String,
-        description: Option<String>,
-        link:        Option<String>,
-        image:       Option<String>,
-        user_id:     i32,
-        position:    i16,
-        types:       i16,
-        slug:        String
+        title:          String,
+        title_en:       String,
+        description:    Option<String>,
+        description_en: Option<String>,
+        link:           Option<String>,
+        image:          Option<String>,
+        user_id:        i32,
+        position:       i16,
+        types:          i16,
+        slug:           String
     ) -> Self {
         use chrono::Duration;
 
         NewItem {
-            title:       title,
-            description: description,
-            content:     None,
-            link:        link,
-            image:       image,
-            is_active:   false,
-            price:       0,
-            user_id:     user_id,
-            created:     chrono::Local::now().naive_utc() + Duration::hours(3),
-            position:    position,
-            view:        0,
-            height:      0.0,
-            seconds:     0,
-            price_acc:   None,
-            types:       types,
-            slug:        slug,
-            now_u:       0,
+            title:          title,
+            title_en:       title_en,
+            description:    description,
+            description_en: description_en,
+            content:        None,
+            link:           link,
+            image:          image,
+            is_active:      false,
+            price:          0,
+            user_id:        user_id,
+            created:        chrono::Local::now().naive_utc() + Duration::hours(3),
+            position:       position,
+            view:           0,
+            height:         0.0,
+            seconds:        0,
+            price_acc:      None,
+            types:          types,
+            slug:           slug,
         }
     }
 }
@@ -2352,12 +2565,14 @@ impl NewItem {
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="items"]
 pub struct EditItem {
-    pub title:       String,
-    pub description: Option<String>,
-    pub link:        Option<String>,
-    pub image:       Option<String>,
-    pub position:    i16,
-    pub slug:        String,
+    pub title:          String,
+    pub title_en:       String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub link:           Option<String>,
+    pub image:          Option<String>,
+    pub position:       i16,
+    pub slug:           String,
 }
 
 
@@ -2373,24 +2588,24 @@ pub struct EditItem {
 // 8. веб-сервис
 // 9. язык / технология
 // 10. опция
-#[derive(Identifiable, Queryable, Associations)]
+#[derive(Identifiable, Queryable)]
 #[table_name="category"]
 pub struct Category {
-    pub id:            i32,
-    pub categories_id: i32,
-    pub item_id:       i32,
-    pub types:         i16,
+    pub id:          i32,
+    pub category_id: i32,
+    pub item_id:     i32,
+    pub types:       i16,
 }
 
 #[derive(Insertable)]
 #[table_name="category"]
 pub struct NewCategory {
-    pub categories_id: i32,
-    pub item_id:       i32,
-    pub types:         i16,
+    pub category_id: i32,
+    pub item_id:     i32,
+    pub types:       i16,
 }
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Queryable, Identifiable)]
 pub struct ItemComment {
     pub id:        i32,
     pub comment:   String,

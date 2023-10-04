@@ -72,11 +72,10 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
 
             let _stats = stat_pages
                 .filter(schema::stat_pages::types.eq(7))
-                .limit(1)
-                .load::<StatPage>(&_connection)
-                .expect("E");
-            if _stats.len() > 0 {
-                _stat = _stats.into_iter().nth(0).unwrap();
+                .first::<StatPage>(&_connection);
+                
+            if _stats.is_ok() {
+                _stat = _stats.expect("E");
             }
             else {
                 use crate::models::NewStatPage;
@@ -85,7 +84,6 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
                     view:    0,
                     height:  0.0,
                     seconds: 0,
-                    now_u:   0,
                 };
                 _stat = diesel::insert_into(schema::stat_pages::table)
                     .values(&form)
@@ -170,7 +168,6 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
                     view:    0,
                     height:  0.0,
                     seconds: 0,
-                    now_u:   0,
                 };
                 _stat = diesel::insert_into(schema::stat_pages::table)
                     .values(&form)
@@ -241,7 +238,6 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
                 view:    0,
                 height:  0.0,
                 seconds: 0,
-                now_u:   0,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
@@ -300,20 +296,22 @@ fn find_user(data: LoginUser2) -> Result<SessionUser, AuthError> {
     if let Some(user) = items.pop() {
         if let Ok(matching) = verify(&user.password, &data.password) {
             if matching {
-                let __user = SessionUser {
+                let _user = SessionUser {
                     id:       user.id,
                     username: user.username,
                 };
-                return Ok(__user.into());
+                return Ok(_user.into());
             }
         }
     }
     Err(AuthError::NotFound(String::from("User not found")))
 }
 
-fn handle_sign_in(data: LoginUser2,
-                session: &Session,
-                req: &HttpRequest) -> Result<HttpResponse, AuthError> {
+fn handle_sign_in (
+    data: LoginUser2,
+    session: &Session,
+    req: &HttpRequest
+) -> Result<HttpResponse, AuthError> {
     use crate::utils::{is_json_request, set_current_user};
 
     let _connection = establish_connection();
@@ -373,8 +371,8 @@ pub async fn login(mut payload: Multipart, session: Session, req: HttpRequest) -
     }
     else {
         let form = login_form(payload.borrow_mut()).await;
-        println!("{:?}", form.username.clone());
-        println!("{:?}", form.password.clone());
+        //println!("{:?}", form.username.clone());
+        //println!("{:?}", form.password.clone());
         handle_sign_in(form, &session, &req)
     }
 }
@@ -430,9 +428,6 @@ pub async fn process_signup(session: Session, mut payload: Multipart) -> impl Re
             image:    None,
             perm:     1,
         };
-        println!("{:?}", form.username.clone());
-        println!("{:?}", form.email.clone());
-        println!("{:?}", form.password.clone());
 
         let _new_user = diesel::insert_into(schema::users::table)
             .values(&form_user)

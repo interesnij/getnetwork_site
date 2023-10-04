@@ -54,9 +54,7 @@ pub fn tag_routes(config: &mut web::ServiceConfig) {
 }
 
 pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     let template_types = get_template(&req);
     if is_ajax == 0 {
         get_first_load_page (
@@ -70,10 +68,8 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
         ).await
     }
     else {
-        use schema::tags::dsl::tags;
-
         let _connection = establish_connection();
-        let all_tags = tags
+        let all_tags = schema::tags::table
             .load::<Tag>(&_connection)
             .expect("Error.");
 
@@ -126,19 +122,17 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.is_superuser() {
-            use crate::utils::category_form;
-
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
+            let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
             let new_tag = NewTag {
                 name:     form.name.clone(),
+                name_en:  form.name_en.clone(),
                 position: form.position,
                 count:    0,
                 user_id:  _request_user.id,
                 view:     0,
                 height:   0.0,
                 seconds:  0,
-                now_u:    0,
             };
             let _new_tag = diesel::insert_into(schema::tags::table)
                 .values(&new_tag)
@@ -156,9 +150,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
     let _connection = establish_connection();
     let template_types = get_template(&req);
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let _tag_id: String = _id.to_string();
     let _tag = tags
-        .filter(schema::tags::name.eq(&_tag_id))
+        .filter(schema::tags::name.eq(_id.to_string()))
         .first::<Tag>(&_connection)
         .expect("E");
 
@@ -195,7 +188,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                 4 => wiki_stack.push(_tag_item.item_id),
                 5 => work_stack.push(_tag_item.item_id),
                 6 => help_stack.push(_tag_item.item_id),
-                _ => println!("no value"),
+                _ => 0,
             };
         };
 
@@ -418,9 +411,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
     let template_types = get_template(&req);
-    let _tag_id: String = _id.to_string();
     let _tag = tags
-        .filter(schema::tags::name.eq(&_tag_id))
+        .filter(schema::tags::name.eq(_id.to_string()))
         .first::<Tag>(&_connection)
         .expect("E");
 
@@ -563,10 +555,9 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let _tag_id: String = _id.clone();
     let template_types = get_template(&req);
     let _tag = tags
-        .filter(schema::tags::name.eq(&_tag_id))
+        .filter(schema::tags::name.eq(_id.clone()))
         .first::<Tag>(&_connection)
         .expect("E");
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
@@ -1328,7 +1319,6 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                 view:    0,
                 height:  0.0,
                 seconds: 0,
-                now_u:   0,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
@@ -1521,15 +1511,15 @@ pub async fn edit_tag(session: Session, mut payload: Multipart, _id: web::Path<i
             use crate::utils::category_form;
 
             let _connection = establish_connection();
-            let _tag_id : i32 = *_id;
             let _tag = tags
-                .filter(schema::tags::id.eq(_tag_id))
+                .filter(schema::tags::id.eq(*_id))
                 .first::<Tag>(&_connection)
                 .expect("E");
 
             let form = category_form(payload.borrow_mut(), _request_user.id).await;
             let _new_tag = EditTag {
                 name:     form.name.clone(),
+                name_en:  form.name_en.clone(),
                 position: form.position,
             };
 

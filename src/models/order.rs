@@ -15,20 +15,22 @@ use crate::schema::{
 use crate::utils::establish_connection;
 
 
-#[derive(Debug, Serialize, Identifiable, Queryable, Associations)]
+#[derive(Debug, Serialize, Identifiable, Queryable)]
 #[table_name="orders"]
 pub struct Order {
-    pub id:          i32,
-    pub title:       String,
-    pub types:       i16,
-    pub object_id:   i32,
-    pub username:    String,
-    pub email:       String,
-    pub description: Option<String>,
-    pub created:     chrono::NaiveDateTime,
-    pub user_id:     i32,
-    pub price:       i32,
-    pub price_acc:   Option<i32>,
+    pub id:             i32,
+    pub title:          String,
+    pub title_en:       String,
+    pub types:          i16,
+    pub object_id:      i32,
+    pub username:       String,
+    pub email:          String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub created:        chrono::NaiveDateTime,
+    pub user_id:        i32,
+    pub price:          i32,
+    pub price_acc:      Option<i32>,
 }
 
 impl Order {
@@ -151,35 +153,41 @@ impl Order {
 #[derive(Insertable)]
 #[table_name="orders"]
 pub struct NewOrder {
-    pub title:       String,
-    pub types:       i16,
-    pub object_id:   i32,
-    pub username:    String,
-    pub email:       String,
-    pub description: Option<String>,
-    pub created:     chrono::NaiveDateTime,
-    pub user_id:     i32,
-    pub price:       i32,
+    pub title:          String,
+    pub title_en:       String,
+    pub types:          i16,
+    pub object_id:      i32,
+    pub username:       String,
+    pub email:          String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
+    pub created:        chrono::NaiveDateTime,
+    pub user_id:        i32,
+    pub price:          i32,
 }
 impl NewOrder {
     pub fn create (
-        title:       String,
-        types:       i16,
-        object_id:   i32,
-        username:    String,
-        email:       String,
-        description: Option<String>,
-        user_id:     i32,
+        title:          String,
+        title_en:       String,
+        types:          i16,
+        object_id:      i32,
+        username:       String,
+        email:          String,
+        description:    Option<String>,
+        description_en: Option<String>,
+        user_id:        i32,
     ) -> Self {
         use chrono::Duration;
 
         NewOrder {
-            title:       title,
-            types:       types,
-            object_id:   object_id,
-            username:    username,
-            email:       email,
-            description: description,
+            title:          title,
+            title_en:       title,
+            types:          types,
+            object_id:      object_id,
+            username:       username,
+            email:          email,
+            description:    description,
+            description_en: description_en,
             created:     chrono::Local::now().naive_utc() + Duration::hours(3),
             user_id:     user_id,
             price:       0,
@@ -189,13 +197,14 @@ impl NewOrder {
 #[derive(Queryable, Serialize, Deserialize, AsChangeset, Debug)]
 #[table_name="orders"]
 pub struct EditOrder {
-    pub username:    String,
-    pub email:       String,
-    pub description: Option<String>,
+    pub username:       String,
+    pub email:          String,
+    pub description:    Option<String>,
+    pub description_en: Option<String>,
 }
 
 
-#[derive(Debug, Serialize, Queryable, Identifiable, Associations)]
+#[derive(Debug, Serialize, Queryable, Identifiable)]
 pub struct OrderFile {
     pub id:       i32,
     pub order_id: i32,

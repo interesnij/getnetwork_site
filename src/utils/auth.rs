@@ -72,51 +72,26 @@ pub fn get_current_user(session: &Session) -> Result<SessionUser, AuthError> {
 }
 
 
-pub async fn get_cookie_user_id(req: &HttpRequest) -> i32 {
+fn get_cookie_user_id<'a>(req: &'a HttpRequest) -> i32 {
+    let cookie = req.headers().get("cookie")?.to_str().ok();
     let mut user_id = 0;
-    for header in req.headers().into_iter() {
-        if header.0 == "cookie" {
-            let str_cookie = header.1.to_str().unwrap();
-            let _cookie: Vec<&str> = str_cookie.split(";").collect();
-            for c in _cookie.iter() {
-                let split_c: Vec<&str> = c.split("=").collect();
-                if split_c[0] == "user" {
-                    user_id = split_c[1].parse().unwrap();
-                }
-                println!("name {:?}", split_c[0].trim());
-                println!("value {:?}", split_c[1]);
-            }
+    for c in _cookie.iter() {
+        let split_c: Vec<&str> = c.split("=").collect();
+        if split_c[0] == "user" {
+            user_id = split_c[1].parse().unwrap();
         }
-    };
+    }
     user_id
 }
-pub async fn get_or_create_cookie_user_id(conn: ConnectionInfo, req: &HttpRequest) -> i32 {
-    let mut user_id = 0;
-    for header in req.headers().into_iter() {
-        if header.0 == "cookie" {
-            let str_cookie = header.1.to_str().unwrap();
-            let _cookie: Vec<&str> = str_cookie.split(";").collect();
-            for c in _cookie.iter() {
-                let split_c: Vec<&str> = c.split("=").collect();
-                if split_c[0] == "user" {
-                    user_id = split_c[1].parse().unwrap();
-                }
-                println!("name {:?}", split_c[0].trim());
-                println!("value {:?}", split_c[1]);
-            }
-        }
-    };
-    if user_id == 0 {
-        use crate::views::create_c_user;
 
-        let user = create_c_user(conn, &req).await;
-        user_id = user.id;
+pub async fn get_or_create_cookie_user_id(conn: ConnectionInfo, req: &HttpRequest) -> i32 {
+    let user_id = get_cookie_user_id(&req);
+    if user_id != 0 {
+        let user = crate::views::get_c_user(conn, user_id, &req).await;
+        return user.id;
     }
     else {
-        use crate::views::get_c_user;
-
-        let user = get_c_user(conn, user_id, &req).await;
-        user_id = user.id;
+        let user = crate::views::create_c_user(conn, &req).await;
+        return user.id;
     }
-    user_id
 }

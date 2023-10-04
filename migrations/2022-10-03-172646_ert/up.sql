@@ -1,4 +1,0 @@
--- Your SQL goes here
-
-ALTER TABLE tags ADD COLUMN now_u
-SMALLINT NOT NULL DEFAULT 0;

@@ -40,16 +40,13 @@ pub fn service_routes(config: &mut web::ServiceConfig) {
 
 
 pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Path<(String,String)>) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-    use schema::items::dsl::items;
-
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     let _connection = establish_connection();
     let template_types = get_template(&req);
     let _item_id: String = param.1.clone();
     let _cat_id: String = param.0.clone();
 
-    let _item = items
+    let _item = items::items::table
         .filter(schema::items::slug.eq(&_item_id))
         .first::<Item>(&_connection)
         .expect("E");
@@ -97,9 +94,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            if _item.is_active == false && _request_user.perm < 10 {
-                use crate::utils::get_private_page;
-                get_private_page (
+            if !_item.is_active && _request_user.perm < 10 {
+                crate::utils::get_private_page (
                     is_ajax,
                     _request_user,
                     is_desctop,
@@ -171,8 +167,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
         }
         else {
             if _item.is_active == false {
-                use crate::utils::get_anon_private_page;
-                get_anon_private_page (
+                crate::utils::get_anon_private_page (
                     is_ajax,
                     is_desctop,
                     _item.title.clone() + &" | Услуга".to_string(),
@@ -244,15 +239,15 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
     use crate::schema::categories::dsl::categories;
     use crate::utils::get_device_and_ajax;
 
-    let _cat_id: String = _id.clone();
     let _connection = establish_connection();
     let template_types = get_template(&req);
 
     let _category = categories
-        .filter(schema::categories::slug.eq(&_cat_id))
+        .filter(schema::categories::slug.eq(*_id))
         .filter(schema::categories::types.eq(2))
         .select((
             schema::categories::name,
+            schema::categories::name_en,
             schema::categories::slug,
             schema::categories::count,
             schema::categories::id,
@@ -260,7 +255,6 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             schema::categories::view,
             schema::categories::height,
             schema::categories::seconds,
-            schema::categories::now_u,
         ))
         .first::<CatDetail>(&_connection)
         .expect("E");
@@ -420,10 +414,8 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
 }
 
 pub async fn service_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-
     let template_types = get_template(&req);
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -454,7 +446,6 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
                 view:    0,
                 height:  0.0,
                 seconds: 0,
-                now_u:   0,
             };
             _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)

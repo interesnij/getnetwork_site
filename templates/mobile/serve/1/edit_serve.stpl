@@ -50,9 +50,9 @@
             </div>
             <div class="mb-20 mb-md-10">
               <label>Категория</label>
-              <select class="input-md form-control" data-cat-id="<%= object.serve_categories %>" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
+              <select class="input-md form-control" data-cat-id="<%= object.category_id %>" name="serve_categories" data-live-search="true" tabindex="-1" aria-hidden="true">
                 <% for cat in serve_cats.iter() { %>
-                  <option <% if cat.id == object.serve_categories { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
+                  <option <% if cat.id == object.category_id { %>selected=""<% } %> value="<%= cat.id %>"><%= cat.name %></option>
                 <% } %>
               </select>
             </div>

@@ -239,11 +239,10 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let template_types = get_template(&req);
     let _connection = establish_connection();
-    let _order_id: i32 = *_id;
     let user_id = get_cookie_user_id(&req).await;
 
     let _order = orders
-        .filter(schema::orders::id.eq(&_order_id))
+        .filter(schema::orders::id.eq(*_id))
         .first::<Order>(&_connection)
         .expect("E");
     if is_ajax == 0 {
@@ -264,7 +263,7 @@ pub async fn get_order_page(session: Session, req: HttpRequest, _id: web::Path<i
         use schema::order_files::dsl::order_files;
 
         let _files = order_files
-            .filter(schema::order_files::order_id.eq(&_order_id))
+            .filter(schema::order_files::order_id.eq(*_id))
             .load::<OrderFile>(&_connection)
             .expect("E");
 
@@ -388,11 +387,13 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
         let form = order_form(payload.borrow_mut(), user_id).await;
         let new_order = NewOrder::create (
             form.title.clone(),
+            form.title_en.clone(),
             form.types,
             form.object_id,
             form.username.clone(),
             form.email.clone(),
             form.description.clone(),
+            form.description_en,
             user_id,
         );
 
@@ -414,9 +415,9 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
 
         // создаем опции услуги и записываем id опций в вектор.
         let mut serve_ids = Vec::new();
-        for serve_id in form.serve_list.iter() {
+        for serve_id in form.serve_list.into_iter() {
             let new_serve_form = NewServeItems {
-                serve_id: *serve_id,
+                serve_id: serve_id,
                 item_id:  form.object_id,
                 types:    form.types,
             };
@@ -424,7 +425,7 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
                 .values(&new_serve_form)
                 .execute(&_connection)
                 .expect("Error.");
-            serve_ids.push(*serve_id);
+            serve_ids.push(serve_id);
         }
 
         // получаем опции, чтобы создать связи с их тех. категорией.
@@ -437,7 +438,7 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
         let mut tech_cat_ids = Vec::new();
         let mut order_price = 0;
         for _serve in _serves.iter() {
-            if !tech_cat_ids.iter().any(|&i| i==_serve.tech_cat_id) {
+            if !tech_cat_ids.into_iter().any(|i| i==_serve.tech_cat_id) {
                 tech_cat_ids.push(_serve.tech_cat_id);
             }
             order_price += _serve.price;
@@ -457,7 +458,7 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
         }
 
         // фух. Связи созданы все, но надо еще посчитать цену
-        // услуги для калькулятора. Как? А  это будет сумма всех
+        // услуги для калькулятора. Как? А это будет сумма всех
         // цен выбранных опций.
         let price_acc = get_price_acc_values(&order_price);
         diesel::update(&_order)
@@ -465,19 +466,16 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
                 schema::orders::price.eq(order_price),
                 schema::orders::price_acc.eq(price_acc),
             ))
-            .get_result::<Order>(&_connection)
+            .execute(&_connection)
             .expect("Error.");
     }
     HttpResponse::Ok()
 }
 
 pub async fn delete_order(req: HttpRequest, _id: web::Path<i32>) -> impl Responder {
-    use schema::orders::dsl::orders;
-
-    let _order_id: i32 = *_id;
     let _connection = establish_connection();
-    let _order = orders
-        .filter(schema::orders::id.eq(&_order_id))
+    let _order = schema::orders::table
+        .filter(schema::orders::id.eq(*_id))
         .first::<Order>(&_connection)
         .expect("E");
 
