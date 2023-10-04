@@ -163,7 +163,7 @@ pub struct NewServeCategories {
 /////// Serve ////// 
 #[derive(Debug, Serialize, Clone, Identifiable)]
 #[table_name="serve"]  
-pub struct Serve {
+pub struct Serve { 
     pub id:             i32,
     pub name:           String,
     pub name_en:        String,
