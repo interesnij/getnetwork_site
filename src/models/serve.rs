@@ -161,8 +161,7 @@ pub struct NewServeCategories {
 }
 
 /////// Serve ////// 
-#[derive(Debug, Serialize, Clone, Identifiable)]
-#[table_name="serve"]  
+#[derive(Debug, Serialize, Clone, Identifiable)] 
 pub struct Serve { 
     pub id:             i32,
     pub name:           String,
@@ -172,7 +171,7 @@ pub struct Serve {
     pub position:       i16,
     pub category_id:    i32,
     pub price:          i32,
-    pub man_hours:      i16,
+    pub man_hours:      i16, 
     pub is_default:     bool,
     pub user_id:        i32,
     pub tech_cat_id:    i32,
