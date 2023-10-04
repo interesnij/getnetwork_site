@@ -115,6 +115,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       page_id: $page_id*1,
       link: $link,
       title: $title,
+      title_en: $title,
       height: $height*1.0,
       seconds: $seconds,
       template: "rhythm",
@@ -126,6 +127,7 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
       page_id: $page_id*1,
       link: $link,
       title: $title,
+      title_en: $title,
       height: $height*1.0,
       seconds: $seconds,
       template: "rhythm",
@@ -151,14 +153,12 @@ function get_stat_meta($link, $title, $object_id, $page_id) {
 function get_window_stat_meta($link, $title, $object_id, $page_id) {
   //return
   ip_block = document.body.querySelector(".ip_span");
-  if (document.body.querySelector("#is_superuser")
+  if (
+    document.body.querySelector("#is_superuser")
       || ip_block.innerHTML == "91.239.184.81"
-      || ip_block.innerHTML == "176.59.23.228") {
-    return
-  }
-  else if (!$page_id) {
-    return
-  }
+      || ip_block.innerHTML == "176.59.23.228"
+      || !$page_id 
+    ) { return 0; }
 
   if ($object_id) {
     analyticsData = {
