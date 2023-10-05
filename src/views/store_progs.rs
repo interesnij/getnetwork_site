@@ -105,7 +105,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     _item.title.clone() + &" | Товар: вебсервисы.рф".to_string(),
                     "/store/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
-                    template_types,
+                    t, 
+                    l,
                 ).await
             }
             else if is_desctop {
@@ -177,7 +178,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     _item.title.clone() + &" | Товар: вебсервисы.рф".to_string(),
                     "/store/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
-                    template_types,
+                    t, 
+                    l,
                 ).await
             }
             else if is_desctop {

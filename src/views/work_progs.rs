@@ -107,7 +107,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                     title.clone() + &" | Работа: вебсервисы.рф".to_string(),
                     "/work/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
-                    template_types,
+                    t, 
+                    l,
                 ).await
             }
             else if is_desctop {
@@ -179,7 +180,8 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
                     title.clone() + &" | Работа: вебсервисы.рф".to_string(),
                     "/work/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
-                    template_types,
+                    t, 
+                    l,
                 ).await
             }
             else if is_desctop {

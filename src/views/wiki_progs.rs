@@ -105,7 +105,8 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
                     _item.title.clone() + &" | Обучающая статья: вебсервисы.рф".to_string(),
                     "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
-                    template_types,
+                    t, 
+                    l,
                 ).await
             }
             else if is_desctop {
@@ -174,14 +175,15 @@ pub async fn get_wiki_page(session: Session, req: HttpRequest, param: web::Path<
         else {
             if _item.is_active == false {
                 use crate::utils::get_anon_private_page;
-                get_anon_private_page (
+                get_anon_private_page ( 
                     is_ajax,
                     is_desctop,
                     _item.title.clone() + &" | Обучающая статья".to_string(),
                     _item.title.clone() + &" | Обучающая статья: вебсервисы.рф".to_string(),
                     "/wiki/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
-                    template_types,
+                    t, 
+                    l,
                 ).await
             }
             else if is_desctop {
