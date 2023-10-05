@@ -391,7 +391,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     helps_count:    usize,
                     is_ajax:        i32,
                     template_types: u8,
-                    linguage:       l,
+                    linguage:       u8,
                 }
                 let body = Template {
                     tag:            _tag,
