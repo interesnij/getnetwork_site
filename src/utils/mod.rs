@@ -128,8 +128,8 @@ pub struct StorageParams {
 }
 pub fn get_all_storage() -> (u8, u8) {
     (
-        get_template_storage().parse::<u8>().unwrap(),
-        get_linguage_storage().parse::<u8>().unwrap()
+        get_template_storage(),
+        get_linguage_storage()
     )
 }
 
