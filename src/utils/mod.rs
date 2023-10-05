@@ -134,10 +134,10 @@ pub fn get_all_storage() -> StorageParams {
 }
 
 pub fn set_template(types: u8) -> () {
-    web_local_storage_api::set_item("template", types.parse::<&str>().unwrap());
+    web_local_storage_api::set_item("template", types.to_str());
 }
 pub fn set_linguage(types: u8) -> () {
-    web_local_storage_api::set_item("linguage", types.parse::<&str>().unwrap());
+    web_local_storage_api::set_item("linguage", types.to_string().as_str());
 }
 
 
