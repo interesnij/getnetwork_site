@@ -245,7 +245,6 @@ pub fn get_request_user_data(session: &Session) -> User {
 }
 
 pub async fn get_first_load_page (
-    req:         &HttpRequest,
     session:     &Session,
     is_desctop:  bool,
     title:       String,

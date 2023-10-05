@@ -251,7 +251,6 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
         .filter(schema::categories::types.eq(3))
         .select((
             schema::categories::name,
-            schema::categories::name_en,
             schema::categories::slug,
             schema::categories::count,
             schema::categories::id,
