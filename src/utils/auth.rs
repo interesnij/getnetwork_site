@@ -74,6 +74,7 @@ pub fn get_current_user(session: &Session) -> Result<SessionUser, AuthError> {
 
 pub fn get_cookie_user_id(req: &HttpRequest) -> i32 {
     let _cookie = req.headers().get("cookie").expect("E.").to_str().ok();
+    println!("_cookie {:?}", _cookie);
     let mut user_id = 0;
     for c in _cookie.iter() {
         //println!("c {:?}", c);
