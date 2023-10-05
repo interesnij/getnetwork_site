@@ -358,6 +358,31 @@ pub struct StatPage {
     pub height:  f64,
     pub seconds: i32,
 }
+impl StatPage {
+    pub fn get_or_create(types: i16) -> StatPage {
+        let _connection = establish_connection();
+        let _stats = schema::stat_pages::table
+            .filter(schema::stat_pages::types.eq(types))
+            .first::<StatPage>(&_connection);
+        if _stats.is_ok() {
+            return _stats.expect("E");
+        }
+        else { 
+            let form = NewStatPage {
+                types:   types,
+                view:    0,
+                height:  0.0,
+                seconds: 0,
+            };
+            _stat = diesel::insert_into(schema::stat_pages::table)
+                .values(&form)
+                .get_result::<StatPage>(&_connection)
+                .expect("Error.");
+            return _stat;
+        }
+    }
+}
+
 ////////////////////
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="stat_pages"]

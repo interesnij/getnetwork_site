@@ -12,7 +12,8 @@ use crate::utils::{
     is_signed_in,
     verify,
     get_first_load_page,
-    get_template,
+    get_all_storage,
+    StorageParams,
 };
 use crate::diesel::{
     RunQueryDsl,
@@ -51,8 +52,8 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
         use crate::utils::get_device_and_ajax;
 
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-        let template_types = get_template(&req);
-        if is_ajax == 0 {
+        let (t, l) = get_all_storage();
+        if is_ajax == 0 { 
             get_first_load_page (
                 &session,
                 is_desctop,
@@ -60,49 +61,26 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
                 "вебсервисы.рф: Регистрация".to_string(),
                 "/signup/".to_string(),
                 "/static/images/dark/store.jpg".to_string(),
-                template_types,
+                t, 
+                l,
             ).await
         }
         else {
-            use crate::schema::stat_pages::dsl::stat_pages;
-            use crate::models::StatPage;
-
-            let _connection = establish_connection();
-            let _stat: StatPage;
-
-            let _stats = stat_pages
-                .filter(schema::stat_pages::types.eq(7))
-                .first::<StatPage>(&_connection);
-                
-            if _stats.is_ok() {
-                _stat = _stats.expect("E");
-            }
-            else {
-                use crate::models::NewStatPage;
-                let form = NewStatPage {
-                    types:   7,
-                    view:    0,
-                    height:  0.0,
-                    seconds: 0,
-                };
-                _stat = diesel::insert_into(schema::stat_pages::table)
-                    .values(&form)
-                    .get_result::<StatPage>(&_connection)
-                    .expect("Error.");
-            }
-
+            let _stat = crate::models::StatPage::get_or_create(7);
             if is_desctop {
                 #[derive(TemplateOnce)]
                 #[template(path = "desctop/auth/signup.stpl")]
                 struct Template {
                     is_ajax:        i32,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     is_ajax:        is_ajax,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -114,12 +92,14 @@ pub async fn signup_page(req: HttpRequest, session: Session) -> actix_web::Resul
                 struct Template {
                     is_ajax:        i32,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     is_ajax:        is_ajax,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -136,7 +116,7 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
         use crate::utils::get_device_and_ajax;
 
         let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-        let template_types = get_template(&req);
+        let (t, l) = get_all_storage();
         if is_ajax == 0 {
             get_first_load_page (
                 &session,
@@ -145,35 +125,12 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
                 "вебсервисы.рф: Вход".to_string(),
                 "/login/".to_string(),
                 "/static/images/dark/store.jpg".to_string(),
-                template_types
+                t, 
+                l,
             ).await
         }
         else {
-            use crate::schema::stat_pages::dsl::stat_pages;
-            use crate::models::StatPage;
-
-            let _connection = establish_connection();
-            let _stat: StatPage;
-
-            let _stats = stat_pages
-                .filter(schema::stat_pages::types.eq(6))
-                .first::<StatPage>(&_connection);
-            if _stats.is_ok() {
-                _stat = _stats.expect("E");
-            }
-            else {
-                use crate::models::NewStatPage;
-                let form = NewStatPage {
-                    types:   6,
-                    view:    0,
-                    height:  0.0,
-                    seconds: 0,
-                };
-                _stat = diesel::insert_into(schema::stat_pages::table)
-                    .values(&form)
-                    .get_result::<StatPage>(&_connection)
-                    .expect("Error.");
-            }
+            let _stat = crate::models::StatPage::get_or_create(6);
 
             if is_desctop {
                 #[derive(TemplateOnce)]
@@ -181,12 +138,14 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
                 struct Template {
                     is_ajax:        i32,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     is_ajax:        is_ajax,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -198,12 +157,14 @@ pub async fn login_page(req: HttpRequest, session: Session) -> actix_web::Result
                 struct Template {
                     is_ajax:        i32,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     is_ajax:        is_ajax,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -219,46 +180,24 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
     }
     else {
         use crate::utils::is_desctop;
-        use crate::schema::stat_pages::dsl::stat_pages;
-        use crate::models::StatPage;
 
-        let _connection = establish_connection();
-        let _stat: StatPage;
-
-        let _stats = stat_pages
-            .filter(schema::stat_pages::types.eq(8))
-            .first::<StatPage>(&_connection);
-        if _stats.is_ok() {
-            _stat = _stats.expect("E");
-        }
-        else {
-            use crate::models::NewStatPage;
-            let form = NewStatPage {
-                types:   8,
-                view:    0,
-                height:  0.0,
-                seconds: 0,
-            };
-            _stat = diesel::insert_into(schema::stat_pages::table)
-                .values(&form)
-                .get_result::<StatPage>(&_connection)
-                .expect("Error.");
-        }
-
+        let _stat = crate::models::StatPage::get_or_create(8);
         session.clear();
-        let template_types = get_template(&req);
+        let (t, l) = get_all_storage();
         if is_desctop(&req) {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/auth/logout.stpl")]
             struct Template {
                 is_ajax:        i32,
                 stat:           StatPage,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 is_ajax:        0,
                 stat:           _stat,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -270,12 +209,14 @@ pub async fn logout_page(req: HttpRequest, session: Session) -> actix_web::Resul
             struct Template {
                 is_ajax:        i32,
                 stat:           StatPage,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 is_ajax:        0,
                 stat:           _stat,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

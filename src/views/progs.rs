@@ -20,7 +20,7 @@ use crate::utils::{
     establish_connection,
     is_signed_in,
     get_request_user_data,
-};
+}; 
 use crate::diesel::{
     RunQueryDsl,
     ExpressionMethods,
@@ -47,18 +47,18 @@ pub fn progs_routes(config: &mut web::ServiceConfig) {
 
     config.route("/create_item/", web::post().to(create_item));
     config.route("/edit_item/{id}/", web::post().to(edit_item));
-    config.route("/delete_item/{id}/", web::get().to(delete_item));
-    config.route("/publish_item/{id}/", web::get().to(publish_item));
-    config.route("/hide_item/{id}/", web::get().to(hide_item));
+    config.route("/delete_item/{id}/", web::post().to(delete_item));
+    config.route("/publish_item/{id}/", web::post().to(publish_item));
+    config.route("/hide_item/{id}/", web::post().to(hide_item));
     config.route("/edit_content_item/{id}/", web::post().to(edit_content_item));
 
     config.route("/create_category/", web::post().to(create_category));
     config.route("/edit_category/{id}/", web::post().to(edit_category));
-    config.route("/delete_category/{id}/", web::get().to(delete_category));
+    config.route("/delete_category/{id}/", web::post().to(delete_category));
 
     config.route("/create_files/{id}/", web::post().to(create_files));
     config.route("/edit_file/{id}/", web::post().to(edit_file));
-    config.route("/delete_file/{id}/", web::get().to(delete_file));
+    config.route("/delete_file/{id}/", web::post().to(delete_file));
 }
 
 pub async fn create_c_user(conn: ConnectionInfo, req: &HttpRequest) -> CookieUser {

@@ -76,12 +76,12 @@ pub fn get_cookie_user_id(req: &HttpRequest) -> i32 {
     let _cookie = req.headers().get("cookie").expect("E.").to_str().ok();
     let mut user_id = 0;
     for c in _cookie.iter() {
-        println!("c {:?}", c);
+        //println!("c {:?}", c);
         let split_c: Vec<&str> = c.split("=").collect();
-        println!("split_c[0] {:?}", split_c[0]);
-        println!("split_c[1] {:?}", split_c[1]);
+        //println!("split_c[0] {:?}", split_c[0]);
+        //println!("split_c[1] {:?}", split_c[1]);
         if split_c[0] == "user" {
-            println!("split_c {:?}", split_c[1]);
+            //println!("split_c {:?}", split_c[1]);
             user_id = split_c[1].parse().unwrap();
         }
     }
