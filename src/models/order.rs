@@ -188,9 +188,9 @@ impl NewOrder {
             email:          email,
             description:    description,
             description_en: description_en,
-            created:     chrono::Local::now().naive_utc() + Duration::hours(3),
-            user_id:     user_id,
-            price:       0,
+            created:        chrono::Local::now().naive_utc() + Duration::hours(3),
+            user_id:        user_id,
+            price:          0,
         }
     }
 }

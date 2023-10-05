@@ -212,7 +212,6 @@ impl Serve {
             .select((
                 schema::serve::id,
                 schema::serve::name,
-                schema::serve::name_en,
                 schema::serve::price,
                 schema::serve::man_hours,
                 schema::serve::is_default,
@@ -231,7 +230,6 @@ impl Serve {
             .select((
                 schema::serve::id,
                 schema::serve::name,
-                schema::serve::name_en,
                 schema::serve::price,
                 schema::serve::man_hours,
                 schema::serve::is_default,
@@ -284,34 +282,27 @@ impl Serve {
             .first::<ServeCategories>(&_connection)
             .expect("E");
     } 
-    pub fn get_100_description(&self) -> (String, String) {
-        let description: String;
-        let description_en: String;
-        if self.description.is_some() {
-            let _content = self.description.as_deref().unwrap();
-            if _content.len() > 100 {
-                description = _content[..100].to_string();
+    pub fn get_100_description(&self, l: u8) -> String {
+        if l == 1 {
+            if self.description.is_some() {
+                let _content = self.description.as_deref().unwrap();
+                if _content.len() > 100 {
+                    return _content[..100].to_string();
+                }
+                return _content.to_string();
             }
-            else {
-                description = _content.to_string();
+            return "".to_string();
+        }
+        else if l == 2 {
+            if self.description_en.is_some() {
+                let _content = self.description_en.as_deref().unwrap();
+                if _content.len() > 100 {
+                    return _content[..100].to_string();
+                }
+                return _content.to_string();
             }
+            return "".to_string();
         }
-        else {
-            description = "".to_string();
-        }
-        if self.description_en.is_some() {
-            let _content = self.description_en.as_deref().unwrap();
-            if _content.len() > 100 {
-                description_en = _content[..100].to_string();
-            }
-            else {
-                description_en = _content.to_string();
-            }
-        }
-        else {
-            description_en = "".to_string();
-        }
-        return (description, description_en);
     }
 }
 

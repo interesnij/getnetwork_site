@@ -2,7 +2,6 @@ use actix_web::{
     HttpRequest,
     HttpResponse,
     web,
-    //web::block,
     error::InternalError,
     http::StatusCode,
 };
@@ -13,7 +12,8 @@ use crate::utils::{
     is_signed_in,
     get_request_user_data,
     get_first_load_page,
-    get_template,
+    get_all_storage,
+    StorageParams,
 };
 
 use sailfish::TemplateOnce;
@@ -34,7 +34,7 @@ pub fn search_routes(config: &mut web::ServiceConfig) {
 
 pub async fn empty_search_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -43,7 +43,8 @@ pub async fn empty_search_page(req: HttpRequest, session: Session) -> actix_web:
             "вебсервисы.рф: Общий поиск".to_string(),
             "/search/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else if is_signed_in(&session) {
@@ -54,12 +55,14 @@ pub async fn empty_search_page(req: HttpRequest, session: Session) -> actix_web:
             struct Template {
                 request_user:   User,
                 is_ajax:        i32,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 request_user:   _request_user,
                 is_ajax:        is_ajax,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -70,11 +73,13 @@ pub async fn empty_search_page(req: HttpRequest, session: Session) -> actix_web:
             #[template(path = "mobile/search/empty_search.stpl")]
             struct Template {
                 is_ajax:        i32,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 is_ajax:        is_ajax,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -87,11 +92,13 @@ pub async fn empty_search_page(req: HttpRequest, session: Session) -> actix_web:
             #[template(path = "desctop/search/anon_empty_search.stpl")]
             struct Template {
                 is_ajax:        i32,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 is_ajax:        is_ajax,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -102,11 +109,13 @@ pub async fn empty_search_page(req: HttpRequest, session: Session) -> actix_web:
             #[template(path = "mobile/search/anon_empty_search.stpl")]
             struct Template {
                 is_ajax:        i32,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 is_ajax:        is_ajax,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -121,7 +130,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
     let _q_standalone = "%".to_owned() + &_q + "%";
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -131,7 +140,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
             "вебсервисы.рф: Общий поиск по фрагменту ".to_string() + &q,
             "/search/".to_string() + &q + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -173,7 +183,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                     stores_count:   usize,
                     is_ajax:        i32,
                     q:              String,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
@@ -190,7 +201,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                     stores_count:   store_count,
                     is_ajax:        is_ajax,
                     q:              _q,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -213,7 +225,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                     stores_count:   usize,
                     is_ajax:        i32,
                     q:              String,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     works_list:     work_list,
@@ -229,7 +242,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                     stores_count:   store_count,
                     is_ajax:        is_ajax,
                     q:              _q,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -266,7 +280,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                     stores_count:   usize,
                     is_ajax:        i32,
                     q:              String,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     works_list:     work_list,
@@ -282,7 +297,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                     stores_count:   store_count,
                     is_ajax:        is_ajax,
                     q:              _q,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -305,7 +321,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                     stores_count:   usize,
                     is_ajax:        i32,
                     q:              String,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     works_list:     work_list,
@@ -321,7 +338,8 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
                     stores_count:   store_count,
                     is_ajax:        is_ajax,
                     q:              _q,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -334,7 +352,7 @@ pub async fn search_page(session: Session, req: HttpRequest, q: web::Path<String
 pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     let _q = q.clone();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -344,7 +362,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
             "вебсервисы.рф: Поиск статей по фрагменту ".to_string() + &q,
             "/search_blogs/".to_string() + &q + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -387,7 +406,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -396,8 +416,10 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
+
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
                 Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
@@ -411,7 +433,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     blogs_list:       blog_list,
@@ -419,7 +442,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -443,7 +467,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     blogs_list:       blog_list,
@@ -451,7 +476,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -466,7 +492,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     blogs_list:       blog_list,
@@ -474,7 +501,8 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -487,7 +515,7 @@ pub async fn search_blogs_page(session: Session, req: HttpRequest, q: web::Path<
 pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Path<String>) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     let _q = q.clone();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -497,7 +525,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
             "вебсервисы.рф: Поиск услуг по фрагменту ".to_string() + &q,
             "/search_services/".to_string() + &q + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -539,7 +568,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -548,7 +578,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -563,15 +594,18 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
+
                 let body = Template {
                     services_list:    services_list,
                     services_count:   services_count,
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -595,7 +629,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     services_list:    services_list,
@@ -603,7 +638,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -618,7 +654,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     services_list:    services_list,
@@ -626,7 +663,8 @@ pub async fn search_services_page(session: Session, req: HttpRequest, q: web::Pa
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -641,17 +679,18 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
 
     if is_ajax == 0 {
         get_first_load_page (
+            &req,
             &session,
-            is_desctop,
             "Поиск товаров по фрагменту ".to_string() + &q,
             "вебсервисы.рф: Поиск товаров по фрагменту ".to_string() + &q,
             "/search_stores/".to_string() + &q + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -695,7 +734,8 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -704,7 +744,8 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -719,7 +760,8 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     stores_list:      store_list,
@@ -727,7 +769,8 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -752,15 +795,18 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
+
                 let body = Template {
                     stores_list:      store_list,
                     stores_count:     stores_count,
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -775,7 +821,8 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     stores_list:      store_list,
@@ -783,7 +830,8 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -798,7 +846,7 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -808,7 +856,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
             "вебсервисы.рф: Поиск статей по фрагменту ".to_string() + &q,
             "/search_wikis/".to_string() + &q + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -851,7 +900,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -860,7 +910,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -875,7 +926,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     wikis_list:       wiki_list,
@@ -883,7 +935,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -907,7 +960,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     wikis_list:       wiki_list,
@@ -915,7 +969,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -930,7 +985,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     wikis_list:       wiki_list,
@@ -938,7 +994,8 @@ pub async fn search_wikis_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -953,7 +1010,7 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _q = q.clone();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -963,7 +1020,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
             "вебсервисы.рф: Поиск работ по фрагменту ".to_string() + &q,
             "/search_works/".to_string() + &q + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -1007,7 +1065,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -1016,7 +1075,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1031,7 +1091,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     works_list:       work_list,
@@ -1039,7 +1100,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1063,7 +1125,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     works_list:       work_list,
@@ -1071,7 +1134,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1086,7 +1150,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     works_list:       work_list,
@@ -1094,7 +1159,8 @@ pub async fn search_works_page(session: Session, req: HttpRequest, q: web::Path<
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1108,7 +1174,7 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
     use crate::utils::{get_device_and_ajax, get_page};
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let _q = q.clone();
 
     if is_ajax == 0 {
@@ -1119,7 +1185,8 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
             "вебсервисы.рф: Поиск по фрагменту ".to_string() + &q,
             "/search_help/".to_string() + &q + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -1160,7 +1227,8 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -1169,7 +1237,8 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1184,7 +1253,8 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     items_list:       _items,
@@ -1192,7 +1262,8 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1214,7 +1285,8 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     items_list:       _items,
@@ -1222,7 +1294,8 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1237,7 +1310,8 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
                     is_ajax:          i32,
                     q:                String,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     items_list:       _items,
@@ -1245,7 +1319,8 @@ pub async fn search_help_page(session: Session, req: HttpRequest, q: web::Path<S
                     is_ajax:          is_ajax,
                     q:                _q,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

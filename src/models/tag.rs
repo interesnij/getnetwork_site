@@ -16,9 +16,8 @@ use crate::utils::establish_connection;
 
 #[derive(Serialize, Queryable)]
 pub struct SmallTag {
-    pub name:    String,
-    pub name_en: String,
-    pub count:   i16,
+    pub name:  String,
+    pub count: i16,
 }
 
 #[derive(Debug, Serialize, Queryable, Identifiable)]
@@ -65,7 +64,6 @@ impl Tag {
             .offset(offset)
             .select((
                 schema::tags::name,
-                schema::tags::name_en,
                 schema::tags::count
             ))
             .load::<SmallTag>(&_connection)

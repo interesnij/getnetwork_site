@@ -12,7 +12,8 @@ use crate::utils::{
     is_signed_in,
     get_request_user_data,
     get_first_load_page,
-    get_template,
+    get_all_storage,
+    StorageParams,
 };
 use actix_session::Session;
 use crate::schema;
@@ -47,7 +48,7 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
     let _connection = establish_connection();
     let _item_id: String = param.1.clone();
     let _cat_id: String = param.0.clone();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
 
     let _item = items
         .filter(schema::items::slug.eq(&_item_id))
@@ -61,7 +62,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
             _item.title.clone() + &" | Товар: вебсервисы.рф".to_string(),
             "/store/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
             _item.get_image(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -116,7 +118,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     prev:           Option<FeaturedItem>,
                     next:           Option<FeaturedItem>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
@@ -125,7 +128,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     prev:           prev,
                     next:           next,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -143,7 +147,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     prev:           Option<FeaturedItem>,
                     next:           Option<FeaturedItem>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
@@ -154,7 +159,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     prev:           prev,
                     next:           next,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -183,7 +189,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     prev:           Option<FeaturedItem>,
                     next:           Option<FeaturedItem>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     object:         _item,
@@ -191,7 +198,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     prev:           prev,
                     next:           next,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -208,7 +216,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     prev:           Option<FeaturedItem>,
                     next:           Option<FeaturedItem>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     object:         _item,
@@ -218,7 +227,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
                     prev:           prev,
                     next:           next,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -234,7 +244,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
 
     let _cat_id: String = _id.clone();
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
 
     let _category = categories
         .filter(schema::categories::slug.eq(&_cat_id))
@@ -270,7 +280,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
             _category.name.clone() + &" | Категория товаров - вебсервисы.рф".to_string(),
             "/stores/".to_string() + &_category.slug.clone() + &"/".to_string(),
             cat_image,
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -312,7 +323,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     object_list:      Vec<Store>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -322,7 +334,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -338,8 +351,10 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     object_list:      Vec<Store>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
+
                 let body = Template {
                     all_tags:         _tags,
                     category:         _category,
@@ -347,7 +362,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -371,7 +387,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     object_list:      Vec<Store>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     all_tags:         _tags,
@@ -380,7 +397,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -396,7 +414,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     object_list:      Vec<Store>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     all_tags:         _tags,
@@ -405,7 +424,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -418,7 +438,7 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
 pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     use crate::utils::get_device_and_ajax;
 
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     if is_ajax == 0 {
         get_first_load_page (
@@ -428,35 +448,12 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
             "вебсервисы.рф: Категории товаров".to_string(),
             "/store_categories/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
-        use crate::schema::stat_pages::dsl::stat_pages;
-        use crate::models::StatPage;
-
-        let _connection = establish_connection();
-        let _stat: StatPage;
-        let _stats = stat_pages
-            .filter(schema::stat_pages::types.eq(71))
-            .first::<StatPage>(&_connection);
-        if _stats.is_ok() {
-            _stat = _stats.expect("E");
-        }
-        else {
-            use crate::models::NewStatPage;
-            let form = NewStatPage {
-                types:   71,
-                view:    0,
-                height:  0.0,
-                seconds: 0,
-            };
-            _stat = diesel::insert_into(schema::stat_pages::table)
-                .values(&form)
-                .get_result::<StatPage>(&_connection)
-                .expect("Error.");
-        }
-
+        let _stat = crate::models::StatPage::get_or_create(71);
         let _cats: Vec<Cat>;
         let _tags: Vec<SmallTag>;
         let cats_res = block(move || Categories::get_categories_for_types(3)).await?;
@@ -482,7 +479,8 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     cats:           Vec<Cat>,
                     all_tags:       Vec<SmallTag>,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
@@ -490,7 +488,8 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     cats:           _cats,
                     all_tags:       _tags,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -505,7 +504,8 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     cats:           Vec<Cat>,
                     all_tags:       Vec<SmallTag>,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
@@ -513,7 +513,8 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     cats:           _cats,
                     all_tags:       _tags,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -529,14 +530,16 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     cats:           Vec<Cat>,
                     all_tags:       Vec<SmallTag>,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     is_ajax:        is_ajax,
                     cats:           _cats,
                     all_tags:       _tags,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -550,14 +553,16 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
                     cats:           Vec<Cat>,
                     all_tags:       Vec<SmallTag>,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     is_ajax:        is_ajax,
                     cats:           _cats,
                     all_tags:       _tags,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

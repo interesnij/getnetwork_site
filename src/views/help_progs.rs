@@ -12,7 +12,8 @@ use crate::utils::{
     is_signed_in,
     get_request_user_data,
     get_first_load_page,
-    get_template,
+    get_all_storage,
+    StorageParams,
 };
 use actix_session::Session;
 use crate::schema;
@@ -43,7 +44,7 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
 
     let _category = schema::categories::table
         .filter(schema::categories::slug.eq(_id.clone()))
@@ -79,7 +80,8 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
             _category.name.clone() + &" | Категория помощи - вебсервисы.рф".to_string(),
             "/help/".to_string() + &_category.slug.clone() + &"/".to_string(),
             cat_image,
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -121,7 +123,8 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      Vec<Help>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -131,7 +134,8 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -148,7 +152,8 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      Vec<Help>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -158,7 +163,8 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -182,7 +188,8 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      Vec<Help>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     all_tags:         _tags,
@@ -191,7 +198,8 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -207,7 +215,8 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      Vec<Help>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     all_tags:         _tags,
@@ -216,7 +225,8 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

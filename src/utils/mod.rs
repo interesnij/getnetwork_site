@@ -65,114 +65,88 @@ pub fn get_price_acc_values(price: &i32) -> Option<i32> {
         return None;
     }
 }
-//lazy_static! {
-    pub fn establish_connection() -> PgConnection {
-        use dotenv::dotenv;
 
-        dotenv().ok();
-        let database_url = std::env::var("DATABASE_URL")
-            .expect("DATABASE_URL must be set");
+pub fn establish_connection() -> PgConnection {
+    dotenv::dotenv().ok();
+    let database_url = std::env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set");
+    PgConnection::establish(&database_url)
+        .expect(&format!("Error connecting to {}", database_url))
+}
 
-        PgConnection::establish(&database_url)
-            .expect(&format!("Error connecting to {}", database_url))
+pub fn get_auth_template(req: &HttpRequest) -> i16 {
+    #[derive(Deserialize)]
+    struct TemplateParams {
+        pub template: Option<i16>,
     }
-
-    pub fn get_template(req: &HttpRequest) -> i16 {
-        //return 1;
-        #[derive(Deserialize)]
-        struct TemplateParams {
-            pub template: Option<i16>,
-        }
-        let params_some = web::Query::<TemplateParams>::from_query(&req.query_string());
-        if params_some.is_ok() {
-            let params = params_some.unwrap();
-            if params.template.is_some() {
-                let template = params.template.unwrap();
-                if template > 0 && template < 3 {
-                    set_template(template);
-                    return template;
-                }
-                else {
-                    return 1;
-                }
-            }
-            else {
-                return get_template_storage();
-            }
-        }
-        else {
-            return get_template_storage();
-        }
-    }
-
-    pub fn get_auth_template(req: &HttpRequest) -> i16 {
-        //return 1;
-        #[derive(Deserialize)]
-        struct TemplateParams {
-            pub template: Option<i16>,
-        }
-        let params_some = web::Query::<TemplateParams>::from_query(&req.query_string());
-        if params_some.is_ok() {
-            let params = params_some.unwrap();
-            if params.template.is_some() {
-                let template = params.template.unwrap();
-                if template > 0 && template < 3 {
-                    set_template(template);
-                    return template;
-                }
-                else {
-                    return 1;
-                }
-            }
-            else {
-                return get_template_storage();
-            }
-        }
-        else {
-            return get_template_storage();
-        }
-    }
-
-    pub fn get_template_storage() -> i16 {
-        let template_res = web_local_storage_api::get_item("template");
-        if template_res.is_ok() {
-            let template_some = template_res.expect("E.");
-            if template_some.is_some() {
-                let template = template_some.unwrap();
-                return match template.as_str() {
-                    "rhythm" => 1,
-                    "eremia" => 2,
-                    _ => 1,
-                };
+    let params_some = web::Query::<TemplateParams>::from_query(&req.query_string());
+    if params_some.is_ok() {
+        let params = params_some.unwrap();
+        if params.template.is_some() {
+        let template = params.template.unwrap();
+            if template > 0 && template < 3 {
+                set_template(template);
+                return template;
             }
             else {
                 return 1;
             }
         }
         else {
-            return 1;
+            return get_template_storage();
         }
     }
-
-    pub fn set_template(types: i16) -> () {
-        let value: &str = match types {
-            1 => "rhythm",
-            2 => "eremia",
-            _ => "rhythm",
-        };
-        web_local_storage_api::set_item("template", value);
+    else {
+        return get_template_storage();
     }
+}
 
-
-    fn get_content_type<'a>(req: &'a HttpRequest) -> Option<&'a str> {
-        return req.headers().get("user-agent")?.to_str().ok();
+pub fn get_template_storage() -> u8 {
+    let template_res = web_local_storage_api::get_item("template");
+    if template_res.is_ok() {
+        let template_some = template_res.expect("E.");
+        if template_some.is_some() {
+            return template_some.unwrap();
+        }
     }
-    pub fn is_desctop(req: &HttpRequest) -> bool {
-        if get_content_type(req).unwrap().contains("Mobile") {
-            return false;
-        };
-        return true;
-    } 
+    return 1;
+}
+pub fn get_linguage_storage() -> u8 {
+    let linguage_res = web_local_storage_api::get_item("linguage");
+    if linguage_res.is_ok() {
+        let linguage_some = linguage_res.expect("E.");
+        if linguage_some.is_some() {
+            return linguage_some.unwrap();
+        }
+    }
+    return 1;
+}
+
+pub struct StorageParams {
+    pub template: u8,
+    pub linguage: u8, 
+}
+pub fn get_all_storage() -> StorageParams {
+    return StorageParams {
+        template: get_template_storage(),
+        linguage: get_linguage_storage(),
+    }
+}
+
+pub fn set_template(types: u8) -> () {
+    web_local_storage_api::set_item("template", types);
+}
+pub fn set_linguage(types: u8) -> () {
+    web_local_storage_api::set_item("linguage", types);
+}
+
+
+fn get_content_type<'a>(req: &'a HttpRequest) -> Option<&'a str> {
+    return req.headers().get("user-agent")?.to_str().ok();
+}
+pub fn is_desctop(req: &HttpRequest) -> bool {
+    return get_content_type(req).unwrap().contains("Mobile");
+} 
 
     pub fn get_device_and_ajax(req: &HttpRequest) -> (bool, i32) {
         #[derive(Debug, Deserialize)]
@@ -271,13 +245,15 @@ pub fn get_request_user_data(session: &Session) -> User {
 }
 
 pub async fn get_first_load_page (
-    session:        &Session,
-    is_desctop:     bool,
-    title:          String,
-    description:    String,
-    uri:            String,
-    image:          String,
-    template_types: i16
+    req:         &HttpRequest
+    session:     &Session,
+    is_desctop:  bool,
+    title:       String,
+    description: String,
+    uri:         String,
+    image:       String,
+    t:           u8,
+    l:           u8,
 ) -> actix_web::Result<HttpResponse> {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
@@ -290,7 +266,8 @@ pub async fn get_first_load_page (
                 description:    String,
                 image:          String,
                 uri:            String,
-                template_types: i16, 
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 request_user:   _request_user,
@@ -298,7 +275,8 @@ pub async fn get_first_load_page (
                 description:    description,
                 image:          image,
                 uri:            uri,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -313,7 +291,8 @@ pub async fn get_first_load_page (
                 description:    String,
                 image:          String,
                 uri:            String,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 request_user:   _request_user,
@@ -321,7 +300,8 @@ pub async fn get_first_load_page (
                 description:    description,
                 image:          image,
                 uri:            uri,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -337,14 +317,16 @@ pub async fn get_first_load_page (
                 description:    String,
                 image:          String,
                 uri:            String,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 title:          title,
                 description:    description,
                 image:          image,
                 uri:            uri,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -358,14 +340,16 @@ pub async fn get_first_load_page (
                 description:    String,
                 image:          String,
                 uri:            String,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 title:          title,
                 description:    description,
                 image:          image,
                 uri:            uri,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -375,14 +359,15 @@ pub async fn get_first_load_page (
 }
 
 pub async fn get_private_page (
-    is_ajax:        i32,
-    user:           User,
-    is_desctop:     bool,
-    title:          String,
-    description:    String,
-    uri:            String,
-    image:          String,
-    template_types: i16
+    is_ajax:     i32,
+    user:        User,
+    is_desctop:  bool,
+    title:       String,
+    description: String,
+    uri:         String,
+    image:       String,
+    t:           u8,
+    l:           u8,
 ) -> actix_web::Result<HttpResponse> {
     if is_desctop {
         #[derive(TemplateOnce)]
@@ -394,7 +379,8 @@ pub async fn get_private_page (
             description:    String,
             image:          String,
             uri:            String,
-            template_types: i16,
+            template_types: u8,
+            linguage:       u8,
         }
         let body = Template {
             is_ajax:        is_ajax,
@@ -403,7 +389,8 @@ pub async fn get_private_page (
             description:    description,
             image:          image,
             uri:            uri,
-            template_types: template_types,
+            template_types: t,
+            linguage:       l,
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -418,7 +405,8 @@ pub async fn get_private_page (
             description:    String,
             image:          String,
             uri:            String,
-            template_types: i16,
+            template_types: u8,
+            linguage:       u8,
         }
         let body = Template {
             is_ajax:        is_ajax,
@@ -426,7 +414,8 @@ pub async fn get_private_page (
             description:    description,
             image:          image,
             uri:            uri,
-            template_types: template_types,
+            template_types: t,
+            linguage:       l,
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -435,13 +424,14 @@ pub async fn get_private_page (
 }
 
 pub async fn get_anon_private_page (
-    is_ajax:        i32,
-    is_desctop:     bool,
-    title:          String,
-    description:    String,
-    uri:            String,
-    image:          String,
-    template_types: i16,
+    is_ajax:     i32,
+    is_desctop:  bool,
+    title:       String,
+    description: String,
+    uri:         String,
+    image:       String,
+    t:           u8,
+    l:           u8,
 ) -> actix_web::Result<HttpResponse> {
     if is_desctop {
         #[derive(TemplateOnce)]
@@ -452,7 +442,8 @@ pub async fn get_anon_private_page (
             description:    String,
             image:          String,
             uri:            String,
-            template_types: i16,
+            template_types: u8,
+            linguage:       u8,
         }
         let body = Template {
             is_ajax:        is_ajax,
@@ -460,7 +451,8 @@ pub async fn get_anon_private_page (
             description:    description,
             image:          image,
             uri:            uri,
-            template_types: template_types,
+            template_types: t,
+            linguage:       l,
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -475,7 +467,8 @@ pub async fn get_anon_private_page (
             description:    String,
             image:          String,
             uri:            String,
-            template_types: i16,
+            template_types: u8,
+            linguage:       u8,
         }
         let body = Template {
             is_ajax:        is_ajax,
@@ -483,7 +476,8 @@ pub async fn get_anon_private_page (
             description:    description,
             image:          image,
             uri:            uri,
-            template_types: template_types,
+            template_types: t,
+            linguage:       l,
         }
         .render_once()
         .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

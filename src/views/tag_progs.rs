@@ -21,7 +21,8 @@ use crate::utils::{
     is_signed_in,
     get_request_user_data,
     get_first_load_page,
-    get_template,
+    get_all_storage,
+    StorageParams,
 };
 use crate::schema;
 use crate::models::{
@@ -55,7 +56,7 @@ pub fn tag_routes(config: &mut web::ServiceConfig) {
 
 pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -64,7 +65,8 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
             "вебсервисы.рф: Создание тега".to_string(),
             "/create_tag/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -82,13 +84,15 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
                     request_user:   User,
                     all_tags:       Vec<Tag>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
                     all_tags:       all_tags,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -100,12 +104,14 @@ pub async fn create_tag_page(session: Session, req: HttpRequest) -> actix_web::R
                 struct Template {
                     all_tags:       Vec<Tag>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     all_tags:       all_tags,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -148,7 +154,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
     use schema::tags::dsl::tags;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let slug = _id.to_string();
     let _tag = tags
@@ -164,7 +170,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
             _tag.name.clone() + &" | вебсервисы.рф:Тег".to_string(),
             "/tag/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -231,7 +238,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     stores_count:   usize,
                     helps_count:    usize,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     tag:            _tag,
@@ -250,7 +258,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     stores_count:   stores_count,
                     helps_count:    helps_count,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -275,7 +284,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     stores_count:   usize,
                     helps_count:    usize,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     tag:            _tag,
@@ -293,7 +303,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     stores_count:   stores_count,
                     helps_count:    helps_count,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -334,7 +345,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     stores_count:   usize,
                     helps_count:    usize,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     tag:            _tag,
@@ -352,7 +364,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     stores_count:   stores_count,
                     helps_count:    helps_count,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -377,7 +390,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     stores_count:   usize,
                     helps_count:    usize,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       l,
                 }
                 let body = Template {
                     tag:            _tag,
@@ -395,7 +409,8 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
                     stores_count:   stores_count,
                     helps_count:    helps_count,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -411,7 +426,7 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let slug = _id.to_string();
     let _tag = tags
         .filter(schema::tags::name.eq(&slug))
@@ -426,7 +441,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
             _tag.name.clone() + &" | вебсервисы.рф: Статьи тега".to_string(),
             "/tag_blogs/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -459,7 +475,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -468,7 +485,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      blog_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -483,7 +501,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -491,7 +510,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      blog_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -511,7 +531,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -519,7 +540,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      blog_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -534,7 +556,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -542,7 +565,8 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
                     blogs_count:      blog_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -557,7 +581,7 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let slug = _id.to_string();
     let _tag = tags
         .filter(schema::tags::name.eq(&slug))
@@ -573,7 +597,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
             _tag.name.clone() + &" | вебсервисы.рф: Услуги тега".to_string(),
             "/tag_services/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -604,7 +629,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -613,7 +639,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   service_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -628,7 +655,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -636,7 +664,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   service_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -656,7 +685,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -664,7 +694,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   service_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -679,7 +710,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -687,7 +719,8 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
                     services_count:   service_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -702,7 +735,7 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let slug = _id.to_string();
     let _tag = tags
         .filter(schema::tags::name.eq(&slug))
@@ -718,7 +751,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
             _tag.name.clone() + &" | вебсервисы.рф: Товары тега ".to_string(),
             "/tag_stores/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -750,7 +784,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -759,7 +794,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     stores_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -774,7 +810,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -782,7 +819,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     stores_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -802,7 +840,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -810,7 +849,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     stores_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,                
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -825,7 +865,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -833,7 +874,8 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
                     stores_count:     stores_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -848,7 +890,7 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let slug = _id.to_string();
     let _tag = tags
         .filter(schema::tags::name.eq(&slug))
@@ -864,7 +906,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
             _tag.name.clone() + &" | вебсервисы.рф: Статьи тега".to_string(),
             "/tag_wikis/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -896,7 +939,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -905,7 +949,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      wikis_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -920,7 +965,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -928,7 +974,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      wikis_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -948,7 +995,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -956,7 +1004,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      wikis_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -971,7 +1020,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -979,7 +1029,8 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
                     wikis_count:      wikis_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -994,7 +1045,7 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let slug = _id.to_string();
     let _tag = tags
         .filter(schema::tags::name.eq(&slug))
@@ -1010,7 +1061,8 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
             _tag.name.clone() + &" | вебсервисы.рф: Работы тега".to_string(),
             "/tag_works/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -1042,7 +1094,8 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -1051,7 +1104,8 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      works_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1066,7 +1120,8 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1074,8 +1129,10 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      works_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
+
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
                 Ok(HttpResponse::Ok().content_type("text/html; charset=utf-8").body(body))
@@ -1094,7 +1151,8 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1102,7 +1160,8 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      works_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1117,7 +1176,8 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1125,7 +1185,8 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
                     works_count:      works_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1140,7 +1201,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let slug = _id.to_string();
     let _tag = tags
         .filter(schema::tags::name.eq(&slug))
@@ -1156,7 +1217,8 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
             _tag.name.clone() + &" | вебсервисы.рф: Справки тега".to_string(),
             "/tag_helps/".to_string() + &slug + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -1188,7 +1250,8 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -1197,7 +1260,8 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      helps_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1212,7 +1276,8 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1220,7 +1285,8 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      helps_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1240,7 +1306,8 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1248,7 +1315,8 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      helps_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1263,7 +1331,8 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      usize,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     tag:              _tag,
@@ -1271,7 +1340,8 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
                     helps_count:      helps_count,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1285,7 +1355,7 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
     use crate::utils::get_device_and_ajax;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -1294,40 +1364,16 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
             "вебсервисы.рф: Ключевые слова".to_string(),
             "/tags/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
-        use crate::utils::get_page;
-        use crate::schema::stat_pages::dsl::stat_pages;
-        use crate::models::StatPage;
-
-        let page = get_page(&req);
-
-        let _connection = establish_connection();
+        let page = crate::utils::get_page(&req);
         let (all_tags, next_page_number) = Tag::get_tags_list(page, 20);
         let tags_count = all_tags.len();
 
-        let _stat: StatPage;
-        let _stats = stat_pages
-            .filter(schema::stat_pages::types.eq(31))
-            .first::<StatPage>(&_connection);
-        if _stats.is_ok() {
-            _stat = _stats.expect("E");
-        }
-        else {
-            use crate::models::NewStatPage;
-            let form = NewStatPage {
-                types:   31,
-                view:    0,
-                height:  0.0,
-                seconds: 0,
-            };
-            _stat = diesel::insert_into(schema::stat_pages::table)
-                .values(&form)
-                .get_result::<StatPage>(&_connection)
-                .expect("Error.");
-        }
+        let _stat = crate::models::StatPage::get_or_create(31);
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -1341,7 +1387,8 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: i32,
                     is_ajax:          i32,
                     stat:             StatPage,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
@@ -1350,7 +1397,8 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                     stat:             _stat,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1365,7 +1413,8 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: i32,
                     is_ajax:          i32,
                     stat:             StatPage,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     all_tags:         all_tags,
@@ -1373,7 +1422,8 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                     stat:             _stat,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1390,7 +1440,8 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: i32,
                     is_ajax:          i32,
                     stat:             StatPage,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     all_tags:         all_tags,
@@ -1398,7 +1449,8 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                     stat:             _stat,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1413,7 +1465,8 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: i32,
                     is_ajax:          i32,
                     stat:             StatPage,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     all_tags:         all_tags,
@@ -1421,7 +1474,8 @@ pub async fn tags_page(session: Session, req: HttpRequest) -> actix_web::Result<
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
                     stat:             _stat,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1436,7 +1490,7 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
     use schema::tags::dsl::tags;
 
     let _tag_id: i32 = *_id;
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let _connection = establish_connection();
     let _tag = tags
         .filter(schema::tags::id.eq(&_tag_id))
@@ -1453,7 +1507,8 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
             "вебсервисы.рф: Изменение тега ".to_string() + &_tag.name,
             "/edit_tag/".to_string() + &_tag.id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else if is_signed_in(&session) {
@@ -1466,13 +1521,15 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
                     request_user:   User,
                     tag:            Tag,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
                     tag:            _tag,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1484,12 +1541,14 @@ pub async fn edit_tag_page(session: Session, req: HttpRequest, _id: web::Path<i3
                 struct Template {
                     tag:            Tag,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     tag:            _tag,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;

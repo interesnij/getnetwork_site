@@ -23,8 +23,8 @@ use crate::utils::{
     get_request_user_data,
     is_signed_in,
     get_first_load_page,
-    get_template, get_auth_template,
-    IndexResponse, AppState,
+    get_all_storage, get_auth_template,
+    IndexResponse, AppState, StorageParams,
 };
 use crate::diesel::{
     RunQueryDsl,
@@ -69,7 +69,7 @@ pub fn pages_routes(config: &mut web::ServiceConfig) {
 pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -78,7 +78,8 @@ pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<
             "вебсервисы.рф: Страница не найдена".to_string(),
             "/not_found/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -90,13 +91,15 @@ pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<
                 struct Template {
                     request_user:   User,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
 
                 }
                 let body = Template {
                     request_user:   _request_user,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
     
                 }
                 .render_once()
@@ -108,11 +111,13 @@ pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<
                 #[template(path = "mobile/pages/404.stpl")]
                 struct Template {
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -125,11 +130,13 @@ pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<
                 #[template(path = "desctop/pages/anon_404.stpl")]
                 struct Template {
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 } 
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -140,11 +147,13 @@ pub async fn not_found(req: HttpRequest, session: Session) -> actix_web::Result<
                 #[template(path = "mobile/pages/anon_404.stpl")]
                 struct Template {
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -171,7 +180,7 @@ pub async fn index_page (
     session: Session,
 ) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -181,39 +190,19 @@ pub async fn index_page (
             "вебсервисы - Комплексное, экспертное создание и развитие высоконагруженных веб-ресурсов".to_string(),
             "/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
         use crate::models::{Blog, Service, Store, Wiki, Work};
 
         let _connection = establish_connection();
-        let _stat: StatPage;
-
-        let _stats = schema::stat_pages::table
-            .filter(schema::stat_pages::types.eq(1))
-            .first::<StatPage>(&_connection);
-        if _stats.is_ok() {
-            _stat = _stats.expect("E");
-        }
-        else {
-            use crate::models::NewStatPage;
-            let form = NewStatPage {
-                types:   1,
-                view:    0,
-                height:  0.0,
-                seconds: 0,
-            };
-            _stat = diesel::insert_into(schema::stat_pages::table)
-                .values(&form)
-                .get_result::<StatPage>(&_connection)
-                .expect("Error.");
-
-        }
+        let _stat = crate::models::StatPage::get_or_create(1);
+        let (t, l) = get_all_storage();
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let template_types = get_auth_template(&req);
             let is_admin = _request_user.is_superuser();
             //User::create_superuser(_request_user.id);
             let _last_works = Item::get_works(3, 0, is_admin);
@@ -234,7 +223,8 @@ pub async fn index_page (
                     last_stores:    Vec<Store>,
                     is_ajax:        i32,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
@@ -245,7 +235,8 @@ pub async fn index_page (
                     last_stores:    _last_stores,
                     is_ajax:        is_ajax,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -263,7 +254,8 @@ pub async fn index_page (
                     last_stores:    Vec<Store>,
                     is_ajax:        i32,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
@@ -274,7 +266,8 @@ pub async fn index_page (
                     last_stores:    _last_stores,
                     is_ajax:        is_ajax,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -299,7 +292,8 @@ pub async fn index_page (
                     last_stores:    Vec<Store>,
                     is_ajax:        i32,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     last_works:     _last_works,
@@ -309,7 +303,8 @@ pub async fn index_page (
                     last_stores:    _last_stores,
                     is_ajax:        is_ajax,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -326,7 +321,8 @@ pub async fn index_page (
                     last_stores:    Vec<Store>,
                     is_ajax:        i32,
                     stat:           StatPage,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     last_works:     _last_works,
@@ -336,7 +332,8 @@ pub async fn index_page (
                     last_stores:    _last_stores,
                     is_ajax:        is_ajax,
                     stat:           _stat,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -348,50 +345,28 @@ pub async fn index_page (
 
 pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template(&req);
-
+    let (t, l) = get_all_storage();
     if is_ajax == 0 {
-        get_first_load_page (
+        return get_first_load_page (
             &session,
             is_desctop,
             "Информация".to_string(),
             "вебсервисы.рф: Информация о нас, о сайте, контакты, вкладка помощи".to_string(),
             "/info/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
-        ).await
+            t, 
+            l,
+        ).await;
     }
-    else if is_signed_in(&session) {
-        use schema::stat_pages::dsl::stat_pages;
 
-        let _connection = establish_connection();
-        let _stat: StatPage;
-        let _stats = stat_pages
-            .filter(schema::stat_pages::types.eq(10))
-            .first::<StatPage>(&_connection);
-        if _stats.is_ok() {
-            _stat = _stats.expect("E");
-        }
-        else {
-            use crate::models::NewStatPage;
-            let form = NewStatPage {
-                types:   10,
-                view:    0,
-                height:  0.0,
-                seconds: 0,
-            };
-            _stat = diesel::insert_into(schema::stat_pages::table)
-                .values(&form)
-                .get_result::<StatPage>(&_connection)
-                .expect("Error.");
-        }
-        let _help_cats: Vec<Cat>;
-        let cats_res = block(move || Categories::get_categories_for_types(6)).await?;
-        let _help_cats = match cats_res {
-            Ok(_ok) => _ok,
-            Err(_error) => Vec::new(),
-        };
-
+    let _stat = crate::models::StatPage::get_or_create(10);
+    let _help_cats: Vec<Cat>;
+    let cats_res = block(move || Categories::get_categories_for_types(6)).await?;
+    let _help_cats = match cats_res {
+        Ok(_ok) => _ok,
+        Err(_error) => Vec::new(),
+    };
+    if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if is_desctop {
             #[derive(TemplateOnce)]
@@ -401,14 +376,16 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
                 is_ajax:        i32,
                 help_cats:      Vec<Cat>,
                 stat:           StatPage,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 request_user:   _request_user,
                 is_ajax:        is_ajax,
                 help_cats:      _help_cats,
                 stat:           _stat,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -421,13 +398,15 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
                 is_ajax:        i32,
                 help_cats:      Vec<Cat>,
                 stat:           StatPage,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 is_ajax:        is_ajax,
                 help_cats:      _help_cats,
                 stat:           _stat,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -435,34 +414,6 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
         }
     }
     else {
-        let _connection = establish_connection();
-        let _stat: StatPage;
-        let _stats = schema::stat_pages::table
-            .filter(schema::stat_pages::types.eq(10))
-            .first::<StatPage>(&_connection);
-        if _stats.is_ok() {
-            _stat = _stats.expect("E");
-        }
-        else {
-            use crate::models::NewStatPage;
-            let form = NewStatPage {
-                types:   10,
-                view:    0,
-                height:  0.0,
-                seconds: 0,
-            };
-            _stat = diesel::insert_into(schema::stat_pages::table)
-                .values(&form)
-                .get_result::<StatPage>(&_connection)
-                .expect("Error.");
-        }
-        let _help_cats: Vec<Cat>;
-        let cats_res = block(move || Categories::get_categories_for_types(6)).await?;
-        let _help_cats = match cats_res {
-            Ok(_ok) => _ok,
-            Err(_error) => Vec::new(),
-        };
-
         if is_desctop {
             #[derive(TemplateOnce)]
             #[template(path = "desctop/pages/anon_info.stpl")]
@@ -470,13 +421,15 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
                 is_ajax:        i32,
                 help_cats:      Vec<Cat>,
                 stat:           StatPage,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 is_ajax:        is_ajax,
                 help_cats:      _help_cats,
                 stat:           _stat,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -489,13 +442,15 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
                 help_cats:      Vec<Cat>,
                 is_ajax:        i32,
                 stat:           StatPage,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 is_ajax:        is_ajax,
                 help_cats:      _help_cats,
                 stat:           _stat,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -507,7 +462,7 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
 pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Session) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -516,7 +471,8 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
             "вебсервисы.рф: История просмотров пользователя".to_string(),
             "/history/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -550,7 +506,8 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
                     object_list:      Vec<CookieStat>,
                     is_ajax:          i32,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
 
                 }
                 let body = Template {
@@ -559,7 +516,8 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
                     object_list:      object_list,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -573,14 +531,16 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
                     object_list:      Vec<CookieStat>,
                     is_ajax:          i32,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     user:             _cookie_user,
                     object_list:      object_list,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -596,14 +556,16 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
                     object_list:      Vec<CookieStat>,
                     is_ajax:          i32,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     user:             _cookie_user,
                     object_list:      object_list,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -617,14 +579,16 @@ pub async fn history_page(conn: ConnectionInfo, req: HttpRequest, session: Sessi
                     object_list:      Vec<CookieStat>,
                     is_ajax:          i32,
                     next_page_number: i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     user:             _cookie_user,
                     object_list:      object_list,
                     is_ajax:          is_ajax,
                     next_page_number: next_page_number,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -642,7 +606,7 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
             use crate::models::Feedback;
 
             let _connection = establish_connection();
-            let template_types = get_template(&req);
+            let (t, l) = get_all_storage();
             let _feedbacks = schema::feedbacks::table
                 .load::<Feedback>(&_connection)
                 .expect("E");
@@ -659,13 +623,15 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
                     request_user:   User,
                     is_ajax:        i32,
                     feedback_list:  Vec<Feedback>,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
                     is_ajax:        is_ajax,
                     feedback_list:  _feedbacks,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -677,12 +643,14 @@ pub async fn feedback_list_page(req: HttpRequest, session: Session) -> actix_web
                 struct Template {
                     is_ajax:        i32,
                     feedback_list:  Vec<Feedback>,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     is_ajax:        is_ajax,
                     feedback_list:  _feedbacks,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -695,7 +663,7 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
     use crate::models::TechCategories;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let all_tech_categories = schema::tech_categories::table
         .order(schema::tech_categories::level.asc())
         .load::<TechCategories>(&_connection)
@@ -710,7 +678,8 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             "вебсервисы.рф: Список опций и услуг".to_string(),
             "/serve_list/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else if is_signed_in(&session) {
@@ -722,13 +691,15 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
                 request_user:   User,
                 is_ajax:        i32,
                 tech_cats:      Vec<TechCategories>,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 request_user:   _request_user,
                 is_ajax:        is_ajax,
                 tech_cats:      all_tech_categories,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -741,13 +712,15 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
                 request_user:   User,
                 is_ajax:        i32,
                 tech_cats:      Vec<TechCategories>,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 request_user:   _request_user,
                 is_ajax:        is_ajax,
                 tech_cats:      all_tech_categories,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -761,12 +734,14 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             struct Template {
                 is_ajax:        i32,
                 tech_cats:      Vec<TechCategories>,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 is_ajax:        is_ajax,
                 tech_cats:      all_tech_categories,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -778,12 +753,14 @@ pub async fn serve_list_page(req: HttpRequest, session: Session) -> actix_web::R
             struct Template {
                 is_ajax:        i32,
                 tech_cats:      Vec<TechCategories>,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 is_ajax:        is_ajax,
                 tech_cats:      all_tech_categories,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -796,7 +773,7 @@ pub async fn get_tech_category_page(req: HttpRequest, _id: web::Path<i32>) -> ac
     use crate::models::TechCategories;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let tech_category = schema::tech_categories::table
         .filter(schema::tech_categories::id.eq(*_id))
         .first::<TechCategories>(&_connection)
@@ -806,11 +783,13 @@ pub async fn get_tech_category_page(req: HttpRequest, _id: web::Path<i32>) -> ac
     #[template(path = "desctop/load/tech_category.stpl")]
     struct Template {
         object:         TechCategories,
-        template_types: i16,
+        template_types: u8,
+        linguage:       u8,
     }
     let body = Template {
         object:         tech_category,
-        template_types: template_types,
+        template_types: t,
+        linguage:       l,
     }
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -821,7 +800,7 @@ pub async fn get_serve_category_page(req: HttpRequest, _id: web::Path<i32>) -> a
     use crate::models::ServeCategories;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let serve_category = schema::serve_categories::table
         .filter(schema::serve_categories::id.eq(*_id))
         .first::<ServeCategories>(&_connection)
@@ -831,11 +810,13 @@ pub async fn get_serve_category_page(req: HttpRequest, _id: web::Path<i32>) -> a
     #[template(path = "desctop/load/serve_category.stpl")]
     struct Template {
         object:         ServeCategories,
-        template_types: i16,
+        template_types: u8,
+        linguage:       u8,
     }
     let body = Template {
         object:         serve_category,
-        template_types: template_types,
+        template_types: t,
+        linguage:       l,
     }
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -846,7 +827,7 @@ pub async fn get_serve_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
     use crate::models::Serve;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let _serve = schema::serve::table
         .filter(schema::serve::id.eq(*_id))
         .first::<Serve>(&_connection)
@@ -856,11 +837,13 @@ pub async fn get_serve_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
     #[template(path = "desctop/load/serve.stpl")]
     struct Template {
         object:         Serve,
-        template_types: i16,
+        template_types: u8,
+        linguage:       u8,
     }
     let body = Template {
         object:         _serve,
-        template_types: template_types,
+        template_types: t,
+        linguage:       l,
     }
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -868,14 +851,16 @@ pub async fn get_serve_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web:
 }
 
 pub async fn get_feedback_page(req: HttpRequest) -> actix_web::Result<HttpResponse> {
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     #[derive(TemplateOnce)]
     #[template(path = "desctop/load/feedback.stpl")]
     struct Template {
-        template_types: i16,
+        template_types: u8,
+        linguage:       u8,
     }
     let body = Template {
-        template_types: template_types,
+        template_types: t,
+        linguage:       l,
     }
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -887,7 +872,7 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
     use crate::models::CookieUser;
 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let _connection = establish_connection();
     if is_ajax == 0 {
         get_first_load_page (
@@ -897,7 +882,8 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
             "вебсервисы.рф: Общая статистика сайта".to_string(),
             "/cookie_users_list/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else {
@@ -913,14 +899,16 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
                     object_list:      Vec<CookieUser>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -934,14 +922,16 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
                     object_list:      Vec<CookieUser>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     request_user:     _request_user,
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -956,13 +946,15 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
                     object_list:      Vec<CookieUser>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -975,13 +967,15 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
                     object_list:      Vec<CookieUser>,
                     next_page_number: i32,
                     is_ajax:          i32,
-                    template_types:   i16,
+                    template_types:   u8,
+                    linguage:         u8,
                 }
                 let body = Template {
                     object_list:      object_list,
                     next_page_number: next_page_number,
                     is_ajax:          is_ajax,
-                    template_types:   template_types,
+                    template_types:   t,
+                    linguage:         l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -994,7 +988,7 @@ pub async fn cookie_users_list_page(session: Session, req: HttpRequest) -> actix
 pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        let template_types = get_template(&req);
+        let (t, l) = get_all_storage();
         if _request_user.is_superuser() {
             use crate::utils::get_page;
             use crate::models::CookieStat;
@@ -1013,12 +1007,14 @@ pub async fn get_user_history_page(session: Session, req: HttpRequest, user_id: 
             struct Template {
                 object_list:      Vec<CookieStat>,
                 next_page_number: i32,
-                template_types:   i16,
+                template_types:   u8,
+                linguage:         u8,
             }
             let body = Template {
                 object_list:      object_list,
                 next_page_number: next_page_number,
-                template_types:   template_types,
+                template_types:   t,
+                linguage:         l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1037,7 +1033,7 @@ pub async fn get_tech_objects_page(req: HttpRequest, session: Session, _id: web:
     use crate::models::TechCategories;
 
     let mut is_admin = false;
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.is_superuser() {
@@ -1055,12 +1051,14 @@ pub async fn get_tech_objects_page(req: HttpRequest, session: Session, _id: web:
     struct Template {
         object:         TechCategories,
         is_admin:       bool,
-        template_types: i16,
+        template_types: u8,
+        linguage:       u8,
     }
     let body = Template {
         object:         _cat,
         is_admin:       is_admin,
-        template_types: template_types,
+        template_types: t,
+        linguage:       l,
     }
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1068,7 +1066,7 @@ pub async fn get_tech_objects_page(req: HttpRequest, session: Session, _id: web:
 }
 
 pub async fn unical_object_form_page(req: HttpRequest, session: Session, _id: web::Path<i16>) -> actix_web::Result<HttpResponse> {
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if !_request_user.is_superuser() {
@@ -1093,12 +1091,14 @@ pub async fn unical_object_form_page(req: HttpRequest, session: Session, _id: we
             struct Template {
                 cats:           Vec<Cat>,
                 biznes_mode:    bool,
-                template_types: i16,
+                template_types: u8,
+                linguage:       u8,
             }
             let body = Template {
                 cats:           _cats,
                 biznes_mode:    biznes_mode,
-                template_types: template_types,
+                template_types: t,
+                linguage:       l,
             }
             .render_once()
             .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1112,7 +1112,7 @@ pub async fn unical_object_form_page(req: HttpRequest, session: Session, _id: we
 
 pub async fn create_category_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -1121,7 +1121,8 @@ pub async fn create_category_page(session: Session, req: HttpRequest) -> actix_w
             "вебсервисы.рф: Создание категории".to_string(),
             "/create_category/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else if is_signed_in(&session) {
@@ -1139,13 +1140,15 @@ pub async fn create_category_page(session: Session, req: HttpRequest) -> actix_w
                     request_user:   User,
                     cats:           Vec<Categories>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
                     cats:           _cats,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1157,12 +1160,14 @@ pub async fn create_category_page(session: Session, req: HttpRequest) -> actix_w
                 struct Template {
                     cats:           Vec<Categories>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     cats:           _cats,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1180,7 +1185,7 @@ pub async fn create_category_page(session: Session, req: HttpRequest) -> actix_w
 
 pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let cat_id: i32 = *_id;
     let _connection = establish_connection();
     let _cats = schema::categories::table
@@ -1197,7 +1202,8 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
             "вебсервисы.рф: Изменение категории ".to_string() + &_cat.name,
             "/edit_category/".to_string() + &_cat.id.to_string() + &"/".to_string(),
             _cat.get_image(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else if is_signed_in(&session) {
@@ -1215,14 +1221,16 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     cat:            Categories,
                     cats:           Vec<Categories>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
                     cat:            _cat,
                     cats:           _cats,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1235,13 +1243,15 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
                     cat:            Categories,
                     cats:           Vec<Categories>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     cat:            _cat,
                     cats:           _cats,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1259,7 +1269,7 @@ pub async fn edit_category_page(session: Session, req: HttpRequest, _id: web::Pa
 
 pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::Result<HttpResponse> {
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     if is_ajax == 0 {
         get_first_load_page (
             &session,
@@ -1268,7 +1278,8 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
             "вебсервисы.рф: Создание объекта".to_string(),
             "/create_item/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else if is_signed_in(&session) {
@@ -1292,13 +1303,15 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
                     request_user:   User,
                     all_tags:       Vec<Tag>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
                     all_tags:       all_tags,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1310,12 +1323,14 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
                 struct Template {
                     all_tags:       Vec<Tag>,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     all_tags:       all_tags,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1331,7 +1346,7 @@ pub async fn create_item_page(session: Session, req: HttpRequest) -> actix_web::
     }
 }
 pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let _connection = establish_connection();
     let _item = schema::items::table
         .filter(schema::items::id.eq(*_id))
@@ -1347,7 +1362,8 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
             "вебсервисы.рф: Изменение объекта ".to_string() + &_item.title,
             "/edit_item/".to_string() + &_item.id.to_string() + &"/".to_string(),
             _item.get_image(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else if is_signed_in(&session) {
@@ -1397,7 +1413,8 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
                     item_cats:      Vec<Categories>,
                     tech_cats:      Vec<TechCategories>,
                     level:          i16,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
@@ -1409,7 +1426,8 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
                     item_cats:      item_cats,
                     tech_cats:      _tech_categories,
                     level:          level,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1427,7 +1445,8 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
                     item_cats:      Vec<Categories>,
                     tech_cats:      Vec<TechCategories>,
                     level:          i16,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     object:         _item,
@@ -1438,7 +1457,8 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
                     item_cats:      item_cats,
                     tech_cats:      _tech_categories,
                     level:          level,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1455,7 +1475,7 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
 }
 
 pub async fn edit_content_item_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let _connection = establish_connection();
     let _item = schema::items::table
         .filter(schema::items::id.eq(&*_id))
@@ -1471,7 +1491,8 @@ pub async fn edit_content_item_page(session: Session, req: HttpRequest, _id: web
             "вебсервисы.рф: Изменение текста объекта ".to_string() + &_item.title,
             "/edit_content_item/".to_string() + &_item.id.to_string() + &"/".to_string(),
             _item.get_image(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else if is_signed_in(&session) {
@@ -1484,13 +1505,15 @@ pub async fn edit_content_item_page(session: Session, req: HttpRequest, _id: web
                     request_user:   User,
                     item:           Item,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
                     item:           _item,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1502,12 +1525,14 @@ pub async fn edit_content_item_page(session: Session, req: HttpRequest, _id: web
                 struct Template {
                     item:           Item,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     item:           _item,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1526,7 +1551,7 @@ pub async fn edit_content_item_page(session: Session, req: HttpRequest, _id: web
 pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i32>) -> actix_web::Result<HttpResponse> {
     use crate::models::File;
 
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let _connection = establish_connection();
     let _file = schema::files::table
         .filter(schema::files::id.eq(*_id))
@@ -1542,7 +1567,8 @@ pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i
             "вебсервисы.рф: Изменение файла".to_string(),
             "/edit_file/".to_string() + &_file.id.to_string() + &"/".to_string(),
             "/static/images/dark/store.jpg".to_string(),
-            template_types,
+            t, 
+            l,
         ).await
     }
     else if is_signed_in(&session) {
@@ -1555,13 +1581,15 @@ pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i
                     request_user:   User,
                     file:           File,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     request_user:   _request_user,
                     file:           _file,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1573,12 +1601,14 @@ pub async fn edit_file_page(session: Session, req: HttpRequest, _id: web::Path<i
                 struct Template {
                     file:           File,
                     is_ajax:        i32,
-                    template_types: i16,
+                    template_types: u8,
+                    linguage:       u8,
                 }
                 let body = Template {
                     file:           _file,
                     is_ajax:        is_ajax,
-                    template_types: template_types,
+                    template_types: t,
+                    linguage:       l,
                 }
                 .render_once()
                 .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
@@ -1598,7 +1628,7 @@ pub async fn image_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Res
     use crate::models::File;
 
     let _connection = establish_connection();
-    let template_types = get_template(&req);
+    let (t, l) = get_all_storage();
     let _file = schema::files::table
         .filter(schema::files::id.eq(*_id))
         .first::<File>(&_connection)
@@ -1644,14 +1674,16 @@ pub async fn image_page(req: HttpRequest, _id: web::Path<i32>) -> actix_web::Res
         item:           Item,
         prev:           Option<File>,
         next:           Option<File>,
-        template_types: i16,
+        template_types: u8,
+        linguage:       u8,
     }
     let body = Template {
         object:         _file,
         item:           _item,
         prev:           prev,
         next:           next,
-        template_types: template_types,
+        template_types: t,
+        linguage:       l,
     }
     .render_once()
     .map_err(|e| InternalError::new(e, StatusCode::INTERNAL_SERVER_ERROR))?;
