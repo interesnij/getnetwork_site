@@ -29,6 +29,7 @@ use crate::models::{
     NewOrder,
     OrderFile,
     NewOrderFile,
+    StatPage,
 };
 use actix_session::Session;
 use actix_multipart::Multipart;

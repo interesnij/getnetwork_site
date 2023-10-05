@@ -22,7 +22,7 @@ use crate::diesel::{
 };
 use crate::schema;
 use futures::StreamExt;
-use crate::models::{User, NewUser, SessionUser};
+use crate::models::{User, NewUser, SessionUser, StatPage};
 use actix_session::Session;
 use crate::errors::AuthError;
 use actix_multipart::{Field, Multipart};

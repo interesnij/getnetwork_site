@@ -28,6 +28,7 @@ use crate::models::{
     Cat,
     SmallTag,
     CatDetail,
+    StatPage,
 };
 use sailfish::TemplateOnce;
 
