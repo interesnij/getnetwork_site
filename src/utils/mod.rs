@@ -145,7 +145,7 @@ fn get_content_type<'a>(req: &'a HttpRequest) -> Option<&'a str> {
     return req.headers().get("user-agent")?.to_str().ok();
 }
 pub fn is_desctop(req: &HttpRequest) -> bool {
-    return get_content_type(req).unwrap().contains("Mobile");
+    return !get_content_type(req).unwrap().contains("Mobile");
 } 
 
     pub fn get_device_and_ajax(req: &HttpRequest) -> (bool, i32) {
