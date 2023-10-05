@@ -185,7 +185,6 @@ pub struct Serve {
 pub struct ServeVar {
     pub id:         i32,
     pub name:       String,
-    pub name_en:    String,
     pub price:      i32,
     pub man_hours:  i16,
     pub is_default: bool,

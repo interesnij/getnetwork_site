@@ -126,15 +126,15 @@ pub struct StorageParams {
     pub template: u8,
     pub linguage: u8, 
 }
-pub fn get_all_storage() -> StorageParams {
-    return StorageParams {
-        template: get_template_storage(),
-        linguage: get_linguage_storage(),
-    }
+pub fn get_all_storage() -> (u8, u8) {
+    (
+        get_template_storage().parse::<u8>().unwrap(),
+        get_linguage_storage().parse::<u8>().unwrap()
+    )
 }
 
 pub fn set_template(types: u8) -> () {
-    web_local_storage_api::set_item("template", types.to_str());
+    web_local_storage_api::set_item("template", types.to_string().as_str());
 }
 pub fn set_linguage(types: u8) -> () {
     web_local_storage_api::set_item("linguage", types.to_string().as_str());

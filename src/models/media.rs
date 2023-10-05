@@ -33,10 +33,9 @@ use crate::schema::files;
 
 #[derive(Serialize, Queryable)]
 pub struct SmallFile {
-    pub id:             i32,
-    pub src:            String,
-    pub description:    Option<String>,
-    pub description_en: Option<String>,
+    pub id:          i32,
+    pub src:         String,
+    pub description: Option<String>,
 }
 
 #[derive(Debug, Serialize, Identifiable, Queryable)]
