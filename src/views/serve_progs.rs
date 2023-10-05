@@ -25,7 +25,7 @@ use crate::schema;
 use crate::models::{
     ServeCategories,
     NewServeCategories,
-    Serve,
+    Serve, StatPage,
     NewServe,
     TechCategories,
     NewTechCategories,

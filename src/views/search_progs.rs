@@ -17,7 +17,7 @@ use crate::utils::{
 };
 
 use sailfish::TemplateOnce;
-use crate::models::User;
+use crate::models::{User, StatPage};
 
 
 pub fn search_routes(config: &mut web::ServiceConfig) {
@@ -684,6 +684,7 @@ pub async fn search_stores_page(session: Session, req: HttpRequest, q: web::Path
     if is_ajax == 0 {
         get_first_load_page (
             &session,
+            is_desctop,
             "Поиск товаров по фрагменту ".to_string() + &q,
             "вебсервисы.рф: Поиск товаров по фрагменту ".to_string() + &q,
             "/search_stores/".to_string() + &q + &"/".to_string(),

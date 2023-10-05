@@ -24,7 +24,7 @@ use crate::diesel::{
 };
 use crate::models::{
     Categories,
-    Item,
+    Item, StatPage,
     User,
     Cat,
     SmallTag,

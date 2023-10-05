@@ -29,6 +29,7 @@ use crate::models::{
     Item,
     User,
     CatDetail,
+    StatPage,
 };
 use sailfish::TemplateOnce;
 

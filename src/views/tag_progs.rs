@@ -26,7 +26,7 @@ use crate::utils::{
 };
 use crate::schema;
 use crate::models::{
-    Tag,
+    Tag, StatPage,
     SmallTag,
     NewTag,
     TagItems,
