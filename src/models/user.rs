@@ -374,7 +374,7 @@ impl StatPage {
                 height:  0.0,
                 seconds: 0,
             };
-            _stat = diesel::insert_into(schema::stat_pages::table)
+            let _stat = diesel::insert_into(schema::stat_pages::table)
                 .values(&form)
                 .get_result::<StatPage>(&_connection)
                 .expect("Error.");
