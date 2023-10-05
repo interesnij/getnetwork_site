@@ -76,8 +76,8 @@ pub fn get_cookie_user_id(req: &HttpRequest) -> i32 {
     let _cookie = req.headers().get("cookie").expect("E.").to_str().ok();
     println!("_cookie {:?}", _cookie);
     let mut user_id = 0;
-    if _cookie.is_ok() {
-        for c in _cookie.expect("E.").split("; ").collect().iter() {
+    if _cookie.is_some() {
+        for c in _cookie.unwrap().split("; ").collect().iter() {
             let split_c: Vec<&str> = c.split("=").collect();
             println!("split_c[0] {:?}", split_c[0]);
             println!("split_c[1] {:?}", split_c[1]);
