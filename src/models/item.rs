@@ -1134,7 +1134,6 @@ impl Item {
                 }
                 return _content.to_string();
             }
-            return "".to_string();
         }
         else if l == 2 {
             if self.description_en.is_some() {
@@ -1144,8 +1143,8 @@ impl Item {
                 }
                 return _content.to_string();
             }
-            return "".to_string();
         }
+        return "".to_string();
     }
 
     pub fn get_categories(&self) -> Result<Vec<SmallCat>, Error> {
