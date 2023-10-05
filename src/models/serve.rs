@@ -291,7 +291,6 @@ impl Serve {
                 }
                 return _content.to_string();
             }
-            return "".to_string();
         }
         else if l == 2 {
             if self.description_en.is_some() {
@@ -301,8 +300,8 @@ impl Serve {
                 }
                 return _content.to_string();
             }
-            return "".to_string();
         }
+        return "".to_string();
     }
 }
 

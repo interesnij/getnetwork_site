@@ -74,10 +74,10 @@ pub fn establish_connection() -> PgConnection {
         .expect(&format!("Error connecting to {}", database_url))
 }
 
-pub fn get_auth_template(req: &HttpRequest) -> i16 {
+pub fn get_auth_template(req: &HttpRequest) -> u8 {
     #[derive(Deserialize)]
     struct TemplateParams {
-        pub template: Option<i16>,
+        pub template: Option<u8>,
     }
     let params_some = web::Query::<TemplateParams>::from_query(&req.query_string());
     if params_some.is_ok() {
@@ -106,7 +106,7 @@ pub fn get_template_storage() -> u8 {
     if template_res.is_ok() {
         let template_some = template_res.expect("E.");
         if template_some.is_some() {
-            return template_some.unwrap();
+            return template_some.unwrap().parse().unwrap();
         }
     }
     return 1;
@@ -116,7 +116,7 @@ pub fn get_linguage_storage() -> u8 {
     if linguage_res.is_ok() {
         let linguage_some = linguage_res.expect("E.");
         if linguage_some.is_some() {
-            return linguage_some.unwrap();
+            return linguage_some.unwrap().parse().unwrap();
         }
     }
     return 1;
@@ -134,10 +134,10 @@ pub fn get_all_storage() -> StorageParams {
 }
 
 pub fn set_template(types: u8) -> () {
-    web_local_storage_api::set_item("template", types);
+    web_local_storage_api::set_item("template", types.as_str());
 }
 pub fn set_linguage(types: u8) -> () {
-    web_local_storage_api::set_item("linguage", types);
+    web_local_storage_api::set_item("linguage", types.as_str());
 }
 
 
@@ -245,7 +245,7 @@ pub fn get_request_user_data(session: &Session) -> User {
 }
 
 pub async fn get_first_load_page (
-    req:         &HttpRequest
+    req:         &HttpRequest,
     session:     &Session,
     is_desctop:  bool,
     title:       String,
