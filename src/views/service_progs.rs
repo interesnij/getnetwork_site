@@ -105,7 +105,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                     _item.title.clone() + &" | Услуга: вебсервисы.рф".to_string(),
                     "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
-                    template_types,
+                    t, 
+                    l,
                 ).await
             }
             else if is_desctop {
@@ -180,7 +181,8 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
                     _item.title.clone() + &" | Услуга: вебсервисы.рф".to_string(),
                     "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
-                    template_types,
+                    t, 
+                    l,
                 ).await
             }
             else if is_desctop {

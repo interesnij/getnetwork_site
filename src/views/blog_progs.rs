@@ -98,7 +98,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                     _item.title.clone() + &" | Статья: вебсервисы.рф".to_string(),
                     "/service/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
-                    template_types,
+                    t, 
+                    l,
                 ).await
             }
             else if is_desctop {
@@ -173,7 +174,8 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
                     _item.title.clone() + &" | Статья: вебсервисы.рф".to_string(),
                     "/blog/".to_string() + &_cat_id.to_string() + &"/".to_string() + &_item_id.to_string() + &"/".to_string(),
                     _item.get_image(),
-                    template_types,
+                    t, 
+                    l,
                 ).await
             }
             else if is_desctop {
