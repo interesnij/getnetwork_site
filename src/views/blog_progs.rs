@@ -248,7 +248,6 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         .filter(schema::categories::types.eq(1))
         .select((
             schema::categories::name,
-            schema::categories::name_en,
             schema::categories::slug,
             schema::categories::count,
             schema::categories::id,
