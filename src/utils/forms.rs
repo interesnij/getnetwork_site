@@ -172,9 +172,7 @@ pub async fn content_form(payload: &mut Multipart) -> ContentForm {
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ItemForms {
     pub title:          String,
-    pub title_en:       String,
     pub description:    Option<String>,
-    pub description_en: Option<String>,
     pub link:           Option<String>,
     pub main_image:     Option<String>,
     pub category_list:  Vec<i32>,
@@ -190,9 +188,7 @@ pub struct ItemForms {
 pub async fn item_form(payload: &mut Multipart, owner_id: i32) -> ItemForms {
     let mut form: ItemForms = ItemForms {
         title:          "".to_string(),
-        title_en:       "".to_string(),
         description:    None,
-        description_en: None,
         link:           None,
         main_image:     None,
         category_list:  Vec::new(),
@@ -207,7 +203,7 @@ pub async fn item_form(payload: &mut Multipart, owner_id: i32) -> ItemForms {
     while let Some(item) = payload.next().await {
         let mut field: Field = item.expect("split_payload err");
         let name = field.name();
-        let string_list = ["title", "title_en", "description", "description_en", "link", "slug"];
+        let string_list = ["title", "description", "link", "slug"];
 
         if string_list.contains(&name) {
             let mut _content = "".to_string();
@@ -217,12 +213,8 @@ pub async fn item_form(payload: &mut Multipart, owner_id: i32) -> ItemForms {
                     let data_string = s.to_string();
                     if field.name() == "title" {
                         form.title = data_string;
-                    } else if field.name() == "title_en" {
-                        form.title_en = data_string; 
                     } else if field.name() == "description" {
                         form.description = Some(data_string);
-                    } else if field.name() == "description_en" {
-                        form.description_en = Some(data_string);
                     } else if field.name() == "link" {
                         form.link = Some(data_string);
                     }
@@ -386,12 +378,8 @@ pub async fn order_form(payload: &mut Multipart, owner_id: i32) -> OrderForms {
                     let data_string = s.to_string();
                     if field.name() == "title" {
                         form.title = data_string;
-                    } else if field.name() == "title_en" {
-                        form.title_en = data_string;
                     } else if field.name() == "description" {
                         form.description = Some(data_string);
-                    } else if field.name() == "description_en" {
-                        form.description_en = Some(data_string);
                     } else if field.name() == "email" {
                         form.email = data_string;
                     } else if field.name() == "username" {

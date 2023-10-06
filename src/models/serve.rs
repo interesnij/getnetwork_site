@@ -65,8 +65,8 @@ impl TechCategories {
         else if l == 2 {
             diesel::update(&cat)
                 .set((
-                    schema::tech_categories::name_en.eq(&form.name_en),
-                    schema::tech_categories::description_en.eq(&form.description_en),
+                    schema::tech_categories::name_en.eq(&form.name),
+                    schema::tech_categories::description_en.eq(&form.description),
                     schema::tech_categories::position.eq(form.position),
                     schema::tech_categories::image.eq(&form.image),
                     schema::tech_categories::level.eq(form.level),
@@ -101,9 +101,9 @@ impl TechCategories {
         else if l == 2 {
             let new_cat = NewTechCategories {
                 name:           "".to_string(),
-                name_en:        form.name_en.clone(),
+                name_en:        form.name.clone(),
                 description:    None,
-                description_en: Some(form.description_en.clone()),
+                description_en: Some(form.description.clone()),
                 position:       form.position,
                 count:          0,
                 level:          form.level,
