@@ -77,19 +77,8 @@ pub async fn get_store_page(session: Session, req: HttpRequest, param: web::Path
             .filter(schema::categories::types.eq(_item.types))
             .first::<Categories>(&_connection)
             .expect("E");
-        let _cats: Vec<Cat>;
-        let _tags: Vec<SmallTag>;
-        let cats_res = block(move || Categories::get_categories_for_types(3, l)).await?;
-        _cats = match cats_res {
-            Ok(_ok) => _ok,
-            Err(_error) => Vec::new(),
-        };
-
-        let tags_res = block(move || Categories::get_tags(3, l)).await?;
-        _tags = match tags_res {
-            Ok(_list) => _list,
-            Err(_error) => Vec::new(),
-        };
+        let _cats = block(move || Categories::get_categories_for_types(3, l)).await?;
+        let _tags = block(move || Categories::get_tags(3, l)).await?;
 
         let (prev, next) = _category.get_featured_items(_item.id, _item.types, l);
 
@@ -291,19 +280,8 @@ pub async fn store_category_page(session: Session, req: HttpRequest, _id: web::P
         let page = get_page(&req);
         let object_list: Vec<Store>;
         let next_page_number: i32;
-        let _cats: Vec<Cat>;
-        let _tags: Vec<SmallTag>;
-        let cats_res = block(move || Categories::get_categories_for_types(3, l)).await?;
-        _cats = match cats_res {
-            Ok(_ok) => _ok,
-            Err(_error) => Vec::new(),
-        };
-
-        let tags_res = block(move || Categories::get_tags(3, l)).await?;
-        _tags = match tags_res {
-            Ok(_list) => _list,
-            Err(_error) => Vec::new(),
-        };
+        let _cats = block(move || Categories::get_categories_for_types(3, l)).await?;
+        let _tags = block(move || Categories::get_tags(3, l)).await?;
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -454,19 +432,8 @@ pub async fn store_categories_page(session: Session, req: HttpRequest) -> actix_
     }
     else {
         let _stat = crate::models::StatPage::get_or_create(71);
-        let _cats: Vec<Cat>;
-        let _tags: Vec<SmallTag>;
-        let cats_res = block(move || Categories::get_categories_for_types(3, l)).await?;
-        _cats = match cats_res {
-            Ok(_ok) => _ok,
-            Err(_error) => Vec::new(),
-        };
-
-        let tags_res = block(move || Categories::get_tags(3, l)).await?;
-        _tags = match tags_res {
-            Ok(_list) => _list,
-            Err(_error) => Vec::new(),
-        };
+        let _cats = block(move || Categories::get_categories_for_types(3, l)).await?;
+        let _tags = block(move || Categories::get_tags(3, l)).await?;
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);

@@ -872,7 +872,7 @@ pub async fn publish_item(session: Session, _id: web::Path<i32>) -> impl Respond
             let tags_o = _item.get_tags_obj().expect("E");
             let categories_o = _item.get_categories_obj().expect("E");
             let cats_res = block(move || categories_o).await;
-            let tags_res = block(move || tags_o).await;
+            let _tags = block(move || tags_o).await;
             _categories = match cats_res {
                 Ok(_ok) => _ok,
                 Err(_error) => Vec::new(),
@@ -883,10 +883,6 @@ pub async fn publish_item(session: Session, _id: web::Path<i32>) -> impl Respond
                     .execute(&_connection)
                     .expect("Error.");
             }
-            _tags = match tags_res {
-                Ok(_list) => _list,
-                Err(_error) => Vec::new(),
-            };
             for _tag in _tags.iter() {
                 diesel::update(_tag)
                     .set(schema::tags::count.eq(_tag.count + 1))
@@ -913,12 +909,10 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
                 .expect("Error.");
 
             let _categories: Vec<Categories>;
-            let _tags: Vec<Tag>;
-
             let _categories_0 = _item.get_categories_obj().expect("E");
             let _tags_0 = _item.get_tags_obj().expect("E");
             let cats_res = block(move || _categories_0).await;
-            let tags_res = block(move || _tags_0).await;
+            let _tags = block(move || _tags_0).await;
 
             _categories = match cats_res {
                 Ok(_ok) => _ok,
@@ -930,10 +924,6 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
                     .execute(&_connection)
                     .expect("Error.");
             }
-            _tags = match tags_res {
-                Ok(_list) => _list,
-                Err(_error) => Vec::new(),
-            };
             for _tag in _tags.iter() {
                 diesel::update(_tag)
                     .set(schema::tags::count.eq(_tag.count - 1))

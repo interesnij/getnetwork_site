@@ -80,17 +80,12 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             .first::<Categories>(&_connection)
             .expect("E");
         let _cats: Vec<Cat>;
-        let _tags: Vec<SmallTag>;
         let cats_res = block(move || Categories::get_categories_for_types(2, l)).await?;
         _cats = match cats_res {
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
-        let tags_res = block(move || Categories::get_tags(2, l)).await?;
-        _tags = match tags_res {
-            Ok(_list) => _list,
-            Err(_error) => Vec::new(),
-        };
+        let _tags = block(move || Categories::get_tags(2, l)).await?;
 
         let (prev, next) = _category.get_featured_items(_item.id, _item.types, l);
 
@@ -299,19 +294,8 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
         let page = get_page(&req);
         let object_list: Vec<Service>;
         let next_page_number: i32;
-        let _cats: Vec<Cat>;
-        let _tags: Vec<SmallTag>;
-        let cats_res = block(move || Categories::get_categories_for_types(2, l)).await?;
-        _cats = match cats_res {
-            Ok(_ok) => _ok,
-            Err(_error) => Vec::new(),
-        };
-
-        let tags_res = block(move || Categories::get_tags(2, l)).await?;
-        _tags = match tags_res {
-            Ok(_list) => _list,
-            Err(_error) => Vec::new(),
-        };
+        let _cats = block(move || Categories::get_categories_for_types(2, l)).await?;
+        let _tags = block(move || Categories::get_tags(2, l)).await?;
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -451,19 +435,8 @@ pub async fn service_categories_page(session: Session, req: HttpRequest) -> acti
     }
     else {
         let _stat = crate::models::StatPage::get_or_create(61);
-        let _cats: Vec<Cat>;
-        let _tags: Vec<SmallTag>;
-        let cats_res = block(move || Categories::get_categories_for_types(2, l)).await?;
-        _cats = match cats_res {
-            Ok(_ok) => _ok,
-            Err(_error) => Vec::new(),
-        };
-
-        let tags_res = block(move || Categories::get_tags(1, l)).await?;
-        _tags = match tags_res {
-            Ok(_list) => _list,
-            Err(_error) => Vec::new(),
-        };
+        let _cats = block(move || Categories::get_categories_for_types(2, l)).await?;
+        let _tags = block(move || Categories::get_tags(1, l)).await?;
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);

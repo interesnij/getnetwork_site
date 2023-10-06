@@ -80,12 +80,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
-        let tags_res = block(move || Categories::get_tags(1, l)).await?;
-        _tags = match tags_res {
-            Ok(_list) => _list,
-            Err(_error) => Vec::new(),
-        };
-
+        let tags = block(move || Categories::get_tags(1, l)).await?;
         let (prev, next) = _category.get_featured_items(_item.id, _item.types, l);
 
         if is_signed_in(&session) {
@@ -294,12 +289,7 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
-        let tags_res = block(move || Categories::get_tags(1, l)).await?;
-        _tags = match tags_res {
-            Ok(_list) => _list,
-            Err(_error) => Vec::new(),
-        };
-
+        let tags = block(move || Categories::get_tags(1, l)).await?;
         let object_list: Vec<Blog>;
         let next_page_number: i32;
 
@@ -450,20 +440,8 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
     }
     else {
         let _stat = crate::models::StatPage::get_or_create(41);
-        let _cats: Vec<Cat>;
-        let _tags: Vec<SmallTag>;
-
-        let cats_res = block(move || Categories::get_categories_for_types(1, l)).await?;
-        _cats = match cats_res {
-            Ok(_ok) => _ok,
-            Err(_error) => Vec::new(),
-        };
-
-        let tags_res = block(move || Categories::get_tags(1, l)).await?;
-        _tags = match tags_res {
-            Ok(_list) => _list,
-            Err(_error) => Vec::new(),
-        };
+        let _cats = block(move || Categories::get_categories_for_types(1, l)).await?;
+        let _tags = block(move || Categories::get_tags(1, l)).await?;
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
