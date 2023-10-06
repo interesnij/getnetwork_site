@@ -822,7 +822,7 @@ impl Categories {
                     .expect("E."));
             }
         } else {
-            else if l == 1 {
+            if l == 1 {
                 return Ok(items
                     .filter(schema::items::id.eq_any(ids))
                     .filter(schema::items::is_active.eq(true))
