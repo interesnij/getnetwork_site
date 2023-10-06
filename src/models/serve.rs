@@ -19,6 +19,7 @@ use crate::utils::{
     get_linguage_storage,
     CategoriesForm
 };
+use crate::models::User;
 
 
 /////// TechCategories //////
@@ -44,7 +45,7 @@ impl TechCategories {
         let _connection = establish_connection();
         let l = get_linguage_storage();
         let cat = schema::tech_categories::table
-            .filter(schema::tech_categories::id.eq(id))
+            .filter(schema::tech_categories::id.eq(cat_id))
             .first::<TechCategories>(&_connection)
             .expect("E.");
         if user.perm < 60 && cat.user_id != user.id {
@@ -56,7 +57,7 @@ impl TechCategories {
                     schema::tech_categories::name.eq(&form.name),
                     schema::tech_categories::description.eq(&form.description),
                     schema::tech_categories::position.eq(form.position),
-                    schema::tech_categories::image.eq(&form.image),
+                    //schema::tech_categories::image.eq(&form.image),
                     schema::tech_categories::level.eq(form.level),
                 ))
                 .execute(&_connection)
@@ -68,7 +69,7 @@ impl TechCategories {
                     schema::tech_categories::name_en.eq(&form.name),
                     schema::tech_categories::description_en.eq(&form.description),
                     schema::tech_categories::position.eq(form.position),
-                    schema::tech_categories::image.eq(&form.image),
+                    //schema::tech_categories::image.eq(&form.image),
                     schema::tech_categories::level.eq(form.level),
                 ))
                 .execute(&_connection)
@@ -179,7 +180,7 @@ impl ServeCategories {
         let _connection = establish_connection();
         let l = get_linguage_storage();
         let cat = schema::serve_categories::table
-            .filter(schema::serve_categories::id.eq(id))
+            .filter(schema::serve_categories::id.eq(cat_id))
             .first::<ServeCategories>(&_connection)
             .expect("E.");
         if user.perm < 60 && cat.user_id != user.id {

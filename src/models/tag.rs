@@ -16,6 +16,8 @@ use crate::utils::{
     get_linguage_storage,
     CategoriesForm
 };
+use crate::models::User;
+use crate::errors::Error;
 
 
 #[derive(Serialize, Queryable)]
