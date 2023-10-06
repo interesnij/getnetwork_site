@@ -185,12 +185,12 @@ pub fn is_desctop(req: &HttpRequest) -> bool {
         Vec<Cat>,
         Vec<Cat>,
     ) { 
-        let _service_cats = Categories::get_categories_for_types(2, l).expect("E.");
-        let _store_cats = Categories::get_categories_for_types(3, l).expect("E.");
-        let _blog_cats = Categories::get_categories_for_types(1, l).expect("E.");
-        let _wiki_cats = Categories::get_categories_for_types(4, l).expect("E.");
-        let _work_cats = Categories::get_categories_for_types(5, l).expect("E.");
-        let _help_cats = Categories::get_categories_for_types(6, l).expect("E.");
+        let _service_cats = Categories::get_categories_for_types(2, l);
+        let _store_cats = Categories::get_categories_for_types(3, l);
+        let _blog_cats = Categories::get_categories_for_types(1, l);
+        let _wiki_cats = Categories::get_categories_for_types(4, l);
+        let _work_cats = Categories::get_categories_for_types(5, l);
+        let _help_cats = Categories::get_categories_for_types(6, l);
 
         return (
             _service_cats,

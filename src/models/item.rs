@@ -994,7 +994,7 @@ impl Categories {
             return "/static/images/img.jpg".to_string();
         }
     } 
-    pub fn get_categories_for_types(types: i16, l: u8) -> Result<Vec<Cat>, Error> {
+    pub fn get_categories_for_types(types: i16, l: u8) -> Vec<Cat> {
         let _connection = establish_connection();
         if l == 1 {
             return Ok(schema::categories::table
