@@ -24,7 +24,7 @@
         <div class="row multi-columns-row">
             <%
               use crate::models::Categories;
-              let get_6_services = Categories::get_stores(category.id, 3, 0, request_user.is_superuser()).expect("E");
+              let get_6_services = Categories::get_stores(category.id, 3, 0, request_user.is_superuser(), l).expect("E");
             %>
             <% if get_6_services.len() > 0 { %>
 
