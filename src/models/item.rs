@@ -104,7 +104,7 @@ impl Blog {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
+    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
         let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
@@ -134,7 +134,7 @@ impl Service {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
+    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
@@ -167,7 +167,7 @@ impl Store {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
+    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
@@ -199,7 +199,7 @@ impl Wiki {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
+    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
@@ -230,7 +230,7 @@ impl Work {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
+    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
@@ -275,7 +275,7 @@ impl Help {
             .expect("E");
         return _category;
     }
-    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
+    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
