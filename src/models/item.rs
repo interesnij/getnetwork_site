@@ -501,7 +501,8 @@ impl Categories {
         cat_id:   i32,
         page:     i32,
         limit:    i32,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<(Vec<Blog>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
@@ -510,13 +511,13 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_blogs(cat_id, limit.into(), step.into(), is_admin)?;
+            object_list = Categories::get_blogs(cat_id, limit.into(), step.into(), is_admin, l)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_blogs(cat_id, limit.into(), 0, is_admin)?;
+            object_list = Categories::get_blogs(cat_id, limit.into(), 0, is_admin, l)?;
         }
-        if Categories::get_blogs(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
+        if Categories::get_blogs(cat_id, 1, have_next.into(), is_admin, l)?.len() > 0 {
             next_page_number = page + 1;
         }
         let _tuple = (object_list, next_page_number);
@@ -526,64 +527,101 @@ impl Categories {
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<Vec<Blog>, Error> {
-        use crate::schema::{
-            items::dsl::items,
-            category::dsl::category,
-        };
-
         let _connection = establish_connection();
-        let _items: Vec<Blog>;
-        let ids = category
+        let ids = schema::category::table
             .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(1))
             .select(schema::category::item_id)
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .order(schema::items::created.desc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::slug,
-                    schema::items::image.nullable(),
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::created,
-                    schema::items::description.nullable(),
-                ))
-                .load::<Blog>(&_connection)
-                .expect("E.");
+            if l == 1 {
+                return Ok(schema::items::table
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::created,
+                        schema::items::description.nullable(),
+                    ))
+                    .load::<Blog>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(schema::items::table
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::created,
+                        schema::items::description_en.nullable(),
+                    ))
+                    .load::<Blog>(&_connection)
+                    .expect("E."));
+            }
         } else {
-            _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .filter(schema::items::is_active.eq(true))
-                .order(schema::items::created.desc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::slug,
-                    schema::items::image.nullable(),
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::created,
-                    schema::items::description.nullable(),
-                ))
-                .load::<Blog>(&_connection)
-                .expect("E.");
+            if l == 2 {
+                return Ok(schema::items::table
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::created,
+                        schema::items::description.nullable(),
+                    ))
+                    .load::<Blog>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(schema::items::table
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::created,
+                        schema::items::description_en.nullable(),
+                    ))
+                    .load::<Blog>(&_connection)
+                    .expect("E."));
+            }
         }
-        return Ok(_items);
+        return Ok(Vec::new());
     }
     pub fn get_services_list (
         cat_id:   i32,
         page:     i32,
         limit:    i32,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<(Vec<Service>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
@@ -592,13 +630,13 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_services(cat_id, limit.into(), step.into(), is_admin)?;
+            object_list = Categories::get_services(cat_id, limit.into(), step.into(), is_admin, l)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_services(cat_id, limit.into(), 0, is_admin)?;
+            object_list = Categories::get_services(cat_id, limit.into(), 0, is_admin, l)?;
         }
-        if Categories::get_services(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
+        if Categories::get_services(cat_id, 1, have_next.into(), is_admin, l)?.len() > 0 {
             next_page_number = page + 1;
         }
 
@@ -608,7 +646,8 @@ impl Categories {
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<Vec<Service>, Error> {
         use crate::schema::{
             items::dsl::items,
@@ -616,7 +655,6 @@ impl Categories {
         };
 
         let _connection = establish_connection();
-        let _items: Vec<Service>;
         let ids = category
             .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(2))
@@ -624,47 +662,87 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .order(schema::items::created.desc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::slug,
-                    schema::items::image.nullable(),
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::description.nullable(),
-                ))
-                .load::<Service>(&_connection)
-                .expect("E.");
+            if l == 1 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::description.nullable(),
+                    ))
+                    .load::<Service>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::description_en.nullable(),
+                    ))
+                    .load::<Service>(&_connection)
+                    .expect("E."));
+            }
         } else {
-            _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .filter(schema::items::is_active.eq(true))
-                .order(schema::items::created.desc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::slug,
-                    schema::items::image.nullable(),
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::description.nullable(),
-                ))
-                .load::<Service>(&_connection)
-                .expect("E.");
+            if l == 1 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::description.nullable(),
+                    ))
+                    .load::<Service>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::description_en.nullable(),
+                    ))
+                    .load::<Service>(&_connection)
+                    .expect("E."));
+            }
         }
-        return Ok(_items);
+        return Ok(Vec::new());
     }
 
     pub fn get_stores_list (
         cat_id:   i32,
         page:     i32,
         limit:    i32,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<(Vec<Store>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
@@ -673,13 +751,13 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_stores(cat_id, limit.into(), step.into(), is_admin)?;
+            object_list = Categories::get_stores(cat_id, limit.into(), step.into(), is_admin, l)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_stores(cat_id, limit.into(), 0, is_admin)?;
+            object_list = Categories::get_stores(cat_id, limit.into(), 0, is_admin, l)?;
         }
-        if Categories::get_stores(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
+        if Categories::get_stores(cat_id, 1, have_next.into(), is_admin, l)?.len() > 0 {
             next_page_number = page + 1;
         }
 
@@ -689,7 +767,8 @@ impl Categories {
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<Vec<Store>, Error> {
         use crate::schema::{
             items::dsl::items,
@@ -697,7 +776,6 @@ impl Categories {
         };
 
         let _connection = establish_connection();
-        let _items: Vec<Store>;
         let ids = category
             .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(3))
@@ -705,51 +783,95 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .order(schema::items::created.desc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::slug,
-                    schema::items::image.nullable(),
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::description.nullable(),
-                    schema::items::price,
-                    schema::items::price_acc.nullable(),
-                ))
-                .load::<Store>(&_connection)
-                .expect("E.");
+            if l == 1 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::description.nullable(),
+                        schema::items::price,
+                        schema::items::price_acc.nullable(),
+                    ))
+                    .load::<Store>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::description_en.nullable(),
+                        schema::items::price,
+                        schema::items::price_acc.nullable(),
+                    ))
+                    .load::<Store>(&_connection)
+                    .expect("E."));
+            }
         } else {
-            _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .filter(schema::items::is_active.eq(true))
-                .order(schema::items::created.desc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::slug,
-                    schema::items::image.nullable(),
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::description.nullable(),
-                    schema::items::price,
-                    schema::items::price_acc.nullable(),
-                ))
-                .load::<Store>(&_connection)
-                .expect("E.");
+            else if l == 1 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::description.nullable(),
+                        schema::items::price,
+                        schema::items::price_acc.nullable(),
+                    ))
+                    .load::<Store>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::description_en.nullable(),
+                        schema::items::price,
+                        schema::items::price_acc.nullable(),
+                    ))
+                    .load::<Store>(&_connection)
+                    .expect("E."));
+            }
         }
-        return Ok(_items);
+        return Ok(Vec::new());
     }
 
     pub fn get_wikis_list (
         cat_id:   i32,
         page:     i32,
         limit:    i32,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<(Vec<Wiki>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
@@ -758,13 +880,13 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_wikis(cat_id, limit.into(), step.into(), is_admin)?;
+            object_list = Categories::get_wikis(cat_id, limit.into(), step.into(), is_admin, l)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_wikis(cat_id, limit.into(), 0, is_admin)?;
+            object_list = Categories::get_wikis(cat_id, limit.into(), 0, is_admin, l)?;
         }
-        if Categories::get_wikis(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
+        if Categories::get_wikis(cat_id, 1, have_next.into(), is_admin, l)?.len() > 0 {
             next_page_number = page + 1;
         }
 
@@ -774,7 +896,8 @@ impl Categories {
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<Vec<Wiki>, Error> {
         use crate::schema::{
             items::dsl::items,
@@ -782,7 +905,6 @@ impl Categories {
         };
 
         let _connection = establish_connection();
-        let _items: Vec<Wiki>;
         let ids = category
             .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(4))
@@ -790,49 +912,91 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .order(schema::items::created.desc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::slug,
-                    schema::items::image.nullable(),
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::description.nullable(),
-                    schema::items::created
-                ))
-                .load::<Wiki>(&_connection)
-                .expect("E.");
+            if l == 1 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::description.nullable(),
+                        schema::items::created
+                    ))
+                    .load::<Wiki>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::description_en.nullable(),
+                        schema::items::created
+                    ))
+                    .load::<Wiki>(&_connection)
+                    .expect("E."));
+            }
         } else {
-            _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .filter(schema::items::is_active.eq(true))
-                .order(schema::items::created.desc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::slug,
-                    schema::items::image.nullable(),
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::description.nullable(),
-                    schema::items::created
-                ))
-                .load::<Wiki>(&_connection)
-                .expect("E.");
+            if l == 1 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::description.nullable(),
+                        schema::items::created
+                    ))
+                    .load::<Wiki>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::description_en.nullable(),
+                        schema::items::created
+                    ))
+                    .load::<Wiki>(&_connection)
+                    .expect("E."));
+            }
         }
-        return Ok(_items);
+        return Ok(Vec::new());
     }
 
     pub fn get_works_list (
         cat_id:   i32,
         page:     i32,
         limit:    i32,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<(Vec<Work>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
@@ -841,13 +1005,13 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_works(cat_id, limit.into(), step.into(), is_admin)?;
+            object_list = Categories::get_works(cat_id, limit.into(), step.into(), is_admin, l)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_works(cat_id, limit.into(), 0, is_admin)?;
+            object_list = Categories::get_works(cat_id, limit.into(), 0, is_admin, l)?;
         }
-        if Categories::get_works(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
+        if Categories::get_works(cat_id, 1, have_next.into(), is_admin, l)?.len() > 0 {
             next_page_number = page + 1;
         }
 
@@ -857,7 +1021,8 @@ impl Categories {
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<Vec<Work>, Error> {
         use crate::schema::{
             items::dsl::items,
@@ -865,7 +1030,6 @@ impl Categories {
         };
 
         let _connection = establish_connection();
-        let _items: Vec<Work>;
         let ids = category
             .filter(schema::category::category_id.eq(cat_id))
             .filter(schema::category::types.eq(5))
@@ -873,47 +1037,87 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .order(schema::items::created.desc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::slug,
-                    schema::items::image.nullable(),
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::description.nullable(),
-                ))
-                .load::<Work>(&_connection)
-                .expect("E.");
+            if l == 1 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::description.nullable(),
+                    ))
+                    .load::<Work>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::description_en.nullable(),
+                    ))
+                    .load::<Work>(&_connection)
+                    .expect("E."));
+            }
         } else {
-            _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .filter(schema::items::is_active.eq(true))
-                .order(schema::items::created.desc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::slug,
-                    schema::items::image.nullable(),
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::description.nullable(),
-                ))
-                .load::<Work>(&_connection)
-                .expect("E.");
+            if l == 1 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::description.nullable(),
+                    ))
+                    .load::<Work>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::created.desc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::slug,
+                        schema::items::image.nullable(),
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::description_en.nullable(),
+                    ))
+                    .load::<Work>(&_connection)
+                    .expect("E."));
+            }
         }
-        return Ok(_items);
+        return Ok(Vec::new());
     }
 
     pub fn get_helps_list (
         cat_id:   i32,
         page:     i32,
         limit:    i32,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<(Vec<Help>, i32), Error> {
         let mut next_page_number = 0;
         let have_next: i32;
@@ -922,23 +1126,24 @@ impl Categories {
         if page > 1 {
             let step = (page - 1) * 20;
             have_next = page * limit + 1;
-            object_list = Categories::get_helps(cat_id, limit.into(), step.into(), is_admin)?;
+            object_list = Categories::get_helps(cat_id, limit.into(), step.into(), is_admin, l)?;
         }
         else {
             have_next = limit + 1;
-            object_list = Categories::get_helps(cat_id, limit.into(), 0, is_admin)?;
+            object_list = Categories::get_helps(cat_id, limit.into(), 0, is_admin, l)?;
         }
-        if Categories::get_helps(cat_id, 1, have_next.into(), is_admin)?.len() > 0 {
+        if Categories::get_helps(cat_id, 1, have_next.into(), is_admin, l)?.len() > 0 {
             next_page_number = page + 1;
         }
 
         return Ok((object_list, next_page_number));
     }
-    pub fn get_helps (
+    pub fn get_helps (  
         cat_id:   i32,
         limit:    i64,
         offset:   i64,
-        is_admin: bool
+        is_admin: bool,
+        l:        u8,
     ) -> Result<Vec<Help>, Error> {
         use crate::schema::{
             items::dsl::items,
@@ -954,36 +1159,71 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         if is_admin {
-             _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .order(schema::items::position.asc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::content,
-                ))
-                .load::<Help>(&_connection)
-                .expect("E.");
+            if l == 1 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::position.asc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::content,
+                    ))
+                    .load::<Help>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .order(schema::items::position.asc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::content_en,
+                    ))
+                    .load::<Help>(&_connection)
+                    .expect("E."));
+            }
         } else {
-            _items = items
-                .filter(schema::items::id.eq_any(ids))
-                .filter(schema::items::is_active.eq(true))
-                .order(schema::items::position.asc())
-                .limit(limit)
-                .offset(offset)
-                .select((
-                    schema::items::id,
-                    schema::items::is_active,
-                    schema::items::title,
-                    schema::items::content,
-                ))
-                .load::<Help>(&_connection)
-                .expect("E.");
+            if l == 1 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::position.asc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::is_active,
+                        schema::items::title,
+                        schema::items::content,
+                    ))
+                    .load::<Help>(&_connection)
+                    .expect("E."));
+            }
+            else if l == 2 {
+                return Ok(items
+                    .filter(schema::items::id.eq_any(ids))
+                    .filter(schema::items::is_active.eq(true))
+                    .order(schema::items::position.asc())
+                    .limit(limit)
+                    .offset(offset)
+                    .select((
+                        schema::items::id,
+                        schema::items::is_active,
+                        schema::items::title_en,
+                        schema::items::content_en,
+                    ))
+                    .load::<Help>(&_connection)
+                    .expect("E."));
+            }
         }
-        return Ok(_items);
+        return Ok(Vec::new());
     }
 
     pub fn get_image(&self) -> String {

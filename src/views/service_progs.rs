@@ -293,7 +293,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
-            let _res = block(move || Categories::get_services_list(_category.id, page, 20, _request_user.perm == 60)).await?;
+            let _res = block(move || Categories::get_services_list(_category.id, page, 20, _request_user.perm == 60, l)).await?;
             let _dict = match _res {
                 Ok(_ok) => {object_list = _ok.0; next_page_number = _ok.1},
                 Err(_error) => {object_list = Vec::new(); next_page_number = 0},
@@ -352,7 +352,7 @@ pub async fn service_category_page(session: Session, req: HttpRequest, _id: web:
             }
         }
         else {
-            let _res = block(move || Categories::get_services_list(_category.id, page, 20, false)).await?;
+            let _res = block(move || Categories::get_services_list(_category.id, page, 20, false, l)).await?;
             let _dict = match _res {
                 Ok(_ok) => {object_list = _ok.0; next_page_number = _ok.1},
                 Err(_error) => {object_list = Vec::new(); next_page_number = 0},
