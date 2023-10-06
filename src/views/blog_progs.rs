@@ -73,7 +73,7 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
             .first::<Categories>(&_connection)
             .expect("E");
         let _cats = block(move || Categories::get_categories_for_types(1, l)).await?;
-        let tags = block(move || Categories::get_tags(1, l)).await?;
+        let _tags = block(move || Categories::get_tags(1, l)).await?;
         let (prev, next) = _category.get_featured_items(_item.id, _item.types, l);
 
         if is_signed_in(&session) {
