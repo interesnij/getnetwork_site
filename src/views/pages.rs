@@ -361,7 +361,7 @@ pub async fn info_page(req: HttpRequest, session: Session) -> actix_web::Result<
 
     let _stat = crate::models::StatPage::get_or_create(10);
     let _help_cats: Vec<Cat>;
-    let cats_res = block(move || Categories::get_categories_for_types(6)).await?;
+    let cats_res = block(move || Categories::get_categories_for_types(6, l)).await?;
     let _help_cats = match cats_res {
         Ok(_ok) => _ok,
         Err(_error) => Vec::new(),
@@ -1080,7 +1080,7 @@ pub async fn unical_object_form_page(req: HttpRequest, session: Session, _id: we
                 biznes_mode = true;
             }
             let _cats: Vec<Cat>;
-            let cats_res = block(move || Categories::get_categories_for_types(types)).await?;
+            let cats_res = block(move || Categories::get_categories_for_types(types, l)).await?;
             let _cats = match cats_res {
                 Ok(_ok) => _ok,
                 Err(_error) => Vec::new(),

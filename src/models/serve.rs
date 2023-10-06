@@ -40,13 +40,16 @@ pub struct TechCategories {
 }
 
 impl TechCategories {
-    pub fn update_category_with_id(id: i32, form: CategoriesForm) -> i16 {
+    pub fn update_category_with_id(user: User, cat_id: i32, form: CategoriesForm) -> i16 {
         let _connection = establish_connection();
         let l = get_linguage_storage();
         let cat = schema::tech_categories::table
             .filter(schema::tech_categories::id.eq(id))
             .first::<TechCategories>(&_connection)
             .expect("E.");
+        if user.perm < 60 && cat.user_id != user.id {
+            return 0;
+        }
         if l == 1 { 
             diesel::update(&cat)
                 .set((
@@ -172,6 +175,85 @@ pub struct ServeCategories {
     pub seconds:        i32,
 }
 impl ServeCategories {
+    pub fn update_category_with_id(user: User, cat_id: i32, form: ServeCategoriesForm) -> i16 {
+        let _connection = establish_connection();
+        let l = get_linguage_storage();
+        let cat = schema::serve_categories::table
+            .filter(schema::serve_categories::id.eq(id))
+            .first::<ServeCategories>(&_connection)
+            .expect("E.");
+        if user.perm < 60 && cat.user_id != user.id {
+            return 0;
+        }
+        if l == 1 { 
+            diesel::update(&cat)
+                .set((
+                    schema::serve_categories::name.eq(&form.name),
+                    schema::serve_categories::description.eq(&form.description),
+                    schema::serve_categories::position.eq(form.position),
+                    schema::serve_categories::image.eq(&form.image),
+                    schema::serve_categories::level.eq(form.level),
+                ))
+                .execute(&_connection)
+                .expect("E");
+        }
+        else if l == 2 {
+            diesel::update(&cat)
+                .set((
+                    schema::serve_categories::name_en.eq(&form.name_en),
+                    schema::serve_categories::description_en.eq(&form.description_en),
+                    schema::serve_categories::position.eq(form.position),
+                    schema::serve_categories::image.eq(&form.image),
+                    schema::serve_categories::level.eq(form.level),
+                ))
+                .execute(&_connection)
+                .expect("E");
+        }
+        return 1;
+    }
+    pub fn create(user_id: i32, form: ServeCategoriesForm) -> i16 {
+        let _connection = establish_connection();
+        let l = get_linguage_storage();
+        if l == 1 {
+            let new_cat = NewServeCategories {
+                name:           form.name.clone(),
+                name_en:        "".to_string(),
+                description:    Some(form.description.clone()),
+                description_en: None,
+                category_id:    form.category_id,
+                position:       form.position,
+                default_price:  form.default_price,
+                user_id:        user_id,
+                view:           0,
+                height:         0.0,
+                seconds:        0,
+            };
+            diesel::insert_into(tech_categories::table)
+                .values(&new_cat)
+                .execute(&_connection)
+                .expect("E.");
+        }
+        else if l == 2 {
+            let new_cat = NewTechCategories {
+                name:           "".to_string(),
+                name_en:        form.name_en.clone(),
+                description:    None,
+                description_en: Some(form.description_en.clone()),
+                category_id:    form.category_id,
+                position:       form.position,
+                default_price:  form.default_price,
+                user_id:        user_id,
+                view:           0,
+                height:         0.0,
+                seconds:        0,
+            };
+            diesel::insert_into(tech_categories::table)
+                .values(&new_cat)
+                .execute(&_connection)
+                .expect("E.");
+        }
+        return 1;
+    }
     pub fn get_categories_from_level(level: &i16) -> Vec<ServeCategories> {
         use crate::schema::{
             serve_categories::dsl::serve_categories,

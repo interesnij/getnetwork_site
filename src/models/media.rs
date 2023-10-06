@@ -4,6 +4,7 @@ use crate::diesel::{
     Insertable,
     QueryDsl,
     RunQueryDsl,
+    ExpressionMethods,
 };
 use serde::{Serialize, Deserialize};
 use crate::schema::files;
@@ -57,13 +58,22 @@ pub struct File {
     pub seconds:        i32,
 }
 impl File {
-    pub fn update_file_with_id(id: i32, form: CategoriesForm) -> i16 {
+    pub fn update_file_with_id(user: User, file_id: i32, form: CategoriesForm) -> i16 {
         let _connection = establish_connection();
         let l = get_linguage_storage();
         let _file = schema::files::table
-            .filter(schema::files::id.eq(id))
+            .filter(schema::files::id.eq(file_id))
             .first::<File>(&_connection)
             .expect("E.");
+        let _item = schema::items::table
+            .filter(schema::items::id.eq(_file.item_id))
+            .filter(schema::items::types.eq(_file.item_types))
+            .first::<crate::models::Item>(&_connection)
+            .expect("E.");
+
+        if user.perm < 60 && _item.user_id != user.id {
+            return 0;
+        }
         if l == 1 { 
             diesel::update(&_file)
                 .set(schema::files::description.eq(&form.description))
