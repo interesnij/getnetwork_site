@@ -997,7 +997,7 @@ impl Categories {
     pub fn get_categories_for_types(types: i16, l: u8) -> Vec<Cat> {
         let _connection = establish_connection();
         if l == 1 {
-            return Ok(schema::categories::table
+            return schema::categories::table
                 .filter(schema::categories::types.eq(types))
                 .select((
                     schema::categories::name,
@@ -1007,10 +1007,10 @@ impl Categories {
                     schema::categories::image
                 ))
                 .load::<Cat>(&_connection)
-                .expect("E"));
+                .expect("E");
         }
         else if l == 2 {
-            return Ok(schema::categories::table
+            return schema::categories::table
                 .filter(schema::categories::types.eq(types))
                 .select((
                     schema::categories::name_en,
@@ -1020,9 +1020,9 @@ impl Categories {
                     schema::categories::image
                 ))
                 .load::<Cat>(&_connection)
-                .expect("E"));
+                .expect("E");
         }
-        return Ok(Vec::new());
+        return Vec::new();
     }
 }
 
