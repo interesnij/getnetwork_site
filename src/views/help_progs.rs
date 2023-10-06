@@ -91,19 +91,8 @@ pub async fn help_category_page(session: Session, req: HttpRequest, _id: web::Pa
         let page = get_page(&req);
         let object_list: Vec<Help>;
         let next_page_number: i32;
-        let _cats: Vec<Cat>;
-        let _tags: Vec<SmallTag>;
-        let cats_res = block(move || Categories::get_categories_for_types(6, l)).await?;
-        _cats = match cats_res {
-            Ok(_ok) => _ok,
-            Err(_error) => Vec::new(),
-        };
-
-        let tags_res = block(move || Categories::get_tags(6, l)).await?;
-        _tags = match tags_res {
-            Ok(_list) => _list,
-            Err(_error) => Vec::new(),
-        };
+        let _cats = block(move || Categories::get_categories_for_types(6, l)).await?;
+        let _tags = block(move || Categories::get_tags(6, l)).await?;
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);

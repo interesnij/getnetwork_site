@@ -1188,7 +1188,7 @@ impl Item {
         return "".to_string();
     }
 
-    pub fn get_categories(&self) -> Result<Vec<SmallCat>, Error> {
+    pub fn get_categories(&self) -> Vec<SmallCat> {
         use crate::schema::{
             category::dsl::category,
             categories::dsl::categories,
@@ -1210,9 +1210,9 @@ impl Item {
             ))
             .load::<SmallCat>(&_connection)
             .expect("E");
-        return Ok(_categories);
+        return _categories;
     }
-    pub fn get_categories_obj(&self) -> Result<Vec<Categories>, Error> {
+    pub fn get_categories_obj(&self) -> Vec<Categories> {
         use crate::schema::{
             category::dsl::category,
             categories::dsl::categories,
@@ -1230,10 +1230,10 @@ impl Item {
             .filter(schema::categories::id.eq_any(ids))
             .load::<Categories>(&_connection)
             .expect("E");
-        return Ok(_categories);
+        return _categories;
     }
 
-    pub fn get_tags(&self, l: u8) -> Reult<Vec<SmallTag>, Error> {
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
         let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(&self.id))
@@ -1243,7 +1243,7 @@ impl Item {
             .expect("E");
         return Tag::get_tags_with_ids(_tag_items, l);
     }
-    pub fn get_tags_obj(&self) -> Reult<Vec<SmallTag>, Error> {
+    pub fn get_tags_obj(&self) -> Vec<SmallTag> {
         use crate::schema::{
             tags_items::dsl::tags_items,
             tags::dsl::tags,
@@ -1260,7 +1260,7 @@ impl Item {
             .filter(schema::tags::id.eq_any(_tag_items))
             .load::<Tag>(&_connection)
             .expect("E");
-        return Ok(_tags);
+        return _tags;
     }
 
     pub fn get_blogs (
