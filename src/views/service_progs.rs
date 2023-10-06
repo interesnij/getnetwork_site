@@ -79,12 +79,7 @@ pub async fn get_service_page(session: Session, req: HttpRequest, param: web::Pa
             .filter(schema::categories::types.eq(_item.types))
             .first::<Categories>(&_connection)
             .expect("E");
-        let _cats: Vec<Cat>;
-        let cats_res = block(move || Categories::get_categories_for_types(2, l)).await?;
-        _cats = match cats_res {
-            Ok(_ok) => _ok,
-            Err(_error) => Vec::new(),
-        };
+        let _cats = block(move || Categories::get_categories_for_types(2, l)).await?;
         let _tags = block(move || Categories::get_tags(2, l)).await?;
 
         let (prev, next) = _category.get_featured_items(_item.id, _item.types, l);

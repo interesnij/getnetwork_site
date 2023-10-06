@@ -866,10 +866,8 @@ pub async fn publish_item(session: Session, _id: web::Path<i32>) -> impl Respond
                 .execute(&_connection)
                 .expect("Error.");
 
-            let tags_o = _item.get_tags_obj();
             let _categories = _item.get_categories_obj();
-            let cats_res = block(move || categories_o).await;
-            let _tags = block(move || tags_o).await;
+            let _tags = _item.get_tags_obj();
             for _category in _categories.iter() {
                 diesel::update(_category)
                     .set(schema::categories::count.eq(_category.count + 1))
@@ -901,16 +899,8 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
                 .execute(&_connection)
                 .expect("Error.");
 
-            let _categories: Vec<Categories>;
-            let _categories_0 = _item.get_categories_obj();
-            let _tags_0 = _item.get_tags_obj();
-            let cats_res = block(move || _categories_0).await;
-            let _tags = block(move || _tags_0).await;
-
-            _categories = match cats_res {
-                Ok(_ok) => _ok,
-                Err(_error) => Vec::new(),
-            };
+            let _categories = _item.get_categories_obj();
+            let _tags = _item.get_tags_obj();
             for _category in _categories.iter() {
                 diesel::update(_category)
                     .set(schema::categories::count.eq(_category.count - 1))
