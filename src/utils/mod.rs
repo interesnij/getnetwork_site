@@ -177,7 +177,7 @@ pub fn is_desctop(req: &HttpRequest) -> bool {
         (is_desctop(req), is_ajax)
     }
 
-    pub fn get_categories_2(l) -> (
+    pub fn get_categories_2(l: u8) -> (
         Vec<Cat>,
         Vec<Cat>,
         Vec<Cat>,
