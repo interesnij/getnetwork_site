@@ -424,8 +424,8 @@ impl Categories {
             .load::<i32>(&_connection)
             .expect("E");
         let _category_items_len = _category_items.len();
-        for (i, item) in _category_items.into_iter().enumerate().rev() {
-            if item == item_id {
+        for (i, item) in _category_items.iter().enumerate().rev() {
+            if item == &item_id {
                 if (i + 1) != _category_items_len {
                     let _next = Some(&_category_items[i + 1]);
                     if l == 1 {
