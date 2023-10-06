@@ -115,7 +115,7 @@ impl Blog {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items));
+        return Ok(Tag::get_tags_with_ids(_tag_items, l));
     }
 }
 
@@ -146,7 +146,7 @@ impl Service {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items));
+        return Ok(Tag::get_tags_with_ids(_tag_items, l));
     }
 }
 
@@ -179,7 +179,7 @@ impl Store {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items));
+        return Ok(Tag::get_tags_with_ids(_tag_items, l));
     }
 }
 
@@ -211,7 +211,7 @@ impl Wiki {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items));
+        return Ok(Tag::get_tags_with_ids(_tag_items, l));
     }
 }
 
@@ -242,7 +242,7 @@ impl Work {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items));
+        return Ok(Tag::get_tags_with_ids(_tag_items, l));
     }
 }
 
@@ -287,7 +287,7 @@ impl Help {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items));
+        return Ok(Tag::get_tags_with_ids(_tag_items, l));
     }
 }
 
@@ -405,7 +405,7 @@ impl Categories {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items));
+        return Ok(Tag::get_tags_with_ids(_tag_items, l));
     }
     pub fn get_featured_items ( 
         &self,
@@ -420,7 +420,7 @@ impl Categories {
         let mut prev: Option<FeaturedItem> = None;
         let mut next: Option<FeaturedItem> = None;
 
-        let _category_items = category::category::table
+        let _category_items = schema::category::table
             .filter(schema::category::category_id.eq(self.id))
             .filter(schema::category::types.eq(types))
             .select(schema::category::item_id)
@@ -428,13 +428,13 @@ impl Categories {
             .expect("E");
         let _category_items_len = _category_items.len();
         for (i, item) in _category_items.into_iter().enumerate().rev() {
-            if item == id {
+            if item == item_id {
                 if (i + 1) != _category_items_len {
                     let _next = Some(&_category_items[i + 1]);
                     if l = 1 {
                         next = Some(items
                             .filter(schema::items::id.eq(_next.unwrap()))
-                            .filter(schema::items::types.eq(types))
+                            .filter(schema::items::types.eq(item_types))
                             .filter(schema::items::is_active.eq(true))
                             .select((
                                 schema::items::slug,
@@ -446,7 +446,7 @@ impl Categories {
                     else if l = 2 {
                         next = Some(items
                             .filter(schema::items::id.eq(_next.unwrap()))
-                            .filter(schema::items::types.eq(types))
+                            .filter(schema::items::types.eq(item_types))
                             .filter(schema::items::is_active.eq(true))
                             .select((
                                 schema::items::slug,
@@ -461,7 +461,7 @@ impl Categories {
                     if l = 1 {
                         prev = Some(items
                             .filter(schema::items::id.eq(_next.unwrap()))
-                            .filter(schema::items::types.eq(types))
+                            .filter(schema::items::types.eq(item_types))
                             .filter(schema::items::is_active.eq(true))
                             .select((
                                 schema::items::slug,
@@ -473,7 +473,7 @@ impl Categories {
                     else if l = 2 {
                         prev = Some(items
                             .filter(schema::items::id.eq(_next.unwrap()))
-                            .filter(schema::items::types.eq(types))
+                            .filter(schema::items::types.eq(item_types))
                             .filter(schema::items::is_active.eq(true))
                             .select((
                                 schema::items::slug,
@@ -1244,7 +1244,7 @@ impl Item {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items));
+        return Ok(Tag::get_tags_with_ids(_tag_items, l));
     }
     pub fn get_tags_obj(&self) -> Result<Vec<Tag>, Error> {
         use crate::schema::{
