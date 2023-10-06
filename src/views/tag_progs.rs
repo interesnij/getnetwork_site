@@ -128,22 +128,8 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.is_superuser() {
-            let _connection = establish_connection();
             let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
-            let new_tag = NewTag {
-                name:     form.name.clone(),
-                name_en:  form.name_en.clone(),
-                position: form.position,
-                count:    0,
-                user_id:  _request_user.id,
-                view:     0,
-                height:   0.0,
-                seconds:  0,
-            };
-            let _new_tag = diesel::insert_into(schema::tags::table)
-                .values(&new_tag)
-                .execute(&_connection)
-                .expect("E.");
+            Tag::create(form);
         }
     }
     return HttpResponse::Ok();
@@ -1197,17 +1183,11 @@ pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<S
 }
 
 pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
-    use schema::tags::dsl::tags;
-    use crate::utils::get_device_and_ajax;
-
     let _connection = establish_connection();
     let (t, l) = get_all_storage();
     let slug = _id.to_string();
-    let _tag = tags
-        .filter(schema::tags::name.eq(&slug))
-        .first::<Tag>(&_connection)
-        .expect("E");
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let _tag = Tag::get_tag_with_slug(&slug);
+    let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -1568,27 +1548,8 @@ pub async fn edit_tag(session: Session, mut payload: Multipart, _id: web::Path<i
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::models::EditTag;
-            use crate::schema::tags::dsl::tags;
-            use crate::utils::category_form;
-
-            let _connection = establish_connection();
-            let _tag = tags
-                .filter(schema::tags::id.eq(*_id))
-                .first::<Tag>(&_connection)
-                .expect("E");
-
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
-            let _new_tag = EditTag {
-                name:     form.name.clone(),
-                name_en:  form.name_en.clone(),
-                position: form.position,
-            };
-
-            diesel::update(&_tag)
-                .set(_new_tag)
-                .execute(&_connection)
-                .expect("E");
+            let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
+            Tag::update_tag_with_id(*_id, form);
         }
     }
 
@@ -1600,13 +1561,9 @@ pub async fn delete_tag(session: Session, _id: web::Path<i32>) -> impl Responder
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::schema::tags::dsl::tags;
-            use crate::schema::tags_items::dsl::tags_items;
-
             let _connection = establish_connection();
-            let _tag_id: i32 = *_id;
-            diesel::delete(tags_items.filter(schema::tags_items::tag_id.eq(_tag_id))).execute(&_connection).expect("E");
-            diesel::delete(tags.filter(schema::tags::id.eq(_tag_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::tags_items::table.filter(schema::tags_items::tag_id.eq(*_id))).execute(&_connection).expect("E");
+            diesel::delete(schema::tags::table.filter(schema::tags::id.eq(*_id))).execute(&_connection).expect("E");
         }
     }
     HttpResponse::Ok()

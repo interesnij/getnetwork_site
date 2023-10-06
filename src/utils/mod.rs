@@ -48,6 +48,13 @@ pub struct IndexResponse {
     pub messages: Vec<String>,
 }
 
+#[derive(Deserialize, Serialize)]
+pub struct NewUserForm {
+    pub username: String,
+    pub email:    String,
+    pub password: String,
+}
+
 pub fn get_price_acc_values(price: &i32) -> Option<i32> {
     if price > &3_000_000 {
         let acc = (price * 10) / 100; // 10% скидка

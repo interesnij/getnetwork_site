@@ -23,7 +23,11 @@ use crate::schema::{
     category,
     item_comments,
 };
-use crate::utils::establish_connection;
+use crate::utils::{
+    establish_connection,
+    get_linguage_storage,
+    CategoriesForm
+};
 use crate::errors::Error;
 
 
@@ -385,6 +389,84 @@ pub struct Categories {
 }
 
 impl Categories {
+    pub fn update_category_with_id(id: i32, form: CategoriesForm) -> i16 {
+        let _connection = establish_connection();
+        let l = get_linguage_storage();
+        let cat = schema::categories::table
+            .filter(schema::categories::id.eq(id))
+            .first::<Categories>(&_connection)
+            .expect("E.");
+        if l == 1 {
+            diesel::update(&cat)
+                .set((
+                    schema::categories::name.eq(&form.name),
+                    schema::categories::description.eq(&form.description),
+                    schema::categories::position.eq(form.position),
+                    schema::categories::image.eq(&form.image),
+                    schema::categories::slug.eq(&form.slug),
+                ))
+                .execute(&_connection)
+                .expect("E");
+        }
+        else if l == 2 {
+            diesel::update(&cat)
+                .set((
+                    schema::categories::name_en.eq(&form.name_en),
+                    schema::categories::description_en.eq(&form.description_en),
+                    schema::categories::position.eq(form.position),
+                    schema::categories::image.eq(&form.image),
+                    schema::categories::slug.eq(&form.slug),
+                ))
+                .execute(&_connection)
+                .expect("E");
+        }
+        return 1;
+    }
+    pub fn create(form: CategoriesForm) -> i16 {
+        let _connection = establish_connection();
+        let l = get_linguage_storage();
+        if l == 1 {
+            let new_cat = NewCategories {
+                name:           form.name.clone(),
+                name_en:        "".to_string(),
+                description:    Some(form.description.clone()),
+                description_en: Some("".to_string()),
+                position:       form.position,
+                image:          Some(form.image.clone()),
+                count:          0,
+                view:           0,
+                height:         0.0,
+                seconds:        0,
+                types:          form.types,
+                slug:           form.slug,
+            };
+            diesel::insert_into(schema::categories::table)
+                .values(&new_cat)
+                .execute(&_connection)
+                .expect("E.");
+        }
+        else if l == 2 {
+            let new_cat = NewCategories {
+                name:           "".to_string(),
+                name_en:        form.name.clone(),
+                description:    Some("".to_string()),
+                description_en: Some(form.description.clone()),
+                position:       form.position,
+                image:          Some(form.image.clone()),
+                count:          0,
+                view:           0,
+                height:         0.0,
+                seconds:        0,
+                types:          form.types,
+                slug:           form.slug,
+            };
+            diesel::insert_into(schema::categories::table)
+                .values(&new_cat)
+                .execute(&_connection)
+                .expect("E.");
+        }
+        return 1;
+    }
     pub fn get_tags(types: i16) -> Result<Vec<SmallTag>, Error> {
         use crate::schema::{
             tags_items::dsl::tags_items,

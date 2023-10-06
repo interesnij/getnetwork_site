@@ -14,7 +14,11 @@ use crate::schema::{
     serve_items,
     tech_categories_items,
 };
-use crate::utils::establish_connection;
+use crate::utils::{
+    establish_connection,
+    get_linguage_storage,
+    CategoriesForm
+};
 
 
 /////// TechCategories //////
@@ -36,6 +40,82 @@ pub struct TechCategories {
 }
 
 impl TechCategories {
+    pub fn update_category_with_id(id: i32, form: CategoriesForm) -> i16 {
+        let _connection = establish_connection();
+        let l = get_linguage_storage();
+        let cat = schema::tech_categories::table
+            .filter(schema::tech_categories::id.eq(id))
+            .first::<TechCategories>(&_connection)
+            .expect("E.");
+        if l == 1 { 
+            diesel::update(&cat)
+                .set((
+                    schema::tech_categories::name.eq(&form.name),
+                    schema::tech_categories::description.eq(&form.description),
+                    schema::tech_categories::position.eq(form.position),
+                    schema::tech_categories::image.eq(&form.image),
+                    schema::tech_categories::level.eq(form.level),
+                ))
+                .execute(&_connection)
+                .expect("E");
+        }
+        else if l == 2 {
+            diesel::update(&cat)
+                .set((
+                    schema::tech_categories::name_en.eq(&form.name_en),
+                    schema::tech_categories::description_en.eq(&form.description_en),
+                    schema::tech_categories::position.eq(form.position),
+                    schema::tech_categories::image.eq(&form.image),
+                    schema::tech_categories::level.eq(form.level),
+                ))
+                .execute(&_connection)
+                .expect("E");
+        }
+        return 1;
+    }
+    pub fn create(user_id: i32, form: CategoriesForm) -> i16 {
+        let _connection = establish_connection();
+        let l = get_linguage_storage();
+        if l == 1 {
+            let new_cat = NewTechCategories {
+                name:           form.name.clone(),
+                name_en:        "".to_string(),
+                description:    Some(form.description.clone()),
+                description_en: None,
+                position:       form.position,
+                count:          0,
+                level:          form.level,
+                user_id:        user_id,
+                view:           0,
+                height:         0.0,
+                seconds:        0,
+            };
+            let _new_tech = diesel::insert_into(tech_categories::table)
+                .values(&new_cat)
+                .execute(&_connection)
+                .expect("E.");
+        }
+        else if l == 2 {
+            let new_cat = NewTechCategories {
+                name:           "".to_string(),
+                name_en:        form.name_en.clone(),
+                description:    None,
+                description_en: Some(form.description_en.clone()),
+                position:       form.position,
+                count:          0,
+                level:          form.level,
+                user_id:        user_id,
+                view:           0,
+                height:         0.0,
+                seconds:        0,
+            };
+            let _new_tech = diesel::insert_into(tech_categories::table)
+                .values(&new_cat)
+                .execute(&_connection)
+                .expect("E.");
+        }
+        return 1;
+    }
     pub fn get_serve_categories(&self) -> Vec<ServeCategories> {
         use crate::schema::serve_categories::dsl::serve_categories;
 

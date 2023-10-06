@@ -14,7 +14,7 @@ use crate::diesel::{
     Connection,
 };
 use serde::{Serialize, Deserialize};
-use crate::utils::establish_connection;
+use crate::utils::{establish_connection, NewUserForm};
 use crate::errors::Error;
 
 
@@ -40,6 +40,29 @@ impl User {
                 .set(schema::users::perm.eq(60))
                 .execute(&_connection);
         }))
+    }
+    pub fn get_user_with_username(username: &String) -> Result<User, Error> {
+        let _connection = establish_connection();
+        return Ok(schema::users::table
+            .filter(schema::users::username.eq(username))
+            .first::<User>(&_connection)?);
+    }
+    pub fn create(form: NewUserForm) -> User {
+        let _connection = establish_connection();
+        let form_user = NewUser {
+            username: form.username.clone(),
+            email:    form.email.clone(),
+            password: crate::utils::hash_password(&form.password),
+            bio:      None,
+            image:    None,
+            perm:     1,
+        };
+
+        let _new_user = diesel::insert_into(schema::users::table)
+            .values(&form_user)
+            .get_result::<User>(&_connection)
+            .expect("Error saving user.");
+        return _new_user;
     }
 }
 

@@ -1,13 +1,16 @@
-//use crate::schema;
+use crate::schema;
 use crate::diesel::{
     Queryable,
     Insertable,
-    //QueryDsl,
-    //RunQueryDsl,
+    QueryDsl,
+    RunQueryDsl,
 };
 use serde::{Serialize, Deserialize};
 use crate::schema::files;
-//use crate::utils::establish_connection;
+use crate::utils::{
+    establish_connection,
+    get_linguage_storage,
+};
 
 
 ///////////
@@ -52,6 +55,29 @@ pub struct File {
     pub position:       i16,
     pub view:           i32,
     pub seconds:        i32,
+}
+impl File {
+    pub fn update_file_with_id(id: i32, form: CategoriesForm) -> i16 {
+        let _connection = establish_connection();
+        let l = get_linguage_storage();
+        let _file = schema::files::table
+            .filter(schema::files::id.eq(id))
+            .first::<File>(&_connection)
+            .expect("E.");
+        if l == 1 { 
+            diesel::update(&_file)
+                .set(schema::files::description.eq(&form.description))
+                .execute(&_connection)
+                .expect("E");
+        }
+        else if l == 2 {
+            diesel::update(&_file)
+                .set(schema::files::description_en.eq(&form.description_en))
+                .execute(&_connection)
+                .expect("E");
+        }
+        return 1;
+    }
 }
 #[derive(Debug, Deserialize, Insertable)]
 #[table_name="files"]
