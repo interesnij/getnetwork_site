@@ -662,26 +662,8 @@ pub async fn create_category(session: Session, mut payload: Multipart) -> impl R
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            let _connection = establish_connection();
             let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
-            let new_cat = crate::models::NewCategories {
-                name:           form.name.clone(),
-                name_en:        form.name_en.clone(),
-                description:    Some(form.description.clone()),
-                description_en: Some(form.description_en.clone()),
-                position:       form.position,
-                image:          Some(form.image.clone()),
-                count:          0,
-                view:           0,
-                height:         0.0,
-                seconds:        0,
-                types:          form.types,
-                slug:           form.slug,
-            };
-            diesel::insert_into(schema::categories::table)
-                .values(&new_cat)
-                .execute(&_connection)
-                .expect("E.");
+            Categories::create(form);
         }
     }
     return HttpResponse::Ok();
@@ -691,26 +673,8 @@ pub async fn edit_category(session: Session, mut payload: Multipart, _id: web::P
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            let _connection = establish_connection();
-            let _category = schema::categories::table
-                .filter(schema::categories::id.eq(*_id))
-                .first::<Categories>(&_connection)
-                .expect("E");
-
             let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
-            let _new_cat = crate::models::EditCategories {
-                name:           form.name.clone(),
-                name_en:        form.name_en.clone(),
-                description:    Some(form.description.clone()),
-                description_en: Some(form.description_en.clone()),
-                position:       form.position,
-                image:          Some(form.image.clone()),
-                slug:           form.slug,
-            };
-            diesel::update(&_category)
-                .set(_new_cat)
-                .execute(&_connection)
-                .expect("E");
+            Categories::update_category_with_id(*_id, form);
         }
     }
     HttpResponse::Ok()
@@ -865,23 +829,8 @@ pub async fn edit_file(session: Session, mut payload: Multipart, _id: web::Path<
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            let _connection = establish_connection();
-            let _file = schema::files::table
-                .filter(schema::files::id.eq(*_id))
-                .first::<crate::models::File>(&_connection)
-                .expect("E");
-
             let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
-            let _new_file = crate::models::EditFile {
-                description:    Some(form.description.clone()),
-                description_en: Some(form.description_en.clone()),
-                position:       form.position,
-            };
-
-            diesel::update(&_file)
-                .set(_new_file)
-                .execute(&_connection)
-                .expect("E");
+            File::update_file_with_id(*_id, form);
         }
     }
     HttpResponse::Ok()

@@ -800,29 +800,9 @@ pub async fn create_tech_categories(session: Session, mut payload: Multipart) ->
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-
-            use schema::tech_categories;
-            use crate::utils::category_form;
-
             let _connection = establish_connection();
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
-            let new_cat = NewTechCategories {
-                name:           form.name.clone(),
-                name_en:        form.name_en.clone(),
-                description:    Some(form.description.clone()),
-                description_en: Some(form.description_en.clone()),
-                position:       form.position,
-                count:          0,
-                level:          form.level,
-                user_id:        _request_user.id,
-                view:           0,
-                height:         0.0,
-                seconds:        0,
-            };
-            let _new_tech = diesel::insert_into(tech_categories::table)
-                .values(&new_cat)
-                .execute(&_connection)
-                .expect("E.");
+            let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
+            TechCategories::create(_request_user.id, form);
         }
     }
     return HttpResponse::Ok();
@@ -832,109 +812,30 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            use crate::utils::serve_category_form;
-
-            let _connection = establish_connection();
             let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;
-
-            let new_cat = NewServeCategories {
-                name:            form.name.clone(),
-                name_en:         form.name_en.clone(),
-                description:     Some(form.description.clone()),
-                description_en:  Some(form.description_en.clone()),
-                category_id:     form.category_id,
-                position:        form.position,
-                count:           0,
-                default_price:   0,
-                user_id:         _request_user.id,
-                view:            0,
-                height:          0.0,
-                seconds:         0,
-            };
-            let _new_serve = diesel::insert_into(schema::serve_categories::table)
-                .values(&new_cat)
-                .execute(&_connection)
-                .expect("E.");
+            ServeCategories::create(_request_user.id, form);
         }
     }
     return HttpResponse::Ok();
 }
 
 pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::{
-        tech_categories::dsl::tech_categories,
-    };
-
-    let _connection = establish_connection();
-    let _category = tech_categories
-        .filter(schema::tech_categories::id.eq(*_id))
-        .first::<TechCategories>(&_connection)
-        .expect("E");
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 || _category.user_id == _request_user.id {
-            use crate::utils::category_form;
-
-            let form = category_form(payload.borrow_mut(), _request_user.id).await;
-            let new_cat = NewTechCategories {
-                name:            form.name.clone(),
-                name_en:         form.name_en.clone(),
-                description:     Some(form.description.clone()),
-                description_en:  Some(form.description_en.clone()),
-                position:        form.position,
-                count:           0,
-                level:           form.level,
-                user_id:         _request_user.id,
-                view:            0,
-                height:          0.0,
-                seconds:         0,
-            };
-            diesel::update(&_category)
-                .set(new_cat)
-                .execute(&_connection)
-                .expect("E");
+            let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
+            TechCategories::update_category_with_id(_request_user.id, form);
         }
     }
     return HttpResponse::Ok();
 }
 
 pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    use crate::schema::{
-        serve_categories::dsl::serve_categories,
-    };
-
-    let _connection = establish_connection();
-
-    let s_category = serve_categories
-        .filter(schema::serve_categories::id.eq(*_id))
-        .first::<ServeCategories>(&_connection)
-        .expect("E");
-
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 || s_category.user_id == _request_user.id {
-            use crate::utils::serve_category_form;
-
             let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;
-            let new_cat = NewServeCategories {
-                name:           form.name.clone(),
-                name_en:        form.name_en.clone(),
-                description:    Some(form.description.clone()),
-                description_en: Some(form.description_en.clone()),
-                category_id:    form.category_id,
-                position:       form.position,
-                count:          s_category.count,
-                default_price:  form.default_price,
-                user_id:        _request_user.id,
-                view:           0,
-                height:         0.0,
-                seconds:        0,
-            };
-            diesel::update(&s_category)
-                .set(new_cat)
-                .execute(&_connection)
-                .expect("E");
+            ServeCategories::update_category_with_id(_request_user.id, form);
         }
     }
     return HttpResponse::Ok();

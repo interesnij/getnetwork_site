@@ -11,7 +11,11 @@ use crate::schema::{
     tags,
     tags_items,
 };
-use crate::utils::establish_connection;
+use crate::utils::{
+    establish_connection,
+    get_linguage_storage,
+    CategoriesForm
+};
 
 
 #[derive(Serialize, Queryable)]
@@ -33,7 +37,91 @@ pub struct Tag {
     pub height:   f64,
     pub seconds:  i32,
 }
-impl Tag {
+impl Tag { 
+    pub fn get_tag_with_id(id: i32) -> Tag {
+        let _connection = establish_connection();
+        return schema::tags::table
+            .filter(schema::tags::id.eq(id))
+            .first::<Tag>(&_connection)
+            .expect("E.");
+    }
+    pub fn get_tag_with_slug(slug: &String) -> Tag {
+        let _connection = establish_connection();
+        return schema::tags::table
+            .filter(schema::tags::slug.eq(slug))
+            .first::<Tag>(&_connection)
+            .expect("E.");
+    }
+    pub fn update_tag_with_id(id: i32, form: CategoriesForm) -> i16 {
+        let _connection = establish_connection();
+        let l = get_linguage_storage();
+        let tag = schema::tags::table
+            .filter(schema::tags::id.eq(id))
+            .first::<Tag>(&_connection)
+            .expect("E.");
+        if l == 1 {
+            diesel::update(&_tag)
+                .set((
+                    schema::tags::name.eq(&form.name),
+                    schema::tags::position.eq(form.position),
+                ))
+                .execute(&_connection)
+                .expect("E");
+        }
+        else if l == 2 {
+            diesel::update(&_tag)
+                .set((
+                    schema::tags::name_en.eq(&form.name),
+                    schema::tags::position.eq(form.position),
+                ))
+                .execute(&_connection)
+                .expect("E");
+        }
+        return 1;
+    }
+    pub fn create(form: CategoriesForm) -> i16 {
+        let _connection = establish_connection();
+        let l = get_linguage_storage();
+        if l == 1 {
+            let new_tag = NewTag {
+                name:     form.name.clone(),
+                name_en:  "".to_string(),
+                position: form.position,
+                count:    0,
+                user_id:  _request_user.id,
+                view:     0,
+                height:   0.0,
+                seconds:  0,
+            };
+            diesel::insert_into(schema::tags::table)
+                .values(&new_tag)
+                .execute(&_connection)
+                .expect("E.");
+        }
+        else if l == 2 {
+            let new_tag = NewTag {
+                name:     "".to_string(),
+                name_en:  form.name.clone(),
+                position: form.position,
+                count:    0,
+                user_id:  _request_user.id,
+                view:     0,
+                height:   0.0,
+                seconds:  0,
+            }; 
+            diesel::insert_into(schema::tags::table)
+                .values(&new_tag)
+                .execute(&_connection)
+                .expect("E.");
+        }
+        return 1;
+    }
+    pub fn get_all_tags() -> Vec<Tag> {
+        let _connection = establish_connection();
+        return schema::tags::table
+            .load::<Tag>(&_connection)
+            .expect("E.");
+    }
     pub fn get_tags_list(page: i32, limit: i32) -> (Vec<SmallTag>, i32) {
         let mut next_page_number = 0;
         let have_next: i32;
