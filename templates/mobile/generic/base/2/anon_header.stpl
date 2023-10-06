@@ -178,7 +178,7 @@
                                 <span class="dsn-meta-menu">Перейти</span>
                             </a>
                         </li>
-                        <% for object in store_cats.iter() { %>
+                        <% for object in blog_cats.iter() { %>
                             <li>
                                 <a class="ajax" href="/blogs/<%= object.slug %>/">
                                     <span class="dsn-title-menu"><%= object.name %></span>

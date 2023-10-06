@@ -42,21 +42,20 @@
                 <%
                     use crate::utils::get_categories_2;
                     let (service_cats, store_cats, blog_cats, wiki_cats, work_cats, help_cats) = get_categories_2(linguage);
-                %>
-
+                %> 
+                
                 <li class="dsn-active dsn-drop-down">
                     <a href="#" class="user-no-selection">
                         <span class="dsn-title-menu">Услуги</span>
                         <span class="dsn-meta-menu">02</span>
                         <span class="dsn-bg-arrow"></span>
-                    </a>
+                    </a> 
                     <ul>
                         <li class="dsn-back-menu">
                             <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-dsn-src="/static/2_images/left-chevron.svg" alt="img">
                             <span class="dsn-title-menu">Назад</span>
                         </li> 
-
-                        <li>
+                        <li> 
                             <a href="/service_categories/" class="ajax">
                                 <span class="dsn-title-menu">Раздел услуг</span>
                                 <span class="dsn-meta-menu">Перейти</span>
@@ -72,6 +71,7 @@
                         <% } %>
                     </ul>
                 </li>
+                <% } %>
 
                 <li class="dsn-active dsn-drop-down">
                     <a href="#" class="user-no-selection">
@@ -178,7 +178,7 @@
                                 <span class="dsn-meta-menu">Перейти</span>
                             </a>
                         </li>
-                        <% for object in store_cats.iter() { %>
+                        <% for object in blog_cats.iter() { %>
                             <li>
                                 <a class="ajax" href="/blogs/<%= object.slug %>/">
                                     <span class="dsn-title-menu"><%= object.name %></span>
