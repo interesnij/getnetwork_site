@@ -1243,7 +1243,7 @@ impl Item {
             .expect("E");
         return Tag::get_tags_with_ids(_tag_items, l);
     }
-    pub fn get_tags_obj(&self) -> Vec<SmallTag> {
+    pub fn get_tags_obj(&self) -> Vec<Tag> {
         use crate::schema::{
             tags_items::dsl::tags_items,
             tags::dsl::tags,

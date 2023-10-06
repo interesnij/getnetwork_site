@@ -472,8 +472,8 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
                 let _categories: Vec<Categories>;
                 let _tags: Vec<Tag>;
 
-                let _categories = _item.get_categories_obj().expect("E");
-                let _tags = _item.get_tags_obj().expect("E");
+                let _categories = _item.get_categories_obj();
+                let _tags = _item.get_tags_obj();
 
                 for _category in _categories.iter() {
                     diesel::update(_category)
@@ -752,8 +752,8 @@ pub async fn delete_item(session: Session, _id: web::Path<i32>) -> impl Responde
                 .expect("E");
             diesel::delete(&_item).execute(&_connection).expect("E");
 
-            let _categories = _item.get_categories_obj().expect("E");
-            let _tags = _item.get_tags_obj().expect("E");
+            let _categories = _item.get_categories_obj();
+            let _tags = _item.get_tags_obj();
 
             for _category in _categories.iter() {
                 diesel::update(_category)
@@ -866,17 +866,10 @@ pub async fn publish_item(session: Session, _id: web::Path<i32>) -> impl Respond
                 .execute(&_connection)
                 .expect("Error.");
 
-            let _categories: Vec<Categories>;
-            let _tags: Vec<Tag>;
-
-            let tags_o = _item.get_tags_obj().expect("E");
-            let categories_o = _item.get_categories_obj().expect("E");
+            let tags_o = _item.get_tags_obj();
+            let _categories = _item.get_categories_obj();
             let cats_res = block(move || categories_o).await;
             let _tags = block(move || tags_o).await;
-            _categories = match cats_res {
-                Ok(_ok) => _ok,
-                Err(_error) => Vec::new(),
-            };
             for _category in _categories.iter() {
                 diesel::update(_category)
                     .set(schema::categories::count.eq(_category.count + 1))
@@ -909,8 +902,8 @@ pub async fn hide_item(session: Session, _id: web::Path<i32>) -> impl Responder 
                 .expect("Error.");
 
             let _categories: Vec<Categories>;
-            let _categories_0 = _item.get_categories_obj().expect("E");
-            let _tags_0 = _item.get_tags_obj().expect("E");
+            let _categories_0 = _item.get_categories_obj();
+            let _tags_0 = _item.get_tags_obj();
             let cats_res = block(move || _categories_0).await;
             let _tags = block(move || _tags_0).await;
 
