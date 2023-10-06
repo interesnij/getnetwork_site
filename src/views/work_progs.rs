@@ -13,7 +13,6 @@ use crate::utils::{
     get_request_user_data,
     get_first_load_page,
     get_all_storage,
-    StorageParams,
 };
 use actix_session::Session;
 use crate::schema;

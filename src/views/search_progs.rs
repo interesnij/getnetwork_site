@@ -13,11 +13,10 @@ use crate::utils::{
     get_request_user_data,
     get_first_load_page,
     get_all_storage,
-    StorageParams,
 };
 
 use sailfish::TemplateOnce;
-use crate::models::{User, StatPage};
+use crate::models::User;
 
 
 pub fn search_routes(config: &mut web::ServiceConfig) {

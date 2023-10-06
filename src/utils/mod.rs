@@ -129,10 +129,6 @@ pub fn get_linguage_storage() -> u8 {
     return 1;
 }
 
-pub struct StorageParams {
-    pub template: u8,
-    pub linguage: u8, 
-}
 pub fn get_all_storage() -> (u8, u8) {
     (
         get_template_storage(),

@@ -12,7 +12,7 @@ use crate::utils::{
     verify,
     get_first_load_page,
     get_all_storage,
-    StorageParams, NewUserForm,
+    NewUserForm,
 };
 use futures::StreamExt;
 use crate::models::{User, SessionUser, StatPage};
