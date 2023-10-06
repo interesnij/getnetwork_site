@@ -215,39 +215,41 @@ impl ServeCategories {
         let _connection = establish_connection();
         let l = get_linguage_storage();
         if l == 1 {
-            let new_cat = NewServeCategories {
+            let new_cat = NewServeCategories {  
                 name:           form.name.clone(),
                 name_en:        "".to_string(),
                 description:    Some(form.description.clone()),
                 description_en: None,
                 category_id:    form.category_id,
                 position:       form.position,
+                count:          0,
                 default_price:  form.default_price,
                 user_id:        user_id,
                 view:           0,
                 height:         0.0,
                 seconds:        0,
             };
-            diesel::insert_into(tech_categories::table)
+            diesel::insert_into(serve_categories::table)
                 .values(&new_cat)
                 .execute(&_connection)
                 .expect("E.");
         }
         else if l == 2 {
-            let new_cat = NewTechCategories {
+            let new_cat = NewServeCategories {
                 name:           "".to_string(),
-                name_en:        form.name_en.clone(),
+                name_en:        form.name.clone(),
                 description:    None,
-                description_en: Some(form.description_en.clone()),
+                description_en: Some(form.description.clone()),
                 category_id:    form.category_id,
                 position:       form.position,
+                count:          0,
                 default_price:  form.default_price,
                 user_id:        user_id,
                 view:           0,
                 height:         0.0,
                 seconds:        0,
             };
-            diesel::insert_into(tech_categories::table)
+            diesel::insert_into(serve_categories::table)
                 .values(&new_cat)
                 .execute(&_connection)
                 .expect("E.");
