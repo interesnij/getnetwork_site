@@ -177,14 +177,13 @@ pub fn is_desctop(req: &HttpRequest) -> bool {
         (is_desctop(req), is_ajax)
     }
 
-    pub fn get_categories_2() -> (
+    pub fn get_categories_2(l) -> (
         Vec<Cat>,
         Vec<Cat>,
         Vec<Cat>,
         Vec<Cat>,
         Vec<Cat>,
         Vec<Cat>,
-        l,
     ) { 
         let _service_cats = Categories::get_categories_for_types(2, l).expect("E.");
         let _store_cats = Categories::get_categories_for_types(3, l).expect("E.");
