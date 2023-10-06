@@ -12,6 +12,7 @@ use crate::utils::{
     establish_connection,
     get_linguage_storage,
 };
+use crate::models::User;
 
 
 ///////////
