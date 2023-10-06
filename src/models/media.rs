@@ -82,7 +82,7 @@ impl File {
         }
         else if l == 2 {
             diesel::update(&_file)
-                .set(schema::files::description_en.eq(&form.description_en))
+                .set(schema::files::description_en.eq(&form.description))
                 .execute(&_connection)
                 .expect("E");
         }

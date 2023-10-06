@@ -853,16 +853,14 @@ pub struct ServeForm {
 
 pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
     let mut form: ServeForm = ServeForm {
-        name:           "".to_string(),
-        name_en:        "".to_string(),
-        description:    "".to_string(),
-        description_en: "".to_string(),
-        position:       0,
-        category_id:    0,
-        price:          0,
-        man_hours:      0,
-        is_default:     true,
-        serve_id:       None,
+        name:        "".to_string(),
+        description: "".to_string(),
+        position:    0,
+        category_id: 0,
+        price:       0,
+        man_hours:   0,
+        is_default:  true,
+        serve_id:    None,
     };
 
     let mut is_default = false;
@@ -932,13 +930,9 @@ pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {
                     let data_string = s.to_string();
                     if field.name() == "name" {
                         form.name = data_string
-                    } else if field.name() == "name_en" {
-                        form.name_en = data_string
                     } else if field.name() == "description" {
                         form.description = data_string
-                    } else if field.name() == "description_en" {
-                        form.description_en = data_string
-                    };
+                    } ;
                 }
             }
         }
@@ -963,9 +957,9 @@ pub async fn create_serve(session: Session, mut payload: Multipart) -> impl Resp
 
             let _new_serve = NewServe {
                 name:           form.name.clone(),
-                name_en:        form.name_en.clone(),
+                name_en:        form.name.clone(),
                 description:    Some(form.description.clone()),
-                description_en: Some(form.description_en.clone()),
+                description_en: Some(form.description.clone()),
                 position:       form.position,
                 category_id:    _cat_id,
                 price:          form.price,

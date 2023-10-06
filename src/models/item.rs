@@ -341,8 +341,8 @@ impl Categories {
         else if l == 2 {
             diesel::update(&cat)
                 .set((
-                    schema::categories::name_en.eq(&form.name_en),
-                    schema::categories::description_en.eq(&form.description_en),
+                    schema::categories::name_en.eq(&form.name),
+                    schema::categories::description_en.eq(&form.description),
                     schema::categories::position.eq(form.position),
                     schema::categories::image.eq(&form.image),
                     schema::categories::slug.eq(&form.slug),

@@ -420,7 +420,7 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
             form.username.clone(),
             form.email.clone(),
             form.description.clone(),
-            form.description_en,
+            form.description,
             user_id,
         );
 
