@@ -140,7 +140,7 @@ impl Service {
     pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items::tags_items::table
+        let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(2))
             .select(schema::tags_items::tag_id)
@@ -173,7 +173,7 @@ impl Store {
     pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items::tags_items::table
+        let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(3))
             .select(schema::tags_items::tag_id)
@@ -205,7 +205,7 @@ impl Wiki {
     pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items::tags_items::table
+        let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(4))
             .select(schema::tags_items::tag_id)
@@ -236,7 +236,7 @@ impl Work {
     pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items::tags_items::table
+        let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(5))
             .select(schema::tags_items::tag_id)
@@ -281,7 +281,7 @@ impl Help {
     pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items::tags_items::table
+        let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(6))
             .select(schema::tags_items::tag_id)
@@ -400,7 +400,7 @@ impl Categories {
     pub fn get_tags(types: i16, l: u8) -> Result<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items::tags_items::table
+        let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::types.eq(types))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
@@ -422,7 +422,7 @@ impl Categories {
 
         let _category_items = schema::category::table
             .filter(schema::category::category_id.eq(self.id))
-            .filter(schema::category::types.eq(types))
+            .filter(schema::category::types.eq(item_types))
             .select(schema::category::item_id)
             .load::<i32>(&_connection)
             .expect("E");
@@ -431,7 +431,7 @@ impl Categories {
             if item == item_id {
                 if (i + 1) != _category_items_len {
                     let _next = Some(&_category_items[i + 1]);
-                    if l = 1 {
+                    if l == 1 {
                         next = Some(items
                             .filter(schema::items::id.eq(_next.unwrap()))
                             .filter(schema::items::types.eq(item_types))
@@ -443,7 +443,7 @@ impl Categories {
                             .first::<FeaturedItem>(&_connection)
                             .expect("E."));
                     }
-                    else if l = 2 {
+                    else if l == 2 {
                         next = Some(items
                             .filter(schema::items::id.eq(_next.unwrap()))
                             .filter(schema::items::types.eq(item_types))
@@ -458,9 +458,9 @@ impl Categories {
                 };
                 if i != 0 {
                     let _prev = Some(&_category_items[i - 1]);
-                    if l = 1 {
+                    if l == 1 {
                         prev = Some(items
-                            .filter(schema::items::id.eq(_next.unwrap()))
+                            .filter(schema::items::id.eq(_prev.unwrap()))
                             .filter(schema::items::types.eq(item_types))
                             .filter(schema::items::is_active.eq(true))
                             .select((
@@ -470,9 +470,9 @@ impl Categories {
                             .first::<FeaturedItem>(&_connection)
                             .expect("E."));
                     }
-                    else if l = 2 {
+                    else if l == 2 {
                         prev = Some(items
-                            .filter(schema::items::id.eq(_next.unwrap()))
+                            .filter(schema::items::id.eq(_prev.unwrap()))
                             .filter(schema::items::types.eq(item_types))
                             .filter(schema::items::is_active.eq(true))
                             .select((
@@ -1238,7 +1238,7 @@ impl Item {
 
     pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
-        let _tag_items = tags_items::tags_items::table
+        let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(&self.id))
             .filter(schema::tags_items::types.eq(self.types))
             .select(schema::tags_items::tag_id)

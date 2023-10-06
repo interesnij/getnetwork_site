@@ -24,7 +24,7 @@
                       </li>
                       <%
                         use crate::utils::get_categories_2;
-                        let (service_cats, store_cats, blog_cats, wiki_cats, work_cats, help_cats) = get_categories_2(l);
+                        let (service_cats, store_cats, blog_cats, wiki_cats, work_cats, help_cats) = get_categories_2(linguage);
                       %>
                       <li>
                           <a href="/service_categories/" class="mn-has-sub service ajax folder">Услуги</a>

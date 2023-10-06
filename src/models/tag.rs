@@ -38,7 +38,7 @@ pub struct Tag {
     pub seconds:  i32,
 }
 impl Tag {
-    pub fn get_tags_with_ids(_tag_items: Vec<i32>, l: u8) -> SmallTag {
+    pub fn get_tags_with_ids(_tag_items: Vec<i32>, l: u8) -> Vec<SmallTag> {
         if l == 1 {
             return schema::tags::table
                 .filter(schema::tags::id.eq_any(_tag_items))

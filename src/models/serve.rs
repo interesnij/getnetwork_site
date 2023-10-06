@@ -191,8 +191,7 @@ impl ServeCategories {
                     schema::serve_categories::name.eq(&form.name),
                     schema::serve_categories::description.eq(&form.description),
                     schema::serve_categories::position.eq(form.position),
-                    schema::serve_categories::image.eq(&form.image),
-                    schema::serve_categories::level.eq(form.level),
+                    //schema::serve_categories::image.eq(&form.image),
                 ))
                 .execute(&_connection)
                 .expect("E");
@@ -200,12 +199,11 @@ impl ServeCategories {
         else if l == 2 {
             diesel::update(&cat)
                 .set((
-                    schema::serve_categories::name_en.eq(&form.name_en),
-                    schema::serve_categories::description_en.eq(&form.description_en),
+                    schema::serve_categories::name_en.eq(&form.name),
+                    schema::serve_categories::description_en.eq(&form.description),
                     schema::serve_categories::position.eq(form.position),
-                    schema::serve_categories::image.eq(&form.image),
-                    schema::serve_categories::level.eq(form.level),
-                ))
+                    //schema::serve_categories::image.eq(&form.image),
+                )) 
                 .execute(&_connection)
                 .expect("E");
         }
