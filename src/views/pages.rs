@@ -23,8 +23,8 @@ use crate::utils::{
     get_request_user_data,
     is_signed_in,
     get_first_load_page,
-    get_all_storage, get_auth_template,
-    IndexResponse, AppState, StorageParams,
+    get_all_storage,
+    IndexResponse, AppState,
 };
 use crate::diesel::{
     RunQueryDsl,
