@@ -414,7 +414,7 @@ pub async fn create_order(conn: ConnectionInfo, req: HttpRequest, mut payload: M
         let form = order_form(payload.borrow_mut(), user_id).await;
         let new_order = NewOrder::create (
             form.title.clone(),
-            form.title_en.clone(),
+            form.title.clone(),
             form.types,
             form.object_id,
             form.username.clone(),

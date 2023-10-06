@@ -322,7 +322,7 @@ pub async fn create_item(session: Session, mut payload: Multipart) -> impl Respo
             let types = form.types;
             let new_item = NewItem::create (
                 form.title.clone(),
-                form.title_en.clone(),
+                form.title.clone(),
                 form.description.clone(),
                 form.description.clone(),
                 form.link.clone(),
@@ -521,7 +521,7 @@ pub async fn edit_item(session: Session, mut payload: Multipart, _id: web::Path<
             let form = crate::utils::item_form(payload.borrow_mut(), _request_user.id).await;
             let _new_item = EditItem {
                 title:          form.title.clone(),
-                title_en:       form.title_en.clone(),
+                title_en:       form.title.clone(),
                 description:    form.description.clone(),
                 description_en: form.description.clone(),
                 link:           form.link.clone(),

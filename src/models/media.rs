@@ -58,7 +58,7 @@ pub struct File {
     pub seconds:        i32,
 }
 impl File {
-    pub fn update_file_with_id(user: User, file_id: i32, form: CategoriesForm) -> i16 {
+    pub fn update_file_with_id(user: User, file_id: i32, form: crate::utils::CategoriesForm) -> i16 {
         let _connection = establish_connection();
         let l = get_linguage_storage();
         let _file = schema::files::table

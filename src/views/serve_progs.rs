@@ -812,7 +812,7 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
         if _request_user.perm == 60 {
-            let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;
+            let form = crate::utils::serve_category_form(payload.borrow_mut(), _request_user.id).await;
             ServeCategories::create(_request_user.id, form);
         }
     }
@@ -839,16 +839,14 @@ pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: 
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ServeForm {
-    pub name:           String,
-    pub name_en:        String,
-    pub description:    String,
-    pub description_en: String,
-    pub position:       i16,
-    pub category_id:    i32,
-    pub price:          i32,
-    pub man_hours:      i16,
-    pub is_default:     bool,
-    pub serve_id:       Option<i32>,
+    pub name:        String,
+    pub description: String,
+    pub position:    i16,
+    pub category_id: i32,
+    pub price:       i32,
+    pub man_hours:   i16,
+    pub is_default:  bool,
+    pub serve_id:    Option<i32>,
 }
 
 pub async fn serve_split_payload(payload: &mut Multipart) -> ServeForm {

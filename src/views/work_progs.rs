@@ -169,7 +169,7 @@ pub async fn get_work_page(session: Session, req: HttpRequest, param: web::Path<
             }
         }
         else {
-            if is_active == false {
+            if !_item.is_active {
                 use crate::utils::get_anon_private_page;
                 get_anon_private_page (
                     is_ajax,

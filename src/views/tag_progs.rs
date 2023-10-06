@@ -129,7 +129,7 @@ pub async fn create_tag(session: Session, mut payload: Multipart) -> impl Respon
         let _request_user = get_request_user_data(&session);
         if _request_user.is_superuser() {
             let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
-            Tag::create(form);
+            Tag::create(_request_user, form);
         }
     }
     return HttpResponse::Ok();
@@ -407,7 +407,7 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
 }
 
 pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
-    let (is_desctop, is_ajax) = get_device_and_ajax(&req);
+    let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
     let _connection = establish_connection();
     let (t, l) = get_all_storage();
     let slug = _id.to_string();

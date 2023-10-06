@@ -10,11 +10,8 @@ use crate::diesel::{
 };
 use serde::{Serialize,Deserialize};
 use crate::models::{
-    Tag,
-    TechCategories,
-    Serve,
-    SmallTag,
-    SmallFile,
+    Tag, TechCategories, Serve,
+    SmallTag, SmallFile, User,
 };
 
 use crate::schema::{
@@ -323,7 +320,7 @@ impl Categories {
             .filter(schema::categories::id.eq(id))
             .first::<Categories>(&_connection)
             .expect("E.");
-        if _request_user.perm < 60 {
+        if user.perm < 60 {
             return 0;
         }
         if l == 1 { 
@@ -404,7 +401,7 @@ impl Categories {
             .filter(schema::tags_items::types.eq(types))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
-            .expect("E.");
+            .expect("E."); 
         return Ok(Tag::get_tags_with_ids(_tag_items, l));
     }
     pub fn get_featured_items ( 

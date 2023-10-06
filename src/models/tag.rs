@@ -39,6 +39,7 @@ pub struct Tag {
 }
 impl Tag {
     pub fn get_tags_with_ids(_tag_items: Vec<i32>, l: u8) -> Result<Vec<SmallTag>, Error> {
+        let _connection = establish_connection();
         if l == 1 {
             return Ok(schema::tags::table
                 .filter(schema::tags::id.eq_any(_tag_items))
@@ -78,7 +79,7 @@ impl Tag {
     pub fn update_tag_with_id(id: i32, form: CategoriesForm) -> i16 {
         let _connection = establish_connection();
         let l = get_linguage_storage();
-        let tag = schema::tags::table
+        let _tag = schema::tags::table
             .filter(schema::tags::id.eq(id))
             .first::<Tag>(&_connection)
             .expect("E.");
@@ -102,16 +103,16 @@ impl Tag {
         }
         return 1;
     }
-    pub fn create(form: CategoriesForm) -> i16 {
+    pub fn create(user: User, form: CategoriesForm) -> i16 {
         let _connection = establish_connection();
         let l = get_linguage_storage();
-        if l == 1 {
+        if l == 1 { 
             let new_tag = NewTag {
                 name:     form.name.clone(),
                 name_en:  "".to_string(),
                 position: form.position,
                 count:    0,
-                user_id:  _request_user.id,
+                user_id:  user.id,
                 view:     0,
                 height:   0.0,
                 seconds:  0,
@@ -127,7 +128,7 @@ impl Tag {
                 name_en:  form.name.clone(),
                 position: form.position,
                 count:    0,
-                user_id:  _request_user.id,
+                user_id:  user.id,
                 view:     0,
                 height:   0.0,
                 seconds:  0,
