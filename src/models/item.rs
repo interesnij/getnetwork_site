@@ -104,7 +104,7 @@ impl Blog {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
         let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
@@ -112,7 +112,7 @@ impl Blog {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items, l));
+        return Tag::get_tags_with_ids(_tag_items, l);
     }
 }
 
@@ -134,7 +134,7 @@ impl Service {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
@@ -143,7 +143,7 @@ impl Service {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items, l));
+        return Tag::get_tags_with_ids(_tag_items, l);
     }
 }
 
@@ -167,7 +167,7 @@ impl Store {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
@@ -176,7 +176,7 @@ impl Store {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items, l));
+        return Tag::get_tags_with_ids(_tag_items, l);
     }
 }
 
@@ -199,7 +199,7 @@ impl Wiki {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
@@ -208,7 +208,7 @@ impl Wiki {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items, l));
+        return Tag::get_tags_with_ids(_tag_items, l);
     }
 }
 
@@ -230,7 +230,7 @@ impl Work {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
@@ -239,7 +239,7 @@ impl Work {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items, l));
+        return Tag::get_tags_with_ids(_tag_items, l);
     }
 }
 
@@ -275,7 +275,7 @@ impl Help {
             .expect("E");
         return _category;
     }
-    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
@@ -284,7 +284,7 @@ impl Help {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items, l));
+        return Tag::get_tags_with_ids(_tag_items, l);
     }
 }
 
@@ -394,7 +394,7 @@ impl Categories {
         }
         return 1;
     }
-    pub fn get_tags(types: i16, l: u8) -> Result<Vec<SmallTag>, Error> {
+    pub fn get_tags(types: i16, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
         let _tag_items = schema::tags_items::table
@@ -402,7 +402,7 @@ impl Categories {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E."); 
-        return Ok(Tag::get_tags_with_ids(_tag_items, l));
+        return Tag::get_tags_with_ids(_tag_items, l);
     }
     pub fn get_featured_items ( 
         &self,
@@ -1233,7 +1233,7 @@ impl Item {
         return Ok(_categories);
     }
 
-    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
         let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(&self.id))
@@ -1241,9 +1241,9 @@ impl Item {
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        return Ok(Tag::get_tags_with_ids(_tag_items, l));
+        return Tag::get_tags_with_ids(_tag_items, l);
     }
-    pub fn get_tags_obj(&self) -> Result<Vec<Tag>, Error> {
+    pub fn get_tags_obj(&self) -> Reult<Vec<SmallTag>, Error> {
         use crate::schema::{
             tags_items::dsl::tags_items,
             tags::dsl::tags,
