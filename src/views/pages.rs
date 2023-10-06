@@ -1371,8 +1371,8 @@ pub async fn edit_item_page(session: Session, req: HttpRequest, _id: web::Path<i
         if _request_user.perm == 60 || _item.user_id == _request_user.id {
             use crate::models::TechCategories;
 
-            let item_cats = _item.get_categories_obj().expect("E");
-            let item_tags = _item.get_tags_obj().expect("E");
+            let item_cats = _item.get_categories_obj();
+            let item_tags = _item.get_tags_obj();
 
             let _all_tags = schema::tags::table
                 .load::<Tag>(&_connection)
