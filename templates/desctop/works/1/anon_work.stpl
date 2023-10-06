@@ -37,7 +37,7 @@
                                       <a href="/works/<%= category.slug %>/" class="ajax"><%= category.name %> - <%= category.count %></a><% if i != _work_categories.len() { %>, <% } %>
                                     <% } %>
                                 </p>
-                                <% let _work_tags = object.get_tags(linguage).expect("E"); %>
+                                <% let _work_tags = object.get_tags(linguage); %>
                                 <% if _work_tags.len() > 0 { %>
                                 <p>
                                     <strong>Теги:</strong>
