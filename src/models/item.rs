@@ -147,6 +147,7 @@ impl Service {
             .load::<i32>(&_connection)
             .expect("E");
         return Ok(Tag::get_tags_with_ids(_tag_items));
+    }
 }
 
 #[derive(Serialize, Queryable)]
