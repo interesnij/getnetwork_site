@@ -1233,7 +1233,7 @@ impl Item {
         return Ok(_categories);
     }
 
-    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
+    pub fn get_tags(&self, l: u8) -> Reult<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
         let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(&self.id))
