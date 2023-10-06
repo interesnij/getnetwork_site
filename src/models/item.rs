@@ -404,7 +404,7 @@ impl Categories {
             .filter(schema::tags_items::types.eq(types))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
-            .expect("E");
+            .expect("E.");
         return Ok(Tag::get_tags_with_ids(_tag_items, l));
     }
     pub fn get_featured_items ( 
@@ -1000,7 +1000,7 @@ impl Categories {
     pub fn get_categories_for_types(types: i16, l: u8) -> Result<Vec<Cat>, Error> {
         let _connection = establish_connection();
         if l == 1 {
-            return schema::categories::table
+            return Ok(schema::categories::table
                 .filter(schema::categories::types.eq(types))
                 .select((
                     schema::categories::name,
@@ -1010,10 +1010,10 @@ impl Categories {
                     schema::categories::image
                 ))
                 .load::<Cat>(&_connection)
-                .expect("E");
+                .expect("E"));
         }
         else if l == 2 {
-            return schema::categories::table
+            return Ok(schema::categories::table
                 .filter(schema::categories::types.eq(types))
                 .select((
                     schema::categories::name_en,
@@ -1023,9 +1023,9 @@ impl Categories {
                     schema::categories::image
                 ))
                 .load::<Cat>(&_connection)
-                .expect("E");
+                .expect("E"));
         }
-        return Vec::new();
+        return Ok(Vec::new());
     }
 }
 

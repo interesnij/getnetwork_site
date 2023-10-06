@@ -1042,9 +1042,9 @@ pub async fn edit_serve(session: Session, mut payload: Multipart, _id: web::Path
 
             let _new_serve = NewServe {
                 name:           form.name.clone(),
-                name_en:        form.name_en.clone(),
+                name_en:        form.name.clone(),
                 description:    Some(form.description.clone()),
-                description_en: Some(form.description_en.clone()),
+                description_en: Some(form.description.clone()),
                 position:       form.position,
                 category_id:    _serve.category_id,
                 price:          form.price,
