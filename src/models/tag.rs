@@ -17,7 +17,6 @@ use crate::utils::{
     CategoriesForm
 };
 use crate::models::User;
-use crate::errors::Error;
 
 
 #[derive(Serialize, Queryable)]
