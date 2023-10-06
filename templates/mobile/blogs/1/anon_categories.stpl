@@ -21,7 +21,7 @@
 
         <%
           use crate::models::Categories;
-          let get_6_blogs = Categories::get_blogs(category.id, 3, 0, false, l).expect("E");
+          let get_6_blogs = Categories::get_blogs(category.id, 3, 0, false, linguage).expect("E");
         %>
 
         <h4 class="font-alt mb-10">
