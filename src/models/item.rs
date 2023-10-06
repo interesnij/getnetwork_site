@@ -107,28 +107,15 @@ impl Blog {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self) -> Vec<SmallTag> {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-        };
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
-
-        let _tag_items = tags_items
+        let _tag_items = schema::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(1))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(_tag_items))
-            .select((
-                schema::tags::name,
-                schema::tags::count,
-            ))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
-        return _tags;
+        return Ok(Tag::get_tags_with_ids(_tag_items));
     }
 }
 
@@ -150,29 +137,16 @@ impl Service {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self) -> Vec<SmallTag> {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-        };
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items
+        let _tag_items = tags_items::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(2))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(_tag_items))
-            .select((
-                schema::tags::name,
-                schema::tags::count,
-            ))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
-        return _tags;
-    }
+        return Ok(Tag::get_tags_with_ids(_tag_items));
 }
 
 #[derive(Serialize, Queryable)]
@@ -195,28 +169,16 @@ impl Store {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self) -> Vec<SmallTag> {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-        };
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items
+        let _tag_items = tags_items::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(3))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(_tag_items))
-            .select((
-                schema::tags::name,
-                schema::tags::count,
-            ))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
-        return _tags;
+        return Ok(Tag::get_tags_with_ids(_tag_items));
     }
 }
 
@@ -239,28 +201,16 @@ impl Wiki {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self) -> Vec<SmallTag> {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-        };
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items
+        let _tag_items = tags_items::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(4))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(_tag_items))
-            .select((
-                schema::tags::name,
-                schema::tags::count,
-            ))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
-        return _tags;
+        return Ok(Tag::get_tags_with_ids(_tag_items));
     }
 }
 
@@ -282,28 +232,16 @@ impl Work {
             return "/static/images/img.jpg".to_string();
         }
     }
-    pub fn get_tags(&self) -> Vec<SmallTag> {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-        };
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items
+        let _tag_items = tags_items::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(5))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(_tag_items))
-            .select((
-                schema::tags::name,
-                schema::tags::count,
-            ))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
-        return _tags;
+        return Ok(Tag::get_tags_with_ids(_tag_items));
     }
 }
 
@@ -339,28 +277,16 @@ impl Help {
             .expect("E");
         return _category;
     }
-    pub fn get_tags(&self) -> Vec<SmallTag> {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-        };
+    pub fn get_tags(&self, l: u8) -> Vec<SmallTag> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items
+        let _tag_items = tags_items::tags_items::table
             .filter(schema::tags_items::item_id.eq(self.id))
             .filter(schema::tags_items::types.eq(6))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(_tag_items))
-            .select((
-                schema::tags::name,
-                schema::tags::count,
-            ))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
-        return _tags;
+        return Ok(Tag::get_tags_with_ids(_tag_items));
     }
 }
 
@@ -389,14 +315,17 @@ pub struct Categories {
 }
 
 impl Categories {
-    pub fn update_category_with_id(id: i32, form: CategoriesForm) -> i16 {
+    pub fn update_category_with_id(user: User, id: i32, form: CategoriesForm) -> i16 {
         let _connection = establish_connection();
         let l = get_linguage_storage();
         let cat = schema::categories::table
             .filter(schema::categories::id.eq(id))
             .first::<Categories>(&_connection)
             .expect("E.");
-        if l == 1 {
+        if _request_user.perm < 60 {
+            return 0;
+        }
+        if l == 1 { 
             diesel::update(&cat)
                 .set((
                     schema::categories::name.eq(&form.name),
@@ -467,73 +396,91 @@ impl Categories {
         }
         return 1;
     }
-    pub fn get_tags(types: i16) -> Result<Vec<SmallTag>, Error> {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-        };
+    pub fn get_tags(types: i16, l: u8) -> Result<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
 
-        let _tag_items = tags_items
+        let _tag_items = tags_items::tags_items::table
             .filter(schema::tags_items::types.eq(types))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(_tag_items))
-            .select((
-                schema::tags::name,
-                schema::tags::count,
-            ))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
-        return Ok(_tags);
+        return Ok(Tag::get_tags_with_ids(_tag_items));
     }
-    pub fn get_featured_items(&self, types: i16, id: i32) -> (Option<FeaturedItem>, Option<FeaturedItem>) {
-        use crate::schema::{
-            category::dsl::category,
-            items::dsl::items,
-        };
+    pub fn get_featured_items ( 
+        &self,
+        item_id:    i32,
+        item_types: i16,
+        l:          u8,
+    ) -> (Option<FeaturedItem>, Option<FeaturedItem>) {
+        use crate::schema::items::dsl::items;
 
         let _connection = establish_connection();
 
         let mut prev: Option<FeaturedItem> = None;
         let mut next: Option<FeaturedItem> = None;
 
-        let _category_items = category
+        let _category_items = category::category::table
             .filter(schema::category::category_id.eq(self.id))
             .filter(schema::category::types.eq(types))
             .select(schema::category::item_id)
             .load::<i32>(&_connection)
             .expect("E");
         let _category_items_len = _category_items.len();
-        for (i, item) in _category_items.iter().enumerate().rev() {
-            if item == &id {
+        for (i, item) in _category_items.into_iter().enumerate().rev() {
+            if item == id {
                 if (i + 1) != _category_items_len {
                     let _next = Some(&_category_items[i + 1]);
-                    next = Some(items
-                        .filter(schema::items::id.eq(_next.unwrap()))
-                        .filter(schema::items::types.eq(types))
-                        .filter(schema::items::is_active.eq(true))
-                        .select((
-                            schema::items::slug,
-                            schema::items::title,
-                        ))
-                        .first::<FeaturedItem>(&_connection)
-                        .expect("E."));
+                    if l = 1 {
+                        next = Some(items
+                            .filter(schema::items::id.eq(_next.unwrap()))
+                            .filter(schema::items::types.eq(types))
+                            .filter(schema::items::is_active.eq(true))
+                            .select((
+                                schema::items::slug,
+                                schema::items::title,
+                            ))
+                            .first::<FeaturedItem>(&_connection)
+                            .expect("E."));
+                    }
+                    else if l = 2 {
+                        next = Some(items
+                            .filter(schema::items::id.eq(_next.unwrap()))
+                            .filter(schema::items::types.eq(types))
+                            .filter(schema::items::is_active.eq(true))
+                            .select((
+                                schema::items::slug,
+                                schema::items::title_en,
+                            ))
+                            .first::<FeaturedItem>(&_connection)
+                            .expect("E."));
+                    }
                 };
                 if i != 0 {
                     let _prev = Some(&_category_items[i - 1]);
-                    prev = Some(items
-                        .filter(schema::items::id.eq(_prev.unwrap()))
-                        .filter(schema::items::types.eq(types))
-                        .filter(schema::items::is_active.eq(true))
-                        .select((
-                            schema::items::slug,
-                            schema::items::title,
-                        ))
-                        .first::<FeaturedItem>(&_connection)
-                        .expect("E."));
+                    if l = 1 {
+                        prev = Some(items
+                            .filter(schema::items::id.eq(_next.unwrap()))
+                            .filter(schema::items::types.eq(types))
+                            .filter(schema::items::is_active.eq(true))
+                            .select((
+                                schema::items::slug,
+                                schema::items::title,
+                            ))
+                            .first::<FeaturedItem>(&_connection)
+                            .expect("E."));
+                    }
+                    else if l = 2 {
+                        prev = Some(items
+                            .filter(schema::items::id.eq(_next.unwrap()))
+                            .filter(schema::items::types.eq(types))
+                            .filter(schema::items::is_active.eq(true))
+                            .select((
+                                schema::items::slug,
+                                schema::items::title_en,
+                            ))
+                            .first::<FeaturedItem>(&_connection)
+                            .expect("E."));
+                    }
                 };
                 break;
             }
@@ -1048,22 +995,36 @@ impl Categories {
         else {
             return "/static/images/img.jpg".to_string();
         }
-    }
-    pub fn get_categories_for_types(types: i16) -> Result<Vec<Cat>, Error> {
-        use crate::schema::categories::dsl::categories;
+    } 
+    pub fn get_categories_for_types(types: i16, l: u8) -> Result<Vec<Cat>, Error> {
         let _connection = establish_connection();
-        let cats = categories
-            .filter(schema::categories::types.eq(types))
-            .select((
-                schema::categories::name,
-                schema::categories::slug,
-                schema::categories::count,
-                schema::categories::id,
-                schema::categories::image
-            ))
-            .load::<Cat>(&_connection)
-            .expect("E");
-        return Ok(cats);
+        if l == 1 {
+            return schema::categories::table
+                .filter(schema::categories::types.eq(types))
+                .select((
+                    schema::categories::name,
+                    schema::categories::slug,
+                    schema::categories::count,
+                    schema::categories::id,
+                    schema::categories::image
+                ))
+                .load::<Cat>(&_connection)
+                .expect("E");
+        }
+        else if l == 2 {
+            return schema::categories::table
+                .filter(schema::categories::types.eq(types))
+                .select((
+                    schema::categories::name_en,
+                    schema::categories::slug,
+                    schema::categories::count,
+                    schema::categories::id,
+                    schema::categories::image
+                ))
+                .load::<Cat>(&_connection)
+                .expect("E");
+        }
+        return Vec::new();
     }
 }
 
@@ -1274,28 +1235,15 @@ impl Item {
         return Ok(_categories);
     }
 
-    pub fn get_tags(&self) -> Result<Vec<SmallTag>, Error> {
-        use crate::schema::{
-            tags_items::dsl::tags_items,
-            tags::dsl::tags,
-        };
+    pub fn get_tags(&self, l: u8) -> Result<Vec<SmallTag>, Error> {
         let _connection = establish_connection();
-
-        let _tag_items = tags_items
+        let _tag_items = tags_items::tags_items::table
             .filter(schema::tags_items::item_id.eq(&self.id))
             .filter(schema::tags_items::types.eq(self.types))
             .select(schema::tags_items::tag_id)
             .load::<i32>(&_connection)
             .expect("E");
-        let _tags = tags
-            .filter(schema::tags::id.eq_any(_tag_items))
-            .select((
-                schema::tags::name,
-                schema::tags::count
-            ))
-            .load::<SmallTag>(&_connection)
-            .expect("E");
-        return Ok(_tags);
+        return Ok(Tag::get_tags_with_ids(_tag_items));
     }
     pub fn get_tags_obj(&self) -> Result<Vec<Tag>, Error> {
         use crate::schema::{

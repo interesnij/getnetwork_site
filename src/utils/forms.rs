@@ -47,15 +47,13 @@ pub struct FeedbackForm {
 }
 #[derive(Deserialize, Serialize, Debug)]
 pub struct CategoriesForm {
-    pub name:           String,
-    pub name_en:        String,
-    pub description:    String,
-    pub description_en: String,
-    pub position:       i16,
-    pub image:          String,
-    pub level:          i16,
-    pub types:          i16,
-    pub slug:           String,
+    pub name:        String,
+    pub description: String,
+    pub position:    i16,
+    pub image:       String,
+    pub level:       i16,
+    pub types:       i16,
+    pub slug:        String,
 }
 
 

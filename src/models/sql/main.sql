@@ -302,7 +302,7 @@ CREATE TABLE serve_categories (
     name_en        VARCHAR(100) NOT NULL,
     description    VARCHAR(10000),
     description_en VARCHAR(10000),
-    category_id    INT NOT NULL,
+    category_id    INT NOT NULL, 
     position       SMALLINT NOT NULL,
     count          SMALLINT NOT NULL,
     default_price  INT NOT NULL, -- сумма всех опуий по умолчанию.

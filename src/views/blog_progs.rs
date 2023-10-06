@@ -75,18 +75,18 @@ pub async fn get_blog_page(session: Session, req: HttpRequest, param: web::Path<
 
         let _cats: Vec<Cat>;
         let _tags: Vec<SmallTag>;
-        let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
+        let cats_res = block(move || Categories::get_categories_for_types(1, l)).await?;
         _cats = match cats_res {
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
-        let tags_res = block(move || Categories::get_tags(1)).await?;
+        let tags_res = block(move || Categories::get_tags(1, l)).await?;
         _tags = match tags_res {
             Ok(_list) => _list,
             Err(_error) => Vec::new(),
         };
 
-        let (prev, next) = _category.get_featured_items(_item.types, _item.id);
+        let (prev, next) = _category.get_featured_items(_item.id, _item.types, l);
 
         if is_signed_in(&session) {
             let _request_user = get_request_user_data(&session);
@@ -289,12 +289,12 @@ pub async fn blog_category_page(session: Session, req: HttpRequest, _id: web::Pa
         let _cats: Vec<Cat>;
         let _tags: Vec<SmallTag>;
 
-        let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
+        let cats_res = block(move || Categories::get_categories_for_types(1, l)).await?;
         _cats = match cats_res {
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
-        let tags_res = block(move || Categories::get_tags(1)).await?;
+        let tags_res = block(move || Categories::get_tags(1, l)).await?;
         _tags = match tags_res {
             Ok(_list) => _list,
             Err(_error) => Vec::new(),
@@ -453,13 +453,13 @@ pub async fn blog_categories_page(session: Session, req: HttpRequest) -> actix_w
         let _cats: Vec<Cat>;
         let _tags: Vec<SmallTag>;
 
-        let cats_res = block(move || Categories::get_categories_for_types(1)).await?;
+        let cats_res = block(move || Categories::get_categories_for_types(1, l)).await?;
         _cats = match cats_res {
             Ok(_ok) => _ok,
             Err(_error) => Vec::new(),
         };
 
-        let tags_res = block(move || Categories::get_tags(1)).await?;
+        let tags_res = block(move || Categories::get_tags(1, l)).await?;
         _tags = match tags_res {
             Ok(_list) => _list,
             Err(_error) => Vec::new(),

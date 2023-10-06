@@ -672,10 +672,8 @@ pub async fn create_category(session: Session, mut payload: Multipart) -> impl R
 pub async fn edit_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
-            Categories::update_category_with_id(*_id, form);
-        }
+        let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
+        Categories::update_category_with_id(_request_user, *_id, form);
     }
     HttpResponse::Ok()
 }
@@ -826,13 +824,11 @@ pub async fn create_files(session: Session, mut payload: Multipart, id: web::Pat
 }
 
 pub async fn edit_file(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
-    if is_signed_in(&session) {
+    if is_signed_in(&session) { 
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 {
-            let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
-            File::update_file_with_id(*_id, form);
-        }
-    }
+        let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
+        crate::models::File::update_file_with_id(_request_user, *_id, form);
+    } 
     HttpResponse::Ok()
 }
 

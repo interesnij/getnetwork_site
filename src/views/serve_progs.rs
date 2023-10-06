@@ -821,11 +821,9 @@ pub async fn create_serve_categories(session: Session, mut payload: Multipart) -
 
 pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     if is_signed_in(&session) {
-        let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 || _category.user_id == _request_user.id {
-            let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
-            TechCategories::update_category_with_id(_request_user.id, form);
-        }
+        let _request_user = get_request_user_data(&session); 
+        let form = crate::utils::category_form(payload.borrow_mut(), _request_user.id).await;
+        TechCategories::update_category_with_id(_request_user, *_id, form);
     }
     return HttpResponse::Ok();
 }
@@ -833,10 +831,8 @@ pub async fn edit_tech_category(session: Session, mut payload: Multipart, _id: w
 pub async fn edit_serve_category(session: Session, mut payload: Multipart, _id: web::Path<i32>) -> impl Responder {
     if is_signed_in(&session) {
         let _request_user = get_request_user_data(&session);
-        if _request_user.perm == 60 || s_category.user_id == _request_user.id {
-            let form = serve_category_form(payload.borrow_mut(), _request_user.id).await;
-            ServeCategories::update_category_with_id(_request_user.id, form);
-        }
+        let form = crate::utils::serve_category_form(payload.borrow_mut(), _request_user.id).await;
+        ServeCategories::update_category_with_id(_request_user, *_id, form);
     }
     return HttpResponse::Ok();
 }

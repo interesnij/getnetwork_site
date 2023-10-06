@@ -37,7 +37,30 @@ pub struct Tag {
     pub height:   f64,
     pub seconds:  i32,
 }
-impl Tag { 
+impl Tag {
+    pub fn get_tags_with_ids(_tag_items: Vec<i32>, l: u8) -> SmallTag {
+        if l == 1 {
+            return schema::tags::table
+                .filter(schema::tags::id.eq_any(_tag_items))
+                .select((
+                    schema::tags::name,
+                    schema::tags::count,
+                ))
+                .load::<SmallTag>(&_connection)
+                .expect("E");
+        }
+        else if l == 2 {
+            return schema::tags::table
+                .filter(schema::tags::id.eq_any(_tag_items))
+                .select((
+                    schema::tags::name_en,
+                    schema::tags::count,
+                ))
+                .load::<SmallTag>(&_connection)
+                .expect("E");
+        }
+        return Vec::new();
+    }
     pub fn get_tag_with_id(id: i32) -> Tag {
         let _connection = establish_connection();
         return schema::tags::table
