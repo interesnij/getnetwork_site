@@ -71,7 +71,6 @@
                         <% } %>
                     </ul>
                 </li>
-                <% } %>
 
                 <li class="dsn-active dsn-drop-down">
                     <a href="#" class="user-no-selection">
