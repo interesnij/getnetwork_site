@@ -407,17 +407,11 @@ pub async fn tag_page(req: HttpRequest, session: Session, _id: web::Path<String>
 }
 
 pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
-    use crate::utils::get_device_and_ajax;
-    use schema::tags::dsl::tags;
-
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
     let _connection = establish_connection();
     let (t, l) = get_all_storage();
     let slug = _id.to_string();
-    let _tag = tags
-        .filter(schema::tags::name.eq(&slug))
-        .first::<Tag>(&_connection)
-        .expect("E");
+    let _tag = Tag::get_tag_with_slug(&slug); 
 
     if is_ajax == 0 {
         get_first_load_page (
@@ -563,16 +557,12 @@ pub async fn tag_blogs_page(session: Session, req: HttpRequest, _id: web::Path<S
 }
 
 pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
-    use schema::tags::dsl::tags;
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
     let (t, l) = get_all_storage();
     let slug = _id.to_string();
-    let _tag = tags
-        .filter(schema::tags::name.eq(&slug))
-        .first::<Tag>(&_connection)
-        .expect("E");
+    let _tag = Tag::get_tag_with_slug(&slug); 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
@@ -717,16 +707,12 @@ pub async fn tag_services_page(session: Session, req: HttpRequest, _id: web::Pat
 }
 
 pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
-    use schema::tags::dsl::tags;
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
     let (t, l) = get_all_storage();
     let slug = _id.to_string();
-    let _tag = tags
-        .filter(schema::tags::name.eq(&slug))
-        .first::<Tag>(&_connection)
-        .expect("E");
+    let _tag = Tag::get_tag_with_slug(&slug); 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
@@ -872,16 +858,12 @@ pub async fn tag_stores_page(session: Session, req: HttpRequest, _id: web::Path<
 }
 
 pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
-    use schema::tags::dsl::tags;
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
     let (t, l) = get_all_storage();
     let slug = _id.to_string();
-    let _tag = tags
-        .filter(schema::tags::name.eq(&slug))
-        .first::<Tag>(&_connection)
-        .expect("E");
+    let _tag = Tag::get_tag_with_slug(&slug); 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
@@ -1027,16 +1009,12 @@ pub async fn tag_wikis_page(session: Session, req: HttpRequest, _id: web::Path<S
 }
 
 pub async fn tag_works_page(session: Session, req: HttpRequest, _id: web::Path<String>) -> actix_web::Result<HttpResponse> {
-    use schema::tags::dsl::tags;
     use crate::utils::get_device_and_ajax;
 
     let _connection = establish_connection();
     let (t, l) = get_all_storage();
     let slug = _id.to_string();
-    let _tag = tags
-        .filter(schema::tags::name.eq(&slug))
-        .first::<Tag>(&_connection)
-        .expect("E");
+    let _tag = Tag::get_tag_with_slug(&slug); 
     let (is_desctop, is_ajax) = get_device_and_ajax(&req);
 
     if is_ajax == 0 {
@@ -1186,7 +1164,7 @@ pub async fn tag_helps_page(session: Session, req: HttpRequest, _id: web::Path<S
     let _connection = establish_connection();
     let (t, l) = get_all_storage();
     let slug = _id.to_string();
-    let _tag = Tag::get_tag_with_slug(&slug);
+    let _tag = Tag::get_tag_with_slug(&slug); 
     let (is_desctop, is_ajax) = crate::utils::get_device_and_ajax(&req);
 
     if is_ajax == 0 {

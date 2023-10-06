@@ -67,11 +67,11 @@ impl Tag {
             .filter(schema::tags::id.eq(id))
             .first::<Tag>(&_connection)
             .expect("E.");
-    }
-    pub fn get_tag_with_slug(slug: &String) -> Tag {
+    } 
+    pub fn get_tag_with_slug(name: &String) -> Tag {
         let _connection = establish_connection();
         return schema::tags::table
-            .filter(schema::tags::slug.eq(slug))
+            .filter(schema::tags::name.eq(name))
             .first::<Tag>(&_connection)
             .expect("E.");
     }
