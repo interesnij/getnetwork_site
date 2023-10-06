@@ -26,7 +26,7 @@
                 </div>
                 <div class="box-content" data-swiper-parallax-opacity="0">
                     <div class="metas d-inline-block mb-15">
-                        <% for tag in object.get_tags().iter() { %>
+                        <% for tag in object.get_tags(linguage).iter() { %>
                             <a href="/tag/<%= tag.name %>/" class="mb-5 ajax"><%= tag.name %> (<%= tag.count %>)</a>
                         <% } %>
                     </div>

@@ -175,7 +175,7 @@ pub struct ServeCategories {
     pub seconds:        i32,
 }
 impl ServeCategories {
-    pub fn update_category_with_id(user: User, cat_id: i32, form: ServeCategoriesForm) -> i16 {
+    pub fn update_category_with_id(user: User, cat_id: i32, form: crate::utils::ServeCategoriesForm) -> i16 {
         let _connection = establish_connection();
         let l = get_linguage_storage();
         let cat = schema::serve_categories::table
@@ -211,7 +211,7 @@ impl ServeCategories {
         }
         return 1;
     }
-    pub fn create(user_id: i32, form: ServeCategoriesForm) -> i16 {
+    pub fn create(user_id: i32, form: crate::utils::ServeCategoriesForm) -> i16 {
         let _connection = establish_connection();
         let l = get_linguage_storage();
         if l == 1 {
