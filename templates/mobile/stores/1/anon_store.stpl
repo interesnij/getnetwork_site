@@ -29,7 +29,7 @@
                         </p>
                         <p>
                             <strong>Категории:</strong>
-                            <% let _work_categories = object.get_categories().expect("E"); %>
+                            <% let _work_categories = object.get_categories(); %>
                             <% for (i, category) in _work_categories.iter().enumerate() { %>
                               <a href="/works/<%= category.slug %>/" class="ajax"><%= category.name %> - <%= category.count %></a><% if i != _work_categories.len() { %>, <% } %>
                             <% } %>
